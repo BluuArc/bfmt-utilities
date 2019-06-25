@@ -23,6 +23,8 @@ module.exports = {
     }],
   },
   plugins: [
-    new ForkTsCheckerWebpackPlugin(),
+    new ForkTsCheckerWebpackPlugin({
+      tsconfig: path.resolve(__dirname, 'tsconfig.json'),
+    }),
   ],
 };

@@ -4,5 +4,6 @@ const cleanup = require('./cleanup');
 const build = require('./build');
 
 // gulp.task('cleanup', cleanup);
-exports.cleanup = cleanup;
-exports.buildWebpack = build.buildWebpack;
+exports.clean = cleanup;
+exports['build:js'] = build.buildWebpack;
+exports['build:es'] = build.buildEcmaScript;

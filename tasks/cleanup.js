@@ -1,6 +1,7 @@
 // based on https://gist.github.com/geedew/cf66b81b0bcdab1f334b
 const fs = require('fs');
 const path = require('path');
+const fancyLog = require('fancy-log');
 
 const packageName = require('../package.json').name;
 
@@ -11,24 +12,24 @@ function stripPackageName (str = '') {
 
 function deleteFolderRecursive (folderPath) {
   if (fs.existsSync(folderPath)) {
-    console.log('deleting', stripPackageName(folderPath));
+    fancyLog.info('deleting', stripPackageName(folderPath));
     fs.readdirSync(folderPath).forEach((file, index) => {
       const curPath = path.resolve(folderPath, file);
-      console.log('deleting', stripPackageName(curPath));
+      fancyLog.info('deleting', stripPackageName(curPath));
       if (fs.lstatSync(curPath).isDirectory()) {
         deleteFolderRecursive(curPath);
       } else {
         fs.unlinkSync(curPath);
       }
-      console.log('deleted', stripPackageName(curPath));
+      fancyLog.info('deleted', stripPackageName(curPath));
     });
     fs.rmdirSync(folderPath);
-    console.log('deleted', stripPackageName(folderPath));
+    fancyLog.info('deleted', stripPackageName(folderPath));
   }
 }
 
 module.exports = function cleanup (done) {
-  console.log("cleaning up dist folder");
+  fancyLog.info("cleaning up dist folder");
   deleteFolderRecursive(path.resolve(__dirname, '../dist'));
   done();
 }
