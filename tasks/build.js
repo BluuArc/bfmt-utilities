@@ -102,6 +102,7 @@ function buildDocs (done) {
   Promise.all(buildPromises).then(() => done());
 }
 
+// TODO: add task to copy types.d.ts
 module.exports = {
   buildWebpack,
   buildEcmaScript,
