@@ -1,16 +1,26 @@
 import { isAttackingProcId } from './buffs';
 
+
+/**
+ * Given a brave burst and a level, get the associated entry at that burst's level
+ */
 export function getLevelEntryForBurst (burst: Bfmt.Utilities.Datamine.BraveBurst, level: number | undefined): Bfmt.Utilities.Datamine.BurstLevelEntry {
   const burstEffectsByLevel = (burst && Array.isArray(burst.levels)) ? burst.levels : [];
   const levelIndex = !isNaN(<number>level) ? +<number>level : (burstEffectsByLevel.length - 1);
   return burstEffectsByLevel[levelIndex] || { 'bc cost': 0, effects: [] };
 }
 
+/**
+ * Given a brave burst and a level, get the list of effects at that burst's level
+ */
 export function getBurstEffects (burst: Bfmt.Utilities.Datamine.BraveBurst, level: number | undefined): Array<Bfmt.Utilities.Datamine.ProcEffect | Bfmt.Utilities.Datamine.UnknownProcEffect> {
   const levelEntry = getLevelEntryForBurst(burst, level);
   return levelEntry.effects;
 }
 
+/**
+ * Given a brave burst and a level, get the cost, hits, and dropcheck information for that burst's level
+ */
 export function getBcDcInfo (burst: Bfmt.Utilities.Datamine.BraveBurst, level: number | undefined): { cost: number, hits: number, dropchecks: number} {
   const result = {
     cost: 0,

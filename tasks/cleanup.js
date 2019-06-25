@@ -28,8 +28,19 @@ function deleteFolderRecursive (folderPath) {
   }
 }
 
-module.exports = function cleanup (done) {
+function cleanBuild (done) {
   fancyLog.info("cleaning up dist folder");
   deleteFolderRecursive(path.resolve(__dirname, '../dist'));
   done();
 }
+
+function cleanDocs (done) {
+  fancyLog.info("cleaning up docs folder");
+  deleteFolderRecursive(path.resolve(__dirname, '../docs'));
+  done();
+}
+
+module.exports = {
+  cleanBuild,
+  cleanDocs,
+};
