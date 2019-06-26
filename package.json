@@ -4,17 +4,20 @@
   "description": "Set of utility functions used by the BFMT project. This is a separate repository for them because they are usable outside of BFMT.",
   "main": "dist/index.umd.js",
   "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jasmine --config=spec/jasmine.json",
     "check-types": "tsc --noEmit",
     "build:types": "tsc --emitDeclarationOnly",
     "build:es": "tsc",
     "build:js": "webpack --mode=production",
-    "build": "npm run build:types && npm run build:es && npm run build:js",
     "gulp": "gulp --gulpfile tasks/index.js",
-    "clean:build": "npm run gulp -- clean:build",
+    "clean:app": "npm run gulp -- clean:app",
     "clean:docs": "npm run gulp -- clean:docs",
-    "build:docs": "npm run gulp -- build:docs"
+    "build:docs": "npm run gulp -- build:docs",
+    "build:app": "npm run build:types && npm run gulp -- build:app",
+    "build": "npm run build:app && npm run build:docs",
+    "clean": "npm run gulp -- clean:app clean:docs"
   },
   "author": "Joshua Castor",
   "license": "GPL-3.0",

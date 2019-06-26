@@ -15,7 +15,7 @@ Given a brave burst and a level, get the associated entry at that burst's level
 
 ### Parameters
 
--   `burst`  
+-   `burst`  {BraveBurst}
 -   `level`  
 
 ## getBurstEffects

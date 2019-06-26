@@ -1,8 +1,10 @@
 import { isAttackingProcId } from './buffs';
+import { BraveBurst, BurstLevelEntry, ProcEffect, UnknownProcEffect } from './datamine-types';
 
 
 /**
  * Given a brave burst and a level, get the associated entry at that burst's level
+ * @param burst {BraveBurst}
  */
 export function getLevelEntryForBurst (burst: BraveBurst, level: number | undefined): BurstLevelEntry {
   const burstEffectsByLevel = (burst && Array.isArray(burst.levels)) ? burst.levels : [];

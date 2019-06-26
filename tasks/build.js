@@ -68,7 +68,17 @@ function buildWebpack (done) {
     });
 }
 
-function buildEcmaScript () {
+function buildTypeScript () {
+  if (!fs.existsSync(DIST_FOLDER)) {
+    fs.mkdirSync(DIST_FOLDER);
+  }
+
+  const DATAMINE_TYPE_DESTINATION = path.resolve(DIST_FOLDER, './datamine-types.d.ts');
+  if (fs.existsSync(DATAMINE_TYPE_DESTINATION)) {
+    fs.unlinkSync(DATAMINE_TYPE_DESTINATION);
+  }
+
+  fs.copyFileSync(path.resolve(__dirname, '../src/datamine-types.d.ts'), DATAMINE_TYPE_DESTINATION);
   return getTranspiledTypeScript()
     .js.pipe(dest(DIST_FOLDER));
 }
@@ -102,9 +112,8 @@ function buildDocs (done) {
   Promise.all(buildPromises).then(() => done());
 }
 
-// TODO: add task to copy types.d.ts
 module.exports = {
   buildWebpack,
-  buildEcmaScript,
+  buildTypeScript,
   buildDocs,
 };

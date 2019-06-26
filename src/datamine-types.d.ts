@@ -1,17 +1,17 @@
-declare type UnitArenaAiEntry = {
+export type UnitArenaAiEntry = {
   action: string;
   'chance%': number;
   'target conditions': string;
   'target type': string;
 }
 
-declare type UnitMovemmentEntry = {
+export type UnitMovemmentEntry = {
   'move speed': number;
   'move speed type': string;
   'move type': string;
 }
 
-declare type UnitStatsEntry = {
+export type UnitStatsEntry = {
   hp: number;
   atk: number;
   def: number;
@@ -24,40 +24,40 @@ declare interface BaseProcEffect {
   'target type': string;
 }
 
-declare type ProcEffect = BaseProcEffect & {
+export type ProcEffect = BaseProcEffect & {
   'proc id': string;
   [key: string]: any;
 }
 
-declare type UnknownProcEffect = BaseProcEffect & {
+export type UnknownProcEffect = BaseProcEffect & {
   'unknown proc id': string;
   'unknown proc param': string;
   [key: string]: any;
 }
 
-declare type PassiveEffect = {
+export type PassiveEffect = {
   'passive id': string;
   [key: string]: any;
 }
 
-declare type UnknownPassiveEffect = {
+export type UnknownPassiveEffect = {
   'unknown passive id': string;
   'unknown passive params': string;
 }
 
-declare type DamageFramesEntry = {
+export type DamageFramesEntry = {
   'effect delay time(ms)/frame': string;
   'frame times': number[];
   'hit dmg% distribution': number[];
   'hit dmg% distribution total': number;
 }
 
-declare type BurstLevelEntry = {
+export type BurstLevelEntry = {
   'bc cost': number;
   effects: Array<(ProcEffect | UnknownProcEffect) & { hits?: number; }>;
 }
 
-declare type BraveBurst = {
+export type BraveBurst = {
   associated_units?: string[];
   'damage frames': (DamageFramesEntry & { 'proc id': string; hits: number; })[];
   desc: string;
@@ -67,14 +67,14 @@ declare type BraveBurst = {
   levels: BurstLevelEntry[];
 }
 
-declare type ExtraSkillCondition = {
+export type ExtraSkillCondition = {
   'item required'?: string[];
   'sphere category required'?: string;
   'sphere category required (raw)'?: string;
   'unit required'?: { id: number; name: string; }[];
 }
 
-declare type ExtraSkill = {
+export type ExtraSkill = {
   desc: string;
   effects: Array<(PassiveEffect | UnknownPassiveEffect) & {
     conditions: ExtraSkillCondition[];
@@ -86,7 +86,7 @@ declare type ExtraSkill = {
   target: string;
 }
 
-declare type SpEnhancementEntry = {
+export type SpEnhancementEntry = {
   category: string;
   dependency?: string;
   'dependency comment'?: string;
@@ -94,7 +94,7 @@ declare type SpEnhancementEntry = {
   skill: SpEnhancementSkill;
 }
 
-declare type SpEnhancementSkill = {
+export type SpEnhancementSkill = {
   bp: number;
   desc: string;
   effects: SpEnhancementEffect[];
@@ -104,21 +104,21 @@ declare type SpEnhancementSkill = {
   series: string;
 }
 
-declare type SpEnhancementEffect = {
+export type SpEnhancementEffect = {
   passive?: PassiveEffect | UnknownPassiveEffect;
   'add to bb'?: ProcEffect | UnknownProcEffect;
   'add to sbb'?: ProcEffect | UnknownProcEffect;
   'add to ubb'?: ProcEffect | UnknownProcEffect;
 }
 
-declare type LeaderSkill = {
+export type LeaderSkill = {
   desc: string;
   effects: Array<PassiveEffect | UnknownPassiveEffect>;
   id: string;
   name: string;
 }
 
-declare type Unit = {
+export type Unit = {
   ai?: UnitArenaAiEntry[];
   animations?: {
     [key: string]: {
