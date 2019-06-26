@@ -1,9 +1,8 @@
-const { src, dest } = require('gulp');
+const { dest } = require('gulp');
 const { spawn } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const fancyLog = require('fancy-log');
-const through2 = require('through2');
 
 const ts = require('gulp-typescript');
 const tsProject = ts.createProject('../tsconfig.json');
@@ -84,32 +83,8 @@ function buildTypeScript () {
 }
 
 function buildDocs (done) {
-  const DOCS_PATH = path.resolve(__dirname, '../docs/');
-  if (!fs.existsSync(DOCS_PATH)) {
-    fs.mkdirSync(DOCS_PATH);
-  }
-
-  // build docs in parallel
-  const buildPromises = [];
-  src(path.resolve(DIST_FOLDER, './**.js'))
-    .pipe(through2.obj((file, enc, done) => {
-      const splitPath = file.path.split(path.sep);
-      const [filename, ...extension] = splitPath[splitPath.length - 1].split('.');
-      if (filename !== 'index') {
-        fancyLog.info(`generating docs for ${filename}`);
-        const instance = spawn('node.exe', [path.resolve(__dirname, '../node_modules/documentation/bin/documentation.js'), 'build', file.path, '--shallow', '-f', 'md', '-o', path.resolve(__dirname, '../docs/', `${filename}.md`)]);
-        const buildPromise = handleSpawn(instance, `documentation:${filename}`)
-          .then(() => {
-            fancyLog.info(`built ${filename}.md`);
-          });
-        buildPromises.push(buildPromise);
-        done(null, file);
-      } else {
-        done(null, file);
-      }
-    }));
-
-  Promise.all(buildPromises).then(() => done());
+  runNpmCommand('build:docs', 'typedoc')
+    .then(() => done());
 }
 
 module.exports = {
