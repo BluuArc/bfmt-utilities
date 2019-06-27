@@ -20,7 +20,7 @@
 
 ● **attackingProcs**: *`ReadonlyArray<string>`* =  Object.freeze(['1', '13', '14', '27', '28', '29', '47', '61', '64', '75', '11000'].concat(['46', '48', '97']))
 
-*Defined in [buffs.ts:5](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/buffs.ts#L5)*
+*Defined in [buffs.ts:5](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/buffs.ts#L5)*
 
 **`type`** {string[]} List of proc IDs that are associated with attacks
 
@@ -32,7 +32,7 @@ ___
 
 ▸ **isAttackingProcId**(`id`: string): *boolean*
 
-*Defined in [buffs.ts:11](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/buffs.ts#L11)*
+*Defined in [buffs.ts:11](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/buffs.ts#L11)*
 
 Determine if a given proc ID is associated with an attack
 

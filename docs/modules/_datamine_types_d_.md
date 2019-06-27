@@ -36,7 +36,7 @@
 
 Ƭ **BraveBurst**: *object*
 
-*Defined in [datamine-types.d.ts:60](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L60)*
+*Defined in [datamine-types.d.ts:60](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L60)*
 
 #### Type declaration:
 
@@ -60,7 +60,7 @@ ___
 
 Ƭ **BurstLevelEntry**: *object*
 
-*Defined in [datamine-types.d.ts:55](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L55)*
+*Defined in [datamine-types.d.ts:55](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L55)*
 
 #### Type declaration:
 
@@ -74,7 +74,7 @@ ___
 
 Ƭ **DamageFramesEntry**: *object*
 
-*Defined in [datamine-types.d.ts:48](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L48)*
+*Defined in [datamine-types.d.ts:48](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L48)*
 
 #### Type declaration:
 
@@ -92,7 +92,7 @@ ___
 
 Ƭ **ExtraSkill**: *object*
 
-*Defined in [datamine-types.d.ts:77](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L77)*
+*Defined in [datamine-types.d.ts:77](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L77)*
 
 #### Type declaration:
 
@@ -114,7 +114,7 @@ ___
 
 Ƭ **ExtraSkillCondition**: *object*
 
-*Defined in [datamine-types.d.ts:70](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L70)*
+*Defined in [datamine-types.d.ts:70](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L70)*
 
 #### Type declaration:
 
@@ -132,7 +132,7 @@ ___
 
 Ƭ **LeaderSkill**: *object*
 
-*Defined in [datamine-types.d.ts:114](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L114)*
+*Defined in [datamine-types.d.ts:114](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L114)*
 
 #### Type declaration:
 
@@ -150,7 +150,7 @@ ___
 
 Ƭ **PassiveEffect**: *object*
 
-*Defined in [datamine-types.d.ts:38](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L38)*
+*Defined in [datamine-types.d.ts:38](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L38)*
 
 #### Type declaration:
 
@@ -164,7 +164,7 @@ ___
 
 Ƭ **ProcEffect**: *[BaseProcEffect](../interfaces/_datamine_types_d_.baseproceffect.md) & object*
 
-*Defined in [datamine-types.d.ts:27](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L27)*
+*Defined in [datamine-types.d.ts:27](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L27)*
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 Ƭ **SpEnhancementEffect**: *object*
 
-*Defined in [datamine-types.d.ts:107](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L107)*
+*Defined in [datamine-types.d.ts:107](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L107)*
 
 #### Type declaration:
 
@@ -190,7 +190,7 @@ ___
 
 Ƭ **SpEnhancementEntry**: *object*
 
-*Defined in [datamine-types.d.ts:89](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L89)*
+*Defined in [datamine-types.d.ts:89](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L89)*
 
 #### Type declaration:
 
@@ -210,7 +210,7 @@ ___
 
 Ƭ **SpEnhancementSkill**: *object*
 
-*Defined in [datamine-types.d.ts:97](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L97)*
+*Defined in [datamine-types.d.ts:97](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L97)*
 
 #### Type declaration:
 
@@ -234,7 +234,7 @@ ___
 
 Ƭ **Unit**: *object*
 
-*Defined in [datamine-types.d.ts:121](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L121)*
+*Defined in [datamine-types.d.ts:121](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L121)*
 
 #### Type declaration:
 
@@ -376,7 +376,7 @@ ___
 
 Ƭ **UnitArenaAiEntry**: *object*
 
-*Defined in [datamine-types.d.ts:1](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L1)*
+*Defined in [datamine-types.d.ts:1](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L1)*
 
 #### Type declaration:
 
@@ -394,7 +394,7 @@ ___
 
 Ƭ **UnitMovemmentEntry**: *object*
 
-*Defined in [datamine-types.d.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L8)*
+*Defined in [datamine-types.d.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L8)*
 
 #### Type declaration:
 
@@ -410,7 +410,7 @@ ___
 
 Ƭ **UnitStatsEntry**: *object*
 
-*Defined in [datamine-types.d.ts:14](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L14)*
+*Defined in [datamine-types.d.ts:14](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L14)*
 
 #### Type declaration:
 
@@ -428,7 +428,7 @@ ___
 
 Ƭ **UnknownPassiveEffect**: *object*
 
-*Defined in [datamine-types.d.ts:43](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L43)*
+*Defined in [datamine-types.d.ts:43](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L43)*
 
 #### Type declaration:
 
@@ -442,6 +442,6 @@ ___
 
 Ƭ **UnknownProcEffect**: *[BaseProcEffect](../interfaces/_datamine_types_d_.baseproceffect.md) & object*
 
-*Defined in [datamine-types.d.ts:32](https://github.com/BluuArc/bfmt-utilities/blob/dfb9803/src/datamine-types.d.ts#L32)*
+*Defined in [datamine-types.d.ts:32](https://github.com/BluuArc/bfmt-utilities/blob/3dd6fae/src/datamine-types.d.ts#L32)*
 
 ___

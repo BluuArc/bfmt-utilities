@@ -3,10 +3,18 @@ import { BraveBurst, BurstLevelEntry, ProcEffect, UnknownProcEffect } from './da
 
 /**
  * Given a brave burst and a level, get the associated entry at that burst's level
+ * @param level the level of the entry to get; this is 1-indexed (so level 1 would get the entry at index 0)
  */
 export function getLevelEntryForBurst (burst: BraveBurst, level: number | undefined): BurstLevelEntry {
   const burstEffectsByLevel = (burst && Array.isArray(burst.levels)) ? burst.levels : [];
-  const levelIndex = !isNaN(<number>level) ? +<number>level : (burstEffectsByLevel.length - 1);
+  let levelIndex: number;
+  if (!isNaN(<number>level)) {
+    levelIndex = (+<number>level - 1);
+  } else if (level === undefined) {
+    levelIndex = burstEffectsByLevel.length - 1;
+  } else {
+    levelIndex = <number>level;
+  }
   return burstEffectsByLevel[levelIndex] || { 'bc cost': 0, effects: [] };
 }
 
