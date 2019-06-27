@@ -1,5 +1,6 @@
-import * as burstUtilities from '../src/bursts';
-import { generateInputPairsOfTypesExcept } from './utils';
+import * as burstUtilities from '../../src/bursts';
+import { generateInputPairsOfTypesExcept } from '../utils';
+
 describe("bursts utilities", () => {
   const MOCK_PROC_EFFECT = { 'proc id': '1' };
   const MOCK_UNKNOWN_PROC_EFFECT = { 'unknown proc id': '48' };
