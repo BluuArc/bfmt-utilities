@@ -20,7 +20,12 @@ describe('bursts utilities', () => {
         effects: [],
       })),
     };
-  }
+  };
+  let mockBurst = getMockBurst(NUM_BURST_LEVELS);
+
+  beforeEach(() => {
+    mockBurst = getMockBurst(NUM_BURST_LEVELS);
+  });
 
   describe('getLevelEntryForBurst', () => {
     const DEFAULT_RETURN_VALUE = {
@@ -33,11 +38,6 @@ describe('bursts utilities', () => {
       expect(input.effects).toEqual(effects);
     };
     const assertDefaultShape = (input) => assertShape(input, DEFAULT_RETURN_VALUE['bc cost'], DEFAULT_RETURN_VALUE.effects);
-    let mockBurst = getMockBurst(NUM_BURST_LEVELS);
-
-    beforeEach(() => {
-      mockBurst = getMockBurst(NUM_BURST_LEVELS);
-    });
 
     describe('for non-object burst inputs', () => {
       generateInputPairsOfTypesExcept(['object']).forEach(testCase => {
@@ -54,7 +54,7 @@ describe('bursts utilities', () => {
         const expectedResult = mockBurst.levels[EXISTING_LEVEL - 1];
         const actualResult = burstUtilities.getLevelEntryForBurst(mockBurst, EXISTING_LEVEL);
         expect(expectedResult).toBeDefined();
-        expect(actualResult).toBe(expectedResult)
+        expect(actualResult).toBe(expectedResult);
       });
 
       it('returns default values when the level entry is out of bounds', () => {
@@ -79,4 +79,87 @@ describe('bursts utilities', () => {
       expect(actualResult).toBe(expectedResult);
     });
   });
+
+  describe('getBurstEffects', () => {
+    const assertEmptyArray = (input) => {
+      expect(Array.isArray(input)).toBeTruthy('Result is not an array');
+      expect(input.length).toBe(0, 'Result is not an empty array');
+    };
+
+    const NUM_EFFECTS = 10; // should be a number >= 0
+    const EFFECT_TEMPLATE_ARRAY = new Array(NUM_EFFECTS).fill(0);
+    beforeEach(() => {
+      mockBurst.levels.forEach(levelEntry => {
+        levelEntry.effects = EFFECT_TEMPLATE_ARRAY.map(() => getMockProcEffect({
+          id: ARBITRARY_PROC_ID,
+        }));
+      });
+    });
+
+    describe('for non-object burst inputs', () => {
+      generateInputPairsOfTypesExcept(['object']).forEach(testCase => {
+        it(`returns an empty array when burst input is ${testCase.name}`, () => {
+          const result = burstUtilities.getBurstEffects(testCase.value);
+          assertEmptyArray(result);
+        });
+      });
+    });
+
+    describe('when a level is specified', () => {
+      it('returns the effects of the burst level entry at the specified level if it exists', () => {
+        const EXISTING_LEVEL = NUM_BURST_LEVELS - 1;
+        const expectedResult = mockBurst.levels[EXISTING_LEVEL - 1].effects;
+        const actualResult = burstUtilities.getBurstEffects(mockBurst, EXISTING_LEVEL);
+        expect(expectedResult).toBeDefined();
+        expect(actualResult).toBe(expectedResult);
+      });
+
+      it('returns an empty array when the level entry is out of bounds', () => {
+        const NONEXISTENT_LEVEL = NUM_BURST_LEVELS + 1;
+        const result = burstUtilities.getBurstEffects(mockBurst, NONEXISTENT_LEVEL);
+        assertEmptyArray(result);
+      });
+
+      describe('for nun-numeric level inputs', () => {
+        generateInputPairsOfTypesExcept(['number', 'undefined']).forEach(testCase => {
+          it(`returns an empty array when level input is ${testCase.name}`, () => {
+            const result = burstUtilities.getBurstEffects(mockBurst, testCase.value);
+            assertEmptyArray(result);
+          });
+        });
+      });
+
+      it('returns the last level entry if no level entry is specified', () => {
+        const expectedResult = mockBurst.levels[NUM_BURST_LEVELS - 1].effects;
+        const actualResult = burstUtilities.getBurstEffects(mockBurst);
+        expect(actualResult).toBe(expectedResult);
+      });
+    });
+
+    it('returns an empty array if the entry at the specified level does not have an effects property', () => {
+      const ARBITRARY_VALID_LEVEL = 1;
+      const correspondingEntry = mockBurst.levels[ARBITRARY_VALID_LEVEL - 1];
+      expect(burstUtilities.getBurstEffects(mockBurst, ARBITRARY_VALID_LEVEL)).toBe(correspondingEntry.effects);
+      delete correspondingEntry.effects;
+      expect(correspondingEntry.effects).toBeUndefined();
+
+      const result = burstUtilities.getBurstEffects(mockBurst, ARBITRARY_VALID_LEVEL);
+      assertEmptyArray(result);
+    });
+
+    describe('for non-array-like effects properties', () => {
+      generateInputPairsOfTypesExcept(['array']).forEach(testCase => {
+        it(`returns an empty array if the entry at the specified level has an effect property that is ${testCase.name}`, () => {
+          const ARBITRARY_VALID_LEVEL = 1;
+          const correspondingEntry = mockBurst.levels[ARBITRARY_VALID_LEVEL - 1];
+          correspondingEntry.effects = testCase.value;
+
+          const result = burstUtilities.getBurstEffects(mockBurst, ARBITRARY_VALID_LEVEL);
+          assertEmptyArray(result);
+        });
+      });
+    });
+  });
+
+  // tests for 1-indexed
 });
