@@ -2,12 +2,15 @@ import * as burstUtilities from '../../src/bursts';
 import { generateInputPairsOfTypesExcept } from '../utils';
 
 describe('bursts utilities', () => {
-  const MOCK_PROC_EFFECT = { 'proc id': '1' };
-  const MOCK_UNKNOWN_PROC_EFFECT = { 'unknown proc id': '48' };
   const ARBITRARY_BC_COST = 123;
+  const ARBITRARY_PROC_ID = '123';
+  const ATTACKING_PROC_ID = '1';
+  const NON_ATTACKING_PROC_ID = '2';
+  const NUM_BURST_LEVELS = 10; // should be a number >= 2 for the following test cases
 
-  const getMockProcEffect = ({ isUnknown = false, id = '1' } = {}) => ({
+  const getMockProcEffect = ({ isUnknown = false, id = '1', ...attrs } = {}) => ({
     [`${isUnknown ? 'unknown ' : ''}proc id`]: id,
+    ...attrs,
   });
   const getMockBurst = (numLevels = 10) => {
     const levelsArray = new Array(numLevels).fill(0);
@@ -30,6 +33,11 @@ describe('bursts utilities', () => {
       expect(input.effects).toEqual(effects);
     };
     const assertDefaultShape = (input) => assertShape(input, DEFAULT_RETURN_VALUE['bc cost'], DEFAULT_RETURN_VALUE.effects);
+    let mockBurst = getMockBurst(NUM_BURST_LEVELS);
+
+    beforeEach(() => {
+      mockBurst = getMockBurst(NUM_BURST_LEVELS);
+    });
 
     describe('for non-object burst inputs', () => {
       generateInputPairsOfTypesExcept(['object']).forEach(testCase => {
@@ -41,12 +49,6 @@ describe('bursts utilities', () => {
     });
 
     describe('when a level is specified', () => {
-      const NUM_BURST_LEVELS = 10; // should be a number >= 2 for the following test cases
-      let mockBurst = getMockBurst(NUM_BURST_LEVELS);
-      beforeEach(() =>{
-        mockBurst = getMockBurst(NUM_BURST_LEVELS);
-      });
-
       it('returns the burst level entry at the specified level if it exists', () => {
         const EXISTING_LEVEL = NUM_BURST_LEVELS - 1;
         const expectedResult = mockBurst.levels[EXISTING_LEVEL - 1];
@@ -69,12 +71,12 @@ describe('bursts utilities', () => {
           });
         });
       });
+    });
 
-      it('returns the last level entry if no level entry is specified', () => {
-        const expectedResult = mockBurst.levels[NUM_BURST_LEVELS - 1];
-        const actualResult = burstUtilities.getLevelEntryForBurst(mockBurst);
-        expect(actualResult).toBe(expectedResult);
-      });
+    it('returns the last level entry if no level entry is specified', () => {
+      const expectedResult = mockBurst.levels[NUM_BURST_LEVELS - 1];
+      const actualResult = burstUtilities.getLevelEntryForBurst(mockBurst);
+      expect(actualResult).toBe(expectedResult);
     });
   });
 });

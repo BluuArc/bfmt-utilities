@@ -9,8 +9,10 @@ export function getLevelEntryForBurst (burst: BraveBurst, level: number | undefi
   const burstEffectsByLevel = (burst && Array.isArray(burst.levels)) ? burst.levels : [];
   let levelIndex: number;
   if (!isNaN(<number>level)) {
+    // 1-indexed
     levelIndex = (+<number>level - 1);
   } else if (level === undefined) {
+    // default to last entry in burst
     levelIndex = burstEffectsByLevel.length - 1;
   } else {
     levelIndex = <number>level;
@@ -20,14 +22,16 @@ export function getLevelEntryForBurst (burst: BraveBurst, level: number | undefi
 
 /**
  * Given a brave burst and a level, get the list of effects at that burst's level
+ * @param level the level of the entry to get; this is 1-indexed (so level 1 would get the entry at index 0)
  */
 export function getBurstEffects (burst: BraveBurst, level: number | undefined): Array<ProcEffect | UnknownProcEffect> {
   const levelEntry = getLevelEntryForBurst(burst, level);
-  return levelEntry.effects;
+  return Array.isArray(levelEntry.effects) ? levelEntry.effects : [];
 }
 
 /**
  * Given a brave burst and a level, get the cost, hits, and dropcheck information for that burst's level
+ * @param level the level of the entry to get; this is 1-indexed (so level 1 would get the entry at index 0)
  */
 export function getBcDcInfo (burst: BraveBurst, level: number | undefined): { cost: number, hits: number, dropchecks: number} {
   const result = {
