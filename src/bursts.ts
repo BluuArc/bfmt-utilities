@@ -42,15 +42,15 @@ export function getBcDcInfo (burst: BraveBurst, level: number | undefined): { co
 
   if (burst) {
     const levelEntry = getLevelEntryForBurst(burst, level);
-    const attacks = levelEntry.effects
+    const attacks = ((Array.isArray(levelEntry.effects) && levelEntry.effects) || [])
       .map((e, i) => ({
         id: e['proc id'] || (<UnknownProcEffect>e)['unknown proc id'],
-        hits: e.hits || (burst['damage frames'][i] || { hits: 0 }).hits || 0,
+        hits: (+<number>e.hits) || (burst['damage frames'] && burst['damage frames'][i] || { hits: 0 }).hits || 0,
       })).filter(e => isAttackingProcId(e.id));
-    const numHits = attacks.reduce((acc, val) => acc + +val.hits, 0);
-    const dropchecks = numHits * +burst['drop check count'];
+    const numHits = attacks.reduce((acc, val) => acc + +val.hits, 0) || 0;
+    const dropchecks = numHits * (+burst['drop check count'] || 0);
 
-    result.cost = levelEntry['bc cost'];
+    result.cost = +levelEntry['bc cost'] || 0;
     result.hits = numHits;
     result.dropchecks = dropchecks;
   }
