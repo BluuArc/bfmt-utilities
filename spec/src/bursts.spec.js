@@ -49,6 +49,13 @@ describe('bursts utilities', () => {
     });
 
     describe('when a level is specified', () => {
+      it('returns the first burst level entry when the level is 1', () => {
+        const expectedResult = mockBurst.levels[0];
+        const actualResult = burstUtilities.getLevelEntryForBurst(mockBurst, 1);
+        expect(expectedResult).toBeDefined();
+        expect(actualResult).toBe(expectedResult);
+      });
+
       it('returns the burst level entry at the specified level if it exists', () => {
         const EXISTING_LEVEL = NUM_BURST_LEVELS - 1;
         const expectedResult = mockBurst.levels[EXISTING_LEVEL - 1];
@@ -106,6 +113,13 @@ describe('bursts utilities', () => {
     });
 
     describe('when a level is specified', () => {
+      it('returns the first burst level entry when the level is 1', () => {
+        const expectedResult = mockBurst.levels[0].effects;
+        const actualResult = burstUtilities.getBurstEffects(mockBurst, 1);
+        expect(expectedResult).toBeDefined();
+        expect(actualResult).toBe(expectedResult);
+      });
+
       it('returns the effects of the burst level entry at the specified level if it exists', () => {
         const EXISTING_LEVEL = NUM_BURST_LEVELS - 1;
         const expectedResult = mockBurst.levels[EXISTING_LEVEL - 1].effects;
@@ -160,6 +174,4 @@ describe('bursts utilities', () => {
       });
     });
   });
-
-  // tests for 1-indexed
 });
