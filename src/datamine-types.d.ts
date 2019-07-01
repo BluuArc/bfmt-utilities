@@ -57,9 +57,15 @@ export type BurstLevelEntry = {
   effects: Array<(ProcEffect | UnknownProcEffect) & { hits?: number; }>;
 }
 
+export type BurstDamageFramesEntry = DamageFramesEntry & {
+  'unknown proc id'?: string;
+  'proc id'?: string;
+  hits: number;
+}
+
 export type BraveBurst = {
   associated_units?: string[];
-  'damage frames': (DamageFramesEntry & { 'proc id': string; hits: number; })[];
+  'damage frames': BurstDamageFramesEntry[];
   desc: string;
   'drop check count': number;
   id: string;

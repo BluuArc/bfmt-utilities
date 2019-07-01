@@ -1,11 +1,12 @@
-import { isAttackingProcId } from './buffs';
+import { isAttackingProcId, getEffectId } from './buffs';
 import { BraveBurst, BurstLevelEntry, ProcEffect, UnknownProcEffect } from './datamine-types';
+import { TARGET_AREA_MAPPING } from './constants';
 
 /**
  * Given a brave burst and a level, get the associated entry at that burst's level
  * @param level the level of the entry to get; this is 1-indexed (so level 1 would get the entry at index 0)
  */
-export function getLevelEntryForBurst (burst: BraveBurst, level: number | undefined): BurstLevelEntry {
+export function getLevelEntryForBurst (burst: BraveBurst, level?: number): BurstLevelEntry {
   const burstEffectsByLevel = (burst && Array.isArray(burst.levels)) ? burst.levels : [];
   let levelIndex: number;
   if (!isNaN(<number>level)) {
@@ -24,7 +25,7 @@ export function getLevelEntryForBurst (burst: BraveBurst, level: number | undefi
  * Given a brave burst and a level, get the list of effects at that burst's level
  * @param level the level of the entry to get; this is 1-indexed (so level 1 would get the entry at index 0)
  */
-export function getBurstEffects (burst: BraveBurst, level: number | undefined): Array<ProcEffect | UnknownProcEffect> {
+export function getBurstEffects (burst: BraveBurst, level?: number): Array<ProcEffect | UnknownProcEffect> {
   const levelEntry = getLevelEntryForBurst(burst, level);
   return Array.isArray(levelEntry.effects) ? levelEntry.effects : [];
 }
@@ -33,7 +34,7 @@ export function getBurstEffects (burst: BraveBurst, level: number | undefined): 
  * Given a brave burst and a level, get the cost, hits, and dropcheck information for that burst's level
  * @param level the level of the entry to get; this is 1-indexed (so level 1 would get the entry at index 0)
  */
-export function getBcDcInfo (burst: BraveBurst, level: number | undefined): { cost: number, hits: number, dropchecks: number} {
+export function getBcDcInfo (burst: BraveBurst, level?: number): { cost: number, hits: number, dropchecks: number} {
   const result = {
     cost: 0,
     hits: 0,
@@ -55,4 +56,24 @@ export function getBcDcInfo (burst: BraveBurst, level: number | undefined): { co
     result.dropchecks = dropchecks;
   }
   return result;
+}
+
+export function getHitCountData (burst: BraveBurst, filterFn: (input: any) => boolean = (f) => isAttackingProcId(f.id)) {
+  if (typeof burst !== 'object' || !Array.isArray(burst['damage frames'])) {
+    return [];
+  }
+  // hit count data is the same regardless of level
+  const endLevelEntry = getBurstEffects(burst);
+  return burst['damage frames']
+    .map((f, i) => {
+      const effectData = endLevelEntry[i];
+      const targetArea = effectData['random attack'] ? TARGET_AREA_MAPPING.random : (<TARGET_AREA_MAPPING>effectData['target area']);
+      return {
+        target: targetArea,
+        id: getEffectId(f),
+        damageFramesEntry: f,
+        delay: effectData['effect delay time(ms)/frame'],
+        effects: effectData,
+      };
+    }).filter(filterFn);
 }
