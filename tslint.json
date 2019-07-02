@@ -1,0 +1,28 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "no-any": {
+            "options": { "ignore-rest-args": true },
+            "severity": "warning"
+        },
+        "quotemark": [true, "single", "avoid-template", "avoid-escape"],
+        "no-magic-numbers": true,
+        "no-parameter-reassignment": true,
+        "await-promise": true,
+        "no-async-without-await": true,
+        "no-console": true,
+        "no-construct": true,
+        "no-duplicate-variable": true,
+        "no-invalid-template-strings": true,
+        "no-return-await": true,
+        "no-sparse-arrays": true,
+        "max-line-length": false,
+        "space-before-function-paren": [true, "always"],
+        "object-literal-key-quotes": [true, "as-needed"]
+    },
+    "rulesDirectory": []
+}

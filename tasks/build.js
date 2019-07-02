@@ -60,7 +60,7 @@ function runNpmCommand (command = [], name, handlers = {}) {
 }
 
 function buildWebpack (done) {
-  runNpmCommand('build:js', 'webpack')
+  runNpmCommand('build:bundle', 'webpack')
     .then(logger => {
       logger.log('finished build');
       done();

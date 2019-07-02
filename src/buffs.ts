@@ -1,4 +1,9 @@
-import { ProcEffect, UnknownProcEffect, PassiveEffect, UnknownPassiveEffect } from "./datamine-types";
+import {
+  PassiveEffect,
+  ProcEffect,
+  UnknownPassiveEffect,
+  UnknownProcEffect,
+} from './datamine-types';
 
 // TODO: dynamically create
 /**
@@ -14,15 +19,17 @@ export function isAttackingProcId (id: string): boolean {
   return attackingProcs.includes(id);
 }
 
+// tslint:disable-next-line no-any
 export function isPassiveEffect (effect: any = {}): boolean {
-  return effect && (
+  return !!effect && (
     !isNaN(effect['passive id']) ||
     !isNaN(effect['unknown passive id'])
   );
 }
 
+// tslint:disable-next-line no-any
 export function isProcEffect (effect: any = {}): boolean {
-  return effect && (
+  return !!effect && (
     !isNaN(effect['proc id']) ||
     !isNaN(effect['unknown proc id'])
   );
@@ -36,8 +43,8 @@ export function getEffectId (effect?: {
 }): string {
   let result = '';
   if (effect) {
-    result = (<ProcEffect>effect)['proc id'] || (<UnknownProcEffect>effect)['unknown proc id'] ||
-      (<PassiveEffect>effect)['passive id'] || (<UnknownPassiveEffect>effect)['unknown passive id'] ||
+    result = (effect as ProcEffect)['proc id'] || (effect as UnknownProcEffect)['unknown proc id'] ||
+      (effect as PassiveEffect)['passive id'] || (effect as UnknownPassiveEffect)['unknown passive id'] ||
       result;
   }
   return result;

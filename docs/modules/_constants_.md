@@ -9,3 +9,4 @@
 #### Enumerations
 
 * [BF_SERVERS](../enums/_constants_.bf_servers.md)
+* [TARGET_AREA_MAPPING](../enums/_constants_.target_area_mapping.md)

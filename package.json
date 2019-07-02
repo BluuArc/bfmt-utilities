@@ -14,9 +14,12 @@
     "clean:docs": "npm run gulp -- clean:docs",
     "build:docs": "typedoc --options typedoc.config.js --theme markdown --out docs src/",
     "build:app": "npm run build:types && npm run gulp -- build:app",
-    "build": "npm run build:app && npm run build:docs",
+    "build": "npm run lint && npm run lintless-build",
+    "build:bundle": "webpack --mode=production",
+    "lintless-build": "npm run build:app && npm run build:docs",
     "clean": "npm run gulp -- clean:app clean:docs",
-    "tdd": "nodemon --watch src --watch spec -e js,ts --exec npm run test"
+    "tdd": "nodemon --watch src --watch spec -e js,ts --exec npm run test",
+    "lint": "tslint -c tslint.json -p tsconfig.json"
   },
   "author": "Joshua Castor",
   "license": "GPL-3.0",
@@ -33,6 +36,7 @@
     "gulp-typescript": "^5.0.1",
     "jasmine": "^3.4.0",
     "nodemon": "^1.19.1",
+    "tslint": "^5.18.0",
     "typedoc": "^0.14.2",
     "typedoc-plugin-markdown": "^2.0.6",
     "typescript": "^3.5.2",
