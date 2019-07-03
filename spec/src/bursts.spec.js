@@ -7,8 +7,16 @@ describe('bursts utilities', () => {
   const ATTACKING_PROC_ID = '1';
   const NON_ATTACKING_PROC_ID = '2';
   const ARBITRARY_DROPCHECK_COUNT = 3;
+  const ARBITRARY_EFFECT_DELAY = '16.7/1';
   const NUM_BURST_LEVELS = 10; // should be a number >= 2 for the following test cases
+  const NUM_EFFECTS = 10; // should be a number >= 0
+  const ARBITRARY_TARGET_AREA = 'some target area';
+  const EFFECT_TEMPLATE_ARRAY = new Array(NUM_EFFECTS).fill(0);
 
+  const assertEmptyArray = (input) => {
+    expect(Array.isArray(input)).toBeTruthy('Result is not an array');
+    expect(input.length).toBe(0, 'Result is not an empty array');
+  };
   const getMockProcEffect = ({ isUnknown = false, id = '1', ...attrs } = {}) => ({
     [`${isUnknown ? 'unknown ' : ''}proc id`]: id,
     ...attrs,
@@ -90,13 +98,6 @@ describe('bursts utilities', () => {
   });
 
   describe('getBurstEffects', () => {
-    const assertEmptyArray = (input) => {
-      expect(Array.isArray(input)).toBeTruthy('Result is not an array');
-      expect(input.length).toBe(0, 'Result is not an empty array');
-    };
-
-    const NUM_EFFECTS = 10; // should be a number >= 0
-    const EFFECT_TEMPLATE_ARRAY = new Array(NUM_EFFECTS).fill(0);
     beforeEach(() => {
       mockBurst.levels.forEach(levelEntry => {
         levelEntry.effects = EFFECT_TEMPLATE_ARRAY.map(() => getMockProcEffect({
@@ -196,8 +197,6 @@ describe('bursts utilities', () => {
       DEFAULT_RETURN_VALUE.dropchecks,
     );
 
-    const NUM_EFFECTS = 10; // should be a number >= 0
-    const EFFECT_TEMPLATE_ARRAY = new Array(NUM_EFFECTS).fill(0);
     beforeEach(() => {
       mockBurst.levels = mockBurst.levels.map((entry, i) => ({ ...entry, ['bc cost']: i }));
     });
@@ -363,6 +362,57 @@ describe('bursts utilities', () => {
       const expectedHits = EFFECT_TEMPLATE_ARRAY.reduce((acc, _, i) => acc + i + 1, 0);
       const result = burstUtilities.getBcDcInfo(mockBurst, ARBITRARY_VALID_LEVEL);
       assertShape(result, DEFAULT_RETURN_VALUE.cost, expectedHits, 0);
+    });
+  });
+
+  describe('getHitCountData', () => {
+    const assertProperty = (obj = {}, prop = '', value) => {
+      expect(obj.hasOwnProperty(prop)).toBeTruthy();
+      expect(obj[prop]).toEqual(value);
+    };
+    const assertShape = (actual = [], expected = []) => {
+      const PROPS_TO_COMPARE = ['damageFramesEntry', 'delay', 'effects', 'id', 'target'];
+      expect(actual.length).toBe(expected.length);
+      actual.forEach((entry, i) => {
+        const correspondingExpectedEntry = expected[i];
+        expect(correspondingExpectedEntry).toBeDefined();
+        PROPS_TO_COMPARE.forEach(prop => {
+          assertProperty(entry, prop, correspondingExpectedEntry[prop]);
+        });
+      });
+    };
+    describe('for non-object burst inputs', () => {
+      generateInputPairsOfTypesExcept(['object']).forEach(testCase => {
+        it(`returns an empty array if the burst input is ${testCase.name}`, () => {
+          const result = burstUtilities.getHitCountData(testCase.value);
+          assertEmptyArray(result);
+        });
+      });
+    });
+
+    it('returns all attacking frames when no filter function is specified', () => {
+      const LAST_LEVEL = NUM_BURST_LEVELS - 1;
+      const correspondingEntry = mockBurst.levels[LAST_LEVEL];
+      correspondingEntry.effects = EFFECT_TEMPLATE_ARRAY.map((_, i) => getMockProcEffect({
+        id: (i % 2 === 0) ? ATTACKING_PROC_ID : NON_ATTACKING_PROC_ID,
+        'effect delay time(ms)/frame': ARBITRARY_EFFECT_DELAY,
+        'target area': ARBITRARY_TARGET_AREA,
+      }));
+      mockBurst['damage frames'] = EFFECT_TEMPLATE_ARRAY.map((_, i) => ({
+        'proc id': (i % 2 === 0) ? ATTACKING_PROC_ID : NON_ATTACKING_PROC_ID,
+      }));
+
+      const expectedResult = correspondingEntry.effects
+        .map((_, i) => ({
+          damageFramesEntry: mockBurst['damage frames'][i],
+          delay: ARBITRARY_EFFECT_DELAY,
+          effects: mockBurst.levels[LAST_LEVEL].effects[i],
+          id: mockBurst.levels[LAST_LEVEL].effects[i]['proc id'],
+          target: ARBITRARY_TARGET_AREA,
+        }))
+        .filter(e => e.id === ATTACKING_PROC_ID);
+      const result = burstUtilities.getHitCountData(mockBurst);
+      assertShape(result, expectedResult);
     });
   });
 });

@@ -60,20 +60,20 @@ export function getBcDcInfo (burst: BraveBurst, level?: number): { cost: number,
 
 // tslint:disable-next-line no-any
 export function getHitCountData (burst: BraveBurst, filterFn: (input: any) => boolean = (f) => isAttackingProcId(f.id)) {
-  if (typeof burst !== 'object' || !Array.isArray(burst['damage frames'])) {
+  if (!burst || !Array.isArray(burst['damage frames'])) {
     return [];
   }
   // hit count data is the same regardless of level
   const endLevelEntry = getBurstEffects(burst);
   return burst['damage frames']
     .map((f, i) => {
-      const effectData = endLevelEntry[i];
+      const effectData = endLevelEntry[i] || {};
       const targetArea = effectData['random attack'] ? TARGET_AREA_MAPPING.random : (effectData['target area'] as TARGET_AREA_MAPPING);
       return {
         damageFramesEntry: f,
         delay: effectData['effect delay time(ms)/frame'],
         effects: effectData,
-        id: getEffectId(f),
+        id: getEffectId(f) || getEffectId(effectData),
         target: targetArea,
       };
     }).filter(filterFn);
