@@ -19,7 +19,7 @@
 
 ▸ **getBcDcInfo**(`burst`: [BraveBurst](_datamine_types_d_.md#braveburst), `level?`: undefined | number): *object*
 
-*Defined in [bursts.ts:37](https://github.com/BluuArc/bfmt-utilities/blob/0a68867/src/bursts.ts#L37)*
+*Defined in [bursts.ts:37](https://github.com/BluuArc/bfmt-utilities/blob/2fa5d16/src/bursts.ts#L37)*
 
 Given a brave burst and a level, get the cost, hits, and dropcheck information for that burst's level
 
@@ -44,7 +44,7 @@ ___
 
 ▸ **getBurstEffects**(`burst`: [BraveBurst](_datamine_types_d_.md#braveburst), `level?`: undefined | number): *`Array<ProcEffect | UnknownProcEffect>`*
 
-*Defined in [bursts.ts:28](https://github.com/BluuArc/bfmt-utilities/blob/0a68867/src/bursts.ts#L28)*
+*Defined in [bursts.ts:28](https://github.com/BluuArc/bfmt-utilities/blob/2fa5d16/src/bursts.ts#L28)*
 
 Given a brave burst and a level, get the list of effects at that burst's level
 
@@ -63,7 +63,7 @@ ___
 
 ▸ **getHitCountData**(`burst`: [BraveBurst](_datamine_types_d_.md#braveburst), `filterFn`: function): *object[]*
 
-*Defined in [bursts.ts:62](https://github.com/BluuArc/bfmt-utilities/blob/0a68867/src/bursts.ts#L62)*
+*Defined in [bursts.ts:62](https://github.com/BluuArc/bfmt-utilities/blob/2fa5d16/src/bursts.ts#L62)*
 
 **Parameters:**
 
@@ -87,7 +87,7 @@ ___
 
 ▸ **getLevelEntryForBurst**(`burst`: [BraveBurst](_datamine_types_d_.md#braveburst), `level?`: undefined | number): *[BurstLevelEntry](_datamine_types_d_.md#burstlevelentry)*
 
-*Defined in [bursts.ts:9](https://github.com/BluuArc/bfmt-utilities/blob/0a68867/src/bursts.ts#L9)*
+*Defined in [bursts.ts:9](https://github.com/BluuArc/bfmt-utilities/blob/2fa5d16/src/bursts.ts#L9)*
 
 Given a brave burst and a level, get the associated entry at that burst's level
 

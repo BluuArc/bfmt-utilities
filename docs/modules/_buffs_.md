@@ -23,7 +23,7 @@
 
 ● **attackingProcs**: *`ReadonlyArray<string>`* =  Object.freeze(['1', '13', '14', '27', '28', '29', '47', '61', '64', '75', '11000'].concat(['46', '48', '97']))
 
-*Defined in [buffs.ts:12](https://github.com/BluuArc/bfmt-utilities/blob/0a68867/src/buffs.ts#L12)*
+*Defined in [buffs.ts:12](https://github.com/BluuArc/bfmt-utilities/blob/2fa5d16/src/buffs.ts#L12)*
 
 **`type`** {string[]} List of proc IDs that are associated with attacks
 
@@ -35,7 +35,7 @@ ___
 
 ▸ **getEffectId**(`effect?`: undefined | object): *string*
 
-*Defined in [buffs.ts:38](https://github.com/BluuArc/bfmt-utilities/blob/0a68867/src/buffs.ts#L38)*
+*Defined in [buffs.ts:38](https://github.com/BluuArc/bfmt-utilities/blob/2fa5d16/src/buffs.ts#L38)*
 
 **Parameters:**
 
@@ -51,7 +51,7 @@ ___
 
 ▸ **isAttackingProcId**(`id`: string): *boolean*
 
-*Defined in [buffs.ts:18](https://github.com/BluuArc/bfmt-utilities/blob/0a68867/src/buffs.ts#L18)*
+*Defined in [buffs.ts:18](https://github.com/BluuArc/bfmt-utilities/blob/2fa5d16/src/buffs.ts#L18)*
 
 Determine if a given proc ID is associated with an attack
 
@@ -69,7 +69,7 @@ ___
 
 ▸ **isPassiveEffect**(`effect`: any): *boolean*
 
-*Defined in [buffs.ts:23](https://github.com/BluuArc/bfmt-utilities/blob/0a68867/src/buffs.ts#L23)*
+*Defined in [buffs.ts:23](https://github.com/BluuArc/bfmt-utilities/blob/2fa5d16/src/buffs.ts#L23)*
 
 **Parameters:**
 
@@ -85,7 +85,7 @@ ___
 
 ▸ **isProcEffect**(`effect`: any): *boolean*
 
-*Defined in [buffs.ts:31](https://github.com/BluuArc/bfmt-utilities/blob/0a68867/src/buffs.ts#L31)*
+*Defined in [buffs.ts:31](https://github.com/BluuArc/bfmt-utilities/blob/2fa5d16/src/buffs.ts#L31)*
 
 **Parameters:**
 
