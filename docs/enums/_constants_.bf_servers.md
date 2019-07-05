@@ -18,7 +18,7 @@
 
 ● **EUROPE**: = "eu"
 
-*Defined in [constants.ts:1](https://github.com/BluuArc/bfmt-utilities/blob/2fa5d16/src/constants.ts#L1)*
+*Defined in [constants.ts:1](https://github.com/BluuArc/bfmt-utilities/blob/b1cab37/src/constants.ts#L1)*
 
 ___
 
@@ -26,7 +26,7 @@ ___
 
 ● **GLOBAL**: = "gl"
 
-*Defined in [constants.ts:1](https://github.com/BluuArc/bfmt-utilities/blob/2fa5d16/src/constants.ts#L1)*
+*Defined in [constants.ts:1](https://github.com/BluuArc/bfmt-utilities/blob/b1cab37/src/constants.ts#L1)*
 
 ___
 
@@ -34,6 +34,6 @@ ___
 
 ● **JAPAN**: = "jp"
 
-*Defined in [constants.ts:1](https://github.com/BluuArc/bfmt-utilities/blob/2fa5d16/src/constants.ts#L1)*
+*Defined in [constants.ts:1](https://github.com/BluuArc/bfmt-utilities/blob/b1cab37/src/constants.ts#L1)*
 
 ___

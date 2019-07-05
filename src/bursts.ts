@@ -34,7 +34,22 @@ export function getBurstEffects (burst: BraveBurst, level?: number): Array<ProcE
  * Given a brave burst and a level, get the cost, hits, and dropcheck information for that burst's level
  * @param level the level of the entry to get; this is 1-indexed (so level 1 would get the entry at index 0)
  */
-export function getBcDcInfo (burst: BraveBurst, level?: number): { cost: number, hits: number, dropchecks: number} {
+export function getBcDcInfo (burst: BraveBurst, level?: number): {
+  /**
+   * the BC cost of the burst at the given level
+   */
+  cost: number,
+
+  /**
+   * the number of hits of the burst at the given level
+   */
+  hits: number,
+
+  /**
+   * the maximum number of BC that can drop per enemy if every hit dropped its maximum amount of BC
+   */
+  dropchecks: number,
+} {
   const result = {
     cost: 0,
     dropchecks: 0,
@@ -58,8 +73,11 @@ export function getBcDcInfo (burst: BraveBurst, level?: number): { cost: number,
   return result;
 }
 
-// tslint:disable-next-line no-any
-export function getHitCountData (burst: BraveBurst, filterFn: (input: any) => boolean = (f) => isAttackingProcId(f.id)) {
+/**
+ * Get a combined object containing the damage frames and effects of a given burst
+ * @param filterFn determine what damage frames to return based on its ID
+ */
+export function getHitCountData (burst: BraveBurst, filterFn: (input: any) => boolean = (f) => isAttackingProcId(f.id)) { // tslint:disable-line no-any
   if (!burst || !Array.isArray(burst['damage frames'])) {
     return [];
   }

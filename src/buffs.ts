@@ -7,7 +7,7 @@ import {
 
 // TODO: dynamically create
 /**
- * @type {string[]} List of proc IDs that are associated with attacks
+ * List of proc IDs that are associated with attacks
  */
 export const attackingProcs = Object.freeze(['1', '13', '14', '27', '28', '29', '47', '61', '64', '75', '11000'].concat(['46', '48', '97']));
 
@@ -19,27 +19,39 @@ export function isAttackingProcId (id: string): boolean {
   return attackingProcs.includes(id);
 }
 
-// tslint:disable-next-line no-any
-export function isPassiveEffect (effect: any = {}): boolean {
+/**
+ * Determine whether a given effect entry is a passive effect
+ * @param effect the effect entry to test
+ */
+export function isPassiveEffect (effect: any = {}): boolean { // tslint:disable-line no-any
   return !!effect && (
     !isNaN(effect['passive id']) ||
     !isNaN(effect['unknown passive id'])
   );
 }
 
-// tslint:disable-next-line no-any
-export function isProcEffect (effect: any = {}): boolean {
+/**
+ * Determine whether a given effect entry is a proc effect
+ * @param effect the effect entry to test
+ */
+export function isProcEffect (effect: any = {}): boolean { // tslint:disable-line no-any
   return !!effect && (
     !isNaN(effect['proc id']) ||
     !isNaN(effect['unknown proc id'])
   );
 }
 
+/**
+ * Get the ID of a given effect entry
+ * @param effect the effect entry to read from
+ */
 export function getEffectId (effect?: {
+  // tslint:disable: completed-docs
   'proc id'?: string,
   'unknown proc id'?: string,
   'passive id'?: string,
   'unknown passive id'?: string,
+  // tslint:enable: completed-docs
 }): string {
   let result = '';
   if (effect) {

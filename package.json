@@ -21,8 +21,8 @@
     "build:docs": "typedoc --options typedoc.config.js --theme markdown --out docs src/",
     "build:types": "tsc --emitDeclarationOnly",
     "watch:test": "nodemon --watch src --watch spec -e js,ts --exec npm run test",
-    "watch:lint": "nodemon --watch src -e js,ts --exec npm run lint",
-    "watch:dev": "nodemon --watch src --watch spec -e js,ts --exec npm run dev-test"
+    "watch:lint": "nodemon --watch src --watch tslint.json -e js,ts,json --exec npm run lint",
+    "watch:dev": "nodemon --watch src --watch spec --watch tslint.json -e js,ts,json --exec npm run dev-test"
   },
   "author": "Joshua Castor",
   "license": "GPL-3.0",
