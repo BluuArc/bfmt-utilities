@@ -68,13 +68,15 @@ export function getHitCountData (burst: BraveBurst, filterFn: (input: any) => bo
   return burst['damage frames']
     .map((f, i) => {
       const effectData = endLevelEntry[i] || {};
-      const targetArea = effectData['random attack'] ? TARGET_AREA_MAPPING.random : (effectData['target area'] as TARGET_AREA_MAPPING);
+      const targetArea = effectData['random attack']
+        ? TARGET_AREA_MAPPING.random
+        : (TARGET_AREA_MAPPING[(effectData['target area'] as any) as number]); // tslint:disable-line no-any
       return {
         damageFramesEntry: f,
         delay: effectData['effect delay time(ms)/frame'],
         effects: effectData,
         id: getEffectId(f) || getEffectId(effectData),
-        target: targetArea,
+        target: targetArea || effectData['target area'],
       };
     }).filter(filterFn);
 }

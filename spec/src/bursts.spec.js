@@ -381,6 +381,7 @@ describe('bursts utilities', () => {
         });
       });
     };
+
     describe('for non-object burst inputs', () => {
       generateInputPairsOfTypesExcept(['object']).forEach(testCase => {
         it(`returns an empty array if the burst input is ${testCase.name}`, () => {
@@ -413,6 +414,97 @@ describe('bursts utilities', () => {
         .filter(e => e.id === ATTACKING_PROC_ID);
       const result = burstUtilities.getHitCountData(mockBurst);
       assertShape(result, expectedResult);
+    });
+
+    describe('when a filter function is specified', () => {
+      const LAST_LEVEL = NUM_BURST_LEVELS - 1;
+      let correspondingEntry = mockBurst.levels[LAST_LEVEL];
+      let expectedResult = [];
+      let mockFilterFunction = jasmine.createSpy('Mock Filter Function');
+
+      beforeEach(() => {
+        correspondingEntry = mockBurst.levels[LAST_LEVEL];
+        correspondingEntry.effects = EFFECT_TEMPLATE_ARRAY.map((_, i) => getMockProcEffect({
+          id: ARBITRARY_PROC_ID,
+          'effect delay time(ms)/frame': ARBITRARY_EFFECT_DELAY,
+          'target area': ARBITRARY_TARGET_AREA,
+        }));
+        mockBurst['damage frames'] = EFFECT_TEMPLATE_ARRAY.map((_, i) => ({
+          'proc id': ARBITRARY_PROC_ID,
+        }));
+
+        mockFilterFunction = jasmine.createSpy('Mock Filter Function');
+        expectedResult = mockBurst.levels[LAST_LEVEL].effects
+          .map((_, i) => ({
+            damageFramesEntry: mockBurst['damage frames'][i],
+            delay: ARBITRARY_EFFECT_DELAY,
+            effects: mockBurst.levels[LAST_LEVEL].effects[i],
+            id: mockBurst.levels[LAST_LEVEL].effects[i]['proc id'],
+            target: ARBITRARY_TARGET_AREA,
+          }));
+      });
+
+      it('calls filter function with transformed frame data', () => {
+        burstUtilities.getHitCountData(mockBurst, mockFilterFunction);
+
+        expectedResult.forEach((entry, i) => {
+          // signature of Array.filter
+          expect(mockFilterFunction).toHaveBeenCalledWith(
+            jasmine.objectContaining(entry),
+            i,
+            jasmine.any(Array),
+          );
+        });
+      });
+
+      it('filters result based on filter function', () => {
+        mockFilterFunction.and.returnValue(true);
+        const result = burstUtilities.getHitCountData(mockBurst, mockFilterFunction);
+
+        // because the mock filter function always returns true, it should return everything
+        expect(result).toEqual(expectedResult);
+      });
+    });
+
+    describe('target translations', () => {
+      const LAST_LEVEL = NUM_BURST_LEVELS - 1;
+      let correspondingEntry = mockBurst.levels[LAST_LEVEL];
+      let mockFilterFunction = jasmine.createSpy('Mock Filter Function');
+
+      beforeEach(() => {
+        mockBurst['damage frames'] = [{ 'proc id': ARBITRARY_PROC_ID }];
+        correspondingEntry = mockBurst.levels[LAST_LEVEL];
+        mockFilterFunction = jasmine.createSpy('Mock Filter Function').and.returnValue(true);
+      });
+
+      [
+        { target: 'random', expected: 'RT' },
+        { target: 'aoe', expected: 'AOE' },
+        { target: 'single', expected: 'ST' },
+      ].forEach(testCase => {
+        it(`returns correct translation of target when the target area is ${testCase.target}`, () => {
+          const mockEffect = testCase.target === 'random'
+            ? getMockProcEffect({ id: ARBITRARY_PROC_ID, 'random attack': true })
+            : getMockProcEffect({ id: ARBITRARY_PROC_ID, 'target area': testCase.target });
+          correspondingEntry.effects = [mockEffect];
+
+          const result = burstUtilities.getHitCountData(mockBurst, mockFilterFunction);
+          expect(result.length).toBe(1);
+          expect(result[0].target).toBe(testCase.expected);
+        });
+      });
+
+      it('returns the original target area if no mapping exists for it', () => {
+        const ARBITRARY_TARGET_AREA = 'some target area';
+        correspondingEntry.effects = [getMockProcEffect({
+          id: ARBITRARY_PROC_ID,
+          'target area': ARBITRARY_TARGET_AREA,
+        })];
+
+        const result = burstUtilities.getHitCountData(mockBurst, mockFilterFunction);
+        expect(result.length).toBe(1);
+        expect(result[0].target).toBe(ARBITRARY_TARGET_AREA);
+      });
     });
   });
 });
