@@ -371,7 +371,7 @@ describe('bursts utilities', () => {
       expect(obj[prop]).toEqual(value);
     };
     const assertShape = (actual = [], expected = []) => {
-      const PROPS_TO_COMPARE = ['damageFramesEntry', 'delay', 'effects', 'id', 'target'];
+      const PROPS_TO_COMPARE = ['damageFramesEntry', 'delay', 'effect', 'id', 'target'];
       expect(actual.length).toBe(expected.length);
       actual.forEach((entry, i) => {
         const correspondingExpectedEntry = expected[i];
@@ -407,7 +407,7 @@ describe('bursts utilities', () => {
         .map((_, i) => ({
           damageFramesEntry: mockBurst['damage frames'][i],
           delay: ARBITRARY_EFFECT_DELAY,
-          effects: mockBurst.levels[LAST_LEVEL].effects[i],
+          effect: mockBurst.levels[LAST_LEVEL].effects[i],
           id: mockBurst.levels[LAST_LEVEL].effects[i]['proc id'],
           target: ARBITRARY_TARGET_AREA,
         }))
@@ -438,7 +438,7 @@ describe('bursts utilities', () => {
           .map((_, i) => ({
             damageFramesEntry: mockBurst['damage frames'][i],
             delay: ARBITRARY_EFFECT_DELAY,
-            effects: mockBurst.levels[LAST_LEVEL].effects[i],
+            effect: mockBurst.levels[LAST_LEVEL].effects[i],
             id: mockBurst.levels[LAST_LEVEL].effects[i]['proc id'],
             target: ARBITRARY_TARGET_AREA,
           }));

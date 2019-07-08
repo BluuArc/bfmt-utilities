@@ -1,6 +1,12 @@
 import { getEffectId, isAttackingProcId } from './buffs';
 import { TARGET_AREA_MAPPING } from './constants';
-import { BraveBurst, BurstLevelEntry, ProcEffect, UnknownProcEffect } from './datamine-types';
+import {
+  BraveBurst,
+  BurstDamageFramesEntry,
+  BurstLevelEntry,
+  ProcEffect,
+  UnknownProcEffect,
+} from './datamine-types';
 
 /**
  * Given a brave burst and a level, get the associated entry at that burst's level
@@ -74,10 +80,40 @@ export function getBcDcInfo (burst: BraveBurst, level?: number): {
 }
 
 /**
+ * Combined object containing the damage frame and effect of an effect entry in a Brave Burst
+ */
+interface IHitCountData {
+  /**
+   * the damage frames for a given effect
+   */
+  damageFramesEntry: BurstDamageFramesEntry;
+
+  /**
+   * the time/frame delay of a given effect
+   */
+  delay: string;
+
+  /**
+   * the parameters for a given effect
+   */
+  effect: ProcEffect | UnknownProcEffect;
+
+  /**
+   * the proc id of a given effect
+   */
+  id: string;
+
+  /**
+   * the target area of a given effect
+   */
+  target: TARGET_AREA_MAPPING;
+}
+
+/**
  * Get a combined object containing the damage frames and effects of a given burst
  * @param filterFn determine what damage frames to return based on its ID
  */
-export function getHitCountData (burst: BraveBurst, filterFn: (input: any) => boolean = (f) => isAttackingProcId(f.id)) { // tslint:disable-line no-any
+export function getHitCountData (burst: BraveBurst, filterFn: (input: IHitCountData) => boolean = (f) => isAttackingProcId(f.id)): IHitCountData[] {
   if (!burst || !Array.isArray(burst['damage frames'])) {
     return [];
   }
@@ -92,7 +128,7 @@ export function getHitCountData (burst: BraveBurst, filterFn: (input: any) => bo
       return {
         damageFramesEntry: f,
         delay: effectData['effect delay time(ms)/frame'],
-        effects: effectData,
+        effect: effectData,
         id: getEffectId(f) || getEffectId(effectData),
         target: targetArea || effectData['target area'],
       };
