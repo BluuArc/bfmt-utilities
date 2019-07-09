@@ -17,6 +17,10 @@ describe('bursts utilities', () => {
     expect(Array.isArray(input)).toBeTruthy('Result is not an array');
     expect(input.length).toBe(0, 'Result is not an empty array');
   };
+  const assertProperty = (obj = {}, prop = '', value) => {
+    expect(obj.hasOwnProperty(prop)).toBeTruthy();
+    expect(obj[prop]).toEqual(value);
+  };
   const getMockProcEffect = ({ isUnknown = false, id = '1', ...attrs } = {}) => ({
     [`${isUnknown ? 'unknown ' : ''}proc id`]: id,
     ...attrs,
@@ -365,11 +369,7 @@ describe('bursts utilities', () => {
     });
   });
 
-  describe('getHitCountData', () => {
-    const assertProperty = (obj = {}, prop = '', value) => {
-      expect(obj.hasOwnProperty(prop)).toBeTruthy();
-      expect(obj[prop]).toEqual(value);
-    };
+  describe('getEffectFrameData', () => {
     const assertShape = (actual = [], expected = []) => {
       const PROPS_TO_COMPARE = ['damageFramesEntry', 'delay', 'effect', 'id', 'target'];
       expect(actual.length).toBe(expected.length);
@@ -385,7 +385,7 @@ describe('bursts utilities', () => {
     describe('for non-object burst inputs', () => {
       generateInputPairsOfTypesExcept(['object']).forEach(testCase => {
         it(`returns an empty array if the burst input is ${testCase.name}`, () => {
-          const result = burstUtilities.getHitCountData(testCase.value);
+          const result = burstUtilities.getEffectFrameData(testCase.value);
           assertEmptyArray(result);
         });
       });
@@ -412,7 +412,7 @@ describe('bursts utilities', () => {
           target: ARBITRARY_TARGET_AREA,
         }))
         .filter(e => e.id === ATTACKING_PROC_ID);
-      const result = burstUtilities.getHitCountData(mockBurst);
+      const result = burstUtilities.getEffectFrameData(mockBurst);
       assertShape(result, expectedResult);
     });
 
@@ -445,7 +445,7 @@ describe('bursts utilities', () => {
       });
 
       it('calls filter function with transformed frame data', () => {
-        burstUtilities.getHitCountData(mockBurst, mockFilterFunction);
+        burstUtilities.getEffectFrameData(mockBurst, mockFilterFunction);
 
         expectedResult.forEach((entry, i) => {
           // signature of Array.filter
@@ -459,7 +459,7 @@ describe('bursts utilities', () => {
 
       it('filters result based on filter function', () => {
         mockFilterFunction.and.returnValue(true);
-        const result = burstUtilities.getHitCountData(mockBurst, mockFilterFunction);
+        const result = burstUtilities.getEffectFrameData(mockBurst, mockFilterFunction);
 
         // because the mock filter function always returns true, it should return everything
         expect(result).toEqual(expectedResult);
@@ -488,7 +488,7 @@ describe('bursts utilities', () => {
             : getMockProcEffect({ id: ARBITRARY_PROC_ID, 'target area': testCase.target });
           correspondingEntry.effects = [mockEffect];
 
-          const result = burstUtilities.getHitCountData(mockBurst, mockFilterFunction);
+          const result = burstUtilities.getEffectFrameData(mockBurst, mockFilterFunction);
           expect(result.length).toBe(1);
           expect(result[0].target).toBe(testCase.expected);
         });
@@ -501,7 +501,103 @@ describe('bursts utilities', () => {
           'target area': ARBITRARY_TARGET_AREA,
         })];
 
-        const result = burstUtilities.getHitCountData(mockBurst, mockFilterFunction);
+        const result = burstUtilities.getEffectFrameData(mockBurst, mockFilterFunction);
+        expect(result.length).toBe(1);
+        expect(result[0].target).toBe(ARBITRARY_TARGET_AREA);
+      });
+    });
+  });
+
+  describe('getHealFrameData', () => {
+    const HEAL_PROC_ID = '2';
+    const assertShape = (actual = [], expected = []) => {
+      const PROPS_TO_COMPARE = ['damageFramesEntry', 'delay', 'effect', 'id', 'target'];
+      expect(actual.length).toBe(expected.length);
+      actual.forEach((entry, i) => {
+        const correspondingExpectedEntry = expected[i];
+        expect(correspondingExpectedEntry).toBeDefined();
+        PROPS_TO_COMPARE.forEach(prop => {
+          assertProperty(entry, prop, correspondingExpectedEntry[prop]);
+        });
+      });
+    };
+
+    describe('for non-object burst inputs', () => {
+      generateInputPairsOfTypesExcept(['object']).forEach(testCase => {
+        it(`returns an empty array if the burst input is ${testCase.name}`, () => {
+          const result = burstUtilities.getHealFrameData(testCase.value);
+          assertEmptyArray(result);
+        });
+      });
+    });
+
+    it('returns all frames with the heal proc id (2)', () => {
+      const LAST_LEVEL = NUM_BURST_LEVELS - 1;
+      const correspondingEntry = mockBurst.levels[LAST_LEVEL];
+
+      // use ATTACKING_PROC_ID to verify that the filer isn't the same default as getEffectFrameData
+      correspondingEntry.effects = EFFECT_TEMPLATE_ARRAY.map((_, i) => getMockProcEffect({
+        id: (i % 2 === 0) ? HEAL_PROC_ID : ATTACKING_PROC_ID,
+        'effect delay time(ms)/frame': ARBITRARY_EFFECT_DELAY,
+        'target area': ARBITRARY_TARGET_AREA,
+      }));
+      mockBurst['damage frames'] = EFFECT_TEMPLATE_ARRAY.map((_, i) => ({
+        'proc id': (i % 2 === 0) ? HEAL_PROC_ID : ATTACKING_PROC_ID,
+      }));
+
+      const expectedResult = correspondingEntry.effects
+        .map((_, i) => ({
+          damageFramesEntry: mockBurst['damage frames'][i],
+          delay: ARBITRARY_EFFECT_DELAY,
+          effect: mockBurst.levels[LAST_LEVEL].effects[i],
+          id: mockBurst.levels[LAST_LEVEL].effects[i]['proc id'],
+          target: ARBITRARY_TARGET_AREA,
+        }))
+        .filter(e => e.id === HEAL_PROC_ID);
+      const result = burstUtilities.getHealFrameData(mockBurst);
+      assertShape(result, expectedResult);
+    });
+
+    describe('target translations', () => {
+      const LAST_LEVEL = NUM_BURST_LEVELS - 1;
+      let correspondingEntry = mockBurst.levels[LAST_LEVEL];
+
+      beforeEach(() => {
+        mockBurst['damage frames'] = [{ 'proc id': HEAL_PROC_ID }];
+        correspondingEntry = mockBurst.levels[LAST_LEVEL];
+      });
+
+      [
+        { target: 'random', expected: 'RT' },
+        { target: 'aoe', expected: 'AOE' },
+        { target: 'single', expected: 'ST' },
+      ].forEach(testCase => {
+        it(`returns correct translation of target when the target area is ${testCase.target}`, () => {
+          const mockEffect = testCase.target === 'random' ?
+            getMockProcEffect({
+              id: HEAL_PROC_ID,
+              'random attack': true
+            }) :
+            getMockProcEffect({
+              id: HEAL_PROC_ID,
+              'target area': testCase.target
+            });
+          correspondingEntry.effects = [mockEffect];
+
+          const result = burstUtilities.getHealFrameData(mockBurst);
+          expect(result.length).toBe(1);
+          expect(result[0].target).toBe(testCase.expected);
+        });
+      });
+
+      it('returns the original target area if no mapping exists for it', () => {
+        const ARBITRARY_TARGET_AREA = 'some target area';
+        correspondingEntry.effects = [getMockProcEffect({
+          id: HEAL_PROC_ID,
+          'target area': ARBITRARY_TARGET_AREA,
+        })];
+
+        const result = burstUtilities.getHealFrameData(mockBurst);
         expect(result.length).toBe(1);
         expect(result[0].target).toBe(ARBITRARY_TARGET_AREA);
       });

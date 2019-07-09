@@ -6,11 +6,16 @@
 
 ### Index
 
+#### Interfaces
+
+* [IEffectFrameData](../interfaces/_bursts_.ieffectframedata.md)
+
 #### Functions
 
 * [getBcDcInfo](_bursts_.md#getbcdcinfo)
 * [getBurstEffects](_bursts_.md#getbursteffects)
-* [getHitCountData](_bursts_.md#gethitcountdata)
+* [getEffectFrameData](_bursts_.md#geteffectframedata)
+* [getHealFrameData](_bursts_.md#gethealframedata)
 * [getLevelEntryForBurst](_bursts_.md#getlevelentryforburst)
 
 ## Functions
@@ -19,7 +24,7 @@
 
 ▸ **getBcDcInfo**(`burst`: [BraveBurst](_datamine_types_d_.md#braveburst), `level?`: undefined | number): *object*
 
-*Defined in [bursts.ts:37](https://github.com/BluuArc/bfmt-utilities/blob/b1cab37/src/bursts.ts#L37)*
+*Defined in [bursts.ts:43](https://github.com/BluuArc/bfmt-utilities/blob/1179835/src/bursts.ts#L43)*
 
 Given a brave burst and a level, get the cost, hits, and dropcheck information for that burst's level
 
@@ -44,7 +49,7 @@ ___
 
 ▸ **getBurstEffects**(`burst`: [BraveBurst](_datamine_types_d_.md#braveburst), `level?`: undefined | number): *`Array<ProcEffect | UnknownProcEffect>`*
 
-*Defined in [bursts.ts:28](https://github.com/BluuArc/bfmt-utilities/blob/b1cab37/src/bursts.ts#L28)*
+*Defined in [bursts.ts:34](https://github.com/BluuArc/bfmt-utilities/blob/1179835/src/bursts.ts#L34)*
 
 Given a brave burst and a level, get the list of effects at that burst's level
 
@@ -59,11 +64,11 @@ Name | Type | Description |
 
 ___
 
-###  getHitCountData
+###  getEffectFrameData
 
-▸ **getHitCountData**(`burst`: [BraveBurst](_datamine_types_d_.md#braveburst), `filterFn`: function): *object[]*
+▸ **getEffectFrameData**(`burst`: [BraveBurst](_datamine_types_d_.md#braveburst), `filterFn`: function): *[IEffectFrameData](../interfaces/_bursts_.ieffectframedata.md)[]*
 
-*Defined in [bursts.ts:80](https://github.com/BluuArc/bfmt-utilities/blob/b1cab37/src/bursts.ts#L80)*
+*Defined in [bursts.ts:116](https://github.com/BluuArc/bfmt-utilities/blob/1179835/src/bursts.ts#L116)*
 
 Get a combined object containing the damage frames and effects of a given burst
 
@@ -75,15 +80,33 @@ Get a combined object containing the damage frames and effects of a given burst
 
 determine what damage frames to return based on its ID
 
-▸ (`input`: any): *boolean*
+▸ (`input`: [IEffectFrameData](../interfaces/_bursts_.ieffectframedata.md)): *boolean*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`input` | any |
+`input` | [IEffectFrameData](../interfaces/_bursts_.ieffectframedata.md) |
 
-**Returns:** *object[]*
+**Returns:** *[IEffectFrameData](../interfaces/_bursts_.ieffectframedata.md)[]*
+
+___
+
+###  getHealFrameData
+
+▸ **getHealFrameData**(`burst`: [BraveBurst](_datamine_types_d_.md#braveburst)): *[IEffectFrameData](../interfaces/_bursts_.ieffectframedata.md)[]*
+
+*Defined in [bursts.ts:141](https://github.com/BluuArc/bfmt-utilities/blob/1179835/src/bursts.ts#L141)*
+
+Get the frame data for all healing effects (i.e. with a proc ID of 2) from a given burst
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`burst` | [BraveBurst](_datamine_types_d_.md#braveburst) |
+
+**Returns:** *[IEffectFrameData](../interfaces/_bursts_.ieffectframedata.md)[]*
 
 ___
 
@@ -91,7 +114,7 @@ ___
 
 ▸ **getLevelEntryForBurst**(`burst`: [BraveBurst](_datamine_types_d_.md#braveburst), `level?`: undefined | number): *[BurstLevelEntry](_datamine_types_d_.md#burstlevelentry)*
 
-*Defined in [bursts.ts:9](https://github.com/BluuArc/bfmt-utilities/blob/b1cab37/src/bursts.ts#L9)*
+*Defined in [bursts.ts:15](https://github.com/BluuArc/bfmt-utilities/blob/1179835/src/bursts.ts#L15)*
 
 Given a brave burst and a level, get the associated entry at that burst's level
 

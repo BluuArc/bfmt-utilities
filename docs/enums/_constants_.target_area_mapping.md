@@ -18,7 +18,7 @@
 
 ● **aoe**: = "AOE"
 
-*Defined in [constants.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/b1cab37/src/constants.ts#L3)*
+*Defined in [constants.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/1179835/src/constants.ts#L3)*
 
 ___
 
@@ -26,7 +26,7 @@ ___
 
 ● **random**: = "RT"
 
-*Defined in [constants.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/b1cab37/src/constants.ts#L3)*
+*Defined in [constants.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/1179835/src/constants.ts#L3)*
 
 ___
 
@@ -34,6 +34,6 @@ ___
 
 ● **single**: = "ST"
 
-*Defined in [constants.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/b1cab37/src/constants.ts#L3)*
+*Defined in [constants.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/1179835/src/constants.ts#L3)*
 
 ___

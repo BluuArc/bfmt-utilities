@@ -82,7 +82,7 @@ export function getBcDcInfo (burst: BraveBurst, level?: number): {
 /**
  * Combined object containing the damage frame and effect of an effect entry in a Brave Burst
  */
-interface IHitCountData {
+interface IEffectFrameData {
   /**
    * the damage frames for a given effect
    */
@@ -113,7 +113,7 @@ interface IHitCountData {
  * Get a combined object containing the damage frames and effects of a given burst
  * @param filterFn determine what damage frames to return based on its ID
  */
-export function getHitCountData (burst: BraveBurst, filterFn: (input: IHitCountData) => boolean = (f) => isAttackingProcId(f.id)): IHitCountData[] {
+export function getEffectFrameData (burst: BraveBurst, filterFn: (input: IEffectFrameData) => boolean = (f) => isAttackingProcId(f.id)): IEffectFrameData[] {
   if (!burst || !Array.isArray(burst['damage frames'])) {
     return [];
   }
@@ -133,4 +133,11 @@ export function getHitCountData (burst: BraveBurst, filterFn: (input: IHitCountD
         target: targetArea || effectData['target area'],
       };
     }).filter(filterFn);
+}
+
+/**
+ * Get the frame data for all healing effects (i.e. with a proc ID of 2) from a given burst
+ */
+export function getHealFrameData (burst: BraveBurst) {
+  return getEffectFrameData(burst, (f) => f.id === '2');
 }
