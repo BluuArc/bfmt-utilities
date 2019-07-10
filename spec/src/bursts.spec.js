@@ -619,6 +619,11 @@ describe('bursts utilities', () => {
       .fill(0)
       .map((_, i) => (i + 1) * 5);
     const ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION = ARBITRARY_DAMAGE_DISTRIBUTION.reduce((acc, val) => acc + val, 0);
+    const ARBITRARY_DAMAGE_FRAMES_ENTRY = {
+      'frame times': ARBITRARY_FRAME_TIMES,
+      'hit dmg% distribution': ARBITRARY_DAMAGE_DISTRIBUTION,
+      'hit dmg% distribution total': ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+    };
 
     const assertShape = (input, frameTimes = [], hitDmgDistribution = [], dmgDistributionTotal = 0) => {
       expect(typeof input).toBe('object');
@@ -654,9 +659,7 @@ describe('bursts utilities', () => {
         damageFrames: [
           {
             'proc id': ATTACKING_PROC_ID,
-            'frame times': ARBITRARY_FRAME_TIMES,
-            'hit dmg% distribution': ARBITRARY_DAMAGE_DISTRIBUTION,
-            'hit dmg% distribution total': ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+            ...ARBITRARY_DAMAGE_FRAMES_ENTRY,
           }
         ],
         expected: {
@@ -676,9 +679,7 @@ describe('bursts utilities', () => {
         damageFrames: [
           {
             'proc id': HEAL_PROC_ID,
-            'frame times': ARBITRARY_FRAME_TIMES,
-            'hit dmg% distribution': ARBITRARY_DAMAGE_DISTRIBUTION,
-            'hit dmg% distribution total': ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+            ...ARBITRARY_DAMAGE_FRAMES_ENTRY,
           }
         ],
         expected: {
@@ -698,9 +699,7 @@ describe('bursts utilities', () => {
         damageFrames: [
           {
             'proc id': NON_ATTACKING_PROC_ID,
-            'frame times': ARBITRARY_FRAME_TIMES,
-            'hit dmg% distribution': ARBITRARY_DAMAGE_DISTRIBUTION,
-            'hit dmg% distribution total': ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+            ...ARBITRARY_DAMAGE_FRAMES_ENTRY,
           }
         ],
         expected: {
@@ -724,15 +723,11 @@ describe('bursts utilities', () => {
         damageFrames: [
           {
             'proc id': ATTACKING_PROC_ID,
-            'frame times': ARBITRARY_FRAME_TIMES,
-            'hit dmg% distribution': ARBITRARY_DAMAGE_DISTRIBUTION,
-            'hit dmg% distribution total': ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+            ...ARBITRARY_DAMAGE_FRAMES_ENTRY,
           },
           {
             'proc id': HEAL_PROC_ID,
-            'frame times': ARBITRARY_FRAME_TIMES,
-            'hit dmg% distribution': ARBITRARY_DAMAGE_DISTRIBUTION,
-            'hit dmg% distribution total': ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+            ...ARBITRARY_DAMAGE_FRAMES_ENTRY,
           }
         ],
         expected: {
@@ -742,6 +737,59 @@ describe('bursts utilities', () => {
           dmgDistributionTotal: ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION * 2 - ARBITRARY_DAMAGE_DISTRIBUTION[0],
         },
         name: 'drops the first frame of frame sets after the first frame set',
+      },
+      {
+        effects: [
+          getMockProcEffect({
+            hits: ARBITRARY_NUMBER,
+            id: NON_ATTACKING_PROC_ID,
+          }),
+          getMockProcEffect({
+            hits: ARBITRARY_NUMBER,
+            id: ATTACKING_PROC_ID,
+          }),
+          getMockProcEffect({
+            hits: ARBITRARY_NUMBER,
+            id: NON_ATTACKING_PROC_ID,
+          }),
+          getMockProcEffect({
+            hits: ARBITRARY_NUMBER,
+            id: HEAL_PROC_ID,
+          }),
+          getMockProcEffect({
+            hits: ARBITRARY_NUMBER,
+            id: NON_ATTACKING_PROC_ID,
+          }),
+        ],
+        damageFrames: [
+          {
+            'proc id': NON_ATTACKING_PROC_ID,
+            ...ARBITRARY_DAMAGE_FRAMES_ENTRY,
+          },
+          {
+            'proc id': ATTACKING_PROC_ID,
+            ...ARBITRARY_DAMAGE_FRAMES_ENTRY,
+          },
+          {
+            'proc id': NON_ATTACKING_PROC_ID,
+            ...ARBITRARY_DAMAGE_FRAMES_ENTRY,
+          },
+          {
+            'proc id': HEAL_PROC_ID,
+            ...ARBITRARY_DAMAGE_FRAMES_ENTRY,
+          },
+          {
+            'proc id': NON_ATTACKING_PROC_ID,
+            ...ARBITRARY_DAMAGE_FRAMES_ENTRY,
+          },
+        ],
+        expected: {
+          frameTimes: ARBITRARY_FRAME_TIMES.concat(ARBITRARY_FRAME_TIMES.slice(1)).sort((a, b) => +a - +b),
+          // NOTE: this example only works because the damage distribution in the arbitrary value here is in ascending order by default
+          hitDmgDistribution: ARBITRARY_DAMAGE_DISTRIBUTION.concat(ARBITRARY_DAMAGE_DISTRIBUTION.slice(1)).sort((a, b) => +a - +b),
+          dmgDistributionTotal: ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION * 2 - ARBITRARY_DAMAGE_DISTRIBUTION[0],
+        },
+        name: 'correctly processes attack and healing frames regardless of other frames around them',
       },
     ].forEach((testCase) => {
       it(testCase.name, () => {
