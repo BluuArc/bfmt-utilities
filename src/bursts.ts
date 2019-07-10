@@ -4,6 +4,7 @@ import {
   BraveBurst,
   BurstDamageFramesEntry,
   BurstLevelEntry,
+  DamageFramesEntry,
   ProcEffect,
   UnknownProcEffect,
 } from './datamine-types';
@@ -111,7 +112,7 @@ interface IEffectFrameData {
 
 /**
  * Get a combined object containing the damage frames and effects of a given burst
- * @param filterFn determine what damage frames to return based on its ID
+ * @param filterFn determine what damage frames to return based on its ID; by default, it filters for attacking effects
  */
 export function getEffectFrameData (burst: BraveBurst, filterFn: (input: IEffectFrameData) => boolean = (f) => isAttackingProcId(f.id)): IEffectFrameData[] {
   if (!burst || !Array.isArray(burst['damage frames'])) {
@@ -140,4 +141,53 @@ export function getEffectFrameData (burst: BraveBurst, filterFn: (input: IEffect
  */
 export function getHealFrameData (burst: BraveBurst) {
   return getEffectFrameData(burst, (f) => f.id === '2');
+}
+
+/**
+ * Get the damage frames entry for extra attacks based on a given brave burst.
+ */
+export function getExtraAttackDamageFramesEntry (burst: BraveBurst): DamageFramesEntry {
+  const unifiedFrames: Array<{
+    /**
+     * the damage of a particular attack at a given frame
+     */
+    dmg: number,
+
+    /**
+     * the frame of a particular attack
+     */
+    time: number,
+  }> = [];
+  // get frames that are either attacking or healing
+  getEffectFrameData(burst, (f) => f.id === '2' || isAttackingProcId(f.id))
+    .map((d) => d.damageFramesEntry)
+    .forEach((frameSet, i) => {
+      // aggregate frame data
+      const keepFirstFrame = i === 0;
+      // assumption: frame times array and hit damage distribution array are the same length
+      const numFrames = frameSet['frame times'].length;
+      for (let frameIndex = keepFirstFrame ? 0 : 1; frameIndex < numFrames; ++frameIndex) {
+        unifiedFrames.push({
+          dmg: frameSet['hit dmg% distribution'][frameIndex],
+          time: frameSet['frame times'][frameIndex],
+        });
+      }
+    });
+
+  // sort frames by frame time and aggregate result
+  const extraAttackDamageFramesEntry: DamageFramesEntry = {
+    'effect delay time(ms)/frame': '0.0/0',
+    'frame times': [],
+    'hit dmg% distribution': [],
+    'hit dmg% distribution total': 0,
+  };
+  return unifiedFrames.sort((a, b) => a.time - b.time).reduce(
+    (acc, {time, dmg }) => {
+      acc['frame times'].push(time);
+      acc['hit dmg% distribution'].push(dmg);
+      acc['hit dmg% distribution total'] += dmg;
+      return acc;
+    },
+    extraAttackDamageFramesEntry,
+  );
 }

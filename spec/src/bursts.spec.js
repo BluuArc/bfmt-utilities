@@ -2,10 +2,11 @@ import * as burstUtilities from '../../src/bursts';
 import { generateInputPairsOfTypesExcept } from '../utils';
 
 describe('bursts utilities', () => {
-  const ARBITRARY_BC_COST = 123;
+  const ARBITRARY_NUMBER = 123;
   const ARBITRARY_PROC_ID = '123';
   const ATTACKING_PROC_ID = '1';
-  const NON_ATTACKING_PROC_ID = '2';
+  const NON_ATTACKING_PROC_ID = '3';
+  const HEAL_PROC_ID = '2';
   const ARBITRARY_DROPCHECK_COUNT = 3;
   const ARBITRARY_EFFECT_DELAY = '16.7/1';
   const NUM_BURST_LEVELS = 10; // should be a number >= 2 for the following test cases
@@ -29,7 +30,7 @@ describe('bursts utilities', () => {
     const levelsArray = new Array(numLevels).fill(0);
     return {
       levels: levelsArray.map(() => ({
-        'bc cost': ARBITRARY_BC_COST,
+        'bc cost': ARBITRARY_NUMBER,
         effects: [],
       })),
       'drop check count': ARBITRARY_DROPCHECK_COUNT,
@@ -191,6 +192,7 @@ describe('bursts utilities', () => {
 
     const assertShape = (input, cost = 0, hits = 0, dropchecks = 0) => {
       expect(typeof input).toBe('object');
+      expect(input).toBeTruthy();
       expect(input.cost).toBe(cost);
       expect(input.hits).toBe(hits);
       expect(input.dropchecks).toBe(dropchecks);
@@ -509,7 +511,6 @@ describe('bursts utilities', () => {
   });
 
   describe('getHealFrameData', () => {
-    const HEAL_PROC_ID = '2';
     const assertShape = (actual = [], expected = []) => {
       const PROPS_TO_COMPARE = ['damageFramesEntry', 'delay', 'effect', 'id', 'target'];
       expect(actual.length).toBe(expected.length);
@@ -600,6 +601,155 @@ describe('bursts utilities', () => {
         const result = burstUtilities.getHealFrameData(mockBurst);
         expect(result.length).toBe(1);
         expect(result[0].target).toBe(ARBITRARY_TARGET_AREA);
+      });
+    });
+  });
+
+  describe('getExtraAttackDamageFramesEntry', () => {
+    const DEFAULT_RETURN_VALUE = {
+      'frame times': [],
+      'hit dmg% distribution': [],
+      'hit dmg% distribution total': 0,
+      'effect delay time(ms)/frame': '0.0/0',
+    };
+    const ARBITRARY_FRAME_TIMES = new Array(NUM_EFFECTS)
+      .fill(0)
+      .map((_, i) => i * 10);
+    const ARBITRARY_DAMAGE_DISTRIBUTION = new Array(NUM_EFFECTS)
+      .fill(0)
+      .map((_, i) => (i + 1) * 5);
+    const ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION = ARBITRARY_DAMAGE_DISTRIBUTION.reduce((acc, val) => acc + val, 0);
+
+    const assertShape = (input, frameTimes = [], hitDmgDistribution = [], dmgDistributionTotal = 0) => {
+      expect(typeof input).toBe('object');
+      expect(input).toBeTruthy();
+      expect(input['frame times']).toEqual(frameTimes);
+      expect(input['hit dmg% distribution']).toEqual(hitDmgDistribution);
+      expect(input['hit dmg% distribution total']).toBe(dmgDistributionTotal);
+      expect(input['effect delay time(ms)/frame']).toBe(DEFAULT_RETURN_VALUE['effect delay time(ms)/frame']);
+    };
+    const assertDefaultShape = (input) => assertShape(input,
+      DEFAULT_RETURN_VALUE['frame times'],
+      DEFAULT_RETURN_VALUE['hit dmg% distribution'],
+      DEFAULT_RETURN_VALUE['hit dmg% distribution total'],
+    );
+
+    describe('for non-object burst inputs', () => {
+      generateInputPairsOfTypesExcept(['object']).forEach(testCase => {
+        it(`returns default values when burst input is ${testCase.name}`, () => {
+          const result = burstUtilities.getExtraAttackDamageFramesEntry(testCase.value);
+          assertDefaultShape(result);
+        });
+      });
+    });
+
+    [
+      {
+        effects: [
+          getMockProcEffect({
+            hits: ARBITRARY_NUMBER,
+            id: ATTACKING_PROC_ID,
+          }),
+        ],
+        damageFrames: [
+          {
+            'proc id': ATTACKING_PROC_ID,
+            'frame times': ARBITRARY_FRAME_TIMES,
+            'hit dmg% distribution': ARBITRARY_DAMAGE_DISTRIBUTION,
+            'hit dmg% distribution total': ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+          }
+        ],
+        expected: {
+          frameTimes: ARBITRARY_FRAME_TIMES,
+          hitDmgDistribution: ARBITRARY_DAMAGE_DISTRIBUTION,
+          dmgDistributionTotal: ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+        },
+        name: 'uses attacking frames in the result',
+      },
+      {
+        effects: [
+          getMockProcEffect({
+            hits: ARBITRARY_NUMBER,
+            id: HEAL_PROC_ID,
+          }),
+        ],
+        damageFrames: [
+          {
+            'proc id': HEAL_PROC_ID,
+            'frame times': ARBITRARY_FRAME_TIMES,
+            'hit dmg% distribution': ARBITRARY_DAMAGE_DISTRIBUTION,
+            'hit dmg% distribution total': ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+          }
+        ],
+        expected: {
+          frameTimes: ARBITRARY_FRAME_TIMES,
+          hitDmgDistribution: ARBITRARY_DAMAGE_DISTRIBUTION,
+          dmgDistributionTotal: ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+        },
+        name: 'uses healing frames in the result',
+      },
+      {
+        effects: [
+          getMockProcEffect({
+            hits: ARBITRARY_NUMBER,
+            id: NON_ATTACKING_PROC_ID,
+          }),
+        ],
+        damageFrames: [
+          {
+            'proc id': NON_ATTACKING_PROC_ID,
+            'frame times': ARBITRARY_FRAME_TIMES,
+            'hit dmg% distribution': ARBITRARY_DAMAGE_DISTRIBUTION,
+            'hit dmg% distribution total': ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+          }
+        ],
+        expected: {
+          frameTimes: DEFAULT_RETURN_VALUE['frame times'],
+          hitDmgDistribution: DEFAULT_RETURN_VALUE['hit dmg% distribution'],
+          dmgDistributionTotal: DEFAULT_RETURN_VALUE['hit dmg% distribution total'],
+        },
+        name: 'ignores non-attacking and non-healing frames in the result',
+      },
+      {
+        effects: [
+          getMockProcEffect({
+            hits: ARBITRARY_NUMBER,
+            id: ATTACKING_PROC_ID,
+          }),
+          getMockProcEffect({
+            hits: ARBITRARY_NUMBER,
+            id: HEAL_PROC_ID,
+          }),
+        ],
+        damageFrames: [
+          {
+            'proc id': ATTACKING_PROC_ID,
+            'frame times': ARBITRARY_FRAME_TIMES,
+            'hit dmg% distribution': ARBITRARY_DAMAGE_DISTRIBUTION,
+            'hit dmg% distribution total': ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+          },
+          {
+            'proc id': HEAL_PROC_ID,
+            'frame times': ARBITRARY_FRAME_TIMES,
+            'hit dmg% distribution': ARBITRARY_DAMAGE_DISTRIBUTION,
+            'hit dmg% distribution total': ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION,
+          }
+        ],
+        expected: {
+          frameTimes: ARBITRARY_FRAME_TIMES.concat(ARBITRARY_FRAME_TIMES.slice(1)).sort((a, b) => +a - +b),
+          // NOTE: this example only works because the damage distribution in the arbitrary value here is in ascending order by default
+          hitDmgDistribution: ARBITRARY_DAMAGE_DISTRIBUTION.concat(ARBITRARY_DAMAGE_DISTRIBUTION.slice(1)).sort((a, b) => +a - +b),
+          dmgDistributionTotal: ARBITRARY_TOTAL_DAMAGE_DISTRIBUTION * 2 - ARBITRARY_DAMAGE_DISTRIBUTION[0],
+        },
+        name: 'drops the first frame of frame sets after the first frame set',
+      },
+    ].forEach((testCase) => {
+      it(testCase.name, () => {
+        mockBurst['damage frames'] = testCase.damageFrames;
+        mockBurst.levels[NUM_BURST_LEVELS - 1].effects = testCase.effects;
+
+        const result = burstUtilities.getExtraAttackDamageFramesEntry(mockBurst);
+        assertShape(result, testCase.expected.frameTimes, testCase.expected.hitDmgDistribution, testCase.expected.dmgDistributionTotal);
       });
     });
   });
