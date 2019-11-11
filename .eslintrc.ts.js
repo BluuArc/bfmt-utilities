@@ -46,7 +46,8 @@ module.exports = {
 		],
 		'@typescript-eslint/interface-name-prefix': [
 			2,
-			{ 'prefixWithI': 'always' }
+			{ 'prefixWithI': 'always' },
 		],
+		'@typescript-eslint/no-explicit-any': 0,
 	}
 };

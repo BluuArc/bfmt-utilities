@@ -2,9 +2,8 @@ const path = require('path');
 const { src, dest, series } = require('gulp');
 const ts = require('gulp-typescript');
 
-const tsProject = ts.createProject('../tsconfig.json');
-
 function transpileToJs () {
+	const tsProject = ts.createProject('../tsconfig.json');
 	return src('../src/**/*.ts')
 		.pipe(tsProject())
 		.pipe(dest(path.join('../dist')));
