@@ -78,7 +78,7 @@ export interface IUnknownPassiveEffect {
 	'unknown passive params': string;
 }
 
-export type PassiveEffect = IPassiveEffect | IPassiveEffect;
+export type PassiveEffect = IPassiveEffect | IUnknownPassiveEffect;
 
 export interface IDamageFramesEntry {
 	'effect delay time(ms)/frame': string;
@@ -150,16 +150,76 @@ export interface IExtraSkillCondition {
 	'unit required'?: { id: number; name: string }[];
 }
 
-export interface IExtraSkillEffect extends PassiveEffect {
+export interface IExtraSkillPassiveEffect extends IPassiveEffect {
 	conditions: IExtraSkillCondition[];
 	'passive target': TargetType;
 }
 
+export interface IExtraSkillUnknownPassiveEffect extends IUnknownPassiveEffect {
+	conditions: IExtraSkillCondition[];
+	'passive target': TargetType;
+}
+
+export type ExtraSkillPassiveEffect = IExtraSkillPassiveEffect | IExtraSkillUnknownPassiveEffect;
+
 export interface IExtraSkill {
 	desc: string;
-	effects: IExtraSkillEffect[];
+	effects: ExtraSkillPassiveEffect[];
 	is: string;
 	name: string;
 	rarity?: string;
 	target: TargetType;
+}
+
+export enum SpCategoryName {
+	'Parameter Boost' = 'Parameter Boost',
+	Spark = 'Spark',
+	'Critical Hits' = 'Critical Hits',
+	'Attack Boost' = 'Attack Boost',
+	'BB Gauge' = 'BB Gauge',
+	'HP Recovery' = 'HP Recovery',
+	Drops = 'Drops',
+	'Ailment Resistance' = 'Ailment Resistance',
+	'Ailment Infliction' = 'Ailment Infliction',
+	'Damage Reduction' = 'Damage Reduction',
+	Special = 'Special',
+}
+
+export enum SpCategoryId {
+	'Parameter Boost' = '1',
+	Spark = '2',
+	'Critical Hits' = '3',
+	'Attack Boost' = '4',
+	'BB Gauge' = '5',
+	'HP Recovery' = '6',
+	Drops = '7',
+	'Ailment Resistance' = '8',
+	'Ailment Infliction' = '9',
+	'Damage Reduction' = '10',
+	Special = '11',
+}
+
+export interface ISpEnhancementEffect {
+	passive?: PassiveEffect;
+	'add to bb'?: ProcEffect;
+	'add to sbb'?: ProcEffect;
+	'add to ubb': ProcEffect;
+}
+
+export interface ISpEnhancementSkill {
+	bp: number;
+	desc: string;
+	effects: ISpEnhancementEffect[];
+	id: string;
+	level: number;
+	name: string;
+	series: string;
+}
+
+export interface ISpEnhancementEntry {
+	category: SpCategoryId;
+	dependency?: string;
+	'dependency comment'?: string;
+	id: string;
+	skill: ISpEnhancementSkill;
 }
