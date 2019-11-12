@@ -66,6 +66,8 @@ export interface IUnknownProcEffect extends IBaseProcEffect {
 	[key: string]: any;
 }
 
+export type ProcEffect = IProcEffect | IUnknownProcEffect;
+
 export interface IPassiveEffect {
 	'passive id': string;
 	[key: string]: any;
@@ -74,4 +76,33 @@ export interface IPassiveEffect {
 export interface IUnknownPassiveEffect {
 	'unknown passive id': string;
 	'unknown passive params': string;
+}
+
+export type PassiveEffect = IPassiveEffect | IPassiveEffect;
+
+export interface IDamageFramesEntry {
+	'effect delay time(ms)/frame': string;
+	'frame times': number[];
+	'hit dmg% distribution': number;
+}
+
+export interface IBurstLevelEntry {
+	'bc cost': number;
+	effects: ProcEffect[];
+}
+
+export interface IBurstDamageFramesEntry extends IDamageFramesEntry {
+	'unknown proc id'?: string;
+	'proc id'?: string;
+	hits: number;
+}
+
+export interface IBraveBurst {
+	associated_units? : string[];
+	'damage frames': IBurstDamageFramesEntry[];
+	desc: string;
+	'drop check count': number;
+	id: string;
+	name: string;
+	levels: IBurstLevelEntry[];
 }
