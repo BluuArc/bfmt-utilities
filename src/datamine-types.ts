@@ -84,6 +84,7 @@ export interface IDamageFramesEntry {
 	'effect delay time(ms)/frame': string;
 	'frame times': number[];
 	'hit dmg% distribution': number;
+	hits: number;
 }
 
 export interface IBurstLevelEntry {
@@ -94,7 +95,6 @@ export interface IBurstLevelEntry {
 export interface IBurstDamageFramesEntry extends IDamageFramesEntry {
 	'unknown proc id'?: string;
 	'proc id'?: string;
-	hits: number;
 }
 
 export interface IBraveBurst {
@@ -222,4 +222,118 @@ export interface ISpEnhancementEntry {
 	'dependency comment'?: string;
 	id: string;
 	skill: ISpEnhancementSkill;
+}
+
+export interface ILeaderSkill {
+	desc: string;
+	effects: PassiveEffect[];
+	id: string;
+	name: string;
+}
+
+export enum UnitAnimationKey {
+	Attack = 'attack',
+	Idle = 'idle',
+	Move = 'move',
+}
+
+export interface IUnitAnimationEntry {
+	'total number of frames': number;
+}
+
+export enum UnitElement {
+	Fire = 'fire',
+	Water = 'water',
+	Earth = 'earth',
+	Thunder = 'thunder',
+	Light = 'light',
+	Dark = 'dark',
+}
+
+export enum UnitGender {
+	Male = 'male',
+	Female = 'female',
+	Other = 'other',
+}
+
+export enum UnitGettingType {
+	Ineligible = 'not eligible for achievement',
+	Farmable = 'farmable',
+	RareSummon = 'rare summon',
+}
+
+export enum UnitKind {
+	Normal = 'normal',
+	Evolution = 'evo',
+	Enhancing = 'enhancing',
+	Sale = 'sale',
+}
+
+export interface IUnit {
+	/**
+	 * @description Arena AI; determines chances for different actions in Arena.
+	 */
+	ai?: IUnitArenaAiEntry[];
+	animations?: {
+		[UnitAnimationKey.Attack]?: IUnitAnimationEntry;
+		[UnitAnimationKey.Idle]?: IUnitAnimationEntry;
+		[UnitAnimationKey.Move]?: IUnitAnimationEntry;
+	};
+	bb?: IBraveBurst;
+	sbb?: IBraveBurst;
+	ubb?: IBraveBurst;
+
+	/**
+	 * @description Typically used to identify an evolution line of units.
+	 */
+	category?: number;
+	cost: number;
+
+	/**
+	 * @description Damage frames for a unit's normal attack.
+	 */
+	'damage frames': IDamageFramesEntry;
+
+	/**
+	 * @author BluuArc
+	 */
+	dictionary?: {
+		description?: string;
+		eveolution?: string;
+		fusion?: string;
+		summon?: string;
+	};
+
+	/**
+	 * @description Maximum number of battle crystals dropped per hit on normal attack.
+	 */
+	'drop check count': number;
+	element: UnitElement;
+
+	/**
+	 * @description Defines the leveling curve. See [Unit Leveling](https://bravefrontierglobal.fandom.com/wiki/Unit_Leveling) for more information.
+	 */
+	exp_pattern: number;
+	'extra skill'?: IExtraSkill;
+	feskills?: ISpEnhancementEntry[];
+	gender: UnitGender;
+
+	/**
+	 * @description Helps determine merit value in exchange hall
+	 */
+	'getting type': UnitGettingType;
+	guide_id: number;
+	id: number;
+	imp: {
+		'max hp': string;
+		'max atk': string;
+		'max def': string;
+		'max rec': string;
+	};
+	/**
+	 * @description Tells what this unit can be used for. In Deathmax's datamine, the types for
+	 * evolutions and enhancing are swapped. For example, the Fire Totem is marked as an enhancing
+	 * unit while a burst frog is marked as an evolution unit.
+	 */
+	kind: UnitKind | null;
 }
