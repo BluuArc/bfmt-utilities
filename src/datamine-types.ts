@@ -106,3 +106,60 @@ export interface IBraveBurst {
 	name: string;
 	levels: IBurstLevelEntry[];
 }
+
+export enum SphereTypeName {
+	None = 'None',
+	'Status Enhancing' = 'Status Enhancing',
+	Critical = 'Critical',
+	Drop = 'Drop',
+	'Ailment Inducing' = 'Ailment Inducing',
+	'Element Fusion' = 'Element Fusion',
+	'BB Gauge' = 'BB Gauge',
+	'HP Recovery' = 'HP Recovery',
+	'Target Setting' = 'Target Setting',
+	'Damage Deflecting' = 'Damage Deflecting',
+	'Damage Reducing' = 'Damage Reducing',
+	Spark = 'Spark',
+	'Defense Piercing' = 'Defense Piercing',
+	'Attack Boosting' = 'Attack Boosting',
+	Special = 'Special',
+}
+
+export enum SphereTypeId {
+	'None' = 0,
+	'Status Enhancing' = 1,
+	'Critical' = 2,
+	'Drop' = 3,
+	'Ailment Inducing' = 4,
+	'Element Fusion' = 5,
+	'BB Gauge' = 6,
+	'HP Recovery' = 7,
+	'Target Setting' = 8,
+	'Damage Deflecting' = 9,
+	'Damage Reducing' = 10,
+	'Spark' = 11,
+	'Defense Piercing' = 12,
+	'Attack Boosting' = 13,
+	'Special' = 14,
+}
+
+export interface IExtraSkillCondition {
+	'item required'?: string[];
+	'sphere category required'?: SphereTypeName;
+	'sphere category required (raw)'?: SphereTypeId;
+	'unit required'?: { id: number; name: string }[];
+}
+
+export interface IExtraSkillEffect extends PassiveEffect {
+	conditions: IExtraSkillCondition[];
+	'passive target': TargetType;
+}
+
+export interface IExtraSkill {
+	desc: string;
+	effects: IExtraSkillEffect[];
+	is: string;
+	name: string;
+	rarity?: string;
+	target: TargetType;
+}
