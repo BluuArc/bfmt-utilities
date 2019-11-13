@@ -336,4 +336,58 @@ export interface IUnit {
 	 * unit while a burst frog is marked as an evolution unit.
 	 */
 	kind: UnitKind | null;
+
+	/**
+	 * @description format of `minvalue~maxvalue`
+	 */
+	'lord damage range': string;
+
+	movement: {
+		attack: IUnitMovemmentEntry;
+		skill?: IUnitMovemmentEntry;
+	};
+	name: string;
+	'overdrive stats': {
+		'atk%': number;
+		'def%': number;
+		'rec%': number;
+	};
+	rarity: number;
+	'sell caution': boolean;
+	stats: {
+		anima: {
+			atk: number;
+			def: number;
+			'hp max': number;
+			'hp min': number;
+			'rec max': number;
+			'rec min': number;
+		};
+		breaker: {
+			hp: number;
+			rec: number;
+			'atk max': number;
+			'atk min': number;
+			'def max': number;
+			'def min': number;
+		};
+		guardian: {
+			hp: number;
+			atk: number;
+			'def max': number;
+			'def min': number;
+			'rec max': number;
+			'rec min': number;
+		};
+		oracle: {
+			atk: number;
+			def: number;
+			'hp max': number;
+			'hp min': number;
+			'rec max': number;
+			'rec min': number;
+		};
+		_base: IUnitStatsEntry;
+		_lord: IUnitStatsEntry;
+	};
 }
