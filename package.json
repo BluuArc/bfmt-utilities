@@ -2,7 +2,7 @@
   "name": "bfmt-utilities",
   "version": "0.0.1",
   "description": "Set of utility functions used by the BFMT project. This is a separate repository for them because they are usable outside of BFMT.",
-  "main": "dist/index.umd.js",
+  "main": "dist/index.browser.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -15,16 +15,17 @@
   "author": "Joshua Castor",
   "license": "MIT",
   "devDependencies": {
-    "fancy-log": "^1.3.3"
+    "@babel/core": "^7.7.2",
+    "@babel/preset-env": "^7.7.1",
+    "fancy-log": "^1.3.3",
+    "rollup": "^1.27.0"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
     "@babel/cli": "^7.7.0",
-    "@babel/core": "^7.7.2",
     "@babel/plugin-transform-typescript": "^7.7.2",
-    "@babel/preset-env": "^7.7.1",
     "@babel/preset-typescript": "^7.7.2",
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",

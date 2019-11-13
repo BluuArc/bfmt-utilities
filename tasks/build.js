@@ -1,6 +1,7 @@
 const path = require('path');
 const { src, dest, series } = require('gulp');
 const ts = require('gulp-typescript');
+const rollup = require('rollup');
 
 function transpileToJs () {
 	const tsProject = ts.createProject('../tsconfig.json');
@@ -9,11 +10,21 @@ function transpileToJs () {
 		.pipe(dest(path.join('../dist')));
 }
 
+function compileWithRollup () {
+	return rollup.rollup({
+		input: '../dist/index.js',
+	}).then(bundle => bundle.write({
+		format: 'iife',
+		name: 'bfmtUtilities',
+		file: '../dist/index.browser.js',
+	}));
+}
+
 function copyTypeDefinitions () {
 	return src('../src/**/*.d.ts')
 		.pipe(dest(path.join('../dist')));
 }
 
 module.exports = {
-	build: series(copyTypeDefinitions, transpileToJs),
+	build: series(copyTypeDefinitions, transpileToJs, compileWithRollup),
 };
