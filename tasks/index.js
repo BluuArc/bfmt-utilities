@@ -11,7 +11,7 @@ function runDev () {
 		logger.log('watching for changes');
 		done();
 	}
-	const onChange = series(fullBuild, testTasks.runTests, notifyReadiness);
+	const onChange = series(testTasks.runTests, fullBuild, notifyReadiness);
 	watch(['../src/**/*.ts', '../.eslintrc.ts.js'], onChange);
 	watch(['../test/**/*.js', '../test/jasmine.json'], series(testTasks.lintTests, testTasks.runTests, notifyReadiness));
 	watch(['./**/*.js'], series(testTasks.lintTasks, notifyReadiness));
