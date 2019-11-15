@@ -10,7 +10,11 @@
     "dirty-build": "npm run gulp -- dirty-build",
     "build": "npm run gulp -- build",
     "dev": "npm run gulp -- dev",
-    "lint": "eslint -c .eslintrc.ts.js --ext .ts src",
+    "lint": "npm run lint-app && npm run lint-non-app",
+    "lint-app": "eslint -c .eslintrc.ts.js --ext .ts src",
+    "lint-non-app": "npm run lint-tasks && npm run lint-tests",
+    "lint-tasks": "eslint -c .eslintrc.js tasks",
+    "lint-tests": "eslint -c test/.eslintrc.js test",
     "test": "jasmine --config=test/jasmine.json"
   },
   "author": "Joshua Castor",
