@@ -15,7 +15,9 @@
     "lint-non-app": "npm run lint-tasks && npm run lint-tests",
     "lint-tasks": "eslint -c .eslintrc.js tasks",
     "lint-tests": "eslint -c test/.eslintrc.js test",
-    "test": "jasmine --config=test/jasmine.json"
+    "test": "jasmine --config=test/jasmine.json",
+    "coverage": "tsc -p tsconfig.coverage.json && nyc jasmine --config=test/jasmine.coverage.json",
+    "cleanup-coverage": "npm run gulp -- cleanup-coverage"
   },
   "author": "Joshua Castor",
   "license": "MIT",
@@ -36,6 +38,7 @@
     "gulp-typedoc": "^2.2.3",
     "gulp-typescript": "^5.0.1",
     "jasmine": "^3.5.0",
+    "nyc": "^14.1.1",
     "rollup": "^1.27.0",
     "typedoc": "^0.15.0",
     "typescript": "^3.7.2"

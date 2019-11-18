@@ -2,6 +2,9 @@
 /node_modules
 /dist
 _orig
+src/*.js
+src/*.d.ts
+.nyc_output
 
 # local env files
 .env.local

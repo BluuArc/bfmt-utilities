@@ -1,4 +1,6 @@
 const fancyLog = require('fancy-log');
+const fs = require('fs');
+const path = require('path');
 const { spawn } = require('child_process');
 
 function createLogger (prefix) {
@@ -46,7 +48,21 @@ function runNpmCommand (command = [], name, handlers = {}) {
 	return handleSpawn(instance, name, handlers);
 }
 
+function forAllFilesInFolder (folderPath, fn = () => {}) {
+	if (fs.existsSync(folderPath)) {
+		fs.readdirSync(folderPath).forEach(entry => {
+			const entryPath = path.join(folderPath, entry);
+			if (fs.lstatSync(entryPath).isDirectory()) {
+				forAllFilesInFolder(entryPath, fn);
+			} else {
+				fn(entryPath);
+			}
+		});
+	}
+}
+
 module.exports = {
 	createLogger,
 	runNpmCommand,
+	forAllFilesInFolder,
 };
