@@ -26,5 +26,5 @@ function copyTypeDefinitions () {
 }
 
 module.exports = {
-	build: series(copyTypeDefinitions, transpileToJs, compileWithRollup),
+	buildApp: series(copyTypeDefinitions, transpileToJs, compileWithRollup),
 };
