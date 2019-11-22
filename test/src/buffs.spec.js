@@ -36,16 +36,36 @@ describe('buff utilties', () => {
 	});
 
 	describe('isAttackingProcId', () => {
-		it('returns true for an attacking proc id', () => {
-			expect(buffUtilities.isAttackingProcId(ARBITRARY_ATTACKING_PROC_ID)).toBe(true);
-		});
-
-		it('returns false for a valid but non-attack proc id', () => {
-			expect(buffUtilities.isAttackingProcId(ARBITRARY_NON_ATTACKING_PROC_ID)).toBe(false);
-		});
-
-		it('returns true for an invalid proc id', () => {
-			expect(buffUtilities.isAttackingProcId(ARBITRARY_INVALID_PROC_ID)).toBe(false);
+		[
+			{
+				input: ARBITRARY_ATTACKING_PROC_ID,
+				name: 'an attacking proc id',
+				expectedValue: true,
+			},
+			{
+				input: ARBITRARY_NON_ATTACKING_PROC_ID,
+				name: 'a valid but non-attacking proc id',
+				expectedValue: false,
+			},
+			{
+				input: ARBITRARY_INVALID_PROC_ID,
+				name: 'an invalid proc id',
+				expectedValue: false,
+			},
+			{
+				input: void 0,
+				name: 'an undefined id',
+				expectedValue: false,
+			},
+			{
+				input: null,
+				name: 'a null id',
+				expectedValue: false,
+			},
+		].forEach(testCase => {
+			it(`returns ${testCase.expectedValue} for ${testCase.name}`, () => {
+				expect(buffUtilities.isAttackingProcId(testCase.input)).toBe(testCase.expectedValue);
+			});
 		});
 	});
 });
