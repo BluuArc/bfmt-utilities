@@ -1,12 +1,12 @@
 const burstUtilites = require('../../src/bursts');
 
-describe('bursts utilities', () => {
+describe('burst utilities', () => {
 	it('has expected API surface', () => {
 		const expectedSurface = [
 			'getLevelEntryForBurst',
 			'getEffectsForBurst',
-		];
-		expect(Object.keys(burstUtilites)).toEqual(expectedSurface);
+		].sort();
+		expect(Object.keys(burstUtilites).sort()).toEqual(expectedSurface);
 	});
 
 	describe('getLevelEntryForBurst method', () => {
