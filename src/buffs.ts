@@ -15,7 +15,7 @@ import {
  * @param id proc ID to check
  */
 export function isAttackingProcId (id: string): boolean {
-	const metadataEntry = PROC_METADATA.hasOwnProperty(id) && PROC_METADATA[id];
+	const metadataEntry = Object.hasOwnProperty.call(PROC_METADATA, id) && PROC_METADATA[id];
 	return !!metadataEntry && metadataEntry.Type === ProcBuffType.Attack;
 }
 
