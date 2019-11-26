@@ -94,7 +94,7 @@ describe('burst utilities', () => {
 		});
 	});
 
-	describe('getEffectsForBurst', () => {
+	describe('getEffectsForBurst method', () => {
 		const generateBurstWithLevelEntries = (numEntries) => ({
 			levels: Array.from({ length: numEntries }, (_, index) => ({ effects: [ index ] })),
 		});

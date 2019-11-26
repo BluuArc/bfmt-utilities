@@ -83,7 +83,8 @@ export type PassiveEffect = IPassiveEffect | IUnknownPassiveEffect;
 export interface IDamageFramesEntry {
 	'effect delay time(ms)/frame': string;
 	'frame times': number[];
-	'hit dmg% distribution': number;
+	'hit dmg% distribution': number[];
+	'hit dmg% distribution (total)': number;
 	hits: number;
 }
 
