@@ -1,13 +1,15 @@
 const buffUtilities = require('../../src/buffs');
 const datamineTypes = require('../../src/datamine-types');
 const testConstants = require('../helpers/constants');
-const { getStringValueForLog, createObjectListFactoryFromSchema } = require('../helpers/utils');
+const { getStringValueForLog } = require('../helpers/utils');
+const { generateDamageFramesList, generateEffectsList } = require('../helpers/dataFactories');
 
 describe('buff utilties', () => {
 	it('has expected API surface', () => {
 		const expectedSurface = [
 			'isAttackingProcId',
 			'combineEffectsAndDamageFrames',
+			'getEffectId',
 		].sort();
 		expect(Object.keys(buffUtilities).sort()).toEqual(expectedSurface);
 	});
@@ -47,28 +49,9 @@ describe('buff utilties', () => {
 	});
 
 	describe('combineEffectsAndDamageFrames method', () => {
-		const ARBITRARY_TARGET_AREA = 'arbitrary target area';
-		const ARBITRARY_TARGET_TYPE = 'arbitrary target type';
 		const assertIsArray = (result) => {
 			expect(Array.isArray(result)).toBe(true, `result "${getStringValueForLog(result)}" is not an array`);
 		};
-		const generateEffectsList = createObjectListFactoryFromSchema({
-			'effect delay time(ms)/frame': (index) => `delay-${index}`,
-			'proc id': (index) => `id-${index}`,
-			'unknown proc id': () => undefined,
-			'random attack': () => undefined,
-			'target area': () => ARBITRARY_TARGET_AREA,
-			'target type': () => ARBITRARY_TARGET_TYPE,
-		});
-
-		const generateDamageFramesList = createObjectListFactoryFromSchema({
-			'effect delay time(ms)/frame': (index) => `delay-${index}`,
-			'frame times': (index) => Array.from({ length: index + 1 }, (_, timeIndex) => timeIndex),
-			'hit dmg% distribution': (index) => Array.from({ length: index + 1 }, (_, timeIndex) => timeIndex + 1),
-			'hit dmg% distribution (total)': (index) => Array.from({ length: index + 1 }, (_, timeIndex) => timeIndex + 1)
-				.reduce((acc, val) => acc + val, 0),
-			hits: (index) => index + 1,
-		});
 
 		describe('for invalid inputs', () => {
 			const invalidArrayCases = [
@@ -222,6 +205,39 @@ describe('buff utilties', () => {
 				const damageFramesList = generateDamageFramesList(10);
 				const result = buffUtilities.combineEffectsAndDamageFrames(effectsList, damageFramesList);
 				assertResult(result, effectsList, damageFramesList);
+			});
+		});
+	});
+
+	describe('getEffectId method', () => {
+		[
+			{
+				name: 'is undefined',
+				value: (void 0),
+			},
+			{
+				name: 'is null',
+				value: null,
+			},
+			{
+				name: 'is not an object',
+				value: 123,
+			},
+			{
+				name: 'is an object but it does not have any of the ID keys',
+				value: { some: 'property' },
+			},
+		].forEach(testCase => {
+			it(`returns an empty string when the effect parameter ${testCase.name}`, () => {
+				expect(buffUtilities.getEffectId(testCase.value)).toBe('');
+			});
+		});
+
+		const ARBITRARY_STRING = 'some string';
+		['proc id', 'unknown proc id', 'passive id', 'unknown passive id'].forEach(key => {
+			it(`returns the value for ${key} if the effect parameter is an object that has a ${key} property`, () => {
+				const inputEffect = { [key]: ARBITRARY_STRING };
+				expect(buffUtilities.getEffectId(inputEffect)).toBe(ARBITRARY_STRING);
 			});
 		});
 	});

@@ -41,17 +41,17 @@ export function getExtraAttackDamageFramesEntry (
 	effectDelay = '0.0/0',
 ): IDamageFramesEntry {
 	// relevant frames are all effects for healing or attacking
-	const relevantCompositeFrames = damageFrames.filter(frame => {
+	const relevantFrames = damageFrames.filter(frame => {
 		const procId = getEffectId(frame);
 		return procId === KnownProcId.BurstHeal || isAttackingProcId(procId);
 	});
 
 	type UnifiedFrame = { damage: number, time: number };
-	const unifiedFrames: UnifiedFrame[] = relevantCompositeFrames.reduce((acc: UnifiedFrame[], { frames: damageFrameEntry }, index) => {
+	const unifiedFrames: UnifiedFrame[] = relevantFrames.reduce((acc: UnifiedFrame[], frameEntry, index) => {
 		const keepFirstFrame = index === 0;
-		const numFrames = damageFrameEntry['frame times'].length;
-		const damageDistribution = damageFrameEntry['hit dmg% distribution'];
-		const frameTimes = damageFrameEntry['frame times'];
+		const numFrames = frameEntry['frame times'].length;
+		const damageDistribution = frameEntry['hit dmg% distribution'];
+		const frameTimes = frameEntry['frame times'];
 		for (let frameIndex = keepFirstFrame ? 0 : 1; frameIndex < numFrames; ++frameIndex) {
 			acc.push({
 				damage: damageDistribution[frameIndex],
