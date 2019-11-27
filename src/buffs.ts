@@ -50,3 +50,17 @@ export function combineEffectsAndDamageFrames (effects: ProcEffect[], damageFram
 	}
 	return combinedEntries;
 }
+
+export function getEffectId (effect: {
+	'proc id'?: string,
+	'unknown proc id'?: string,
+	'passive id'?: string,
+	'unknown passive id'?: string
+}): string {
+	let resultId = '';
+	if (effect) {
+		resultId = effect['proc id'] || effect['unknown proc id'] ||
+			effect['passive id'] || effect['unknown passive id'] || '';
+	}
+	return resultId;
+}

@@ -2,7 +2,11 @@ import {
 	IBraveBurst,
 	IBurstLevelEntry,
 	ProcEffect,
+	IDamageFramesEntry,
+	IBurstDamageFramesEntry,
 } from './datamine-types';
+import { getEffectId, isAttackingProcId } from './buffs';
+import { KnownProcId } from './constants';
 
 /**
  * @description Grab the level entry of a burst at a given level (or the last level if no level is given)
@@ -30,4 +34,46 @@ export function getLevelEntryForBurst (burst: IBraveBurst, level?: number): IBur
 export function getEffectsForBurst (burst: IBraveBurst, level?: number): ProcEffect[] {
 	const levelEntry = getLevelEntryForBurst(burst, level);
 	return (levelEntry && Array.isArray(levelEntry.effects)) ? levelEntry.effects : [];
+}
+
+export function getExtraAttackDamageFramesEntry (
+	damageFrames: IBurstDamageFramesEntry[],
+	effectDelay = '0.0/0',
+): IDamageFramesEntry {
+	// relevant frames are all effects for healing or attacking
+	const relevantCompositeFrames = damageFrames.filter(frame => {
+		const procId = getEffectId(frame);
+		return procId === KnownProcId.BurstHeal || isAttackingProcId(procId);
+	});
+
+	type UnifiedFrame = { damage: number, time: number };
+	const unifiedFrames: UnifiedFrame[] = relevantCompositeFrames.reduce((acc: UnifiedFrame[], { frames: damageFrameEntry }, index) => {
+		const keepFirstFrame = index === 0;
+		const numFrames = damageFrameEntry['frame times'].length;
+		const damageDistribution = damageFrameEntry['hit dmg% distribution'];
+		const frameTimes = damageFrameEntry['frame times'];
+		for (let frameIndex = keepFirstFrame ? 0 : 1; frameIndex < numFrames; ++frameIndex) {
+			acc.push({
+				damage: damageDistribution[frameIndex],
+				time: frameTimes[frameIndex],
+			});
+		}
+		return acc;
+	}, []);
+
+	const resultDamageFramesEntry: IDamageFramesEntry = {
+		'effect delay time(ms)/frame': effectDelay,
+		'frame times': [],
+		'hit dmg% distribution': [],
+		'hit dmg% distribution (total)': 0,
+		hits: 0,
+	};
+	unifiedFrames.sort((a, b) => a.time - b.time)
+		.forEach(({ time, damage }) => {
+			resultDamageFramesEntry['frame times'].push(time);
+			resultDamageFramesEntry['hit dmg% distribution'].push(damage);
+			resultDamageFramesEntry['hit dmg% distribution (total)'] += damage;
+		});
+	resultDamageFramesEntry.hits = resultDamageFramesEntry['frame times'].length;
+	return resultDamageFramesEntry;
 }
