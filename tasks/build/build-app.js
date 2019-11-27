@@ -4,6 +4,8 @@ const ts = require('gulp-typescript');
 const rollup = require('rollup');
 const terser = require('gulp-terser');
 const babel = require('gulp-babel');
+const sourcemaps = require('gulp-sourcemaps');
+const rename = require('gulp-rename');
 
 function transpileToJs () {
 	const tsProject = ts.createProject('../tsconfig.json');
@@ -20,6 +22,7 @@ function compileWithRollup () {
 			format: 'iife',
 			name: 'bfmtUtilities',
 			file: '../dist/index.browser.js',
+			sourcemap: true,
 		}),
 		bundle.write({
 			format: 'cjs',
@@ -31,6 +34,7 @@ function compileWithRollup () {
 
 function transpileRollupBrowserBuild () {
 	return src('../dist/index.browser.js')
+		.pipe(sourcemaps.init({ loadMaps: true }))
 		.pipe(babel({
 			presets: [
 				[
@@ -41,7 +45,19 @@ function transpileRollupBrowserBuild () {
 				],
 			],
 		}))
+		.pipe(sourcemaps.write('../dist'))
+		.pipe(dest('../dist'));
+}
+
+// TODO: fix
+function minifyBrowserBuild () {
+	return src('../dist/index.browser.js')
+		.pipe(sourcemaps.init({ loadMaps: true }))
+		.pipe(rename((filePath) => {
+			filePath.basename = filePath.basename.replace('.browser', '.browser.min');
+		}))
 		.pipe(terser())
+		.pipe(sourcemaps.write('../dist'))
 		.pipe(dest('../dist'));
 }
 
@@ -51,5 +67,5 @@ function copyTypeDefinitions () {
 }
 
 module.exports = {
-	buildApp: series(copyTypeDefinitions, transpileToJs, compileWithRollup, transpileRollupBrowserBuild),
+	buildApp: series(copyTypeDefinitions, transpileToJs, compileWithRollup, transpileRollupBrowserBuild, minifyBrowserBuild),
 };
