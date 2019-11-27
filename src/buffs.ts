@@ -28,6 +28,11 @@ export interface IProcEffectFrameComposite {
 	targetType: TargetType;
 }
 
+/**
+ * @description Create a list of objects that contain both the effect data and its corresponding damage frame
+ * @param effects List of proc effects to combine; must be the same length as the `damageFrames`
+ * @param damageFrames List of damage frames whose index corresponds with the effect in the `effects` list
+ */
 export function combineEffectsAndDamageFrames (effects: ProcEffect[], damageFrames: IDamageFramesEntry[]): IProcEffectFrameComposite[] {
 	let combinedEntries: IProcEffectFrameComposite[] = [];
 	if (Array.isArray(effects) && effects.length > 0 && Array.isArray(damageFrames) && effects.length === damageFrames.length) {

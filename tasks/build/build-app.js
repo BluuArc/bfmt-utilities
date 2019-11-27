@@ -49,7 +49,6 @@ function transpileRollupBrowserBuild () {
 		.pipe(dest('../dist'));
 }
 
-// TODO: fix
 function minifyBrowserBuild () {
 	return src('../dist/index.browser.js')
 		.pipe(sourcemaps.init({ loadMaps: true }))
