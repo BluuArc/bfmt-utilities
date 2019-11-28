@@ -41,7 +41,8 @@ export function getExtraAttackDamageFramesEntry (
 	effectDelay = '0.0/0',
 ): IDamageFramesEntry {
 	// relevant frames are all effects for healing or attacking
-	const relevantFrames = damageFrames.filter(frame => {
+	const inputFrames = Array.isArray(damageFrames) ? damageFrames : [];
+	const relevantFrames = inputFrames.filter(frame => {
 		const procId = getEffectId(frame);
 		return procId === KnownProcId.BurstHeal || isAttackingProcId(procId);
 	});

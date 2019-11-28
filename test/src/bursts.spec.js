@@ -1,10 +1,12 @@
 const burstUtilites = require('../../src/bursts');
+const { getStringValueForLog } = require('../helpers/utils');
 
 describe('burst utilities', () => {
 	it('has expected API surface', () => {
 		const expectedSurface = [
 			'getLevelEntryForBurst',
 			'getEffectsForBurst',
+			'getExtraAttackDamageFramesEntry',
 		].sort();
 		expect(Object.keys(burstUtilites).sort()).toEqual(expectedSurface);
 	});
@@ -173,6 +175,90 @@ describe('burst utilities', () => {
 				const inputLevel = 0;
 				const result = burstUtilites.getEffectsForBurst(inputBurst, inputLevel);
 				expect(result).toEqual([]);
+			});
+		});
+	});
+
+	describe('getExtraAttackDamageFramesEntry method', () => {
+		const arbitraryDelay = 'arbitrary delay';
+		/**
+		 * @param {import('../../src/datamine-types').IDamageFramesEntry} result
+		 * @param {import('../../src/datamine-types').IDamageFramesEntry} expected
+		 */
+		const assertDamageFramesEntry = (result, expected) => {
+			expect(!!result && typeof result === 'object').toBe(true, `Result [${getStringValueForLog(result)}] was not a populated object`);
+			expect(result['effect delay time(ms)/frame']).toBe(expected['effect delay time(ms)/frame']);
+			expect(result['frame times']).toEqual(expected['frame times']);
+			expect(result['hit dmg% distribution']).toEqual(expected['hit dmg% distribution']);
+			expect(result['hit dmg% distribution (total)']).toEqual(expected['hit dmg% distribution (total)']);
+			expect(result.hits).toBe(expected.hits);
+		};
+
+		/**
+		 * @param {object} args
+		 * @param {string?} args.delay
+		 * @param {number[]?} args.frames
+		 * @param {number[]?} damageDistribution
+		 * @param {number?} damageTotal
+		 * @param {number?} hits
+		 * @returns {import('../../src/datamine-types').IDamageFramesEntry}
+		 */
+		const createDamageFramesEntry = ({ delay = '', frames = [], damageDistribution = [], damageTotal = 0, hits = 0 }) => ({
+			'effect delay time(ms)/frame': delay,
+			'frame times': frames,
+			'hit dmg% distribution': damageDistribution,
+			'hit dmg% distribution (total)': damageTotal,
+			hits,
+		});
+
+		describe('for invalid values for damageFrames', () => {
+			const emptyDamageFramesEntry = createDamageFramesEntry(({
+				delay: arbitraryDelay,
+				frames: [],
+				damageDistribution: [],
+				damageTotal: 0,
+				hits: 0,
+			}));
+			[
+				{
+					name: 'is undefined',
+					value: (void 0),
+				},
+				{
+					name: 'is null',
+					value: null,
+				},
+				{
+					name: 'is not an object',
+					value: 'some string',
+				},
+				{
+					name: 'is an object but not an array',
+					value: { some: 'property' },
+				},
+				{
+					name: 'is an array but has no valid ID properties in its entries',
+					value: [{ some: 'property' }, { some: 'other property' }],
+				},
+			].forEach(testCase => {
+				it(`returns an empty damage frames entry if damageFrames ${testCase.name}`, () => {
+					const result = burstUtilites.getExtraAttackDamageFramesEntry(testCase.value, arbitraryDelay);
+					assertDamageFramesEntry(result, emptyDamageFramesEntry);
+				});
+			});
+		});
+
+		describe('for the effectDelay parameter', () => {
+			it('defaults to a delay of 0.0/0 if a value is passed in for effectDelay', () => {
+				const expectedResult = createDamageFramesEntry({ delay: '0.0/0' });
+				const result = burstUtilites.getExtraAttackDamageFramesEntry([]);
+				assertDamageFramesEntry(result, expectedResult);
+			});
+
+			it('uses the passed in value for effectDelay', () => {
+				const expectedResult = createDamageFramesEntry({ delay: arbitraryDelay });
+				const result = burstUtilites.getExtraAttackDamageFramesEntry([]);
+				assertDamageFramesEntry(result, expectedResult);
 			});
 		});
 	});
