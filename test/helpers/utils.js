@@ -13,7 +13,7 @@ function getStringValueForLog (input) {
  * @param {{ [key: string]: (index: number) => any }} schema an object that tells what top-level keys the resulting object should contain and the default getters for each property
  * @param {object} options options used to customize factory behavior
  * @param {boolean?} options.deleteUndefined whether to delete `undefined` values from the resulting object
- * @returns {(numEntries: number, valueGetter?: (propName: string, index: number, defaultValue: any) => any,  objectExtender?: (obj: object) => object) => any[]} resulting factory function
+ * @returns {(numEntries: number, valueGetter?: (propName: string, index: number, defaultValue: any) => any,  objectExtender?: (obj: object, index: number) => object) => any[]} resulting factory function
  */
 function createObjectListFactoryFromSchema (schema, { deleteUndefined = true } = {}) {
 	const keys = Object.keys(schema);
@@ -21,7 +21,7 @@ function createObjectListFactoryFromSchema (schema, { deleteUndefined = true } =
 	/**
 	 * @param {number} numEntries number of entries to generate
 	 * @param {(propName: string, index: number, defaultValue: any) => any} valueGetter function used to get the value for a given property name and index
-	 * @param {(obj: object) => object} objectExtender function used to modify the given object beyond the original schema and return the modified object
+	 * @param {(obj: object, index: number) => object} objectExtender function used to modify the given object beyond the original schema and return the modified object
 	 */
 	return function (numEntries, valueGetter, objectExtender) {
 		const valueGetterIsFunction = typeof valueGetter === 'function';
@@ -37,7 +37,7 @@ function createObjectListFactoryFromSchema (schema, { deleteUndefined = true } =
 					}
 					return obj;
 				}, {});
-				return objectExtenderIsFunction ? objectExtender(initialObject) : initialObject;
+				return objectExtenderIsFunction ? objectExtender(initialObject, index) : initialObject;
 			},
 		);
 

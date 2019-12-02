@@ -1,5 +1,8 @@
 const burstUtilites = require('../../src/bursts');
 const { getStringValueForLog } = require('../helpers/utils');
+const { generateDamageFramesList } = require('../helpers/dataFactories');
+const testConstants = require('../helpers/constants');
+const appConstants = require('../../src/constants');
 
 describe('burst utilities', () => {
 	it('has expected API surface', () => {
@@ -186,21 +189,24 @@ describe('burst utilities', () => {
 		 * @param {import('../../src/datamine-types').IDamageFramesEntry} expected
 		 */
 		const assertDamageFramesEntry = (result, expected) => {
-			expect(!!result && typeof result === 'object').toBe(true, `Result [${getStringValueForLog(result)}] was not a populated object`);
-			expect(result['effect delay time(ms)/frame']).toBe(expected['effect delay time(ms)/frame']);
-			expect(result['frame times']).toEqual(expected['frame times']);
-			expect(result['hit dmg% distribution']).toEqual(expected['hit dmg% distribution']);
-			expect(result['hit dmg% distribution (total)']).toEqual(expected['hit dmg% distribution (total)']);
-			expect(result.hits).toBe(expected.hits);
+			const isPopulatedObject = !!result && typeof result === 'object';
+			expect(isPopulatedObject).withContext(`Result [${getStringValueForLog(result)}] is not a populated object`).toBe(true);
+			if (isPopulatedObject) {
+				expect(result['effect delay time(ms)/frame']).withContext('effect delay time/frame mismatch').toBe(expected['effect delay time(ms)/frame']);
+				expect(result['frame times']).withContext('frame time array mismatch').toEqual(expected['frame times']);
+				expect(result['hit dmg% distribution']).withContext('damage distribution array mismatch').toEqual(expected['hit dmg% distribution']);
+				expect(result['hit dmg% distribution (total)']).withContext('total damage distribution mismatch').toEqual(expected['hit dmg% distribution (total)']);
+				expect(result.hits).withContext('hit count mismatch').toBe(expected.hits);
+			}
 		};
 
 		/**
 		 * @param {object} args
 		 * @param {string?} args.delay
 		 * @param {number[]?} args.frames
-		 * @param {number[]?} damageDistribution
-		 * @param {number?} damageTotal
-		 * @param {number?} hits
+		 * @param {number[]?} args.damageDistribution
+		 * @param {number?} args.damageTotal
+		 * @param {number?} args.hits
 		 * @returns {import('../../src/datamine-types').IDamageFramesEntry}
 		 */
 		const createDamageFramesEntry = ({ delay = '', frames = [], damageDistribution = [], damageTotal = 0, hits = 0 }) => ({
@@ -210,15 +216,15 @@ describe('burst utilities', () => {
 			'hit dmg% distribution (total)': damageTotal,
 			hits,
 		});
+		const emptyDamageFramesEntry = createDamageFramesEntry(({
+			delay: arbitraryDelay,
+			frames: [],
+			damageDistribution: [],
+			damageTotal: 0,
+			hits: 0,
+		}));
 
 		describe('for invalid values for damageFrames', () => {
-			const emptyDamageFramesEntry = createDamageFramesEntry(({
-				delay: arbitraryDelay,
-				frames: [],
-				damageDistribution: [],
-				damageTotal: 0,
-				hits: 0,
-			}));
 			[
 				{
 					name: 'is undefined',
@@ -257,8 +263,62 @@ describe('burst utilities', () => {
 
 			it('uses the passed in value for effectDelay', () => {
 				const expectedResult = createDamageFramesEntry({ delay: arbitraryDelay });
-				const result = burstUtilites.getExtraAttackDamageFramesEntry([]);
+				const result = burstUtilites.getExtraAttackDamageFramesEntry([], arbitraryDelay);
 				assertDamageFramesEntry(result, expectedResult);
+			});
+		});
+
+		describe('when the damageFrames parameter is a non-empty array', () => {
+			describe('for when there is one applicable frame entry', () => {
+				[
+					{
+						name: 'an attacking proc ID',
+						index: 1,
+						key: 'proc id',
+						valueAtIndex: testConstants.ARBITRARY_ATTACKING_PROC_ID,
+						valueAtOtherIndices: testConstants.ARBITRARY_NON_ATTACKING_PROC_ID,
+					},
+					{
+						name: 'an attacking proc ID that is considered unknown',
+						index: 2,
+						key: 'unknown proc id',
+						valueAtIndex: testConstants.ARBITRARY_ATTACKING_PROC_ID,
+						valueAtOtherIndices: testConstants.ARBITRARY_NON_ATTACKING_PROC_ID,
+					},
+					{
+						name: 'the burst heal proc ID',
+						index: 1,
+						key: 'proc id',
+						valueAtIndex: appConstants.KnownProcId.BurstHeal,
+						valueAtOtherIndices: testConstants.ARBITRARY_NON_ATTACKING_PROC_ID,
+					},
+				].forEach(testCase => {
+					it(`returns an identical result when the applicable frame entry has ${testCase.name}`, () => {
+						const inputFrames = generateDamageFramesList(10, undefined, (obj, index) => {
+							if (index === testCase.index) {
+								obj[testCase.key] = testConstants.ARBITRARY_ATTACKING_PROC_ID;
+							} else {
+								obj[testCase.key] = testConstants.ARBITRARY_NON_ATTACKING_PROC_ID;
+							}
+							return obj;
+						});
+						const expectedResult = {
+							...inputFrames[testCase.index],
+							'effect delay time(ms)/frame': arbitraryDelay,
+						};
+						const result = burstUtilites.getExtraAttackDamageFramesEntry(inputFrames, arbitraryDelay);
+						assertDamageFramesEntry(result, expectedResult);
+					});
+				});
+			});
+
+			it('returns an empty damage frames entry if there are no applicable frame entries', () => {
+				const inputFrames = generateDamageFramesList(10, undefined, (obj) => {
+					obj['proc id'] = testConstants.ARBITRARY_NON_ATTACKING_PROC_ID;
+					return obj;
+				});
+				const result = burstUtilites.getExtraAttackDamageFramesEntry(inputFrames, arbitraryDelay);
+				assertDamageFramesEntry(result, emptyDamageFramesEntry);
 			});
 		});
 	});

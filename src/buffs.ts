@@ -52,10 +52,10 @@ export function combineEffectsAndDamageFrames (effects: ProcEffect[], damageFram
 }
 
 export function getEffectId (effect: {
-	'proc id'?: string,
-	'unknown proc id'?: string,
-	'passive id'?: string,
-	'unknown passive id'?: string
+	'proc id'?: string;
+	'unknown proc id'?: string;
+	'passive id'?: string;
+	'unknown passive id'?: string;
 }): string {
 	let resultId = '';
 	if (effect) {

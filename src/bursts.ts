@@ -47,7 +47,10 @@ export function getExtraAttackDamageFramesEntry (
 		return procId === KnownProcId.BurstHeal || isAttackingProcId(procId);
 	});
 
-	type UnifiedFrame = { damage: number, time: number };
+	type UnifiedFrame = {
+		damage: number;
+		time: number;
+	};
 	const unifiedFrames: UnifiedFrame[] = relevantFrames.reduce((acc: UnifiedFrame[], frameEntry, index) => {
 		const keepFirstFrame = index === 0;
 		const numFrames = frameEntry['frame times'].length;
