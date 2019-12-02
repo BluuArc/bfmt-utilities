@@ -289,7 +289,7 @@ describe('burst utilities', () => {
 						name: 'the burst heal proc ID',
 						index: 1,
 						key: 'proc id',
-						valueAtIndex: appConstants.KnownProcId.BurstHeal,
+						valueAtIndex: appConstants.KNOWN_PROC_ID.BurstHeal,
 						valueAtOtherIndices: testConstants.ARBITRARY_NON_ATTACKING_PROC_ID,
 					},
 				].forEach(testCase => {

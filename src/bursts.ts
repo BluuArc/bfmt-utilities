@@ -6,7 +6,7 @@ import {
 	IBurstDamageFramesEntry,
 } from './datamine-types';
 import { getEffectId, isAttackingProcId } from './buffs';
-import { KnownProcId } from './constants';
+import { KNOWN_PROC_ID } from './constants';
 
 /**
  * @description Grab the level entry of a burst at a given level (or the last level if no level is given)
@@ -44,7 +44,7 @@ export function getExtraAttackDamageFramesEntry (
 	const inputFrames = Array.isArray(damageFrames) ? damageFrames : [];
 	const relevantFrames = inputFrames.filter(frame => {
 		const procId = getEffectId(frame);
-		return procId === KnownProcId.BurstHeal || isAttackingProcId(procId);
+		return procId === KNOWN_PROC_ID.BurstHeal || isAttackingProcId(procId);
 	});
 
 	type UnifiedFrame = {
