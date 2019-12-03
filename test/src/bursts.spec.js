@@ -56,7 +56,7 @@ describe('burst utilities', () => {
 			expect(result).toBe(expectedLevelEntry);
 		});
 
-		describe('when level parameter is defined', () => {
+		describe('when level parameter is a specified value', () => {
 			[
 				{
 					name: 'is null',
@@ -139,7 +139,7 @@ describe('burst utilities', () => {
 			});
 		});
 
-		describe('when level parameter is defined', () => {
+		describe('when level parameter is a specified value', () => {
 			[
 				{
 					name: 'is null',
