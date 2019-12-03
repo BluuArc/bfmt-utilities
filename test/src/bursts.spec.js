@@ -321,5 +321,43 @@ describe('burst utilities', () => {
 				assertDamageFramesEntry(result, emptyDamageFramesEntry);
 			});
 		});
+
+		it('correctly drops the first frame and distribution entries for frame entries after the first applicable frame', () => {
+			const inputFrames = generateDamageFramesList(5, undefined, (obj, index) => {
+				// mark even frames as attacking frames
+				obj['proc id'] = index % 2 === 0
+					? testConstants.ARBITRARY_ATTACKING_PROC_ID
+					: testConstants.ARBITRARY_NON_ATTACKING_PROC_ID;
+				return obj;
+			});
+
+			// compute expected result from input frames
+			const expectedApplicableFrames = inputFrames.filter(f => f['proc id'] === testConstants.ARBITRARY_ATTACKING_PROC_ID);
+			const frameDamagePairs = expectedApplicableFrames.reduce((acc, frame, frameIndex) => {
+				// conditionally drop the first entry of each array
+				const expectedFrameTimesForFrame = frame['frame times'].slice(frameIndex > 0 ? 1 : 0);
+				const expectedDamageDistributionsForFrame = frame['hit dmg% distribution'].slice(frameIndex > 0 ? 1 : 0);
+				expectedFrameTimesForFrame.forEach((time, index) => {
+					acc.push({
+						time,
+						dmg: expectedDamageDistributionsForFrame[index],
+					});
+				});
+				return acc;
+			}, []).sort((a, b) => a.time - b.time);
+			const expectedResult = {
+				'effect delay time(ms)/frame': arbitraryDelay,
+				'frame times': frameDamagePairs.map(({ time }) => time),
+				'hit dmg% distribution': frameDamagePairs.map(({ dmg }) => dmg),
+				'hit dmg% distribution (total)': frameDamagePairs.reduce((acc, { dmg }) => acc + dmg, 0),
+				hits: frameDamagePairs.length,
+			};
+			// ensure correctness of expected result
+			expect(expectedResult['hit dmg% distribution (total)']).not.toBeNaN();
+			expect(expectedResult.hits).not.toBeNaN();
+
+			const result = burstUtilites.getExtraAttackDamageFramesEntry(inputFrames, arbitraryDelay);
+			assertDamageFramesEntry(result, expectedResult);
+		});
 	});
 });
