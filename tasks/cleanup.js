@@ -1,46 +1,36 @@
-// based on https://gist.github.com/geedew/cf66b81b0bcdab1f334b
-const fs = require('fs');
+const { forAllFilesInFolder, createLogger } = require('./utils');
 const path = require('path');
-const fancyLog = require('fancy-log');
+const fs = require('fs');
 
-const packageName = require('../package.json').name;
-
-function stripPackageName (str = '') {
-  const [initialPath, ...rest] = str.split(packageName);
-  return path.join(...rest);
-}
-
-function deleteFolderRecursive (folderPath) {
-  if (fs.existsSync(folderPath)) {
-    fancyLog.info('deleting', stripPackageName(folderPath));
-    fs.readdirSync(folderPath).forEach((file, index) => {
-      const curPath = path.resolve(folderPath, file);
-      fancyLog.info('deleting', stripPackageName(curPath));
-      if (fs.lstatSync(curPath).isDirectory()) {
-        deleteFolderRecursive(curPath);
-      } else {
-        fs.unlinkSync(curPath);
-      }
-      fancyLog.info('deleted', stripPackageName(curPath));
-    });
-    fs.rmdirSync(folderPath);
-    fancyLog.info('deleted', stripPackageName(folderPath));
-  }
-}
-
-function cleanBuild (done) {
-  fancyLog.info("cleaning up dist folder");
-  deleteFolderRecursive(path.resolve(__dirname, '../dist'));
-  done();
-}
-
-function cleanDocs (done) {
-  fancyLog.info("cleaning up docs folder");
-  deleteFolderRecursive(path.resolve(__dirname, '../docs'));
-  done();
+function cleanupCoverageFiles (done) {
+	const logger = createLogger('cleanupCoverage');
+	const allFiles = {};
+	forAllFilesInFolder(path.join(__dirname, '..', 'src'), (filePath) => {
+		if (typeof filePath === 'string') {
+			allFiles[filePath] = true;
+		}
+	});
+	const JS_EXTENSION = '.js';
+	const D_TS_EXTENSION = '.d.ts';
+	const isTranspiledJsFile = (filePath = '') => {
+		const isJsFile = filePath.endsWith(JS_EXTENSION);
+		const correspondingTsFile = isJsFile && `${filePath.slice(0, filePath.length - JS_EXTENSION.length)}.ts`;
+		return isJsFile && fs.existsSync(correspondingTsFile);
+	};
+	const isGeneratedDefinitionFile = (filePath = '') => {
+		const isTypeDefinitionFile = filePath.endsWith(D_TS_EXTENSION);
+		const correspondingTsFile = isTypeDefinitionFile && `${filePath.slice(0, filePath.length - D_TS_EXTENSION.length)}.ts`;
+		return isTypeDefinitionFile && fs.existsSync(correspondingTsFile);
+	};
+	Object.keys(allFiles).forEach(filePath => {
+		if (isTranspiledJsFile(filePath) || isGeneratedDefinitionFile(filePath)) {
+			logger.log(`Removing ${filePath}`);
+			fs.unlinkSync(filePath);
+		}
+	});
+	done();
 }
 
 module.exports = {
-  cleanBuild,
-  cleanDocs,
+	cleanupCoverageFiles,
 };

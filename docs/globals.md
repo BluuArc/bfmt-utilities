@@ -1,14 +1,13 @@
-> ## [bfmt-utilities](README.md)
-
-[Globals](globals.md) /
+[bfmt-utilities](README.md) › [Globals](globals.md)
 
 # bfmt-utilities
 
-### Index
+## Index
 
-#### External modules
+### External modules
 
+* ["buff-metadata"](modules/_buff_metadata_.md)
 * ["buffs"](modules/_buffs_.md)
 * ["bursts"](modules/_bursts_.md)
 * ["constants"](modules/_constants_.md)
-* ["datamine-types.d"](modules/_datamine_types_d_.md)
+* ["datamine-types"](modules/_datamine_types_.md)

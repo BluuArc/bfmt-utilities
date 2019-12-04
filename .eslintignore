@@ -1,1 +1,4 @@
 dist
+_orig
+src/*.d.ts
+src/*.js

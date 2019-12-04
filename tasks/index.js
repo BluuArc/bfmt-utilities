@@ -1,12 +1,29 @@
-const { series, parallel } = require('gulp');
+const { watch, series } = require('gulp');
+const buildTasks = require('./build');
+const testTasks = require('./test');
+const cleanupTasks = require('./cleanup');
+const utils = require('./utils');
 
-const cleanup = require('./cleanup');
-const build = require('./build');
+const fullBuild = series(testTasks.lintApplication, buildTasks.build, buildTasks.buildDocs);
 
-// gulp.task('cleanup', cleanup);
-exports['clean:app'] = cleanup.cleanBuild;
-exports['clean:docs'] = cleanup.cleanDocs;
-exports['build:js'] = build.buildWebpack;
-exports['build:es'] = build.buildTypeScript;
-exports['build:docs'] = build.buildDocs;
-exports['build:app'] = parallel(build.buildWebpack, build.buildTypeScript);
+function runDev () {
+	const logger = utils.createLogger('Watcher');
+	function notifyReadiness (done) {
+		logger.log('watching for changes');
+		done();
+	}
+	const onChange = series(cleanupTasks.cleanupCoverageFiles, testTasks.runCoverage, fullBuild, notifyReadiness);
+	watch(['../src/**/*.ts', '../.eslintrc.ts.js', '!../src/**/*.d.ts'], onChange);
+	watch(['../typedoc.config.js', '../README.md'], series(buildTasks.buildDocs, notifyReadiness));
+	watch(['../test/**/*.js', '../test/jasmine.json'], series(testTasks.lintTests, cleanupTasks.cleanupCoverageFiles, testTasks.runCoverage, notifyReadiness));
+	watch(['./**/*.js'], series(testTasks.lintTasks, notifyReadiness));
+	return onChange();
+}
+
+module.exports = {
+	'dirty-build': buildTasks.build,
+	'build': fullBuild,
+	'update-data': buildTasks.updateBuffMetadata,
+	'dev': runDev,
+	'cleanup-coverage': cleanupTasks.cleanupCoverageFiles,
+};

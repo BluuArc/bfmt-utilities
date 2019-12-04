@@ -1,12 +1,9 @@
-> ## [bfmt-utilities](../README.md)
-
-[Globals](../globals.md) / ["constants"](_constants_.md) /
+[bfmt-utilities](../README.md) › [Globals](../globals.md) › ["constants"](_constants_.md)
 
 # External module: "constants"
 
-### Index
+## Index
 
-#### Enumerations
+### Enumerations
 
-* [BF_SERVERS](../enums/_constants_.bf_servers.md)
-* [TARGET_AREA_MAPPING](../enums/_constants_.target_area_mapping.md)
+* [KNOWN_PROC_ID](../enums/_constants_.known_proc_id.md)

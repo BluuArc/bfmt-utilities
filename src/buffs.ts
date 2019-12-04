@@ -1,63 +1,66 @@
 import {
-  PassiveEffect,
-  ProcEffect,
-  UnknownPassiveEffect,
-  UnknownProcEffect,
+	PROC_METADATA,
+	ProcBuffType,
+} from './buff-metadata';
+import {
+	ProcEffect,
+	IDamageFramesEntry,
+	TargetArea,
+	TargetType,
+	IUnknownProcEffect,
 } from './datamine-types';
 
-// TODO: dynamically create
 /**
- * List of proc IDs that are associated with attacks
- */
-export const attackingProcs = Object.freeze(['1', '13', '14', '27', '28', '29', '47', '61', '64', '75', '11000'].concat(['46', '48', '97']));
-
-/**
- * Determine if a given proc ID is associated with an attack
- * @param id Proc ID to test
+ * @description Determine if a given proc ID's type is an attack
+ * @param id proc ID to check
  */
 export function isAttackingProcId (id: string): boolean {
-  return attackingProcs.includes(id);
+	const metadataEntry = Object.hasOwnProperty.call(PROC_METADATA, id) && PROC_METADATA[id];
+	return !!metadataEntry && metadataEntry.Type === ProcBuffType.Attack;
+}
+
+export interface IProcEffectFrameComposite {
+	delay: string;
+	effect: ProcEffect;
+	frames: IDamageFramesEntry;
+	id: string;
+	targetArea: TargetArea;
+	targetType: TargetType;
 }
 
 /**
- * Determine whether a given effect entry is a passive effect
- * @param effect the effect entry to test
+ * @description Create a list of objects that contain both the effect data and its corresponding damage frame
+ * @param effects List of proc effects to combine; must be the same length as the `damageFrames`
+ * @param damageFrames List of damage frames whose index corresponds with the effect in the `effects` list
  */
-export function isPassiveEffect (effect: any = {}): boolean { // tslint:disable-line no-any
-  return !!effect && (
-    !isNaN(effect['passive id']) ||
-    !isNaN(effect['unknown passive id'])
-  );
+export function combineEffectsAndDamageFrames (effects: ProcEffect[], damageFrames: IDamageFramesEntry[]): IProcEffectFrameComposite[] {
+	let combinedEntries: IProcEffectFrameComposite[] = [];
+	if (Array.isArray(effects) && effects.length > 0 && Array.isArray(damageFrames) && effects.length === damageFrames.length) {
+		combinedEntries = effects.map((effect, i) => {
+			const correspondingFrameEntry = damageFrames[i];
+			return {
+				delay: effect['effect delay time(ms)/frame'],
+				effect,
+				frames: correspondingFrameEntry,
+				id: `${effect['proc id'] || (effect as IUnknownProcEffect)['unknown proc id']}`,
+				targetArea: effect['random attack'] ? TargetArea.Random : effect['target area'],
+				targetType: effect['target type'],
+			};
+		});
+	}
+	return combinedEntries;
 }
 
-/**
- * Determine whether a given effect entry is a proc effect
- * @param effect the effect entry to test
- */
-export function isProcEffect (effect: any = {}): boolean { // tslint:disable-line no-any
-  return !!effect && (
-    !isNaN(effect['proc id']) ||
-    !isNaN(effect['unknown proc id'])
-  );
-}
-
-/**
- * Get the ID of a given effect entry
- * @param effect the effect entry to read from
- */
-export function getEffectId (effect?: {
-  // tslint:disable: completed-docs
-  'proc id'?: string,
-  'unknown proc id'?: string,
-  'passive id'?: string,
-  'unknown passive id'?: string,
-  // tslint:enable: completed-docs
+export function getEffectId (effect: {
+	'proc id'?: string;
+	'unknown proc id'?: string;
+	'passive id'?: string;
+	'unknown passive id'?: string;
 }): string {
-  let result = '';
-  if (effect) {
-    result = (effect as ProcEffect)['proc id'] || (effect as UnknownProcEffect)['unknown proc id'] ||
-      (effect as PassiveEffect)['passive id'] || (effect as UnknownPassiveEffect)['unknown passive id'] ||
-      result;
-  }
-  return result;
+	let resultId = '';
+	if (effect) {
+		resultId = effect['proc id'] || effect['unknown proc id'] ||
+			effect['passive id'] || effect['unknown passive id'] || '';
+	}
+	return resultId;
 }
