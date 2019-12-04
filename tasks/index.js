@@ -4,7 +4,7 @@ const testTasks = require('./test');
 const cleanupTasks = require('./cleanup');
 const utils = require('./utils');
 
-const fullBuild = series(testTasks.lintApplication, buildTasks.build);
+const fullBuild = series(testTasks.lintApplication, buildTasks.build, buildTasks.buildDocs);
 
 function runDev () {
 	const logger = utils.createLogger('Watcher');
@@ -14,6 +14,7 @@ function runDev () {
 	}
 	const onChange = series(cleanupTasks.cleanupCoverageFiles, testTasks.runCoverage, fullBuild, notifyReadiness);
 	watch(['../src/**/*.ts', '../.eslintrc.ts.js', '!../src/**/*.d.ts'], onChange);
+	watch(['../typedoc.config.js', '../README.md'], series(buildTasks.buildDocs, notifyReadiness));
 	watch(['../test/**/*.js', '../test/jasmine.json'], series(testTasks.lintTests, cleanupTasks.cleanupCoverageFiles, testTasks.runCoverage, notifyReadiness));
 	watch(['./**/*.js'], series(testTasks.lintTasks, notifyReadiness));
 	return onChange();

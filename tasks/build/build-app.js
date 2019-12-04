@@ -6,6 +6,7 @@ const terser = require('gulp-terser');
 const babel = require('gulp-babel');
 const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
+const { runNpmCommand } = require('../utils/run-npm-command');
 
 function transpileToJs () {
 	const tsProject = ts.createProject('../tsconfig.json');
@@ -65,6 +66,11 @@ function copyTypeDefinitions () {
 		.pipe(dest(path.join('../dist')));
 }
 
+function buildDocs () {
+	return runNpmCommand(['build-docs']);
+}
+
 module.exports = {
 	buildApp: series(copyTypeDefinitions, transpileToJs, compileWithRollup, transpileRollupBrowserBuild, minifyBrowserBuild),
+	buildDocs,
 };

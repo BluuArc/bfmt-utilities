@@ -9,6 +9,7 @@
     "gulp": "gulp --gulpfile tasks/index.js",
     "dirty-build": "npm run gulp -- dirty-build",
     "build": "npm run gulp -- build",
+    "build-docs": "typedoc --options typedoc.config.js --theme markdown --out docs src/",
     "dev": "npm run gulp -- dev",
     "lint": "npm run lint-app && npm run lint-non-app",
     "lint-app": "eslint -c .eslintrc.ts.js --ext .ts src",
@@ -46,7 +47,8 @@
     "nyc": "^14.1.1",
     "puppeteer": "^2.0.0",
     "rollup": "^1.27.0",
-    "typedoc": "^0.15.0",
+    "typedoc": "^0.15.3",
+    "typedoc-plugin-markdown": "^2.2.11",
     "typescript": "^3.7.2"
   },
   "files": [
