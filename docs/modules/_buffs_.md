@@ -1,49 +1,56 @@
-> ## [bfmt-utilities](../README.md)
-
-[Globals](../globals.md) / ["buffs"](_buffs_.md) /
+[bfmt-utilities](../README.md) › [Globals](../globals.md) › ["buffs"](_buffs_.md)
 
 # External module: "buffs"
 
-### Index
+## Index
 
-#### Variables
+### Interfaces
 
-* [attackingProcs](_buffs_.md#const-attackingprocs)
+* [IProcEffectFrameComposite](../interfaces/_buffs_.iproceffectframecomposite.md)
 
-#### Functions
+### Functions
 
+* [combineEffectsAndDamageFrames](_buffs_.md#combineeffectsanddamageframes)
 * [getEffectId](_buffs_.md#geteffectid)
 * [isAttackingProcId](_buffs_.md#isattackingprocid)
-* [isPassiveEffect](_buffs_.md#ispassiveeffect)
-* [isProcEffect](_buffs_.md#isproceffect)
-
-## Variables
-
-### `Const` attackingProcs
-
-● **attackingProcs**: *`ReadonlyArray<string>`* =  Object.freeze(['1', '13', '14', '27', '28', '29', '47', '61', '64', '75', '11000'].concat(['46', '48', '97']))
-
-*Defined in [buffs.ts:12](https://github.com/BluuArc/bfmt-utilities/blob/c9b209e/src/buffs.ts#L12)*
-
-List of proc IDs that are associated with attacks
-
-___
 
 ## Functions
 
-###  getEffectId
+###  combineEffectsAndDamageFrames
 
-▸ **getEffectId**(`effect?`: undefined | object): *string*
+▸ **combineEffectsAndDamageFrames**(`effects`: [ProcEffect](_datamine_types_.md#proceffect)[], `damageFrames`: [IDamageFramesEntry](../interfaces/_datamine_types_.idamageframesentry.md)[]): *[IProcEffectFrameComposite](../interfaces/_buffs_.iproceffectframecomposite.md)[]*
 
-*Defined in [buffs.ts:48](https://github.com/BluuArc/bfmt-utilities/blob/c9b209e/src/buffs.ts#L48)*
+*Defined in [buffs.ts:36](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/buffs.ts#L36)*
 
-Get the ID of a given effect entry
+**`description`** Create a list of objects that contain both the effect data and its corresponding damage frame
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`effect?` | undefined \| object | the effect entry to read from  |
+`effects` | [ProcEffect](_datamine_types_.md#proceffect)[] | List of proc effects to combine; must be the same length as the `damageFrames` |
+`damageFrames` | [IDamageFramesEntry](../interfaces/_datamine_types_.idamageframesentry.md)[] | List of damage frames whose index corresponds with the effect in the `effects` list  |
+
+**Returns:** *[IProcEffectFrameComposite](../interfaces/_buffs_.iproceffectframecomposite.md)[]*
+
+___
+
+###  getEffectId
+
+▸ **getEffectId**(`effect`: object): *string*
+
+*Defined in [buffs.ts:54](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/buffs.ts#L54)*
+
+**Parameters:**
+
+▪ **effect**: *object*
+
+Name | Type |
+------ | ------ |
+`passive id?` | undefined &#124; string |
+`proc id?` | undefined &#124; string |
+`unknown passive id?` | undefined &#124; string |
+`unknown proc id?` | undefined &#124; string |
 
 **Returns:** *string*
 
@@ -53,52 +60,14 @@ ___
 
 ▸ **isAttackingProcId**(`id`: string): *boolean*
 
-*Defined in [buffs.ts:18](https://github.com/BluuArc/bfmt-utilities/blob/c9b209e/src/buffs.ts#L18)*
+*Defined in [buffs.ts:17](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/buffs.ts#L17)*
 
-Determine if a given proc ID is associated with an attack
+**`description`** Determine if a given proc ID's type is an attack
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`id` | string | Proc ID to test  |
+`id` | string | proc ID to check  |
 
 **Returns:** *boolean*
-
-___
-
-###  isPassiveEffect
-
-▸ **isPassiveEffect**(`effect`: any): *boolean*
-
-*Defined in [buffs.ts:26](https://github.com/BluuArc/bfmt-utilities/blob/c9b209e/src/buffs.ts#L26)*
-
-Determine whether a given effect entry is a passive effect
-
-**Parameters:**
-
-Name | Type | Default | Description |
------- | ------ | ------ | ------ |
-`effect` | any |  {} | the effect entry to test  |
-
-**Returns:** *boolean*
-
-___
-
-###  isProcEffect
-
-▸ **isProcEffect**(`effect`: any): *boolean*
-
-*Defined in [buffs.ts:37](https://github.com/BluuArc/bfmt-utilities/blob/c9b209e/src/buffs.ts#L37)*
-
-Determine whether a given effect entry is a proc effect
-
-**Parameters:**
-
-Name | Type | Default | Description |
------- | ------ | ------ | ------ |
-`effect` | any |  {} | the effect entry to test  |
-
-**Returns:** *boolean*
-
-___
