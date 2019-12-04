@@ -24,7 +24,7 @@
 
 • **effect delay time(ms)/frame**: *string*
 
-*Defined in [datamine-types.ts:84](https://github.com/BluuArc/bfmt-utilities/blob/dc2bfb7/src/datamine-types.ts#L84)*
+*Defined in [datamine-types.ts:84](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L84)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **frame times**: *number[]*
 
-*Defined in [datamine-types.ts:85](https://github.com/BluuArc/bfmt-utilities/blob/dc2bfb7/src/datamine-types.ts#L85)*
+*Defined in [datamine-types.ts:85](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L85)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **hit dmg% distribution**: *number[]*
 
-*Defined in [datamine-types.ts:86](https://github.com/BluuArc/bfmt-utilities/blob/dc2bfb7/src/datamine-types.ts#L86)*
+*Defined in [datamine-types.ts:86](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L86)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **hit dmg% distribution (total)**: *number*
 
-*Defined in [datamine-types.ts:87](https://github.com/BluuArc/bfmt-utilities/blob/dc2bfb7/src/datamine-types.ts#L87)*
+*Defined in [datamine-types.ts:87](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L87)*
 
 ___
 
@@ -56,4 +56,4 @@ ___
 
 • **hits**: *number*
 
-*Defined in [datamine-types.ts:88](https://github.com/BluuArc/bfmt-utilities/blob/dc2bfb7/src/datamine-types.ts#L88)*
+*Defined in [datamine-types.ts:88](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L88)*

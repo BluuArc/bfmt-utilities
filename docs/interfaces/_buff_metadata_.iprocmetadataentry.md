@@ -20,7 +20,7 @@
 
 • **ID**: *string*
 
-*Defined in [buff-metadata.ts:12](https://github.com/BluuArc/bfmt-utilities/blob/dc2bfb7/src/buff-metadata.ts#L12)*
+*Defined in [buff-metadata.ts:12](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/buff-metadata.ts#L12)*
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 • **Name**: *string*
 
-*Defined in [buff-metadata.ts:13](https://github.com/BluuArc/bfmt-utilities/blob/dc2bfb7/src/buff-metadata.ts#L13)*
+*Defined in [buff-metadata.ts:13](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/buff-metadata.ts#L13)*
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **Type**: *[ProcBuffType](../enums/_buff_metadata_.procbufftype.md) | string*
 
-*Defined in [buff-metadata.ts:14](https://github.com/BluuArc/bfmt-utilities/blob/dc2bfb7/src/buff-metadata.ts#L14)*
+*Defined in [buff-metadata.ts:14](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/buff-metadata.ts#L14)*

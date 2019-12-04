@@ -24,7 +24,7 @@ export enum MoveType {
 	NonMoving = 3,
 }
 
-export interface IUnitMovemmentEntry {
+export interface IUnitMovementEntry {
 	'move speed': number;
 	'move speed type': string;
 	'move type': MoveType;
@@ -344,8 +344,8 @@ export interface IUnit {
 	'lord damage range': string;
 
 	movement: {
-		attack: IUnitMovemmentEntry;
-		skill?: IUnitMovemmentEntry;
+		attack: IUnitMovementEntry;
+		skill?: IUnitMovementEntry;
 	};
 	name: string;
 	'overdrive stats': {

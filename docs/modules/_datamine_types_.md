@@ -40,7 +40,7 @@
 * [IUnit](../interfaces/_datamine_types_.iunit.md)
 * [IUnitAnimationEntry](../interfaces/_datamine_types_.iunitanimationentry.md)
 * [IUnitArenaAiEntry](../interfaces/_datamine_types_.iunitarenaaientry.md)
-* [IUnitMovemmentEntry](../interfaces/_datamine_types_.iunitmovemmententry.md)
+* [IUnitMovementEntry](../interfaces/_datamine_types_.iunitmovemententry.md)
 * [IUnitStatsEntry](../interfaces/_datamine_types_.iunitstatsentry.md)
 * [IUnknownPassiveEffect](../interfaces/_datamine_types_.iunknownpassiveeffect.md)
 * [IUnknownProcEffect](../interfaces/_datamine_types_.iunknownproceffect.md)
@@ -57,7 +57,7 @@
 
 Ƭ **ExtraSkillPassiveEffect**: *[IExtraSkillPassiveEffect](../interfaces/_datamine_types_.iextraskillpassiveeffect.md) | [IExtraSkillUnknownPassiveEffect](../interfaces/_datamine_types_.iextraskillunknownpassiveeffect.md)*
 
-*Defined in [datamine-types.ts:164](https://github.com/BluuArc/bfmt-utilities/blob/dc2bfb7/src/datamine-types.ts#L164)*
+*Defined in [datamine-types.ts:164](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L164)*
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 Ƭ **PassiveEffect**: *[IPassiveEffect](../interfaces/_datamine_types_.ipassiveeffect.md) | [IUnknownPassiveEffect](../interfaces/_datamine_types_.iunknownpassiveeffect.md)*
 
-*Defined in [datamine-types.ts:81](https://github.com/BluuArc/bfmt-utilities/blob/dc2bfb7/src/datamine-types.ts#L81)*
+*Defined in [datamine-types.ts:81](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L81)*
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 Ƭ **ProcEffect**: *[IProcEffect](../interfaces/_datamine_types_.iproceffect.md) | [IUnknownProcEffect](../interfaces/_datamine_types_.iunknownproceffect.md)*
 
-*Defined in [datamine-types.ts:69](https://github.com/BluuArc/bfmt-utilities/blob/dc2bfb7/src/datamine-types.ts#L69)*
+*Defined in [datamine-types.ts:69](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L69)*
