@@ -1,8 +1,8 @@
 {
-  "name": "bfmt-utilities",
+  "name": "@bluuarc/bfmt-utilities",
   "version": "0.0.1",
   "description": "Set of utility functions used by the BFMT project. This is a separate repository for them because they are usable outside of BFMT.",
-  "main": "dist/index.browser.js",
+  "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -53,5 +53,12 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BluuArc/bfmt-utilities.git"
+  }
 }
