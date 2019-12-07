@@ -1,4 +1,4 @@
-[bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IExtraSkillUnknownPassiveEffect](_datamine_types_.iextraskillunknownpassiveeffect.md)
+[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IExtraSkillUnknownPassiveEffect](_datamine_types_.iextraskillunknownpassiveeffect.md)
 
 # Interface: IExtraSkillUnknownPassiveEffect
 
@@ -23,7 +23,7 @@
 
 • **conditions**: *[IExtraSkillCondition](_datamine_types_.iextraskillcondition.md)[]*
 
-*Defined in [datamine-types.ts:160](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L160)*
+*Defined in [datamine-types.ts:160](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L160)*
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 • **passive target**: *[TargetType](../enums/_datamine_types_.targettype.md)*
 
-*Defined in [datamine-types.ts:161](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L161)*
+*Defined in [datamine-types.ts:161](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L161)*
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 *Inherited from [IUnknownPassiveEffect](_datamine_types_.iunknownpassiveeffect.md).[unknown passive id](_datamine_types_.iunknownpassiveeffect.md#unknown-passive-id)*
 
-*Defined in [datamine-types.ts:77](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L77)*
+*Defined in [datamine-types.ts:77](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L77)*
 
 ___
 
@@ -51,4 +51,4 @@ ___
 
 *Inherited from [IUnknownPassiveEffect](_datamine_types_.iunknownpassiveeffect.md).[unknown passive params](_datamine_types_.iunknownpassiveeffect.md#unknown-passive-params)*
 
-*Defined in [datamine-types.ts:78](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L78)*
+*Defined in [datamine-types.ts:78](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L78)*

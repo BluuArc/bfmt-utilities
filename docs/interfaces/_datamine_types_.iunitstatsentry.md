@@ -1,4 +1,4 @@
-[bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IUnitStatsEntry](_datamine_types_.iunitstatsentry.md)
+[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IUnitStatsEntry](_datamine_types_.iunitstatsentry.md)
 
 # Interface: IUnitStatsEntry
 
@@ -21,7 +21,7 @@
 
 • **atk**: *number*
 
-*Defined in [datamine-types.ts:35](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L35)*
+*Defined in [datamine-types.ts:35](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L35)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **def**: *number*
 
-*Defined in [datamine-types.ts:36](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L36)*
+*Defined in [datamine-types.ts:36](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L36)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **hp**: *number*
 
-*Defined in [datamine-types.ts:34](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L34)*
+*Defined in [datamine-types.ts:34](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L34)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **rec**: *number*
 
-*Defined in [datamine-types.ts:37](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L37)*
+*Defined in [datamine-types.ts:37](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L37)*

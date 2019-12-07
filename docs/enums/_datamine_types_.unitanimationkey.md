@@ -1,4 +1,4 @@
-[bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitAnimationKey](_datamine_types_.unitanimationkey.md)
+[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitAnimationKey](_datamine_types_.unitanimationkey.md)
 
 # Enumeration: UnitAnimationKey
 
@@ -16,7 +16,7 @@
 
 • **Attack**: = "attack"
 
-*Defined in [datamine-types.ts:236](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L236)*
+*Defined in [datamine-types.ts:236](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L236)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **Idle**: = "idle"
 
-*Defined in [datamine-types.ts:237](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L237)*
+*Defined in [datamine-types.ts:237](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L237)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **Move**: = "move"
 
-*Defined in [datamine-types.ts:238](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L238)*
+*Defined in [datamine-types.ts:238](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L238)*

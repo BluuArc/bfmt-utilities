@@ -1,4 +1,4 @@
-[bfmt-utilities](../README.md) › [Globals](../globals.md) › ["constants"](../modules/_constants_.md) › [KNOWN_PROC_ID](_constants_.known_proc_id.md)
+[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["constants"](../modules/_constants_.md) › [KNOWN_PROC_ID](_constants_.known_proc_id.md)
 
 # Enumeration: KNOWN_PROC_ID
 
@@ -14,4 +14,4 @@
 
 • **BurstHeal**: = "2"
 
-*Defined in [constants.ts:2](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/constants.ts#L2)*
+*Defined in [constants.ts:2](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/constants.ts#L2)*

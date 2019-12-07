@@ -1,4 +1,4 @@
-[bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](_datamine_types_.md)
+[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](_datamine_types_.md)
 
 # External module: "datamine-types"
 
@@ -57,7 +57,7 @@
 
 Ƭ **ExtraSkillPassiveEffect**: *[IExtraSkillPassiveEffect](../interfaces/_datamine_types_.iextraskillpassiveeffect.md) | [IExtraSkillUnknownPassiveEffect](../interfaces/_datamine_types_.iextraskillunknownpassiveeffect.md)*
 
-*Defined in [datamine-types.ts:164](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L164)*
+*Defined in [datamine-types.ts:164](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L164)*
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 Ƭ **PassiveEffect**: *[IPassiveEffect](../interfaces/_datamine_types_.ipassiveeffect.md) | [IUnknownPassiveEffect](../interfaces/_datamine_types_.iunknownpassiveeffect.md)*
 
-*Defined in [datamine-types.ts:81](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L81)*
+*Defined in [datamine-types.ts:81](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L81)*
 
 ___
 
@@ -73,4 +73,4 @@ ___
 
 Ƭ **ProcEffect**: *[IProcEffect](../interfaces/_datamine_types_.iproceffect.md) | [IUnknownProcEffect](../interfaces/_datamine_types_.iunknownproceffect.md)*
 
-*Defined in [datamine-types.ts:69](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L69)*
+*Defined in [datamine-types.ts:69](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L69)*

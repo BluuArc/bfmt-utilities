@@ -1,4 +1,4 @@
-[bfmt-utilities](../README.md) › [Globals](../globals.md) › ["buff-metadata"](../modules/_buff_metadata_.md) › [IPassiveMetadataEntry](_buff_metadata_.ipassivemetadataentry.md)
+[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["buff-metadata"](../modules/_buff_metadata_.md) › [IPassiveMetadataEntry](_buff_metadata_.ipassivemetadataentry.md)
 
 # Interface: IPassiveMetadataEntry
 
@@ -19,7 +19,7 @@
 
 • **ID**: *string*
 
-*Defined in [buff-metadata.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/buff-metadata.ts#L3)*
+*Defined in [buff-metadata.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/buff-metadata.ts#L3)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **Name**: *string*
 
-*Defined in [buff-metadata.ts:4](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/buff-metadata.ts#L4)*
+*Defined in [buff-metadata.ts:4](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/buff-metadata.ts#L4)*

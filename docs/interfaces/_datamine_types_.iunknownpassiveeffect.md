@@ -1,4 +1,4 @@
-[bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IUnknownPassiveEffect](_datamine_types_.iunknownpassiveeffect.md)
+[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IUnknownPassiveEffect](_datamine_types_.iunknownpassiveeffect.md)
 
 # Interface: IUnknownPassiveEffect
 
@@ -21,7 +21,7 @@
 
 • **unknown passive id**: *string*
 
-*Defined in [datamine-types.ts:77](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L77)*
+*Defined in [datamine-types.ts:77](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L77)*
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 • **unknown passive params**: *string*
 
-*Defined in [datamine-types.ts:78](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L78)*
+*Defined in [datamine-types.ts:78](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L78)*

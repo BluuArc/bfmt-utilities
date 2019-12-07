@@ -1,4 +1,4 @@
-[bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitGettingType](_datamine_types_.unitgettingtype.md)
+[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitGettingType](_datamine_types_.unitgettingtype.md)
 
 # Enumeration: UnitGettingType
 
@@ -16,7 +16,7 @@
 
 • **Farmable**: = "farmable"
 
-*Defined in [datamine-types.ts:262](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L262)*
+*Defined in [datamine-types.ts:262](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L262)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **Ineligible**: = "not eligible for achievement"
 
-*Defined in [datamine-types.ts:261](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L261)*
+*Defined in [datamine-types.ts:261](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L261)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **RareSummon**: = "rare summon"
 
-*Defined in [datamine-types.ts:263](https://github.com/BluuArc/bfmt-utilities/blob/dcfe900/src/datamine-types.ts#L263)*
+*Defined in [datamine-types.ts:263](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L263)*

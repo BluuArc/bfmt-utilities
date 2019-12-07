@@ -1,6 +1,6 @@
-[bfmt-utilities](README.md) › [Globals](globals.md)
+[@bluuarc/bfmt-utilities](README.md) › [Globals](globals.md)
 
-# bfmt-utilities
+# @bluuarc/bfmt-utilities
 
 # bfmt-utilities
 

@@ -1,4 +1,4 @@
-[bfmt-utilities](../README.md) › [Globals](../globals.md) › ["constants"](_constants_.md)
+[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["constants"](_constants_.md)
 
 # External module: "constants"
 
