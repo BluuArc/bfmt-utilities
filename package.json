@@ -19,7 +19,8 @@
     "test": "jasmine --config=test/jasmine.json",
     "coverage": "tsc -p tsconfig.coverage.json && nyc jasmine --config=test/jasmine.coverage.json",
     "cleanup-coverage": "npm run gulp -- cleanup-coverage",
-    "update-data": "npm run gulp -- update-data"
+    "update-data": "npm run gulp -- update-data",
+    "prepublishOnly": "npm run build"
   },
   "author": "Joshua Castor",
   "license": "MIT",
