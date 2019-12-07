@@ -1,5 +1,7 @@
 # bfmt-utilities
 
+![](https://github.com/BluuArc/bfmt-utilities/workflows/Node%20CI/badge.svg)
+
 ## Description
 
 NPM module that contains a set of utility functions used by the [BFMT project](https://github.com/BluuArc/bf-mt). This is a separate repository for them because they are usable outside of BFMT.
