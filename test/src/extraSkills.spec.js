@@ -24,11 +24,11 @@ describe('extra skill utilities', () => {
 					value: 'some string',
 				},
 				{
-					name: 'is an object without an effects property',
+					name: 'is an object where obj.effects does not exist',
 					value: { some: 'property' },
 				},
 				{
-					name: 'is an object with an effects property that is not an array',
+					name: 'is an object obj.effects is not an array',
 					value: { effects: 'some string' },
 				},
 			].forEach(testCase => {

@@ -9,7 +9,7 @@ export function getEffectsForItem (item: IConsumableItem | ISphere): (PassiveEff
 	if (item && item.effect) {
 		if (Array.isArray((item as ISphere).effect)) {
 			result = (item as ISphere).effect;
-		} else {
+		} else if (Array.isArray((item as IConsumableItem).effect.effect)) {
 			const { effect, target_area: targetArea, target_type: targetType } = (item as IConsumableItem).effect;
 			result = effect.map(e => {
 				// apply target data to each effect
