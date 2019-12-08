@@ -1,4 +1,4 @@
-import { IExtraSkill, ExtraSkillPassiveEffect } from "./datamine-types";
+import { IExtraSkill, ExtraSkillPassiveEffect } from './datamine-types';
 
 /**
  * Get the effects of a given extra skill
