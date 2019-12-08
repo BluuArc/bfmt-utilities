@@ -101,7 +101,7 @@ describe('burst utilities', () => {
 
 	describe('getEffectsForBurst method', () => {
 		const generateBurstWithLevelEntries = (numEntries) => ({
-			levels: Array.from({ length: numEntries }, (_, index) => ({ effects: [ index ] })),
+			levels: Array.from({ length: numEntries }, (_, index) => ({ effects: [index] })),
 		});
 
 		describe('for invalid values for burst', () => {
@@ -120,7 +120,7 @@ describe('burst utilities', () => {
 				},
 				{
 					name: 'is an object without a levels property',
-					value: {},
+					value: { some: 'property' },
 				},
 				{
 					name: 'is an object without an effects property at the specified level',
@@ -128,7 +128,7 @@ describe('burst utilities', () => {
 					level: 1,
 				},
 				{
-					name: 'is an object an effects property that is not an array at the specified level',
+					name: 'is an object with an effects property that is not an array at the specified level',
 					value: { level: [{ effects: 'some string' }]},
 					level: 1,
 				},

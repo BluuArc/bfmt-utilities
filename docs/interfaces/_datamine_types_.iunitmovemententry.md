@@ -20,7 +20,7 @@
 
 • **move speed**: *number*
 
-*Defined in [datamine-types.ts:28](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L28)*
+*Defined in [datamine-types.ts:28](https://github.com/BluuArc/bfmt-utilities/blob/10ddcf7/src/datamine-types.ts#L28)*
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 • **move speed type**: *string*
 
-*Defined in [datamine-types.ts:29](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L29)*
+*Defined in [datamine-types.ts:29](https://github.com/BluuArc/bfmt-utilities/blob/10ddcf7/src/datamine-types.ts#L29)*
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **move type**: *[MoveType](../enums/_datamine_types_.movetype.md)*
 
-*Defined in [datamine-types.ts:30](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L30)*
+*Defined in [datamine-types.ts:30](https://github.com/BluuArc/bfmt-utilities/blob/10ddcf7/src/datamine-types.ts#L30)*
