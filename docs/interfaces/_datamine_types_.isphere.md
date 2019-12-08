@@ -36,7 +36,7 @@
 
 *Inherited from [IItem](_datamine_types_.iitem.md).[associated_units](_datamine_types_.iitem.md#optional-associated_units)*
 
-*Defined in [datamine-types.ts:452](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L452)*
+*Defined in [datamine-types.ts:452](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L452)*
 
 **`description`** List of units that use this item
 
@@ -50,7 +50,7 @@ ___
 
 *Inherited from [IItem](_datamine_types_.iitem.md).[desc](_datamine_types_.iitem.md#desc)*
 
-*Defined in [datamine-types.ts:425](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L425)*
+*Defined in [datamine-types.ts:425](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L425)*
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 *Inherited from [IItem](_datamine_types_.iitem.md).[dictionary](_datamine_types_.iitem.md#optional-dictionary)*
 
-*Defined in [datamine-types.ts:444](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L444)*
+*Defined in [datamine-types.ts:444](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L444)*
 
 **`author`** BluuArc
 
@@ -70,7 +70,7 @@ ___
 
 • **effect**: *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)[]*
 
-*Defined in [datamine-types.ts:465](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L465)*
+*Defined in [datamine-types.ts:465](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L465)*
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 *Inherited from [IItem](_datamine_types_.iitem.md).[id](_datamine_types_.iitem.md#id)*
 
-*Defined in [datamine-types.ts:426](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L426)*
+*Defined in [datamine-types.ts:426](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L426)*
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 *Inherited from [IItem](_datamine_types_.iitem.md).[max_stack](_datamine_types_.iitem.md#max_stack)*
 
-*Defined in [datamine-types.ts:427](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L427)*
+*Defined in [datamine-types.ts:427](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L427)*
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 *Inherited from [IItem](_datamine_types_.iitem.md).[name](_datamine_types_.iitem.md#name)*
 
-*Defined in [datamine-types.ts:428](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L428)*
+*Defined in [datamine-types.ts:428](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L428)*
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 *Inherited from [IItem](_datamine_types_.iitem.md).[raid](_datamine_types_.iitem.md#raid)*
 
-*Defined in [datamine-types.ts:429](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L429)*
+*Defined in [datamine-types.ts:429](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L429)*
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 *Inherited from [IItem](_datamine_types_.iitem.md).[rarity](_datamine_types_.iitem.md#rarity)*
 
-*Defined in [datamine-types.ts:430](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L430)*
+*Defined in [datamine-types.ts:430](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L430)*
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 *Inherited from [IItem](_datamine_types_.iitem.md).[sell_price](_datamine_types_.iitem.md#sell_price)*
 
-*Defined in [datamine-types.ts:431](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L431)*
+*Defined in [datamine-types.ts:431](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L431)*
 
 ___
 
@@ -138,7 +138,7 @@ ___
 
 • **sphere type**: *[SphereTypeId](../enums/_datamine_types_.spheretypeid.md)*
 
-*Defined in [datamine-types.ts:466](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L466)*
+*Defined in [datamine-types.ts:466](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L466)*
 
 ___
 
@@ -146,7 +146,7 @@ ___
 
 • **sphere type text**: *[SphereTypeName](../enums/_datamine_types_.spheretypename.md)*
 
-*Defined in [datamine-types.ts:467](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L467)*
+*Defined in [datamine-types.ts:467](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L467)*
 
 ___
 
@@ -156,7 +156,7 @@ ___
 
 *Inherited from [IItem](_datamine_types_.iitem.md).[thumbnail](_datamine_types_.iitem.md#thumbnail)*
 
-*Defined in [datamine-types.ts:432](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L432)*
+*Defined in [datamine-types.ts:432](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L432)*
 
 ___
 
@@ -166,7 +166,7 @@ ___
 
 *Inherited from [IItem](_datamine_types_.iitem.md).[type](_datamine_types_.iitem.md#type)*
 
-*Defined in [datamine-types.ts:433](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L433)*
+*Defined in [datamine-types.ts:433](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L433)*
 
 ___
 
@@ -176,7 +176,7 @@ ___
 
 *Inherited from [IItem](_datamine_types_.iitem.md).[usage](_datamine_types_.iitem.md#optional-usage)*
 
-*Defined in [datamine-types.ts:439](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L439)*
+*Defined in [datamine-types.ts:439](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L439)*
 
 **`description`** List of other items that use the current item somewhere in their recipe
 

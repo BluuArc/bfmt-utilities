@@ -21,7 +21,7 @@
 
 • **atk**: *number*
 
-*Defined in [datamine-types.ts:35](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L35)*
+*Defined in [datamine-types.ts:35](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L35)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **def**: *number*
 
-*Defined in [datamine-types.ts:36](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L36)*
+*Defined in [datamine-types.ts:36](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L36)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **hp**: *number*
 
-*Defined in [datamine-types.ts:34](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L34)*
+*Defined in [datamine-types.ts:34](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L34)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **rec**: *number*
 
-*Defined in [datamine-types.ts:37](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L37)*
+*Defined in [datamine-types.ts:37](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L37)*

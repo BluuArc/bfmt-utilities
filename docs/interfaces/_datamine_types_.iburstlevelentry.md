@@ -19,7 +19,7 @@
 
 • **bc cost**: *number*
 
-*Defined in [datamine-types.ts:92](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L92)*
+*Defined in [datamine-types.ts:92](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L92)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **effects**: *[ProcEffect](../modules/_datamine_types_.md#proceffect)[]*
 
-*Defined in [datamine-types.ts:93](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L93)*
+*Defined in [datamine-types.ts:93](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L93)*

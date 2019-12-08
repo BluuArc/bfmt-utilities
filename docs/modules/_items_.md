@@ -6,15 +6,15 @@
 
 ### Functions
 
-* [getItemEffects](_items_.md#getitemeffects)
+* [getEffectsForItem](_items_.md#geteffectsforitem)
 
 ## Functions
 
-###  getItemEffects
+###  getEffectsForItem
 
-▸ **getItemEffects**(`item`: [IConsumableItem](../interfaces/_datamine_types_.iconsumableitem.md) | [ISphere](../interfaces/_datamine_types_.isphere.md)): *[IProcEffect](../interfaces/_datamine_types_.iproceffect.md) | [IUnknownProcEffect](../interfaces/_datamine_types_.iunknownproceffect.md) | [IPassiveEffect](../interfaces/_datamine_types_.ipassiveeffect.md) | [IUnknownPassiveEffect](../interfaces/_datamine_types_.iunknownpassiveeffect.md)[]*
+▸ **getEffectsForItem**(`item`: [IConsumableItem](../interfaces/_datamine_types_.iconsumableitem.md) | [ISphere](../interfaces/_datamine_types_.isphere.md)): *[IProcEffect](../interfaces/_datamine_types_.iproceffect.md) | [IUnknownProcEffect](../interfaces/_datamine_types_.iunknownproceffect.md) | [IPassiveEffect](../interfaces/_datamine_types_.ipassiveeffect.md) | [IUnknownPassiveEffect](../interfaces/_datamine_types_.iunknownpassiveeffect.md)[]*
 
-Defined in items.ts:7
+*Defined in [items.ts:7](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/items.ts#L7)*
 
 **`description`** Get the effects of a given item
 
