@@ -7,6 +7,7 @@ describe('application entry point', () => {
 			'bursts',
 			'buffs',
 			'extraSkills',
+			'items',
 		].sort();
 		expect(Object.keys(app).sort()).toEqual(expectedSurface);
 	});

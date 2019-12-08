@@ -4,7 +4,7 @@ import { IConsumableItem, ISphere, PassiveEffect, ProcEffect } from './datamine-
  * @description Get the effects of a given item
  * @param item item to get the effects of, if any are present
  */
-export function getItemEffects (item: IConsumableItem | ISphere): (PassiveEffect | ProcEffect)[] {
+export function getEffectsForItem (item: IConsumableItem | ISphere): (PassiveEffect | ProcEffect)[] {
 	let result: (ProcEffect | PassiveEffect)[] = [];
 	if (item && item.effect) {
 		if (Array.isArray((item as ISphere).effect)) {

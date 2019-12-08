@@ -3,12 +3,12 @@ const extraSkillUtilities = require('../../src/extra-skills');
 describe('extra skill utilities', () => {
 	it('has expected API surface', () => {
 		const expectedSurface = [
-			'getExtraSkillEffects',
+			'getEffectsForExtraSkill',
 		].sort();
 		expect(Object.keys(extraSkillUtilities).sort()).toEqual(expectedSurface);
 	});
 
-	describe('getExtraSkillEffects method', () => {
+	describe('getEffectsForExtraSkill method', () => {
 		describe('for invalid values for skill', () => {
 			[
 				{
@@ -33,14 +33,14 @@ describe('extra skill utilities', () => {
 				},
 			].forEach(testCase => {
 				it(`returns an empty array if skill parameter ${testCase.name}`, () => {
-					expect(extraSkillUtilities.getExtraSkillEffects(testCase.value)).toEqual([]);
+					expect(extraSkillUtilities.getEffectsForExtraSkill(testCase.value)).toEqual([]);
 				});
 			});
 		});
 
 		it('returns the effects array of the given skill', () => {
 			const inputSkill = { effects: [{ some: 'effect' }] };
-			expect(extraSkillUtilities.getExtraSkillEffects(inputSkill)).toBe(inputSkill.effects);
+			expect(extraSkillUtilities.getEffectsForExtraSkill(inputSkill)).toBe(inputSkill.effects);
 		});
 	});
 });
