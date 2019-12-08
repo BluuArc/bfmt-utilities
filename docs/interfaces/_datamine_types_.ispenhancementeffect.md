@@ -21,7 +21,7 @@
 
 • **add to bb**? : *[ProcEffect](../modules/_datamine_types_.md#proceffect)*
 
-*Defined in [datamine-types.ts:205](https://github.com/BluuArc/bfmt-utilities/blob/10ddcf7/src/datamine-types.ts#L205)*
+*Defined in [datamine-types.ts:205](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L205)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **add to sbb**? : *[ProcEffect](../modules/_datamine_types_.md#proceffect)*
 
-*Defined in [datamine-types.ts:206](https://github.com/BluuArc/bfmt-utilities/blob/10ddcf7/src/datamine-types.ts#L206)*
+*Defined in [datamine-types.ts:206](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L206)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **add to ubb**: *[ProcEffect](../modules/_datamine_types_.md#proceffect)*
 
-*Defined in [datamine-types.ts:207](https://github.com/BluuArc/bfmt-utilities/blob/10ddcf7/src/datamine-types.ts#L207)*
+*Defined in [datamine-types.ts:207](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L207)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **passive**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
 
-*Defined in [datamine-types.ts:204](https://github.com/BluuArc/bfmt-utilities/blob/10ddcf7/src/datamine-types.ts#L204)*
+*Defined in [datamine-types.ts:204](https://github.com/BluuArc/bfmt-utilities/blob/caba68a/src/datamine-types.ts#L204)*

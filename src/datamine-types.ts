@@ -392,3 +392,77 @@ export interface IUnit {
 		_lord: IUnitStatsEntry;
 	};
 }
+
+export enum ItemType {
+	Consumable = 'consumable',
+	Material = 'material',
+	Sphere = 'sphere',
+	EvolutionMaterial = 'evomat',
+	SummonerConsumable = 'summoner_consumable',
+	LeaderSkillSphere = 'ls_sphere',
+}
+
+export interface IItemRecipeMaterial {
+	count: number;
+	id: number;
+	name: string;
+}
+
+export interface IItemRecipe {
+	karma: string;
+	materials: IItemRecipeMaterial[];
+}
+
+/**
+ * @author BluuArc
+ */
+export interface IItemUsageEntry {
+	id: number;
+	name: string;
+}
+
+export interface IItem {
+	desc: string;
+	id: number;
+	max_stack: number;
+	name: string;
+	raid: boolean;
+	rarity: number;
+	sell_price: number;
+	thumbnail: string;
+	type: ItemType;
+
+	/**
+	 * @description List of other items that use the current item somewhere in their recipe
+	 * @author BluuArc
+	 */
+	usage?: IItemUsageEntry[];
+
+	/**
+	 * @author BluuArc
+	 */
+	dictionary?: {
+		lore?: string;
+	};
+
+	/**
+	 * @description List of units that use this item
+	 * @author BluuArc
+	 */
+	associated_units?: string[];
+}
+
+export interface IConsumableItem extends IItem {
+	'max equipped': number;
+	effect: {
+		effect: ProcEffect[];
+		target_area: TargetArea;
+		target_type: TargetType;
+	};
+}
+
+export interface ISphere extends IItem {
+	effect: PassiveEffect[];
+	'sphere type': SphereTypeId;
+	'sphere type text': SphereTypeName;
+}

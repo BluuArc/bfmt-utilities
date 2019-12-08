@@ -12,3 +12,4 @@
 * ["constants"](modules/_constants_.md)
 * ["datamine-types"](modules/_datamine_types_.md)
 * ["extra-skills"](modules/_extra_skills_.md)
+* ["items"](modules/_items_.md)
