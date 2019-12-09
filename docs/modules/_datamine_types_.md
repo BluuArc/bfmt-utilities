@@ -44,6 +44,7 @@
 * [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)
 * [ISpEnhancementSkill](../interfaces/_datamine_types_.ispenhancementskill.md)
 * [ISphere](../interfaces/_datamine_types_.isphere.md)
+* [ITriggeredEffect](../interfaces/_datamine_types_.itriggeredeffect.md)
 * [IUnit](../interfaces/_datamine_types_.iunit.md)
 * [IUnitAnimationEntry](../interfaces/_datamine_types_.iunitanimationentry.md)
 * [IUnitArenaAiEntry](../interfaces/_datamine_types_.iunitarenaaientry.md)
@@ -64,15 +65,15 @@
 
 Ƭ **ExtraSkillPassiveEffect**: *[IExtraSkillPassiveEffect](../interfaces/_datamine_types_.iextraskillpassiveeffect.md) | [IExtraSkillUnknownPassiveEffect](../interfaces/_datamine_types_.iextraskillunknownpassiveeffect.md)*
 
-*Defined in [datamine-types.ts:164](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/datamine-types.ts#L164)*
+*Defined in [datamine-types.ts:172](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L172)*
 
 ___
 
 ###  PassiveEffect
 
-Ƭ **PassiveEffect**: *[IPassiveEffect](../interfaces/_datamine_types_.ipassiveeffect.md) | [IUnknownPassiveEffect](../interfaces/_datamine_types_.iunknownpassiveeffect.md)*
+Ƭ **PassiveEffect**: *[IPassiveEffect](../interfaces/_datamine_types_.ipassiveeffect.md) | [IUnknownPassiveEffect](../interfaces/_datamine_types_.iunknownpassiveeffect.md) | [ITriggeredEffect](../interfaces/_datamine_types_.itriggeredeffect.md)*
 
-*Defined in [datamine-types.ts:81](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/datamine-types.ts#L81)*
+*Defined in [datamine-types.ts:89](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L89)*
 
 ___
 
@@ -80,4 +81,4 @@ ___
 
 Ƭ **ProcEffect**: *[IProcEffect](../interfaces/_datamine_types_.iproceffect.md) | [IUnknownProcEffect](../interfaces/_datamine_types_.iunknownproceffect.md)*
 
-*Defined in [datamine-types.ts:69](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/datamine-types.ts#L69)*
+*Defined in [datamine-types.ts:69](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L69)*

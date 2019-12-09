@@ -20,7 +20,7 @@
 
 ▸ **combineEffectsAndDamageFrames**(`effects`: [ProcEffect](_datamine_types_.md#proceffect)[], `damageFrames`: [IDamageFramesEntry](../interfaces/_datamine_types_.idamageframesentry.md)[]): *[IProcEffectFrameComposite](../interfaces/_buffs_.iproceffectframecomposite.md)[]*
 
-*Defined in [buffs.ts:36](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/buffs.ts#L36)*
+*Defined in [buffs.ts:36](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/buffs.ts#L36)*
 
 **`description`** Create a list of objects that contain both the effect data and its corresponding damage frame
 
@@ -39,7 +39,7 @@ ___
 
 ▸ **getEffectId**(`effect`: object): *string*
 
-*Defined in [buffs.ts:54](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/buffs.ts#L54)*
+*Defined in [buffs.ts:54](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/buffs.ts#L54)*
 
 **Parameters:**
 
@@ -60,7 +60,7 @@ ___
 
 ▸ **isAttackingProcId**(`id`: string): *boolean*
 
-*Defined in [buffs.ts:17](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/buffs.ts#L17)*
+*Defined in [buffs.ts:17](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/buffs.ts#L17)*
 
 **`description`** Determine if a given proc ID's type is an attack
 

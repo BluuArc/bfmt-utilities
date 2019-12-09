@@ -1313,6 +1313,12 @@ var bfmtUtilities = function () {
   (function (KNOWN_PROC_ID) {
     KNOWN_PROC_ID["BurstHeal"] = "2";
   })(KNOWN_PROC_ID || (KNOWN_PROC_ID = {}));
+
+  var KNOWN_PASSIVE_ID;
+
+  (function (KNOWN_PASSIVE_ID) {
+    KNOWN_PASSIVE_ID["TriggeredEffect"] = "66";
+  })(KNOWN_PASSIVE_ID || (KNOWN_PASSIVE_ID = {}));
   /**
    * @description Grab the level entry of a burst at a given level (or the last level if no level is given)
    * @param burst Burst to get level entry from

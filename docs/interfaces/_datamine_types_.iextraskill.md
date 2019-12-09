@@ -23,7 +23,7 @@
 
 • **desc**: *string*
 
-*Defined in [datamine-types.ts:167](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/datamine-types.ts#L167)*
+*Defined in [datamine-types.ts:175](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L175)*
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 • **effects**: *[ExtraSkillPassiveEffect](../modules/_datamine_types_.md#extraskillpassiveeffect)[]*
 
-*Defined in [datamine-types.ts:168](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/datamine-types.ts#L168)*
+*Defined in [datamine-types.ts:176](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L176)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • **is**: *string*
 
-*Defined in [datamine-types.ts:169](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/datamine-types.ts#L169)*
+*Defined in [datamine-types.ts:177](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L177)*
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:170](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/datamine-types.ts#L170)*
+*Defined in [datamine-types.ts:178](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L178)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 • **rarity**? : *undefined | string*
 
-*Defined in [datamine-types.ts:171](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/datamine-types.ts#L171)*
+*Defined in [datamine-types.ts:179](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L179)*
 
 ___
 
@@ -63,4 +63,4 @@ ___
 
 • **target**: *[TargetType](../enums/_datamine_types_.targettype.md)*
 
-*Defined in [datamine-types.ts:172](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/datamine-types.ts#L172)*
+*Defined in [datamine-types.ts:180](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L180)*

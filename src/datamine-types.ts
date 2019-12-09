@@ -73,12 +73,20 @@ export interface IPassiveEffect {
 	[key: string]: any;
 }
 
+export interface ITriggeredEffect {
+	'passive id': '66';
+	'trigger on bb'?: boolean;
+	'trigger on sbb'?: boolean;
+	'trigger on ubb'?: boolean;
+	'triggered effect': ProcEffect[];
+}
+
 export interface IUnknownPassiveEffect {
 	'unknown passive id': string;
 	'unknown passive params': string;
 }
 
-export type PassiveEffect = IPassiveEffect | IUnknownPassiveEffect;
+export type PassiveEffect = IPassiveEffect | IUnknownPassiveEffect | ITriggeredEffect;
 
 export interface IDamageFramesEntry {
 	'effect delay time(ms)/frame': string;
@@ -201,10 +209,30 @@ export enum SpCategoryId {
 }
 
 export interface ISpEnhancementEffect {
+	/**
+	 * @description used to add an entirely new effect
+	 */
 	passive?: PassiveEffect;
-	'add to bb'?: ProcEffect;
-	'add to sbb'?: ProcEffect;
-	'add to ubb': ProcEffect;
+
+	/**
+	 * @description used when enhancing an existing effect on LS
+	 */
+	'add to passive'?: PassiveEffect;
+
+	/**
+	 * @description used when enhancing an existing BB
+	 */
+	'add to bb'?: PassiveEffect;
+
+	/**
+	 * @description used when enhancing an existing SBB
+	 */
+	'add to sbb'?: PassiveEffect;
+
+	/**
+	 * @description used when enhancing an existing UBB
+	 */
+	'add to ubb'?: PassiveEffect;
 }
 
 export interface ISpEnhancementSkill {
@@ -300,7 +328,7 @@ export interface IUnit {
 	 */
 	dictionary?: {
 		description?: string;
-		eveolution?: string;
+		evolution?: string;
 		fusion?: string;
 		summon?: string;
 	};
@@ -316,6 +344,10 @@ export interface IUnit {
 	 */
 	exp_pattern: number;
 	'extra skill'?: IExtraSkill;
+
+	/**
+	 * @author BluuArc
+	 */
 	feskills?: ISpEnhancementEntry[];
 	gender: UnitGender;
 
