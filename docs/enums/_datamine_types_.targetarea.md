@@ -16,7 +16,7 @@
 
 • **Aoe**: = "aoe"
 
-*Defined in [datamine-types.ts:41](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L41)*
+*Defined in [datamine-types.ts:41](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/datamine-types.ts#L41)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **Random**: = "random"
 
-*Defined in [datamine-types.ts:43](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L43)*
+*Defined in [datamine-types.ts:43](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/datamine-types.ts#L43)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **Single**: = "single"
 
-*Defined in [datamine-types.ts:42](https://github.com/BluuArc/bfmt-utilities/blob/1f753a7/src/datamine-types.ts#L42)*
+*Defined in [datamine-types.ts:42](https://github.com/BluuArc/bfmt-utilities/blob/502c544/src/datamine-types.ts#L42)*
