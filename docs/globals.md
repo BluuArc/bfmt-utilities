@@ -15,3 +15,4 @@
 * ["items"](modules/_items_.md)
 * ["leader-skills"](modules/_leader_skills_.md)
 * ["sp-enhancements"](modules/_sp_enhancements_.md)
+* ["version"](modules/_version_.md)
