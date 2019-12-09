@@ -13,7 +13,7 @@ function runDev () {
 		done();
 	}
 	const onChange = series(cleanupTasks.cleanupCoverageFiles, testTasks.runCoverage, fullBuild, notifyReadiness);
-	watch(['../src/**/*.ts', '../.eslintrc.ts.js', '!../src/**/*.d.ts'], onChange);
+	watch(['../src/**/*.ts', '../.eslintrc.ts.js', '!../src/**/*.d.ts', '!../src/version.ts'], onChange);
 	watch(['../typedoc.config.js', '../README.md'], series(buildTasks.buildDocs, notifyReadiness));
 	watch(['../test/**/*.js', '../test/jasmine.json', '../nyc.config.js'], series(testTasks.lintTests, cleanupTasks.cleanupCoverageFiles, testTasks.runCoverage, notifyReadiness));
 	watch(['./**/*.js'], series(testTasks.lintTasks, notifyReadiness));

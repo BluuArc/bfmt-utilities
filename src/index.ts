@@ -4,12 +4,14 @@ import * as extraSkills from './extra-skills';
 import * as items from './items';
 import * as leaderSkills from './leader-skills';
 import * as spEnhancements from './sp-enhancements';
+import version from './version';
 
-export default {
+export default Object.freeze({
 	buffs,
 	bursts,
 	extraSkills,
 	items,
 	leaderSkills,
 	spEnhancements,
-};
+	version,
+});

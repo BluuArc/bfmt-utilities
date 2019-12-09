@@ -10,6 +10,7 @@ describe('application entry point', () => {
 			'items',
 			'leaderSkills',
 			'spEnhancements',
+			'version',
 		].sort();
 		expect(Object.keys(app).sort()).toEqual(expectedSurface);
 	});

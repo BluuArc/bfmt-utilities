@@ -3,6 +3,7 @@ const defaultExcludes = require('@istanbuljs/schema').nyc.properties.exclude.def
 module.exports = {
 	'check-coverage': true,
 	exclude: defaultExcludes.concat([
-		'src/index.js', // excluded to avoid testing transpiled importStar code
+		'src/index.js', // avoid testing transpiled importStar code
+		'src/version.js', // no need to test auto-generated file
 	]),
 };
