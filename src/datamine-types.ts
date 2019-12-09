@@ -88,6 +88,28 @@ export interface IUnknownPassiveEffect {
 
 export type PassiveEffect = IPassiveEffect | IUnknownPassiveEffect | ITriggeredEffect;
 
+export enum SpPassiveType {
+	AddPassive = 'passive',
+	EnhanceBb = 'add to bb',
+	EnhanceSbb = 'add to sbb',
+	EnhanceUbb = 'add to ubb',
+	EnhancePassive = 'add to passive',
+}
+
+export interface ISpEnhancementPassiveEffect extends IPassiveEffect {
+	sp_type: SpPassiveType;
+}
+
+export interface ISpEnhancementUnknownPassiveEffect extends IUnknownPassiveEffect {
+	sp_type: SpPassiveType;
+}
+
+export interface ISpEnhancementTriggeredEffect extends ITriggeredEffect {
+	sp_type: SpPassiveType;
+}
+
+export type SpEnhancementEffect = ISpEnhancementPassiveEffect | ISpEnhancementUnknownPassiveEffect | ISpEnhancementTriggeredEffect;
+
 export interface IDamageFramesEntry {
 	'effect delay time(ms)/frame': string;
 	'frame times': number[];
@@ -208,7 +230,7 @@ export enum SpCategoryId {
 	Special = '11',
 }
 
-export interface ISpEnhancementEffect {
+export interface ISpEnhancementEffectWrapper {
 	/**
 	 * @description used to add an entirely new effect
 	 */
@@ -238,7 +260,7 @@ export interface ISpEnhancementEffect {
 export interface ISpEnhancementSkill {
 	bp: number;
 	desc: string;
-	effects: ISpEnhancementEffect[];
+	effects: ISpEnhancementEffectWrapper[];
 	id: string;
 	level: number;
 	name: string;

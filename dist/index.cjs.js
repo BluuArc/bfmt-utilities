@@ -1114,6 +1114,14 @@ var TargetType;
     TargetType["Party"] = "party";
     TargetType["Enemy"] = "enemy";
 })(TargetType || (TargetType = {}));
+var SpPassiveType;
+(function (SpPassiveType) {
+    SpPassiveType["AddPassive"] = "passive";
+    SpPassiveType["EnhanceBb"] = "add to bb";
+    SpPassiveType["EnhanceSbb"] = "add to sbb";
+    SpPassiveType["EnhanceUbb"] = "add to ubb";
+    SpPassiveType["EnhancePassive"] = "add to passive";
+})(SpPassiveType || (SpPassiveType = {}));
 var SphereTypeName;
 (function (SphereTypeName) {
     SphereTypeName["None"] = "None";

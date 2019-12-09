@@ -16,7 +16,7 @@
 
 • **Farmable**: = "farmable"
 
-*Defined in [datamine-types.ts:290](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L290)*
+*Defined in [datamine-types.ts:312](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L312)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **Ineligible**: = "not eligible for achievement"
 
-*Defined in [datamine-types.ts:289](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L289)*
+*Defined in [datamine-types.ts:311](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L311)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **RareSummon**: = "rare summon"
 
-*Defined in [datamine-types.ts:291](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L291)*
+*Defined in [datamine-types.ts:313](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L313)*

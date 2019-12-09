@@ -20,7 +20,7 @@
 
 • **count**: *number*
 
-*Defined in [datamine-types.ts:438](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L438)*
+*Defined in [datamine-types.ts:460](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L460)*
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 • **id**: *number*
 
-*Defined in [datamine-types.ts:439](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L439)*
+*Defined in [datamine-types.ts:461](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L461)*
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:440](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L440)*
+*Defined in [datamine-types.ts:462](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L462)*

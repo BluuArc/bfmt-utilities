@@ -24,7 +24,7 @@
 
 • **Ailment Infliction**: = "9"
 
-*Defined in [datamine-types.ts:206](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L206)*
+*Defined in [datamine-types.ts:228](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L228)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **Ailment Resistance**: = "8"
 
-*Defined in [datamine-types.ts:205](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L205)*
+*Defined in [datamine-types.ts:227](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L227)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **Attack Boost**: = "4"
 
-*Defined in [datamine-types.ts:201](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L201)*
+*Defined in [datamine-types.ts:223](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L223)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **BB Gauge**: = "5"
 
-*Defined in [datamine-types.ts:202](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L202)*
+*Defined in [datamine-types.ts:224](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L224)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 • **Critical Hits**: = "3"
 
-*Defined in [datamine-types.ts:200](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L200)*
+*Defined in [datamine-types.ts:222](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L222)*
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 • **Damage Reduction**: = "10"
 
-*Defined in [datamine-types.ts:207](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L207)*
+*Defined in [datamine-types.ts:229](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L229)*
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 • **Drops**: = "7"
 
-*Defined in [datamine-types.ts:204](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L204)*
+*Defined in [datamine-types.ts:226](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L226)*
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 • **HP Recovery**: = "6"
 
-*Defined in [datamine-types.ts:203](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L203)*
+*Defined in [datamine-types.ts:225](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L225)*
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 • **Parameter Boost**: = "1"
 
-*Defined in [datamine-types.ts:198](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L198)*
+*Defined in [datamine-types.ts:220](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L220)*
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 • **Spark**: = "2"
 
-*Defined in [datamine-types.ts:199](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L199)*
+*Defined in [datamine-types.ts:221](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L221)*
 
 ___
 
@@ -104,4 +104,4 @@ ___
 
 • **Special**: = "11"
 
-*Defined in [datamine-types.ts:208](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L208)*
+*Defined in [datamine-types.ts:230](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L230)*

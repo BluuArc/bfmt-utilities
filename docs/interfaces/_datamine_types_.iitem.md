@@ -33,7 +33,7 @@
 
 • **associated_units**? : *string[]*
 
-*Defined in [datamine-types.ts:484](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L484)*
+*Defined in [datamine-types.ts:506](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L506)*
 
 **`description`** List of units that use this item
 
@@ -45,7 +45,7 @@ ___
 
 • **desc**: *string*
 
-*Defined in [datamine-types.ts:457](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L457)*
+*Defined in [datamine-types.ts:479](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L479)*
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 • **dictionary**? : *undefined | object*
 
-*Defined in [datamine-types.ts:476](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L476)*
+*Defined in [datamine-types.ts:498](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L498)*
 
 **`author`** BluuArc
 
@@ -63,7 +63,7 @@ ___
 
 • **id**: *number*
 
-*Defined in [datamine-types.ts:458](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L458)*
+*Defined in [datamine-types.ts:480](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L480)*
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 • **max_stack**: *number*
 
-*Defined in [datamine-types.ts:459](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L459)*
+*Defined in [datamine-types.ts:481](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L481)*
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:460](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L460)*
+*Defined in [datamine-types.ts:482](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L482)*
 
 ___
 
@@ -87,7 +87,7 @@ ___
 
 • **raid**: *boolean*
 
-*Defined in [datamine-types.ts:461](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L461)*
+*Defined in [datamine-types.ts:483](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L483)*
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 • **rarity**: *number*
 
-*Defined in [datamine-types.ts:462](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L462)*
+*Defined in [datamine-types.ts:484](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L484)*
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 • **sell_price**: *number*
 
-*Defined in [datamine-types.ts:463](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L463)*
+*Defined in [datamine-types.ts:485](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L485)*
 
 ___
 
@@ -111,7 +111,7 @@ ___
 
 • **thumbnail**: *string*
 
-*Defined in [datamine-types.ts:464](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L464)*
+*Defined in [datamine-types.ts:486](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L486)*
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 • **type**: *[ItemType](../enums/_datamine_types_.itemtype.md)*
 
-*Defined in [datamine-types.ts:465](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L465)*
+*Defined in [datamine-types.ts:487](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L487)*
 
 ___
 
@@ -127,7 +127,7 @@ ___
 
 • **usage**? : *[IItemUsageEntry](_datamine_types_.iitemusageentry.md)[]*
 
-*Defined in [datamine-types.ts:471](https://github.com/BluuArc/bfmt-utilities/blob/2dbb89b/src/datamine-types.ts#L471)*
+*Defined in [datamine-types.ts:493](https://github.com/BluuArc/bfmt-utilities/blob/51a3629/src/datamine-types.ts#L493)*
 
 **`description`** List of other items that use the current item somewhere in their recipe
 
