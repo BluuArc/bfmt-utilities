@@ -1,6 +1,6 @@
 {
   "name": "@bluuarc/bfmt-utilities",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Set of utility functions used by the BFMT project. This is a separate repository for them because they are usable outside of BFMT.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -31,6 +31,7 @@
     "@babel/preset-env": "^7.7.1",
     "@babel/preset-typescript": "^7.7.2",
     "@babel/register": "^7.7.0",
+    "@istanbuljs/schema": "^0.1.2",
     "@typescript-eslint/eslint-plugin": "^2.6.1",
     "@typescript-eslint/parser": "^2.6.1",
     "eslint": "^6.6.0",

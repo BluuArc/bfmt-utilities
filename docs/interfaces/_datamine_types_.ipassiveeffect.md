@@ -6,6 +6,8 @@
 
 * **IPassiveEffect**
 
+  ↳ [ISpEnhancementPassiveEffect](_datamine_types_.ispenhancementpassiveeffect.md)
+
   ↳ [IExtraSkillPassiveEffect](_datamine_types_.iextraskillpassiveeffect.md)
 
 ## Indexable
@@ -24,4 +26,4 @@
 
 • **passive id**: *string*
 
-*Defined in [datamine-types.ts:72](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L72)*
+*Defined in [datamine-types.ts:72](https://github.com/BluuArc/bfmt-utilities/blob/8c37919/src/datamine-types.ts#L72)*

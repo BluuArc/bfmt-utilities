@@ -101,7 +101,7 @@ describe('burst utilities', () => {
 
 	describe('getEffectsForBurst method', () => {
 		const generateBurstWithLevelEntries = (numEntries) => ({
-			levels: Array.from({ length: numEntries }, (_, index) => ({ effects: [ index ] })),
+			levels: Array.from({ length: numEntries }, (_, index) => ({ effects: [index] })),
 		});
 
 		describe('for invalid values for burst', () => {
@@ -120,7 +120,7 @@ describe('burst utilities', () => {
 				},
 				{
 					name: 'is an object without a levels property',
-					value: {},
+					value: { some: 'property' },
 				},
 				{
 					name: 'is an object without an effects property at the specified level',
@@ -128,7 +128,7 @@ describe('burst utilities', () => {
 					level: 1,
 				},
 				{
-					name: 'is an object an effects property that is not an array at the specified level',
+					name: 'is an object with an effects property that is not an array at the specified level',
 					value: { level: [{ effects: 'some string' }]},
 					level: 1,
 				},
@@ -183,7 +183,7 @@ describe('burst utilities', () => {
 	});
 
 	describe('getExtraAttackDamageFramesEntry method', () => {
-		const arbitraryDelay = 'arbitrary delay';
+		const ARBITRARY_DELAY = 'arbitrary delay';
 		/**
 		 * @param {import('../../src/datamine-types').IDamageFramesEntry} result
 		 * @param {import('../../src/datamine-types').IDamageFramesEntry} expected
@@ -217,7 +217,7 @@ describe('burst utilities', () => {
 			hits,
 		});
 		const emptyDamageFramesEntry = createDamageFramesEntry(({
-			delay: arbitraryDelay,
+			delay: ARBITRARY_DELAY,
 			frames: [],
 			damageDistribution: [],
 			damageTotal: 0,
@@ -248,7 +248,7 @@ describe('burst utilities', () => {
 				},
 			].forEach(testCase => {
 				it(`returns an empty damage frames entry if damageFrames ${testCase.name}`, () => {
-					const result = burstUtilites.getExtraAttackDamageFramesEntry(testCase.value, arbitraryDelay);
+					const result = burstUtilites.getExtraAttackDamageFramesEntry(testCase.value, ARBITRARY_DELAY);
 					assertDamageFramesEntry(result, emptyDamageFramesEntry);
 				});
 			});
@@ -262,8 +262,8 @@ describe('burst utilities', () => {
 			});
 
 			it('uses the passed in value for effectDelay', () => {
-				const expectedResult = createDamageFramesEntry({ delay: arbitraryDelay });
-				const result = burstUtilites.getExtraAttackDamageFramesEntry([], arbitraryDelay);
+				const expectedResult = createDamageFramesEntry({ delay: ARBITRARY_DELAY });
+				const result = burstUtilites.getExtraAttackDamageFramesEntry([], ARBITRARY_DELAY);
 				assertDamageFramesEntry(result, expectedResult);
 			});
 		});
@@ -304,9 +304,9 @@ describe('burst utilities', () => {
 						});
 						const expectedResult = {
 							...inputFrames[testCase.index],
-							'effect delay time(ms)/frame': arbitraryDelay,
+							'effect delay time(ms)/frame': ARBITRARY_DELAY,
 						};
-						const result = burstUtilites.getExtraAttackDamageFramesEntry(inputFrames, arbitraryDelay);
+						const result = burstUtilites.getExtraAttackDamageFramesEntry(inputFrames, ARBITRARY_DELAY);
 						assertDamageFramesEntry(result, expectedResult);
 					});
 				});
@@ -317,7 +317,7 @@ describe('burst utilities', () => {
 					obj['proc id'] = testConstants.ARBITRARY_NON_ATTACKING_PROC_ID;
 					return obj;
 				});
-				const result = burstUtilites.getExtraAttackDamageFramesEntry(inputFrames, arbitraryDelay);
+				const result = burstUtilites.getExtraAttackDamageFramesEntry(inputFrames, ARBITRARY_DELAY);
 				assertDamageFramesEntry(result, emptyDamageFramesEntry);
 			});
 		});
@@ -346,7 +346,7 @@ describe('burst utilities', () => {
 				return acc;
 			}, []).sort((a, b) => a.time - b.time);
 			const expectedResult = {
-				'effect delay time(ms)/frame': arbitraryDelay,
+				'effect delay time(ms)/frame': ARBITRARY_DELAY,
 				'frame times': frameDamagePairs.map(({ time }) => time),
 				'hit dmg% distribution': frameDamagePairs.map(({ dmg }) => dmg),
 				'hit dmg% distribution (total)': frameDamagePairs.reduce((acc, { dmg }) => acc + dmg, 0),
@@ -356,7 +356,7 @@ describe('burst utilities', () => {
 			expect(expectedResult['hit dmg% distribution (total)']).not.toBeNaN();
 			expect(expectedResult.hits).not.toBeNaN();
 
-			const result = burstUtilites.getExtraAttackDamageFramesEntry(inputFrames, arbitraryDelay);
+			const result = burstUtilites.getExtraAttackDamageFramesEntry(inputFrames, ARBITRARY_DELAY);
 			assertDamageFramesEntry(result, expectedResult);
 		});
 	});

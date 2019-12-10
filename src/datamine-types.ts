@@ -73,12 +73,42 @@ export interface IPassiveEffect {
 	[key: string]: any;
 }
 
+export interface ITriggeredEffect {
+	'passive id': '66';
+	'trigger on bb'?: boolean;
+	'trigger on sbb'?: boolean;
+	'trigger on ubb'?: boolean;
+	'triggered effect': ProcEffect[];
+}
+
 export interface IUnknownPassiveEffect {
 	'unknown passive id': string;
 	'unknown passive params': string;
 }
 
-export type PassiveEffect = IPassiveEffect | IUnknownPassiveEffect;
+export type PassiveEffect = IPassiveEffect | IUnknownPassiveEffect | ITriggeredEffect;
+
+export enum SpPassiveType {
+	AddPassive = 'passive',
+	EnhanceBb = 'add to bb',
+	EnhanceSbb = 'add to sbb',
+	EnhanceUbb = 'add to ubb',
+	EnhancePassive = 'add to passive',
+}
+
+export interface ISpEnhancementPassiveEffect extends IPassiveEffect {
+	sp_type: SpPassiveType;
+}
+
+export interface ISpEnhancementUnknownPassiveEffect extends IUnknownPassiveEffect {
+	sp_type: SpPassiveType;
+}
+
+export interface ISpEnhancementTriggeredEffect extends ITriggeredEffect {
+	sp_type: SpPassiveType;
+}
+
+export type SpEnhancementEffect = ISpEnhancementPassiveEffect | ISpEnhancementUnknownPassiveEffect | ISpEnhancementTriggeredEffect;
 
 export interface IDamageFramesEntry {
 	'effect delay time(ms)/frame': string;
@@ -200,17 +230,37 @@ export enum SpCategoryId {
 	Special = '11',
 }
 
-export interface ISpEnhancementEffect {
+export interface ISpEnhancementEffectWrapper {
+	/**
+	 * @description used to add an entirely new effect
+	 */
 	passive?: PassiveEffect;
-	'add to bb'?: ProcEffect;
-	'add to sbb'?: ProcEffect;
-	'add to ubb': ProcEffect;
+
+	/**
+	 * @description used when enhancing an existing effect on LS
+	 */
+	'add to passive'?: PassiveEffect;
+
+	/**
+	 * @description used when enhancing an existing BB
+	 */
+	'add to bb'?: PassiveEffect;
+
+	/**
+	 * @description used when enhancing an existing SBB
+	 */
+	'add to sbb'?: PassiveEffect;
+
+	/**
+	 * @description used when enhancing an existing UBB
+	 */
+	'add to ubb'?: PassiveEffect;
 }
 
 export interface ISpEnhancementSkill {
 	bp: number;
 	desc: string;
-	effects: ISpEnhancementEffect[];
+	effects: ISpEnhancementEffectWrapper[];
 	id: string;
 	level: number;
 	name: string;
@@ -300,7 +350,7 @@ export interface IUnit {
 	 */
 	dictionary?: {
 		description?: string;
-		eveolution?: string;
+		evolution?: string;
 		fusion?: string;
 		summon?: string;
 	};
@@ -316,6 +366,10 @@ export interface IUnit {
 	 */
 	exp_pattern: number;
 	'extra skill'?: IExtraSkill;
+
+	/**
+	 * @author BluuArc
+	 */
 	feskills?: ISpEnhancementEntry[];
 	gender: UnitGender;
 
@@ -391,4 +445,78 @@ export interface IUnit {
 		_base: IUnitStatsEntry;
 		_lord: IUnitStatsEntry;
 	};
+}
+
+export enum ItemType {
+	Consumable = 'consumable',
+	Material = 'material',
+	Sphere = 'sphere',
+	EvolutionMaterial = 'evomat',
+	SummonerConsumable = 'summoner_consumable',
+	LeaderSkillSphere = 'ls_sphere',
+}
+
+export interface IItemRecipeMaterial {
+	count: number;
+	id: number;
+	name: string;
+}
+
+export interface IItemRecipe {
+	karma: string;
+	materials: IItemRecipeMaterial[];
+}
+
+/**
+ * @author BluuArc
+ */
+export interface IItemUsageEntry {
+	id: number;
+	name: string;
+}
+
+export interface IItem {
+	desc: string;
+	id: number;
+	max_stack: number;
+	name: string;
+	raid: boolean;
+	rarity: number;
+	sell_price: number;
+	thumbnail: string;
+	type: ItemType;
+
+	/**
+	 * @description List of other items that use the current item somewhere in their recipe
+	 * @author BluuArc
+	 */
+	usage?: IItemUsageEntry[];
+
+	/**
+	 * @author BluuArc
+	 */
+	dictionary?: {
+		lore?: string;
+	};
+
+	/**
+	 * @description List of units that use this item
+	 * @author BluuArc
+	 */
+	associated_units?: string[];
+}
+
+export interface IConsumableItem extends IItem {
+	'max equipped': number;
+	effect: {
+		effect: ProcEffect[];
+		target_area: TargetArea;
+		target_type: TargetType;
+	};
+}
+
+export interface ISphere extends IItem {
+	effect: PassiveEffect[];
+	'sphere type': SphereTypeId;
+	'sphere type text': SphereTypeName;
 }

@@ -6,6 +6,8 @@
 
 * **IUnknownPassiveEffect**
 
+  ↳ [ISpEnhancementUnknownPassiveEffect](_datamine_types_.ispenhancementunknownpassiveeffect.md)
+
   ↳ [IExtraSkillUnknownPassiveEffect](_datamine_types_.iextraskillunknownpassiveeffect.md)
 
 ## Index
@@ -21,7 +23,7 @@
 
 • **unknown passive id**: *string*
 
-*Defined in [datamine-types.ts:77](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L77)*
+*Defined in [datamine-types.ts:85](https://github.com/BluuArc/bfmt-utilities/blob/8c37919/src/datamine-types.ts#L85)*
 
 ___
 
@@ -29,4 +31,4 @@ ___
 
 • **unknown passive params**: *string*
 
-*Defined in [datamine-types.ts:78](https://github.com/BluuArc/bfmt-utilities/blob/6b85551/src/datamine-types.ts#L78)*
+*Defined in [datamine-types.ts:86](https://github.com/BluuArc/bfmt-utilities/blob/8c37919/src/datamine-types.ts#L86)*
