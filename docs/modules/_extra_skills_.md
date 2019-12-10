@@ -14,7 +14,7 @@
 
 ▸ **getEffectsForExtraSkill**(`skill`: [IExtraSkill](../interfaces/_datamine_types_.iextraskill.md)): *[ExtraSkillPassiveEffect](_datamine_types_.md#extraskillpassiveeffect)[]*
 
-*Defined in [extra-skills.ts:7](https://github.com/BluuArc/bfmt-utilities/blob/8c37919/src/extra-skills.ts#L7)*
+*Defined in [extra-skills.ts:7](https://github.com/BluuArc/bfmt-utilities/blob/8be7d96/src/extra-skills.ts#L7)*
 
 **`description`** Get the effects of a given extra skill
 

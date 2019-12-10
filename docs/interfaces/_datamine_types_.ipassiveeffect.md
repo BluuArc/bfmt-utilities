@@ -26,4 +26,4 @@
 
 • **passive id**: *string*
 
-*Defined in [datamine-types.ts:72](https://github.com/BluuArc/bfmt-utilities/blob/8c37919/src/datamine-types.ts#L72)*
+*Defined in [datamine-types.ts:72](https://github.com/BluuArc/bfmt-utilities/blob/8be7d96/src/datamine-types.ts#L72)*

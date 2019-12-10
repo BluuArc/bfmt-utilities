@@ -14,7 +14,7 @@
 
 ▸ **getEffectsForLeaderSkill**(`skill`: [ILeaderSkill](../interfaces/_datamine_types_.ileaderskill.md)): *[PassiveEffect](_datamine_types_.md#passiveeffect)[]*
 
-*Defined in [leader-skills.ts:7](https://github.com/BluuArc/bfmt-utilities/blob/8c37919/src/leader-skills.ts#L7)*
+*Defined in [leader-skills.ts:7](https://github.com/BluuArc/bfmt-utilities/blob/8be7d96/src/leader-skills.ts#L7)*
 
 **`description`** Get the effects of a given leader skill
 
