@@ -24,7 +24,7 @@
 
 • **effect delay time(ms)/frame**: *string*
 
-*Defined in [datamine-types.ts:53](https://github.com/BluuArc/bfmt-utilities/blob/8be7d96/src/datamine-types.ts#L53)*
+*Defined in [datamine-types.ts:53](https://github.com/BluuArc/bfmt-utilities/blob/1177551/src/datamine-types.ts#L53)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **target area**: *[TargetArea](../enums/_datamine_types_.targetarea.md)*
 
-*Defined in [datamine-types.ts:54](https://github.com/BluuArc/bfmt-utilities/blob/8be7d96/src/datamine-types.ts#L54)*
+*Defined in [datamine-types.ts:54](https://github.com/BluuArc/bfmt-utilities/blob/1177551/src/datamine-types.ts#L54)*
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 • **target type**: *[TargetType](../enums/_datamine_types_.targettype.md)*
 
-*Defined in [datamine-types.ts:55](https://github.com/BluuArc/bfmt-utilities/blob/8be7d96/src/datamine-types.ts#L55)*
+*Defined in [datamine-types.ts:55](https://github.com/BluuArc/bfmt-utilities/blob/1177551/src/datamine-types.ts#L55)*
