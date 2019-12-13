@@ -19,7 +19,7 @@
 
 • **Consumable**: = "consumable"
 
-*Defined in [datamine-types.ts:453](https://github.com/BluuArc/bfmt-utilities/blob/1177551/src/datamine-types.ts#L453)*
+*Defined in [datamine-types.ts:453](https://github.com/BluuArc/bfmt-utilities/blob/cf39af8/src/datamine-types.ts#L453)*
 
 ___
 
@@ -27,7 +27,7 @@ ___
 
 • **EvolutionMaterial**: = "evomat"
 
-*Defined in [datamine-types.ts:456](https://github.com/BluuArc/bfmt-utilities/blob/1177551/src/datamine-types.ts#L456)*
+*Defined in [datamine-types.ts:456](https://github.com/BluuArc/bfmt-utilities/blob/cf39af8/src/datamine-types.ts#L456)*
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **LeaderSkillSphere**: = "ls_sphere"
 
-*Defined in [datamine-types.ts:458](https://github.com/BluuArc/bfmt-utilities/blob/1177551/src/datamine-types.ts#L458)*
+*Defined in [datamine-types.ts:458](https://github.com/BluuArc/bfmt-utilities/blob/cf39af8/src/datamine-types.ts#L458)*
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 • **Material**: = "material"
 
-*Defined in [datamine-types.ts:454](https://github.com/BluuArc/bfmt-utilities/blob/1177551/src/datamine-types.ts#L454)*
+*Defined in [datamine-types.ts:454](https://github.com/BluuArc/bfmt-utilities/blob/cf39af8/src/datamine-types.ts#L454)*
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 • **Sphere**: = "sphere"
 
-*Defined in [datamine-types.ts:455](https://github.com/BluuArc/bfmt-utilities/blob/1177551/src/datamine-types.ts#L455)*
+*Defined in [datamine-types.ts:455](https://github.com/BluuArc/bfmt-utilities/blob/cf39af8/src/datamine-types.ts#L455)*
 
 ___
 
@@ -59,4 +59,4 @@ ___
 
 • **SummonerConsumable**: = "summoner_consumable"
 
-*Defined in [datamine-types.ts:457](https://github.com/BluuArc/bfmt-utilities/blob/1177551/src/datamine-types.ts#L457)*
+*Defined in [datamine-types.ts:457](https://github.com/BluuArc/bfmt-utilities/blob/cf39af8/src/datamine-types.ts#L457)*

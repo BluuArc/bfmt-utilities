@@ -14,7 +14,7 @@
 
 ▸ **getEffectsForSpEnhancement**(`entry`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)): *[SpEnhancementEffect](_datamine_types_.md#spenhancementeffect)[]*
 
-*Defined in [sp-enhancements.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/1177551/src/sp-enhancements.ts#L3)*
+*Defined in [sp-enhancements.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/cf39af8/src/sp-enhancements.ts#L3)*
 
 **Parameters:**
 
