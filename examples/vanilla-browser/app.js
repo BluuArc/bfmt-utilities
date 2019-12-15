@@ -1,7 +1,5 @@
 (function(inputWindow) {
 	const BASE_DATAMINE_URL = 'https://raw.githubusercontent.com/cheahjs/bravefrontier_data/master';
-	const unitDataPromise = inputWindow.fetch(`${BASE_DATAMINE_URL}/info.json`)
-		.then(r => r.ok ? r.json() : {});
 
 	/**
 	 * @typedef {{ [key: string]: import('../../src/datamine-types').IUnit}} UnitData
@@ -29,7 +27,7 @@
 	 */
 	function initializeSelect (unitData = {}) {
 		const ids = Object.keys(unitData);
-		const unitSelectorElement = inputWindow.document.querySelector('select[name="Unit Selector"]');
+		const unitSelectorElement = inputWindow.document.querySelector('select[name="unit-selector"]');
 		let options = [];
 		if (ids.length === 0) {
 			options.push({ label: 'Error getting units.', value: '' });
@@ -65,6 +63,7 @@
 			bb: unitDetailsArea.querySelector('.brave-burst-details'),
 			sbb: unitDetailsArea.querySelector('.super-brave-burst-details'),
 			ubb: unitDetailsArea.querySelector('.ultimate-brave-burst-details'),
+			sp: unitDetailsArea.querySelector('.enhancement-details'),
 		};
 		const selectedId = event && event.target && event.target.value;
 		const unit = !!selectedId && unitData[selectedId];
@@ -91,6 +90,13 @@
 				detailSections.ubb.removeAttribute('hidden');
 			} else {
 				detailSections.ubb.setAttribute('hidden', '');
+			}
+
+			if (unit.feskills) {
+				setEffectsForSpSection(detailSections.sp, unit.feskills);
+				detailSections.sp.removeAttribute('hidden');
+			} else {
+				detailSections.sp.setAttribute('hidden', '');
 			}
 
 			unitDetailsArea.removeAttribute('hidden');
@@ -129,5 +135,78 @@
 		}
 	}
 
-	unitDataPromise.then(initializeSelect);
+	/**
+	 * @param {HTMLElement} section
+	 * @param {import('../../src/datamine-types').ISpEnhancementEntry[]} spEntries
+	 */
+	function setEffectsForSpSection (section, spEntries) {
+		const skillList = section.querySelector('ol');
+		if (skillList) {
+			skillList.querySelectorAll('li').forEach(entry => entry.remove());
+			let entries = [];
+			if (spEntries.length > 0) {
+				entries = spEntries.map(spEntry => {
+					const htmlEntry = inputWindow.document.createElement('li');
+
+					// get effects for current SP entry
+					const effectListWrapper = inputWindow.document.createElement('ul');
+					const effects = bfmtUtilities.spEnhancements.getEffectsForSpEnhancement(spEntry);
+					const effectHtmlEntries = effects.map(effect => {
+						const entry = inputWindow.document.createElement('li');
+						entry.innerText = JSON.stringify(effect);
+						return entry;
+					});
+					effectListWrapper.append.apply(effectListWrapper, effectHtmlEntries);
+
+					// get SP description
+					const description = inputWindow.document.createElement('p');
+					description.innerText = spEntry.skill.name || spEntry.skill.desc;
+
+					htmlEntry.append.apply(htmlEntry, [description, effectListWrapper]);
+					return htmlEntry;
+				});
+			} else {
+				const noneEntry = inputWindow.document.createElement('li');
+				noneEntry.innerText = 'None';
+				entries.push(noneEntry);
+			}
+			skillList.append.apply(skillList, entries);
+		}
+	}
+
+	function initializeApp () {
+		const unitSelectorElement = inputWindow.document.querySelector('select[name="unit-selector"]');
+		setOptionsOnSelectElement(unitSelectorElement, [{ label: 'Loading data...', value: '' }]);
+
+		const unitDataPromise = inputWindow.fetch(`${BASE_DATAMINE_URL}/info.json`)
+			.then(r => r.ok ? r.json() : ({}));
+		const enhancementDataPromise = inputWindow.Promise.resolve().then(() => {
+			/**
+			 * @type {HTMLInputElement}
+			 */
+			const spCheckbox = inputWindow.document.querySelector('input[name="load-sp-checkbox"]');
+			const loadSp = !!spCheckbox && !!spCheckbox.checked;
+			return loadSp ? inputWindow.fetch(`${BASE_DATAMINE_URL}/feskills.json`).then(r => r.ok ? r.json() : {}) : {};
+		}).catch(() => ({}));
+
+		inputWindow.Promise.all([unitDataPromise, enhancementDataPromise])
+			.then(([unitData = {}, spData = {}]) => {
+				// add SP data to each unit
+				Object.keys(spData).forEach(spKey => {
+					if (unitData.hasOwnProperty(spKey)) {
+						unitData[spKey].feskills = spData[spKey].skills;
+					}
+				});
+
+				return initializeSelect(unitData);
+			});
+	}
+
+	/**
+	 * @type {HTMLButtonElement}
+	 */
+	const loadButton = document.querySelector('button[name="load-units-button"]');
+	if (loadButton) {
+		loadButton.addEventListener('click', initializeApp);
+	}
 })(self);

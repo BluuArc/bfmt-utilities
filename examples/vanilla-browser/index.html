@@ -5,6 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Basic Browser Example</title>
+	<style>
+		select[name="unit-selector"] {
+			display: block;
+			margin: 1em 0;
+		}
+	</style>
 </head>
 <body>
 	<article>
@@ -21,15 +27,25 @@
 			</pre>
 			<p>(Alternatively, you could use <code>index.browser.js</code> if you'd like to view an unminified version.)</p>
 			<p>After adding the script, you will now have access to the <code>bfmtUtilities</code> variable within your JavaScript, which is the entry point for all the functions.</p>
+			<p>The demo below fetches the latest copy of the unit datamine for Global from <a href="https://github.com/cheahjs/bravefrontier_data" target="_blank">Deathmax's repository</a> and displays the effects of each unit separated by source.</p>
 		</section>
 		<section>
 			<header>
 				<h2>Demo</h2>
 			</header>
 			<section>
-				<select name="Unit Selector" disabled>
-					<option value="">Loading units...</option>
-				</select>
+				<div>
+					<div>
+						<button name="load-units-button">Load Unit Data</button>
+						<label>
+							<input type="checkbox" name="load-sp-checkbox" checked/>
+							Include SP Enhancements
+						</label>
+					</div>
+					<select name="unit-selector" aria-label="Select a Unit" disabled>
+						<option value="">No units loaded.</option>
+					</select>
+				</div>
 				<article class="unit-details" hidden>
 					<h3>Effects for <span class="unit-name">Unit</span></h3>
 					<section class="leader-skill-details">
@@ -61,6 +77,12 @@
 						<ul>
 							<li>None</li>
 						</ul>
+					</section>
+					<section class="enhancement-details">
+						<h3>SP Enhancements</h3>
+						<ol type="A">
+							<li>None</li>
+						</ol>
 					</section>
 				</article>
 			</section>
