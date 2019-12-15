@@ -186,7 +186,7 @@
 			 */
 			const spCheckbox = inputWindow.document.querySelector('input[name="load-sp-checkbox"]');
 			const loadSp = !!spCheckbox && !!spCheckbox.checked;
-			return loadSp ? inputWindow.fetch(`${BASE_DATAMINE_URL}/feskills.json`).then(r => r.ok ? r.json() : {}) : {};
+			return loadSp ? inputWindow.fetch(`${BASE_DATAMINE_URL}/feskills.json`).then(r => r.ok ? r.json() : ({})) : {};
 		}).catch(() => ({}));
 
 		inputWindow.Promise.all([unitDataPromise, enhancementDataPromise])
