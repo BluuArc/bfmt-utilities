@@ -19,7 +19,7 @@
 
 • **ID**: *string*
 
-*Defined in [buff-metadata.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/8f0140f/src/buff-metadata.ts#L3)*
+*Defined in [buff-metadata.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/buff-metadata.ts#L3)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **Name**: *string*
 
-*Defined in [buff-metadata.ts:4](https://github.com/BluuArc/bfmt-utilities/blob/8f0140f/src/buff-metadata.ts#L4)*
+*Defined in [buff-metadata.ts:4](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/buff-metadata.ts#L4)*

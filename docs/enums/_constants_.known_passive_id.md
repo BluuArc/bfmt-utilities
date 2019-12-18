@@ -14,4 +14,4 @@
 
 • **TriggeredEffect**: = "66"
 
-*Defined in [constants.ts:6](https://github.com/BluuArc/bfmt-utilities/blob/8f0140f/src/constants.ts#L6)*
+*Defined in [constants.ts:6](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/constants.ts#L6)*

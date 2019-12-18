@@ -21,7 +21,7 @@
 
 • **item required**? : *string[]*
 
-*Defined in [datamine-types.ts:178](https://github.com/BluuArc/bfmt-utilities/blob/8f0140f/src/datamine-types.ts#L178)*
+*Defined in [datamine-types.ts:178](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L178)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **sphere category required**? : *[SphereTypeName](../enums/_datamine_types_.spheretypename.md)*
 
-*Defined in [datamine-types.ts:179](https://github.com/BluuArc/bfmt-utilities/blob/8f0140f/src/datamine-types.ts#L179)*
+*Defined in [datamine-types.ts:179](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L179)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **sphere category required (raw)**? : *[SphereTypeId](../enums/_datamine_types_.spheretypeid.md)*
 
-*Defined in [datamine-types.ts:180](https://github.com/BluuArc/bfmt-utilities/blob/8f0140f/src/datamine-types.ts#L180)*
+*Defined in [datamine-types.ts:180](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L180)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **unit required**? : *object[]*
 
-*Defined in [datamine-types.ts:181](https://github.com/BluuArc/bfmt-utilities/blob/8f0140f/src/datamine-types.ts#L181)*
+*Defined in [datamine-types.ts:181](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L181)*
