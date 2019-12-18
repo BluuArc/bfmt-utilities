@@ -1231,11 +1231,29 @@ var ItemType;
 })(ItemType || (ItemType = {}));
 
 /**
+ * @description Get the associated metadata entry for a given proc ID
+ * @param id proc ID to get metadata for
+ */
+function getMetadataForProc(id) {
+    return Object.hasOwnProperty.call(PROC_METADATA, id)
+        ? PROC_METADATA[id]
+        : (void 0);
+}
+/**
+ * @description Get the associated metadata entry for a given passive ID
+ * @param id passive ID to get metadata for
+ */
+function getMetadataForPassive(id) {
+    return Object.hasOwnProperty.call(PASSIVE_METADATA, id)
+        ? PASSIVE_METADATA[id]
+        : (void 0);
+}
+/**
  * @description Determine if a given proc ID's type is an attack
  * @param id proc ID to check
  */
 function isAttackingProcId(id) {
-    const metadataEntry = Object.hasOwnProperty.call(PROC_METADATA, id) && PROC_METADATA[id];
+    const metadataEntry = getMetadataForProc(id);
     return !!metadataEntry && metadataEntry.Type === ProcBuffType.Attack;
 }
 /**
@@ -1271,6 +1289,8 @@ function getEffectId(effect) {
 
 var buffs = /*#__PURE__*/Object.freeze({
     __proto__: null,
+    getMetadataForProc: getMetadataForProc,
+    getMetadataForPassive: getMetadataForPassive,
     isAttackingProcId: isAttackingProcId,
     combineEffectsAndDamageFrames: combineEffectsAndDamageFrames,
     getEffectId: getEffectId

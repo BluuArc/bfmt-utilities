@@ -7,11 +7,95 @@ const { generateDamageFramesList, generateEffectsList } = require('../helpers/da
 describe('buff utilties', () => {
 	it('has expected API surface', () => {
 		const expectedSurface = [
+			'getMetadataForProc',
+			'getMetadataForPassive',
 			'isAttackingProcId',
 			'combineEffectsAndDamageFrames',
 			'getEffectId',
 		].sort();
 		expect(Object.keys(buffUtilities).sort()).toEqual(expectedSurface);
+	});
+
+	describe('getMetadataForProc method', () => {
+		[
+			{
+				input: testConstants.ARBITRARY_ATTACKING_PROC_ID,
+				name: 'a valid proc id',
+				shouldHaveEntry: true,
+			},
+			{
+				input: testConstants.ARBITRARY_INVALID_PROC_ID,
+				name: 'an invalid proc id',
+				shouldHaveEntry: false,
+			},
+			{
+				input: void 0,
+				name: 'an undefined id',
+				shouldHaveEntry: false,
+			},
+			{
+				input: null,
+				name: 'a null id',
+				shouldHaveEntry: false,
+			},
+		].forEach(testCase => {
+			it(`returns ${testCase.shouldHaveEntry ? 'an object' : 'undefined'} for ${testCase.name}`, () => {
+				const result = buffUtilities.getMetadataForProc(testCase.input);
+				if (testCase.shouldHaveEntry) {
+					expect(result)
+						.withContext('result does not exist')
+						.toBeTruthy();
+					expect(typeof result === 'object')
+						.withContext('result is not an object')
+						.toBe(true);
+				} else {
+					expect(result)
+						.withContext('result is not undefined')
+						.toBe(undefined);
+				}
+			});
+		});
+	});
+
+	describe('getMetadataForPassive method', () => {
+		[
+			{
+				input: testConstants.ARBITRARY_PASSIVE_ID,
+				name: 'a valid passive id',
+				shouldHaveEntry: true,
+			},
+			{
+				input: testConstants.ARBITRARY_INVALID_PASSIVE_ID,
+				name: 'an invalid passive id',
+				shouldHaveEntry: false,
+			},
+			{
+				input: void 0,
+				name: 'an undefined id',
+				shouldHaveEntry: false,
+			},
+			{
+				input: null,
+				name: 'a null id',
+				shouldHaveEntry: false,
+			},
+		].forEach(testCase => {
+			it(`returns ${testCase.shouldHaveEntry ? 'an object' : 'undefined'} for ${testCase.name}`, () => {
+				const result = buffUtilities.getMetadataForPassive(testCase.input);
+				if (testCase.shouldHaveEntry) {
+					expect(result)
+						.withContext('result does not exist')
+						.toBeTruthy();
+					expect(typeof result === 'object')
+						.withContext('result is not an object')
+						.toBe(true);
+				} else {
+					expect(result)
+						.withContext('result is not undefined')
+						.toBe(undefined);
+				}
+			});
+		});
 	});
 
 	describe('isAttackingProcId method', () => {
@@ -50,7 +134,9 @@ describe('buff utilties', () => {
 
 	describe('combineEffectsAndDamageFrames method', () => {
 		const assertIsArray = (result) => {
-			expect(Array.isArray(result)).toBe(true, `result "${getStringValueForLog(result)}" is not an array`);
+			expect(Array.isArray(result))
+				.withContext(`result "${getStringValueForLog(result)}" is not an array`)
+				.toBe(true);
 		};
 
 		describe('for invalid inputs', () => {
@@ -77,7 +163,9 @@ describe('buff utilties', () => {
 					it(`returns an empty array if the effects parameter ${effectsCase.name} and the damageFrames parameter ${damageFramesCase.name}`, () => {
 						const result = buffUtilities.combineEffectsAndDamageFrames(effectsCase.value, damageFramesCase.value);
 						assertIsArray(result);
-						expect(result.length).toBe(0);
+						expect(result.length)
+							.withContext('result is not an empty array')
+							.toBe(0);
 					});
 				});
 			});
@@ -86,7 +174,9 @@ describe('buff utilties', () => {
 		it('returns an empty array if the effects array is empty', () => {
 			const result = buffUtilities.combineEffectsAndDamageFrames([], []);
 			assertIsArray(result);
-			expect(result.length).toBe(0);
+			expect(result.length)
+				.withContext('result is not an empty array')
+				.toBe(0);
 		});
 
 		it('returns an empty array if the damage frames array is empty', () => {
@@ -94,7 +184,9 @@ describe('buff utilties', () => {
 			const damageFramesList = [];
 			const result = buffUtilities.combineEffectsAndDamageFrames(effectsList, damageFramesList);
 			assertIsArray(result);
-			expect(result.length).toBe(0);
+			expect(result.length)
+				.withContext('result is not an empty array')
+				.toBe(0);
 		});
 
 		it('returns an empty array if the length of the effects array does not match the length of the damage frames array', () => {
@@ -102,7 +194,9 @@ describe('buff utilties', () => {
 			const damageFramesList = generateDamageFramesList(9);
 			const result = buffUtilities.combineEffectsAndDamageFrames(effectsList, damageFramesList);
 			assertIsArray(result);
-			expect(result.length).toBe(0);
+			expect(result.length)
+				.withContext('result is not an empty array')
+				.toBe(0);
 		});
 
 		describe('when both effects array and damage frame arrays are the same length and correct shape', () => {
@@ -113,30 +207,52 @@ describe('buff utilties', () => {
 			 * @param {import('../../src/datamine-types').IDamageFramesEntry[]} damageFrames
 			 */
 			const assertResult = (result = [], inputEffects = [], inputDamageFrames = []) => {
-				expect(result.length).toBe(inputEffects.length, `Length of result array [${result.length}] did not match length of input effects array [${inputEffects.length}]`);
-				expect(result.length).toBe(inputDamageFrames.length, `Length of result array [${result.length}] did not match length of input damage frames array [${inputDamageFrames.length}]`);
+				expect(result.length)
+					.withContext(`Length of result array [${result.length}] did not match length of input effects array [${inputEffects.length}]`)
+					.toBe(inputEffects.length);
+				expect(result.length)
+					.withContext(`Length of result array [${result.length}] did not match length of input damage frames array [${inputDamageFrames.length}]`)
+					.toBe(inputDamageFrames.length);
 				result.forEach((entry, index) => {
 					const correspondingEffect = inputEffects[index];
 					const correspondingDamageFrame = inputDamageFrames[index];
 
-					expect(Object.keys(entry).sort()).toEqual(expectedResultKeys);
-					expect(entry.delay).toBe(correspondingEffect['effect delay time(ms)/frame']);
-					expect(entry.effect).toBe(correspondingEffect);
-					expect(entry.frames).toBe(correspondingDamageFrame);
+					expect(Object.keys(entry).sort())
+						.withContext('key mismatch')
+						.toEqual(expectedResultKeys);
+					expect(entry.delay)
+						.withContext('delay mismatch')
+						.toBe(correspondingEffect['effect delay time(ms)/frame']);
+					expect(entry.effect)
+						.withContext('effect mismatch')
+						.toBe(correspondingEffect);
+					expect(entry.frames)
+						.withContext('frames mismatch')
+						.toBe(correspondingDamageFrame);
 
 					if (correspondingEffect['proc id']) {
-						expect(entry.id).toBe(correspondingEffect['proc id']);
+						expect(entry.id)
+							.withContext('proc id mismatch')
+							.toBe(correspondingEffect['proc id']);
 					} else {
-						expect(entry.id).toBe(correspondingEffect['unknown proc id']);
+						expect(entry.id)
+							.withContext('unknown proc id mismatch')
+							.toBe(correspondingEffect['unknown proc id']);
 					}
 
 					if (correspondingEffect['random attack']) {
-						expect(entry.targetArea).toBe(datamineTypes.TargetArea.Random);
+						expect(entry.targetArea)
+							.withContext('target area mismatch')
+							.toBe(datamineTypes.TargetArea.Random);
 					} else {
-						expect(entry.targetArea).toBe(correspondingEffect['target area']);
+						expect(entry.targetArea)
+							.withContext('target area mismatch')
+							.toBe(correspondingEffect['target area']);
 					}
 
-					expect(entry.targetType).toBe(correspondingEffect['target type']);
+					expect(entry.targetType)
+						.withContext('target type mismatch')
+						.toBe(correspondingEffect['target type']);
 				});
 			};
 

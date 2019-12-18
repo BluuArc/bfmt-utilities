@@ -12,6 +12,8 @@
 
 * [combineEffectsAndDamageFrames](_buffs_.md#combineeffectsanddamageframes)
 * [getEffectId](_buffs_.md#geteffectid)
+* [getMetadataForPassive](_buffs_.md#getmetadataforpassive)
+* [getMetadataForProc](_buffs_.md#getmetadataforproc)
 * [isAttackingProcId](_buffs_.md#isattackingprocid)
 
 ## Functions
@@ -20,7 +22,7 @@
 
 ▸ **combineEffectsAndDamageFrames**(`effects`: [ProcEffect](_datamine_types_.md#proceffect)[], `damageFrames`: [IDamageFramesEntry](../interfaces/_datamine_types_.idamageframesentry.md)[]): *[IProcEffectFrameComposite](../interfaces/_buffs_.iproceffectframecomposite.md)[]*
 
-*Defined in [buffs.ts:36](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/buffs.ts#L36)*
+*Defined in [buffs.ts:59](https://github.com/BluuArc/bfmt-utilities/blob/57ae3a5/src/buffs.ts#L59)*
 
 **`description`** Create a list of objects that contain both the effect data and its corresponding damage frame
 
@@ -39,7 +41,7 @@ ___
 
 ▸ **getEffectId**(`effect`: object): *string*
 
-*Defined in [buffs.ts:54](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/buffs.ts#L54)*
+*Defined in [buffs.ts:77](https://github.com/BluuArc/bfmt-utilities/blob/57ae3a5/src/buffs.ts#L77)*
 
 **Parameters:**
 
@@ -56,11 +58,47 @@ Name | Type |
 
 ___
 
+###  getMetadataForPassive
+
+▸ **getMetadataForPassive**(`id`: string): *[IPassiveMetadataEntry](../interfaces/_buff_metadata_.ipassivemetadataentry.md) | undefined*
+
+*Defined in [buffs.ts:30](https://github.com/BluuArc/bfmt-utilities/blob/57ae3a5/src/buffs.ts#L30)*
+
+**`description`** Get the associated metadata entry for a given passive ID
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`id` | string | passive ID to get metadata for  |
+
+**Returns:** *[IPassiveMetadataEntry](../interfaces/_buff_metadata_.ipassivemetadataentry.md) | undefined*
+
+___
+
+###  getMetadataForProc
+
+▸ **getMetadataForProc**(`id`: string): *[IProcMetadataEntry](../interfaces/_buff_metadata_.iprocmetadataentry.md) | undefined*
+
+*Defined in [buffs.ts:20](https://github.com/BluuArc/bfmt-utilities/blob/57ae3a5/src/buffs.ts#L20)*
+
+**`description`** Get the associated metadata entry for a given proc ID
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`id` | string | proc ID to get metadata for  |
+
+**Returns:** *[IProcMetadataEntry](../interfaces/_buff_metadata_.iprocmetadataentry.md) | undefined*
+
+___
+
 ###  isAttackingProcId
 
 ▸ **isAttackingProcId**(`id`: string): *boolean*
 
-*Defined in [buffs.ts:17](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/buffs.ts#L17)*
+*Defined in [buffs.ts:40](https://github.com/BluuArc/bfmt-utilities/blob/57ae3a5/src/buffs.ts#L40)*
 
 **`description`** Determine if a given proc ID's type is an attack
 
