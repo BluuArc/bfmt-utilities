@@ -1,6 +1,6 @@
 {
   "name": "@bluuarc/bfmt-utilities",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Set of utility functions used by the BFMT project. This is a separate repository for them because they are usable outside of BFMT.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
@@ -20,7 +20,10 @@
     "coverage": "tsc -p tsconfig.coverage.json && nyc jasmine --config=test/jasmine.coverage.json",
     "cleanup-coverage": "npm run gulp -- cleanup-coverage",
     "update-data": "npm run gulp -- update-data",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "preversion": "npm run coverage",
+    "version": "npm run build && git add -A",
+    "postversion": "echo review changes before pushing"
   },
   "author": "Joshua Castor",
   "license": "MIT",

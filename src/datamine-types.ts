@@ -392,6 +392,8 @@ export interface IUnit {
 	 */
 	kind: UnitKind | null;
 
+	'leader skill'?: ILeaderSkill;
+
 	/**
 	 * @description format of `minvalue~maxvalue`
 	 */

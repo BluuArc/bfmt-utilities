@@ -18,7 +18,7 @@
 
 • **AddPassive**: = "passive"
 
-*Defined in [datamine-types.ts:92](https://github.com/BluuArc/bfmt-utilities/blob/8be7d96/src/datamine-types.ts#L92)*
+*Defined in [datamine-types.ts:92](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L92)*
 
 ___
 
@@ -26,7 +26,7 @@ ___
 
 • **EnhanceBb**: = "add to bb"
 
-*Defined in [datamine-types.ts:93](https://github.com/BluuArc/bfmt-utilities/blob/8be7d96/src/datamine-types.ts#L93)*
+*Defined in [datamine-types.ts:93](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L93)*
 
 ___
 
@@ -34,7 +34,7 @@ ___
 
 • **EnhancePassive**: = "add to passive"
 
-*Defined in [datamine-types.ts:96](https://github.com/BluuArc/bfmt-utilities/blob/8be7d96/src/datamine-types.ts#L96)*
+*Defined in [datamine-types.ts:96](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L96)*
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 • **EnhanceSbb**: = "add to sbb"
 
-*Defined in [datamine-types.ts:94](https://github.com/BluuArc/bfmt-utilities/blob/8be7d96/src/datamine-types.ts#L94)*
+*Defined in [datamine-types.ts:94](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L94)*
 
 ___
 
@@ -50,4 +50,4 @@ ___
 
 • **EnhanceUbb**: = "add to ubb"
 
-*Defined in [datamine-types.ts:95](https://github.com/BluuArc/bfmt-utilities/blob/8be7d96/src/datamine-types.ts#L95)*
+*Defined in [datamine-types.ts:95](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L95)*
