@@ -14,4 +14,4 @@
 
 • **BurstHeal**: = "2"
 
-*Defined in [constants.ts:2](https://github.com/BluuArc/bfmt-utilities/blob/cf39af8/src/constants.ts#L2)*
+*Defined in [constants.ts:2](https://github.com/BluuArc/bfmt-utilities/blob/8f0140f/src/constants.ts#L2)*
