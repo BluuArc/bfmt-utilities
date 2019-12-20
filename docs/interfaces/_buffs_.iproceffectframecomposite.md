@@ -23,7 +23,7 @@
 
 • **delay**: *string*
 
-*Defined in [buffs.ts:23](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/buffs.ts#L23)*
+*Defined in [buffs.ts:90](https://github.com/BluuArc/bfmt-utilities/blob/d4dfbbc/src/buffs.ts#L90)*
 
 ___
 
@@ -31,7 +31,7 @@ ___
 
 • **effect**: *[ProcEffect](../modules/_datamine_types_.md#proceffect)*
 
-*Defined in [buffs.ts:24](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/buffs.ts#L24)*
+*Defined in [buffs.ts:91](https://github.com/BluuArc/bfmt-utilities/blob/d4dfbbc/src/buffs.ts#L91)*
 
 ___
 
@@ -39,7 +39,7 @@ ___
 
 • **frames**: *[IDamageFramesEntry](_datamine_types_.idamageframesentry.md)*
 
-*Defined in [buffs.ts:25](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/buffs.ts#L25)*
+*Defined in [buffs.ts:92](https://github.com/BluuArc/bfmt-utilities/blob/d4dfbbc/src/buffs.ts#L92)*
 
 ___
 
@@ -47,7 +47,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [buffs.ts:26](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/buffs.ts#L26)*
+*Defined in [buffs.ts:93](https://github.com/BluuArc/bfmt-utilities/blob/d4dfbbc/src/buffs.ts#L93)*
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 • **targetArea**: *[TargetArea](../enums/_datamine_types_.targetarea.md)*
 
-*Defined in [buffs.ts:27](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/buffs.ts#L27)*
+*Defined in [buffs.ts:94](https://github.com/BluuArc/bfmt-utilities/blob/d4dfbbc/src/buffs.ts#L94)*
 
 ___
 
@@ -63,4 +63,4 @@ ___
 
 • **targetType**: *[TargetType](../enums/_datamine_types_.targettype.md)*
 
-*Defined in [buffs.ts:28](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/buffs.ts#L28)*
+*Defined in [buffs.ts:95](https://github.com/BluuArc/bfmt-utilities/blob/d4dfbbc/src/buffs.ts#L95)*

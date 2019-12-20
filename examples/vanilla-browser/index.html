@@ -10,6 +10,10 @@
 			display: block;
 			margin: 1em 0;
 		}
+
+		body {
+			font-family: 'Roboto', Arial, Helvetica, sans-serif;
+		}
 	</style>
 </head>
 <body>
@@ -22,12 +26,15 @@
 				<h2>Instructions</h2>
 			</header>
 			<p>This is a basic example of how to use <code>bfmt-utilities</code> within the browser directly. The key thing you will want to do is import the script like so:</p>
-			<pre>
-				<code>&lt;script src="https://joshuacastor.me/bfmt-utilities/dist/index.browser.min.js"&gt;&lt;/script&gt;</code>
-			</pre>
+			<pre><code>&lt;script src="https://joshuacastor.me/bfmt-utilities/dist/index.browser.min.js"&gt;&lt;/script&gt;</code></pre>
 			<p>(Alternatively, you could use <code>index.browser.js</code> if you'd like to view an unminified version.)</p>
 			<p>After adding the script, you will now have access to the <code>bfmtUtilities</code> variable within your JavaScript, which is the entry point for all the functions.</p>
 			<p>The demo below fetches the latest copy of the unit datamine for Global from <a href="https://github.com/cheahjs/bravefrontier_data" target="_blank">Deathmax's repository</a> and displays the effects of each unit separated by source.</p>
+			<p>The source code can be found <a href="https://github.com/BluuArc/bfmt-utilities/tree/master/examples/vanilla-browser">here.</a></p>
+			<ul>
+				<li>The <code>app.js</code> file contains the logic for hooking up the button, checkbox, and dropdown as well as fetching the data and using the <code>bfmt-utilities</code> library to display effect data for a chosen unit.</li>
+				<li>The <code>index.html</code> file contains the markup that you see on this page. It also imports both <code>bfmt-utilities</code> and <code>app.js</code> into the browser.</li>
+			</ul>
 		</section>
 		<section>
 			<header>

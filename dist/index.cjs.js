@@ -1231,12 +1231,64 @@ var ItemType;
 })(ItemType || (ItemType = {}));
 
 /**
+ * @description Get the associated metadata entry for a given proc ID
+ * @param id proc ID to get metadata for
+ */
+function getMetadataForProc(id) {
+    return Object.hasOwnProperty.call(PROC_METADATA, id)
+        ? PROC_METADATA[id]
+        : (void 0);
+}
+/**
+ * @description Get the associated metadata entry for a given passive ID
+ * @param id passive ID to get metadata for
+ */
+function getMetadataForPassive(id) {
+    return Object.hasOwnProperty.call(PASSIVE_METADATA, id)
+        ? PASSIVE_METADATA[id]
+        : (void 0);
+}
+/**
  * @description Determine if a given proc ID's type is an attack
  * @param id proc ID to check
  */
 function isAttackingProcId(id) {
-    const metadataEntry = Object.hasOwnProperty.call(PROC_METADATA, id) && PROC_METADATA[id];
+    const metadataEntry = getMetadataForProc(id);
     return !!metadataEntry && metadataEntry.Type === ProcBuffType.Attack;
+}
+/**
+ * @description Get the associated name for a given proc ID
+ * @param id proc ID to get the name of
+ */
+function getNameForProc(id) {
+    const metadataEntry = getMetadataForProc(id);
+    return (!!metadataEntry && metadataEntry.Name) || '';
+}
+/**
+ * @description Get the associated name for a given passive ID
+ * @param id passive ID to get the name of
+ */
+function getNameForPassive(id) {
+    const metadataEntry = getMetadataForPassive(id);
+    return (!!metadataEntry && metadataEntry.Name) || '';
+}
+/**
+ * @description Determine if a given effect object is a proc effect
+ * @param effect object to check
+ */
+function isProcEffect(effect) {
+    return !!effect &&
+        typeof effect === 'object' &&
+        (Object.hasOwnProperty.call(effect, 'proc id') || Object.hasOwnProperty.call(effect, 'unknown proc id'));
+}
+/**
+ * @description Determine if a given effect object is a passive effect
+ * @param effect object to check
+ */
+function isPassiveEffect(effect) {
+    return !!effect &&
+        typeof effect === 'object' &&
+        (Object.hasOwnProperty.call(effect, 'passive id') || Object.hasOwnProperty.call(effect, 'unknown passive id'));
 }
 /**
  * @description Create a list of objects that contain both the effect data and its corresponding damage frame
@@ -1260,6 +1312,11 @@ function combineEffectsAndDamageFrames(effects, damageFrames) {
     }
     return combinedEntries;
 }
+/**
+ * @description Get the proc/passive ID of a given object
+ * @param effect Object to get the effect ID from
+ * @returns The proc/passive ID of the input effect if it exists; empty string otherwise
+ */
 function getEffectId(effect) {
     let resultId = '';
     if (effect) {
@@ -1268,12 +1325,35 @@ function getEffectId(effect) {
     }
     return resultId;
 }
+/**
+ * @description Get the name of a given object
+ * @param effect Object to get the name from
+ * @returns The name of the input effect if it exists; empty string otherwise
+ */
+function getEffectName(effect) {
+    let resultName = '';
+    const effectId = getEffectId(effect);
+    if (isPassiveEffect(effect)) {
+        resultName = getNameForPassive(effectId);
+    }
+    else if (isProcEffect(effect)) {
+        resultName = getNameForProc(effectId);
+    }
+    return resultName;
+}
 
 var buffs = /*#__PURE__*/Object.freeze({
     __proto__: null,
+    getMetadataForProc: getMetadataForProc,
+    getMetadataForPassive: getMetadataForPassive,
     isAttackingProcId: isAttackingProcId,
+    getNameForProc: getNameForProc,
+    getNameForPassive: getNameForPassive,
+    isProcEffect: isProcEffect,
+    isPassiveEffect: isPassiveEffect,
     combineEffectsAndDamageFrames: combineEffectsAndDamageFrames,
-    getEffectId: getEffectId
+    getEffectId: getEffectId,
+    getEffectName: getEffectName
 });
 
 var KNOWN_PROC_ID;

@@ -123,7 +123,7 @@
 			if (effects.length > 0) {
 				entries = effects.map(effect => {
 					const entry = inputWindow.document.createElement('li');
-					entry.innerText = JSON.stringify(effect);
+					entry.innerText = `${bfmtUtilities.buffs.getEffectName(effect)}: ${JSON.stringify(effect)}`;
 					return entry;
 				});
 			} else {
@@ -153,7 +153,7 @@
 					const effects = bfmtUtilities.spEnhancements.getEffectsForSpEnhancement(spEntry);
 					const effectHtmlEntries = effects.map(effect => {
 						const entry = inputWindow.document.createElement('li');
-						entry.innerText = JSON.stringify(effect);
+						entry.innerText = `${bfmtUtilities.buffs.getEffectName(effect)}: ${JSON.stringify(effect)}`;
 						return entry;
 					});
 					effectListWrapper.append.apply(effectListWrapper, effectHtmlEntries);

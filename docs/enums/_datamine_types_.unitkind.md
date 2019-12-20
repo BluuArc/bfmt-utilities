@@ -17,7 +17,7 @@
 
 • **Enhancing**: = "enhancing"
 
-*Defined in [datamine-types.ts:319](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L319)*
+*Defined in [datamine-types.ts:319](https://github.com/BluuArc/bfmt-utilities/blob/d4dfbbc/src/datamine-types.ts#L319)*
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 • **Evolution**: = "evo"
 
-*Defined in [datamine-types.ts:318](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L318)*
+*Defined in [datamine-types.ts:318](https://github.com/BluuArc/bfmt-utilities/blob/d4dfbbc/src/datamine-types.ts#L318)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **Normal**: = "normal"
 
-*Defined in [datamine-types.ts:317](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L317)*
+*Defined in [datamine-types.ts:317](https://github.com/BluuArc/bfmt-utilities/blob/d4dfbbc/src/datamine-types.ts#L317)*
 
 ___
 
@@ -41,4 +41,4 @@ ___
 
 • **Sale**: = "sale"
 
-*Defined in [datamine-types.ts:320](https://github.com/BluuArc/bfmt-utilities/blob/076080a/src/datamine-types.ts#L320)*
+*Defined in [datamine-types.ts:320](https://github.com/BluuArc/bfmt-utilities/blob/d4dfbbc/src/datamine-types.ts#L320)*
