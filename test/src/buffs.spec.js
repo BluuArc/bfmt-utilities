@@ -3,6 +3,7 @@ const datamineTypes = require('../../src/datamine-types');
 const testConstants = require('../helpers/constants');
 const { getStringValueForLog } = require('../helpers/utils');
 const { generateDamageFramesList, generateEffectsList } = require('../helpers/dataFactories');
+const { PROC_METADATA, PASSIVE_METADATA } = require('../../src/buff-metadata');
 
 describe('buff utilties', () => {
 	it('has expected API surface', () => {
@@ -12,8 +13,11 @@ describe('buff utilties', () => {
 			'isAttackingProcId',
 			'getNameForProc',
 			'getNameForPassive',
+			'isProcEffect',
+			'isPassiveEffect',
 			'combineEffectsAndDamageFrames',
 			'getEffectId',
+			'getEffectName',
 		].sort();
 		expect(Object.keys(buffUtilities).sort()).toEqual(expectedSurface);
 	});
@@ -212,6 +216,72 @@ describe('buff utilties', () => {
 						.withContext('result is not an empty string')
 						.toBe(0);
 				}
+			});
+		});
+	});
+
+	describe('isProcEffect method', () => {
+		[
+			{
+				name: 'is undefined',
+				value: (void 0),
+			},
+			{
+				name: 'is null',
+				value: null,
+			},
+			{
+				name: 'is not an object',
+				value: 123,
+			},
+			{
+				name: 'is an object but it does not have any of the proc ID keys',
+				value: { some: 'property' },
+			},
+		].forEach(testCase => {
+			it(`returns false string when the effect parameter ${testCase.name}`, () => {
+				expect(buffUtilities.isProcEffect(testCase.value)).toBe(false);
+			});
+		});
+
+		const ARBITRARY_STRING = 'some string';
+		['proc id', 'unknown proc id'].forEach(key => {
+			it(`returns true if the effect parameter is an object that has a ${key} property`, () => {
+				const inputEffect = { [key]: ARBITRARY_STRING };
+				expect(buffUtilities.isProcEffect(inputEffect)).toBe(true);
+			});
+		});
+	});
+
+	describe('isPassiveEffect method', () => {
+		[
+			{
+				name: 'is undefined',
+				value: (void 0),
+			},
+			{
+				name: 'is null',
+				value: null,
+			},
+			{
+				name: 'is not an object',
+				value: 123,
+			},
+			{
+				name: 'is an object but it does not have any of the passive ID keys',
+				value: { some: 'property' },
+			},
+		].forEach(testCase => {
+			it(`returns false string when the effect parameter ${testCase.name}`, () => {
+				expect(buffUtilities.isPassiveEffect(testCase.value)).toBe(false);
+			});
+		});
+
+		const ARBITRARY_STRING = 'some string';
+		['passive id', 'unknown passive id'].forEach(key => {
+			it(`returns true if the effect parameter is an object that has a ${key} property`, () => {
+				const inputEffect = { [key]: ARBITRARY_STRING };
+				expect(buffUtilities.isPassiveEffect(inputEffect)).toBe(true);
 			});
 		});
 	});
@@ -438,6 +508,46 @@ describe('buff utilties', () => {
 			it(`returns the value for ${key} if the effect parameter is an object that has a ${key} property`, () => {
 				const inputEffect = { [key]: ARBITRARY_STRING };
 				expect(buffUtilities.getEffectId(inputEffect)).toBe(ARBITRARY_STRING);
+			});
+		});
+	});
+
+	describe('getEffectName method', () => {
+		[
+			{
+				name: 'is undefined',
+				value: (void 0),
+			},
+			{
+				name: 'is null',
+				value: null,
+			},
+			{
+				name: 'is not an object',
+				value: 123,
+			},
+			{
+				name: 'is an object but it does not have any of the ID keys',
+				value: { some: 'property' },
+			},
+		].forEach(testCase => {
+			it(`returns an empty string when the effect parameter ${testCase.name}`, () => {
+				expect(buffUtilities.getEffectName(testCase.value)).toBe('');
+			});
+		});
+
+		[
+			['proc id', testConstants.ARBITRARY_ATTACKING_PROC_ID, PROC_METADATA[testConstants.ARBITRARY_ATTACKING_PROC_ID].Name],
+			['unknown proc id', testConstants.ARBITRARY_ATTACKING_PROC_ID, PROC_METADATA[testConstants.ARBITRARY_ATTACKING_PROC_ID].Name],
+			['passive id', testConstants.ARBITRARY_PASSIVE_ID, PASSIVE_METADATA[testConstants.ARBITRARY_PASSIVE_ID].Name],
+			['unknown passive id', testConstants.ARBITRARY_PASSIVE_ID, PASSIVE_METADATA[testConstants.ARBITRARY_PASSIVE_ID].Name],
+		].forEach(([key, value, expectedName]) => {
+			it(`returns the value for ${key} if the effect parameter is an object that has a ${key} property`, () => {
+				const inputEffect = { [key]: value };
+				expect(expectedName.length)
+					.withContext('expected name is empty')
+					.toBeGreaterThan(0);
+				expect(buffUtilities.getEffectName(inputEffect)).toBe(expectedName);
 			});
 		});
 	});

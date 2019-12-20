@@ -36,7 +36,7 @@ function loadDatamineData () {
 function getDisplayDataForSection (sectionName, name, effects) {
 	let entries = [];
 	if (effects.length > 0) {
-		entries = effects.map(effect => JSON.stringify(effect));
+		entries = effects.map(effect => `${bfmtUtilities.buffs.getEffectName(effect)}: ${JSON.stringify(effect)}`);
 	} else {
 		entries.push('None');
 	}

@@ -1312,6 +1312,24 @@ var bfmtUtilities = function () {
     return !!metadataEntry && metadataEntry.Name || '';
   }
   /**
+   * @description Determine if a given effect object is a proc effect
+   * @param effect object to check
+   */
+
+
+  function isProcEffect(effect) {
+    return !!effect && typeof effect === 'object' && (Object.hasOwnProperty.call(effect, 'proc id') || Object.hasOwnProperty.call(effect, 'unknown proc id'));
+  }
+  /**
+   * @description Determine if a given effect object is a passive effect
+   * @param effect object to check
+   */
+
+
+  function isPassiveEffect(effect) {
+    return !!effect && typeof effect === 'object' && (Object.hasOwnProperty.call(effect, 'passive id') || Object.hasOwnProperty.call(effect, 'unknown passive id'));
+  }
+  /**
    * @description Create a list of objects that contain both the effect data and its corresponding damage frame
    * @param effects List of proc effects to combine; must be the same length as the `damageFrames`
    * @param damageFrames List of damage frames whose index corresponds with the effect in the `effects` list
@@ -1339,7 +1357,7 @@ var bfmtUtilities = function () {
   }
   /**
    * @description Get the proc/passive ID of a given object
-   * @param effect Object to get the effect from
+   * @param effect Object to get the effect ID from
    * @returns The proc/passive ID of the input effect if it exists; empty string otherwise
    */
 
@@ -1353,6 +1371,25 @@ var bfmtUtilities = function () {
 
     return resultId;
   }
+  /**
+   * @description Get the name of a given object
+   * @param effect Object to get the name from
+   * @returns The name of the input effect if it exists; empty string otherwise
+   */
+
+
+  function getEffectName(effect) {
+    let resultName = '';
+    const effectId = getEffectId(effect);
+
+    if (isPassiveEffect(effect)) {
+      resultName = getNameForPassive(effectId);
+    } else if (isProcEffect(effect)) {
+      resultName = getNameForProc(effectId);
+    }
+
+    return resultName;
+  }
 
   var buffs =
   /*#__PURE__*/
@@ -1363,8 +1400,11 @@ var bfmtUtilities = function () {
     isAttackingProcId: isAttackingProcId,
     getNameForProc: getNameForProc,
     getNameForPassive: getNameForPassive,
+    isProcEffect: isProcEffect,
+    isPassiveEffect: isPassiveEffect,
     combineEffectsAndDamageFrames: combineEffectsAndDamageFrames,
-    getEffectId: getEffectId
+    getEffectId: getEffectId,
+    getEffectName: getEffectName
   });
   var KNOWN_PROC_ID;
 
