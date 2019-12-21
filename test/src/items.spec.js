@@ -5,6 +5,7 @@ describe('item utilities', () => {
 	it('has expected API surface', () => {
 		const expectedSurface = [
 			'getEffectsForItem',
+			'getImageUrl',
 		].sort();
 		expect(Object.keys(itemUtilities).sort()).toEqual(expectedSurface);
 	});
@@ -94,6 +95,35 @@ describe('item utilities', () => {
 				result.forEach((resultEffect, i) => {
 					expect(resultEffect['target area']).withContext(`target area mismatch at index ${i}`).toBe(ARBITRARY_TARGET_AREA);
 					expect(resultEffect['target type']).withContext(`target type mismatch at index ${i}`).toBe(ARBITRARY_TARGET_TYPE);
+				});
+			});
+		});
+	});
+
+	describe('getImageUrl method', () => {
+		const testCases = [
+			{
+				name: 'is null',
+				value: null,
+				expectedValueForParameter: '',
+			},
+			{
+				name: 'is undefined',
+				value: void 0,
+				expectedValueForParameter: '',
+			},
+			{
+				name: 'is a string',
+				value: 'some string',
+				expectedValueForParameter: 'some string',
+			},
+		];
+		
+		testCases.forEach(baseContentUrlTestCase => {
+			testCases.forEach(filenameTestCase => {
+				it(`returns expected string when baseContentUrl ${baseContentUrlTestCase.name} and filename ${filenameTestCase.name}"`, () => {
+					const expectedResult = `${baseContentUrlTestCase.expectedValueForParameter}/item/${filenameTestCase.expectedValueForParameter}`;
+					expect(itemUtilities.getImageUrl(baseContentUrlTestCase.value, filenameTestCase.value)).toBe(expectedResult);
 				});
 			});
 		});
