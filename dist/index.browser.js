@@ -1543,12 +1543,23 @@ var bfmtUtilities = function () {
 
     return result;
   }
+  /**
+   * @description Generate a URL to display the image with the given item thumbnail filename
+   * @param baseContentUrl Base URL of the server
+   * @param fileName name of the file that represents the thumbnail image for a given item
+   */
+
+
+  function getImageUrl(baseContentUrl, fileName) {
+    return "".concat(baseContentUrl || '', "/item/").concat(fileName || '');
+  }
 
   var items =
   /*#__PURE__*/
   Object.freeze({
     __proto__: null,
-    getEffectsForItem: getEffectsForItem
+    getEffectsForItem: getEffectsForItem,
+    getImageUrl: getImageUrl
   });
   /**
    * @description Get the effects of a given leader skill
@@ -1564,6 +1575,28 @@ var bfmtUtilities = function () {
   Object.freeze({
     __proto__: null,
     getEffectsForLeaderSkill: getEffectsForLeaderSkill
+  });
+  /**
+   * @description Generate the file names for each of the image type for a given unit ID
+   * @param id the unit ID to use to generate the file names
+   * @param suffix optional parameter that's useful for things like alternate art
+   */
+
+  function getUnitImageFileNames(id, suffix = '') {
+    const fileNameSuffix = "".concat(id || '').concat(suffix || '', ".png");
+    return {
+      spritesheet: "unit_anime_".concat(fileNameSuffix),
+      battleAvatar: "unit_ills_battle_".concat(fileNameSuffix),
+      guideAvatar: "unit_ills_thum_".concat(fileNameSuffix),
+      fullIllustration: "unit_ills_full_".concat(fileNameSuffix)
+    };
+  }
+
+  var units =
+  /*#__PURE__*/
+  Object.freeze({
+    __proto__: null,
+    getUnitImageFileNames: getUnitImageFileNames
   });
 
   function getEffectsForSpEnhancement(entry) {
@@ -1600,6 +1633,7 @@ var bfmtUtilities = function () {
     extraSkills,
     items,
     leaderSkills,
+    units,
     spEnhancements,
     version
   });

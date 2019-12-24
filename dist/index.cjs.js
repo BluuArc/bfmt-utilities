@@ -1472,10 +1472,19 @@ function getEffectsForItem(item) {
     }
     return result;
 }
+/**
+ * @description Generate a URL to display the image with the given item thumbnail filename
+ * @param baseContentUrl Base URL of the server
+ * @param fileName name of the file that represents the thumbnail image for a given item
+ */
+function getImageUrl(baseContentUrl, fileName) {
+    return `${baseContentUrl || ''}/item/${fileName || ''}`;
+}
 
 var items = /*#__PURE__*/Object.freeze({
     __proto__: null,
-    getEffectsForItem: getEffectsForItem
+    getEffectsForItem: getEffectsForItem,
+    getImageUrl: getImageUrl
 });
 
 /**
@@ -1489,6 +1498,26 @@ function getEffectsForLeaderSkill(skill) {
 var leaderSkills = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForLeaderSkill: getEffectsForLeaderSkill
+});
+
+/**
+ * @description Generate the file names for each of the image type for a given unit ID
+ * @param id the unit ID to use to generate the file names
+ * @param suffix optional parameter that's useful for things like alternate art
+ */
+function getUnitImageFileNames(id, suffix = '') {
+    const fileNameSuffix = `${id || ''}${suffix || ''}.png`;
+    return {
+        spritesheet: `unit_anime_${fileNameSuffix}`,
+        battleAvatar: `unit_ills_battle_${fileNameSuffix}`,
+        guideAvatar: `unit_ills_thum_${fileNameSuffix}`,
+        fullIllustration: `unit_ills_full_${fileNameSuffix}`,
+    };
+}
+
+var units = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    getUnitImageFileNames: getUnitImageFileNames
 });
 
 function getEffectsForSpEnhancement(entry) {
@@ -1520,6 +1549,7 @@ var index = Object.freeze({
     extraSkills,
     items,
     leaderSkills,
+    units,
     spEnhancements,
     version,
 });

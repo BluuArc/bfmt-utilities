@@ -9,6 +9,7 @@ describe('application entry point', () => {
 			'extraSkills',
 			'items',
 			'leaderSkills',
+			'units',
 			'spEnhancements',
 			'version',
 		].sort();
