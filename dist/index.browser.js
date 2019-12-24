@@ -1591,12 +1591,23 @@ var bfmtUtilities = function () {
       fullIllustration: "unit_ills_full_".concat(fileNameSuffix)
     };
   }
+  /**
+   * @description Generate a URL to display the image with the given unit filename
+   * @param baseContentUrl Base URL of the server
+   * @param fileName name of the file that represents an image for a given unit
+   */
+
+
+  function getUnitImageUrl(baseContentUrl, fileName) {
+    return "".concat(baseContentUrl || '', "/unit/img/").concat(fileName || '');
+  }
 
   var units =
   /*#__PURE__*/
   Object.freeze({
     __proto__: null,
-    getUnitImageFileNames: getUnitImageFileNames
+    getUnitImageFileNames: getUnitImageFileNames,
+    getUnitImageUrl: getUnitImageUrl
   });
 
   function getEffectsForSpEnhancement(entry) {
