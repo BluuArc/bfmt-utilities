@@ -26,7 +26,7 @@
 
 • **conditions**: *[IExtraSkillCondition](_datamine_types_.iextraskillcondition.md)[]*
 
-*Defined in [datamine-types.ts:185](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/datamine-types.ts#L185)*
+*Defined in [datamine-types.ts:185](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L185)*
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 *Inherited from [IPassiveEffect](_datamine_types_.ipassiveeffect.md).[passive id](_datamine_types_.ipassiveeffect.md#passive-id)*
 
-*Defined in [datamine-types.ts:72](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/datamine-types.ts#L72)*
+*Defined in [datamine-types.ts:72](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L72)*
 
 ___
 
@@ -44,4 +44,4 @@ ___
 
 • **passive target**: *[TargetType](../enums/_datamine_types_.targettype.md)*
 
-*Defined in [datamine-types.ts:186](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/datamine-types.ts#L186)*
+*Defined in [datamine-types.ts:186](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L186)*

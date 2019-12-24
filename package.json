@@ -1,6 +1,6 @@
 {
   "name": "@bluuarc/bfmt-utilities",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Set of utility functions used by the BFMT project. This is a separate repository for them because they are usable outside of BFMT.",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
