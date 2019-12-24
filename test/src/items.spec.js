@@ -5,7 +5,7 @@ describe('item utilities', () => {
 	it('has expected API surface', () => {
 		const expectedSurface = [
 			'getEffectsForItem',
-			'getImageUrl',
+			'getItemImageUrl',
 		].sort();
 		expect(Object.keys(itemUtilities).sort()).toEqual(expectedSurface);
 	});
@@ -100,7 +100,7 @@ describe('item utilities', () => {
 		});
 	});
 
-	describe('getImageUrl method', () => {
+	describe('getItemImageUrl method', () => {
 		const testCases = [
 			{
 				name: 'is null',
@@ -123,7 +123,7 @@ describe('item utilities', () => {
 			testCases.forEach(filenameTestCase => {
 				it(`returns expected string when baseContentUrl ${baseContentUrlTestCase.name} and filename ${filenameTestCase.name}"`, () => {
 					const expectedResult = `${baseContentUrlTestCase.expectedValueForParameter}/item/${filenameTestCase.expectedValueForParameter}`;
-					expect(itemUtilities.getImageUrl(baseContentUrlTestCase.value, filenameTestCase.value)).toBe(expectedResult);
+					expect(itemUtilities.getItemImageUrl(baseContentUrlTestCase.value, filenameTestCase.value)).toBe(expectedResult);
 				});
 			});
 		});

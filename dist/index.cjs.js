@@ -1477,14 +1477,14 @@ function getEffectsForItem(item) {
  * @param baseContentUrl Base URL of the server
  * @param fileName name of the file that represents the thumbnail image for a given item
  */
-function getImageUrl(baseContentUrl, fileName) {
+function getItemImageUrl(baseContentUrl, fileName) {
     return `${baseContentUrl || ''}/item/${fileName || ''}`;
 }
 
 var items = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForItem: getEffectsForItem,
-    getImageUrl: getImageUrl
+    getItemImageUrl: getItemImageUrl
 });
 
 /**

@@ -14,4 +14,4 @@
 
 • **Attack**: = "Attack"
 
-*Defined in [buff-metadata.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/71cd4d1/src/buff-metadata.ts#L8)*
+*Defined in [buff-metadata.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/buff-metadata.ts#L8)*

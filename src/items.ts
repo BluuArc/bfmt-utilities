@@ -29,6 +29,6 @@ export function getEffectsForItem (item: IConsumableItem | ISphere): (PassiveEff
  * @param baseContentUrl Base URL of the server
  * @param fileName name of the file that represents the thumbnail image for a given item
  */
-export function getImageUrl (baseContentUrl: string, fileName: string): string {
+export function getItemImageUrl (baseContentUrl: string, fileName: string): string {
 	return `${baseContentUrl || ''}/item/${fileName || ''}`;
 }

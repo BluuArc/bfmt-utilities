@@ -1550,7 +1550,7 @@ var bfmtUtilities = function () {
    */
 
 
-  function getImageUrl(baseContentUrl, fileName) {
+  function getItemImageUrl(baseContentUrl, fileName) {
     return "".concat(baseContentUrl || '', "/item/").concat(fileName || '');
   }
 
@@ -1559,7 +1559,7 @@ var bfmtUtilities = function () {
   Object.freeze({
     __proto__: null,
     getEffectsForItem: getEffectsForItem,
-    getImageUrl: getImageUrl
+    getItemImageUrl: getItemImageUrl
   });
   /**
    * @description Get the effects of a given leader skill

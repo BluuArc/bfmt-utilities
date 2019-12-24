@@ -21,7 +21,7 @@
 
 • **atk_max**: = "atk_max"
 
-*Defined in [datamine-types.ts:9](https://github.com/BluuArc/bfmt-utilities/blob/71cd4d1/src/datamine-types.ts#L9)*
+*Defined in [datamine-types.ts:9](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/datamine-types.ts#L9)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **hp_25pr_under**: = "hp_25pr_under"
 
-*Defined in [datamine-types.ts:6](https://github.com/BluuArc/bfmt-utilities/blob/71cd4d1/src/datamine-types.ts#L6)*
+*Defined in [datamine-types.ts:6](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/datamine-types.ts#L6)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **hp_50pr_over**: = "hp_50pr_over"
 
-*Defined in [datamine-types.ts:4](https://github.com/BluuArc/bfmt-utilities/blob/71cd4d1/src/datamine-types.ts#L4)*
+*Defined in [datamine-types.ts:4](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/datamine-types.ts#L4)*
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 • **hp_50pr_under**: = "hp_50pr_under"
 
-*Defined in [datamine-types.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/71cd4d1/src/datamine-types.ts#L3)*
+*Defined in [datamine-types.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/datamine-types.ts#L3)*
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 • **hp_75pr_under**: = "hp_75pr_under"
 
-*Defined in [datamine-types.ts:5](https://github.com/BluuArc/bfmt-utilities/blob/71cd4d1/src/datamine-types.ts#L5)*
+*Defined in [datamine-types.ts:5](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/datamine-types.ts#L5)*
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 • **hp_max**: = "hp_max"
 
-*Defined in [datamine-types.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/71cd4d1/src/datamine-types.ts#L8)*
+*Defined in [datamine-types.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/datamine-types.ts#L8)*
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 • **hp_min**: = "hp_min"
 
-*Defined in [datamine-types.ts:7](https://github.com/BluuArc/bfmt-utilities/blob/71cd4d1/src/datamine-types.ts#L7)*
+*Defined in [datamine-types.ts:7](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/datamine-types.ts#L7)*
 
 ___
 
@@ -77,4 +77,4 @@ ___
 
 • **random**: = "random"
 
-*Defined in [datamine-types.ts:10](https://github.com/BluuArc/bfmt-utilities/blob/71cd4d1/src/datamine-types.ts#L10)*
+*Defined in [datamine-types.ts:10](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/datamine-types.ts#L10)*

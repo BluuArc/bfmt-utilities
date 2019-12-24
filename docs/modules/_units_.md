@@ -19,7 +19,7 @@
 
 ▸ **getUnitImageFileNames**(`id`: string, `suffix`: string): *[IUnitImageFileNames](../interfaces/_units_.iunitimagefilenames.md)*
 
-*Defined in [units.ts:13](https://github.com/BluuArc/bfmt-utilities/blob/71cd4d1/src/units.ts#L13)*
+*Defined in [units.ts:13](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/units.ts#L13)*
 
 **`description`** Generate the file names for each of the image type for a given unit ID
 
@@ -38,7 +38,7 @@ ___
 
 ▸ **getUnitImageUrl**(`baseContentUrl`: string, `fileName`: string): *string*
 
-*Defined in [units.ts:28](https://github.com/BluuArc/bfmt-utilities/blob/71cd4d1/src/units.ts#L28)*
+*Defined in [units.ts:28](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/units.ts#L28)*
 
 **`description`** Generate a URL to display the image with the given unit filename
 
