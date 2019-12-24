@@ -45,7 +45,24 @@ function createObjectListFactoryFromSchema (schema, { deleteUndefined = true } =
 	};
 }
 
+/**
+ * @description Asserts that a given object has only the given keys along its surface
+ * @param {object} objectToAssert object to check surface of
+ * @param {string[]} keysToAssert array of keys to check against
+ * @param {string?} contextMessage optional message to display on assertion failure
+ */
+function assertObjectHasOnlyKeys (objectToAssert, keysToAssert, contextMessage) {
+	if (contextMessage) {
+		expect(Object.keys(objectToAssert).sort())
+			.withContext(contextMessage)
+			.toEqual(keysToAssert.sort());
+	} else {
+		expect(Object.keys(objectToAssert).sort()).toEqual(keysToAssert.sort());
+	}
+}
+
 module.exports = {
 	getStringValueForLog,
 	createObjectListFactoryFromSchema,
+	assertObjectHasOnlyKeys,
 };

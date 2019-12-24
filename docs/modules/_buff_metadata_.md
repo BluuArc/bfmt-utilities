@@ -453,7 +453,7 @@
   }
 })
 
-*Defined in [buff-metadata.ts:18](https://github.com/BluuArc/bfmt-utilities/blob/c1a63e5/src/buff-metadata.ts#L18)*
+*Defined in [buff-metadata.ts:18](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/buff-metadata.ts#L18)*
 
 ___
 
@@ -1107,4 +1107,4 @@ ___
   }
 })
 
-*Defined in [buff-metadata.ts:449](https://github.com/BluuArc/bfmt-utilities/blob/c1a63e5/src/buff-metadata.ts#L449)*
+*Defined in [buff-metadata.ts:449](https://github.com/BluuArc/bfmt-utilities/blob/79f412a/src/buff-metadata.ts#L449)*

@@ -1,12 +1,12 @@
 const itemUtilities = require('../../src/items');
-const { getStringValueForLog } = require('../helpers/utils');
+const { getStringValueForLog, assertObjectHasOnlyKeys } = require('../helpers/utils');
 
 describe('item utilities', () => {
 	it('has expected API surface', () => {
-		const expectedSurface = [
+		assertObjectHasOnlyKeys(itemUtilities, [
 			'getEffectsForItem',
-		].sort();
-		expect(Object.keys(itemUtilities).sort()).toEqual(expectedSurface);
+			'getItemImageUrl',
+		]);
 	});
 
 	describe('getEffectsForItem method', () => {
@@ -94,6 +94,35 @@ describe('item utilities', () => {
 				result.forEach((resultEffect, i) => {
 					expect(resultEffect['target area']).withContext(`target area mismatch at index ${i}`).toBe(ARBITRARY_TARGET_AREA);
 					expect(resultEffect['target type']).withContext(`target type mismatch at index ${i}`).toBe(ARBITRARY_TARGET_TYPE);
+				});
+			});
+		});
+	});
+
+	describe('getItemImageUrl method', () => {
+		const testCases = [
+			{
+				name: 'is null',
+				value: null,
+				expectedValueForParameter: '',
+			},
+			{
+				name: 'is undefined',
+				value: void 0,
+				expectedValueForParameter: '',
+			},
+			{
+				name: 'is a string',
+				value: 'some string',
+				expectedValueForParameter: 'some string',
+			},
+		];
+		
+		testCases.forEach(baseContentUrlTestCase => {
+			testCases.forEach(filenameTestCase => {
+				it(`returns expected string when baseContentUrl ${baseContentUrlTestCase.name} and filename ${filenameTestCase.name}"`, () => {
+					const expectedResult = `${baseContentUrlTestCase.expectedValueForParameter}/item/${filenameTestCase.expectedValueForParameter}`;
+					expect(itemUtilities.getItemImageUrl(baseContentUrlTestCase.value, filenameTestCase.value)).toBe(expectedResult);
 				});
 			});
 		});
