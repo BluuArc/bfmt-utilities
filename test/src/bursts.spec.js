@@ -1,17 +1,16 @@
 const burstUtilites = require('../../src/bursts');
-const { getStringValueForLog } = require('../helpers/utils');
+const { getStringValueForLog, assertObjectHasOnlyKeys } = require('../helpers/utils');
 const { generateDamageFramesList } = require('../helpers/dataFactories');
 const testConstants = require('../helpers/constants');
 const appConstants = require('../../src/constants');
 
 describe('burst utilities', () => {
 	it('has expected API surface', () => {
-		const expectedSurface = [
+		assertObjectHasOnlyKeys(burstUtilites, [
 			'getLevelEntryForBurst',
 			'getEffectsForBurst',
 			'getExtraAttackDamageFramesEntry',
-		].sort();
-		expect(Object.keys(burstUtilites).sort()).toEqual(expectedSurface);
+		]);
 	});
 
 	describe('getLevelEntryForBurst method', () => {

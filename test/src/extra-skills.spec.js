@@ -1,11 +1,11 @@
 const extraSkillUtilities = require('../../src/extra-skills');
+const { assertObjectHasOnlyKeys } = require('../helpers/utils');
 
 describe('extra skill utilities', () => {
 	it('has expected API surface', () => {
-		const expectedSurface = [
+		assertObjectHasOnlyKeys(extraSkillUtilities, [
 			'getEffectsForExtraSkill',
-		].sort();
-		expect(Object.keys(extraSkillUtilities).sort()).toEqual(expectedSurface);
+		]);
 	});
 
 	describe('getEffectsForExtraSkill method', () => {

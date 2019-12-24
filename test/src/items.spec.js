@@ -1,13 +1,12 @@
 const itemUtilities = require('../../src/items');
-const { getStringValueForLog } = require('../helpers/utils');
+const { getStringValueForLog, assertObjectHasOnlyKeys } = require('../helpers/utils');
 
 describe('item utilities', () => {
 	it('has expected API surface', () => {
-		const expectedSurface = [
+		assertObjectHasOnlyKeys(itemUtilities, [
 			'getEffectsForItem',
 			'getItemImageUrl',
-		].sort();
-		expect(Object.keys(itemUtilities).sort()).toEqual(expectedSurface);
+		]);
 	});
 
 	describe('getEffectsForItem method', () => {

@@ -1,11 +1,11 @@
 const leaderSkillUtilities = require('../../src/leader-skills');
+const { assertObjectHasOnlyKeys } = require('../helpers/utils');
 
 describe('leader skill utilities', () => {
 	it('has expected API surface', () => {
-		const expectedSurface = [
+		assertObjectHasOnlyKeys(leaderSkillUtilities, [
 			'getEffectsForLeaderSkill',
-		].sort();
-		expect(Object.keys(leaderSkillUtilities).sort()).toEqual(expectedSurface);
+		]);
 	});
 
 	describe('getEffectsForLeaderSkill method', () => {

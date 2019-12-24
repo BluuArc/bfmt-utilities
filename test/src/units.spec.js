@@ -3,11 +3,10 @@ const { assertObjectHasOnlyKeys } = require('../helpers/utils');
 
 describe('unit utilities', () => {
 	it('has expected API surface', () => {
-		const expectedSurface = [
+		assertObjectHasOnlyKeys(unitUtilities, [
 			'getUnitImageFileNames',
 			'getUnitImageUrl',
-		].sort();
-		assertObjectHasOnlyKeys(unitUtilities, expectedSurface);
+		]);
 	});
 
 	describe('getUnitImageFileNames method', () => {

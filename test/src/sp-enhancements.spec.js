@@ -1,11 +1,11 @@
 const spEnhancementUtilities = require('../../src/sp-enhancements');
+const { assertObjectHasOnlyKeys } = require('../helpers/utils');
 
 describe('SP Enhancement utilities', () => {
 	it('has expected API surface', () => {
-		const expectedSurface = [
+		assertObjectHasOnlyKeys(spEnhancementUtilities, [
 			'getEffectsForSpEnhancement',
-		].sort();
-		expect(Object.keys(spEnhancementUtilities).sort()).toEqual(expectedSurface);
+		]);
 	});
 
 	describe('getEffectsForSpEnhancement method', () => {

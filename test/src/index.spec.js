@@ -1,9 +1,10 @@
 const appExport = require('../../src/index');
+const { assertObjectHasOnlyKeys } = require('../helpers/utils');
 const app = appExport.default;
 
 describe('application entry point', () => {
 	it('has expected API surface', () => {
-		const expectedSurface = [
+		assertObjectHasOnlyKeys(app, [
 			'bursts',
 			'buffs',
 			'extraSkills',
@@ -12,7 +13,6 @@ describe('application entry point', () => {
 			'units',
 			'spEnhancements',
 			'version',
-		].sort();
-		expect(Object.keys(app).sort()).toEqual(expectedSurface);
+		]);
 	});
 });

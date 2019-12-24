@@ -1,13 +1,13 @@
 const buffUtilities = require('../../src/buffs');
 const datamineTypes = require('../../src/datamine-types');
 const testConstants = require('../helpers/constants');
-const { getStringValueForLog } = require('../helpers/utils');
+const { getStringValueForLog, assertObjectHasOnlyKeys } = require('../helpers/utils');
 const { generateDamageFramesList, generateEffectsList } = require('../helpers/dataFactories');
 const { PROC_METADATA, PASSIVE_METADATA } = require('../../src/buff-metadata');
 
 describe('buff utilties', () => {
 	it('has expected API surface', () => {
-		const expectedSurface = [
+		assertObjectHasOnlyKeys(buffUtilities, [
 			'getMetadataForProc',
 			'getMetadataForPassive',
 			'isAttackingProcId',
@@ -18,8 +18,7 @@ describe('buff utilties', () => {
 			'combineEffectsAndDamageFrames',
 			'getEffectId',
 			'getEffectName',
-		].sort();
-		expect(Object.keys(buffUtilities).sort()).toEqual(expectedSurface);
+		]);
 	});
 
 	describe('getMetadataForProc method', () => {
