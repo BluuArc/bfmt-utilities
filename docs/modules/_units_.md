@@ -19,7 +19,7 @@
 
 ▸ **getUnitImageFileNames**(`id`: string, `suffix`: string): *[IUnitImageFileNames](../interfaces/_units_.iunitimagefilenames.md)*
 
-*Defined in [units.ts:13](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/units.ts#L13)*
+*Defined in [units.ts:14](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/units.ts#L14)*
 
 **`description`** Generate the file names for each of the image type for a given unit ID
 
@@ -28,9 +28,11 @@
 Name | Type | Default | Description |
 ------ | ------ | ------ | ------ |
 `id` | string | - | the unit ID to use to generate the file names |
-`suffix` | string | "" | optional parameter that's useful for things like alternate art  |
+`suffix` | string | "" | optional parameter that's useful for things like alternate art |
 
 **Returns:** *[IUnitImageFileNames](../interfaces/_units_.iunitimagefilenames.md)*
+
+set of file names for each image type (spritesheet, battle avatar, guide avatar, full illustration)
 
 ___
 
@@ -38,7 +40,7 @@ ___
 
 ▸ **getUnitImageUrl**(`baseContentUrl`: string, `fileName`: string): *string*
 
-*Defined in [units.ts:28](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/units.ts#L28)*
+*Defined in [units.ts:30](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/units.ts#L30)*
 
 **`description`** Generate a URL to display the image with the given unit filename
 
@@ -47,6 +49,8 @@ ___
 Name | Type | Description |
 ------ | ------ | ------ |
 `baseContentUrl` | string | Base URL of the server |
-`fileName` | string | name of the file that represents an image for a given unit  |
+`fileName` | string | name of the file that represents an image for a given unit |
 
 **Returns:** *string*
+
+generated URL based on the given content URL and file name

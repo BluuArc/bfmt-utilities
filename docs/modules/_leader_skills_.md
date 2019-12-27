@@ -14,7 +14,7 @@
 
 ▸ **getEffectsForLeaderSkill**(`skill`: [ILeaderSkill](../interfaces/_datamine_types_.ileaderskill.md)): *[PassiveEffect](_datamine_types_.md#passiveeffect)[]*
 
-*Defined in [leader-skills.ts:7](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/leader-skills.ts#L7)*
+*Defined in [leader-skills.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/leader-skills.ts#L8)*
 
 **`description`** Get the effects of a given leader skill
 
@@ -22,6 +22,8 @@
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`skill` | [ILeaderSkill](../interfaces/_datamine_types_.ileaderskill.md) | leader skill to get the effects of  |
+`skill` | [ILeaderSkill](../interfaces/_datamine_types_.ileaderskill.md) | leader skill to get the effects of |
 
 **Returns:** *[PassiveEffect](_datamine_types_.md#passiveeffect)[]*
+
+the effects of the given leader skill if they exist, an empty array otherwise

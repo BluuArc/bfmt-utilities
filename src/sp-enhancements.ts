@@ -1,5 +1,10 @@
 import { ISpEnhancementEntry, SpEnhancementEffect, PassiveEffect, SpPassiveType } from './datamine-types';
 
+/**
+ * @description Get the effects of a given SP Enhancement Entry
+ * @param entry SP Enhancement Entry to get the effects of
+ * @returns the effects of the given SP Enhancement Entry if they exist, an empty array otherwise
+ */
 export function getEffectsForSpEnhancement (entry: ISpEnhancementEntry): SpEnhancementEffect[] {
 	const result: SpEnhancementEffect[] = [];
 	if (entry && entry.skill && Array.isArray(entry.skill.effects)) {

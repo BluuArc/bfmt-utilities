@@ -21,7 +21,7 @@
 
 • **battleAvatar**: *string*
 
-*Defined in [units.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/units.ts#L3)*
+*Defined in [units.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/units.ts#L3)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **fullIllustration**: *string*
 
-*Defined in [units.ts:5](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/units.ts#L5)*
+*Defined in [units.ts:5](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/units.ts#L5)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **guideAvatar**: *string*
 
-*Defined in [units.ts:4](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/units.ts#L4)*
+*Defined in [units.ts:4](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/units.ts#L4)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **spritesheet**: *string*
 
-*Defined in [units.ts:2](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/units.ts#L2)*
+*Defined in [units.ts:2](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/units.ts#L2)*

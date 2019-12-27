@@ -49,5 +49,13 @@ module.exports = {
 			{ 'prefixWithI': 'always' },
 		],
 		'@typescript-eslint/no-explicit-any': 0,
+		'require-jsdoc': 2,
+		'valid-jsdoc': [
+			2,
+			{
+				requireParamType: false,
+				requireReturnType: false,
+			}
+		],
 	}
 };

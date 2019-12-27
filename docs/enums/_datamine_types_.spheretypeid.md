@@ -28,7 +28,7 @@
 
 • **Ailment Inducing**: = 4
 
-*Defined in [datamine-types.ts:164](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L164)*
+*Defined in [datamine-types.ts:164](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L164)*
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 • **Attack Boosting**: = 13
 
-*Defined in [datamine-types.ts:173](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L173)*
+*Defined in [datamine-types.ts:173](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L173)*
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 • **BB Gauge**: = 6
 
-*Defined in [datamine-types.ts:166](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L166)*
+*Defined in [datamine-types.ts:166](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L166)*
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 • **Critical**: = 2
 
-*Defined in [datamine-types.ts:162](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L162)*
+*Defined in [datamine-types.ts:162](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L162)*
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 • **Damage Deflecting**: = 9
 
-*Defined in [datamine-types.ts:169](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L169)*
+*Defined in [datamine-types.ts:169](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L169)*
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 • **Damage Reducing**: = 10
 
-*Defined in [datamine-types.ts:170](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L170)*
+*Defined in [datamine-types.ts:170](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L170)*
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 • **Defense Piercing**: = 12
 
-*Defined in [datamine-types.ts:172](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L172)*
+*Defined in [datamine-types.ts:172](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L172)*
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 • **Drop**: = 3
 
-*Defined in [datamine-types.ts:163](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L163)*
+*Defined in [datamine-types.ts:163](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L163)*
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 • **Element Fusion**: = 5
 
-*Defined in [datamine-types.ts:165](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L165)*
+*Defined in [datamine-types.ts:165](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L165)*
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 • **HP Recovery**: = 7
 
-*Defined in [datamine-types.ts:167](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L167)*
+*Defined in [datamine-types.ts:167](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L167)*
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 • **None**: = 0
 
-*Defined in [datamine-types.ts:160](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L160)*
+*Defined in [datamine-types.ts:160](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L160)*
 
 ___
 
@@ -116,7 +116,7 @@ ___
 
 • **Spark**: = 11
 
-*Defined in [datamine-types.ts:171](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L171)*
+*Defined in [datamine-types.ts:171](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L171)*
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 • **Special**: = 14
 
-*Defined in [datamine-types.ts:174](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L174)*
+*Defined in [datamine-types.ts:174](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L174)*
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 • **Status Enhancing**: = 1
 
-*Defined in [datamine-types.ts:161](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L161)*
+*Defined in [datamine-types.ts:161](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L161)*
 
 ___
 
@@ -140,4 +140,4 @@ ___
 
 • **Target Setting**: = 8
 
-*Defined in [datamine-types.ts:168](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/datamine-types.ts#L168)*
+*Defined in [datamine-types.ts:168](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/datamine-types.ts#L168)*

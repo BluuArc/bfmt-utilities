@@ -27,7 +27,7 @@
 
 ▸ **combineEffectsAndDamageFrames**(`effects`: [ProcEffect](_datamine_types_.md#proceffect)[], `damageFrames`: [IDamageFramesEntry](../interfaces/_datamine_types_.idamageframesentry.md)[]): *[IProcEffectFrameComposite](../interfaces/_buffs_.iproceffectframecomposite.md)[]*
 
-*Defined in [buffs.ts:103](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/buffs.ts#L103)*
+*Defined in [buffs.ts:113](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/buffs.ts#L113)*
 
 **`description`** Create a list of objects that contain both the effect data and its corresponding damage frame
 
@@ -36,9 +36,11 @@
 Name | Type | Description |
 ------ | ------ | ------ |
 `effects` | [ProcEffect](_datamine_types_.md#proceffect)[] | List of proc effects to combine; must be the same length as the `damageFrames` |
-`damageFrames` | [IDamageFramesEntry](../interfaces/_datamine_types_.idamageframesentry.md)[] | List of damage frames whose index corresponds with the effect in the `effects` list  |
+`damageFrames` | [IDamageFramesEntry](../interfaces/_datamine_types_.idamageframesentry.md)[] | List of damage frames whose index corresponds with the effect in the `effects` list |
 
 **Returns:** *[IProcEffectFrameComposite](../interfaces/_buffs_.iproceffectframecomposite.md)[]*
+
+collection of composite objects that contain the proc effect and the corresponding frames entry
 
 ___
 
@@ -46,7 +48,7 @@ ___
 
 ▸ **getEffectId**(`effect`: object): *string*
 
-*Defined in [buffs.ts:126](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/buffs.ts#L126)*
+*Defined in [buffs.ts:136](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/buffs.ts#L136)*
 
 **`description`** Get the proc/passive ID of a given object
 
@@ -73,7 +75,7 @@ ___
 
 ▸ **getEffectName**(`effect`: object): *string*
 
-*Defined in [buffs.ts:145](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/buffs.ts#L145)*
+*Defined in [buffs.ts:155](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/buffs.ts#L155)*
 
 **`description`** Get the name of a given object
 
@@ -100,7 +102,7 @@ ___
 
 ▸ **getMetadataForPassive**(`id`: string): *[IPassiveMetadataEntry](../interfaces/_buff_metadata_.ipassivemetadataentry.md) | undefined*
 
-*Defined in [buffs.ts:30](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/buffs.ts#L30)*
+*Defined in [buffs.ts:32](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/buffs.ts#L32)*
 
 **`description`** Get the associated metadata entry for a given passive ID
 
@@ -108,9 +110,11 @@ ___
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`id` | string | passive ID to get metadata for  |
+`id` | string | passive ID to get metadata for |
 
 **Returns:** *[IPassiveMetadataEntry](../interfaces/_buff_metadata_.ipassivemetadataentry.md) | undefined*
+
+corresponding passive metadata entry if it exists, undefined otherwise
 
 ___
 
@@ -118,7 +122,7 @@ ___
 
 ▸ **getMetadataForProc**(`id`: string): *[IProcMetadataEntry](../interfaces/_buff_metadata_.iprocmetadataentry.md) | undefined*
 
-*Defined in [buffs.ts:20](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/buffs.ts#L20)*
+*Defined in [buffs.ts:21](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/buffs.ts#L21)*
 
 **`description`** Get the associated metadata entry for a given proc ID
 
@@ -126,9 +130,11 @@ ___
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`id` | string | proc ID to get metadata for  |
+`id` | string | proc ID to get metadata for |
 
 **Returns:** *[IProcMetadataEntry](../interfaces/_buff_metadata_.iprocmetadataentry.md) | undefined*
+
+corresponding proc metadata entry if it exists, undefined otherwise
 
 ___
 
@@ -136,7 +142,7 @@ ___
 
 ▸ **getNameForPassive**(`id`: string): *string*
 
-*Defined in [buffs.ts:58](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/buffs.ts#L58)*
+*Defined in [buffs.ts:63](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/buffs.ts#L63)*
 
 **`description`** Get the associated name for a given passive ID
 
@@ -144,9 +150,11 @@ ___
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`id` | string | passive ID to get the name of  |
+`id` | string | passive ID to get the name of |
 
 **Returns:** *string*
+
+the name of the passive ID if it exists, empty string otherwise
 
 ___
 
@@ -154,7 +162,7 @@ ___
 
 ▸ **getNameForProc**(`id`: string): *string*
 
-*Defined in [buffs.ts:49](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/buffs.ts#L49)*
+*Defined in [buffs.ts:53](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/buffs.ts#L53)*
 
 **`description`** Get the associated name for a given proc ID
 
@@ -162,9 +170,11 @@ ___
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`id` | string | proc ID to get the name of  |
+`id` | string | proc ID to get the name of |
 
 **Returns:** *string*
+
+the name of the proc ID if it exists, empty string otherwise
 
 ___
 
@@ -172,7 +182,7 @@ ___
 
 ▸ **isAttackingProcId**(`id`: string): *boolean*
 
-*Defined in [buffs.ts:40](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/buffs.ts#L40)*
+*Defined in [buffs.ts:43](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/buffs.ts#L43)*
 
 **`description`** Determine if a given proc ID's type is an attack
 
@@ -180,9 +190,11 @@ ___
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`id` | string | proc ID to check  |
+`id` | string | proc ID to check |
 
 **Returns:** *boolean*
+
+whether the given ID corresponds to a proc ID whose type is attack
 
 ___
 
@@ -190,9 +202,10 @@ ___
 
 ▸ **isPassiveEffect**(`effect`: object): *boolean*
 
-*Defined in [buffs.ts:80](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/buffs.ts#L80)*
+*Defined in [buffs.ts:89](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/buffs.ts#L89)*
 
-**`description`** Determine if a given effect object is a passive effect
+**`description`** Determine if a given effect object is a passive effect based on existing properties.
+Do note that it does not check the validity of each property, only the existence.
 
 **Parameters:**
 
@@ -207,15 +220,18 @@ Name | Type |
 
 **Returns:** *boolean*
 
+whether the given effect object is considered a passive effect based on its properties
+
 ___
 
 ###  isProcEffect
 
 ▸ **isProcEffect**(`effect`: object): *boolean*
 
-*Defined in [buffs.ts:67](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/buffs.ts#L67)*
+*Defined in [buffs.ts:74](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/buffs.ts#L74)*
 
-**`description`** Determine if a given effect object is a proc effect
+**`description`** Determine if a given effect object is a proc effect based on existing properties.
+Do note that it does not check the validity of each property, only the existence.
 
 **Parameters:**
 
@@ -229,3 +245,5 @@ Name | Type |
 `unknown proc id?` | undefined &#124; string |
 
 **Returns:** *boolean*
+
+whether the given effect object is considered a proc effect based on its properties
