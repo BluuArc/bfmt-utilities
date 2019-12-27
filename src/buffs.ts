@@ -16,6 +16,7 @@ import {
 /**
  * @description Get the associated metadata entry for a given proc ID
  * @param id proc ID to get metadata for
+ * @returns corresponding proc metadata entry if it exists, undefined otherwise
  */
 export function getMetadataForProc (id: string): IProcMetadataEntry | undefined {
 	return Object.hasOwnProperty.call(PROC_METADATA, id)
@@ -26,6 +27,7 @@ export function getMetadataForProc (id: string): IProcMetadataEntry | undefined 
 /**
  * @description Get the associated metadata entry for a given passive ID
  * @param id passive ID to get metadata for
+ * @returns corresponding passive metadata entry if it exists, undefined otherwise
  */
 export function getMetadataForPassive (id: string): IPassiveMetadataEntry | undefined {
 	return Object.hasOwnProperty.call(PASSIVE_METADATA, id)
@@ -36,6 +38,7 @@ export function getMetadataForPassive (id: string): IPassiveMetadataEntry | unde
 /**
  * @description Determine if a given proc ID's type is an attack
  * @param id proc ID to check
+ * @returns whether the given ID corresponds to a proc ID whose type is attack
  */
 export function isAttackingProcId (id: string): boolean {
 	const metadataEntry = getMetadataForProc(id);
@@ -45,6 +48,7 @@ export function isAttackingProcId (id: string): boolean {
 /**
  * @description Get the associated name for a given proc ID
  * @param id proc ID to get the name of
+ * @returns the name of the proc ID if it exists, empty string otherwise
  */
 export function getNameForProc (id: string): string {
 	const metadataEntry = getMetadataForProc(id);
@@ -54,6 +58,7 @@ export function getNameForProc (id: string): string {
 /**
  * @description Get the associated name for a given passive ID
  * @param id passive ID to get the name of
+ * @returns the name of the passive ID if it exists, empty string otherwise
  */
 export function getNameForPassive (id: string): string {
 	const metadataEntry = getMetadataForPassive(id);
@@ -61,8 +66,10 @@ export function getNameForPassive (id: string): string {
 }
 
 /**
- * @description Determine if a given effect object is a proc effect
+ * @description Determine if a given effect object is a proc effect based on existing properties.
+ * Do note that it does not check the validity of each property, only the existence.
  * @param effect object to check
+ * @returns whether the given effect object is considered a proc effect based on its properties
  */
 export function isProcEffect (effect: {
 	'proc id'?: string;
@@ -74,8 +81,10 @@ export function isProcEffect (effect: {
 }
 
 /**
- * @description Determine if a given effect object is a passive effect
+ * @description Determine if a given effect object is a passive effect based on existing properties.
+ * Do note that it does not check the validity of each property, only the existence.
  * @param effect object to check
+ * @returns whether the given effect object is considered a passive effect based on its properties
  */
 export function isPassiveEffect (effect: {
 	'passive id'?: string;
@@ -99,6 +108,7 @@ export interface IProcEffectFrameComposite {
  * @description Create a list of objects that contain both the effect data and its corresponding damage frame
  * @param effects List of proc effects to combine; must be the same length as the `damageFrames`
  * @param damageFrames List of damage frames whose index corresponds with the effect in the `effects` list
+ * @returns collection of composite objects that contain the proc effect and the corresponding frames entry
  */
 export function combineEffectsAndDamageFrames (effects: ProcEffect[], damageFrames: IDamageFramesEntry[]): IProcEffectFrameComposite[] {
 	let combinedEntries: IProcEffectFrameComposite[] = [];
