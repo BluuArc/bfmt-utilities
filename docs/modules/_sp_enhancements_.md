@@ -14,7 +14,7 @@
 
 ▸ **getEffectsForSpEnhancement**(`entry`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)): *[SpEnhancementEffect](_datamine_types_.md#spenhancementeffect)[]*
 
-*Defined in [sp-enhancements.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/sp-enhancements.ts#L8)*
+*Defined in [sp-enhancements.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/fb7f106/src/sp-enhancements.ts#L8)*
 
 **`description`** Get the effects of a given SP Enhancement Entry
 
