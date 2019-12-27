@@ -1233,6 +1233,7 @@ var ItemType;
 /**
  * @description Get the associated metadata entry for a given proc ID
  * @param id proc ID to get metadata for
+ * @returns corresponding proc metadata entry if it exists, undefined otherwise
  */
 function getMetadataForProc(id) {
     return Object.hasOwnProperty.call(PROC_METADATA, id)
@@ -1242,6 +1243,7 @@ function getMetadataForProc(id) {
 /**
  * @description Get the associated metadata entry for a given passive ID
  * @param id passive ID to get metadata for
+ * @returns corresponding passive metadata entry if it exists, undefined otherwise
  */
 function getMetadataForPassive(id) {
     return Object.hasOwnProperty.call(PASSIVE_METADATA, id)
@@ -1251,6 +1253,7 @@ function getMetadataForPassive(id) {
 /**
  * @description Determine if a given proc ID's type is an attack
  * @param id proc ID to check
+ * @returns whether the given ID corresponds to a proc ID whose type is attack
  */
 function isAttackingProcId(id) {
     const metadataEntry = getMetadataForProc(id);
@@ -1259,6 +1262,7 @@ function isAttackingProcId(id) {
 /**
  * @description Get the associated name for a given proc ID
  * @param id proc ID to get the name of
+ * @returns the name of the proc ID if it exists, empty string otherwise
  */
 function getNameForProc(id) {
     const metadataEntry = getMetadataForProc(id);
@@ -1267,14 +1271,17 @@ function getNameForProc(id) {
 /**
  * @description Get the associated name for a given passive ID
  * @param id passive ID to get the name of
+ * @returns the name of the passive ID if it exists, empty string otherwise
  */
 function getNameForPassive(id) {
     const metadataEntry = getMetadataForPassive(id);
     return (!!metadataEntry && metadataEntry.Name) || '';
 }
 /**
- * @description Determine if a given effect object is a proc effect
+ * @description Determine if a given effect object is a proc effect based on existing properties.
+ * Do note that it does not check the validity of each property, only the existence.
  * @param effect object to check
+ * @returns whether the given effect object is considered a proc effect based on its properties
  */
 function isProcEffect(effect) {
     return !!effect &&
@@ -1282,8 +1289,10 @@ function isProcEffect(effect) {
         (Object.hasOwnProperty.call(effect, 'proc id') || Object.hasOwnProperty.call(effect, 'unknown proc id'));
 }
 /**
- * @description Determine if a given effect object is a passive effect
+ * @description Determine if a given effect object is a passive effect based on existing properties.
+ * Do note that it does not check the validity of each property, only the existence.
  * @param effect object to check
+ * @returns whether the given effect object is considered a passive effect based on its properties
  */
 function isPassiveEffect(effect) {
     return !!effect &&
@@ -1294,6 +1303,7 @@ function isPassiveEffect(effect) {
  * @description Create a list of objects that contain both the effect data and its corresponding damage frame
  * @param effects List of proc effects to combine; must be the same length as the `damageFrames`
  * @param damageFrames List of damage frames whose index corresponds with the effect in the `effects` list
+ * @returns collection of composite objects that contain the proc effect and the corresponding frames entry
  */
 function combineEffectsAndDamageFrames(effects, damageFrames) {
     let combinedEntries = [];
@@ -1369,6 +1379,7 @@ var KNOWN_PASSIVE_ID;
  * @description Grab the level entry of a burst at a given level (or the last level if no level is given)
  * @param burst Burst to get level entry from
  * @param level Optional 1-indexed level to get; if not specified, the last level of the burst is used.
+ * @returns the level entry of a burst at a given level (or last level if no level is given) if it exists, undefined otherwise
  */
 function getLevelEntryForBurst(burst, level) {
     const burstEffectsByLevel = (burst && Array.isArray(burst.levels)) ? burst.levels : [];
@@ -1387,11 +1398,18 @@ function getLevelEntryForBurst(burst, level) {
  * @description Grab the effects at the level entry of a burst at a given level (or the last level if no level is given)
  * @param burst Burst to get effects from
  * @param level Optional 1-indexed level to get entries from; if not specified, the last level of the burst is used.
+ * @returns the effects at the level entry of a burst at a given level (or last level if no level is given) if it exists, an empty array otherwise
  */
 function getEffectsForBurst(burst, level) {
     const levelEntry = getLevelEntryForBurst(burst, level);
     return (levelEntry && Array.isArray(levelEntry.effects)) ? levelEntry.effects : [];
 }
+/**
+ * @description Get the extra attack damage frames entry based on the damage frames of a burst. Also apply the given effect delay to the resulting damage frames entry.
+ * @param damageFrames damage frames that each have their own proc ID
+ * @param effectDelay optional effect delay to apply to the resulting damage frames entry
+ * @returns damage frames entry whose frames are based on the input damage frames
+ */
 function getExtraAttackDamageFramesEntry(damageFrames, effectDelay = '0.0/0') {
     // relevant frames are all effects for healing or attacking
     const inputFrames = Array.isArray(damageFrames) ? damageFrames : [];
@@ -1439,6 +1457,7 @@ var bursts = /*#__PURE__*/Object.freeze({
 /**
  * @description Get the effects of a given extra skill
  * @param skill extra skill to get the effects of
+ * @returns the effects of the given extra skill if they exist, an empty array otherwise
  */
 function getEffectsForExtraSkill(skill) {
     return (skill && Array.isArray(skill.effects)) ? skill.effects : [];
@@ -1452,6 +1471,7 @@ var extraSkills = /*#__PURE__*/Object.freeze({
 /**
  * @description Get the effects of a given item
  * @param item item to get the effects of, if any are present
+ * @returns the effects of the given item if they exist, an empty array otherwise
  */
 function getEffectsForItem(item) {
     let result = [];
@@ -1476,6 +1496,7 @@ function getEffectsForItem(item) {
  * @description Generate a URL to display the image with the given item thumbnail filename
  * @param baseContentUrl Base URL of the server
  * @param fileName name of the file that represents the thumbnail image for a given item
+ * @returns generated URL based on the given content URL and file name
  */
 function getItemImageUrl(baseContentUrl, fileName) {
     return `${baseContentUrl || ''}/item/${fileName || ''}`;
@@ -1490,6 +1511,7 @@ var items = /*#__PURE__*/Object.freeze({
 /**
  * @description Get the effects of a given leader skill
  * @param skill leader skill to get the effects of
+ * @returns the effects of the given leader skill if they exist, an empty array otherwise
  */
 function getEffectsForLeaderSkill(skill) {
     return skill && Array.isArray(skill.effects) ? skill.effects : [];
@@ -1504,6 +1526,7 @@ var leaderSkills = /*#__PURE__*/Object.freeze({
  * @description Generate the file names for each of the image type for a given unit ID
  * @param id the unit ID to use to generate the file names
  * @param suffix optional parameter that's useful for things like alternate art
+ * @returns set of file names for each image type (spritesheet, battle avatar, guide avatar, full illustration)
  */
 function getUnitImageFileNames(id, suffix = '') {
     const fileNameSuffix = `${id || ''}${suffix || ''}.png`;
@@ -1518,6 +1541,7 @@ function getUnitImageFileNames(id, suffix = '') {
  * @description Generate a URL to display the image with the given unit filename
  * @param baseContentUrl Base URL of the server
  * @param fileName name of the file that represents an image for a given unit
+ * @returns generated URL based on the given content URL and file name
  */
 function getUnitImageUrl(baseContentUrl, fileName) {
     return `${baseContentUrl || ''}/unit/img/${fileName || ''}`;
@@ -1529,6 +1553,11 @@ var units = /*#__PURE__*/Object.freeze({
     getUnitImageUrl: getUnitImageUrl
 });
 
+/**
+ * @description Get the effects of a given SP Enhancement Entry
+ * @param entry SP Enhancement Entry to get the effects of
+ * @returns the effects of the given SP Enhancement Entry if they exist, an empty array otherwise
+ */
 function getEffectsForSpEnhancement(entry) {
     const result = [];
     if (entry && entry.skill && Array.isArray(entry.skill.effects)) {

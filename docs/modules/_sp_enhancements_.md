@@ -14,12 +14,16 @@
 
 ▸ **getEffectsForSpEnhancement**(`entry`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)): *[SpEnhancementEffect](_datamine_types_.md#spenhancementeffect)[]*
 
-*Defined in [sp-enhancements.ts:3](https://github.com/BluuArc/bfmt-utilities/blob/819ffe1/src/sp-enhancements.ts#L3)*
+*Defined in [sp-enhancements.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/9e9d9b5/src/sp-enhancements.ts#L8)*
+
+**`description`** Get the effects of a given SP Enhancement Entry
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`entry` | [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md) |
+Name | Type | Description |
+------ | ------ | ------ |
+`entry` | [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md) | SP Enhancement Entry to get the effects of |
 
 **Returns:** *[SpEnhancementEffect](_datamine_types_.md#spenhancementeffect)[]*
+
+the effects of the given SP Enhancement Entry if they exist, an empty array otherwise
