@@ -12,6 +12,7 @@ import { KNOWN_PROC_ID } from './constants';
  * @description Grab the level entry of a burst at a given level (or the last level if no level is given)
  * @param burst Burst to get level entry from
  * @param level Optional 1-indexed level to get; if not specified, the last level of the burst is used.
+ * @returns the level entry of a burst at a given level (or last level if no level is given) if it exists, undefined otherwise
  */
 export function getLevelEntryForBurst (burst: IBraveBurst, level?: number): IBurstLevelEntry | undefined {
 	const burstEffectsByLevel = (burst && Array.isArray(burst.levels)) ? burst.levels : [];
@@ -30,12 +31,19 @@ export function getLevelEntryForBurst (burst: IBraveBurst, level?: number): IBur
  * @description Grab the effects at the level entry of a burst at a given level (or the last level if no level is given)
  * @param burst Burst to get effects from
  * @param level Optional 1-indexed level to get entries from; if not specified, the last level of the burst is used.
+ * @returns the effects at the level entry of a burst at a given level (or last level if no level is given) if it exists, an empty array otherwise
  */
 export function getEffectsForBurst (burst: IBraveBurst, level?: number): ProcEffect[] {
 	const levelEntry = getLevelEntryForBurst(burst, level);
 	return (levelEntry && Array.isArray(levelEntry.effects)) ? levelEntry.effects : [];
 }
 
+/**
+ * @description Get the extra attack damage frames entry based on the damage frames of a burst. Also apply the given effect delay to the resulting damage frames entry.
+ * @param damageFrames damage frames that each have their own proc ID
+ * @param effectDelay optional effect delay to apply to the resulting damage frames entry
+ * @returns damage frames entry whose frames are based on the input damage frames
+ */
 export function getExtraAttackDamageFramesEntry (
 	damageFrames: IBurstDamageFramesEntry[],
 	effectDelay = '0.0/0',
