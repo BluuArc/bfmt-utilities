@@ -6,7 +6,7 @@ const terser = require('gulp-terser');
 const babel = require('gulp-babel');
 const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
-const { runNpmCommand } = require('../utils/run-npm-command');
+const { runNpmCommand } = require('../utils');
 const packageMetadata = require('../../package.json');
 const fs = require('fs');
 

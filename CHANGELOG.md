@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### ➕ Additions
 * Add this changelog file to better document changes
 
+### Δ Changes
+* Replace `gulp-run` with `gulp-execa` in build process
+
 ## [0.3.1] - 2019-12-27
 ### ➕ Additions
 * Add missing documentation for various methods in the following APIs
