@@ -15,7 +15,7 @@
 
 ▸ **getEffectsForItem**(`item`: [IConsumableItem](../interfaces/_datamine_types_.iconsumableitem.md) | [ISphere](../interfaces/_datamine_types_.isphere.md)): *[IProcEffect](../interfaces/_datamine_types_.iproceffect.md) | [IUnknownProcEffect](../interfaces/_datamine_types_.iunknownproceffect.md) | [IPassiveEffect](../interfaces/_datamine_types_.ipassiveeffect.md) | [IUnknownPassiveEffect](../interfaces/_datamine_types_.iunknownpassiveeffect.md) | [ITriggeredEffect](../interfaces/_datamine_types_.itriggeredeffect.md)[]*
 
-*Defined in [items.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/fb7f106/src/items.ts#L8)*
+*Defined in [items.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/master/src/items.ts#L8)*
 
 **`description`** Get the effects of a given item
 
@@ -35,7 +35,7 @@ ___
 
 ▸ **getItemImageUrl**(`baseContentUrl`: string, `fileName`: string): *string*
 
-*Defined in [items.ts:34](https://github.com/BluuArc/bfmt-utilities/blob/fb7f106/src/items.ts#L34)*
+*Defined in [items.ts:34](https://github.com/BluuArc/bfmt-utilities/blob/master/src/items.ts#L34)*
 
 **`description`** Generate a URL to display the image with the given item thumbnail filename
 

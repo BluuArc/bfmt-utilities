@@ -5,4 +5,7 @@ module.exports = {
 	tsconfig: 'tsconfig.json',
 	readme: 'README.md',
 	exclude: 'src/index.ts',
+	theme: 'markdown',
+	out: 'docs',
+	gitRevision: 'master',
 };

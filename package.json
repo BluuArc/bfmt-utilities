@@ -9,7 +9,7 @@
     "gulp": "gulp --gulpfile tasks/index.js",
     "build:dirty": "npm run gulp -- build:dirty",
     "build": "npm run gulp -- build",
-    "build:docs": "typedoc --options typedoc.config.js --theme markdown --out docs src/",
+    "build:docs": "typedoc --options typedoc.config.js src/",
     "dev": "npm run gulp -- dev",
     "lint": "npm run lint:app && npm run lint:non-app",
     "lint:app": "eslint -c .eslintrc.ts.js --ext .ts src",
