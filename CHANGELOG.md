@@ -6,13 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - YYYY-MM-DD
 ### ⚠ Breaking Changes
-* Rename tasks in package.json to use colon notation over dash notation
+* Build: Rename tasks in package.json to use colon notation over dash notation
 
 ### ➕ Additions
-* Add this changelog file to better document changes
+* Docs: Add this changelog file to better document changes
 
 ### Δ Changes
-* Replace `gulp-run` with `gulp-execa` in build process
+* Build: Replace `gulp-run` with `gulp-execa` in build process
+* Docs: Move some options from `build:docs` task into `typedoc.config.js`
+* Docs: Change `gitRevision` to `master` branch instead of last commit
 
 ## [0.3.1] - 2019-12-27
 ### ➕ Additions
