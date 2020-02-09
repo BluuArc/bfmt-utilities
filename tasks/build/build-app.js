@@ -77,7 +77,7 @@ function copyTypeDefinitions () {
 }
 
 function buildDocs () {
-	return runNpmCommand(['build-docs']);
+	return runNpmCommand(['build:docs']);
 }
 
 module.exports = {

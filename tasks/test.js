@@ -1,15 +1,15 @@
 const { runNpmCommand } = require('./utils');
 
 function lintApplication () {
-	return runNpmCommand(['lint-app']);
+	return runNpmCommand(['lint:app']);
 }
 
 function lintTasks () {
-	return runNpmCommand(['lint-tasks']);
+	return runNpmCommand(['lint:tasks']);
 }
 
 function lintTests () {
-	return runNpmCommand(['lint-tests']);
+	return runNpmCommand(['lint:tests']);
 }
 
 function runTests () {
