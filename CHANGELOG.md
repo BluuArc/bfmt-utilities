@@ -5,8 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased] - YYYY-MM-DD
+### ⚠ Breaking Changes
+* Rename tasks in package.json to use colon notation over dash notation
+
 ### ➕ Additions
-* Added this changelog file to better document changes
+* Add this changelog file to better document changes
 
 ## [0.3.1] - 2019-12-27
 ### ➕ Additions
@@ -45,18 +48,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `getEffectName` method
 
 ### Δ Changes
-* buffs: `isAttackingProcId` now calls `getMetadataForProc`
+* buffs: `isAttackingProcId` calls `getMetadataForProc`
 
 ## [0.1.1] - 2019-12-17
 ### ➕ Additions
 * README: Add link to documentation and references to usage examples
-* examples: Added 2 usage examples for the module: one for within the browser (`vanilla-browser`) and within a Node.js context (`vanilla-nodejs`)
-* datamine-types: Added `leader skill` property to `IUnit` interface
+* examples: Add 2 usage examples for the module: one for within the browser (`vanilla-browser`) and within a Node.js context (`vanilla-nodejs`)
+* datamine-types: Add `leader skill` property to `IUnit` interface
 
 ## [0.1.0] - 2019-12-10
 ### ⚠ Breaking Changes
-* datamine-types: Renamed `ISpEnhancementEffect` to `ISpEnhancementEffectWrapper`
-* datamine-types: Fixed typo `eveolution` -> `evolution` in `ISpEnhancementSkill.dictionary` definition
+* datamine-types: Renam `ISpEnhancementEffect` to `ISpEnhancementEffectWrapper`
+* datamine-types: Fix typo `eveolution` -> `evolution` in `ISpEnhancementSkill.dictionary` definition
 
 ### ➕ Additions
 * constants: `KNOWN_PASSIVE_ID` enum with `TriggeredEffect = '66'`
