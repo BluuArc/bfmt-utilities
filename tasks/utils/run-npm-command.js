@@ -1,7 +1,7 @@
-const run = require('gulp-run');
+const { exec } = require('gulp-execa');
 
 function runNpmCommand (command = []) {
-	return run(['npm run'].concat(command).join(' ')).exec();
+	return exec(['npm run'].concat(command).join(' '));
 }
 
 module.exports = {

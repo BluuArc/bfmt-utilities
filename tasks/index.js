@@ -21,9 +21,9 @@ function runDev () {
 }
 
 module.exports = {
-	'dirty-build': buildTasks.build,
 	'build': fullBuild,
+	'build:dirty': buildTasks.build,
 	'update-data': buildTasks.updateBuffMetadata,
 	'dev': runDev,
-	'cleanup-coverage': cleanupTasks.cleanupCoverageFiles,
+	'cleanup:coverage': cleanupTasks.cleanupCoverageFiles,
 };

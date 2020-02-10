@@ -16,7 +16,7 @@
 
 ▸ **getEffectsForBurst**(`burst`: [IBraveBurst](../interfaces/_datamine_types_.ibraveburst.md), `level?`: undefined | number): *[ProcEffect](_datamine_types_.md#proceffect)[]*
 
-*Defined in [bursts.ts:36](https://github.com/BluuArc/bfmt-utilities/blob/fb7f106/src/bursts.ts#L36)*
+*Defined in [bursts.ts:36](https://github.com/BluuArc/bfmt-utilities/blob/master/src/bursts.ts#L36)*
 
 **`description`** Grab the effects at the level entry of a burst at a given level (or the last level if no level is given)
 
@@ -37,7 +37,7 @@ ___
 
 ▸ **getExtraAttackDamageFramesEntry**(`damageFrames`: [IBurstDamageFramesEntry](../interfaces/_datamine_types_.iburstdamageframesentry.md)[], `effectDelay`: string): *[IDamageFramesEntry](../interfaces/_datamine_types_.idamageframesentry.md)*
 
-*Defined in [bursts.ts:47](https://github.com/BluuArc/bfmt-utilities/blob/fb7f106/src/bursts.ts#L47)*
+*Defined in [bursts.ts:47](https://github.com/BluuArc/bfmt-utilities/blob/master/src/bursts.ts#L47)*
 
 **`description`** Get the extra attack damage frames entry based on the damage frames of a burst. Also apply the given effect delay to the resulting damage frames entry.
 
@@ -58,7 +58,7 @@ ___
 
 ▸ **getLevelEntryForBurst**(`burst`: [IBraveBurst](../interfaces/_datamine_types_.ibraveburst.md), `level?`: undefined | number): *[IBurstLevelEntry](../interfaces/_datamine_types_.iburstlevelentry.md) | undefined*
 
-*Defined in [bursts.ts:17](https://github.com/BluuArc/bfmt-utilities/blob/fb7f106/src/bursts.ts#L17)*
+*Defined in [bursts.ts:17](https://github.com/BluuArc/bfmt-utilities/blob/master/src/bursts.ts#L17)*
 
 **`description`** Grab the level entry of a burst at a given level (or the last level if no level is given)
 
