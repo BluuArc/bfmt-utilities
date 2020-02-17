@@ -17,6 +17,7 @@
 * [Parameter Boost](_datamine_types_.spcategoryname.md#parameter-boost)
 * [Spark](_datamine_types_.spcategoryname.md#spark)
 * [Special](_datamine_types_.spcategoryname.md#special)
+* [Unknown](_datamine_types_.spcategoryname.md#unknown)
 
 ## Enumeration members
 
@@ -105,3 +106,11 @@ ___
 • **Special**: = "Special"
 
 *Defined in [datamine-types.ts:216](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L216)*
+
+___
+
+###  Unknown
+
+• **Unknown**: = "Unknown"
+
+*Defined in [datamine-types.ts:217](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L217)*

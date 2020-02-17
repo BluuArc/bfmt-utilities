@@ -12,7 +12,7 @@
 
 * [desc](_datamine_types_.iextraskill.md#desc)
 * [effects](_datamine_types_.iextraskill.md#effects)
-* [is](_datamine_types_.iextraskill.md#is)
+* [id](_datamine_types_.iextraskill.md#id)
 * [name](_datamine_types_.iextraskill.md#name)
 * [rarity](_datamine_types_.iextraskill.md#optional-rarity)
 * [target](_datamine_types_.iextraskill.md#target)
@@ -35,9 +35,9 @@ ___
 
 ___
 
-###  is
+###  id
 
-• **is**: *string*
+• **id**: *string*
 
 *Defined in [datamine-types.ts:199](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L199)*
 

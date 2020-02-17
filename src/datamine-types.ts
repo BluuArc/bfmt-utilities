@@ -214,6 +214,7 @@ export enum SpCategoryName {
 	'Ailment Infliction' = 'Ailment Infliction',
 	'Damage Reduction' = 'Damage Reduction',
 	Special = 'Special',
+	Unknown = 'Unknown',
 }
 
 export enum SpCategoryId {
