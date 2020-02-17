@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### ➕ Additions
 * Docs: Add this changelog file to better document changes
 * datamine-types: Add `IItem.recipe` definition
+* datamine-types: Expose the contents of datamine-types through `bfmtUtilities.datamineTypes`
 
 ### Δ Changes
 * Build: Replace `gulp-run` with `gulp-execa` in build process

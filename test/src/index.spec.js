@@ -7,6 +7,7 @@ describe('application entry point', () => {
 		assertObjectHasOnlyKeys(app, [
 			'bursts',
 			'buffs',
+			'datamineTypes',
 			'extraSkills',
 			'items',
 			'leaderSkills',
