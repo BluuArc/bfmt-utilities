@@ -487,6 +487,7 @@ export interface IItem {
 	sell_price: number;
 	thumbnail: string;
 	type: ItemType;
+	recipe?: IItemRecipe;
 
 	/**
 	 * @description List of other items that use the current item somewhere in their recipe
