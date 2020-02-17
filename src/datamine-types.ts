@@ -196,7 +196,7 @@ export type ExtraSkillPassiveEffect = IExtraSkillPassiveEffect | IExtraSkillUnkn
 export interface IExtraSkill {
 	desc: string;
 	effects: ExtraSkillPassiveEffect[];
-	is: string;
+	id: string;
 	name: string;
 	rarity?: string;
 	target: TargetType;

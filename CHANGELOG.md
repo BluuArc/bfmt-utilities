@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased] - YYYY-MM-DD
 ### ⚠ Breaking Changes
 * Build: Rename tasks in package.json to use colon notation over dash notation
+* datamine-types: Rename `IExtraSkill.is` to `IExtraSkill.id` (as it is supposed to be the ID property)
 
 ### ➕ Additions
 * Docs: Add this changelog file to better document changes
