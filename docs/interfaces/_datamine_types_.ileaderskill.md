@@ -21,7 +21,7 @@
 
 • **desc**: *string*
 
-*Defined in [datamine-types.ts:279](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L279)*
+*Defined in [datamine-types.ts:280](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L280)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **effects**: *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)[]*
 
-*Defined in [datamine-types.ts:280](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L280)*
+*Defined in [datamine-types.ts:281](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L281)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [datamine-types.ts:281](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L281)*
+*Defined in [datamine-types.ts:282](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L282)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:282](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L282)*
+*Defined in [datamine-types.ts:283](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L283)*

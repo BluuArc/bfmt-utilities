@@ -22,7 +22,7 @@
 
 • **add to bb**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
 
-*Defined in [datamine-types.ts:247](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L247)*
+*Defined in [datamine-types.ts:248](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L248)*
 
 **`description`** used when enhancing an existing BB
 
@@ -32,7 +32,7 @@ ___
 
 • **add to passive**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
 
-*Defined in [datamine-types.ts:242](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L242)*
+*Defined in [datamine-types.ts:243](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L243)*
 
 **`description`** used when enhancing an existing effect on LS
 
@@ -42,7 +42,7 @@ ___
 
 • **add to sbb**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
 
-*Defined in [datamine-types.ts:252](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L252)*
+*Defined in [datamine-types.ts:253](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L253)*
 
 **`description`** used when enhancing an existing SBB
 
@@ -52,7 +52,7 @@ ___
 
 • **add to ubb**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
 
-*Defined in [datamine-types.ts:257](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L257)*
+*Defined in [datamine-types.ts:258](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L258)*
 
 **`description`** used when enhancing an existing UBB
 
@@ -62,6 +62,6 @@ ___
 
 • **passive**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
 
-*Defined in [datamine-types.ts:237](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L237)*
+*Defined in [datamine-types.ts:238](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L238)*
 
 **`description`** used to add an entirely new effect

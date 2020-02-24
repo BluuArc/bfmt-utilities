@@ -196,7 +196,7 @@ export type ExtraSkillPassiveEffect = IExtraSkillPassiveEffect | IExtraSkillUnkn
 export interface IExtraSkill {
 	desc: string;
 	effects: ExtraSkillPassiveEffect[];
-	is: string;
+	id: string;
 	name: string;
 	rarity?: string;
 	target: TargetType;
@@ -214,6 +214,7 @@ export enum SpCategoryName {
 	'Ailment Infliction' = 'Ailment Infliction',
 	'Damage Reduction' = 'Damage Reduction',
 	Special = 'Special',
+	Unknown = 'Unknown',
 }
 
 export enum SpCategoryId {
@@ -487,6 +488,7 @@ export interface IItem {
 	sell_price: number;
 	thumbnail: string;
 	type: ItemType;
+	recipe?: IItemRecipe;
 
 	/**
 	 * @description List of other items that use the current item somewhere in their recipe
