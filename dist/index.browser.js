@@ -1265,9 +1265,7 @@ var bfmtUtilities = function () {
     ItemType["LeaderSkillSphere"] = "ls_sphere";
   })(ItemType || (ItemType = {}));
 
-  var datamineTypes =
-  /*#__PURE__*/
-  Object.freeze({
+  var datamineTypes = /*#__PURE__*/Object.freeze({
     __proto__: null,
 
     get ArenaCondition() {
@@ -1468,9 +1466,7 @@ var bfmtUtilities = function () {
     return resultName;
   }
 
-  var buffs =
-  /*#__PURE__*/
-  Object.freeze({
+  var buffs = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getMetadataForProc: getMetadataForProc,
     getMetadataForPassive: getMetadataForPassive,
@@ -1577,9 +1573,7 @@ var bfmtUtilities = function () {
     return resultDamageFramesEntry;
   }
 
-  var bursts =
-  /*#__PURE__*/
-  Object.freeze({
+  var bursts = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getLevelEntryForBurst: getLevelEntryForBurst,
     getEffectsForBurst: getEffectsForBurst,
@@ -1595,9 +1589,7 @@ var bfmtUtilities = function () {
     return skill && Array.isArray(skill.effects) ? skill.effects : [];
   }
 
-  var extraSkills =
-  /*#__PURE__*/
-  Object.freeze({
+  var extraSkills = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForExtraSkill: getEffectsForExtraSkill
   });
@@ -1643,9 +1635,7 @@ var bfmtUtilities = function () {
     return "".concat(baseContentUrl || '', "/item/").concat(fileName || '');
   }
 
-  var items =
-  /*#__PURE__*/
-  Object.freeze({
+  var items = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForItem: getEffectsForItem,
     getItemImageUrl: getItemImageUrl
@@ -1660,9 +1650,7 @@ var bfmtUtilities = function () {
     return skill && Array.isArray(skill.effects) ? skill.effects : [];
   }
 
-  var leaderSkills =
-  /*#__PURE__*/
-  Object.freeze({
+  var leaderSkills = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForLeaderSkill: getEffectsForLeaderSkill
   });
@@ -1694,9 +1682,7 @@ var bfmtUtilities = function () {
     return "".concat(baseContentUrl || '', "/unit/img/").concat(fileName || '');
   }
 
-  var units =
-  /*#__PURE__*/
-  Object.freeze({
+  var units = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getUnitImageFileNames: getUnitImageFileNames,
     getUnitImageUrl: getUnitImageUrl
@@ -1789,9 +1775,7 @@ var bfmtUtilities = function () {
     return result;
   }
 
-  var spEnhancements =
-  /*#__PURE__*/
-  Object.freeze({
+  var spEnhancements = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForSpEnhancement: getEffectsForSpEnhancement,
     getSpCategoryName: getSpCategoryName

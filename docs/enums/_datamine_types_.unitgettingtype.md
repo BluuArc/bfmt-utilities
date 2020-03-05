@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitGettingType](_datamine_types_.unitgettingtype.md)
+[@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitGettingType](_datamine_types_.unitgettingtype.md)
 
 # Enumeration: UnitGettingType
 

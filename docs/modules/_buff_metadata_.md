@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["buff-metadata"](_buff_metadata_.md)
+[@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["buff-metadata"](_buff_metadata_.md)
 
 # External module: "buff-metadata"
 
@@ -22,7 +22,7 @@
 
 ### `Const` PASSIVE_METADATA
 
-• **PASSIVE_METADATA**: *Readonly‹object›* =  Object.freeze({
+• **PASSIVE_METADATA**: *Readonly‹object›* = Object.freeze({
   "1": {
     "ID": "1",
     "Name": "Parameter Boost"
@@ -459,7 +459,7 @@ ___
 
 ### `Const` PROC_METADATA
 
-• **PROC_METADATA**: *Readonly‹object›* =  Object.freeze({
+• **PROC_METADATA**: *Readonly‹object›* = Object.freeze({
   "0": {
     "ID": "0",
     "Name": "",

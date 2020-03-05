@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IItemUsageEntry](_datamine_types_.iitemusageentry.md)
+[@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IItemUsageEntry](_datamine_types_.iitemusageentry.md)
 
 # Interface: IItemUsageEntry
 
