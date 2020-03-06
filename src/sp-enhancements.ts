@@ -72,7 +72,7 @@ export function getSpCategoryName (categoryId: string|number): SpCategoryName {
  * It expects an index between 0 and 61 inclusive; will return an empty string if
  * the given value is outside of the range.
  * @param index Index of an SP entry in a given skills array
- * @returns The corresponding single alpha-numeric character to the given index
+ * @returns The corresponding single alphanumeric character to the given index
  * or an empty string if the index is invalid.
  */
 export function spIndexToCode (index: number): string {
@@ -90,6 +90,32 @@ export function spIndexToCode (index: number): string {
 
 	if (correspondingCharacterCode !== -1) {
 		result = String.fromCharCode(correspondingCharacterCode);
+	}
+	return result;
+}
+
+/**
+ * @description Get the corresponding index for a given character code.
+ * It expects an alphanumeric character and will return -1 otherwise.
+ * @param code Character code an SP entry in a given skills array
+ * @returns The corresponding index to the given character or -1 if the
+ * character is invalid.
+ */
+export function spCodeToIndex (code: string): number {
+	let result = -1;
+	let characterCodeOffset = -1;
+	if (!!code && typeof code === 'string' && code.length === 1) {
+		if (code >= 'A' && code <= 'Z') {
+			characterCodeOffset = CHARACTER_CODE_FOR_UPPERCASE_A;
+		} else if (code >= 'a' && code <= 'z') {
+			characterCodeOffset = CHARACTER_CODE_FOR_LOWERCASE_A - 26;
+		} else if (code >= '0' && code <= '9') {
+			characterCodeOffset = CHARACTER_CODE_FOR_NUMBER_0 - 52;
+		}
+	}
+
+	if (characterCodeOffset !== -1) {
+		result = code.charCodeAt(0) - characterCodeOffset;
 	}
 	return result;
 }
