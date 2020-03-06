@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - YYYY-MM-DD
 ### ➕ Additions
-* sp-enhancements: Add methods around parsing SP Codes.
+* sp-enhancements: Add methods around parsing SP Codes and processing SP Enhancement Entries.
 	* `spIndexToCode`
 	* `spCodeToIndex`
+	* `getSpEntryId`
+
 
 ### Δ Changes
 * Build: Update dependencies to stable latest versions; no changes to functionality as a result of this.

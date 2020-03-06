@@ -8,6 +8,7 @@ describe('SP Enhancement utilities', () => {
 			'getSpCategoryName',
 			'spIndexToCode',
 			'spCodeToIndex',
+			'getSpEntryId',
 		]);
 	});
 
@@ -130,7 +131,7 @@ describe('SP Enhancement utilities', () => {
 	});
 
 	describe('spIndexToCode', () => {
-		describe('for invalid values for categoryId', () => {
+		describe('for invalid values for index', () => {
 			[
 				{
 					name: 'is null',
@@ -204,7 +205,7 @@ describe('SP Enhancement utilities', () => {
 	});
 
 	describe('spCodeToIndex', () => {
-		describe('for invalid values for categoryId', () => {
+		describe('for invalid values for code', () => {
 			[
 				{
 					name: 'is null',
@@ -274,6 +275,48 @@ describe('SP Enhancement utilities', () => {
 					});
 				});
 			});
+		});
+	});
+
+	describe('getSpEntryId', () => {
+		describe('for non-string values for id', () => {
+			[
+				{
+					name: 'is null',
+					value: null,
+				},
+				{
+					name: 'is undefined',
+					value: void 0,
+				},
+				{
+					name: 'is an object',
+					value: { some: 'property' },
+				},
+				{
+					name: 'is a number',
+					value: 5,
+				},
+			].forEach(testCase => {
+				it(`returns the original input if id ${testCase.name}`, () => {
+					expect(spEnhancementUtilities.getSpEntryId(testCase.value)).toBe(testCase.value);
+				});
+			});
+		});
+
+		it('returns the value after the @ character if it exists', () => {
+			const input = 'some@value';
+			expect(spEnhancementUtilities.getSpEntryId(input)).toBe('value');
+		});
+
+		it('returns the original value if there is no data after the @ character', () => {
+			const input = 'some@';
+			expect(spEnhancementUtilities.getSpEntryId(input)).toBe('some@');
+		});
+
+		it('returns the original value if there is no @ character', () => {
+			const input = 'somevalue';
+			expect(spEnhancementUtilities.getSpEntryId(input)).toBe(input);
 		});
 	});
 });

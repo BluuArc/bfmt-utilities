@@ -8,6 +8,7 @@
 
 * [getEffectsForSpEnhancement](_sp_enhancements_.md#geteffectsforspenhancement)
 * [getSpCategoryName](_sp_enhancements_.md#getspcategoryname)
+* [getSpEntryId](_sp_enhancements_.md#getspentryid)
 * [spCodeToIndex](_sp_enhancements_.md#spcodetoindex)
 * [spIndexToCode](_sp_enhancements_.md#spindextocode)
 
@@ -50,6 +51,29 @@ Name | Type | Description |
 **Returns:** *[SpCategoryName](../enums/_datamine_types_.spcategoryname.md)*
 
 The name of the given category ID or the string 'Unknown'.
+
+___
+
+###  getSpEntryId
+
+▸ **getSpEntryId**(`id`: string): *string*
+
+*Defined in [sp-enhancements.ts:131](https://github.com/BluuArc/bfmt-utilities/blob/master/src/sp-enhancements.ts#L131)*
+
+**`description`** Extract the ID of a string in the format of `number@actualId`. If there
+is no value after the @ character or if no @ character is present, the original ID is returned.
+This is particularly useful for extracting the ID of [`ISpEnhancementEntry.dependency`](../interfaces/_datamine_types_.ispenhancemententry.md#optional-dependency)
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`id` | string | Original SP Enhancement Entry ID |
+
+**Returns:** *string*
+
+The ID of a string in the format of `number@actualId`, or the original input if
+there is no @ character or no value after the @ character.
 
 ___
 
