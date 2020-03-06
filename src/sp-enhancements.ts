@@ -7,6 +7,19 @@ import {
 } from './datamine-types';
 
 /**
+ * @ignore
+ */
+const CHARACTER_CODE_FOR_UPPERCASE_A = 'A'.charCodeAt(0);
+/**
+ * @ignore
+ */
+const CHARACTER_CODE_FOR_LOWERCASE_A = 'a'.charCodeAt(0);
+/**
+ * @ignore
+ */
+const CHARACTER_CODE_FOR_NUMBER_0 = '0'.charCodeAt(0);
+
+/**
  * @description Get the effects of a given SP Enhancement Entry
  * @param entry SP Enhancement Entry to get the effects of
  * @returns the effects of the given SP Enhancement Entry if they exist, an empty array otherwise
@@ -50,6 +63,33 @@ export function getSpCategoryName (categoryId: string|number): SpCategoryName {
 	case 10: result = SpCategoryName['Damage Reduction']; break;
 	case 11: result = SpCategoryName.Special; break;
 	default: result = SpCategoryName.Unknown; break;
+	}
+	return result;
+}
+
+/**
+ * @description Get the corresponding character code for a given index.
+ * It expects an index between 0 and 61 inclusive; will return an empty string if
+ * the given value is outside of the range.
+ * @param index Index of an SP entry in a given skills array
+ * @returns The corresponding single alpha-numeric character to the given index
+ * or an empty string if the index is invalid.
+ */
+export function spIndexToCode (index: number): string {
+	let result = '';
+	let correspondingCharacterCode = -1;
+	if (Number.isInteger(index)) {
+		if (index >= 0 && index <= 25) { // A-Z
+			correspondingCharacterCode = index + CHARACTER_CODE_FOR_UPPERCASE_A;
+		} else if (index >= 26 && index <= 51) { // a-z
+			correspondingCharacterCode = (index - 26) + CHARACTER_CODE_FOR_LOWERCASE_A;
+		} else if (index >= 52 && index <= 61) { // 0-9
+			correspondingCharacterCode = (index - 52) + CHARACTER_CODE_FOR_NUMBER_0;
+		}
+	}
+
+	if (correspondingCharacterCode !== -1) {
+		result = String.fromCharCode(correspondingCharacterCode);
 	}
 	return result;
 }
