@@ -8,4 +8,5 @@ module.exports = {
 	theme: 'markdown',
 	out: 'docs',
 	gitRevision: 'master',
+	includeVersion: true,
 };

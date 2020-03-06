@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [ArenaCondition](_datamine_types_.arenacondition.md)
+[@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [ArenaCondition](_datamine_types_.arenacondition.md)
 
 # Enumeration: ArenaCondition
 

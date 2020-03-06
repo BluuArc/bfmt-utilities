@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities](../README.md) › [Globals](../globals.md) › ["buffs"](_buffs_.md)
+[@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["buffs"](_buffs_.md)
 
 # External module: "buffs"
 
