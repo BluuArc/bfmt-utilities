@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `spIndexToCode`
 	* `spCodeToIndex`
 	* `getSpEntryId`
-
+	* `getSpEntryWithId`
 
 ### Δ Changes
 * Build: Update dependencies to stable latest versions; no changes to functionality as a result of this.

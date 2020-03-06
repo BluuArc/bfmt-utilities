@@ -9,6 +9,7 @@
 * [getEffectsForSpEnhancement](_sp_enhancements_.md#geteffectsforspenhancement)
 * [getSpCategoryName](_sp_enhancements_.md#getspcategoryname)
 * [getSpEntryId](_sp_enhancements_.md#getspentryid)
+* [getSpEntryWithId](_sp_enhancements_.md#getspentrywithid)
 * [spCodeToIndex](_sp_enhancements_.md#spcodetoindex)
 * [spIndexToCode](_sp_enhancements_.md#spindextocode)
 
@@ -74,6 +75,27 @@ Name | Type | Description |
 
 The ID of a string in the format of `number@actualId`, or the original input if
 there is no @ character or no value after the @ character.
+
+___
+
+###  getSpEntryWithId
+
+▸ **getSpEntryWithId**(`id`: string, `entries`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[]): *[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md) | undefined*
+
+*Defined in [sp-enhancements.ts:141](https://github.com/BluuArc/bfmt-utilities/blob/master/src/sp-enhancements.ts#L141)*
+
+**`description`** Get the first SP Enhancement Entry that matches the given SP Entry ID, if it exists.
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`id` | string | SP Enhancement entry ID |
+`entries` | [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[] | Collection of SP Enhancement entries to search in |
+
+**Returns:** *[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md) | undefined*
+
+The corresponding SP Enhancement entry with the given SP ID, undefined otherwise.
 
 ___
 
