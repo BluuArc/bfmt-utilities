@@ -1,6 +1,6 @@
 [@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["sp-enhancements"](_sp_enhancements_.md)
 
-# External module: "sp-enhancements"
+# Module: "sp-enhancements"
 
 ## Index
 

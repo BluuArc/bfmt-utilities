@@ -4,7 +4,7 @@
 
 ## Index
 
-### External modules
+### Modules
 
 * ["buff-metadata"](modules/_buff_metadata_.md)
 * ["buffs"](modules/_buffs_.md)

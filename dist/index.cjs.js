@@ -1714,7 +1714,7 @@ function spCodeToIndex(code) {
  * there is no @ character or no value after the @ character.
  */
 function getSpEntryId(id) {
-    return (typeof id == 'string' && id.split('@')[1]) || id;
+    return (typeof id === 'string' && id.split('@')[1]) || id;
 }
 /**
  * @description Get the first SP Enhancement Entry that matches the given SP Entry ID, if it exists.

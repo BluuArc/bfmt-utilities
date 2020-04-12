@@ -1,6 +1,6 @@
 [@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["buffs"](_buffs_.md)
 
-# External module: "buffs"
+# Module: "buffs"
 
 ## Index
 

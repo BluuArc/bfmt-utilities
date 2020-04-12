@@ -1,6 +1,6 @@
 [@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](_datamine_types_.md)
 
-# External module: "datamine-types"
+# Module: "datamine-types"
 
 ## Index
 

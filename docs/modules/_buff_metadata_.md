@@ -1,6 +1,6 @@
 [@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["buff-metadata"](_buff_metadata_.md)
 
-# External module: "buff-metadata"
+# Module: "buff-metadata"
 
 ## Index
 

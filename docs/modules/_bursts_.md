@@ -1,6 +1,6 @@
 [@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["bursts"](_bursts_.md)
 
-# External module: "bursts"
+# Module: "bursts"
 
 ## Index
 

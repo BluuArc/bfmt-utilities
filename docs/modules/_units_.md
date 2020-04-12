@@ -1,6 +1,6 @@
 [@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["units"](_units_.md)
 
-# External module: "units"
+# Module: "units"
 
 ## Index
 
