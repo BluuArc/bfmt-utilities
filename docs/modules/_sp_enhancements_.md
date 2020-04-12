@@ -6,6 +6,7 @@
 
 ### Functions
 
+* [getAllDependenciesForSpEntry](_sp_enhancements_.md#getalldependenciesforspentry)
 * [getEffectsForSpEnhancement](_sp_enhancements_.md#geteffectsforspenhancement)
 * [getSpCategoryName](_sp_enhancements_.md#getspcategoryname)
 * [getSpEntryId](_sp_enhancements_.md#getspentryid)
@@ -14,6 +15,28 @@
 * [spIndexToCode](_sp_enhancements_.md#spindextocode)
 
 ## Functions
+
+###  getAllDependenciesForSpEntry
+
+▸ **getAllDependenciesForSpEntry**(`entry`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md), `allEntries`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[], `addedEntries`: Set‹unknown›): *[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[]*
+
+*Defined in [sp-enhancements.ts:153](https://github.com/BluuArc/bfmt-utilities/blob/master/src/sp-enhancements.ts#L153)*
+
+**`description`** Get all SP Enhancement entries that one would need to unlock the given SP entry.
+
+**Parameters:**
+
+Name | Type | Default | Description |
+------ | ------ | ------ | ------ |
+`entry` | [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md) | - | SP Entry to get dependencies for. |
+`allEntries` | [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[] | - | Collection of SP Entries to search in. |
+`addedEntries` | Set‹unknown› | new Set() | Entries that have already been added to the resulting collection; used to handle circular dependencies. |
+
+**Returns:** *[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[]*
+
+Collection of SP Enhancement entries (if any) that are required to unlock the given SP entry.
+
+___
 
 ###  getEffectsForSpEnhancement
 
