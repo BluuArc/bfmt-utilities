@@ -1,6 +1,6 @@
 [@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["constants"](_constants_.md)
 
-# External module: "constants"
+# Module: "constants"
 
 ## Index
 

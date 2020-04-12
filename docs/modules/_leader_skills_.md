@@ -1,6 +1,6 @@
 [@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["leader-skills"](_leader_skills_.md)
 
-# External module: "leader-skills"
+# Module: "leader-skills"
 
 ## Index
 

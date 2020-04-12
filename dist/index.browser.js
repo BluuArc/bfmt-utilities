@@ -1688,6 +1688,21 @@ var bfmtUtilities = function () {
     getUnitImageUrl: getUnitImageUrl
   });
   /**
+   * @ignore
+   */
+
+  const CHARACTER_CODE_FOR_UPPERCASE_A = 'A'.charCodeAt(0);
+  /**
+   * @ignore
+   */
+
+  const CHARACTER_CODE_FOR_LOWERCASE_A = 'a'.charCodeAt(0);
+  /**
+   * @ignore
+   */
+
+  const CHARACTER_CODE_FOR_NUMBER_0 = '0'.charCodeAt(0);
+  /**
    * @description Get the effects of a given SP Enhancement Entry
    * @param entry SP Enhancement Entry to get the effects of
    * @returns the effects of the given SP Enhancement Entry if they exist, an empty array otherwise
@@ -1774,11 +1789,155 @@ var bfmtUtilities = function () {
 
     return result;
   }
+  /**
+   * @description Get the corresponding character code for a given index.
+   * It expects an index between 0 and 61 inclusive; will return an empty string if
+   * the given value is outside of the range.
+   * @param index Index of an SP entry in a given skills array
+   * @returns The corresponding single alphanumeric character to the given index
+   * or an empty string if the index is invalid.
+   */
+
+
+  function spIndexToCode(index) {
+    let result = '';
+    let correspondingCharacterCode = -1;
+
+    if (Number.isInteger(index)) {
+      if (index >= 0 && index <= 25) {
+        // A-Z
+        correspondingCharacterCode = index + CHARACTER_CODE_FOR_UPPERCASE_A;
+      } else if (index >= 26 && index <= 51) {
+        // a-z
+        correspondingCharacterCode = index - 26 + CHARACTER_CODE_FOR_LOWERCASE_A;
+      } else if (index >= 52 && index <= 61) {
+        // 0-9
+        correspondingCharacterCode = index - 52 + CHARACTER_CODE_FOR_NUMBER_0;
+      }
+    }
+
+    if (correspondingCharacterCode !== -1) {
+      result = String.fromCharCode(correspondingCharacterCode);
+    }
+
+    return result;
+  }
+  /**
+   * @description Get the corresponding index for a given character code.
+   * It expects an alphanumeric character and will return -1 otherwise.
+   * @param code Character code an SP entry in a given skills array
+   * @returns The corresponding index to the given character or -1 if the
+   * character is invalid.
+   */
+
+
+  function spCodeToIndex(code) {
+    let result = -1;
+    let characterCodeOffset = -1;
+
+    if (!!code && typeof code === 'string' && code.length === 1) {
+      if (code >= 'A' && code <= 'Z') {
+        characterCodeOffset = CHARACTER_CODE_FOR_UPPERCASE_A;
+      } else if (code >= 'a' && code <= 'z') {
+        characterCodeOffset = CHARACTER_CODE_FOR_LOWERCASE_A - 26;
+      } else if (code >= '0' && code <= '9') {
+        characterCodeOffset = CHARACTER_CODE_FOR_NUMBER_0 - 52;
+      }
+    }
+
+    if (characterCodeOffset !== -1) {
+      result = code.charCodeAt(0) - characterCodeOffset;
+    }
+
+    return result;
+  }
+  /**
+   * @description Extract the ID of a string in the format of `number@actualId`. If there
+   * is no value after the @ character or if no @ character is present, the original ID is returned.
+   * This is particularly useful for extracting the ID of [[ISpEnhancementEntry.dependency|`ISpEnhancementEntry.dependency`]]
+   * @param id Original SP Enhancement Entry ID
+   * @returns The ID of a string in the format of `number@actualId`, or the original input if
+   * there is no @ character or no value after the @ character.
+   */
+
+
+  function getSpEntryId(id) {
+    return typeof id === 'string' && id.split('@')[1] || id;
+  }
+  /**
+   * @description Get the first SP Enhancement Entry that matches the given SP Entry ID, if it exists.
+   * @param id SP Enhancement entry ID
+   * @param entries Collection of SP Enhancement entries to search in
+   * @returns The corresponding SP Enhancement entry with the given SP ID, undefined otherwise.
+   */
+
+
+  function getSpEntryWithId(id, entries) {
+    const spId = getSpEntryId(id);
+    return id && Array.isArray(entries) && entries.find(e => getSpEntryId(e && e.id) === spId) || void 0;
+  }
+  /**
+   * @description Get all SP Enhancement entries that one would need to unlock the given SP entry.
+   * @param entry SP Entry to get dependencies for.
+   * @param allEntries Collection of SP Entries to search in.
+   * @param addedEntries Entries that have already been added to the resulting collection; used to handle circular references.
+   * @returns Collection of SP Enhancement entries (if any) that are required to unlock the given SP entry.
+   */
+
+
+  function getAllDependenciesForSpEntry(entry, allEntries, addedEntries = new Set()) {
+    let dependencies = [];
+
+    if (entry && entry.dependency && Array.isArray(allEntries) && allEntries.length > 0) {
+      const dependencyId = getSpEntryId(entry.dependency);
+      const dependencyEntry = allEntries.find(s => getSpEntryId(s && s.id) === dependencyId);
+
+      if (dependencyEntry && !addedEntries.has(dependencyEntry)) {
+        addedEntries.add(dependencyEntry);
+        const subDependencies = getAllDependenciesForSpEntry(dependencyEntry, allEntries, addedEntries);
+        dependencies = [dependencyEntry].concat(subDependencies);
+      }
+    }
+
+    return dependencies;
+  }
+  /**
+   * @description Get all SP Enhancement entries that require the given SP entry in order to be unlockable.
+   * @param entry SP Entry to get dependents for.
+   * @param allEntries Collection of SP Entries to search in.
+   * @param addedEntries Entries that have already been added to the resulting collection; used to handle circular references.
+   * @returns Collection of SP Enhancement entries (if any) that require the given SP entry in order to be unlockable.
+   */
+
+
+  function getAllEntriesThatDependOnSpEntry(entry, allEntries, addedEntries = new Set()) {
+    let dependents = [];
+
+    if (entry && entry.id && Array.isArray(allEntries) && allEntries.length > 0) {
+      const entryId = entry.id;
+      dependents = allEntries.filter(s => {
+        return s.dependency && s.dependency.includes(entryId) && !addedEntries.has(s);
+      });
+      dependents.forEach(dependent => {
+        addedEntries.add(dependent);
+        const subDependents = getAllEntriesThatDependOnSpEntry(dependent, allEntries, addedEntries);
+        dependents = dependents.concat(subDependents);
+      });
+    }
+
+    return dependents;
+  }
 
   var spEnhancements = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForSpEnhancement: getEffectsForSpEnhancement,
-    getSpCategoryName: getSpCategoryName
+    getSpCategoryName: getSpCategoryName,
+    spIndexToCode: spIndexToCode,
+    spCodeToIndex: spCodeToIndex,
+    getSpEntryId: getSpEntryId,
+    getSpEntryWithId: getSpEntryWithId,
+    getAllDependenciesForSpEntry: getAllDependenciesForSpEntry,
+    getAllEntriesThatDependOnSpEntry: getAllEntriesThatDependOnSpEntry
   });
   /* NOTE: this file is automatically generated; do not edit this file */
 
