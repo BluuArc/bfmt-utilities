@@ -129,7 +129,7 @@ export function spCodeToIndex (code: string): number {
  * there is no @ character or no value after the @ character.
  */
 export function getSpEntryId (id: string): string {
-	return (typeof id == 'string' && id.split('@')[1]) || id;
+	return (typeof id === 'string' && id.split('@')[1]) || id;
 }
 
 /**

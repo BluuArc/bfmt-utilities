@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Δ Changes
 * Build: Update dependencies to stable latest versions; no changes to functionality as a result of this.
 * Docs: Minor doc config update to include package version in the header.
+* Update ESLint rules to enforce triple equal comparisons.
 
 ## [0.4.0] - 2020-02-23
 ### ⚠ Breaking Changes

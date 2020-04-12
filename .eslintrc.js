@@ -15,21 +15,25 @@ module.exports = {
 		sourceType: 'module',
 	},
 	rules: {
+		eqeqeq: [
+			'error',
+			'always'
+		],
 		indent: [
 			'error',
-			'tab'
+			'tab',
 		],
 		'linebreak-style': [
 			'error',
-			'unix'
+			'unix',
 		],
 		quotes: [
 			'error',
-			'single'
+			'single',
 		],
 		semi: [
 			'error',
-			'always'
+			'always',
 		],
 		'comma-dangle': [
 			'error',
