@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitElement](_datamine_types_.unitelement.md)
+[@bluuarc/bfmt-utilities - v0.4.1](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitElement](_datamine_types_.unitelement.md)
 
 # Enumeration: UnitElement
 

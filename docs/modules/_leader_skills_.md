@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["leader-skills"](_leader_skills_.md)
+[@bluuarc/bfmt-utilities - v0.4.1](../README.md) › [Globals](../globals.md) › ["leader-skills"](_leader_skills_.md)
 
 # Module: "leader-skills"
 

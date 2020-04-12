@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["sp-enhancements"](_sp_enhancements_.md)
+[@bluuarc/bfmt-utilities - v0.4.1](../README.md) › [Globals](../globals.md) › ["sp-enhancements"](_sp_enhancements_.md)
 
 # Module: "sp-enhancements"
 

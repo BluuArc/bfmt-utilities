@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.4.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [SphereTypeId](_datamine_types_.spheretypeid.md)
+[@bluuarc/bfmt-utilities - v0.4.1](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [SphereTypeId](_datamine_types_.spheretypeid.md)
 
 # Enumeration: SphereTypeId
 
