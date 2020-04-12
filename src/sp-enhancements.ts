@@ -150,7 +150,7 @@ export function getSpEntryWithId (id: string, entries: ISpEnhancementEntry[]): I
  * @param addedEntries Entries that have already been added to the resulting collection; used to handle circular references.
  * @returns Collection of SP Enhancement entries (if any) that are required to unlock the given SP entry.
  */
-export function getAllDependenciesForSpEntry (entry: ISpEnhancementEntry, allEntries: ISpEnhancementEntry[], addedEntries = new Set()): ISpEnhancementEntry[] {
+export function getAllDependenciesForSpEntry (entry: ISpEnhancementEntry, allEntries: ISpEnhancementEntry[], addedEntries = new Set<ISpEnhancementEntry>()): ISpEnhancementEntry[] {
 	let dependencies: ISpEnhancementEntry[] = [];
 	if (entry && entry.dependency && Array.isArray(allEntries) && allEntries.length > 0) {
 		const dependencyId = getSpEntryId(entry.dependency);
@@ -171,7 +171,7 @@ export function getAllDependenciesForSpEntry (entry: ISpEnhancementEntry, allEnt
  * @param addedEntries Entries that have already been added to the resulting collection; used to handle circular references.
  * @returns Collection of SP Enhancement entries (if any) that require the given SP entry in order to be unlockable.
  */
-export function getAllEntriesThatDependOnSpEntry (entry: ISpEnhancementEntry, allEntries: ISpEnhancementEntry[], addedEntries = new Set()): ISpEnhancementEntry[] {
+export function getAllEntriesThatDependOnSpEntry (entry: ISpEnhancementEntry, allEntries: ISpEnhancementEntry[], addedEntries = new Set<ISpEnhancementEntry>()): ISpEnhancementEntry[] {
 	let dependents: ISpEnhancementEntry[] = [];
 	if (entry && entry.id && Array.isArray(allEntries) && allEntries.length > 0) {
 		const entryId = entry.id;

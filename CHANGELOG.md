@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased] - YYYY-MM-DD
+### ➕ Additions
+* sp-enhancements: Add type definition to `addedEntries` argument for `getAllDependenciesForSpEntry` and `getAllEntriesThatDependOnSpEntry`
 
 ## [0.4.1] - 2020-04-12
 ### ➕ Additions

@@ -19,7 +19,7 @@
 
 ###  getAllDependenciesForSpEntry
 
-▸ **getAllDependenciesForSpEntry**(`entry`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md), `allEntries`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[], `addedEntries`: Set‹unknown›): *[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[]*
+▸ **getAllDependenciesForSpEntry**(`entry`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md), `allEntries`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[], `addedEntries`: Set‹[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)›): *[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[]*
 
 *Defined in [sp-enhancements.ts:153](https://github.com/BluuArc/bfmt-utilities/blob/master/src/sp-enhancements.ts#L153)*
 
@@ -31,7 +31,7 @@ Name | Type | Default | Description |
 ------ | ------ | ------ | ------ |
 `entry` | [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md) | - | SP Entry to get dependencies for. |
 `allEntries` | [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[] | - | Collection of SP Entries to search in. |
-`addedEntries` | Set‹unknown› | new Set() | Entries that have already been added to the resulting collection; used to handle circular references. |
+`addedEntries` | Set‹[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)› | new Set<ISpEnhancementEntry>() | Entries that have already been added to the resulting collection; used to handle circular references. |
 
 **Returns:** *[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[]*
 
@@ -41,7 +41,7 @@ ___
 
 ###  getAllEntriesThatDependOnSpEntry
 
-▸ **getAllEntriesThatDependOnSpEntry**(`entry`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md), `allEntries`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[], `addedEntries`: Set‹unknown›): *[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[]*
+▸ **getAllEntriesThatDependOnSpEntry**(`entry`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md), `allEntries`: [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[], `addedEntries`: Set‹[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)›): *[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[]*
 
 *Defined in [sp-enhancements.ts:174](https://github.com/BluuArc/bfmt-utilities/blob/master/src/sp-enhancements.ts#L174)*
 
@@ -53,7 +53,7 @@ Name | Type | Default | Description |
 ------ | ------ | ------ | ------ |
 `entry` | [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md) | - | SP Entry to get dependents for. |
 `allEntries` | [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[] | - | Collection of SP Entries to search in. |
-`addedEntries` | Set‹unknown› | new Set() | Entries that have already been added to the resulting collection; used to handle circular references. |
+`addedEntries` | Set‹[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)› | new Set<ISpEnhancementEntry>() | Entries that have already been added to the resulting collection; used to handle circular references. |
 
 **Returns:** *[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[]*
 
