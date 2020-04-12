@@ -1,5 +1,5 @@
 const spEnhancementUtilities = require('../../src/sp-enhancements');
-const { getStringValueForLog, assertObjectHasOnlyKeys } = require('../helpers/utils');
+const { assertObjectHasOnlyKeys } = require('../helpers/utils');
 
 describe('SP Enhancement utilities', () => {
 	it('has expected API surface', () => {
@@ -417,15 +417,6 @@ describe('SP Enhancement utilities', () => {
 	});
 
 	describe('getAllDependenciesForSpEntry method', () => {
-		const assertIsEmptyArray = (result) => {
-			expect(Array.isArray(result))
-				.withContext(`result "${getStringValueForLog(result)}" is not an array`)
-				.toBe(true);
-			expect(result.length)
-				.withContext('result is not an empty array')
-				.toBe(0);
-		};
-
 		describe('for invalid inputs', () => {
 			const invalidEntryCases = [
 				{
@@ -473,7 +464,7 @@ describe('SP Enhancement utilities', () => {
 				invalidEntriesCases.forEach(allEntriesCase => {
 					it(`returns an empty array when entry ${entryCase.name} and allEntries ${allEntriesCase.name}`, () => {
 						const result = spEnhancementUtilities.getAllDependenciesForSpEntry(entryCase.value, allEntriesCase.value);
-						assertIsEmptyArray(result);
+						expect(result).toEqual([]);
 					});
 				});
 			});
@@ -483,7 +474,7 @@ describe('SP Enhancement utilities', () => {
 			const entry = { dependency: '123' };
 			const allEntries = Array.from({ length: 10 }, (_, i) => ({ id: `${i}` }));
 			const result = spEnhancementUtilities.getAllDependenciesForSpEntry(entry, allEntries);
-			assertIsEmptyArray(result);
+			expect(result).toEqual([]);
 		});
 
 		it('returns an array with the corresponding entry that has the input entry\'s dependency ID', () => {

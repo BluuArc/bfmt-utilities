@@ -1,7 +1,7 @@
 const buffUtilities = require('../../src/buffs');
 const datamineTypes = require('../../src/datamine-types');
 const testConstants = require('../helpers/constants');
-const { getStringValueForLog, assertObjectHasOnlyKeys } = require('../helpers/utils');
+const { assertObjectHasOnlyKeys } = require('../helpers/utils');
 const { generateDamageFramesList, generateEffectsList } = require('../helpers/dataFactories');
 const { PROC_METADATA, PASSIVE_METADATA } = require('../../src/buff-metadata');
 
@@ -286,15 +286,6 @@ describe('buff utilties', () => {
 	});
 
 	describe('combineEffectsAndDamageFrames method', () => {
-		const assertIsEmptyArray = (result) => {
-			expect(Array.isArray(result))
-				.withContext(`result "${getStringValueForLog(result)}" is not an array`)
-				.toBe(true);
-			expect(result.length)
-				.withContext('result is not an empty array')
-				.toBe(0);
-		};
-
 		describe('for invalid inputs', () => {
 			const invalidArrayCases = [
 				{
@@ -318,7 +309,7 @@ describe('buff utilties', () => {
 				invalidArrayCases.forEach(damageFramesCase => {
 					it(`returns an empty array if the effects parameter ${effectsCase.name} and the damageFrames parameter ${damageFramesCase.name}`, () => {
 						const result = buffUtilities.combineEffectsAndDamageFrames(effectsCase.value, damageFramesCase.value);
-						assertIsEmptyArray(result);
+						expect(result).toEqual([]);
 					});
 				});
 			});
@@ -326,21 +317,21 @@ describe('buff utilties', () => {
 
 		it('returns an empty array if the effects array is empty', () => {
 			const result = buffUtilities.combineEffectsAndDamageFrames([], []);
-			assertIsEmptyArray(result);
+			expect(result).toEqual([]);
 		});
 
 		it('returns an empty array if the damage frames array is empty', () => {
 			const effectsList = generateEffectsList(10);
 			const damageFramesList = [];
 			const result = buffUtilities.combineEffectsAndDamageFrames(effectsList, damageFramesList);
-			assertIsEmptyArray(result);
+			expect(result).toEqual([]);
 		});
 
 		it('returns an empty array if the length of the effects array does not match the length of the damage frames array', () => {
 			const effectsList = generateEffectsList(10);
 			const damageFramesList = generateDamageFramesList(9);
 			const result = buffUtilities.combineEffectsAndDamageFrames(effectsList, damageFramesList);
-			assertIsEmptyArray(result);
+			expect(result).toEqual([]);
 		});
 
 		describe('when both effects array and damage frame arrays are the same length and correct shape', () => {
