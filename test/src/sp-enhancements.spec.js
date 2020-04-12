@@ -604,6 +604,32 @@ describe('SP Enhancement utilities', () => {
 			expect(result).toEqual([allEntries[1]]);
 		});
 
+		it('returns an array with all entries that depend on the input entry', () => {
+			const entry = { id: '1' };
+			const allEntries = [
+				{
+					id: '0',
+					dependency: '1',
+				},
+				{
+					id: '1',
+				},
+				{
+					id: '2',
+					dependency: '1',
+				},
+				{
+					id: '3',
+				},
+			];
+			const result = spEnhancementUtilities.getAllEntriesThatDependOnSpEntry(entry, allEntries);
+
+			expect(result).toEqual([
+				allEntries[0],
+				allEntries[2],
+			]);
+		});
+
 		it('returns nested dependents', () => {
 			const entry = { id: '5' };
 			const allEntries = [
