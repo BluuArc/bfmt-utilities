@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * sp-enhancements: Add type definition to `addedEntries` argument for `getAllDependenciesForSpEntry` and `getAllEntriesThatDependOnSpEntry`
 * datamine-types: Add definitions for the following types
 	* `IEvolutionMaterial`
-	* `IUnit.evolution`
+	* `IMission`, `ClearBonus`, and `IMimicInfo` (and their dependencies)
+	* `IUnit.evolution` and `IUnit.first_clear_missions`
 
 ## [0.4.1] - 2020-04-12
 ### ➕ Additions

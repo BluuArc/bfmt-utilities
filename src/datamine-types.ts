@@ -366,11 +366,25 @@ export interface IUnit {
 	 * @author BluuArc
 	 */
 	evolution?: {
-		mats: IEvolutionMaterial[];
-		cost: number;
-		next: string;
-		prev: string;
-	}
+		mats?: IEvolutionMaterial[];
+		cost?: number;
+
+		/**
+		 * @description unit ID of next evolution
+		 */
+		next?: string;
+
+		/**
+		 * @description unit ID of pre-evolution
+		 */
+		prev?: string;
+	};
+
+	/**
+	 * @description Array of mission IDs where this unit is a reward
+	 * @author BluuArc
+	 */
+	first_clear_missions?: string[];
 
 	/**
 	 * @description Maximum number of battle crystals dropped per hit on normal attack.
@@ -539,4 +553,89 @@ export interface ISphere extends IItem {
 	effect: PassiveEffect[];
 	'sphere type': SphereTypeId;
 	'sphere type text': SphereTypeName;
+}
+
+export enum MimicUnitIds {
+	Mimic = '60142',
+	BatMimic = '60143',
+	DragonMimic = '60144',
+	MetalMimic = '60224',
+};
+
+/**
+ * @description Known values for the monster groups used in {@link IMimicInfo}
+ */
+export const MimicMonsterGroupMapping = {
+	'1000': MimicUnitIds.Mimic,
+	'1100': MimicUnitIds.BatMimic,
+	'1101': MimicUnitIds.BatMimic,
+	'1200': MimicUnitIds.DragonMimic,
+	'1300': MimicUnitIds.MetalMimic,
+};
+
+export interface IMimicInfo {
+	group_1_chance: string;
+
+	/**
+	 * @description Known mappings can be found at {@link MimicMonsterGroupMapping}
+	 */
+	group_1_monster_group: string;
+	group_2_chance: string;
+
+	/**
+	 * @description Known mappings can be found at {@link MimicMonsterGroupMapping}
+	 */
+	group_2_monster_group: string;
+	spawn_chance_range_maybe: string;
+}
+
+export interface GemClearBonus {
+	gem: string;
+}
+
+export interface UnitClearBonus {
+	unit: {
+		count: string;
+		id: string;
+	}
+}
+
+export interface ItemClearBonus {
+	item: {
+		count: string;
+		id: string;
+	}
+}
+
+export interface ZelClearBonus {
+	zel: string;
+}
+
+export interface KarmaClearBonus {
+	karma: string;
+}
+
+export type ClearBonus = GemClearBonus | UnitClearBonus | ItemClearBonus | ZelClearBonus | KarmaClearBonus;
+
+export interface IMission {
+	area: string;
+	battle_count: number;
+	clear_bonus: ClearBonus[];
+	continue: boolean;
+	desc: string;
+	difficulty: number;
+	dungeon: string;
+	energy_use: number;
+	id: string;
+	karma: number;
+	land: string;
+	mimic_info: IMimicInfo;
+	name: string;
+	xp: number;
+	zel: number;
+
+	/**
+	 * @description string delimited list of mission IDs
+	 */
+	requires?: string;
 }
