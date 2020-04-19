@@ -321,6 +321,12 @@ export enum UnitKind {
 	Sale = 'sale',
 }
 
+export interface IEvolutionMaterial {
+	id: string;
+	name: string;
+	type: 'unit'|'item';
+}
+
 export interface IUnit {
 	/**
 	 * @description Arena AI; determines chances for different actions in Arena.
@@ -355,6 +361,16 @@ export interface IUnit {
 		fusion?: string;
 		summon?: string;
 	};
+
+	/**
+	 * @author BluuArc
+	 */
+	evolution?: {
+		mats: IEvolutionMaterial[];
+		cost: number;
+		next: string;
+		prev: string;
+	}
 
 	/**
 	 * @description Maximum number of battle crystals dropped per hit on normal attack.
