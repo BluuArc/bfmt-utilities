@@ -355,6 +355,17 @@ export interface IEvolutionMaterial {
 	type: 'unit'|'item';
 }
 
+/**
+ * @author BluuArc
+ */
+export interface IUnitBond {
+	/**
+	 * @description Unit ID of bond partner
+	 */
+	partner: number;
+	dbb: IBraveBurst;
+}
+
 export interface IUnit {
 	/**
 	 * @author BluuArc
@@ -373,6 +384,10 @@ export interface IUnit {
 	bb?: IBraveBurst;
 	sbb?: IBraveBurst;
 	ubb?: IBraveBurst;
+
+	bonds?: {
+		[dbbId: string]: IUnitBond;
+	};
 
 	/**
 	 * @description Effects that apply only during Guild Raid
