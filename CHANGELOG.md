@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `IEvolutionMaterial`
 	* `IMission`, `ClearBonus`, and `IMimicInfo` (and their dependencies)
 	* `IUnit.evolution` and `IUnit.first_clear_missions`
+	* `IBfmtMetadata` (and applied as an optional property on `IUnit`, `IItem`, `ILeaderSkill`, `IBraveBurst`, `IExtraSkill`, and `IMission`)
 
 ## [0.4.1] - 2020-04-12
 ### ➕ Additions

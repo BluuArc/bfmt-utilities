@@ -1,3 +1,16 @@
+/**
+ * @author BluuArc
+ */
+export interface IBfmtMetadata {
+	createdAt: string;
+	updatedAt: string;
+
+	/**
+	 * @description whether or not the entry has been removed from the datamine
+	 */
+	removed?: boolean;
+}
+
 export enum ArenaCondition {
 	/* eslint-disable @typescript-eslint/camelcase */
 	hp_50pr_under = 'hp_50pr_under',
@@ -129,6 +142,11 @@ export interface IBurstDamageFramesEntry extends IDamageFramesEntry {
 }
 
 export interface IBraveBurst {
+	/**
+	 * @author BluuArc
+	 */
+	bfmtMetadata?: IBfmtMetadata;
+
 	associated_units? : string[];
 	'damage frames': IBurstDamageFramesEntry[];
 	desc: string;
@@ -194,6 +212,11 @@ export interface IExtraSkillUnknownPassiveEffect extends IUnknownPassiveEffect {
 export type ExtraSkillPassiveEffect = IExtraSkillPassiveEffect | IExtraSkillUnknownPassiveEffect;
 
 export interface IExtraSkill {
+	/**
+	 * @author BluuArc
+	 */
+	bfmtMetadata?: IBfmtMetadata;
+
 	desc: string;
 	effects: ExtraSkillPassiveEffect[];
 	id: string;
@@ -277,6 +300,11 @@ export interface ISpEnhancementEntry {
 }
 
 export interface ILeaderSkill {
+	/**
+	 * @author BluuArc
+	 */
+	bfmtMetadata?: IBfmtMetadata;
+
 	desc: string;
 	effects: PassiveEffect[];
 	id: string;
@@ -328,6 +356,11 @@ export interface IEvolutionMaterial {
 }
 
 export interface IUnit {
+	/**
+	 * @author BluuArc
+	 */
+	bfmtMetadata?: IBfmtMetadata;
+
 	/**
 	 * @description Arena AI; determines chances for different actions in Arena.
 	 */
@@ -509,6 +542,11 @@ export interface IItemUsageEntry {
 }
 
 export interface IItem {
+	/**
+	 * @author BluuArc
+	 */
+	bfmtMetadata?: IBfmtMetadata;
+
 	desc: string;
 	id: number;
 	max_stack: number;
@@ -618,6 +656,11 @@ export interface KarmaClearBonus {
 export type ClearBonus = GemClearBonus | UnitClearBonus | ItemClearBonus | ZelClearBonus | KarmaClearBonus;
 
 export interface IMission {
+	/**
+	 * @author BluuArc
+	 */
+	bfmtMetadata?: IBfmtMetadata;
+
 	area: string;
 	battle_count: number;
 	clear_bonus: ClearBonus[];
