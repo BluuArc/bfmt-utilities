@@ -375,6 +375,15 @@ export interface IUnit {
 	ubb?: IBraveBurst;
 
 	/**
+	 * @description Effects that apply only during Guild Raid
+	 * @author BluuArc
+	 */
+	guild_raid?: {
+		'leader skill'?: ILeaderSkill;
+		'extra skill?': IExtraSkill;
+	}
+
+	/**
 	 * @description Typically used to identify an evolution line of units.
 	 */
 	category?: number;

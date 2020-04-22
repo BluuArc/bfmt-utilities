@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * datamine-types: Add definitions for the following types
 	* `IEvolutionMaterial`
 	* `IMission`, `ClearBonus`, and `IMimicInfo` (and their dependencies)
-	* `IUnit.evolution` and `IUnit.first_clear_missions`
+	* `IUnit.evolution`, `IUnit.first_clear_missions`, `IUnit.guild_raid`
 	* `IBfmtMetadata` (and applied as an optional property on `IUnit`, `IItem`, `ILeaderSkill`, `IBraveBurst`, `IExtraSkill`, and `IMission`)
 
 ## [0.4.1] - 2020-04-12
