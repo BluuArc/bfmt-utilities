@@ -366,6 +366,15 @@ export interface IUnitBond {
 	dbb: IBraveBurst;
 }
 
+export enum UnitType {
+	Lord = 'lord',
+	Anima = 'anima',
+	Breaker = 'breaker',
+	Guardian = 'guardian',
+	Oracle = 'oracle',
+	Rex = 'rex',
+}
+
 export interface IUnit {
 	/**
 	 * @author BluuArc
@@ -500,7 +509,7 @@ export interface IUnit {
 	rarity: number;
 	'sell caution': boolean;
 	stats: {
-		anima: {
+		anima?: {
 			atk: number;
 			def: number;
 			'hp max': number;
@@ -508,7 +517,7 @@ export interface IUnit {
 			'rec max': number;
 			'rec min': number;
 		};
-		breaker: {
+		breaker?: {
 			hp: number;
 			rec: number;
 			'atk max': number;
@@ -516,7 +525,7 @@ export interface IUnit {
 			'def max': number;
 			'def min': number;
 		};
-		guardian: {
+		guardian?: {
 			hp: number;
 			atk: number;
 			'def max': number;
@@ -524,7 +533,7 @@ export interface IUnit {
 			'rec max': number;
 			'rec min': number;
 		};
-		oracle: {
+		oracle?: {
 			atk: number;
 			def: number;
 			'hp max': number;
