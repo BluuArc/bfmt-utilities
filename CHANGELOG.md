@@ -11,10 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### ➕ Additions
 * sp-enhancements: Add type definition to `addedEntries` argument for `getAllDependenciesForSpEntry` and `getAllEntriesThatDependOnSpEntry`
 * datamine-types: Add definitions for the following types
-	* `IEvolutionMaterial`
-	* `IMission`, `ClearBonus`, and `IMimicInfo` (and their dependencies)
-	* `IUnitBond`
-	* `IUnit.evolution`, `IUnit.first_clear_missions`, `IUnit.guild_raid`, `IUnit.bonds`
+	* `IEvolutionMaterial` and `IUnit.evolution`
+	* `IMission`, `ClearBonus`, and `IMimicInfo` (and their dependencies, including `IUnit.first_clear_missions` and `IItem.first_clear_missions`)
+	* `IUnitBond` and `IUnit.bonds`
+	* `IUnit.guild_raid`
 	* `IBfmtMetadata` (and applied as an optional property on `IUnit`, `IItem`, `ILeaderSkill`, `IBraveBurst`, `IExtraSkill`, and `IMission`)
 	* `UnitType`
 

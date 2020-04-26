@@ -609,6 +609,12 @@ export interface IItem {
 	 * @author BluuArc
 	 */
 	associated_units?: string[];
+
+	/**
+	 * @description Array of mission IDs where this item is a reward
+	 * @author BluuArc
+	 */
+	first_clear_missions?: string[];
 }
 
 export interface IConsumableItem extends IItem {
