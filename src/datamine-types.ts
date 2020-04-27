@@ -237,6 +237,12 @@ export interface IExtraSkill {
 	 */
 	bfmtMetadata?: IBfmtMetadata;
 
+	/**
+	 * @description List of units that use this extra skill
+	 * @author BluuArc
+	 */
+	associated_units?: string[];
+
 	desc: string;
 	effects: ExtraSkillPassiveEffect[];
 	id: string;
@@ -324,6 +330,12 @@ export interface ILeaderSkill {
 	 * @author BluuArc
 	 */
 	bfmtMetadata?: IBfmtMetadata;
+
+	/**
+	 * @description List of units that use this leader skill
+	 * @author BluuArc
+	 */
+	associated_units?: string[];
 
 	desc: string;
 	effects: PassiveEffect[];

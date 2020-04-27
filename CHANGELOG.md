@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `IBfmtMetadata` (and applied as an optional property on `IUnit`, `IItem`, `ILeaderSkill`, `IBraveBurst`, `IExtraSkill`, and `IMission`)
 	* `UnitType`
 	* `IAttackInfo`, `TargetAreaShorthand`, and `IBraveBurst.attackInfo`
+	* `IExtraSkill.associated_units` and `ILeaderSkill.associated_units`
 
 ## [0.4.1] - 2020-04-12
 ### ➕ Additions
