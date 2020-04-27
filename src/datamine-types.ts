@@ -56,6 +56,12 @@ export enum TargetArea {
 	Random = 'random',
 }
 
+export enum TargetAreaShorthand {
+	Aoe = 'AOE',
+	Single = 'ST',
+	Random = 'RT',
+}
+
 export enum TargetType {
 	Self = 'self',
 	Party = 'party',
@@ -141,11 +147,25 @@ export interface IBurstDamageFramesEntry extends IDamageFramesEntry {
 	'proc id'?: string;
 }
 
+/**
+ * @author BluuArc
+ */
+export interface IAttackInfo {
+	id: string;
+	target: TargetAreaShorthand;
+	'bb'?: boolean;
+	'sbb'?: boolean;
+	'ubb'?: boolean;
+	sourcePath?: string;
+	hits: number;
+}
+
 export interface IBraveBurst {
 	/**
 	 * @author BluuArc
 	 */
 	bfmtMetadata?: IBfmtMetadata;
+	attackInfo?: IAttackInfo[];
 
 	associated_units? : string[];
 	'damage frames': IBurstDamageFramesEntry[];
