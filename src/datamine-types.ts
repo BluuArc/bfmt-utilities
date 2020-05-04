@@ -1,3 +1,16 @@
+/**
+ * @author BluuArc
+ */
+export interface IBfmtMetadata {
+	createdAt: string;
+	updatedAt: string;
+
+	/**
+	 * @description whether or not the entry has been removed from the datamine
+	 */
+	removed?: boolean;
+}
+
 export enum ArenaCondition {
 	/* eslint-disable @typescript-eslint/camelcase */
 	hp_50pr_under = 'hp_50pr_under',
@@ -41,6 +54,12 @@ export enum TargetArea {
 	Aoe = 'aoe',
 	Single = 'single',
 	Random = 'random',
+}
+
+export enum TargetAreaShorthand {
+	Aoe = 'AOE',
+	Single = 'ST',
+	Random = 'RT',
 }
 
 export enum TargetType {
@@ -128,7 +147,26 @@ export interface IBurstDamageFramesEntry extends IDamageFramesEntry {
 	'proc id'?: string;
 }
 
+/**
+ * @author BluuArc
+ */
+export interface IAttackInfo {
+	id: string;
+	target: TargetAreaShorthand;
+	'bb'?: boolean;
+	'sbb'?: boolean;
+	'ubb'?: boolean;
+	sourcePath?: string;
+	hits: number;
+}
+
 export interface IBraveBurst {
+	/**
+	 * @author BluuArc
+	 */
+	bfmtMetadata?: IBfmtMetadata;
+	attackInfo?: IAttackInfo[];
+
 	associated_units? : string[];
 	'damage frames': IBurstDamageFramesEntry[];
 	desc: string;
@@ -194,6 +232,17 @@ export interface IExtraSkillUnknownPassiveEffect extends IUnknownPassiveEffect {
 export type ExtraSkillPassiveEffect = IExtraSkillPassiveEffect | IExtraSkillUnknownPassiveEffect;
 
 export interface IExtraSkill {
+	/**
+	 * @author BluuArc
+	 */
+	bfmtMetadata?: IBfmtMetadata;
+
+	/**
+	 * @description List of units that use this extra skill
+	 * @author BluuArc
+	 */
+	associated_units?: string[];
+
 	desc: string;
 	effects: ExtraSkillPassiveEffect[];
 	id: string;
@@ -277,6 +326,17 @@ export interface ISpEnhancementEntry {
 }
 
 export interface ILeaderSkill {
+	/**
+	 * @author BluuArc
+	 */
+	bfmtMetadata?: IBfmtMetadata;
+
+	/**
+	 * @description List of units that use this leader skill
+	 * @author BluuArc
+	 */
+	associated_units?: string[];
+
 	desc: string;
 	effects: PassiveEffect[];
 	id: string;
@@ -321,7 +381,38 @@ export enum UnitKind {
 	Sale = 'sale',
 }
 
+export interface IEvolutionMaterial {
+	id: string;
+	name: string;
+	type: 'unit'|'item';
+}
+
+/**
+ * @author BluuArc
+ */
+export interface IUnitBond {
+	/**
+	 * @description Unit ID of bond partner
+	 */
+	partner: number;
+	dbb: IBraveBurst;
+}
+
+export enum UnitType {
+	Lord = 'lord',
+	Anima = 'anima',
+	Breaker = 'breaker',
+	Guardian = 'guardian',
+	Oracle = 'oracle',
+	Rex = 'rex',
+}
+
 export interface IUnit {
+	/**
+	 * @author BluuArc
+	 */
+	bfmtMetadata?: IBfmtMetadata;
+
 	/**
 	 * @description Arena AI; determines chances for different actions in Arena.
 	 */
@@ -334,6 +425,19 @@ export interface IUnit {
 	bb?: IBraveBurst;
 	sbb?: IBraveBurst;
 	ubb?: IBraveBurst;
+
+	bonds?: {
+		[dbbId: string]: IUnitBond;
+	};
+
+	/**
+	 * @description Effects that apply only during Guild Raid
+	 * @author BluuArc
+	 */
+	guild_raid?: {
+		'leader skill'?: ILeaderSkill;
+		'extra skill?': IExtraSkill;
+	};
 
 	/**
 	 * @description Typically used to identify an evolution line of units.
@@ -355,6 +459,30 @@ export interface IUnit {
 		fusion?: string;
 		summon?: string;
 	};
+
+	/**
+	 * @author BluuArc
+	 */
+	evolution?: {
+		mats?: IEvolutionMaterial[];
+		cost?: number;
+
+		/**
+		 * @description unit ID of next evolution
+		 */
+		next?: string;
+
+		/**
+		 * @description unit ID of pre-evolution
+		 */
+		prev?: string;
+	};
+
+	/**
+	 * @description Array of mission IDs where this unit is a reward
+	 * @author BluuArc
+	 */
+	first_clear_missions?: string[];
 
 	/**
 	 * @description Maximum number of battle crystals dropped per hit on normal attack.
@@ -413,7 +541,7 @@ export interface IUnit {
 	rarity: number;
 	'sell caution': boolean;
 	stats: {
-		anima: {
+		anima?: {
 			atk: number;
 			def: number;
 			'hp max': number;
@@ -421,7 +549,7 @@ export interface IUnit {
 			'rec max': number;
 			'rec min': number;
 		};
-		breaker: {
+		breaker?: {
 			hp: number;
 			rec: number;
 			'atk max': number;
@@ -429,7 +557,7 @@ export interface IUnit {
 			'def max': number;
 			'def min': number;
 		};
-		guardian: {
+		guardian?: {
 			hp: number;
 			atk: number;
 			'def max': number;
@@ -437,7 +565,7 @@ export interface IUnit {
 			'rec max': number;
 			'rec min': number;
 		};
-		oracle: {
+		oracle?: {
 			atk: number;
 			def: number;
 			'hp max': number;
@@ -479,6 +607,11 @@ export interface IItemUsageEntry {
 }
 
 export interface IItem {
+	/**
+	 * @author BluuArc
+	 */
+	bfmtMetadata?: IBfmtMetadata;
+
 	desc: string;
 	id: number;
 	max_stack: number;
@@ -508,6 +641,12 @@ export interface IItem {
 	 * @author BluuArc
 	 */
 	associated_units?: string[];
+
+	/**
+	 * @description Array of mission IDs where this item is a reward
+	 * @author BluuArc
+	 */
+	first_clear_missions?: string[];
 }
 
 export interface IConsumableItem extends IItem {
@@ -523,4 +662,94 @@ export interface ISphere extends IItem {
 	effect: PassiveEffect[];
 	'sphere type': SphereTypeId;
 	'sphere type text': SphereTypeName;
+}
+
+export enum MimicUnitIds {
+	Mimic = '60142',
+	BatMimic = '60143',
+	DragonMimic = '60144',
+	MetalMimic = '60224',
+}
+
+/**
+ * @description Known values for the monster groups used in {@link IMimicInfo}
+ */
+export const MimicMonsterGroupMapping = {
+	'1000': MimicUnitIds.Mimic,
+	'1100': MimicUnitIds.BatMimic,
+	'1101': MimicUnitIds.BatMimic,
+	'1200': MimicUnitIds.DragonMimic,
+	'1300': MimicUnitIds.MetalMimic,
+};
+
+export interface IMimicInfo {
+	group_1_chance: string;
+
+	/**
+	 * @description Known mappings can be found at {@link MimicMonsterGroupMapping}
+	 */
+	group_1_monster_group: string;
+	group_2_chance: string;
+
+	/**
+	 * @description Known mappings can be found at {@link MimicMonsterGroupMapping}
+	 */
+	group_2_monster_group: string;
+	spawn_chance_range_maybe: string;
+}
+
+export interface IGemClearBonus {
+	gem: string;
+}
+
+export interface IUnitClearBonus {
+	unit: {
+		count: string;
+		id: string;
+	};
+}
+
+export interface IItemClearBonus {
+	item: {
+		count: string;
+		id: string;
+	};
+}
+
+export interface IZelClearBonus {
+	zel: string;
+}
+
+export interface IKarmaClearBonus {
+	karma: string;
+}
+
+export type ClearBonus = IGemClearBonus | IUnitClearBonus | IItemClearBonus | IZelClearBonus | IKarmaClearBonus;
+
+export interface IMission {
+	/**
+	 * @author BluuArc
+	 */
+	bfmtMetadata?: IBfmtMetadata;
+
+	area: string;
+	battle_count: number;
+	clear_bonus: ClearBonus[];
+	continue: boolean;
+	desc: string;
+	difficulty: number;
+	dungeon: string;
+	energy_use: number;
+	id: string;
+	karma: number;
+	land: string;
+	mimic_info: IMimicInfo;
+	name: string;
+	xp: number;
+	zel: number;
+
+	/**
+	 * @description string delimited list of mission IDs
+	 */
+	requires?: string;
 }

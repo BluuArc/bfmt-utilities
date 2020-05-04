@@ -24,7 +24,7 @@
 
 • **passive id**: *"66"*
 
-*Defined in [datamine-types.ts:77](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L77)*
+*Defined in [datamine-types.ts:96](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L96)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **trigger on bb**? : *undefined | false | true*
 
-*Defined in [datamine-types.ts:78](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L78)*
+*Defined in [datamine-types.ts:97](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L97)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **trigger on sbb**? : *undefined | false | true*
 
-*Defined in [datamine-types.ts:79](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L79)*
+*Defined in [datamine-types.ts:98](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L98)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **trigger on ubb**? : *undefined | false | true*
 
-*Defined in [datamine-types.ts:80](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L80)*
+*Defined in [datamine-types.ts:99](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L99)*
 
 ___
 
@@ -56,4 +56,4 @@ ___
 
 • **triggered effect**: *[ProcEffect](../modules/_datamine_types_.md#proceffect)[]*
 
-*Defined in [datamine-types.ts:81](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L81)*
+*Defined in [datamine-types.ts:100](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L100)*

@@ -5,8 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased] - YYYY-MM-DD
+### ⚠ Breaking Changes
+* datamine-types: stat entries that are not `_lord` or `_base` in `IUnit.stats` are now optional.
+
 ### ➕ Additions
 * sp-enhancements: Add type definition to `addedEntries` argument for `getAllDependenciesForSpEntry` and `getAllEntriesThatDependOnSpEntry`
+* datamine-types: Add definitions for the following types
+	* `IEvolutionMaterial` and `IUnit.evolution`
+	* `IMission`, `ClearBonus`, and `IMimicInfo` (and their dependencies, including `IUnit.first_clear_missions` and `IItem.first_clear_missions`)
+	* `IUnitBond` and `IUnit.bonds`
+	* `IUnit.guild_raid`
+	* `IBfmtMetadata` (and applied as an optional property on `IUnit`, `IItem`, `ILeaderSkill`, `IBraveBurst`, `IExtraSkill`, and `IMission`)
+	* `UnitType`
+	* `IAttackInfo`, `TargetAreaShorthand`, and `IBraveBurst.attackInfo`
+	* `IExtraSkill.associated_units` and `ILeaderSkill.associated_units`
 
 ## [0.4.1] - 2020-04-12
 ### ➕ Additions

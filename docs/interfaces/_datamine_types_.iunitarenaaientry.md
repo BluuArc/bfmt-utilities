@@ -21,7 +21,7 @@
 
 • **action**: *"skill" | "attack"*
 
-*Defined in [datamine-types.ts:15](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L15)*
+*Defined in [datamine-types.ts:28](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L28)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **chance%**: *number*
 
-*Defined in [datamine-types.ts:16](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L16)*
+*Defined in [datamine-types.ts:29](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L29)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **target conditions**: *[ArenaCondition](../enums/_datamine_types_.arenacondition.md)*
 
-*Defined in [datamine-types.ts:17](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L17)*
+*Defined in [datamine-types.ts:30](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L30)*
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 • **target type**: *"party" | "enemy"*
 
-*Defined in [datamine-types.ts:18](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L18)*
+*Defined in [datamine-types.ts:31](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L31)*

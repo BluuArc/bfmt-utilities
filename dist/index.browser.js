@@ -1119,6 +1119,14 @@ var bfmtUtilities = function () {
     TargetArea["Random"] = "random";
   })(TargetArea || (TargetArea = {}));
 
+  var TargetAreaShorthand;
+
+  (function (TargetAreaShorthand) {
+    TargetAreaShorthand["Aoe"] = "AOE";
+    TargetAreaShorthand["Single"] = "ST";
+    TargetAreaShorthand["Random"] = "RT";
+  })(TargetAreaShorthand || (TargetAreaShorthand = {}));
+
   var TargetType;
 
   (function (TargetType) {
@@ -1254,6 +1262,17 @@ var bfmtUtilities = function () {
     UnitKind["Sale"] = "sale";
   })(UnitKind || (UnitKind = {}));
 
+  var UnitType;
+
+  (function (UnitType) {
+    UnitType["Lord"] = "lord";
+    UnitType["Anima"] = "anima";
+    UnitType["Breaker"] = "breaker";
+    UnitType["Guardian"] = "guardian";
+    UnitType["Oracle"] = "oracle";
+    UnitType["Rex"] = "rex";
+  })(UnitType || (UnitType = {}));
+
   var ItemType;
 
   (function (ItemType) {
@@ -1265,6 +1284,26 @@ var bfmtUtilities = function () {
     ItemType["LeaderSkillSphere"] = "ls_sphere";
   })(ItemType || (ItemType = {}));
 
+  var MimicUnitIds;
+
+  (function (MimicUnitIds) {
+    MimicUnitIds["Mimic"] = "60142";
+    MimicUnitIds["BatMimic"] = "60143";
+    MimicUnitIds["DragonMimic"] = "60144";
+    MimicUnitIds["MetalMimic"] = "60224";
+  })(MimicUnitIds || (MimicUnitIds = {}));
+  /**
+   * @description Known values for the monster groups used in {@link IMimicInfo}
+   */
+
+
+  const MimicMonsterGroupMapping = {
+    '1000': MimicUnitIds.Mimic,
+    '1100': MimicUnitIds.BatMimic,
+    '1101': MimicUnitIds.BatMimic,
+    '1200': MimicUnitIds.DragonMimic,
+    '1300': MimicUnitIds.MetalMimic
+  };
   var datamineTypes = /*#__PURE__*/Object.freeze({
     __proto__: null,
 
@@ -1278,6 +1317,10 @@ var bfmtUtilities = function () {
 
     get TargetArea() {
       return TargetArea;
+    },
+
+    get TargetAreaShorthand() {
+      return TargetAreaShorthand;
     },
 
     get TargetType() {
@@ -1324,10 +1367,19 @@ var bfmtUtilities = function () {
       return UnitKind;
     },
 
+    get UnitType() {
+      return UnitType;
+    },
+
     get ItemType() {
       return ItemType;
-    }
+    },
 
+    get MimicUnitIds() {
+      return MimicUnitIds;
+    },
+
+    MimicMonsterGroupMapping: MimicMonsterGroupMapping
   });
   /**
    * @description Get the associated metadata entry for a given proc ID

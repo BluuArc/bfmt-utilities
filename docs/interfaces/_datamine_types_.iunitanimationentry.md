@@ -18,4 +18,4 @@
 
 • **total number of frames**: *number*
 
-*Defined in [datamine-types.ts:293](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L293)*
+*Defined in [datamine-types.ts:353](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L353)*
