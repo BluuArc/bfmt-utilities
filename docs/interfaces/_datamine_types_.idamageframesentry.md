@@ -24,7 +24,7 @@
 
 • **effect delay time(ms)/frame**: *string*
 
-*Defined in [datamine-types.ts:114](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L114)*
+*Defined in [datamine-types.ts:133](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L133)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **frame times**: *number[]*
 
-*Defined in [datamine-types.ts:115](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L115)*
+*Defined in [datamine-types.ts:134](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L134)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **hit dmg% distribution**: *number[]*
 
-*Defined in [datamine-types.ts:116](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L116)*
+*Defined in [datamine-types.ts:135](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L135)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **hit dmg% distribution (total)**: *number*
 
-*Defined in [datamine-types.ts:117](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L117)*
+*Defined in [datamine-types.ts:136](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L136)*
 
 ___
 
@@ -56,4 +56,4 @@ ___
 
 • **hits**: *number*
 
-*Defined in [datamine-types.ts:118](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L118)*
+*Defined in [datamine-types.ts:137](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L137)*

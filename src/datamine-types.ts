@@ -437,7 +437,7 @@ export interface IUnit {
 	guild_raid?: {
 		'leader skill'?: ILeaderSkill;
 		'extra skill?': IExtraSkill;
-	}
+	};
 
 	/**
 	 * @description Typically used to identify an evolution line of units.
@@ -669,7 +669,7 @@ export enum MimicUnitIds {
 	BatMimic = '60143',
 	DragonMimic = '60144',
 	MetalMimic = '60224',
-};
+}
 
 /**
  * @description Known values for the monster groups used in {@link IMimicInfo}
@@ -698,33 +698,33 @@ export interface IMimicInfo {
 	spawn_chance_range_maybe: string;
 }
 
-export interface GemClearBonus {
+export interface IGemClearBonus {
 	gem: string;
 }
 
-export interface UnitClearBonus {
+export interface IUnitClearBonus {
 	unit: {
 		count: string;
 		id: string;
-	}
+	};
 }
 
-export interface ItemClearBonus {
+export interface IItemClearBonus {
 	item: {
 		count: string;
 		id: string;
-	}
+	};
 }
 
-export interface ZelClearBonus {
+export interface IZelClearBonus {
 	zel: string;
 }
 
-export interface KarmaClearBonus {
+export interface IKarmaClearBonus {
 	karma: string;
 }
 
-export type ClearBonus = GemClearBonus | UnitClearBonus | ItemClearBonus | ZelClearBonus | KarmaClearBonus;
+export type ClearBonus = IGemClearBonus | IUnitClearBonus | IItemClearBonus | IZelClearBonus | IKarmaClearBonus;
 
 export interface IMission {
 	/**

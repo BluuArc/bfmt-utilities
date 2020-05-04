@@ -1108,6 +1108,12 @@ var TargetArea;
     TargetArea["Single"] = "single";
     TargetArea["Random"] = "random";
 })(TargetArea || (TargetArea = {}));
+var TargetAreaShorthand;
+(function (TargetAreaShorthand) {
+    TargetAreaShorthand["Aoe"] = "AOE";
+    TargetAreaShorthand["Single"] = "ST";
+    TargetAreaShorthand["Random"] = "RT";
+})(TargetAreaShorthand || (TargetAreaShorthand = {}));
 var TargetType;
 (function (TargetType) {
     TargetType["Self"] = "self";
@@ -1221,6 +1227,15 @@ var UnitKind;
     UnitKind["Enhancing"] = "enhancing";
     UnitKind["Sale"] = "sale";
 })(UnitKind || (UnitKind = {}));
+var UnitType;
+(function (UnitType) {
+    UnitType["Lord"] = "lord";
+    UnitType["Anima"] = "anima";
+    UnitType["Breaker"] = "breaker";
+    UnitType["Guardian"] = "guardian";
+    UnitType["Oracle"] = "oracle";
+    UnitType["Rex"] = "rex";
+})(UnitType || (UnitType = {}));
 var ItemType;
 (function (ItemType) {
     ItemType["Consumable"] = "consumable";
@@ -1230,12 +1245,30 @@ var ItemType;
     ItemType["SummonerConsumable"] = "summoner_consumable";
     ItemType["LeaderSkillSphere"] = "ls_sphere";
 })(ItemType || (ItemType = {}));
+var MimicUnitIds;
+(function (MimicUnitIds) {
+    MimicUnitIds["Mimic"] = "60142";
+    MimicUnitIds["BatMimic"] = "60143";
+    MimicUnitIds["DragonMimic"] = "60144";
+    MimicUnitIds["MetalMimic"] = "60224";
+})(MimicUnitIds || (MimicUnitIds = {}));
+/**
+ * @description Known values for the monster groups used in {@link IMimicInfo}
+ */
+const MimicMonsterGroupMapping = {
+    '1000': MimicUnitIds.Mimic,
+    '1100': MimicUnitIds.BatMimic,
+    '1101': MimicUnitIds.BatMimic,
+    '1200': MimicUnitIds.DragonMimic,
+    '1300': MimicUnitIds.MetalMimic,
+};
 
 var datamineTypes = /*#__PURE__*/Object.freeze({
     __proto__: null,
     get ArenaCondition () { return ArenaCondition; },
     get MoveType () { return MoveType; },
     get TargetArea () { return TargetArea; },
+    get TargetAreaShorthand () { return TargetAreaShorthand; },
     get TargetType () { return TargetType; },
     get SpPassiveType () { return SpPassiveType; },
     get SphereTypeName () { return SphereTypeName; },
@@ -1247,7 +1280,10 @@ var datamineTypes = /*#__PURE__*/Object.freeze({
     get UnitGender () { return UnitGender; },
     get UnitGettingType () { return UnitGettingType; },
     get UnitKind () { return UnitKind; },
-    get ItemType () { return ItemType; }
+    get UnitType () { return UnitType; },
+    get ItemType () { return ItemType; },
+    get MimicUnitIds () { return MimicUnitIds; },
+    MimicMonsterGroupMapping: MimicMonsterGroupMapping
 });
 
 /**

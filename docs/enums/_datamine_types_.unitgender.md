@@ -16,7 +16,7 @@
 
 • **Female**: = "female"
 
-*Defined in [datamine-types.ts:307](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L307)*
+*Defined in [datamine-types.ts:367](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L367)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **Male**: = "male"
 
-*Defined in [datamine-types.ts:306](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L306)*
+*Defined in [datamine-types.ts:366](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L366)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **Other**: = "other"
 
-*Defined in [datamine-types.ts:308](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L308)*
+*Defined in [datamine-types.ts:368](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L368)*

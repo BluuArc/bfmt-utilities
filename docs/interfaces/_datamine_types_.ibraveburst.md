@@ -11,6 +11,8 @@
 ### Properties
 
 * [associated_units](_datamine_types_.ibraveburst.md#optional-associated_units)
+* [attackInfo](_datamine_types_.ibraveburst.md#optional-attackinfo)
+* [bfmtMetadata](_datamine_types_.ibraveburst.md#optional-bfmtmetadata)
 * [damage frames](_datamine_types_.ibraveburst.md#damage-frames)
 * [desc](_datamine_types_.ibraveburst.md#desc)
 * [drop check count](_datamine_types_.ibraveburst.md#drop-check-count)
@@ -24,7 +26,25 @@
 
 • **associated_units**? : *string[]*
 
-*Defined in [datamine-types.ts:132](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L132)*
+*Defined in [datamine-types.ts:170](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L170)*
+
+___
+
+### `Optional` attackInfo
+
+• **attackInfo**? : *[IAttackInfo](_datamine_types_.iattackinfo.md)[]*
+
+*Defined in [datamine-types.ts:168](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L168)*
+
+___
+
+### `Optional` bfmtMetadata
+
+• **bfmtMetadata**? : *[IBfmtMetadata](_datamine_types_.ibfmtmetadata.md)*
+
+*Defined in [datamine-types.ts:167](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L167)*
+
+**`author`** BluuArc
 
 ___
 
@@ -32,7 +52,7 @@ ___
 
 • **damage frames**: *[IBurstDamageFramesEntry](_datamine_types_.iburstdamageframesentry.md)[]*
 
-*Defined in [datamine-types.ts:133](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L133)*
+*Defined in [datamine-types.ts:171](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L171)*
 
 ___
 
@@ -40,7 +60,7 @@ ___
 
 • **desc**: *string*
 
-*Defined in [datamine-types.ts:134](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L134)*
+*Defined in [datamine-types.ts:172](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L172)*
 
 ___
 
@@ -48,7 +68,7 @@ ___
 
 • **drop check count**: *number*
 
-*Defined in [datamine-types.ts:135](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L135)*
+*Defined in [datamine-types.ts:173](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L173)*
 
 ___
 
@@ -56,7 +76,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [datamine-types.ts:136](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L136)*
+*Defined in [datamine-types.ts:174](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L174)*
 
 ___
 
@@ -64,7 +84,7 @@ ___
 
 • **levels**: *[IBurstLevelEntry](_datamine_types_.iburstlevelentry.md)[]*
 
-*Defined in [datamine-types.ts:138](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L138)*
+*Defined in [datamine-types.ts:176](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L176)*
 
 ___
 
@@ -72,4 +92,4 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:137](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L137)*
+*Defined in [datamine-types.ts:175](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L175)*

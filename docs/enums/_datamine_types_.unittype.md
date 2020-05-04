@@ -1,0 +1,62 @@
+[@bluuarc/bfmt-utilities - v0.4.1](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitType](_datamine_types_.unittype.md)
+
+# Enumeration: UnitType
+
+## Index
+
+### Enumeration members
+
+* [Anima](_datamine_types_.unittype.md#anima)
+* [Breaker](_datamine_types_.unittype.md#breaker)
+* [Guardian](_datamine_types_.unittype.md#guardian)
+* [Lord](_datamine_types_.unittype.md#lord)
+* [Oracle](_datamine_types_.unittype.md#oracle)
+* [Rex](_datamine_types_.unittype.md#rex)
+
+## Enumeration members
+
+###  Anima
+
+• **Anima**: = "anima"
+
+*Defined in [datamine-types.ts:403](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L403)*
+
+___
+
+###  Breaker
+
+• **Breaker**: = "breaker"
+
+*Defined in [datamine-types.ts:404](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L404)*
+
+___
+
+###  Guardian
+
+• **Guardian**: = "guardian"
+
+*Defined in [datamine-types.ts:405](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L405)*
+
+___
+
+###  Lord
+
+• **Lord**: = "lord"
+
+*Defined in [datamine-types.ts:402](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L402)*
+
+___
+
+###  Oracle
+
+• **Oracle**: = "oracle"
+
+*Defined in [datamine-types.ts:406](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L406)*
+
+___
+
+###  Rex
+
+• **Rex**: = "rex"
+
+*Defined in [datamine-types.ts:407](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L407)*

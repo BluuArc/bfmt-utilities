@@ -16,7 +16,7 @@
 
 • **Enemy**: = "enemy"
 
-*Defined in [datamine-types.ts:49](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L49)*
+*Defined in [datamine-types.ts:68](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L68)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **Party**: = "party"
 
-*Defined in [datamine-types.ts:48](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L48)*
+*Defined in [datamine-types.ts:67](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L67)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **Self**: = "self"
 
-*Defined in [datamine-types.ts:47](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L47)*
+*Defined in [datamine-types.ts:66](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L66)*
