@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.4.1](../README.md) › [Globals](../globals.md) › ["units"](../modules/_units_.md) › [IUnitImageFileNames](_units_.iunitimagefilenames.md)
+[@bluuarc/bfmt-utilities - v0.5.0](../README.md) › [Globals](../globals.md) › ["units"](../modules/_units_.md) › [IUnitImageFileNames](_units_.iunitimagefilenames.md)
 
 # Interface: IUnitImageFileNames
 
