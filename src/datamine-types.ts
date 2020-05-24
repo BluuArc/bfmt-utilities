@@ -72,6 +72,7 @@ export interface IBaseProcEffect {
 	'effect delay time(ms)/frame': string;
 	'target area': TargetArea;
 	'target type': TargetType;
+	params?: string;
 }
 
 export interface IProcEffect extends IBaseProcEffect {
@@ -90,14 +91,23 @@ export type ProcEffect = IProcEffect | IUnknownProcEffect;
 export interface IPassiveEffect {
 	'passive id': string;
 	[key: string]: any;
+	/**
+	 * @author BluuArc
+	 */
+	params?: string;
 }
 
 export interface ITriggeredEffect {
 	'passive id': '66';
+	'passive target': TargetType;
 	'trigger on bb'?: boolean;
 	'trigger on sbb'?: boolean;
 	'trigger on ubb'?: boolean;
 	'triggered effect': ProcEffect[];
+	/**
+	 * @author BluuArc
+	 */
+	params?: string;
 }
 
 export interface IUnknownPassiveEffect {
@@ -222,6 +232,10 @@ export interface IExtraSkillCondition {
 export interface IExtraSkillPassiveEffect extends IPassiveEffect {
 	conditions: IExtraSkillCondition[];
 	'passive target': TargetType;
+	/**
+	 * @author BluuArc
+	 */
+	conditionParams?: string;
 }
 
 export interface IExtraSkillUnknownPassiveEffect extends IUnknownPassiveEffect {
@@ -417,6 +431,7 @@ export interface IUnit {
 	 * @description Arena AI; determines chances for different actions in Arena.
 	 */
 	ai?: IUnitArenaAiEntry[];
+	ai_id?: string;
 	animations?: {
 		[UnitAnimationKey.Attack]?: IUnitAnimationEntry;
 		[UnitAnimationKey.Idle]?: IUnitAnimationEntry;
@@ -475,7 +490,7 @@ export interface IUnit {
 		/**
 		 * @description unit ID of pre-evolution
 		 */
-		prev?: string;
+		prev?: string[];
 	};
 
 	/**
