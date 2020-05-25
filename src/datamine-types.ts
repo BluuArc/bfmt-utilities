@@ -257,6 +257,12 @@ export interface IExtraSkill {
 	 */
 	associated_units?: string[];
 
+	/**
+	 * @description Array of mission IDs where this extra skill is a reward
+	 * @author BluuArc
+	 */
+	first_clear_missions?: string[];
+
 	desc: string;
 	effects: ExtraSkillPassiveEffect[];
 	id: string;
@@ -308,17 +314,17 @@ export interface ISpEnhancementEffectWrapper {
 	/**
 	 * @description used when enhancing an existing BB
 	 */
-	'add to bb'?: PassiveEffect;
+	'add to bb'?: ProcEffect;
 
 	/**
 	 * @description used when enhancing an existing SBB
 	 */
-	'add to sbb'?: PassiveEffect;
+	'add to sbb'?: ProcEffect;
 
 	/**
 	 * @description used when enhancing an existing UBB
 	 */
-	'add to ubb'?: PassiveEffect;
+	'add to ubb'?: ProcEffect;
 }
 
 export interface ISpEnhancementSkill {
@@ -480,7 +486,9 @@ export interface IUnit {
 	 */
 	evolution?: {
 		mats?: IEvolutionMaterial[];
-		cost?: number;
+		// cost?: number;
+		zel?: number;
+		karma?: number;
 
 		/**
 		 * @description unit ID of next evolution
@@ -555,6 +563,7 @@ export interface IUnit {
 	};
 	rarity: number;
 	'sell caution': boolean;
+	sell_price?: number;
 	stats: {
 		anima?: {
 			atk: number;
@@ -662,6 +671,8 @@ export interface IItem {
 	 * @author BluuArc
 	 */
 	first_clear_missions?: string[];
+
+	'sell caution'?: boolean;
 }
 
 export interface IConsumableItem extends IItem {
@@ -721,6 +732,10 @@ export interface IUnitClearBonus {
 	unit: {
 		count: string;
 		id: string;
+		/**
+		 * @author BluuArc
+		 */
+		elgif?: string;
 	};
 }
 
