@@ -226,7 +226,7 @@ export interface IExtraSkillCondition {
 	'item required'?: string[];
 	'sphere category required'?: SphereTypeName;
 	'sphere category required (raw)'?: SphereTypeId;
-	'unit required'?: { id: number; name: string }[];
+	'unit required'?: { id: number; name?: string }[];
 }
 
 export interface IExtraSkillPassiveEffect extends IPassiveEffect {
@@ -645,10 +645,13 @@ export interface IItem {
 	sell_price: number;
 	thumbnail: string;
 	type: ItemType;
-	recipe?: IItemRecipe;
+	/**
+	 * @description If the source is from Deathmax, then it is an object. If the source is from BluuArc, then it is an array.
+	 */
+	recipe?: IItemRecipe | IItemRecipe[];
 
 	/**
-	 * @description List of other items that use the current item somewhere in their recipe
+	 * @description List of other items that use the current item in their recipe
 	 * @author BluuArc
 	 */
 	usage?: IItemUsageEntry[];
@@ -687,7 +690,7 @@ export interface IConsumableItem extends IItem {
 export interface ISphere extends IItem {
 	effect: PassiveEffect[];
 	'sphere type': SphereTypeId;
-	'sphere type text': SphereTypeName;
+	'sphere type text'?: SphereTypeName;
 }
 
 export enum MimicUnitIds {
@@ -774,12 +777,13 @@ export interface IMission {
 	karma: number;
 	land: string;
 	mimic_info: IMimicInfo;
+	mimic_info_params?: string;
 	name: string;
 	xp: number;
 	zel: number;
 
 	/**
-	 * @description string delimited list of mission IDs
+	 * @description comma delimited list of mission IDs
 	 */
 	requires?: string;
 }
