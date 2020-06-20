@@ -19,7 +19,7 @@
 
 • **Anima**: = "anima"
 
-*Defined in [datamine-types.ts:403](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L403)*
+*Defined in [datamine-types.ts:437](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L437)*
 
 ___
 
@@ -27,7 +27,7 @@ ___
 
 • **Breaker**: = "breaker"
 
-*Defined in [datamine-types.ts:404](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L404)*
+*Defined in [datamine-types.ts:438](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L438)*
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **Guardian**: = "guardian"
 
-*Defined in [datamine-types.ts:405](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L405)*
+*Defined in [datamine-types.ts:439](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L439)*
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 • **Lord**: = "lord"
 
-*Defined in [datamine-types.ts:402](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L402)*
+*Defined in [datamine-types.ts:436](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L436)*
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 • **Oracle**: = "oracle"
 
-*Defined in [datamine-types.ts:406](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L406)*
+*Defined in [datamine-types.ts:440](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L440)*
 
 ___
 
@@ -59,4 +59,4 @@ ___
 
 • **Rex**: = "rex"
 
-*Defined in [datamine-types.ts:407](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L407)*
+*Defined in [datamine-types.ts:441](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L441)*

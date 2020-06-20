@@ -17,6 +17,7 @@
 ### Properties
 
 * [effect delay time(ms)/frame](_datamine_types_.iproceffect.md#effect-delay-time(ms)/frame)
+* [params](_datamine_types_.iproceffect.md#optional-params)
 * [proc id](_datamine_types_.iproceffect.md#proc-id)
 * [target area](_datamine_types_.iproceffect.md#target-area)
 * [target type](_datamine_types_.iproceffect.md#target-type)
@@ -33,11 +34,21 @@
 
 ___
 
+### `Optional` params
+
+• **params**? : *undefined | string*
+
+*Inherited from [IBaseProcEffect](_datamine_types_.ibaseproceffect.md).[params](_datamine_types_.ibaseproceffect.md#optional-params)*
+
+*Defined in [datamine-types.ts:75](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L75)*
+
+___
+
 ###  proc id
 
 • **proc id**: *string*
 
-*Defined in [datamine-types.ts:78](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L78)*
+*Defined in [datamine-types.ts:79](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L79)*
 
 ___
 

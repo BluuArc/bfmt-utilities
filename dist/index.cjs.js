@@ -1098,9 +1098,9 @@ var ArenaCondition;
 })(ArenaCondition || (ArenaCondition = {}));
 var MoveType;
 (function (MoveType) {
-    MoveType[MoveType["Moving"] = 1] = "Moving";
-    MoveType[MoveType["Teleporting"] = 2] = "Teleporting";
-    MoveType[MoveType["NonMoving"] = 3] = "NonMoving";
+    MoveType["Moving"] = "1";
+    MoveType["Teleporting"] = "2";
+    MoveType["NonMoving"] = "3";
 })(MoveType || (MoveType = {}));
 var TargetArea;
 (function (TargetArea) {
@@ -1219,6 +1219,7 @@ var UnitGettingType;
     UnitGettingType["Ineligible"] = "not eligible for achievement";
     UnitGettingType["Farmable"] = "farmable";
     UnitGettingType["RareSummon"] = "rare summon";
+    UnitGettingType["ExtraSkillElgif"] = "extra skill elgif";
 })(UnitGettingType || (UnitGettingType = {}));
 var UnitKind;
 (function (UnitKind) {

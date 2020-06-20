@@ -19,7 +19,7 @@
 
 • **karma**: *string*
 
-*Defined in [datamine-types.ts:597](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L597)*
+*Defined in [datamine-types.ts:653](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L653)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **materials**: *[IItemRecipeMaterial](_datamine_types_.iitemrecipematerial.md)[]*
 
-*Defined in [datamine-types.ts:598](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L598)*
+*Defined in [datamine-types.ts:654](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L654)*

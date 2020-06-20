@@ -20,9 +20,9 @@
 
 ### `Optional` add to bb
 
-• **add to bb**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
+• **add to bb**? : *[ProcEffect](../modules/_datamine_types_.md#proceffect)*
 
-*Defined in [datamine-types.ts:297](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L297)*
+*Defined in [datamine-types.ts:330](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L330)*
 
 **`description`** used when enhancing an existing BB
 
@@ -32,7 +32,7 @@ ___
 
 • **add to passive**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
 
-*Defined in [datamine-types.ts:292](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L292)*
+*Defined in [datamine-types.ts:325](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L325)*
 
 **`description`** used when enhancing an existing effect on LS
 
@@ -40,9 +40,9 @@ ___
 
 ### `Optional` add to sbb
 
-• **add to sbb**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
+• **add to sbb**? : *[ProcEffect](../modules/_datamine_types_.md#proceffect)*
 
-*Defined in [datamine-types.ts:302](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L302)*
+*Defined in [datamine-types.ts:335](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L335)*
 
 **`description`** used when enhancing an existing SBB
 
@@ -50,9 +50,9 @@ ___
 
 ### `Optional` add to ubb
 
-• **add to ubb**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
+• **add to ubb**? : *[ProcEffect](../modules/_datamine_types_.md#proceffect)*
 
-*Defined in [datamine-types.ts:307](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L307)*
+*Defined in [datamine-types.ts:340](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L340)*
 
 **`description`** used when enhancing an existing UBB
 
@@ -62,6 +62,6 @@ ___
 
 • **passive**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
 
-*Defined in [datamine-types.ts:287](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L287)*
+*Defined in [datamine-types.ts:320](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L320)*
 
 **`description`** used to add an entirely new effect
