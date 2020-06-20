@@ -16,7 +16,7 @@
 
 • **Attack**: = "attack"
 
-*Defined in [datamine-types.ts:347](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L347)*
+*Defined in [datamine-types.ts:380](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L380)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **Idle**: = "idle"
 
-*Defined in [datamine-types.ts:348](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L348)*
+*Defined in [datamine-types.ts:381](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L381)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **Move**: = "move"
 
-*Defined in [datamine-types.ts:349](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L349)*
+*Defined in [datamine-types.ts:382](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L382)*

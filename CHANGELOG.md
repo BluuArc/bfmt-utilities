@@ -6,6 +6,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - YYYY-MM-DD
 ### ⚠ Breaking Changes
+* datamine-types: `MoveType` values are now strings instead of numbers.
+* datamine-types: `IUnitMovementEntry['move speed']` is now an optional value.
+* datamine-types: `IItem.dictionary.lore` has been replaced with `IItem.lore`.
+* datamine-types: Remove `IExtraSkillCondition` and replace with `ExtraSkillCondition` type.
+	* Split into subtypes `IExtraSkillItemCondition`, `IExtraSkillSphereTypeCondition`, `IExtraSkillUnitCondition`, `IExtraSkillUnknownCondition`.
+	* Changes type of `IExtraSkillPassiveEffect.conditions` and `IExtraSkillUnknownPassiveEffect.conditions` to be `ExtraSkillCondition[]`.
+* datamine-types: Move `effect delay time(ms)/frame` property from `IDamageFramesEntry` to `IBurstDamageFramesEntry`.
+	* As a result, `getExtraAttackDamageFramesEntry` now returns `IBurstDamageFramesentry` instead of `IDamageFramesEntry`.
+* datamine-types: Replace `IUnit.evolution.cost` with `IUnit.evolution.zel` and `IUnit.evolution.karma`.
+* datamine-types: `IUnit.evolution.prev` is now an array of strings instead of just a string.
+* datamine-types: Rename `IUnit.guild_raid['extra skill?']` to `IUnit.guild_raid['extra skill']` and make it properly optional.
+
+### ➕ Additions
+* datamine-types: Add definitions for the following types
+	* `IMission.assets`
+	* `UnitGettingType.ExtraSkillElgif`
+	* `IUnit.specialEffects`
+	* `IUnit.associated_elgifs` and `IItem.associated_elgifs`
+	* `IItemRecipe.appearanceRequirements`
+	* `IUnknownClearBonus`
+
+## [0.5.0] - 2020-05-03
+### ⚠ Breaking Changes
 * datamine-types: stat entries that are not `_lord` or `_base` in `IUnit.stats` are now optional.
 
 ### ➕ Additions
@@ -184,7 +207,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `UnitKind` enum
 	* `IUnit` interface
 
-[Unreleased]: https://github.com/BluuArc/bfmt-utilities/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/BluuArc/bfmt-utilities/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/BluuArc/bfmt-utilities/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/BluuArc/bfmt-utilities/compare/v0.3.1...v0.4.1
 [0.4.0]: https://github.com/BluuArc/bfmt-utilities/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/BluuArc/bfmt-utilities/compare/v0.3.0...v0.3.1

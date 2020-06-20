@@ -10,15 +10,15 @@
 
 ### Properties
 
-* [move speed](_datamine_types_.iunitmovemententry.md#move-speed)
+* [move speed](_datamine_types_.iunitmovemententry.md#optional-move-speed)
 * [move speed type](_datamine_types_.iunitmovemententry.md#move-speed-type)
 * [move type](_datamine_types_.iunitmovemententry.md#move-type)
 
 ## Properties
 
-###  move speed
+### `Optional` move speed
 
-• **move speed**: *number*
+• **move speed**? : *undefined | number*
 
 *Defined in [datamine-types.ts:41](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L41)*
 

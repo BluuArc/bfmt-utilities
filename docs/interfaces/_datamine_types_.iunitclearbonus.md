@@ -18,10 +18,12 @@
 
 • **unit**: *object*
 
-*Defined in [datamine-types.ts:706](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L706)*
+*Defined in [datamine-types.ts:775](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L775)*
 
 #### Type declaration:
 
 * **count**: *string*
+
+* **elgif**? : *undefined | string*
 
 * **id**: *string*

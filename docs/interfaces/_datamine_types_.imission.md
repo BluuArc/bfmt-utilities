@@ -11,6 +11,7 @@
 ### Properties
 
 * [area](_datamine_types_.imission.md#area)
+* [assets](_datamine_types_.imission.md#optional-assets)
 * [battle_count](_datamine_types_.imission.md#battle_count)
 * [bfmtMetadata](_datamine_types_.imission.md#optional-bfmtmetadata)
 * [clear_bonus](_datamine_types_.imission.md#clear_bonus)
@@ -23,6 +24,7 @@
 * [karma](_datamine_types_.imission.md#karma)
 * [land](_datamine_types_.imission.md#land)
 * [mimic_info](_datamine_types_.imission.md#mimic_info)
+* [mimic_info_params](_datamine_types_.imission.md#optional-mimic_info_params)
 * [name](_datamine_types_.imission.md#name)
 * [requires](_datamine_types_.imission.md#optional-requires)
 * [xp](_datamine_types_.imission.md#xp)
@@ -34,7 +36,17 @@
 
 • **area**: *string*
 
-*Defined in [datamine-types.ts:735](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L735)*
+*Defined in [datamine-types.ts:817](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L817)*
+
+___
+
+### `Optional` assets
+
+• **assets**? : *undefined | object*
+
+*Defined in [datamine-types.ts:842](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L842)*
+
+**`author`** BluuArc
 
 ___
 
@@ -42,7 +54,7 @@ ___
 
 • **battle_count**: *number*
 
-*Defined in [datamine-types.ts:736](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L736)*
+*Defined in [datamine-types.ts:818](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L818)*
 
 ___
 
@@ -50,7 +62,7 @@ ___
 
 • **bfmtMetadata**? : *[IBfmtMetadata](_datamine_types_.ibfmtmetadata.md)*
 
-*Defined in [datamine-types.ts:733](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L733)*
+*Defined in [datamine-types.ts:815](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L815)*
 
 **`author`** BluuArc
 
@@ -60,7 +72,7 @@ ___
 
 • **clear_bonus**: *[ClearBonus](../modules/_datamine_types_.md#clearbonus)[]*
 
-*Defined in [datamine-types.ts:737](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L737)*
+*Defined in [datamine-types.ts:819](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L819)*
 
 ___
 
@@ -68,7 +80,7 @@ ___
 
 • **continue**: *boolean*
 
-*Defined in [datamine-types.ts:738](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L738)*
+*Defined in [datamine-types.ts:820](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L820)*
 
 ___
 
@@ -76,7 +88,7 @@ ___
 
 • **desc**: *string*
 
-*Defined in [datamine-types.ts:739](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L739)*
+*Defined in [datamine-types.ts:821](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L821)*
 
 ___
 
@@ -84,7 +96,7 @@ ___
 
 • **difficulty**: *number*
 
-*Defined in [datamine-types.ts:740](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L740)*
+*Defined in [datamine-types.ts:822](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L822)*
 
 ___
 
@@ -92,7 +104,7 @@ ___
 
 • **dungeon**: *string*
 
-*Defined in [datamine-types.ts:741](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L741)*
+*Defined in [datamine-types.ts:823](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L823)*
 
 ___
 
@@ -100,7 +112,7 @@ ___
 
 • **energy_use**: *number*
 
-*Defined in [datamine-types.ts:742](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L742)*
+*Defined in [datamine-types.ts:824](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L824)*
 
 ___
 
@@ -108,7 +120,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [datamine-types.ts:743](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L743)*
+*Defined in [datamine-types.ts:825](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L825)*
 
 ___
 
@@ -116,7 +128,7 @@ ___
 
 • **karma**: *number*
 
-*Defined in [datamine-types.ts:744](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L744)*
+*Defined in [datamine-types.ts:826](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L826)*
 
 ___
 
@@ -124,7 +136,7 @@ ___
 
 • **land**: *string*
 
-*Defined in [datamine-types.ts:745](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L745)*
+*Defined in [datamine-types.ts:827](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L827)*
 
 ___
 
@@ -132,7 +144,15 @@ ___
 
 • **mimic_info**: *[IMimicInfo](_datamine_types_.imimicinfo.md)*
 
-*Defined in [datamine-types.ts:746](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L746)*
+*Defined in [datamine-types.ts:828](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L828)*
+
+___
+
+### `Optional` mimic_info_params
+
+• **mimic_info_params**? : *undefined | string*
+
+*Defined in [datamine-types.ts:829](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L829)*
 
 ___
 
@@ -140,7 +160,7 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:747](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L747)*
+*Defined in [datamine-types.ts:830](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L830)*
 
 ___
 
@@ -148,9 +168,9 @@ ___
 
 • **requires**? : *undefined | string*
 
-*Defined in [datamine-types.ts:754](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L754)*
+*Defined in [datamine-types.ts:837](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L837)*
 
-**`description`** string delimited list of mission IDs
+**`description`** comma delimited list of mission IDs
 
 ___
 
@@ -158,7 +178,7 @@ ___
 
 • **xp**: *number*
 
-*Defined in [datamine-types.ts:748](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L748)*
+*Defined in [datamine-types.ts:831](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L831)*
 
 ___
 
@@ -166,4 +186,4 @@ ___
 
 • **zel**: *number*
 
-*Defined in [datamine-types.ts:749](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L749)*
+*Defined in [datamine-types.ts:832](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L832)*

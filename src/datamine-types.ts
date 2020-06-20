@@ -32,13 +32,13 @@ export interface IUnitArenaAiEntry {
 }
 
 export enum MoveType {
-	Moving = 1,
-	Teleporting = 2,
-	NonMoving = 3,
+	Moving = '1',
+	Teleporting = '2',
+	NonMoving = '3',
 }
 
 export interface IUnitMovementEntry {
-	'move speed': number;
+	'move speed'?: number;
 	'move speed type': string;
 	'move type': MoveType;
 }
@@ -72,6 +72,7 @@ export interface IBaseProcEffect {
 	'effect delay time(ms)/frame': string;
 	'target area': TargetArea;
 	'target type': TargetType;
+	params?: string;
 }
 
 export interface IProcEffect extends IBaseProcEffect {
@@ -90,14 +91,23 @@ export type ProcEffect = IProcEffect | IUnknownProcEffect;
 export interface IPassiveEffect {
 	'passive id': string;
 	[key: string]: any;
+	/**
+	 * @author BluuArc
+	 */
+	params?: string;
 }
 
 export interface ITriggeredEffect {
 	'passive id': '66';
+	'passive target': TargetType;
 	'trigger on bb'?: boolean;
 	'trigger on sbb'?: boolean;
 	'trigger on ubb'?: boolean;
 	'triggered effect': ProcEffect[];
+	/**
+	 * @author BluuArc
+	 */
+	params?: string;
 }
 
 export interface IUnknownPassiveEffect {
@@ -130,7 +140,6 @@ export interface ISpEnhancementTriggeredEffect extends ITriggeredEffect {
 export type SpEnhancementEffect = ISpEnhancementPassiveEffect | ISpEnhancementUnknownPassiveEffect | ISpEnhancementTriggeredEffect;
 
 export interface IDamageFramesEntry {
-	'effect delay time(ms)/frame': string;
 	'frame times': number[];
 	'hit dmg% distribution': number[];
 	'hit dmg% distribution (total)': number;
@@ -143,6 +152,7 @@ export interface IBurstLevelEntry {
 }
 
 export interface IBurstDamageFramesEntry extends IDamageFramesEntry {
+	'effect delay time(ms)/frame': string;
 	'unknown proc id'?: string;
 	'proc id'?: string;
 }
@@ -212,20 +222,37 @@ export enum SphereTypeId {
 	'Special' = 14,
 }
 
-export interface IExtraSkillCondition {
-	'item required'?: string[];
-	'sphere category required'?: SphereTypeName;
-	'sphere category required (raw)'?: SphereTypeId;
-	'unit required'?: { id: number; name: string }[];
+export interface IExtraSkillItemCondition {
+	'item required': string[];
 }
 
+export interface IExtraSkillSphereTypeCondition {
+	'sphere category required': SphereTypeName;
+	'sphere category required (raw)': SphereTypeId;
+}
+
+export interface IExtraSkillUnitCondition {
+	'unit required': { id: number; name?: string }[];
+}
+
+export interface IExtraSkillUnknownCondition {
+	type_id?: string;
+	condition_id?: string;
+}
+
+export type ExtraSkillCondition = IExtraSkillItemCondition | IExtraSkillSphereTypeCondition | IExtraSkillUnitCondition | IExtraSkillUnknownCondition;
+
 export interface IExtraSkillPassiveEffect extends IPassiveEffect {
-	conditions: IExtraSkillCondition[];
+	conditions: ExtraSkillCondition[];
 	'passive target': TargetType;
+	/**
+	 * @author BluuArc
+	 */
+	conditionParams?: string;
 }
 
 export interface IExtraSkillUnknownPassiveEffect extends IUnknownPassiveEffect {
-	conditions: IExtraSkillCondition[];
+	conditions: ExtraSkillCondition[];
 	'passive target': TargetType;
 }
 
@@ -242,6 +269,12 @@ export interface IExtraSkill {
 	 * @author BluuArc
 	 */
 	associated_units?: string[];
+
+	/**
+	 * @description Array of mission IDs where this extra skill is a reward
+	 * @author BluuArc
+	 */
+	first_clear_missions?: string[];
 
 	desc: string;
 	effects: ExtraSkillPassiveEffect[];
@@ -294,17 +327,17 @@ export interface ISpEnhancementEffectWrapper {
 	/**
 	 * @description used when enhancing an existing BB
 	 */
-	'add to bb'?: PassiveEffect;
+	'add to bb'?: ProcEffect;
 
 	/**
 	 * @description used when enhancing an existing SBB
 	 */
-	'add to sbb'?: PassiveEffect;
+	'add to sbb'?: ProcEffect;
 
 	/**
 	 * @description used when enhancing an existing UBB
 	 */
-	'add to ubb'?: PassiveEffect;
+	'add to ubb'?: ProcEffect;
 }
 
 export interface ISpEnhancementSkill {
@@ -372,6 +405,7 @@ export enum UnitGettingType {
 	Ineligible = 'not eligible for achievement',
 	Farmable = 'farmable',
 	RareSummon = 'rare summon',
+	ExtraSkillElgif = 'extra skill elgif',
 }
 
 export enum UnitKind {
@@ -417,6 +451,7 @@ export interface IUnit {
 	 * @description Arena AI; determines chances for different actions in Arena.
 	 */
 	ai?: IUnitArenaAiEntry[];
+	ai_id?: string;
 	animations?: {
 		[UnitAnimationKey.Attack]?: IUnitAnimationEntry;
 		[UnitAnimationKey.Idle]?: IUnitAnimationEntry;
@@ -436,7 +471,7 @@ export interface IUnit {
 	 */
 	guild_raid?: {
 		'leader skill'?: ILeaderSkill;
-		'extra skill?': IExtraSkill;
+		'extra skill'?: IExtraSkill;
 	};
 
 	/**
@@ -465,7 +500,8 @@ export interface IUnit {
 	 */
 	evolution?: {
 		mats?: IEvolutionMaterial[];
-		cost?: number;
+		zel?: number;
+		karma?: number;
 
 		/**
 		 * @description unit ID of next evolution
@@ -475,7 +511,7 @@ export interface IUnit {
 		/**
 		 * @description unit ID of pre-evolution
 		 */
-		prev?: string;
+		prev?: string[];
 	};
 
 	/**
@@ -540,6 +576,7 @@ export interface IUnit {
 	};
 	rarity: number;
 	'sell caution': boolean;
+	sell_price?: number;
 	stats: {
 		anima?: {
 			atk: number;
@@ -576,6 +613,24 @@ export interface IUnit {
 		_base: IUnitStatsEntry;
 		_lord: IUnitStatsEntry;
 	};
+
+	/**
+	 * @author BluuArc
+	 */
+	specialEffects?: {
+		innateStatusResist?: string;
+		additionalFusionExpBoost?: number;
+		additionalFusionBurstLevel?: number;
+		fusionStatBoost?: string;
+		fusionSphereCapacityBoost?: number;
+		fusionElgifAction?: 'add'|'remove';
+	};
+
+	/**
+	 * @description Array of extra skill IDs that have the current unit as a condition for at least one effect.
+	 * @author BluuArc
+	 */
+	associated_elgifs?: string[];
 }
 
 export enum ItemType {
@@ -596,6 +651,11 @@ export interface IItemRecipeMaterial {
 export interface IItemRecipe {
 	karma: string;
 	materials: IItemRecipeMaterial[];
+	/**
+	 * @description Array of item IDs that the player must have for this recipe to appear.
+	 * @author BluuArc
+	 */
+	appearanceRequirements?: string[];
 }
 
 /**
@@ -621,10 +681,13 @@ export interface IItem {
 	sell_price: number;
 	thumbnail: string;
 	type: ItemType;
-	recipe?: IItemRecipe;
+	/**
+	 * @description If the source is from Deathmax, then it is an object. If the source is from BluuArc, then it is an array.
+	 */
+	recipe?: IItemRecipe | IItemRecipe[];
 
 	/**
-	 * @description List of other items that use the current item somewhere in their recipe
+	 * @description List of other items that use the current item in their recipe
 	 * @author BluuArc
 	 */
 	usage?: IItemUsageEntry[];
@@ -632,9 +695,7 @@ export interface IItem {
 	/**
 	 * @author BluuArc
 	 */
-	dictionary?: {
-		lore?: string;
-	};
+	lore?: string;
 
 	/**
 	 * @description List of units that use this item
@@ -647,6 +708,14 @@ export interface IItem {
 	 * @author BluuArc
 	 */
 	first_clear_missions?: string[];
+
+	'sell caution'?: boolean;
+
+	/**
+	 * @description Array of extra skill IDs that have the current item as a condition for at least one effect.
+	 * @author BluuArc
+	 */
+	associated_elgifs?: string[];
 }
 
 export interface IConsumableItem extends IItem {
@@ -661,7 +730,7 @@ export interface IConsumableItem extends IItem {
 export interface ISphere extends IItem {
 	effect: PassiveEffect[];
 	'sphere type': SphereTypeId;
-	'sphere type text': SphereTypeName;
+	'sphere type text'?: SphereTypeName;
 }
 
 export enum MimicUnitIds {
@@ -706,6 +775,10 @@ export interface IUnitClearBonus {
 	unit: {
 		count: string;
 		id: string;
+		/**
+		 * @author BluuArc
+		 */
+		elgif?: string;
 	};
 }
 
@@ -724,7 +797,16 @@ export interface IKarmaClearBonus {
 	karma: string;
 }
 
-export type ClearBonus = IGemClearBonus | IUnitClearBonus | IItemClearBonus | IZelClearBonus | IKarmaClearBonus;
+export interface IUnknownClearBonus {
+	unknown: {
+		type?: string;
+		rewardId?: string;
+		count?: string;
+		params: string;
+	};
+}
+
+export type ClearBonus = IGemClearBonus | IUnitClearBonus | IItemClearBonus | IZelClearBonus | IKarmaClearBonus | IUnknownClearBonus;
 
 export interface IMission {
 	/**
@@ -744,12 +826,24 @@ export interface IMission {
 	karma: number;
 	land: string;
 	mimic_info: IMimicInfo;
+	mimic_info_params?: string;
 	name: string;
 	xp: number;
 	zel: number;
 
 	/**
-	 * @description string delimited list of mission IDs
+	 * @description comma delimited list of mission IDs
 	 */
 	requires?: string;
+
+	/**
+	 * @author BluuArc
+	 */
+	assets?: {
+		battleMusic?: string;
+		bossMusic?: string;
+		background?: string;
+		openingCutscene?: string;
+		endingCutscene?: string;
+	};
 }

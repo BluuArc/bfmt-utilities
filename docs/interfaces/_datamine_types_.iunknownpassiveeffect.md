@@ -23,7 +23,7 @@
 
 • **unknown passive id**: *string*
 
-*Defined in [datamine-types.ts:104](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L104)*
+*Defined in [datamine-types.ts:114](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L114)*
 
 ___
 
@@ -31,4 +31,4 @@ ___
 
 • **unknown passive params**: *string*
 
-*Defined in [datamine-types.ts:105](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L105)*
+*Defined in [datamine-types.ts:115](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L115)*

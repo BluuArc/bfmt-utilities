@@ -23,7 +23,7 @@
 
 • **associated_units**? : *string[]*
 
-*Defined in [datamine-types.ts:338](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L338)*
+*Defined in [datamine-types.ts:371](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L371)*
 
 **`description`** List of units that use this leader skill
 
@@ -35,7 +35,7 @@ ___
 
 • **bfmtMetadata**? : *[IBfmtMetadata](_datamine_types_.ibfmtmetadata.md)*
 
-*Defined in [datamine-types.ts:332](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L332)*
+*Defined in [datamine-types.ts:365](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L365)*
 
 **`author`** BluuArc
 
@@ -45,7 +45,7 @@ ___
 
 • **desc**: *string*
 
-*Defined in [datamine-types.ts:340](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L340)*
+*Defined in [datamine-types.ts:373](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L373)*
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 • **effects**: *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)[]*
 
-*Defined in [datamine-types.ts:341](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L341)*
+*Defined in [datamine-types.ts:374](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L374)*
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [datamine-types.ts:342](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L342)*
+*Defined in [datamine-types.ts:375](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L375)*
 
 ___
 
@@ -69,4 +69,4 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:343](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L343)*
+*Defined in [datamine-types.ts:376](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L376)*

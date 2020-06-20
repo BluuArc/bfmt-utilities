@@ -19,7 +19,7 @@
 
 • **Dark**: = "dark"
 
-*Defined in [datamine-types.ts:362](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L362)*
+*Defined in [datamine-types.ts:395](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L395)*
 
 ___
 
@@ -27,7 +27,7 @@ ___
 
 • **Earth**: = "earth"
 
-*Defined in [datamine-types.ts:359](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L359)*
+*Defined in [datamine-types.ts:392](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L392)*
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **Fire**: = "fire"
 
-*Defined in [datamine-types.ts:357](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L357)*
+*Defined in [datamine-types.ts:390](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L390)*
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 • **Light**: = "light"
 
-*Defined in [datamine-types.ts:361](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L361)*
+*Defined in [datamine-types.ts:394](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L394)*
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 • **Thunder**: = "thunder"
 
-*Defined in [datamine-types.ts:360](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L360)*
+*Defined in [datamine-types.ts:393](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L393)*
 
 ___
 
@@ -59,4 +59,4 @@ ___
 
 • **Water**: = "water"
 
-*Defined in [datamine-types.ts:358](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L358)*
+*Defined in [datamine-types.ts:391](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L391)*
