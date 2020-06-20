@@ -500,7 +500,6 @@ export interface IUnit {
 	 */
 	evolution?: {
 		mats?: IEvolutionMaterial[];
-		// cost?: number;
 		zel?: number;
 		karma?: number;
 
