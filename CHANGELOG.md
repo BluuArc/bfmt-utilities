@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* As a result, `getExtraAttackDamageFramesEntry` now returns `IBurstDamageFramesentry` instead of `IDamageFramesEntry`.
 * datamine-types: Replace `IUnit.evolution.cost` with `IUnit.evolution.zel` and `IUnit.evolution.karma`.
 * datamine-types: `IUnit.evolution.prev` is now an array of strings instead of just a string.
+* datamine-types: Rename `IUnit.guild_raid['extra skill?']` to `IUnit.guild_raid['extra skill']` and make it properly optional.
 
 ### ➕ Additions
 * datamine-types: Add definitions for the following types

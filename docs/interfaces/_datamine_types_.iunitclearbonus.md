@@ -18,7 +18,7 @@
 
 • **unit**: *object*
 
-*Defined in [datamine-types.ts:776](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L776)*
+*Defined in [datamine-types.ts:775](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L775)*
 
 #### Type declaration:
 

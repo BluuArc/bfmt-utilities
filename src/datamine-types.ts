@@ -471,7 +471,7 @@ export interface IUnit {
 	 */
 	guild_raid?: {
 		'leader skill'?: ILeaderSkill;
-		'extra skill?': IExtraSkill;
+		'extra skill'?: IExtraSkill;
 	};
 
 	/**
