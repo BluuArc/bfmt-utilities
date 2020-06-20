@@ -405,6 +405,7 @@ export enum UnitGettingType {
 	Ineligible = 'not eligible for achievement',
 	Farmable = 'farmable',
 	RareSummon = 'rare summon',
+	ExtraSkillElgif = 'extra skill elgif',
 }
 
 export enum UnitKind {

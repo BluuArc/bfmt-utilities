@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### ➕ Additions
 * datamine-types: Add type definition for `IMission.assets`.
+* datamine-types: Add `UnitGettingType.ExtraSkillElgif` definition.
 
 ## [0.5.0] - 2020-05-03
 ### ⚠ Breaking Changes
