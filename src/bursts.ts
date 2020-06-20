@@ -2,7 +2,6 @@ import {
 	IBraveBurst,
 	IBurstLevelEntry,
 	ProcEffect,
-	IDamageFramesEntry,
 	IBurstDamageFramesEntry,
 } from './datamine-types';
 import { getEffectId, isAttackingProcId } from './buffs';
@@ -47,7 +46,7 @@ export function getEffectsForBurst (burst: IBraveBurst, level?: number): ProcEff
 export function getExtraAttackDamageFramesEntry (
 	damageFrames: IBurstDamageFramesEntry[],
 	effectDelay = '0.0/0',
-): IDamageFramesEntry {
+): IBurstDamageFramesEntry {
 	// relevant frames are all effects for healing or attacking
 	const inputFrames = Array.isArray(damageFrames) ? damageFrames : [];
 	const relevantFrames = inputFrames.filter(frame => {
@@ -73,7 +72,7 @@ export function getExtraAttackDamageFramesEntry (
 		return acc;
 	}, []);
 
-	const resultDamageFramesEntry: IDamageFramesEntry = {
+	const resultDamageFramesEntry: IBurstDamageFramesEntry = {
 		'effect delay time(ms)/frame': effectDelay,
 		'frame times': [],
 		'hit dmg% distribution': [],

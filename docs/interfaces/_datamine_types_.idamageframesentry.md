@@ -12,7 +12,6 @@
 
 ### Properties
 
-* [effect delay time(ms)/frame](_datamine_types_.idamageframesentry.md#effect-delay-time(ms)/frame)
 * [frame times](_datamine_types_.idamageframesentry.md#frame-times)
 * [hit dmg% distribution](_datamine_types_.idamageframesentry.md#hit-dmg%-distribution)
 * [hit dmg% distribution (total)](_datamine_types_.idamageframesentry.md#hit-dmg%-distribution-(total))
@@ -20,19 +19,11 @@
 
 ## Properties
 
-###  effect delay time(ms)/frame
-
-• **effect delay time(ms)/frame**: *string*
-
-*Defined in [datamine-types.ts:143](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L143)*
-
-___
-
 ###  frame times
 
 • **frame times**: *number[]*
 
-*Defined in [datamine-types.ts:144](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L144)*
+*Defined in [datamine-types.ts:143](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L143)*
 
 ___
 
@@ -40,7 +31,7 @@ ___
 
 • **hit dmg% distribution**: *number[]*
 
-*Defined in [datamine-types.ts:145](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L145)*
+*Defined in [datamine-types.ts:144](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L144)*
 
 ___
 
@@ -48,7 +39,7 @@ ___
 
 • **hit dmg% distribution (total)**: *number*
 
-*Defined in [datamine-types.ts:146](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L146)*
+*Defined in [datamine-types.ts:145](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L145)*
 
 ___
 
@@ -56,4 +47,4 @@ ___
 
 • **hits**: *number*
 
-*Defined in [datamine-types.ts:147](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L147)*
+*Defined in [datamine-types.ts:146](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L146)*

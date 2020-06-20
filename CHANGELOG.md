@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * datamine-types: Remove `IExtraSkillCondition` and replace with `ExtraSkillCondition` type.
 	* Split into subtypes `IExtraSkillItemCondition`, `IExtraSkillSphereTypeCondition`, `IExtraSkillUnitCondition`, `IExtraSkillUnknownCondition`.
 	* Changes type of `IExtraSkillPassiveEffect.conditions` and `IExtraSkillUnknownPassiveEffect.conditions` to be `ExtraSkillCondition[]`.
+* datamine-types: Move `effect delay time(ms)/frame` property from `IDamageFramesEntry` to `IBurstDamageFramesEntry`
+	* As a result, `getExtraAttackDamageFramesEntry` now returns `IBurstDamageFramesentry` instead of `IDamageFramesEntry`
 
 ### ➕ Additions
 * datamine-types: Add definitions for the following types

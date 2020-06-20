@@ -140,7 +140,6 @@ export interface ISpEnhancementTriggeredEffect extends ITriggeredEffect {
 export type SpEnhancementEffect = ISpEnhancementPassiveEffect | ISpEnhancementUnknownPassiveEffect | ISpEnhancementTriggeredEffect;
 
 export interface IDamageFramesEntry {
-	'effect delay time(ms)/frame': string;
 	'frame times': number[];
 	'hit dmg% distribution': number[];
 	'hit dmg% distribution (total)': number;
@@ -153,6 +152,7 @@ export interface IBurstLevelEntry {
 }
 
 export interface IBurstDamageFramesEntry extends IDamageFramesEntry {
+	'effect delay time(ms)/frame': string;
 	'unknown proc id'?: string;
 	'proc id'?: string;
 }

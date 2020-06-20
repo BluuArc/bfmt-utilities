@@ -26,9 +26,7 @@
 
 • **effect delay time(ms)/frame**: *string*
 
-*Inherited from [IDamageFramesEntry](_datamine_types_.idamageframesentry.md).[effect delay time(ms)/frame](_datamine_types_.idamageframesentry.md#effect-delay-time(ms)/frame)*
-
-*Defined in [datamine-types.ts:143](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L143)*
+*Defined in [datamine-types.ts:155](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L155)*
 
 ___
 
@@ -38,7 +36,7 @@ ___
 
 *Inherited from [IDamageFramesEntry](_datamine_types_.idamageframesentry.md).[frame times](_datamine_types_.idamageframesentry.md#frame-times)*
 
-*Defined in [datamine-types.ts:144](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L144)*
+*Defined in [datamine-types.ts:143](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L143)*
 
 ___
 
@@ -48,7 +46,7 @@ ___
 
 *Inherited from [IDamageFramesEntry](_datamine_types_.idamageframesentry.md).[hit dmg% distribution](_datamine_types_.idamageframesentry.md#hit-dmg%-distribution)*
 
-*Defined in [datamine-types.ts:145](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L145)*
+*Defined in [datamine-types.ts:144](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L144)*
 
 ___
 
@@ -58,7 +56,7 @@ ___
 
 *Inherited from [IDamageFramesEntry](_datamine_types_.idamageframesentry.md).[hit dmg% distribution (total)](_datamine_types_.idamageframesentry.md#hit-dmg%-distribution-(total))*
 
-*Defined in [datamine-types.ts:146](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L146)*
+*Defined in [datamine-types.ts:145](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L145)*
 
 ___
 
@@ -68,7 +66,7 @@ ___
 
 *Inherited from [IDamageFramesEntry](_datamine_types_.idamageframesentry.md).[hits](_datamine_types_.idamageframesentry.md#hits)*
 
-*Defined in [datamine-types.ts:147](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L147)*
+*Defined in [datamine-types.ts:146](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L146)*
 
 ___
 
