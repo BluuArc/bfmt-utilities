@@ -799,7 +799,16 @@ export interface IKarmaClearBonus {
 	karma: string;
 }
 
-export type ClearBonus = IGemClearBonus | IUnitClearBonus | IItemClearBonus | IZelClearBonus | IKarmaClearBonus;
+export interface IUnknownClearBonus {
+	unknown: {
+		type?: string;
+		rewardId?: string;
+		count?: string;
+		params: string;
+	};
+}
+
+export type ClearBonus = IGemClearBonus | IUnitClearBonus | IItemClearBonus | IZelClearBonus | IKarmaClearBonus | IUnknownClearBonus;
 
 export interface IMission {
 	/**

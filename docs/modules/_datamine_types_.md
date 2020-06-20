@@ -70,6 +70,7 @@
 * [IUnitClearBonus](../interfaces/_datamine_types_.iunitclearbonus.md)
 * [IUnitMovementEntry](../interfaces/_datamine_types_.iunitmovemententry.md)
 * [IUnitStatsEntry](../interfaces/_datamine_types_.iunitstatsentry.md)
+* [IUnknownClearBonus](../interfaces/_datamine_types_.iunknownclearbonus.md)
 * [IUnknownPassiveEffect](../interfaces/_datamine_types_.iunknownpassiveeffect.md)
 * [IUnknownProcEffect](../interfaces/_datamine_types_.iunknownproceffect.md)
 * [IZelClearBonus](../interfaces/_datamine_types_.izelclearbonus.md)
@@ -91,9 +92,9 @@
 
 ###  ClearBonus
 
-Ƭ **ClearBonus**: *[IGemClearBonus](../interfaces/_datamine_types_.igemclearbonus.md) | [IUnitClearBonus](../interfaces/_datamine_types_.iunitclearbonus.md) | [IItemClearBonus](../interfaces/_datamine_types_.iitemclearbonus.md) | [IZelClearBonus](../interfaces/_datamine_types_.izelclearbonus.md) | [IKarmaClearBonus](../interfaces/_datamine_types_.ikarmaclearbonus.md)*
+Ƭ **ClearBonus**: *[IGemClearBonus](../interfaces/_datamine_types_.igemclearbonus.md) | [IUnitClearBonus](../interfaces/_datamine_types_.iunitclearbonus.md) | [IItemClearBonus](../interfaces/_datamine_types_.iitemclearbonus.md) | [IZelClearBonus](../interfaces/_datamine_types_.izelclearbonus.md) | [IKarmaClearBonus](../interfaces/_datamine_types_.ikarmaclearbonus.md) | [IUnknownClearBonus](../interfaces/_datamine_types_.iunknownclearbonus.md)*
 
-*Defined in [datamine-types.ts:802](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L802)*
+*Defined in [datamine-types.ts:811](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L811)*
 
 ___
 
