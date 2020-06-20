@@ -712,6 +712,12 @@ export interface IItem {
 	 * @author BluuArc
 	 */
 	associated_elgifs?: string[];
+
+	/**
+	 * @description Array of item IDs that the player must have for the recipe of this item to appear.
+	 * @author BluuArc
+	 */
+	appearanceRequirements?: string[];
 }
 
 export interface IConsumableItem extends IItem {
