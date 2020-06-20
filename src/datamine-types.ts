@@ -614,6 +614,18 @@ export interface IUnit {
 		_base: IUnitStatsEntry;
 		_lord: IUnitStatsEntry;
 	};
+
+	/**
+	 * @author BluuArc
+	 */
+	specialEffects?: {
+		innateStatusResist?: string;
+		additionalFusionExpBoost?: number;
+		additionalFusionBurstLevel?: number;
+		fusionStatBoost?: string;
+		fusionSphereCapacityBoost?: number;
+		fusionElgifAction?: 'add'|'remove';
+	};
 }
 
 export enum ItemType {

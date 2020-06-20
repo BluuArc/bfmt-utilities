@@ -14,8 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* Changes type of `IExtraSkillPassiveEffect.conditions` and `IExtraSkillUnknownPassiveEffect.conditions` to be `ExtraSkillCondition[]`.
 
 ### ➕ Additions
-* datamine-types: Add type definition for `IMission.assets`.
-* datamine-types: Add `UnitGettingType.ExtraSkillElgif` definition.
+* datamine-types: Add definitions for the following types
+	* `IMission.assets`
+	* `UnitGettingType.ExtraSkillElgif`
+	* `IUnit.specialEffects`
 
 ## [0.5.0] - 2020-05-03
 ### ⚠ Breaking Changes
