@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * datamine-types: `IUnitMovementEntry['move speed']` is now an optional value.
 * datamine-types: `IItem.dictionary.lore` has been replaced with `IItem.lore`.
 
+### ➕ Additions
+* datamine-types: Add type definition for `IMission.assets`.
+
 ## [0.5.0] - 2020-05-03
 ### ⚠ Breaking Changes
 * datamine-types: stat entries that are not `_lord` or `_base` in `IUnit.stats` are now optional.

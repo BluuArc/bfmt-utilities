@@ -784,4 +784,15 @@ export interface IMission {
 	 * @description comma delimited list of mission IDs
 	 */
 	requires?: string;
+
+	/**
+	 * @author BluuArc
+	 */
+	assets?: {
+		battleMusic?: string;
+		bossMusic?: string;
+		background?: string;
+		openingCutscene?: string;
+		endingCutscene?: string;
+	};
 }
