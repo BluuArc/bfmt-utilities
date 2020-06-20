@@ -626,6 +626,12 @@ export interface IUnit {
 		fusionSphereCapacityBoost?: number;
 		fusionElgifAction?: 'add'|'remove';
 	};
+
+	/**
+	 * @description Array of extra skill IDs that have the current unit as a condition for at least one effect.
+	 * @author BluuArc
+	 */
+	associated_elgifs?: string[];
 }
 
 export enum ItemType {
@@ -700,6 +706,12 @@ export interface IItem {
 	first_clear_missions?: string[];
 
 	'sell caution'?: boolean;
+
+	/**
+	 * @description Array of extra skill IDs that have the current item as a condition for at least one effect.
+	 * @author BluuArc
+	 */
+	associated_elgifs?: string[];
 }
 
 export interface IConsumableItem extends IItem {
