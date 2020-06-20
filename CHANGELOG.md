@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `UnitGettingType.ExtraSkillElgif`
 	* `IUnit.specialEffects`
 	* `IUnit.associated_elgifs` and `IItem.associated_elgifs`
-	* `IItem.appearanceRequirements`
+	* `IItemRecipe.appearanceRequirements`
 	* `IUnknownClearBonus`
 
 ## [0.5.0] - 2020-05-03

@@ -17,7 +17,7 @@
 
 • **BatMimic**: = "60143"
 
-*Defined in [datamine-types.ts:740](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L740)*
+*Defined in [datamine-types.ts:739](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L739)*
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 • **DragonMimic**: = "60144"
 
-*Defined in [datamine-types.ts:741](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L741)*
+*Defined in [datamine-types.ts:740](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L740)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **MetalMimic**: = "60224"
 
-*Defined in [datamine-types.ts:742](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L742)*
+*Defined in [datamine-types.ts:741](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L741)*
 
 ___
 
@@ -41,4 +41,4 @@ ___
 
 • **Mimic**: = "60142"
 
-*Defined in [datamine-types.ts:739](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L739)*
+*Defined in [datamine-types.ts:738](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L738)*

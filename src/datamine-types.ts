@@ -652,6 +652,11 @@ export interface IItemRecipeMaterial {
 export interface IItemRecipe {
 	karma: string;
 	materials: IItemRecipeMaterial[];
+	/**
+	 * @description Array of item IDs that the player must have for this recipe to appear.
+	 * @author BluuArc
+	 */
+	appearanceRequirements?: string[];
 }
 
 /**
@@ -712,12 +717,6 @@ export interface IItem {
 	 * @author BluuArc
 	 */
 	associated_elgifs?: string[];
-
-	/**
-	 * @description Array of item IDs that the player must have for the recipe of this item to appear.
-	 * @author BluuArc
-	 */
-	appearanceRequirements?: string[];
 }
 
 export interface IConsumableItem extends IItem {
