@@ -32,13 +32,13 @@ export interface IUnitArenaAiEntry {
 }
 
 export enum MoveType {
-	Moving = 1,
-	Teleporting = 2,
-	NonMoving = 3,
+	Moving = '1',
+	Teleporting = '2',
+	NonMoving = '3',
 }
 
 export interface IUnitMovementEntry {
-	'move speed': number;
+	'move speed'?: number;
 	'move speed type': string;
 	'move type': MoveType;
 }
@@ -659,9 +659,7 @@ export interface IItem {
 	/**
 	 * @author BluuArc
 	 */
-	dictionary?: {
-		lore?: string;
-	};
+	lore?: string;
 
 	/**
 	 * @description List of units that use this item
