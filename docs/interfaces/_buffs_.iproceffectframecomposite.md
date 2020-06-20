@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.5.0](../README.md) › [Globals](../globals.md) › ["buffs"](../modules/_buffs_.md) › [IProcEffectFrameComposite](_buffs_.iproceffectframecomposite.md)
+[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["buffs"](../modules/_buffs_.md) › [IProcEffectFrameComposite](_buffs_.iproceffectframecomposite.md)
 
 # Interface: IProcEffectFrameComposite
 

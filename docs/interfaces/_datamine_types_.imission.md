@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.5.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IMission](_datamine_types_.imission.md)
+[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IMission](_datamine_types_.imission.md)
 
 # Interface: IMission
 

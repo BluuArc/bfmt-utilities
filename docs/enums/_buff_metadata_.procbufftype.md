@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.5.0](../README.md) › [Globals](../globals.md) › ["buff-metadata"](../modules/_buff_metadata_.md) › [ProcBuffType](_buff_metadata_.procbufftype.md)
+[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["buff-metadata"](../modules/_buff_metadata_.md) › [ProcBuffType](_buff_metadata_.procbufftype.md)
 
 # Enumeration: ProcBuffType
 
