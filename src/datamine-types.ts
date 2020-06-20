@@ -222,15 +222,28 @@ export enum SphereTypeId {
 	'Special' = 14,
 }
 
-export interface IExtraSkillCondition {
-	'item required'?: string[];
-	'sphere category required'?: SphereTypeName;
-	'sphere category required (raw)'?: SphereTypeId;
-	'unit required'?: { id: number; name?: string }[];
+export interface IExtraSkillItemCondition {
+	'item required': string[];
 }
 
+export interface IExtraSkillSphereTypeCondition {
+	'sphere category required': SphereTypeName;
+	'sphere category required (raw)': SphereTypeId;
+}
+
+export interface IExtraSkillUnitCondition {
+	'unit required': { id: number; name?: string }[];
+}
+
+export interface IExtraSkillUnknownCondition {
+	type_id?: string;
+	condition_id?: string;
+}
+
+export type ExtraSkillCondition = IExtraSkillItemCondition | IExtraSkillSphereTypeCondition | IExtraSkillUnitCondition | IExtraSkillUnknownCondition;
+
 export interface IExtraSkillPassiveEffect extends IPassiveEffect {
-	conditions: IExtraSkillCondition[];
+	conditions: ExtraSkillCondition[];
 	'passive target': TargetType;
 	/**
 	 * @author BluuArc
@@ -239,7 +252,7 @@ export interface IExtraSkillPassiveEffect extends IPassiveEffect {
 }
 
 export interface IExtraSkillUnknownPassiveEffect extends IUnknownPassiveEffect {
-	conditions: IExtraSkillCondition[];
+	conditions: ExtraSkillCondition[];
 	'passive target': TargetType;
 }
 

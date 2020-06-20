@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * datamine-types: `MoveType` values are now strings instead of numbers.
 * datamine-types: `IUnitMovementEntry['move speed']` is now an optional value.
 * datamine-types: `IItem.dictionary.lore` has been replaced with `IItem.lore`.
+* datamine-types: Remove `IExtraSkillCondition` and replace with `ExtraSkillCondition` type.
+	* Split into subtypes `IExtraSkillItemCondition`, `IExtraSkillSphereTypeCondition`, `IExtraSkillUnitCondition`, `IExtraSkillUnknownCondition`.
+	* Changes type of `IExtraSkillPassiveEffect.conditions` and `IExtraSkillUnknownPassiveEffect.conditions` to be `ExtraSkillCondition[]`.
 
 ### ➕ Additions
 * datamine-types: Add type definition for `IMission.assets`.
