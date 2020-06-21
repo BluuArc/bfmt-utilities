@@ -6,7 +6,6 @@ module.exports = {
 	},
 	extends: [
 		'eslint:recommended',
-		'plugin:@typescript-eslint/eslint-recommended',
 		'plugin:@typescript-eslint/recommended',
 		'plugin:@typescript-eslint/recommended-requiring-type-checking',
 	],
@@ -44,9 +43,17 @@ module.exports = {
 			'error',
 			'always-multiline',
 		],
-		'@typescript-eslint/interface-name-prefix': [
-			2,
-			{ 'prefixWithI': 'always' },
+		'@typescript-eslint/naming-convention': [
+			'error',
+			// enforce that interface names begin with an `I`
+			{
+				selector: 'interface',
+				format: ['PascalCase'],
+				custom: {
+					regex: '^I[A-Z]',
+					match: true,
+				},
+			},
 		],
 		'@typescript-eslint/no-explicit-any': 0,
 		'require-jsdoc': 2,

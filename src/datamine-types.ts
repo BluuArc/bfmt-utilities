@@ -12,7 +12,6 @@ export interface IBfmtMetadata {
 }
 
 export enum ArenaCondition {
-	/* eslint-disable @typescript-eslint/camelcase */
 	hp_50pr_under = 'hp_50pr_under',
 	hp_50pr_over = 'hp_50pr_over',
 	hp_75pr_under = 'hp_75pr_under',
@@ -21,7 +20,6 @@ export enum ArenaCondition {
 	hp_max = 'hp_max',
 	atk_max = 'atk_max',
 	random = 'random',
-	/* eslint-enable @typescript-eslint/camelcase */
 }
 
 export interface IUnitArenaAiEntry {

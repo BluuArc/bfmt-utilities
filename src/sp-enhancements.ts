@@ -33,7 +33,7 @@ export function getEffectsForSpEnhancement (entry: ISpEnhancementEntry): SpEnhan
 				const originalEffect = (effectWrapper[spType as SpPassiveType] as PassiveEffect);
 				const unwrappedEffect: SpEnhancementEffect = {
 					...originalEffect,
-					sp_type: (spType as SpPassiveType), // eslint-disable-line @typescript-eslint/camelcase
+					sp_type: (spType as SpPassiveType),
 				};
 				result.push(unwrappedEffect);
 			});

@@ -11,6 +11,7 @@ import {
 	TargetArea,
 	TargetType,
 	IUnknownProcEffect,
+	IProcEffect,
 } from './datamine-types';
 
 /**
@@ -119,7 +120,7 @@ export function combineEffectsAndDamageFrames (effects: ProcEffect[], damageFram
 				delay: effect['effect delay time(ms)/frame'],
 				effect,
 				frames: correspondingFrameEntry,
-				id: `${effect['proc id'] || (effect as IUnknownProcEffect)['unknown proc id']}`,
+				id: `${(effect as IProcEffect)['proc id'] || (effect as IUnknownProcEffect)['unknown proc id']}`,
 				targetArea: effect['random attack'] ? TargetArea.Random : effect['target area'],
 				targetType: effect['target type'],
 			};
