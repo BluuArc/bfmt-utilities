@@ -1474,7 +1474,7 @@ var bfmtUtilities = function () {
           delay: effect['effect delay time(ms)/frame'],
           effect,
           frames: correspondingFrameEntry,
-          id: "".concat(effect['proc id'] || effect['unknown proc id']),
+          id: `${effect['proc id'] || effect['unknown proc id']}`,
           targetArea: effect['random attack'] ? TargetArea.Random : effect['target area'],
           targetType: effect['target type']
         };
@@ -1685,7 +1685,7 @@ var bfmtUtilities = function () {
 
 
   function getItemImageUrl(baseContentUrl, fileName) {
-    return "".concat(baseContentUrl || '', "/item/").concat(fileName || '');
+    return `${baseContentUrl || ''}/item/${fileName || ''}`;
   }
 
   var items = /*#__PURE__*/Object.freeze({
@@ -1715,12 +1715,12 @@ var bfmtUtilities = function () {
    */
 
   function getUnitImageFileNames(id, suffix = '') {
-    const fileNameSuffix = "".concat(id || '').concat(suffix || '', ".png");
+    const fileNameSuffix = `${id || ''}${suffix || ''}.png`;
     return {
-      spritesheet: "unit_anime_".concat(fileNameSuffix),
-      battleAvatar: "unit_ills_battle_".concat(fileNameSuffix),
-      guideAvatar: "unit_ills_thum_".concat(fileNameSuffix),
-      fullIllustration: "unit_ills_full_".concat(fileNameSuffix)
+      spritesheet: `unit_anime_${fileNameSuffix}`,
+      battleAvatar: `unit_ills_battle_${fileNameSuffix}`,
+      guideAvatar: `unit_ills_thum_${fileNameSuffix}`,
+      fullIllustration: `unit_ills_full_${fileNameSuffix}`
     };
   }
   /**
@@ -1732,7 +1732,7 @@ var bfmtUtilities = function () {
 
 
   function getUnitImageUrl(baseContentUrl, fileName) {
-    return "".concat(baseContentUrl || '', "/unit/img/").concat(fileName || '');
+    return `${baseContentUrl || ''}/unit/img/${fileName || ''}`;
   }
 
   var units = /*#__PURE__*/Object.freeze({
