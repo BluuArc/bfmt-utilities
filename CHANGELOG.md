@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - YYYY-MM-DD
 
+### Δ Changes
+* Build: Update dependencies to latest stable versions; no changes to functionality as a result of this.
+
 ## [0.6.0] - 2020-06-20
 ### ⚠ Breaking Changes
 * datamine-types: `MoveType` values are now strings instead of numbers.
@@ -56,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `getAllEntriesThatDependOnSpEntry`
 
 ### Δ Changes
-* Build: Update dependencies to stable latest versions; no changes to functionality as a result of this.
+* Build: Update dependencies to latest stable versions; no changes to functionality as a result of this.
 * Docs: Minor doc config update to include package version in the header.
 * Update ESLint rules to enforce triple equal comparisons.
 
