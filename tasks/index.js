@@ -23,7 +23,7 @@ function runDev () {
 module.exports = {
 	'build': fullBuild,
 	'build:dirty': buildTasks.build,
-	'update-data': buildTasks.updateBuffMetadata,
+	'update:data': buildTasks.updateBuffMetadata,
 	'dev': runDev,
 	'cleanup:coverage': cleanupTasks.cleanupCoverageFiles,
 };
