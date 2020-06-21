@@ -18,4 +18,4 @@
 
 • **zel**: *string*
 
-*Defined in [datamine-types.ts:793](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L793)*
+*Defined in [datamine-types.ts:791](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L791)*

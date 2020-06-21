@@ -54,7 +54,7 @@
 
 • **ai**? : *[IUnitArenaAiEntry](_datamine_types_.iunitarenaaientry.md)[]*
 
-*Defined in [datamine-types.ts:453](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L453)*
+*Defined in [datamine-types.ts:451](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L451)*
 
 **`description`** Arena AI; determines chances for different actions in Arena.
 
@@ -64,7 +64,7 @@ ___
 
 • **ai_id**? : *undefined | string*
 
-*Defined in [datamine-types.ts:454](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L454)*
+*Defined in [datamine-types.ts:452](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L452)*
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 • **animations**? : *undefined | object*
 
-*Defined in [datamine-types.ts:455](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L455)*
+*Defined in [datamine-types.ts:453](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L453)*
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 • **associated_elgifs**? : *string[]*
 
-*Defined in [datamine-types.ts:633](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L633)*
+*Defined in [datamine-types.ts:631](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L631)*
 
 **`description`** Array of extra skill IDs that have the current unit as a condition for at least one effect.
 
@@ -92,7 +92,7 @@ ___
 
 • **bb**? : *[IBraveBurst](_datamine_types_.ibraveburst.md)*
 
-*Defined in [datamine-types.ts:460](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L460)*
+*Defined in [datamine-types.ts:458](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L458)*
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 • **bfmtMetadata**? : *[IBfmtMetadata](_datamine_types_.ibfmtmetadata.md)*
 
-*Defined in [datamine-types.ts:448](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L448)*
+*Defined in [datamine-types.ts:446](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L446)*
 
 **`author`** BluuArc
 
@@ -110,7 +110,7 @@ ___
 
 • **bonds**? : *undefined | object*
 
-*Defined in [datamine-types.ts:464](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L464)*
+*Defined in [datamine-types.ts:462](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L462)*
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 • **category**? : *undefined | number*
 
-*Defined in [datamine-types.ts:480](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L480)*
+*Defined in [datamine-types.ts:478](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L478)*
 
 **`description`** Typically used to identify an evolution line of units.
 
@@ -128,7 +128,7 @@ ___
 
 • **cost**: *number*
 
-*Defined in [datamine-types.ts:481](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L481)*
+*Defined in [datamine-types.ts:479](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L479)*
 
 ___
 
@@ -136,7 +136,7 @@ ___
 
 • **damage frames**: *[IDamageFramesEntry](_datamine_types_.idamageframesentry.md)*
 
-*Defined in [datamine-types.ts:486](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L486)*
+*Defined in [datamine-types.ts:484](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L484)*
 
 **`description`** Damage frames for a unit's normal attack.
 
@@ -146,7 +146,7 @@ ___
 
 • **dictionary**? : *undefined | object*
 
-*Defined in [datamine-types.ts:491](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L491)*
+*Defined in [datamine-types.ts:489](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L489)*
 
 **`author`** BluuArc
 
@@ -156,7 +156,7 @@ ___
 
 • **drop check count**: *number*
 
-*Defined in [datamine-types.ts:526](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L526)*
+*Defined in [datamine-types.ts:524](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L524)*
 
 **`description`** Maximum number of battle crystals dropped per hit on normal attack.
 
@@ -166,7 +166,7 @@ ___
 
 • **element**: *[UnitElement](../enums/_datamine_types_.unitelement.md)*
 
-*Defined in [datamine-types.ts:527](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L527)*
+*Defined in [datamine-types.ts:525](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L525)*
 
 ___
 
@@ -174,7 +174,7 @@ ___
 
 • **evolution**? : *undefined | object*
 
-*Defined in [datamine-types.ts:501](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L501)*
+*Defined in [datamine-types.ts:499](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L499)*
 
 **`author`** BluuArc
 
@@ -184,7 +184,7 @@ ___
 
 • **exp_pattern**: *number*
 
-*Defined in [datamine-types.ts:532](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L532)*
+*Defined in [datamine-types.ts:530](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L530)*
 
 **`description`** Defines the leveling curve. See [Unit Leveling](https://bravefrontierglobal.fandom.com/wiki/Unit_Leveling) for more information.
 
@@ -194,7 +194,7 @@ ___
 
 • **extra skill**? : *[IExtraSkill](_datamine_types_.iextraskill.md)*
 
-*Defined in [datamine-types.ts:533](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L533)*
+*Defined in [datamine-types.ts:531](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L531)*
 
 ___
 
@@ -202,7 +202,7 @@ ___
 
 • **feskills**? : *[ISpEnhancementEntry](_datamine_types_.ispenhancemententry.md)[]*
 
-*Defined in [datamine-types.ts:538](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L538)*
+*Defined in [datamine-types.ts:536](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L536)*
 
 **`author`** BluuArc
 
@@ -212,7 +212,7 @@ ___
 
 • **first_clear_missions**? : *string[]*
 
-*Defined in [datamine-types.ts:521](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L521)*
+*Defined in [datamine-types.ts:519](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L519)*
 
 **`description`** Array of mission IDs where this unit is a reward
 
@@ -224,7 +224,7 @@ ___
 
 • **gender**: *[UnitGender](../enums/_datamine_types_.unitgender.md)*
 
-*Defined in [datamine-types.ts:539](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L539)*
+*Defined in [datamine-types.ts:537](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L537)*
 
 ___
 
@@ -232,7 +232,7 @@ ___
 
 • **getting type**: *[UnitGettingType](../enums/_datamine_types_.unitgettingtype.md)*
 
-*Defined in [datamine-types.ts:544](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L544)*
+*Defined in [datamine-types.ts:542](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L542)*
 
 **`description`** Helps determine merit value in exchange hall
 
@@ -242,7 +242,7 @@ ___
 
 • **guide_id**: *number*
 
-*Defined in [datamine-types.ts:545](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L545)*
+*Defined in [datamine-types.ts:543](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L543)*
 
 ___
 
@@ -250,7 +250,7 @@ ___
 
 • **guild_raid**? : *undefined | object*
 
-*Defined in [datamine-types.ts:472](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L472)*
+*Defined in [datamine-types.ts:470](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L470)*
 
 **`description`** Effects that apply only during Guild Raid
 
@@ -262,7 +262,7 @@ ___
 
 • **id**: *number*
 
-*Defined in [datamine-types.ts:546](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L546)*
+*Defined in [datamine-types.ts:544](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L544)*
 
 ___
 
@@ -270,7 +270,7 @@ ___
 
 • **imp**: *object*
 
-*Defined in [datamine-types.ts:547](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L547)*
+*Defined in [datamine-types.ts:545](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L545)*
 
 #### Type declaration:
 
@@ -288,7 +288,7 @@ ___
 
 • **kind**: *[UnitKind](../enums/_datamine_types_.unitkind.md) | null*
 
-*Defined in [datamine-types.ts:558](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L558)*
+*Defined in [datamine-types.ts:556](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L556)*
 
 **`description`** Tells what this unit can be used for. In Deathmax's datamine, the types for
 evolutions and enhancing are swapped. For example, the Fire Totem is marked as an enhancing
@@ -300,7 +300,7 @@ ___
 
 • **leader skill**? : *[ILeaderSkill](_datamine_types_.ileaderskill.md)*
 
-*Defined in [datamine-types.ts:560](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L560)*
+*Defined in [datamine-types.ts:558](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L558)*
 
 ___
 
@@ -308,7 +308,7 @@ ___
 
 • **lord damage range**: *string*
 
-*Defined in [datamine-types.ts:565](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L565)*
+*Defined in [datamine-types.ts:563](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L563)*
 
 **`description`** format of `minvalue~maxvalue`
 
@@ -318,7 +318,7 @@ ___
 
 • **movement**: *object*
 
-*Defined in [datamine-types.ts:567](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L567)*
+*Defined in [datamine-types.ts:565](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L565)*
 
 #### Type declaration:
 
@@ -332,7 +332,7 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:571](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L571)*
+*Defined in [datamine-types.ts:569](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L569)*
 
 ___
 
@@ -340,7 +340,7 @@ ___
 
 • **overdrive stats**: *object*
 
-*Defined in [datamine-types.ts:572](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L572)*
+*Defined in [datamine-types.ts:570](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L570)*
 
 #### Type declaration:
 
@@ -356,7 +356,7 @@ ___
 
 • **rarity**: *number*
 
-*Defined in [datamine-types.ts:577](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L577)*
+*Defined in [datamine-types.ts:575](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L575)*
 
 ___
 
@@ -364,7 +364,7 @@ ___
 
 • **sbb**? : *[IBraveBurst](_datamine_types_.ibraveburst.md)*
 
-*Defined in [datamine-types.ts:461](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L461)*
+*Defined in [datamine-types.ts:459](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L459)*
 
 ___
 
@@ -372,7 +372,7 @@ ___
 
 • **sell caution**: *boolean*
 
-*Defined in [datamine-types.ts:578](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L578)*
+*Defined in [datamine-types.ts:576](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L576)*
 
 ___
 
@@ -380,7 +380,7 @@ ___
 
 • **sell_price**? : *undefined | number*
 
-*Defined in [datamine-types.ts:579](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L579)*
+*Defined in [datamine-types.ts:577](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L577)*
 
 ___
 
@@ -388,7 +388,7 @@ ___
 
 • **specialEffects**? : *undefined | object*
 
-*Defined in [datamine-types.ts:620](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L620)*
+*Defined in [datamine-types.ts:618](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L618)*
 
 **`author`** BluuArc
 
@@ -398,7 +398,7 @@ ___
 
 • **stats**: *object*
 
-*Defined in [datamine-types.ts:580](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L580)*
+*Defined in [datamine-types.ts:578](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L578)*
 
 #### Type declaration:
 
@@ -420,4 +420,4 @@ ___
 
 • **ubb**? : *[IBraveBurst](_datamine_types_.ibraveburst.md)*
 
-*Defined in [datamine-types.ts:462](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L462)*
+*Defined in [datamine-types.ts:460](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L460)*

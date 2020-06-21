@@ -1085,7 +1085,6 @@ const PROC_METADATA = Object.freeze({
 
 var ArenaCondition;
 (function (ArenaCondition) {
-    /* eslint-disable @typescript-eslint/camelcase */
     ArenaCondition["hp_50pr_under"] = "hp_50pr_under";
     ArenaCondition["hp_50pr_over"] = "hp_50pr_over";
     ArenaCondition["hp_75pr_under"] = "hp_75pr_under";
@@ -1094,7 +1093,6 @@ var ArenaCondition;
     ArenaCondition["hp_max"] = "hp_max";
     ArenaCondition["atk_max"] = "atk_max";
     ArenaCondition["random"] = "random";
-    /* eslint-enable @typescript-eslint/camelcase */
 })(ArenaCondition || (ArenaCondition = {}));
 var MoveType;
 (function (MoveType) {

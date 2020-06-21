@@ -19,7 +19,7 @@
 
 • **condition_id**? : *undefined | string*
 
-*Defined in [datamine-types.ts:240](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L240)*
+*Defined in [datamine-types.ts:238](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L238)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **type_id**? : *undefined | string*
 
-*Defined in [datamine-types.ts:239](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L239)*
+*Defined in [datamine-types.ts:237](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L237)*

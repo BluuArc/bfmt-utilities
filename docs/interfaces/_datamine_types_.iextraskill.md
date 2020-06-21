@@ -26,7 +26,7 @@
 
 • **associated_units**? : *string[]*
 
-*Defined in [datamine-types.ts:271](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L271)*
+*Defined in [datamine-types.ts:269](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L269)*
 
 **`description`** List of units that use this extra skill
 
@@ -38,7 +38,7 @@ ___
 
 • **bfmtMetadata**? : *[IBfmtMetadata](_datamine_types_.ibfmtmetadata.md)*
 
-*Defined in [datamine-types.ts:265](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L265)*
+*Defined in [datamine-types.ts:263](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L263)*
 
 **`author`** BluuArc
 
@@ -48,7 +48,7 @@ ___
 
 • **desc**: *string*
 
-*Defined in [datamine-types.ts:279](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L279)*
+*Defined in [datamine-types.ts:277](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L277)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 • **effects**: *[ExtraSkillPassiveEffect](../modules/_datamine_types_.md#extraskillpassiveeffect)[]*
 
-*Defined in [datamine-types.ts:280](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L280)*
+*Defined in [datamine-types.ts:278](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L278)*
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 • **first_clear_missions**? : *string[]*
 
-*Defined in [datamine-types.ts:277](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L277)*
+*Defined in [datamine-types.ts:275](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L275)*
 
 **`description`** Array of mission IDs where this extra skill is a reward
 
@@ -76,7 +76,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [datamine-types.ts:281](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L281)*
+*Defined in [datamine-types.ts:279](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L279)*
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:282](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L282)*
+*Defined in [datamine-types.ts:280](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L280)*
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 • **rarity**? : *undefined | string*
 
-*Defined in [datamine-types.ts:283](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L283)*
+*Defined in [datamine-types.ts:281](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L281)*
 
 ___
 
@@ -100,4 +100,4 @@ ___
 
 • **target**: *[TargetType](../enums/_datamine_types_.targettype.md)*
 
-*Defined in [datamine-types.ts:284](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L284)*
+*Defined in [datamine-types.ts:282](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L282)*

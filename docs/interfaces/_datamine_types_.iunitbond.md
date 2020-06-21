@@ -21,7 +21,7 @@
 
 • **dbb**: *[IBraveBurst](_datamine_types_.ibraveburst.md)*
 
-*Defined in [datamine-types.ts:432](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L432)*
+*Defined in [datamine-types.ts:430](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L430)*
 
 ___
 
@@ -29,6 +29,6 @@ ___
 
 • **partner**: *number*
 
-*Defined in [datamine-types.ts:431](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L431)*
+*Defined in [datamine-types.ts:429](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L429)*
 
 **`description`** Unit ID of bond partner

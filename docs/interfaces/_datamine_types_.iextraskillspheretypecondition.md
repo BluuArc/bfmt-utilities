@@ -19,7 +19,7 @@
 
 • **sphere category required**: *[SphereTypeName](../enums/_datamine_types_.spheretypename.md)*
 
-*Defined in [datamine-types.ts:230](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L230)*
+*Defined in [datamine-types.ts:228](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L228)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **sphere category required (raw)**: *[SphereTypeId](../enums/_datamine_types_.spheretypeid.md)*
 
-*Defined in [datamine-types.ts:231](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L231)*
+*Defined in [datamine-types.ts:229](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L229)*

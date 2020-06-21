@@ -51,7 +51,7 @@
     "jasmine": "^3.5.0",
     "nyc": "^15.1.0",
     "puppeteer": "^2.1.1",
-    "rollup": "^1.32.1",
+    "rollup": "^2.17.1",
     "typedoc": "^0.17.7",
     "typedoc-plugin-markdown": "^2.3.1",
     "typescript": "^3.9.5"
