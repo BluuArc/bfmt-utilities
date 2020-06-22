@@ -1,13 +1,12 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["items"](_items_.md)
+[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["items/getEffectsForItem"](_items_geteffectsforitem_.md)
 
-# Module: "items"
+# Module: "items/getEffectsForItem"
 
 ## Index
 
 ### Functions
 
-* [getEffectsForItem](_items_.md#geteffectsforitem)
-* [getItemImageUrl](_items_.md#getitemimageurl)
+* [getEffectsForItem](_items_geteffectsforitem_.md#geteffectsforitem)
 
 ## Functions
 
@@ -15,7 +14,7 @@
 
 ▸ **getEffectsForItem**(`item`: [IConsumableItem](../interfaces/_datamine_types_.iconsumableitem.md) | [ISphere](../interfaces/_datamine_types_.isphere.md)): *[IProcEffect](../interfaces/_datamine_types_.iproceffect.md) | [IUnknownProcEffect](../interfaces/_datamine_types_.iunknownproceffect.md) | [IPassiveEffect](../interfaces/_datamine_types_.ipassiveeffect.md) | [IUnknownPassiveEffect](../interfaces/_datamine_types_.iunknownpassiveeffect.md) | [ITriggeredEffect](../interfaces/_datamine_types_.itriggeredeffect.md)[]*
 
-*Defined in [items.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/master/src/items.ts#L8)*
+*Defined in [items/getEffectsForItem.ts:13](https://github.com/BluuArc/bfmt-utilities/blob/master/src/items/getEffectsForItem.ts#L13)*
 
 **`description`** Get the effects of a given item
 
@@ -28,24 +27,3 @@ Name | Type | Description |
 **Returns:** *[IProcEffect](../interfaces/_datamine_types_.iproceffect.md) | [IUnknownProcEffect](../interfaces/_datamine_types_.iunknownproceffect.md) | [IPassiveEffect](../interfaces/_datamine_types_.ipassiveeffect.md) | [IUnknownPassiveEffect](../interfaces/_datamine_types_.iunknownpassiveeffect.md) | [ITriggeredEffect](../interfaces/_datamine_types_.itriggeredeffect.md)[]*
 
 the effects of the given item if they exist, an empty array otherwise
-
-___
-
-###  getItemImageUrl
-
-▸ **getItemImageUrl**(`baseContentUrl`: string, `fileName`: string): *string*
-
-*Defined in [items.ts:34](https://github.com/BluuArc/bfmt-utilities/blob/master/src/items.ts#L34)*
-
-**`description`** Generate a URL to display the image with the given item thumbnail filename
-
-**Parameters:**
-
-Name | Type | Description |
------- | ------ | ------ |
-`baseContentUrl` | string | Base URL of the server |
-`fileName` | string | name of the file that represents the thumbnail image for a given item |
-
-**Returns:** *string*
-
-generated URL based on the given content URL and file name
