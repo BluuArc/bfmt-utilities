@@ -1,5 +1,6 @@
 dist
 _orig
-src/*.d.ts
-src/*.js
+src/**/*.d.ts
+src/**/*.js
+!src/**/*.spec.js
 examples/vanilla-browser/*.js
