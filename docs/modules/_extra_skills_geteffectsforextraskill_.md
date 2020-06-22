@@ -1,12 +1,12 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["extra-skills"](_extra_skills_.md)
+[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["extra-skills/getEffectsForExtraSkill"](_extra_skills_geteffectsforextraskill_.md)
 
-# Module: "extra-skills"
+# Module: "extra-skills/getEffectsForExtraSkill"
 
 ## Index
 
 ### Functions
 
-* [getEffectsForExtraSkill](_extra_skills_.md#geteffectsforextraskill)
+* [getEffectsForExtraSkill](_extra_skills_geteffectsforextraskill_.md#geteffectsforextraskill)
 
 ## Functions
 
@@ -14,7 +14,7 @@
 
 ▸ **getEffectsForExtraSkill**(`skill`: [IExtraSkill](../interfaces/_datamine_types_.iextraskill.md)): *[ExtraSkillPassiveEffect](_datamine_types_.md#extraskillpassiveeffect)[]*
 
-*Defined in [extra-skills.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/master/src/extra-skills.ts#L8)*
+*Defined in [extra-skills/getEffectsForExtraSkill.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/master/src/extra-skills/getEffectsForExtraSkill.ts#L8)*
 
 **`description`** Get the effects of a given extra skill
 
