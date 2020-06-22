@@ -507,9 +507,10 @@ export interface IUnit {
 		next?: string;
 
 		/**
-		 * @description unit ID of pre-evolution
+		 * @description Unit ID(s) of pre-evolution. If the entry is an array, there will be 0 or more entries.
+		 * If the entry is a non-empty string, then there is only one pre-evolution.
 		 */
-		prev?: string[];
+		prev?: string | string[];
 	};
 
 	/**

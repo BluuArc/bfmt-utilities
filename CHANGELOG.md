@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * index (app root): Export submodules directly instead of exporting a frozen object containing the submodules.
 	* Potentially breaking if there's anything that was relied on from a frozen object that isn't present on an exported object (though, this is highly unlikely to be the case)
 	* Should improve tree-shakeability when using the application root (`dist/index.js`) directly.
+* datamine-types: `IUnit.evolution.prev` can now be an array of strings or just a string.
+	* Will break any implementations that always relied on it being an array only.
 
 ### Δ Changes
 * Build: Update dependencies to latest stable versions; no changes to functionality as a result of this.
