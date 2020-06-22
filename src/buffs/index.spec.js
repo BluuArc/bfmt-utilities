@@ -1,9 +1,9 @@
-const buffIndex = require('./index');
+const index = require('./index');
 const { assertObjectHasOnlyKeys } = require('../_test-helpers/utils');
 
 describe('buffs index', () => {
 	it('has expected API surface', () => {
-		assertObjectHasOnlyKeys(buffIndex, [
+		assertObjectHasOnlyKeys(index, [
 			'getMetadataForProc',
 			'getMetadataForPassive',
 			'isAttackingProcId',
