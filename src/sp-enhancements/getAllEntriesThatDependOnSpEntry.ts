@@ -1,4 +1,4 @@
-import { ISpEnhancementEntry } from "../datamine-types";
+import { ISpEnhancementEntry } from '../datamine-types';
 
 /**
  * @description Get all SP Enhancement entries that require the given SP entry in order to be unlockable.
