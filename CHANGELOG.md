@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* Every exported entry in the mono-module has its own file now in the corresponding mono-module folder
 		* Existing API usage should not be affected.
 		* e.g. `bfmtUtilities.buffs.getEffectId` can be accessed directly at `dist/buffs/getEffectId.js`, but using `bfmtUtilities.buffs.getEffectId` from `index.js` should still work.
+* index (app root): Export submodules directly instead of exporting a frozen object containing the submodules.
+	* Potentially breaking if there's anything that was relied on from a frozen object that isn't present on an exported object (though, this is highly unlikely to be the case)
+	* Should improve tree-shakeability when using the application root (`dist/index.js`) directly.
 
 ### Δ Changes
 * Build: Update dependencies to latest stable versions; no changes to functionality as a result of this.

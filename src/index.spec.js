@@ -1,4 +1,4 @@
-const index = require('./index').default;
+const index = require('./index');
 const { assertObjectHasOnlyKeys } = require('./_test-helpers/utils');
 
 describe('application entry point', () => {

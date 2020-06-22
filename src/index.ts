@@ -1,21 +1,9 @@
-import * as bursts from './bursts';
-import * as buffs from './buffs';
-import * as datamineTypes from './datamine-types';
-import * as extraSkills from './extra-skills';
-import * as items from './items';
-import * as leaderSkills from './leader-skills';
-import * as units from './units';
-import * as spEnhancements from './sp-enhancements';
-import version from './version';
-
-export default Object.freeze({
-	buffs,
-	bursts,
-	datamineTypes,
-	extraSkills,
-	items,
-	leaderSkills,
-	units,
-	spEnhancements,
-	version,
-});
+export * as bursts from './bursts';
+export * as buffs from './buffs';
+export * as datamineTypes from './datamine-types';
+export * as extraSkills from './extra-skills';
+export * as items from './items';
+export * as leaderSkills from './leader-skills';
+export * as units from './units';
+export * as spEnhancements from './sp-enhancements';
+export { default as version } from './version';
