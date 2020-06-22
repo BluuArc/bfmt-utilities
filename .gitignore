@@ -5,6 +5,8 @@
 _orig
 src/**/*.js
 src/**/*.d.ts
+!src/_test-helpers/*.js
+!src/**/*.spec.js
 .nyc_output
 
 # local env files
