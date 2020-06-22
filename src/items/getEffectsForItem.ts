@@ -1,11 +1,16 @@
-import { IConsumableItem, ISphere, PassiveEffect, ProcEffect } from './datamine-types';
+import {
+	IConsumableItem,
+	ISphere,
+	ProcEffect,
+	PassiveEffect,
+} from '../datamine-types';
 
 /**
  * @description Get the effects of a given item
  * @param item item to get the effects of, if any are present
  * @returns the effects of the given item if they exist, an empty array otherwise
  */
-export function getEffectsForItem (item: IConsumableItem | ISphere): (PassiveEffect | ProcEffect)[] {
+export default function getEffectsForItem (item: IConsumableItem | ISphere): (PassiveEffect | ProcEffect)[] {
 	let result: (ProcEffect | PassiveEffect)[] = [];
 	if (item && item.effect) {
 		if (Array.isArray((item as ISphere).effect)) {
@@ -23,14 +28,4 @@ export function getEffectsForItem (item: IConsumableItem | ISphere): (PassiveEff
 	}
 
 	return result;
-}
-
-/**
- * @description Generate a URL to display the image with the given item thumbnail filename
- * @param baseContentUrl Base URL of the server
- * @param fileName name of the file that represents the thumbnail image for a given item
- * @returns generated URL based on the given content URL and file name
- */
-export function getItemImageUrl (baseContentUrl: string, fileName: string): string {
-	return `${baseContentUrl || ''}/item/${fileName || ''}`;
 }
