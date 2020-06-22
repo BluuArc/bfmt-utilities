@@ -3,8 +3,8 @@
 /dist/*
 !/dist/index.*.js*
 _orig
-src/*.js
-src/*.d.ts
+src/**/*.js
+src/**/*.d.ts
 .nyc_output
 
 # local env files
