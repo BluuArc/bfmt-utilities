@@ -7,5 +7,6 @@ module.exports = {
 		'src/version.js', // no need to test auto-generated file
 		'src/**/*.spec.js', // no need to test coverage of test files
 		'src/_test-helpers/*.js', // don't test test-helpers
+		'src/sp-enhancements/_constants.js',
 	]),
 };
