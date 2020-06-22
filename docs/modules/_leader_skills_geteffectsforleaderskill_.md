@@ -1,12 +1,12 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["leader-skills"](_leader_skills_.md)
+[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["leader-skills/getEffectsForLeaderSkill"](_leader_skills_geteffectsforleaderskill_.md)
 
-# Module: "leader-skills"
+# Module: "leader-skills/getEffectsForLeaderSkill"
 
 ## Index
 
 ### Functions
 
-* [getEffectsForLeaderSkill](_leader_skills_.md#geteffectsforleaderskill)
+* [getEffectsForLeaderSkill](_leader_skills_geteffectsforleaderskill_.md#geteffectsforleaderskill)
 
 ## Functions
 
@@ -14,7 +14,7 @@
 
 ▸ **getEffectsForLeaderSkill**(`skill`: [ILeaderSkill](../interfaces/_datamine_types_.ileaderskill.md)): *[PassiveEffect](_datamine_types_.md#passiveeffect)[]*
 
-*Defined in [leader-skills.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/master/src/leader-skills.ts#L8)*
+*Defined in [leader-skills/getEffectsForLeaderSkill.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/master/src/leader-skills/getEffectsForLeaderSkill.ts#L8)*
 
 **`description`** Get the effects of a given leader skill
 
