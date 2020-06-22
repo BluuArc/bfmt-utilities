@@ -3,4 +3,4 @@ export default interface IUnitImageFileNames {
 	battleAvatar: string;
 	guideAvatar: string;
 	fullIllustration: string;
-}
+} // eslint-disable-line semi
