@@ -5,9 +5,9 @@ import isAttackingProcId from '../buffs/isAttackingProcId';
 
 /**
  * @description Get the extra attack damage frames entry based on the damage frames of a burst. Also apply the given effect delay to the resulting damage frames entry.
- * @param damageFrames damage frames that each have their own proc ID
- * @param effectDelay optional effect delay to apply to the resulting damage frames entry
- * @returns damage frames entry whose frames are based on the input damage frames
+ * @param damageFrames Damage frames that each have their own proc ID.
+ * @param effectDelay Optional effect delay to apply to the resulting damage frames entry.
+ * @returns Damage frames entry whose frames are based on the input damage frames.
  */
 export default function getExtraAttackDamageFramesEntry (
 	damageFrames: IBurstDamageFramesEntry[],

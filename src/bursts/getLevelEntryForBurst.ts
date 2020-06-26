@@ -1,10 +1,10 @@
 import { IBraveBurst, IBurstLevelEntry } from '../datamine-types';
 
 /**
- * @description Grab the level entry of a burst at a given level (or the last level if no level is given)
- * @param burst Burst to get level entry from
+ * @description Get the level entry of a burst at a given level (or the last level if no level is given).
+ * @param burst Burst to get level entry from.
  * @param level Optional 1-indexed level to get; if not specified, the last level of the burst is used.
- * @returns the level entry of a burst at a given level (or last level if no level is given) if it exists, undefined otherwise
+ * @returns Level entry of a burst at a given level (or last level if no level is given) if it exists, undefined otherwise.
  */
 export default function getLevelEntryForBurst (burst: IBraveBurst, level?: number): IBurstLevelEntry | undefined {
 	const burstEffectsByLevel = (burst && Array.isArray(burst.levels)) ? burst.levels : [];
