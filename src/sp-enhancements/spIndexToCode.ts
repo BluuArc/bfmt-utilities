@@ -8,8 +8,8 @@ import {
  * @description Get the corresponding character code for a given index.
  * It expects an index between 0 and 61 inclusive; will return an empty string if
  * the given value is outside of the range.
- * @param index Index of an SP entry in a given skills array
- * @returns The corresponding single alphanumeric character to the given index
+ * @param index Index of an SP entry in a given skills array.
+ * @returns Corresponding single alphanumeric character to the given index
  * or an empty string if the index is invalid.
  */
 export default function spIndexToCode (index: number): string {

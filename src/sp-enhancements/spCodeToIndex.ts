@@ -7,8 +7,8 @@ import {
 /**
  * @description Get the corresponding index for a given character code.
  * It expects an alphanumeric character and will return -1 otherwise.
- * @param code Character code an SP entry in a given skills array
- * @returns The corresponding index to the given character or -1 if the
+ * @param code Character code an SP entry in a given skills array.
+ * @returns Corresponding index to the given character or -1 if the
  * character is invalid.
  */
 export default function spCodeToIndex (code: string): number {

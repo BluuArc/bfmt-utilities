@@ -2,8 +2,8 @@ import { SpCategoryName } from '../datamine-types';
 
 /**
  * @description Get the associated category name with a given category ID.
- * @param categoryId Category ID to get the name of
- * @returns The name of the given category ID or the string 'Unknown'.
+ * @param categoryId Category ID to get the name of.
+ * @returns Name of the given category ID or the string 'Unknown'.
  */
 export default function getSpCategoryName (categoryId: string | number): SpCategoryName {
 	let result: SpCategoryName;

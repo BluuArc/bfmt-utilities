@@ -1,10 +1,10 @@
 import IUnitImageFileNames from './IUnitImageFileNames';
 
 /**
- * @description Generate the file names for each of the image type for a given unit ID
- * @param id the unit ID to use to generate the file names
- * @param suffix optional parameter that's useful for things like alternate art
- * @returns set of file names for each image type (spritesheet, battle avatar, guide avatar, full illustration)
+ * @description Generate the file names for each of the image type for a given unit ID.
+ * @param id Unit ID to use to generate the file names.
+ * @param suffix Optional parameter that's useful for things like alternate art.
+ * @returns Set of file names for each image type (spritesheet, battle avatar, guide avatar, full illustration).
  */
 export default function getUnitImageFileNames (id: string, suffix = ''): IUnitImageFileNames {
 	const fileNameSuffix = `${id || ''}${suffix || ''}.png`;

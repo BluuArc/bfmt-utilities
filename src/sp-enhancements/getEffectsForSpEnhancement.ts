@@ -6,9 +6,9 @@ import {
 } from '../datamine-types';
 
 /**
- * @description Get the effects of a given SP Enhancement Entry
- * @param entry SP Enhancement Entry to get the effects of
- * @returns the effects of the given SP Enhancement Entry if they exist, an empty array otherwise
+ * @description Get the effects of a given SP Enhancement Entry.
+ * @param entry SP Enhancement Entry to get the effects of.
+ * @returns Effects of the given SP Enhancement Entry if they exist, an empty array otherwise.
  */
 export default function getEffectsForSpEnhancement (entry: ISpEnhancementEntry): SpEnhancementEffect[] {
 	const result: SpEnhancementEffect[] = [];
