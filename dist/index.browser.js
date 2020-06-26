@@ -71,6 +71,10 @@ var bfmtUtilities = function (exports) {
   })(ProcBuffType || (ProcBuffType = {}));
   /* eslint-disable */
 
+  /**
+   * @ignore
+   */
+
 
   const PASSIVE_METADATA = Object.freeze({
     "1": {
@@ -502,6 +506,10 @@ var bfmtUtilities = function (exports) {
       "Name": ""
     }
   });
+  /**
+   * @ignore
+   */
+
   const PROC_METADATA = Object.freeze({
     "0": {
       "ID": "0",

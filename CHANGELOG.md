@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Δ Changes
 * Build: Update dependencies to latest stable versions; no changes to functionality as a result of this.
+* Docs: No longer generate docs for internal frozen buff metadata objects.
 
 ## [0.6.0] - 2020-06-20
 ### ⚠ Breaking Changes

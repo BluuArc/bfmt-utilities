@@ -57,8 +57,14 @@ export interface IProcMetadataEntry {
 }
 
 /* eslint-disable */
+/**
+ * @ignore
+ */
 export const PASSIVE_METADATA: Readonly<{ [id: string]: IPassiveMetadataEntry }> = Object.freeze(${JSON.stringify(mapping.passive, null, 2)});
 
+/**
+ * @ignore
+ */
 export const PROC_METADATA: Readonly<{ [id: string]: IProcMetadataEntry }> = Object.freeze(${JSON.stringify(mapping.proc, null, 2)});
 `;
 				fs.writeFileSync(path.join(__dirname, '..', '..', 'src', 'buff-metadata.ts'), fileContents, 'utf8');

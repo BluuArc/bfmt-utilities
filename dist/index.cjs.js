@@ -61,6 +61,9 @@ var ProcBuffType;
     ProcBuffType["Attack"] = "Attack";
 })(ProcBuffType || (ProcBuffType = {}));
 /* eslint-disable */
+/**
+ * @ignore
+ */
 const PASSIVE_METADATA = Object.freeze({
     "1": {
         "ID": "1",
@@ -491,6 +494,9 @@ const PASSIVE_METADATA = Object.freeze({
         "Name": ""
     }
 });
+/**
+ * @ignore
+ */
 const PROC_METADATA = Object.freeze({
     "0": {
         "ID": "0",

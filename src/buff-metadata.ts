@@ -15,6 +15,9 @@ export interface IProcMetadataEntry {
 }
 
 /* eslint-disable */
+/**
+ * @ignore
+ */
 export const PASSIVE_METADATA: Readonly<{ [id: string]: IPassiveMetadataEntry }> = Object.freeze({
   "1": {
     "ID": "1",
@@ -446,6 +449,9 @@ export const PASSIVE_METADATA: Readonly<{ [id: string]: IPassiveMetadataEntry }>
   }
 });
 
+/**
+ * @ignore
+ */
 export const PROC_METADATA: Readonly<{ [id: string]: IProcMetadataEntry }> = Object.freeze({
   "0": {
     "ID": "0",
