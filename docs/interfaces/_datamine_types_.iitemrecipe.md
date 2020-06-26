@@ -20,7 +20,7 @@
 
 • **appearanceRequirements**? : *string[]*
 
-*Defined in [datamine-types.ts:656](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L656)*
+*Defined in [datamine-types.ts:657](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L657)*
 
 **`description`** Array of item IDs that the player must have for this recipe to appear.
 
@@ -32,7 +32,7 @@ ___
 
 • **karma**: *string*
 
-*Defined in [datamine-types.ts:650](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L650)*
+*Defined in [datamine-types.ts:651](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L651)*
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 • **materials**: *[IItemRecipeMaterial](_datamine_types_.iitemrecipematerial.md)[]*
 
-*Defined in [datamine-types.ts:651](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L651)*
+*Defined in [datamine-types.ts:652](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L652)*

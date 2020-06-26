@@ -94,7 +94,7 @@
 
 Ƭ **ClearBonus**: *[IGemClearBonus](../interfaces/_datamine_types_.igemclearbonus.md) | [IUnitClearBonus](../interfaces/_datamine_types_.iunitclearbonus.md) | [IItemClearBonus](../interfaces/_datamine_types_.iitemclearbonus.md) | [IZelClearBonus](../interfaces/_datamine_types_.izelclearbonus.md) | [IKarmaClearBonus](../interfaces/_datamine_types_.ikarmaclearbonus.md) | [IUnknownClearBonus](../interfaces/_datamine_types_.iunknownclearbonus.md)*
 
-*Defined in [datamine-types.ts:807](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L807)*
+*Defined in [datamine-types.ts:808](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L808)*
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 ### ▪ **MimicMonsterGroupMapping**: *object*
 
-*Defined in [datamine-types.ts:744](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L744)*
+*Defined in [datamine-types.ts:745](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L745)*
 
 **`description`** Known values for the monster groups used in [IMimicInfo](../interfaces/_datamine_types_.imimicinfo.md)
 
@@ -150,28 +150,28 @@ ___
 
 • **1000**: *[MimicUnitIds](../enums/_datamine_types_.mimicunitids.md)* = MimicUnitIds.Mimic
 
-*Defined in [datamine-types.ts:745](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L745)*
+*Defined in [datamine-types.ts:746](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L746)*
 
 ###  1100
 
 • **1100**: *[MimicUnitIds](../enums/_datamine_types_.mimicunitids.md)* = MimicUnitIds.BatMimic
 
-*Defined in [datamine-types.ts:746](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L746)*
+*Defined in [datamine-types.ts:747](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L747)*
 
 ###  1101
 
 • **1101**: *[MimicUnitIds](../enums/_datamine_types_.mimicunitids.md)* = MimicUnitIds.BatMimic
 
-*Defined in [datamine-types.ts:747](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L747)*
+*Defined in [datamine-types.ts:748](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L748)*
 
 ###  1200
 
 • **1200**: *[MimicUnitIds](../enums/_datamine_types_.mimicunitids.md)* = MimicUnitIds.DragonMimic
 
-*Defined in [datamine-types.ts:748](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L748)*
+*Defined in [datamine-types.ts:749](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L749)*
 
 ###  1300
 
 • **1300**: *[MimicUnitIds](../enums/_datamine_types_.mimicunitids.md)* = MimicUnitIds.MetalMimic
 
-*Defined in [datamine-types.ts:749](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L749)*
+*Defined in [datamine-types.ts:750](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L750)*

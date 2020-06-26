@@ -1,5 +1,5 @@
 import { ISpEnhancementEntry } from '../datamine-types';
-import { getSpEntryId } from '../sp-enhancements';
+import getSpEntryId from './getSpEntryId';
 
 /**
  * @description Get the first SP Enhancement Entry that matches the given SP Entry ID, if it exists.

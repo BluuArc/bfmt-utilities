@@ -22,7 +22,7 @@
 
 • **group_1_chance**: *string*
 
-*Defined in [datamine-types.ts:753](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L753)*
+*Defined in [datamine-types.ts:754](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L754)*
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **group_1_monster_group**: *string*
 
-*Defined in [datamine-types.ts:758](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L758)*
+*Defined in [datamine-types.ts:759](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L759)*
 
 **`description`** Known mappings can be found at [MimicMonsterGroupMapping](../modules/_datamine_types_.md#const-mimicmonstergroupmapping)
 
@@ -40,7 +40,7 @@ ___
 
 • **group_2_chance**: *string*
 
-*Defined in [datamine-types.ts:759](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L759)*
+*Defined in [datamine-types.ts:760](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L760)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **group_2_monster_group**: *string*
 
-*Defined in [datamine-types.ts:764](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L764)*
+*Defined in [datamine-types.ts:765](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L765)*
 
 **`description`** Known mappings can be found at [MimicMonsterGroupMapping](../modules/_datamine_types_.md#const-mimicmonstergroupmapping)
 
@@ -58,4 +58,4 @@ ___
 
 • **spawn_chance_range_maybe**: *string*
 
-*Defined in [datamine-types.ts:765](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L765)*
+*Defined in [datamine-types.ts:766](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L766)*

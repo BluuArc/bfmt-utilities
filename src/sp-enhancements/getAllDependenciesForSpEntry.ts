@@ -1,5 +1,5 @@
 import { ISpEnhancementEntry } from '../datamine-types';
-import { getSpEntryId } from '../sp-enhancements';
+import getSpEntryId from './getSpEntryId';
 
 /**
  * @description Get all SP Enhancement entries that one would need to unlock the given SP entry.
