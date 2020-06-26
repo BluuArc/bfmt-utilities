@@ -5,9 +5,9 @@ import isProcEffect from './isProcEffect';
 import getNameForProc from './getNameForProc';
 
 /**
- * @description Get the name of a given object
- * @param effect Object to get the name from
- * @returns The name of the input effect if it exists; empty string otherwise
+ * @description Get the name of a given object.
+ * @param effect Object to get the name from.
+ * @returns Name of the input effect if it exists; empty string otherwise.
  */
 export default function getEffectName (effect: {
 	'proc id'?: string;

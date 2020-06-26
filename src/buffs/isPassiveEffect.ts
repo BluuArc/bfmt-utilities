@@ -1,8 +1,8 @@
 /**
  * @description Determine if a given effect object is a passive effect based on existing properties.
  * Do note that it does not check the validity of each property, only the existence.
- * @param effect object to check
- * @returns whether the given effect object is considered a passive effect based on its properties
+ * @param effect Object to check.
+ * @returns Whether the given effect object is considered a passive effect based on its properties.
  */
 export default function isPassiveEffect (effect: {
 	'passive id'?: string;
