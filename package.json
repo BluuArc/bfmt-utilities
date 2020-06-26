@@ -16,7 +16,7 @@
     "lint:non-app": "npm run lint:tasks && npm run lint:tests",
     "lint:tasks": "eslint -c .eslintrc.js tasks",
     "lint:tests": "eslint -c test/.eslintrc.js test",
-    "test": "jasmine --config=jasmine.json",
+    "test": "tsc -p tsconfig.coverage.json && jasmine --config=jasmine.json",
     "coverage": "tsc -p tsconfig.coverage.json && nyc jasmine --config=jasmine.coverage.json",
     "cleanup:coverage": "npm run gulp -- cleanup:coverage",
     "update:data": "npm run gulp -- update:data",
