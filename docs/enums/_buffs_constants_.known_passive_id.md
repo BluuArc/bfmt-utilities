@@ -14,4 +14,4 @@
 
 • **TriggeredEffect**: = "66"
 
-Defined in buffs/constants.ts:6
+*Defined in [buffs/constants.ts:6](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/constants.ts#L6)*

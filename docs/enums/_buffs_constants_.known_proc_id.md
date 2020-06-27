@@ -14,4 +14,4 @@
 
 • **BurstHeal**: = "2"
 
-Defined in buffs/constants.ts:2
+*Defined in [buffs/constants.ts:2](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/constants.ts#L2)*
