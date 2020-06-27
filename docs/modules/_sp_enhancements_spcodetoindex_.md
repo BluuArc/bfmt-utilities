@@ -23,9 +23,9 @@ It expects an alphanumeric character and will return -1 otherwise.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`code` | string | Character code an SP entry in a given skills array |
+`code` | string | Character code an SP entry in a given skills array. |
 
 **Returns:** *number*
 
-The corresponding index to the given character or -1 if the
+Corresponding index to the given character or -1 if the
 character is invalid.

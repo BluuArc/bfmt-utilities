@@ -6,8 +6,8 @@
 
 ### Modules
 
-* ["buff-metadata"](modules/_buff_metadata_.md)
 * ["buffs/IProcEffectFrameComposite"](modules/_buffs_iproceffectframecomposite_.md)
+* ["buffs/buff-metadata"](modules/_buffs_buff_metadata_.md)
 * ["buffs/combineEffectsAndDamageFrames"](modules/_buffs_combineeffectsanddamageframes_.md)
 * ["buffs/getEffectId"](modules/_buffs_geteffectid_.md)
 * ["buffs/getEffectName"](modules/_buffs_geteffectname_.md)

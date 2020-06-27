@@ -52,7 +52,7 @@ ___
 
 *Defined in [datamine-types.ts:703](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L703)*
 
-**`description`** List of units that use this item
+**`description`** List of units that use this item.
 
 **`author`** BluuArc
 
@@ -82,7 +82,7 @@ ___
 
 *Defined in [datamine-types.ts:709](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L709)*
 
-**`description`** Array of mission IDs where this item is a reward
+**`description`** Array of mission IDs where this item is a reward.
 
 **`author`** BluuArc
 
@@ -186,6 +186,6 @@ ___
 
 *Defined in [datamine-types.ts:692](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L692)*
 
-**`description`** List of other items that use the current item in their recipe
+**`description`** List of other items that use the current item in their recipe.
 
 **`author`** BluuArc

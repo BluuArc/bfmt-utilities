@@ -16,14 +16,14 @@
 
 *Defined in [buffs/getNameForProc.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/getNameForProc.ts#L8)*
 
-**`description`** Get the associated name for a given proc ID
+**`description`** Get the associated name for a given proc ID.
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`id` | string | proc ID to get the name of |
+`id` | string | Proc ID to get the name of. |
 
 **Returns:** *string*
 
-the name of the proc ID if it exists, empty string otherwise
+Name of the proc ID if it exists, empty string otherwise.

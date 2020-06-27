@@ -23,7 +23,7 @@ Do note that it does not check the validity of each property, only the existence
 
 ▪ **effect**: *object*
 
-object to check
+Object to check.
 
 Name | Type |
 ------ | ------ |
@@ -32,4 +32,4 @@ Name | Type |
 
 **Returns:** *boolean*
 
-whether the given effect object is considered a passive effect based on its properties
+Whether the given effect object is considered a passive effect based on its properties.

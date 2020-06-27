@@ -3,10 +3,10 @@
 var bfmtUtilities = function (exports) {
   'use strict';
   /**
-   * @description Grab the level entry of a burst at a given level (or the last level if no level is given)
-   * @param burst Burst to get level entry from
+   * @description Get the level entry of a burst at a given level (or the last level if no level is given).
+   * @param burst Burst to get level entry from.
    * @param level Optional 1-indexed level to get; if not specified, the last level of the burst is used.
-   * @returns the level entry of a burst at a given level (or last level if no level is given) if it exists, undefined otherwise
+   * @returns Level entry of a burst at a given level (or last level if no level is given) if it exists, undefined otherwise.
    */
 
   function getLevelEntryForBurst(burst, level) {
@@ -24,10 +24,10 @@ var bfmtUtilities = function (exports) {
     return burstEffectsByLevel[levelIndex];
   }
   /**
-   * @description Grab the effects at the level entry of a burst at a given level (or the last level if no level is given)
-   * @param burst Burst to get effects from
+   * @description Get the effects at the level entry of a burst at a given level (or the last level if no level is given).
+   * @param burst Burst to get effects from.
    * @param level Optional 1-indexed level to get entries from; if not specified, the last level of the burst is used.
-   * @returns the effects at the level entry of a burst at a given level (or last level if no level is given) if it exists, an empty array otherwise
+   * @returns Effects at the level entry of a burst at a given level (or last level if no level is given) if it exists, an empty array otherwise.
    */
 
 
@@ -36,9 +36,9 @@ var bfmtUtilities = function (exports) {
     return levelEntry && Array.isArray(levelEntry.effects) ? levelEntry.effects : [];
   }
   /**
-   * @description Get the proc/passive ID of a given object
-   * @param effect Object to get the effect ID from
-   * @returns The proc/passive ID of the input effect if it exists; empty string otherwise
+   * @description Get the proc/passive ID of a given object.
+   * @param effect Object to get the effect ID from.
+   * @returns Proc/passive ID of the input effect if it exists; empty string otherwise.
    */
 
 
@@ -1158,18 +1158,18 @@ var bfmtUtilities = function (exports) {
     }
   });
   /**
-   * @description Get the associated metadata entry for a given proc ID
-   * @param id proc ID to get metadata for
-   * @returns corresponding proc metadata entry if it exists, undefined otherwise
+   * @description Get the associated metadata entry for a given proc ID.
+   * @param id Proc ID to get metadata for.
+   * @returns Corresponding proc metadata entry if it exists, undefined otherwise.
    */
 
   function getMetadataForProc(id) {
     return Object.hasOwnProperty.call(PROC_METADATA, id) ? PROC_METADATA[id] : void 0;
   }
   /**
-   * @description Determine if a given proc ID's type is an attack
-   * @param id proc ID to check
-   * @returns whether the given ID corresponds to a proc ID whose type is attack
+   * @description Determine if a given proc ID's type is an attack.
+   * @param id Proc ID to check.
+   * @returns Whether the given ID corresponds to a proc ID whose type is attack.
    */
 
 
@@ -1179,9 +1179,9 @@ var bfmtUtilities = function (exports) {
   }
   /**
    * @description Get the extra attack damage frames entry based on the damage frames of a burst. Also apply the given effect delay to the resulting damage frames entry.
-   * @param damageFrames damage frames that each have their own proc ID
-   * @param effectDelay optional effect delay to apply to the resulting damage frames entry
-   * @returns damage frames entry whose frames are based on the input damage frames
+   * @param damageFrames Damage frames that each have their own proc ID.
+   * @param effectDelay Optional effect delay to apply to the resulting damage frames entry.
+   * @returns Damage frames entry whose frames are based on the input damage frames.
    */
 
 
@@ -1233,18 +1233,18 @@ var bfmtUtilities = function (exports) {
     getExtraAttackDamageFramesEntry: getExtraAttackDamageFramesEntry
   });
   /**
-   * @description Get the associated metadata entry for a given passive ID
-   * @param id passive ID to get metadata for
-   * @returns corresponding passive metadata entry if it exists, undefined otherwise
+   * @description Get the associated metadata entry for a given passive ID.
+   * @param id Passive ID to get metadata for.
+   * @returns Corresponding passive metadata entry if it exists, undefined otherwise.
    */
 
   function getMetadataForPassive(id) {
     return Object.hasOwnProperty.call(PASSIVE_METADATA, id) ? PASSIVE_METADATA[id] : void 0;
   }
   /**
-   * @description Get the associated name for a given proc ID
-   * @param id proc ID to get the name of
-   * @returns the name of the proc ID if it exists, empty string otherwise
+   * @description Get the associated name for a given proc ID.
+   * @param id Proc ID to get the name of.
+   * @returns Name of the proc ID if it exists, empty string otherwise.
    */
 
 
@@ -1253,9 +1253,9 @@ var bfmtUtilities = function (exports) {
     return !!metadataEntry && metadataEntry.Name || '';
   }
   /**
-   * @description Get the associated name for a given passive ID
-   * @param id passive ID to get the name of
-   * @returns the name of the passive ID if it exists, empty string otherwise
+   * @description Get the associated name for a given passive ID.
+   * @param id Passive ID to get the name of.
+   * @returns Name of the passive ID if it exists, empty string otherwise.
    */
 
 
@@ -1266,8 +1266,8 @@ var bfmtUtilities = function (exports) {
   /**
    * @description Determine if a given effect object is a proc effect based on existing properties.
    * Do note that it does not check the validity of each property, only the existence.
-   * @param effect object to check
-   * @returns whether the given effect object is considered a proc effect based on its properties
+   * @param effect Object to check.
+   * @returns Whether the given effect object is considered a proc effect based on its properties.
    */
 
 
@@ -1277,8 +1277,8 @@ var bfmtUtilities = function (exports) {
   /**
    * @description Determine if a given effect object is a passive effect based on existing properties.
    * Do note that it does not check the validity of each property, only the existence.
-   * @param effect object to check
-   * @returns whether the given effect object is considered a passive effect based on its properties
+   * @param effect Object to check.
+   * @returns Whether the given effect object is considered a passive effect based on its properties.
    */
 
 
@@ -1490,7 +1490,7 @@ var bfmtUtilities = function (exports) {
     MimicUnitIds["MetalMimic"] = "60224";
   })(MimicUnitIds || (MimicUnitIds = {}));
   /**
-   * @description Known values for the monster groups used in {@link IMimicInfo}
+   * @description Known values for the monster groups used in {@link IMimicInfo}.
    */
 
 
@@ -1579,10 +1579,10 @@ var bfmtUtilities = function (exports) {
     MimicMonsterGroupMapping: MimicMonsterGroupMapping
   });
   /**
-   * @description Create a list of objects that contain both the effect data and its corresponding damage frame
-   * @param effects List of proc effects to combine; must be the same length as the `damageFrames`
-   * @param damageFrames List of damage frames whose index corresponds with the effect in the `effects` list
-   * @returns collection of composite objects that contain the proc effect and the corresponding frames entry
+   * @description Create a list of objects that contain both the effect data and its corresponding damage frame.
+   * @param effects List of proc effects to combine; must be the same length as the `damageFrames`.
+   * @param damageFrames List of damage frames whose index corresponds with the effect in the `effects` list.
+   * @returns Collection of composite objects that contain the proc effect and the corresponding frames entry.
    */
 
   function combineEffectsAndDamageFrames(effects, damageFrames) {
@@ -1605,9 +1605,9 @@ var bfmtUtilities = function (exports) {
     return combinedEntries;
   }
   /**
-   * @description Get the name of a given object
-   * @param effect Object to get the name from
-   * @returns The name of the input effect if it exists; empty string otherwise
+   * @description Get the name of a given object.
+   * @param effect Object to get the name from.
+   * @returns Name of the input effect if it exists; empty string otherwise.
    */
 
 
@@ -1635,12 +1635,19 @@ var bfmtUtilities = function (exports) {
     isPassiveEffect: isPassiveEffect,
     combineEffectsAndDamageFrames: combineEffectsAndDamageFrames,
     getEffectId: getEffectId,
-    getEffectName: getEffectName
+    getEffectName: getEffectName,
+
+    get ProcBuffType() {
+      return ProcBuffType;
+    },
+
+    PASSIVE_METADATA: PASSIVE_METADATA,
+    PROC_METADATA: PROC_METADATA
   });
   /**
-   * @description Get the effects of a given extra skill
-   * @param skill extra skill to get the effects of
-   * @returns the effects of the given extra skill if they exist, an empty array otherwise
+   * @description Get the effects of a given extra skill.
+   * @param skill Extra skill to get the effects of.
+   * @returns Effects of the given extra skill if they exist, an empty array otherwise.
    */
 
   function getEffectsForExtraSkill(skill) {
@@ -1652,9 +1659,9 @@ var bfmtUtilities = function (exports) {
     getEffectsForExtraSkill: getEffectsForExtraSkill
   });
   /**
-   * @description Get the effects of a given item
-   * @param item item to get the effects of, if any are present
-   * @returns the effects of the given item if they exist, an empty array otherwise
+   * @description Get the effects of a given item.
+   * @param item Item to get the effects of, if any are present,
+   * @returns Effects of the given item if they exist, an empty array otherwise.
    */
 
   function getEffectsForItem(item) {
@@ -1682,10 +1689,10 @@ var bfmtUtilities = function (exports) {
     return result;
   }
   /**
-   * @description Generate a URL to display the image with the given item thumbnail filename
-   * @param baseContentUrl Base URL of the server
-   * @param fileName name of the file that represents the thumbnail image for a given item
-   * @returns generated URL based on the given content URL and file name
+   * @description Generate a URL to display the image with the given item thumbnail filename.
+   * @param baseContentUrl Base URL of the server.
+   * @param fileName Name of the file that represents the thumbnail image for a given item.
+   * @returns Generated URL based on the given content URL and file name.
    */
 
 
@@ -1699,9 +1706,9 @@ var bfmtUtilities = function (exports) {
     getItemImageUrl: getItemImageUrl
   });
   /**
-   * @description Get the effects of a given leader skill
-   * @param skill leader skill to get the effects of
-   * @returns the effects of the given leader skill if they exist, an empty array otherwise
+   * @description Get the effects of a given leader skill.
+   * @param skill Leader skill to get the effects of.
+   * @returns Effects of the given leader skill if they exist, an empty array otherwise.
    */
 
   function getEffectsForLeaderSkill(skill) {
@@ -1713,10 +1720,10 @@ var bfmtUtilities = function (exports) {
     getEffectsForLeaderSkill: getEffectsForLeaderSkill
   });
   /**
-   * @description Generate the file names for each of the image type for a given unit ID
-   * @param id the unit ID to use to generate the file names
-   * @param suffix optional parameter that's useful for things like alternate art
-   * @returns set of file names for each image type (spritesheet, battle avatar, guide avatar, full illustration)
+   * @description Generate the file names for each of the image type for a given unit ID.
+   * @param id Unit ID to use to generate the file names.
+   * @param suffix Optional parameter that's useful for things like alternate art.
+   * @returns Set of file names for each image type (spritesheet, battle avatar, guide avatar, full illustration).
    */
 
   function getUnitImageFileNames(id, suffix = '') {
@@ -1729,10 +1736,10 @@ var bfmtUtilities = function (exports) {
     };
   }
   /**
-   * @description Generate a URL to display the image with the given unit filename
-   * @param baseContentUrl Base URL of the server
-   * @param fileName name of the file that represents an image for a given unit
-   * @returns generated URL based on the given content URL and file name
+   * @description Generate a URL to display the image with the given unit filename.
+   * @param baseContentUrl Base URL of the server.
+   * @param fileName Name of the file that represents an image for a given unit.
+   * @returns Generated URL based on the given content URL and file name.
    */
 
 
@@ -1746,9 +1753,9 @@ var bfmtUtilities = function (exports) {
     getUnitImageUrl: getUnitImageUrl
   });
   /**
-   * @description Get the effects of a given SP Enhancement Entry
-   * @param entry SP Enhancement Entry to get the effects of
-   * @returns the effects of the given SP Enhancement Entry if they exist, an empty array otherwise
+   * @description Get the effects of a given SP Enhancement Entry.
+   * @param entry SP Enhancement Entry to get the effects of.
+   * @returns Effects of the given SP Enhancement Entry if they exist, an empty array otherwise.
    */
 
   function getEffectsForSpEnhancement(entry) {
@@ -1771,8 +1778,8 @@ var bfmtUtilities = function (exports) {
   }
   /**
    * @description Get the associated category name with a given category ID.
-   * @param categoryId Category ID to get the name of
-   * @returns The name of the given category ID or the string 'Unknown'.
+   * @param categoryId Category ID to get the name of.
+   * @returns Name of the given category ID or the string 'Unknown'.
    */
 
 
@@ -1852,8 +1859,8 @@ var bfmtUtilities = function (exports) {
    * @description Get the corresponding character code for a given index.
    * It expects an index between 0 and 61 inclusive; will return an empty string if
    * the given value is outside of the range.
-   * @param index Index of an SP entry in a given skills array
-   * @returns The corresponding single alphanumeric character to the given index
+   * @param index Index of an SP entry in a given skills array.
+   * @returns Corresponding single alphanumeric character to the given index
    * or an empty string if the index is invalid.
    */
 
@@ -1883,8 +1890,8 @@ var bfmtUtilities = function (exports) {
   /**
    * @description Get the corresponding index for a given character code.
    * It expects an alphanumeric character and will return -1 otherwise.
-   * @param code Character code an SP entry in a given skills array
-   * @returns The corresponding index to the given character or -1 if the
+   * @param code Character code an SP entry in a given skills array.
+   * @returns Corresponding index to the given character or -1 if the
    * character is invalid.
    */
 
@@ -1912,8 +1919,8 @@ var bfmtUtilities = function (exports) {
   /**
    * @description Extract the ID of a string in the format of `number@actualId`. If there
    * is no value after the @ character or if no @ character is present, the original ID is returned.
-   * This is particularly useful for extracting the ID of [[ISpEnhancementEntry.dependency|`ISpEnhancementEntry.dependency`]]
-   * @param id Original SP Enhancement Entry ID
+   * This is particularly useful for extracting the ID of [[ISpEnhancementEntry.dependency|`ISpEnhancementEntry.dependency`]].
+   * @param id Original SP Enhancement Entry ID.
    * @returns The ID of a string in the format of `number@actualId`, or the original input if
    * there is no @ character or no value after the @ character.
    */
@@ -1924,9 +1931,9 @@ var bfmtUtilities = function (exports) {
   }
   /**
    * @description Get the first SP Enhancement Entry that matches the given SP Entry ID, if it exists.
-   * @param id SP Enhancement entry ID
-   * @param entries Collection of SP Enhancement entries to search in
-   * @returns The corresponding SP Enhancement entry with the given SP ID, undefined otherwise.
+   * @param id SP Enhancement entry ID.
+   * @param entries Collection of SP Enhancement entries to search in.
+   * @returns Corresponding SP Enhancement entry with the given SP ID, undefined otherwise.
    */
 
 

@@ -6,7 +6,10 @@
 
 ### References
 
+* [IPassiveMetadataEntry](_buffs_index_.md#ipassivemetadataentry)
 * [IProcEffectFrameComposite](_buffs_index_.md#iproceffectframecomposite)
+* [IProcMetadataEntry](_buffs_index_.md#iprocmetadataentry)
+* [ProcBuffType](_buffs_index_.md#procbufftype)
 * [combineEffectsAndDamageFrames](_buffs_index_.md#combineeffectsanddamageframes)
 * [getEffectId](_buffs_index_.md#geteffectid)
 * [getEffectName](_buffs_index_.md#geteffectname)
@@ -20,9 +23,27 @@
 
 ## References
 
+###  IPassiveMetadataEntry
+
+• **IPassiveMetadataEntry**:
+
+___
+
 ###  IProcEffectFrameComposite
 
 • **IProcEffectFrameComposite**:
+
+___
+
+###  IProcMetadataEntry
+
+• **IProcMetadataEntry**:
+
+___
+
+###  ProcBuffType
+
+• **ProcBuffType**:
 
 ___
 

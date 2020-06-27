@@ -22,9 +22,9 @@
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`id` | string | SP Enhancement entry ID |
-`entries` | [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[] | Collection of SP Enhancement entries to search in |
+`id` | string | SP Enhancement entry ID. |
+`entries` | [ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md)[] | Collection of SP Enhancement entries to search in. |
 
 **Returns:** *[ISpEnhancementEntry](../interfaces/_datamine_types_.ispenhancemententry.md) | undefined*
 
-The corresponding SP Enhancement entry with the given SP ID, undefined otherwise.
+Corresponding SP Enhancement entry with the given SP ID, undefined otherwise.

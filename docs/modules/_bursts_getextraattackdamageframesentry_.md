@@ -22,9 +22,9 @@
 
 Name | Type | Default | Description |
 ------ | ------ | ------ | ------ |
-`damageFrames` | [IBurstDamageFramesEntry](../interfaces/_datamine_types_.iburstdamageframesentry.md)[] | - | damage frames that each have their own proc ID |
-`effectDelay` | string | "0.0/0" | optional effect delay to apply to the resulting damage frames entry |
+`damageFrames` | [IBurstDamageFramesEntry](../interfaces/_datamine_types_.iburstdamageframesentry.md)[] | - | Damage frames that each have their own proc ID. |
+`effectDelay` | string | "0.0/0" | Optional effect delay to apply to the resulting damage frames entry. |
 
 **Returns:** *[IBurstDamageFramesEntry](../interfaces/_datamine_types_.iburstdamageframesentry.md)*
 
-damage frames entry whose frames are based on the input damage frames
+Damage frames entry whose frames are based on the input damage frames.

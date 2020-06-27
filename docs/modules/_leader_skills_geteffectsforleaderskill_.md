@@ -16,14 +16,14 @@
 
 *Defined in [leader-skills/getEffectsForLeaderSkill.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/master/src/leader-skills/getEffectsForLeaderSkill.ts#L8)*
 
-**`description`** Get the effects of a given leader skill
+**`description`** Get the effects of a given leader skill.
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`skill` | [ILeaderSkill](../interfaces/_datamine_types_.ileaderskill.md) | leader skill to get the effects of |
+`skill` | [ILeaderSkill](../interfaces/_datamine_types_.ileaderskill.md) | Leader skill to get the effects of. |
 
 **Returns:** *[PassiveEffect](_datamine_types_.md#passiveeffect)[]*
 
-the effects of the given leader skill if they exist, an empty array otherwise
+Effects of the given leader skill if they exist, an empty array otherwise.

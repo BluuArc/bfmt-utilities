@@ -16,14 +16,14 @@
 
 *Defined in [buffs/getNameForPassive.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/getNameForPassive.ts#L8)*
 
-**`description`** Get the associated name for a given passive ID
+**`description`** Get the associated name for a given passive ID.
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`id` | string | passive ID to get the name of |
+`id` | string | Passive ID to get the name of. |
 
 **Returns:** *string*
 
-the name of the passive ID if it exists, empty string otherwise
+Name of the passive ID if it exists, empty string otherwise.

@@ -28,7 +28,7 @@
 
 *Defined in [datamine-types.ts:269](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L269)*
 
-**`description`** List of units that use this extra skill
+**`description`** List of units that use this extra skill.
 
 **`author`** BluuArc
 
@@ -66,7 +66,7 @@ ___
 
 *Defined in [datamine-types.ts:275](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L275)*
 
-**`description`** Array of mission IDs where this extra skill is a reward
+**`description`** Array of mission IDs where this extra skill is a reward.
 
 **`author`** BluuArc
 

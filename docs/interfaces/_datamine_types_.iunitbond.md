@@ -31,4 +31,4 @@ ___
 
 *Defined in [datamine-types.ts:429](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L429)*
 
-**`description`** Unit ID of bond partner
+**`description`** Unit ID of bond partner.

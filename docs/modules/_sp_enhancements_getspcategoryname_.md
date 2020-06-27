@@ -22,8 +22,8 @@
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`categoryId` | string &#124; number | Category ID to get the name of |
+`categoryId` | string &#124; number | Category ID to get the name of. |
 
 **Returns:** *[SpCategoryName](../enums/_datamine_types_.spcategoryname.md)*
 
-The name of the given category ID or the string 'Unknown'.
+Name of the given category ID or the string 'Unknown'.

@@ -16,14 +16,14 @@
 
 *Defined in [buffs/isAttackingProcId.ts:9](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/isAttackingProcId.ts#L9)*
 
-**`description`** Determine if a given proc ID's type is an attack
+**`description`** Determine if a given proc ID's type is an attack.
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`id` | string | proc ID to check |
+`id` | string | Proc ID to check. |
 
 **Returns:** *boolean*
 
-whether the given ID corresponds to a proc ID whose type is attack
+Whether the given ID corresponds to a proc ID whose type is attack.

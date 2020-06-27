@@ -56,7 +56,7 @@
 
 *Defined in [datamine-types.ts:451](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L451)*
 
-**`description`** Arena AI; determines chances for different actions in Arena.
+**`description`** Arena AI; determines chances for different actions in Arena..
 
 ___
 
@@ -234,7 +234,7 @@ ___
 
 *Defined in [datamine-types.ts:543](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L543)*
 
-**`description`** Helps determine merit value in exchange hall
+**`description`** Helps determine merit value in exchange hall.
 
 ___
 
@@ -252,7 +252,7 @@ ___
 
 *Defined in [datamine-types.ts:470](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L470)*
 
-**`description`** Effects that apply only during Guild Raid
+**`description`** Effects that apply only during Guild Raid.
 
 **`author`** BluuArc
 
@@ -310,7 +310,7 @@ ___
 
 *Defined in [datamine-types.ts:564](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L564)*
 
-**`description`** format of `minvalue~maxvalue`
+**`description`** Format of `minvalue~maxvalue`.
 
 ___
 

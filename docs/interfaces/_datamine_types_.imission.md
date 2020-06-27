@@ -170,7 +170,7 @@ ___
 
 *Defined in [datamine-types.ts:836](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L836)*
 
-**`description`** comma delimited list of mission IDs
+**`description`** Comma delimited list of mission IDs.
 
 ___
 

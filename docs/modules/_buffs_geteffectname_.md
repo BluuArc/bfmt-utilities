@@ -16,13 +16,13 @@
 
 *Defined in [buffs/getEffectName.ts:12](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/getEffectName.ts#L12)*
 
-**`description`** Get the name of a given object
+**`description`** Get the name of a given object.
 
 **Parameters:**
 
 ▪ **effect**: *object*
 
-Object to get the name from
+Object to get the name from.
 
 Name | Type |
 ------ | ------ |
@@ -33,4 +33,4 @@ Name | Type |
 
 **Returns:** *string*
 
-The name of the input effect if it exists; empty string otherwise
+Name of the input effect if it exists; empty string otherwise.

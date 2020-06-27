@@ -144,7 +144,7 @@ ___
 
 *Defined in [datamine-types.ts:745](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L745)*
 
-**`description`** Known values for the monster groups used in [IMimicInfo](../interfaces/_datamine_types_.imimicinfo.md)
+**`description`** Known values for the monster groups used in [IMimicInfo](../interfaces/_datamine_types_.imimicinfo.md).
 
 ###  1000
 

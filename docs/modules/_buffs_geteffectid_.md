@@ -16,13 +16,13 @@
 
 *Defined in [buffs/getEffectId.ts:6](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/getEffectId.ts#L6)*
 
-**`description`** Get the proc/passive ID of a given object
+**`description`** Get the proc/passive ID of a given object.
 
 **Parameters:**
 
 ▪ **effect**: *object*
 
-Object to get the effect ID from
+Object to get the effect ID from.
 
 Name | Type |
 ------ | ------ |
@@ -33,4 +33,4 @@ Name | Type |
 
 **Returns:** *string*
 
-The proc/passive ID of the input effect if it exists; empty string otherwise
+Proc/passive ID of the input effect if it exists; empty string otherwise.

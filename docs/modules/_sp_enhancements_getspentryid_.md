@@ -18,13 +18,13 @@
 
 **`description`** Extract the ID of a string in the format of `number@actualId`. If there
 is no value after the @ character or if no @ character is present, the original ID is returned.
-This is particularly useful for extracting the ID of [`ISpEnhancementEntry.dependency`](../interfaces/_datamine_types_.ispenhancemententry.md#optional-dependency)
+This is particularly useful for extracting the ID of [`ISpEnhancementEntry.dependency`](../interfaces/_datamine_types_.ispenhancemententry.md#optional-dependency).
 
 **Parameters:**
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`id` | string | Original SP Enhancement Entry ID |
+`id` | string | Original SP Enhancement Entry ID. |
 
 **Returns:** *string*
 

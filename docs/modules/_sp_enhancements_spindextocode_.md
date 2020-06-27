@@ -24,9 +24,9 @@ the given value is outside of the range.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`index` | number | Index of an SP entry in a given skills array |
+`index` | number | Index of an SP entry in a given skills array. |
 
 **Returns:** *string*
 
-The corresponding single alphanumeric character to the given index
+Corresponding single alphanumeric character to the given index
 or an empty string if the index is invalid.

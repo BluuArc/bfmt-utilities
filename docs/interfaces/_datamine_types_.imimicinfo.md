@@ -32,7 +32,7 @@ ___
 
 *Defined in [datamine-types.ts:759](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L759)*
 
-**`description`** Known mappings can be found at [MimicMonsterGroupMapping](../modules/_datamine_types_.md#const-mimicmonstergroupmapping)
+**`description`** Known mappings can be found at [MimicMonsterGroupMapping](../modules/_datamine_types_.md#const-mimicmonstergroupmapping).
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 *Defined in [datamine-types.ts:765](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L765)*
 
-**`description`** Known mappings can be found at [MimicMonsterGroupMapping](../modules/_datamine_types_.md#const-mimicmonstergroupmapping)
+**`description`** Known mappings can be found at [MimicMonsterGroupMapping](../modules/_datamine_types_.md#const-mimicmonstergroupmapping).
 
 ___
 
