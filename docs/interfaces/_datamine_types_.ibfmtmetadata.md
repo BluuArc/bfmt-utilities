@@ -32,7 +32,7 @@ ___
 
 *Defined in [datamine-types.ts:11](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L11)*
 
-**`description`** whether or not the entry has been removed from the datamine
+**`description`** Whether or not the entry has been removed from the datamine.
 
 ___
 

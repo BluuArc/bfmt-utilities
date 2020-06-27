@@ -6,13 +6,12 @@ export interface IBfmtMetadata {
 	updatedAt: string;
 
 	/**
-	 * @description whether or not the entry has been removed from the datamine
+	 * @description Whether or not the entry has been removed from the datamine.
 	 */
 	removed?: boolean;
 }
 
 export enum ArenaCondition {
-	/* eslint-disable @typescript-eslint/camelcase */
 	hp_50pr_under = 'hp_50pr_under',
 	hp_50pr_over = 'hp_50pr_over',
 	hp_75pr_under = 'hp_75pr_under',
@@ -21,7 +20,6 @@ export enum ArenaCondition {
 	hp_max = 'hp_max',
 	atk_max = 'atk_max',
 	random = 'random',
-	/* eslint-enable @typescript-eslint/camelcase */
 }
 
 export interface IUnitArenaAiEntry {
@@ -265,13 +263,13 @@ export interface IExtraSkill {
 	bfmtMetadata?: IBfmtMetadata;
 
 	/**
-	 * @description List of units that use this extra skill
+	 * @description List of units that use this extra skill.
 	 * @author BluuArc
 	 */
 	associated_units?: string[];
 
 	/**
-	 * @description Array of mission IDs where this extra skill is a reward
+	 * @description Array of mission IDs where this extra skill is a reward.
 	 * @author BluuArc
 	 */
 	first_clear_missions?: string[];
@@ -426,7 +424,7 @@ export interface IEvolutionMaterial {
  */
 export interface IUnitBond {
 	/**
-	 * @description Unit ID of bond partner
+	 * @description Unit ID of bond partner.
 	 */
 	partner: number;
 	dbb: IBraveBurst;
@@ -448,7 +446,7 @@ export interface IUnit {
 	bfmtMetadata?: IBfmtMetadata;
 
 	/**
-	 * @description Arena AI; determines chances for different actions in Arena.
+	 * @description Arena AI; determines chances for different actions in Arena..
 	 */
 	ai?: IUnitArenaAiEntry[];
 	ai_id?: string;
@@ -466,7 +464,7 @@ export interface IUnit {
 	};
 
 	/**
-	 * @description Effects that apply only during Guild Raid
+	 * @description Effects that apply only during Guild Raid.
 	 * @author BluuArc
 	 */
 	guild_raid?: {
@@ -504,14 +502,15 @@ export interface IUnit {
 		karma?: number;
 
 		/**
-		 * @description unit ID of next evolution
+		 * @description Unit ID of next evolution.
 		 */
 		next?: string;
 
 		/**
-		 * @description unit ID of pre-evolution
+		 * @description Unit ID(s) of pre-evolution. If the entry is an array, there will be 0 or more entries.
+		 * If the entry is a non-empty string, then there is only one pre-evolution.
 		 */
-		prev?: string[];
+		prev?: string | string[];
 	};
 
 	/**
@@ -539,7 +538,7 @@ export interface IUnit {
 	gender: UnitGender;
 
 	/**
-	 * @description Helps determine merit value in exchange hall
+	 * @description Helps determine merit value in exchange hall.
 	 */
 	'getting type': UnitGettingType;
 	guide_id: number;
@@ -560,7 +559,7 @@ export interface IUnit {
 	'leader skill'?: ILeaderSkill;
 
 	/**
-	 * @description format of `minvalue~maxvalue`
+	 * @description Format of `minvalue~maxvalue`.
 	 */
 	'lord damage range': string;
 
@@ -687,7 +686,7 @@ export interface IItem {
 	recipe?: IItemRecipe | IItemRecipe[];
 
 	/**
-	 * @description List of other items that use the current item in their recipe
+	 * @description List of other items that use the current item in their recipe.
 	 * @author BluuArc
 	 */
 	usage?: IItemUsageEntry[];
@@ -698,13 +697,13 @@ export interface IItem {
 	lore?: string;
 
 	/**
-	 * @description List of units that use this item
+	 * @description List of units that use this item.
 	 * @author BluuArc
 	 */
 	associated_units?: string[];
 
 	/**
-	 * @description Array of mission IDs where this item is a reward
+	 * @description Array of mission IDs where this item is a reward.
 	 * @author BluuArc
 	 */
 	first_clear_missions?: string[];
@@ -741,7 +740,7 @@ export enum MimicUnitIds {
 }
 
 /**
- * @description Known values for the monster groups used in {@link IMimicInfo}
+ * @description Known values for the monster groups used in {@link IMimicInfo}.
  */
 export const MimicMonsterGroupMapping = {
 	'1000': MimicUnitIds.Mimic,
@@ -755,13 +754,13 @@ export interface IMimicInfo {
 	group_1_chance: string;
 
 	/**
-	 * @description Known mappings can be found at {@link MimicMonsterGroupMapping}
+	 * @description Known mappings can be found at {@link MimicMonsterGroupMapping}.
 	 */
 	group_1_monster_group: string;
 	group_2_chance: string;
 
 	/**
-	 * @description Known mappings can be found at {@link MimicMonsterGroupMapping}
+	 * @description Known mappings can be found at {@link MimicMonsterGroupMapping}.
 	 */
 	group_2_monster_group: string;
 	spawn_chance_range_maybe: string;
@@ -832,7 +831,7 @@ export interface IMission {
 	zel: number;
 
 	/**
-	 * @description comma delimited list of mission IDs
+	 * @description Comma delimited list of mission IDs.
 	 */
 	requires?: string;
 

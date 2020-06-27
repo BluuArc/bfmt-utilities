@@ -17,7 +17,7 @@
 
 • **ExtraSkillElgif**: = "extra skill elgif"
 
-*Defined in [datamine-types.ts:408](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L408)*
+*Defined in [datamine-types.ts:406](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L406)*
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 • **Farmable**: = "farmable"
 
-*Defined in [datamine-types.ts:406](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L406)*
+*Defined in [datamine-types.ts:404](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L404)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **Ineligible**: = "not eligible for achievement"
 
-*Defined in [datamine-types.ts:405](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L405)*
+*Defined in [datamine-types.ts:403](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L403)*
 
 ___
 
@@ -41,4 +41,4 @@ ___
 
 • **RareSummon**: = "rare summon"
 
-*Defined in [datamine-types.ts:407](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L407)*
+*Defined in [datamine-types.ts:405](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L405)*

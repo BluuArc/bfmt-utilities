@@ -5,6 +5,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased] - YYYY-MM-DD
+### ⚠ Breaking Changes
+* Build: Project restructure to split "mono-modules" buffs, bursts, extra-skills, items, leader-skills, sp-enhancements, and units to more granular folder/function file structure.
+	* `[mono-module].ts/js` files have been replaced with `[mono-module]/index.ts` (e.g. `bursts.ts/js -> bursts/index.ts/js`)
+		* Breaks any apps that use `[mono-module].js` or `[mono-module.ts]` directly since they don't exist anymore.
+	* Every exported entry in the mono-module has its own file now in the corresponding mono-module folder
+		* Existing API usage should not be affected.
+		* e.g. `bfmtUtilities.buffs.getEffectId` can be accessed directly at `dist/buffs/getEffectId.js`, but using `bfmtUtilities.buffs.getEffectId` from `index.js` should still work.
+* index (app root): Export submodules directly instead of exporting a frozen object containing the submodules.
+	* Potentially breaking if there's anything that was relied on from a frozen object that isn't present on an exported object (though, this is highly unlikely to be the case)
+	* Should improve tree-shakeability when using the application root (`dist/index.js`) directly.
+* datamine-types: `IUnit.evolution.prev` can now be an array of strings or just a string.
+	* Will break any implementations that always relied on it being an array only.
+* buff-metadata: Move from root to `buffs` folder; exposed under `buffs` namespace.
+* constants: Move from root to `buffs` folder; exposed under `buffs` namespace. (Contains only `KNOWN_PROC_ID` and `KNOWN_PASSIVE_ID`, both of which fit under `buffs`).
+
+### Δ Changes
+* Build: Update dependencies to latest stable versions; no changes to functionality as a result of this.
+* Docs: No longer generate docs for internal frozen buff metadata objects.
+* Docs: Update all code comments for TSDoc to use sentence casing for consistency.
 
 ## [0.6.0] - 2020-06-20
 ### ⚠ Breaking Changes
@@ -56,7 +75,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `getAllEntriesThatDependOnSpEntry`
 
 ### Δ Changes
-* Build: Update dependencies to stable latest versions; no changes to functionality as a result of this.
+* Build: Update dependencies to latest stable versions; no changes to functionality as a result of this.
 * Docs: Minor doc config update to include package version in the header.
 * Update ESLint rules to enforce triple equal comparisons.
 

@@ -26,7 +26,7 @@
 
 • **effect delay time(ms)/frame**: *string*
 
-*Defined in [datamine-types.ts:155](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L155)*
+*Defined in [datamine-types.ts:153](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L153)*
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 *Inherited from [IDamageFramesEntry](_datamine_types_.idamageframesentry.md).[frame times](_datamine_types_.idamageframesentry.md#frame-times)*
 
-*Defined in [datamine-types.ts:143](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L143)*
+*Defined in [datamine-types.ts:141](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L141)*
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 *Inherited from [IDamageFramesEntry](_datamine_types_.idamageframesentry.md).[hit dmg% distribution](_datamine_types_.idamageframesentry.md#hit-dmg%-distribution)*
 
-*Defined in [datamine-types.ts:144](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L144)*
+*Defined in [datamine-types.ts:142](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L142)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 *Inherited from [IDamageFramesEntry](_datamine_types_.idamageframesentry.md).[hit dmg% distribution (total)](_datamine_types_.idamageframesentry.md#hit-dmg%-distribution-(total))*
 
-*Defined in [datamine-types.ts:145](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L145)*
+*Defined in [datamine-types.ts:143](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L143)*
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 *Inherited from [IDamageFramesEntry](_datamine_types_.idamageframesentry.md).[hits](_datamine_types_.idamageframesentry.md#hits)*
 
-*Defined in [datamine-types.ts:146](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L146)*
+*Defined in [datamine-types.ts:144](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L144)*
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 • **proc id**? : *undefined | string*
 
-*Defined in [datamine-types.ts:157](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L157)*
+*Defined in [datamine-types.ts:155](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L155)*
 
 ___
 
@@ -82,4 +82,4 @@ ___
 
 • **unknown proc id**? : *undefined | string*
 
-*Defined in [datamine-types.ts:156](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L156)*
+*Defined in [datamine-types.ts:154](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L154)*

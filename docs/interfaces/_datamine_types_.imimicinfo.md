@@ -22,7 +22,7 @@
 
 • **group_1_chance**: *string*
 
-*Defined in [datamine-types.ts:755](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L755)*
+*Defined in [datamine-types.ts:754](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L754)*
 
 ___
 
@@ -30,9 +30,9 @@ ___
 
 • **group_1_monster_group**: *string*
 
-*Defined in [datamine-types.ts:760](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L760)*
+*Defined in [datamine-types.ts:759](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L759)*
 
-**`description`** Known mappings can be found at [MimicMonsterGroupMapping](../modules/_datamine_types_.md#const-mimicmonstergroupmapping)
+**`description`** Known mappings can be found at [MimicMonsterGroupMapping](../modules/_datamine_types_.md#const-mimicmonstergroupmapping).
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **group_2_chance**: *string*
 
-*Defined in [datamine-types.ts:761](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L761)*
+*Defined in [datamine-types.ts:760](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L760)*
 
 ___
 
@@ -48,9 +48,9 @@ ___
 
 • **group_2_monster_group**: *string*
 
-*Defined in [datamine-types.ts:766](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L766)*
+*Defined in [datamine-types.ts:765](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L765)*
 
-**`description`** Known mappings can be found at [MimicMonsterGroupMapping](../modules/_datamine_types_.md#const-mimicmonstergroupmapping)
+**`description`** Known mappings can be found at [MimicMonsterGroupMapping](../modules/_datamine_types_.md#const-mimicmonstergroupmapping).
 
 ___
 
@@ -58,4 +58,4 @@ ___
 
 • **spawn_chance_range_maybe**: *string*
 
-*Defined in [datamine-types.ts:767](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L767)*
+*Defined in [datamine-types.ts:766](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L766)*

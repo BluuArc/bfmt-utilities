@@ -94,7 +94,7 @@
 
 Ƭ **ClearBonus**: *[IGemClearBonus](../interfaces/_datamine_types_.igemclearbonus.md) | [IUnitClearBonus](../interfaces/_datamine_types_.iunitclearbonus.md) | [IItemClearBonus](../interfaces/_datamine_types_.iitemclearbonus.md) | [IZelClearBonus](../interfaces/_datamine_types_.izelclearbonus.md) | [IKarmaClearBonus](../interfaces/_datamine_types_.ikarmaclearbonus.md) | [IUnknownClearBonus](../interfaces/_datamine_types_.iunknownclearbonus.md)*
 
-*Defined in [datamine-types.ts:809](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L809)*
+*Defined in [datamine-types.ts:808](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L808)*
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 Ƭ **ExtraSkillCondition**: *[IExtraSkillItemCondition](../interfaces/_datamine_types_.iextraskillitemcondition.md) | [IExtraSkillSphereTypeCondition](../interfaces/_datamine_types_.iextraskillspheretypecondition.md) | [IExtraSkillUnitCondition](../interfaces/_datamine_types_.iextraskillunitcondition.md) | [IExtraSkillUnknownCondition](../interfaces/_datamine_types_.iextraskillunknowncondition.md)*
 
-*Defined in [datamine-types.ts:243](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L243)*
+*Defined in [datamine-types.ts:241](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L241)*
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 Ƭ **ExtraSkillPassiveEffect**: *[IExtraSkillPassiveEffect](../interfaces/_datamine_types_.iextraskillpassiveeffect.md) | [IExtraSkillUnknownPassiveEffect](../interfaces/_datamine_types_.iextraskillunknownpassiveeffect.md)*
 
-*Defined in [datamine-types.ts:259](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L259)*
+*Defined in [datamine-types.ts:257](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L257)*
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 Ƭ **PassiveEffect**: *[IPassiveEffect](../interfaces/_datamine_types_.ipassiveeffect.md) | [IUnknownPassiveEffect](../interfaces/_datamine_types_.iunknownpassiveeffect.md) | [ITriggeredEffect](../interfaces/_datamine_types_.itriggeredeffect.md)*
 
-*Defined in [datamine-types.ts:118](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L118)*
+*Defined in [datamine-types.ts:116](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L116)*
 
 ___
 
@@ -126,7 +126,7 @@ ___
 
 Ƭ **ProcEffect**: *[IProcEffect](../interfaces/_datamine_types_.iproceffect.md) | [IUnknownProcEffect](../interfaces/_datamine_types_.iunknownproceffect.md)*
 
-*Defined in [datamine-types.ts:89](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L89)*
+*Defined in [datamine-types.ts:87](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L87)*
 
 ___
 
@@ -134,7 +134,7 @@ ___
 
 Ƭ **SpEnhancementEffect**: *[ISpEnhancementPassiveEffect](../interfaces/_datamine_types_.ispenhancementpassiveeffect.md) | [ISpEnhancementUnknownPassiveEffect](../interfaces/_datamine_types_.ispenhancementunknownpassiveeffect.md) | [ISpEnhancementTriggeredEffect](../interfaces/_datamine_types_.ispenhancementtriggeredeffect.md)*
 
-*Defined in [datamine-types.ts:140](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L140)*
+*Defined in [datamine-types.ts:138](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L138)*
 
 ## Object literals
 
@@ -142,36 +142,36 @@ ___
 
 ### ▪ **MimicMonsterGroupMapping**: *object*
 
-*Defined in [datamine-types.ts:746](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L746)*
+*Defined in [datamine-types.ts:745](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L745)*
 
-**`description`** Known values for the monster groups used in [IMimicInfo](../interfaces/_datamine_types_.imimicinfo.md)
+**`description`** Known values for the monster groups used in [IMimicInfo](../interfaces/_datamine_types_.imimicinfo.md).
 
 ###  1000
 
 • **1000**: *[MimicUnitIds](../enums/_datamine_types_.mimicunitids.md)* = MimicUnitIds.Mimic
 
-*Defined in [datamine-types.ts:747](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L747)*
+*Defined in [datamine-types.ts:746](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L746)*
 
 ###  1100
 
 • **1100**: *[MimicUnitIds](../enums/_datamine_types_.mimicunitids.md)* = MimicUnitIds.BatMimic
 
-*Defined in [datamine-types.ts:748](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L748)*
+*Defined in [datamine-types.ts:747](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L747)*
 
 ###  1101
 
 • **1101**: *[MimicUnitIds](../enums/_datamine_types_.mimicunitids.md)* = MimicUnitIds.BatMimic
 
-*Defined in [datamine-types.ts:749](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L749)*
+*Defined in [datamine-types.ts:748](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L748)*
 
 ###  1200
 
 • **1200**: *[MimicUnitIds](../enums/_datamine_types_.mimicunitids.md)* = MimicUnitIds.DragonMimic
 
-*Defined in [datamine-types.ts:750](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L750)*
+*Defined in [datamine-types.ts:749](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L749)*
 
 ###  1300
 
 • **1300**: *[MimicUnitIds](../enums/_datamine_types_.mimicunitids.md)* = MimicUnitIds.MetalMimic
 
-*Defined in [datamine-types.ts:751](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L751)*
+*Defined in [datamine-types.ts:750](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L750)*

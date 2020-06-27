@@ -18,4 +18,4 @@
 
 • **karma**: *string*
 
-*Defined in [datamine-types.ts:797](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L797)*
+*Defined in [datamine-types.ts:796](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L796)*

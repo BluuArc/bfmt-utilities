@@ -21,7 +21,7 @@
 
 • **id**: *number*
 
-*Defined in [datamine-types.ts:665](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L665)*
+*Defined in [datamine-types.ts:664](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L664)*
 
 ___
 
@@ -29,4 +29,4 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:666](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L666)*
+*Defined in [datamine-types.ts:665](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L665)*

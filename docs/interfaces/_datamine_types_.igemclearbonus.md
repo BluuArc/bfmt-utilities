@@ -18,4 +18,4 @@
 
 • **gem**: *string*
 
-*Defined in [datamine-types.ts:771](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L771)*
+*Defined in [datamine-types.ts:770](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L770)*

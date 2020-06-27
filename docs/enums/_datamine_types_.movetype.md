@@ -16,7 +16,7 @@
 
 • **Moving**: = "1"
 
-*Defined in [datamine-types.ts:35](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L35)*
+*Defined in [datamine-types.ts:33](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L33)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **NonMoving**: = "3"
 
-*Defined in [datamine-types.ts:37](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L37)*
+*Defined in [datamine-types.ts:35](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L35)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **Teleporting**: = "2"
 
-*Defined in [datamine-types.ts:36](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L36)*
+*Defined in [datamine-types.ts:34](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L34)*

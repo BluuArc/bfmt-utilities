@@ -30,7 +30,7 @@
 
 *Inherited from [IBaseProcEffect](_datamine_types_.ibaseproceffect.md).[effect delay time(ms)/frame](_datamine_types_.ibaseproceffect.md#effect-delay-time(ms)/frame)*
 
-*Defined in [datamine-types.ts:72](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L72)*
+*Defined in [datamine-types.ts:70](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L70)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 *Inherited from [IBaseProcEffect](_datamine_types_.ibaseproceffect.md).[params](_datamine_types_.ibaseproceffect.md#optional-params)*
 
-*Defined in [datamine-types.ts:75](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L75)*
+*Defined in [datamine-types.ts:73](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L73)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **proc id**: *string*
 
-*Defined in [datamine-types.ts:79](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L79)*
+*Defined in [datamine-types.ts:77](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L77)*
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 *Inherited from [IBaseProcEffect](_datamine_types_.ibaseproceffect.md).[target area](_datamine_types_.ibaseproceffect.md#target-area)*
 
-*Defined in [datamine-types.ts:73](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L73)*
+*Defined in [datamine-types.ts:71](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L71)*
 
 ___
 
@@ -68,4 +68,4 @@ ___
 
 *Inherited from [IBaseProcEffect](_datamine_types_.ibaseproceffect.md).[target type](_datamine_types_.ibaseproceffect.md#target-type)*
 
-*Defined in [datamine-types.ts:74](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L74)*
+*Defined in [datamine-types.ts:72](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L72)*

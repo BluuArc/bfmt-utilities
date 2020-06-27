@@ -1,10 +1,75 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
+/**
+ * @description Get the level entry of a burst at a given level (or the last level if no level is given).
+ * @param burst Burst to get level entry from.
+ * @param level Optional 1-indexed level to get; if not specified, the last level of the burst is used.
+ * @returns Level entry of a burst at a given level (or last level if no level is given) if it exists, undefined otherwise.
+ */
+function getLevelEntryForBurst(burst, level) {
+    const burstEffectsByLevel = (burst && Array.isArray(burst.levels)) ? burst.levels : [];
+    let levelIndex;
+    if (level !== null && !isNaN(level)) {
+        // 1-indexed
+        levelIndex = (+level - 1);
+    }
+    else {
+        // default to last entry in burst
+        levelIndex = burstEffectsByLevel.length - 1;
+    }
+    return burstEffectsByLevel[levelIndex];
+}
+
+/**
+ * @description Get the effects at the level entry of a burst at a given level (or the last level if no level is given).
+ * @param burst Burst to get effects from.
+ * @param level Optional 1-indexed level to get entries from; if not specified, the last level of the burst is used.
+ * @returns Effects at the level entry of a burst at a given level (or last level if no level is given) if it exists, an empty array otherwise.
+ */
+function getEffectsForBurst(burst, level) {
+    const levelEntry = getLevelEntryForBurst(burst, level);
+    return (levelEntry && Array.isArray(levelEntry.effects)) ? levelEntry.effects : [];
+}
+
+/**
+ * @description Get the proc/passive ID of a given object.
+ * @param effect Object to get the effect ID from.
+ * @returns Proc/passive ID of the input effect if it exists; empty string otherwise.
+ */
+function getEffectId(effect) {
+    let resultId = '';
+    if (effect) {
+        resultId = effect['proc id'] || effect['unknown proc id'] ||
+            effect['passive id'] || effect['unknown passive id'] || '';
+    }
+    return resultId;
+}
+
+var KNOWN_PROC_ID;
+(function (KNOWN_PROC_ID) {
+    KNOWN_PROC_ID["BurstHeal"] = "2";
+})(KNOWN_PROC_ID || (KNOWN_PROC_ID = {}));
+var KNOWN_PASSIVE_ID;
+(function (KNOWN_PASSIVE_ID) {
+    KNOWN_PASSIVE_ID["TriggeredEffect"] = "66";
+})(KNOWN_PASSIVE_ID || (KNOWN_PASSIVE_ID = {}));
+
+var constants = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    get KNOWN_PROC_ID () { return KNOWN_PROC_ID; },
+    get KNOWN_PASSIVE_ID () { return KNOWN_PASSIVE_ID; }
+});
+
 var ProcBuffType;
 (function (ProcBuffType) {
     ProcBuffType["Attack"] = "Attack";
 })(ProcBuffType || (ProcBuffType = {}));
 /* eslint-disable */
+/**
+ * @ignore
+ */
 const PASSIVE_METADATA = Object.freeze({
     "1": {
         "ID": "1",
@@ -435,6 +500,9 @@ const PASSIVE_METADATA = Object.freeze({
         "Name": ""
     }
 });
+/**
+ * @ignore
+ */
 const PROC_METADATA = Object.freeze({
     "0": {
         "ID": "0",
@@ -1083,9 +1151,134 @@ const PROC_METADATA = Object.freeze({
     }
 });
 
+/**
+ * @description Get the associated metadata entry for a given proc ID.
+ * @param id Proc ID to get metadata for.
+ * @returns Corresponding proc metadata entry if it exists, undefined otherwise.
+ */
+function getMetadataForProc(id) {
+    return Object.hasOwnProperty.call(PROC_METADATA, id)
+        ? PROC_METADATA[id]
+        : (void 0);
+}
+
+/**
+ * @description Determine if a given proc ID's type is an attack.
+ * @param id Proc ID to check.
+ * @returns Whether the given ID corresponds to a proc ID whose type is attack.
+ */
+function isAttackingProcId(id) {
+    const metadataEntry = getMetadataForProc(id);
+    return !!metadataEntry && metadataEntry.Type === ProcBuffType.Attack;
+}
+
+/**
+ * @description Get the extra attack damage frames entry based on the damage frames of a burst. Also apply the given effect delay to the resulting damage frames entry.
+ * @param damageFrames Damage frames that each have their own proc ID.
+ * @param effectDelay Optional effect delay to apply to the resulting damage frames entry.
+ * @returns Damage frames entry whose frames are based on the input damage frames.
+ */
+function getExtraAttackDamageFramesEntry(damageFrames, effectDelay = '0.0/0') {
+    // relevant frames are all effects for healing or attacking
+    const inputFrames = Array.isArray(damageFrames) ? damageFrames : [];
+    const relevantFrames = inputFrames.filter(frame => {
+        const procId = getEffectId(frame);
+        return procId === KNOWN_PROC_ID.BurstHeal || isAttackingProcId(procId);
+    });
+    const unifiedFrames = relevantFrames.reduce((acc, frameEntry, index) => {
+        const keepFirstFrame = index === 0;
+        const numFrames = frameEntry['frame times'].length;
+        const damageDistribution = frameEntry['hit dmg% distribution'];
+        const frameTimes = frameEntry['frame times'];
+        for (let frameIndex = keepFirstFrame ? 0 : 1; frameIndex < numFrames; ++frameIndex) {
+            acc.push({
+                damage: damageDistribution[frameIndex],
+                time: frameTimes[frameIndex],
+            });
+        }
+        return acc;
+    }, []);
+    const resultDamageFramesEntry = {
+        'effect delay time(ms)/frame': effectDelay,
+        'frame times': [],
+        'hit dmg% distribution': [],
+        'hit dmg% distribution (total)': 0,
+        hits: 0,
+    };
+    unifiedFrames.sort((a, b) => a.time - b.time)
+        .forEach(({ time, damage }) => {
+        resultDamageFramesEntry['frame times'].push(time);
+        resultDamageFramesEntry['hit dmg% distribution'].push(damage);
+        resultDamageFramesEntry['hit dmg% distribution (total)'] += damage;
+    });
+    resultDamageFramesEntry.hits = resultDamageFramesEntry['frame times'].length;
+    return resultDamageFramesEntry;
+}
+
+var index = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    getLevelEntryForBurst: getLevelEntryForBurst,
+    getEffectsForBurst: getEffectsForBurst,
+    getExtraAttackDamageFramesEntry: getExtraAttackDamageFramesEntry
+});
+
+/**
+ * @description Get the associated metadata entry for a given passive ID.
+ * @param id Passive ID to get metadata for.
+ * @returns Corresponding passive metadata entry if it exists, undefined otherwise.
+ */
+function getMetadataForPassive(id) {
+    return Object.hasOwnProperty.call(PASSIVE_METADATA, id)
+        ? PASSIVE_METADATA[id]
+        : (void 0);
+}
+
+/**
+ * @description Get the associated name for a given proc ID.
+ * @param id Proc ID to get the name of.
+ * @returns Name of the proc ID if it exists, empty string otherwise.
+ */
+function getNameForProc(id) {
+    const metadataEntry = getMetadataForProc(id);
+    return (!!metadataEntry && metadataEntry.Name) || '';
+}
+
+/**
+ * @description Get the associated name for a given passive ID.
+ * @param id Passive ID to get the name of.
+ * @returns Name of the passive ID if it exists, empty string otherwise.
+ */
+function getNameForPassive(id) {
+    const metadataEntry = getMetadataForPassive(id);
+    return (!!metadataEntry && metadataEntry.Name) || '';
+}
+
+/**
+ * @description Determine if a given effect object is a proc effect based on existing properties.
+ * Do note that it does not check the validity of each property, only the existence.
+ * @param effect Object to check.
+ * @returns Whether the given effect object is considered a proc effect based on its properties.
+ */
+function isProcEffect(effect) {
+    return !!effect &&
+        typeof effect === 'object' &&
+        (Object.hasOwnProperty.call(effect, 'proc id') || Object.hasOwnProperty.call(effect, 'unknown proc id'));
+}
+
+/**
+ * @description Determine if a given effect object is a passive effect based on existing properties.
+ * Do note that it does not check the validity of each property, only the existence.
+ * @param effect Object to check.
+ * @returns Whether the given effect object is considered a passive effect based on its properties.
+ */
+function isPassiveEffect(effect) {
+    return !!effect &&
+        typeof effect === 'object' &&
+        (Object.hasOwnProperty.call(effect, 'passive id') || Object.hasOwnProperty.call(effect, 'unknown passive id'));
+}
+
 var ArenaCondition;
 (function (ArenaCondition) {
-    /* eslint-disable @typescript-eslint/camelcase */
     ArenaCondition["hp_50pr_under"] = "hp_50pr_under";
     ArenaCondition["hp_50pr_over"] = "hp_50pr_over";
     ArenaCondition["hp_75pr_under"] = "hp_75pr_under";
@@ -1094,7 +1287,6 @@ var ArenaCondition;
     ArenaCondition["hp_max"] = "hp_max";
     ArenaCondition["atk_max"] = "atk_max";
     ArenaCondition["random"] = "random";
-    /* eslint-enable @typescript-eslint/camelcase */
 })(ArenaCondition || (ArenaCondition = {}));
 var MoveType;
 (function (MoveType) {
@@ -1254,7 +1446,7 @@ var MimicUnitIds;
     MimicUnitIds["MetalMimic"] = "60224";
 })(MimicUnitIds || (MimicUnitIds = {}));
 /**
- * @description Known values for the monster groups used in {@link IMimicInfo}
+ * @description Known values for the monster groups used in {@link IMimicInfo}.
  */
 const MimicMonsterGroupMapping = {
     '1000': MimicUnitIds.Mimic,
@@ -1288,79 +1480,10 @@ var datamineTypes = /*#__PURE__*/Object.freeze({
 });
 
 /**
- * @description Get the associated metadata entry for a given proc ID
- * @param id proc ID to get metadata for
- * @returns corresponding proc metadata entry if it exists, undefined otherwise
- */
-function getMetadataForProc(id) {
-    return Object.hasOwnProperty.call(PROC_METADATA, id)
-        ? PROC_METADATA[id]
-        : (void 0);
-}
-/**
- * @description Get the associated metadata entry for a given passive ID
- * @param id passive ID to get metadata for
- * @returns corresponding passive metadata entry if it exists, undefined otherwise
- */
-function getMetadataForPassive(id) {
-    return Object.hasOwnProperty.call(PASSIVE_METADATA, id)
-        ? PASSIVE_METADATA[id]
-        : (void 0);
-}
-/**
- * @description Determine if a given proc ID's type is an attack
- * @param id proc ID to check
- * @returns whether the given ID corresponds to a proc ID whose type is attack
- */
-function isAttackingProcId(id) {
-    const metadataEntry = getMetadataForProc(id);
-    return !!metadataEntry && metadataEntry.Type === ProcBuffType.Attack;
-}
-/**
- * @description Get the associated name for a given proc ID
- * @param id proc ID to get the name of
- * @returns the name of the proc ID if it exists, empty string otherwise
- */
-function getNameForProc(id) {
-    const metadataEntry = getMetadataForProc(id);
-    return (!!metadataEntry && metadataEntry.Name) || '';
-}
-/**
- * @description Get the associated name for a given passive ID
- * @param id passive ID to get the name of
- * @returns the name of the passive ID if it exists, empty string otherwise
- */
-function getNameForPassive(id) {
-    const metadataEntry = getMetadataForPassive(id);
-    return (!!metadataEntry && metadataEntry.Name) || '';
-}
-/**
- * @description Determine if a given effect object is a proc effect based on existing properties.
- * Do note that it does not check the validity of each property, only the existence.
- * @param effect object to check
- * @returns whether the given effect object is considered a proc effect based on its properties
- */
-function isProcEffect(effect) {
-    return !!effect &&
-        typeof effect === 'object' &&
-        (Object.hasOwnProperty.call(effect, 'proc id') || Object.hasOwnProperty.call(effect, 'unknown proc id'));
-}
-/**
- * @description Determine if a given effect object is a passive effect based on existing properties.
- * Do note that it does not check the validity of each property, only the existence.
- * @param effect object to check
- * @returns whether the given effect object is considered a passive effect based on its properties
- */
-function isPassiveEffect(effect) {
-    return !!effect &&
-        typeof effect === 'object' &&
-        (Object.hasOwnProperty.call(effect, 'passive id') || Object.hasOwnProperty.call(effect, 'unknown passive id'));
-}
-/**
- * @description Create a list of objects that contain both the effect data and its corresponding damage frame
- * @param effects List of proc effects to combine; must be the same length as the `damageFrames`
- * @param damageFrames List of damage frames whose index corresponds with the effect in the `effects` list
- * @returns collection of composite objects that contain the proc effect and the corresponding frames entry
+ * @description Create a list of objects that contain both the effect data and its corresponding damage frame.
+ * @param effects List of proc effects to combine; must be the same length as the `damageFrames`.
+ * @param damageFrames List of damage frames whose index corresponds with the effect in the `effects` list.
+ * @returns Collection of composite objects that contain the proc effect and the corresponding frames entry.
  */
 function combineEffectsAndDamageFrames(effects, damageFrames) {
     let combinedEntries = [];
@@ -1379,23 +1502,11 @@ function combineEffectsAndDamageFrames(effects, damageFrames) {
     }
     return combinedEntries;
 }
+
 /**
- * @description Get the proc/passive ID of a given object
- * @param effect Object to get the effect ID from
- * @returns The proc/passive ID of the input effect if it exists; empty string otherwise
- */
-function getEffectId(effect) {
-    let resultId = '';
-    if (effect) {
-        resultId = effect['proc id'] || effect['unknown proc id'] ||
-            effect['passive id'] || effect['unknown passive id'] || '';
-    }
-    return resultId;
-}
-/**
- * @description Get the name of a given object
- * @param effect Object to get the name from
- * @returns The name of the input effect if it exists; empty string otherwise
+ * @description Get the name of a given object.
+ * @param effect Object to get the name from.
+ * @returns Name of the input effect if it exists; empty string otherwise.
  */
 function getEffectName(effect) {
     let resultName = '';
@@ -1409,8 +1520,9 @@ function getEffectName(effect) {
     return resultName;
 }
 
-var buffs = /*#__PURE__*/Object.freeze({
+var index$1 = /*#__PURE__*/Object.freeze({
     __proto__: null,
+    constants: constants,
     getMetadataForProc: getMetadataForProc,
     getMetadataForPassive: getMetadataForPassive,
     isAttackingProcId: isAttackingProcId,
@@ -1420,115 +1532,30 @@ var buffs = /*#__PURE__*/Object.freeze({
     isPassiveEffect: isPassiveEffect,
     combineEffectsAndDamageFrames: combineEffectsAndDamageFrames,
     getEffectId: getEffectId,
-    getEffectName: getEffectName
-});
-
-var KNOWN_PROC_ID;
-(function (KNOWN_PROC_ID) {
-    KNOWN_PROC_ID["BurstHeal"] = "2";
-})(KNOWN_PROC_ID || (KNOWN_PROC_ID = {}));
-var KNOWN_PASSIVE_ID;
-(function (KNOWN_PASSIVE_ID) {
-    KNOWN_PASSIVE_ID["TriggeredEffect"] = "66";
-})(KNOWN_PASSIVE_ID || (KNOWN_PASSIVE_ID = {}));
-
-/**
- * @description Grab the level entry of a burst at a given level (or the last level if no level is given)
- * @param burst Burst to get level entry from
- * @param level Optional 1-indexed level to get; if not specified, the last level of the burst is used.
- * @returns the level entry of a burst at a given level (or last level if no level is given) if it exists, undefined otherwise
- */
-function getLevelEntryForBurst(burst, level) {
-    const burstEffectsByLevel = (burst && Array.isArray(burst.levels)) ? burst.levels : [];
-    let levelIndex;
-    if (level !== null && !isNaN(level)) {
-        // 1-indexed
-        levelIndex = (+level - 1);
-    }
-    else {
-        // default to last entry in burst
-        levelIndex = burstEffectsByLevel.length - 1;
-    }
-    return burstEffectsByLevel[levelIndex];
-}
-/**
- * @description Grab the effects at the level entry of a burst at a given level (or the last level if no level is given)
- * @param burst Burst to get effects from
- * @param level Optional 1-indexed level to get entries from; if not specified, the last level of the burst is used.
- * @returns the effects at the level entry of a burst at a given level (or last level if no level is given) if it exists, an empty array otherwise
- */
-function getEffectsForBurst(burst, level) {
-    const levelEntry = getLevelEntryForBurst(burst, level);
-    return (levelEntry && Array.isArray(levelEntry.effects)) ? levelEntry.effects : [];
-}
-/**
- * @description Get the extra attack damage frames entry based on the damage frames of a burst. Also apply the given effect delay to the resulting damage frames entry.
- * @param damageFrames damage frames that each have their own proc ID
- * @param effectDelay optional effect delay to apply to the resulting damage frames entry
- * @returns damage frames entry whose frames are based on the input damage frames
- */
-function getExtraAttackDamageFramesEntry(damageFrames, effectDelay = '0.0/0') {
-    // relevant frames are all effects for healing or attacking
-    const inputFrames = Array.isArray(damageFrames) ? damageFrames : [];
-    const relevantFrames = inputFrames.filter(frame => {
-        const procId = getEffectId(frame);
-        return procId === KNOWN_PROC_ID.BurstHeal || isAttackingProcId(procId);
-    });
-    const unifiedFrames = relevantFrames.reduce((acc, frameEntry, index) => {
-        const keepFirstFrame = index === 0;
-        const numFrames = frameEntry['frame times'].length;
-        const damageDistribution = frameEntry['hit dmg% distribution'];
-        const frameTimes = frameEntry['frame times'];
-        for (let frameIndex = keepFirstFrame ? 0 : 1; frameIndex < numFrames; ++frameIndex) {
-            acc.push({
-                damage: damageDistribution[frameIndex],
-                time: frameTimes[frameIndex],
-            });
-        }
-        return acc;
-    }, []);
-    const resultDamageFramesEntry = {
-        'effect delay time(ms)/frame': effectDelay,
-        'frame times': [],
-        'hit dmg% distribution': [],
-        'hit dmg% distribution (total)': 0,
-        hits: 0,
-    };
-    unifiedFrames.sort((a, b) => a.time - b.time)
-        .forEach(({ time, damage }) => {
-        resultDamageFramesEntry['frame times'].push(time);
-        resultDamageFramesEntry['hit dmg% distribution'].push(damage);
-        resultDamageFramesEntry['hit dmg% distribution (total)'] += damage;
-    });
-    resultDamageFramesEntry.hits = resultDamageFramesEntry['frame times'].length;
-    return resultDamageFramesEntry;
-}
-
-var bursts = /*#__PURE__*/Object.freeze({
-    __proto__: null,
-    getLevelEntryForBurst: getLevelEntryForBurst,
-    getEffectsForBurst: getEffectsForBurst,
-    getExtraAttackDamageFramesEntry: getExtraAttackDamageFramesEntry
+    getEffectName: getEffectName,
+    get ProcBuffType () { return ProcBuffType; },
+    PASSIVE_METADATA: PASSIVE_METADATA,
+    PROC_METADATA: PROC_METADATA
 });
 
 /**
- * @description Get the effects of a given extra skill
- * @param skill extra skill to get the effects of
- * @returns the effects of the given extra skill if they exist, an empty array otherwise
+ * @description Get the effects of a given extra skill.
+ * @param skill Extra skill to get the effects of.
+ * @returns Effects of the given extra skill if they exist, an empty array otherwise.
  */
 function getEffectsForExtraSkill(skill) {
     return (skill && Array.isArray(skill.effects)) ? skill.effects : [];
 }
 
-var extraSkills = /*#__PURE__*/Object.freeze({
+var index$2 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForExtraSkill: getEffectsForExtraSkill
 });
 
 /**
- * @description Get the effects of a given item
- * @param item item to get the effects of, if any are present
- * @returns the effects of the given item if they exist, an empty array otherwise
+ * @description Get the effects of a given item.
+ * @param item Item to get the effects of, if any are present,
+ * @returns Effects of the given item if they exist, an empty array otherwise.
  */
 function getEffectsForItem(item) {
     let result = [];
@@ -1549,41 +1576,42 @@ function getEffectsForItem(item) {
     }
     return result;
 }
+
 /**
- * @description Generate a URL to display the image with the given item thumbnail filename
- * @param baseContentUrl Base URL of the server
- * @param fileName name of the file that represents the thumbnail image for a given item
- * @returns generated URL based on the given content URL and file name
+ * @description Generate a URL to display the image with the given item thumbnail filename.
+ * @param baseContentUrl Base URL of the server.
+ * @param fileName Name of the file that represents the thumbnail image for a given item.
+ * @returns Generated URL based on the given content URL and file name.
  */
 function getItemImageUrl(baseContentUrl, fileName) {
     return `${baseContentUrl || ''}/item/${fileName || ''}`;
 }
 
-var items = /*#__PURE__*/Object.freeze({
+var index$3 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForItem: getEffectsForItem,
     getItemImageUrl: getItemImageUrl
 });
 
 /**
- * @description Get the effects of a given leader skill
- * @param skill leader skill to get the effects of
- * @returns the effects of the given leader skill if they exist, an empty array otherwise
+ * @description Get the effects of a given leader skill.
+ * @param skill Leader skill to get the effects of.
+ * @returns Effects of the given leader skill if they exist, an empty array otherwise.
  */
 function getEffectsForLeaderSkill(skill) {
     return skill && Array.isArray(skill.effects) ? skill.effects : [];
 }
 
-var leaderSkills = /*#__PURE__*/Object.freeze({
+var index$4 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForLeaderSkill: getEffectsForLeaderSkill
 });
 
 /**
- * @description Generate the file names for each of the image type for a given unit ID
- * @param id the unit ID to use to generate the file names
- * @param suffix optional parameter that's useful for things like alternate art
- * @returns set of file names for each image type (spritesheet, battle avatar, guide avatar, full illustration)
+ * @description Generate the file names for each of the image type for a given unit ID.
+ * @param id Unit ID to use to generate the file names.
+ * @param suffix Optional parameter that's useful for things like alternate art.
+ * @returns Set of file names for each image type (spritesheet, battle avatar, guide avatar, full illustration).
  */
 function getUnitImageFileNames(id, suffix = '') {
     const fileNameSuffix = `${id || ''}${suffix || ''}.png`;
@@ -1594,38 +1622,27 @@ function getUnitImageFileNames(id, suffix = '') {
         fullIllustration: `unit_ills_full_${fileNameSuffix}`,
     };
 }
+
 /**
- * @description Generate a URL to display the image with the given unit filename
- * @param baseContentUrl Base URL of the server
- * @param fileName name of the file that represents an image for a given unit
- * @returns generated URL based on the given content URL and file name
+ * @description Generate a URL to display the image with the given unit filename.
+ * @param baseContentUrl Base URL of the server.
+ * @param fileName Name of the file that represents an image for a given unit.
+ * @returns Generated URL based on the given content URL and file name.
  */
 function getUnitImageUrl(baseContentUrl, fileName) {
     return `${baseContentUrl || ''}/unit/img/${fileName || ''}`;
 }
 
-var units = /*#__PURE__*/Object.freeze({
+var index$5 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getUnitImageFileNames: getUnitImageFileNames,
     getUnitImageUrl: getUnitImageUrl
 });
 
 /**
- * @ignore
- */
-const CHARACTER_CODE_FOR_UPPERCASE_A = 'A'.charCodeAt(0);
-/**
- * @ignore
- */
-const CHARACTER_CODE_FOR_LOWERCASE_A = 'a'.charCodeAt(0);
-/**
- * @ignore
- */
-const CHARACTER_CODE_FOR_NUMBER_0 = '0'.charCodeAt(0);
-/**
- * @description Get the effects of a given SP Enhancement Entry
- * @param entry SP Enhancement Entry to get the effects of
- * @returns the effects of the given SP Enhancement Entry if they exist, an empty array otherwise
+ * @description Get the effects of a given SP Enhancement Entry.
+ * @param entry SP Enhancement Entry to get the effects of.
+ * @returns Effects of the given SP Enhancement Entry if they exist, an empty array otherwise.
  */
 function getEffectsForSpEnhancement(entry) {
     const result = [];
@@ -1641,10 +1658,11 @@ function getEffectsForSpEnhancement(entry) {
     }
     return result;
 }
+
 /**
  * @description Get the associated category name with a given category ID.
- * @param categoryId Category ID to get the name of
- * @returns The name of the given category ID or the string 'Unknown'.
+ * @param categoryId Category ID to get the name of.
+ * @returns Name of the given category ID or the string 'Unknown'.
  */
 function getSpCategoryName(categoryId) {
     let result;
@@ -1689,12 +1707,26 @@ function getSpCategoryName(categoryId) {
     }
     return result;
 }
+
+/**
+ * @ignore
+ */
+const CHARACTER_CODE_FOR_UPPERCASE_A = 'A'.charCodeAt(0);
+/**
+ * @ignore
+ */
+const CHARACTER_CODE_FOR_LOWERCASE_A = 'a'.charCodeAt(0);
+/**
+ * @ignore
+ */
+const CHARACTER_CODE_FOR_NUMBER_0 = '0'.charCodeAt(0);
+
 /**
  * @description Get the corresponding character code for a given index.
  * It expects an index between 0 and 61 inclusive; will return an empty string if
  * the given value is outside of the range.
- * @param index Index of an SP entry in a given skills array
- * @returns The corresponding single alphanumeric character to the given index
+ * @param index Index of an SP entry in a given skills array.
+ * @returns Corresponding single alphanumeric character to the given index
  * or an empty string if the index is invalid.
  */
 function spIndexToCode(index) {
@@ -1716,11 +1748,12 @@ function spIndexToCode(index) {
     }
     return result;
 }
+
 /**
  * @description Get the corresponding index for a given character code.
  * It expects an alphanumeric character and will return -1 otherwise.
- * @param code Character code an SP entry in a given skills array
- * @returns The corresponding index to the given character or -1 if the
+ * @param code Character code an SP entry in a given skills array.
+ * @returns Corresponding index to the given character or -1 if the
  * character is invalid.
  */
 function spCodeToIndex(code) {
@@ -1742,27 +1775,30 @@ function spCodeToIndex(code) {
     }
     return result;
 }
+
 /**
  * @description Extract the ID of a string in the format of `number@actualId`. If there
  * is no value after the @ character or if no @ character is present, the original ID is returned.
- * This is particularly useful for extracting the ID of [[ISpEnhancementEntry.dependency|`ISpEnhancementEntry.dependency`]]
- * @param id Original SP Enhancement Entry ID
+ * This is particularly useful for extracting the ID of [[ISpEnhancementEntry.dependency|`ISpEnhancementEntry.dependency`]].
+ * @param id Original SP Enhancement Entry ID.
  * @returns The ID of a string in the format of `number@actualId`, or the original input if
  * there is no @ character or no value after the @ character.
  */
 function getSpEntryId(id) {
     return (typeof id === 'string' && id.split('@')[1]) || id;
 }
+
 /**
  * @description Get the first SP Enhancement Entry that matches the given SP Entry ID, if it exists.
- * @param id SP Enhancement entry ID
- * @param entries Collection of SP Enhancement entries to search in
- * @returns The corresponding SP Enhancement entry with the given SP ID, undefined otherwise.
+ * @param id SP Enhancement entry ID.
+ * @param entries Collection of SP Enhancement entries to search in.
+ * @returns Corresponding SP Enhancement entry with the given SP ID, undefined otherwise.
  */
 function getSpEntryWithId(id, entries) {
     const spId = getSpEntryId(id);
     return (id && Array.isArray(entries) && entries.find(e => getSpEntryId(e && e.id) === spId)) || void 0;
 }
+
 /**
  * @description Get all SP Enhancement entries that one would need to unlock the given SP entry.
  * @param entry SP Entry to get dependencies for.
@@ -1783,6 +1819,7 @@ function getAllDependenciesForSpEntry(entry, allEntries, addedEntries = new Set(
     }
     return dependencies;
 }
+
 /**
  * @description Get all SP Enhancement entries that require the given SP entry in order to be unlockable.
  * @param entry SP Entry to get dependents for.
@@ -1809,7 +1846,7 @@ function getAllEntriesThatDependOnSpEntry(entry, allEntries, addedEntries = new 
     return dependents;
 }
 
-var spEnhancements = /*#__PURE__*/Object.freeze({
+var index$6 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForSpEnhancement: getEffectsForSpEnhancement,
     getSpCategoryName: getSpCategoryName,
@@ -1824,16 +1861,12 @@ var spEnhancements = /*#__PURE__*/Object.freeze({
 /* NOTE: this file is automatically generated; do not edit this file */
 var version = '0.6.0';
 
-var index = Object.freeze({
-    buffs,
-    bursts,
-    datamineTypes,
-    extraSkills,
-    items,
-    leaderSkills,
-    units,
-    spEnhancements,
-    version,
-});
-
-module.exports = index;
+exports.buffs = index$1;
+exports.bursts = index;
+exports.datamineTypes = datamineTypes;
+exports.extraSkills = index$2;
+exports.items = index$3;
+exports.leaderSkills = index$4;
+exports.spEnhancements = index$6;
+exports.units = index$5;
+exports.version = version;
