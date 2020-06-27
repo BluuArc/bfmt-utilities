@@ -11,3 +11,4 @@ export { default as getEffectId } from './getEffectId';
 export { default as getEffectName } from './getEffectName';
 export type { IPassiveMetadataEntry, IProcMetadataEntry } from './buff-metadata';
 export { ProcBuffType, PASSIVE_METADATA, PROC_METADATA } from './buff-metadata';
+export * as constants from './constants';

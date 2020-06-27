@@ -11,6 +11,7 @@
 * [IProcMetadataEntry](_buffs_index_.md#iprocmetadataentry)
 * [ProcBuffType](_buffs_index_.md#procbufftype)
 * [combineEffectsAndDamageFrames](_buffs_index_.md#combineeffectsanddamageframes)
+* [constants](_buffs_index_.md#constants)
 * [getEffectId](_buffs_index_.md#geteffectid)
 * [getEffectName](_buffs_index_.md#geteffectname)
 * [getMetadataForPassive](_buffs_index_.md#getmetadataforpassive)
@@ -50,6 +51,12 @@ ___
 ###  combineEffectsAndDamageFrames
 
 • **combineEffectsAndDamageFrames**:
+
+___
+
+###  constants
+
+• **constants**:
 
 ___
 

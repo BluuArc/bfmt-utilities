@@ -1,5 +1,5 @@
 const testConstants = require('../_test-helpers/constants');
-const appConstants = require('../constants');
+const buffConstants = require('../buffs/constants');
 const { generateDamageFramesList } = require('../_test-helpers/dataFactories');
 const { getStringValueForLog } = require('../_test-helpers/utils');
 const getExtraAttackDamageFramesEntry = require('./getExtraAttackDamageFramesEntry').default;
@@ -111,7 +111,7 @@ describe('getExtraAttackDamageFramesEntry method', () => {
 					name: 'the burst heal proc ID',
 					index: 1,
 					key: 'proc id',
-					valueAtIndex: appConstants.KNOWN_PROC_ID.BurstHeal,
+					valueAtIndex: buffConstants.KNOWN_PROC_ID.BurstHeal,
 					valueAtOtherIndices: testConstants.ARBITRARY_NON_ATTACKING_PROC_ID,
 				},
 			].forEach(testCase => {

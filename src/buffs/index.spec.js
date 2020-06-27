@@ -17,6 +17,7 @@ describe('buffs index', () => {
 			'ProcBuffType',
 			'PASSIVE_METADATA',
 			'PROC_METADATA',
+			'constants',
 		]);
 	});
 });

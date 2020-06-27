@@ -1,6 +1,6 @@
 import { IBurstDamageFramesEntry } from '../datamine-types';
 import getEffectId from '../buffs/getEffectId';
-import { KNOWN_PROC_ID } from '../constants';
+import { KNOWN_PROC_ID } from '../buffs/constants';
 import isAttackingProcId from '../buffs/isAttackingProcId';
 
 /**

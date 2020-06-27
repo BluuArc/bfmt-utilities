@@ -64,6 +64,18 @@ var bfmtUtilities = function (exports) {
     KNOWN_PASSIVE_ID["TriggeredEffect"] = "66";
   })(KNOWN_PASSIVE_ID || (KNOWN_PASSIVE_ID = {}));
 
+  var constants = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+
+    get KNOWN_PROC_ID() {
+      return KNOWN_PROC_ID;
+    },
+
+    get KNOWN_PASSIVE_ID() {
+      return KNOWN_PASSIVE_ID;
+    }
+
+  });
   var ProcBuffType;
 
   (function (ProcBuffType) {
@@ -1626,6 +1638,7 @@ var bfmtUtilities = function (exports) {
 
   var index$1 = /*#__PURE__*/Object.freeze({
     __proto__: null,
+    constants: constants,
     getMetadataForProc: getMetadataForProc,
     getMetadataForPassive: getMetadataForPassive,
     isAttackingProcId: isAttackingProcId,
