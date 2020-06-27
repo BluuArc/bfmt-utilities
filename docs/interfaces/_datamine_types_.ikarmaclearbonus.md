@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IKarmaClearBonus](_datamine_types_.ikarmaclearbonus.md)
+[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IKarmaClearBonus](_datamine_types_.ikarmaclearbonus.md)
 
 # Interface: IKarmaClearBonus
 

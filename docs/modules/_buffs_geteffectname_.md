@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["buffs/getEffectName"](_buffs_geteffectname_.md)
+[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/getEffectName"](_buffs_geteffectname_.md)
 
 # Module: "buffs/getEffectName"
 

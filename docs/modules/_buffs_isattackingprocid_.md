@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["buffs/isAttackingProcId"](_buffs_isattackingprocid_.md)
+[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/isAttackingProcId"](_buffs_isattackingprocid_.md)
 
 # Module: "buffs/isAttackingProcId"
 

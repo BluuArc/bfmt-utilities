@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IItemRecipe](_datamine_types_.iitemrecipe.md)
+[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IItemRecipe](_datamine_types_.iitemrecipe.md)
 
 # Interface: IItemRecipe
 

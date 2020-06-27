@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["buffs/isProcEffect"](_buffs_isproceffect_.md)
+[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/isProcEffect"](_buffs_isproceffect_.md)
 
 # Module: "buffs/isProcEffect"
 

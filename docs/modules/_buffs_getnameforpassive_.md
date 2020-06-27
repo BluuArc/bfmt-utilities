@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["buffs/getNameForPassive"](_buffs_getnameforpassive_.md)
+[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/getNameForPassive"](_buffs_getnameforpassive_.md)
 
 # Module: "buffs/getNameForPassive"
 

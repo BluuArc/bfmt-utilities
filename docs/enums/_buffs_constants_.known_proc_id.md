@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["buffs/constants"](../modules/_buffs_constants_.md) › [KNOWN_PROC_ID](_buffs_constants_.known_proc_id.md)
+[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/constants"](../modules/_buffs_constants_.md) › [KNOWN_PROC_ID](_buffs_constants_.known_proc_id.md)
 
 # Enumeration: KNOWN_PROC_ID
 

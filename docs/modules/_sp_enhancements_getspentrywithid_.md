@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["sp-enhancements/getSpEntryWithId"](_sp_enhancements_getspentrywithid_.md)
+[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["sp-enhancements/getSpEntryWithId"](_sp_enhancements_getspentrywithid_.md)
 
 # Module: "sp-enhancements/getSpEntryWithId"
 

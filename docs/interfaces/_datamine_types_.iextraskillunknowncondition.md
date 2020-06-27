@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IExtraSkillUnknownCondition](_datamine_types_.iextraskillunknowncondition.md)
+[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IExtraSkillUnknownCondition](_datamine_types_.iextraskillunknowncondition.md)
 
 # Interface: IExtraSkillUnknownCondition
 

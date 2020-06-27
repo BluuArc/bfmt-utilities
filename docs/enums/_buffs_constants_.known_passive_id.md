@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.6.0](../README.md) › [Globals](../globals.md) › ["buffs/constants"](../modules/_buffs_constants_.md) › [KNOWN_PASSIVE_ID](_buffs_constants_.known_passive_id.md)
+[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/constants"](../modules/_buffs_constants_.md) › [KNOWN_PASSIVE_ID](_buffs_constants_.known_passive_id.md)
 
 # Enumeration: KNOWN_PASSIVE_ID
 
