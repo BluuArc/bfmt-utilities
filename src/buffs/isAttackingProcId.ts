@@ -1,5 +1,5 @@
 import getMetadataForProc from './getMetadataForProc';
-import { ProcBuffType } from '../buff-metadata';
+import { ProcBuffType } from './buff-metadata';
 
 /**
  * @description Determine if a given proc ID's type is an attack.

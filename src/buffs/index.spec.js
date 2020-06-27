@@ -14,6 +14,9 @@ describe('buffs index', () => {
 			'combineEffectsAndDamageFrames',
 			'getEffectId',
 			'getEffectName',
+			'ProcBuffType',
+			'PASSIVE_METADATA',
+			'PROC_METADATA',
 		]);
 	});
 });

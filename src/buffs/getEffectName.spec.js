@@ -1,5 +1,5 @@
 const testConstants = require('../_test-helpers/constants');
-const { PROC_METADATA, PASSIVE_METADATA } = require('../buff-metadata');
+const { PROC_METADATA, PASSIVE_METADATA } = require('./buff-metadata');
 const getEffectName = require('./getEffectName').default;
 
 describe('getEffectName method', () => {

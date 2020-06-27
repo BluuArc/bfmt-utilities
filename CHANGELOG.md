@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* Should improve tree-shakeability when using the application root (`dist/index.js`) directly.
 * datamine-types: `IUnit.evolution.prev` can now be an array of strings or just a string.
 	* Will break any implementations that always relied on it being an array only.
+* buff-metadata: Move from root to `buffs` folder; exposed under `buffs` namespace.
 
 ### Δ Changes
 * Build: Update dependencies to latest stable versions; no changes to functionality as a result of this.

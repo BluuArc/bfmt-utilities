@@ -1,4 +1,4 @@
-const buffMetadata = require('../buff-metadata');
+const buffMetadata = require('../buffs/buff-metadata');
 const testConstants = require('./constants');
 
 describe('test setup', () => {
