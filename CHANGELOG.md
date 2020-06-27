@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased] - YYYY-MM-DD
+
+## [0.7.0] - 2020-06-26
 ### ⚠ Breaking Changes
 * Build: Project restructure to split "mono-modules" buffs, bursts, extra-skills, items, leader-skills, sp-enhancements, and units to more granular folder/function file structure.
 	* `[mono-module].ts/js` files have been replaced with `[mono-module]/index.ts` (e.g. `bursts.ts/js -> bursts/index.ts/js`)
@@ -13,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 		* Existing API usage should not be affected.
 		* e.g. `bfmtUtilities.buffs.getEffectId` can be accessed directly at `dist/buffs/getEffectId.js`, but using `bfmtUtilities.buffs.getEffectId` from `index.js` should still work.
 * index (app root): Export submodules directly instead of exporting a frozen object containing the submodules.
-	* Potentially breaking if there's anything that was relied on from a frozen object that isn't present on an exported object (though, this is highly unlikely to be the case)
+	* Potentially breaking if there's anything that was relied on from a frozen object that isn't present on an exported object (though, this is highly unlikely to be the case).
 	* Should improve tree-shakeability when using the application root (`dist/index.js`) directly.
 * datamine-types: `IUnit.evolution.prev` can now be an array of strings or just a string.
 	* Will break any implementations that always relied on it being an array only.
@@ -228,7 +230,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `UnitKind` enum
 	* `IUnit` interface
 
-[Unreleased]: https://github.com/BluuArc/bfmt-utilities/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/BluuArc/bfmt-utilities/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/BluuArc/bfmt-utilities/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/BluuArc/bfmt-utilities/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/BluuArc/bfmt-utilities/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/BluuArc/bfmt-utilities/compare/v0.3.1...v0.4.1
