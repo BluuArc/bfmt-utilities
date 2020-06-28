@@ -12,9 +12,9 @@
 
 ###  getNameForProc
 
-▸ **getNameForProc**(`id`: string): *string*
+▸ **getNameForProc**(`id`: string, `metadata?`: undefined | object): *string*
 
-*Defined in [buffs/getNameForProc.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/getNameForProc.ts#L8)*
+*Defined in [buffs/getNameForProc.ts:10](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/getNameForProc.ts#L10)*
 
 **`description`** Get the associated name for a given proc ID.
 
@@ -23,6 +23,7 @@
 Name | Type | Description |
 ------ | ------ | ------ |
 `id` | string | Proc ID to get the name of. |
+`metadata?` | undefined &#124; object | Optional source to use as metadata; defaults to internal proc metadata. |
 
 **Returns:** *string*
 

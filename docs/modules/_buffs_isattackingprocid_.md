@@ -12,9 +12,9 @@
 
 ###  isAttackingProcId
 
-▸ **isAttackingProcId**(`id`: string): *boolean*
+▸ **isAttackingProcId**(`id`: string, `metadata?`: undefined | object): *boolean*
 
-*Defined in [buffs/isAttackingProcId.ts:9](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/isAttackingProcId.ts#L9)*
+*Defined in [buffs/isAttackingProcId.ts:10](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/isAttackingProcId.ts#L10)*
 
 **`description`** Determine if a given proc ID's type is an attack.
 
@@ -23,6 +23,7 @@
 Name | Type | Description |
 ------ | ------ | ------ |
 `id` | string | Proc ID to check. |
+`metadata?` | undefined &#124; object | Optional source to use as metadata; defaults to internal proc metadata. |
 
 **Returns:** *boolean*
 

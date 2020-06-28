@@ -12,17 +12,18 @@
 
 ###  getMetadataForPassive
 
-▸ **getMetadataForPassive**(`id`: string): *[IPassiveMetadataEntry](../interfaces/_buffs_buff_metadata_.ipassivemetadataentry.md) | undefined*
+▸ **getMetadataForPassive**(`id`: string, `metadata`: object): *[IPassiveMetadataEntry](../interfaces/_buffs_buff_metadata_.ipassivemetadataentry.md) | undefined*
 
-*Defined in [buffs/getMetadataForPassive.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/getMetadataForPassive.ts#L8)*
+*Defined in [buffs/getMetadataForPassive.ts:9](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/getMetadataForPassive.ts#L9)*
 
 **`description`** Get the associated metadata entry for a given passive ID.
 
 **Parameters:**
 
-Name | Type | Description |
------- | ------ | ------ |
-`id` | string | Passive ID to get metadata for. |
+Name | Type | Default | Description |
+------ | ------ | ------ | ------ |
+`id` | string | - | Passive ID to get metadata for. |
+`metadata` | object | PASSIVE_METADATA | Optional source to use as metadata; defaults to internal passive metadata. |
 
 **Returns:** *[IPassiveMetadataEntry](../interfaces/_buffs_buff_metadata_.ipassivemetadataentry.md) | undefined*
 
