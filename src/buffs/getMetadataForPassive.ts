@@ -7,7 +7,7 @@ import { IPassiveMetadataEntry, PASSIVE_METADATA } from './buff-metadata';
  * @returns Corresponding passive metadata entry if it exists, undefined otherwise.
  */
 export default function getMetadataForPassive (id: string, metadata = PASSIVE_METADATA): IPassiveMetadataEntry | undefined {
-	return typeof metadata === 'object' && Object.hasOwnProperty.call(PASSIVE_METADATA, id)
-		? PASSIVE_METADATA[id]
+	return (!!metadata && typeof metadata === 'object') && Object.hasOwnProperty.call(metadata, id)
+		? metadata[id]
 		: (void 0);
 }
