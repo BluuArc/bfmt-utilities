@@ -15,7 +15,7 @@
     "lint:app": "eslint -c .eslintrc.ts.js --ext .ts src",
     "lint:non-app": "npm run lint:tasks && npm run lint:tests",
     "lint:tasks": "eslint -c .eslintrc.js tasks",
-    "lint:tests": "eslint -c test/.eslintrc.js test",
+    "lint:tests": "eslint -c .eslintrc.js src/**/*.spec.js && eslint -c .eslintrc.js src/_test-helpers",
     "test": "tsc -p tsconfig.coverage.json && jasmine --config=jasmine.json",
     "coverage": "tsc -p tsconfig.coverage.json && nyc jasmine --config=jasmine.coverage.json",
     "cleanup:coverage": "npm run gulp -- cleanup:coverage",
