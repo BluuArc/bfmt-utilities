@@ -66,7 +66,7 @@ describe('getMetadataForPassive method', () => {
 		});
 	});
 
-	it('defaults to PASSIVE_METADATA for metadata is not specified', () => {
+	it('defaults to PASSIVE_METADATA when metadata is not specified', () => {
 		const result = getMetadataForPassive(testConstants.KNOWN_ARBITRARY_PASSIVE_ID);
 		expect(result)
 			.withContext('result does not exist')

@@ -3,6 +3,14 @@ const { PROC_METADATA, PASSIVE_METADATA } = require('./buff-metadata');
 const getEffectName = require('./getEffectName').default;
 
 describe('getEffectName method', () => {
+	const expectNonEmptyString = (result, expected) => {
+		// use 2 expects to guard against result or expected being an empty string
+		expect(result.length)
+			.withContext('result is an empty etring')
+			.toBeGreaterThan(0);
+		expect(result).toBe(expected);
+	};
+
 	[
 		{
 			name: 'is undefined',
@@ -26,18 +34,72 @@ describe('getEffectName method', () => {
 		});
 	});
 
-	[
-		['proc id', testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID, PROC_METADATA[testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID].Name],
-		['unknown proc id', testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID, PROC_METADATA[testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID].Name],
-		['passive id', testConstants.KNOWN_ARBITRARY_PASSIVE_ID, PASSIVE_METADATA[testConstants.KNOWN_ARBITRARY_PASSIVE_ID].Name],
-		['unknown passive id', testConstants.KNOWN_ARBITRARY_PASSIVE_ID, PASSIVE_METADATA[testConstants.KNOWN_ARBITRARY_PASSIVE_ID].Name],
-	].forEach(([key, value, expectedName]) => {
-		it(`returns the value for ${key} if the effect parameter is an object that has a ${key} property`, () => {
-			const inputEffect = { [key]: value };
-			expect(expectedName.length)
-				.withContext('expected name is empty')
-				.toBeGreaterThan(0);
-			expect(getEffectName(inputEffect)).toBe(expectedName);
+	['proc', 'passive'].forEach(effectType => {
+		[false, true].forEach(hasUnknownEffectId => {
+			const arbitraryId = 'arbitrary id';
+			const arbitraryMissingId = 'arbitrary missing id';
+			const arbitraryName = 'arbitrary name';
+
+			describe(`for a ${effectType} effect with ${hasUnknownEffectId ? 'an unknown' : 'a known'} ID`, () => {
+				describe('for invalid metadata inputs', () => {
+					[
+						{
+							name: 'is null',
+							value: null,
+						},
+						{
+							name: 'is not an object',
+							value: 'some value',
+						},
+					].forEach(metadataTestCase => {
+						it(`returns an empty string when the metadata.${effectType} parameter ${metadataTestCase.name}`, () => {
+							const effect = { [`${hasUnknownEffectId ? 'unknown ' : ''}${effectType} id`]: arbitraryId };
+							expect(getEffectName(effect, metadataTestCase.value)).toBe('');
+						});
+					});
+				});
+
+				describe('when a valid metadata object is passed in', () => {
+					[
+						{
+							input: arbitraryMissingId,
+							name: `a ${effectType} id not in the metadata`,
+						},
+						{
+							input: arbitraryId,
+							name: `a ${effectType} id without a Name`,
+						},
+					].forEach(testCase => {
+						it(`returns an empty string for ${testCase.name}`, () => {
+							const effect = { [`${hasUnknownEffectId ? 'unknown ' : ''}${effectType} id`]: testCase.input };
+							const metadata = { [arbitraryId]: { ID: arbitraryId } };
+							const result = getEffectName(effect, { [effectType]: metadata });
+							expect(result).toBe('');
+						});
+					});
+
+					it('returns the Name field is of a given metadata entry', () => {
+						const effect = { [`${hasUnknownEffectId ? 'unknown ' : ''}${effectType} id`]: arbitraryId };
+						const metadata = { [arbitraryId]: { ID: arbitraryId, Name: arbitraryName } };
+						const result = getEffectName(effect, { [effectType]: metadata });
+						expectNonEmptyString(result, arbitraryName);
+					});
+				});
+
+				it(`defaults to ${effectType.toUpperCase}_METADATA when metadata is not specified`, () => {
+					let effectId;
+					let expectedNameValue;
+					if (effectType === 'passive') {
+						effectId = testConstants.KNOWN_ARBITRARY_PASSIVE_ID;
+						expectedNameValue = PASSIVE_METADATA[testConstants.KNOWN_ARBITRARY_PASSIVE_ID].Name;
+					} else if (effectType === 'proc') {
+						effectId = testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID;
+						expectedNameValue = PROC_METADATA[testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID].Name;
+					}
+					const effect = { [`${hasUnknownEffectId ? 'unknown ' : ''}${effectType} id`]: effectId };
+					expectNonEmptyString(getEffectName(effect), expectedNameValue);
+				});
+			});
 		});
 	});
 });

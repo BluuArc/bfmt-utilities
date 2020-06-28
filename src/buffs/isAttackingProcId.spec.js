@@ -65,7 +65,7 @@ describe('isAttackingProcId method', () => {
 		});
 	});
 
-	it('defaults to PROC_METADATA for metadata is not specified', () => {
+	it('defaults to PROC_METADATA when metadata is not specified', () => {
 		const result = isAttackingProcId(testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID);
 		expect(result).toBeTrue();
 	});

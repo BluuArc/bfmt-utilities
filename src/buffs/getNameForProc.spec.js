@@ -72,7 +72,7 @@ describe('getNameForProc method', () => {
 		});
 	});
 
-	it('defaults to PROC_METADATA for metadata is not specified', () => {
+	it('defaults to PROC_METADATA when metadata is not specified', () => {
 		const result = getNameForProc(testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID);
 		expectNonEmptyString(result, PROC_METADATA[testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID].Name);
 	});

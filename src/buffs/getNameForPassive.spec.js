@@ -72,7 +72,7 @@ describe('getNameForPassive method', () => {
 		});
 	});
 
-	it('defaults to PASSIVE_METADATA for metadata is not specified', () => {
+	it('defaults to PASSIVE_METADATA when metadata is not specified', () => {
 		const result = getNameForPassive(testConstants.KNOWN_ARBITRARY_PASSIVE_ID);
 		expectNonEmptyString(result, PASSIVE_METADATA[testConstants.KNOWN_ARBITRARY_PASSIVE_ID].Name);
 	});

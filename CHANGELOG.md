@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `getNameForPassive`
 	* `getNameForProc`
 	* `isAttackingProcId`
+	* `getEffectName` (allows passing in both passive and proc metadata)
 
 ## [0.7.0] - 2020-06-26
 ### ⚠ Breaking Changes

@@ -66,7 +66,7 @@ describe('getMetadataForProc method', () => {
 		});
 	});
 
-	it('defaults to PROC_METADATA for metadata is not specified', () => {
+	it('defaults to PROC_METADATA when metadata is not specified', () => {
 		const result = getMetadataForProc(testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID);
 		expect(result)
 			.withContext('result does not exist')
