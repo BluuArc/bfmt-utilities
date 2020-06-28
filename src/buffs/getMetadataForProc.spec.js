@@ -10,16 +10,12 @@ describe('getMetadataForProc method', () => {
 				value: null,
 			},
 			{
-				name: 'is undefined',
-				value: (void 0),
-			},
-			{
 				name: 'is not an object',
 				value: 'some value',
 			},
 		].forEach(testCase => {
 			it(`returns undefined if the metadata parameter ${testCase.name}`, () => {
-				expect(getMetadataForProc('arbitrary id', testCase.value)).toBeUndefined();
+				expect(getMetadataForProc(testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID, testCase.value)).toBeUndefined();
 			});
 		});
 	});

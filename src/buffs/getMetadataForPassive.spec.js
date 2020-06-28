@@ -10,16 +10,12 @@ describe('getMetadataForPassive method', () => {
 				value: null,
 			},
 			{
-				name: 'is undefined',
-				value: (void 0),
-			},
-			{
 				name: 'is not an object',
 				value: 'some value',
 			},
 		].forEach(testCase => {
 			it(`returns undefined if the metadata parameter ${testCase.name}`, () => {
-				expect(getMetadataForPassive('arbitrary id', testCase.value)).toBeUndefined();
+				expect(getMetadataForPassive(testConstants.KNOWN_ARBITRARY_PASSIVE_ID, testCase.value)).toBeUndefined();
 			});
 		});
 	});
