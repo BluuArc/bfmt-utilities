@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Δ Changes
 * buffs: The following methods now have an optional metadata parameters for their respective metadata sources.
 	* `getMetadataForPassive`
+	* `getMetadataForProc`
 
 ## [0.7.0] - 2020-06-26
 ### ⚠ Breaking Changes
