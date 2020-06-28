@@ -4,7 +4,7 @@ const getMetadataForProc = require('./getMetadataForProc').default;
 describe('getMetadataForProc method', () => {
 	[
 		{
-			input: testConstants.ARBITRARY_ATTACKING_PROC_ID,
+			input: testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID,
 			name: 'a valid proc id',
 			shouldHaveEntry: true,
 		},

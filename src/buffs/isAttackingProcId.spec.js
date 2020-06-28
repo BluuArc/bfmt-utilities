@@ -4,12 +4,12 @@ const isAttackingProcId = require('./isAttackingProcId').default;
 describe('isAttackingProcId method', () => {
 	[
 		{
-			input: testConstants.ARBITRARY_ATTACKING_PROC_ID,
+			input: testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID,
 			name: 'an attacking proc id',
 			expectedValue: true,
 		},
 		{
-			input: testConstants.ARBITRARY_NON_ATTACKING_PROC_ID,
+			input: testConstants.KNOWN_ARBITRARY_NON_ATTACKING_PROC_ID,
 			name: 'a valid but non-attacking proc id',
 			expectedValue: false,
 		},

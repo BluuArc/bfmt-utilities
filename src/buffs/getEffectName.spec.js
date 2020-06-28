@@ -27,10 +27,10 @@ describe('getEffectName method', () => {
 	});
 
 	[
-		['proc id', testConstants.ARBITRARY_ATTACKING_PROC_ID, PROC_METADATA[testConstants.ARBITRARY_ATTACKING_PROC_ID].Name],
-		['unknown proc id', testConstants.ARBITRARY_ATTACKING_PROC_ID, PROC_METADATA[testConstants.ARBITRARY_ATTACKING_PROC_ID].Name],
-		['passive id', testConstants.ARBITRARY_PASSIVE_ID, PASSIVE_METADATA[testConstants.ARBITRARY_PASSIVE_ID].Name],
-		['unknown passive id', testConstants.ARBITRARY_PASSIVE_ID, PASSIVE_METADATA[testConstants.ARBITRARY_PASSIVE_ID].Name],
+		['proc id', testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID, PROC_METADATA[testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID].Name],
+		['unknown proc id', testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID, PROC_METADATA[testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID].Name],
+		['passive id', testConstants.KNOWN_ARBITRARY_PASSIVE_ID, PASSIVE_METADATA[testConstants.KNOWN_ARBITRARY_PASSIVE_ID].Name],
+		['unknown passive id', testConstants.KNOWN_ARBITRARY_PASSIVE_ID, PASSIVE_METADATA[testConstants.KNOWN_ARBITRARY_PASSIVE_ID].Name],
 	].forEach(([key, value, expectedName]) => {
 		it(`returns the value for ${key} if the effect parameter is an object that has a ${key} property`, () => {
 			const inputEffect = { [key]: value };

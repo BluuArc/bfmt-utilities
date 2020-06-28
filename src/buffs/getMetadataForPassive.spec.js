@@ -4,7 +4,7 @@ const getMetadataForPassive = require('./getMetadataForPassive').default;
 describe('getMetadataForPassive method', () => {
 	[
 		{
-			input: testConstants.ARBITRARY_PASSIVE_ID,
+			input: testConstants.KNOWN_ARBITRARY_PASSIVE_ID,
 			name: 'a valid passive id',
 			shouldHaveEntry: true,
 		},
