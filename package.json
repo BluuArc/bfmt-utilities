@@ -10,7 +10,7 @@
     "build:dirty": "npm run gulp -- build:dirty",
     "build": "npm run gulp -- build",
     "build:docs": "typedoc --options typedoc.config.js src/",
-    "dev": "npm run gulp -- dev",
+    "dev:single-run": "npm run cleanup:coverage && npm run lint && npm run coverage",
     "lint": "npm run lint:app && npm run lint:non-app",
     "lint:app": "eslint -c .eslintrc.ts.js --ext .ts src",
     "lint:non-app": "npm run lint:tasks && npm run lint:tests",
