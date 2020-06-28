@@ -12,3 +12,8 @@ export { default as getEffectName } from './getEffectName';
 export type { IPassiveMetadataEntry, IProcMetadataEntry } from './buff-metadata';
 export { ProcBuffType, PASSIVE_METADATA, PROC_METADATA } from './buff-metadata';
 export * as constants from './constants';
+
+// exports from parsers
+export { default as convertProcEffectToBuff }  from './parsers/convertProcEffectToBuff';
+export { BuffSource, BuffStackType } from './parsers/buff-types';
+export type { IBuff, IUnitState, IEffectToBuffConversionContext } from './parsers/buff-types';
