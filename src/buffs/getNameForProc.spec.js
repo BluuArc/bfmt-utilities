@@ -1,43 +1,73 @@
 const testConstants = require('../_test-helpers/constants');
 const getNameForProc = require('./getNameForProc').default;
+const { PROC_METADATA } = require('./buff-metadata');
 
 describe('getNameForProc method', () => {
-	[
-		{
-			input: testConstants.ARBITRARY_ATTACKING_PROC_ID,
-			name: 'a valid proc id',
-			shouldHaveEntry: true,
-		},
-		{
-			input: testConstants.ARBITRARY_INVALID_PROC_ID,
-			name: 'an invalid proc id',
-			shouldHaveEntry: false,
-		},
-		{
-			input: void 0,
-			name: 'an undefined id',
-			shouldHaveEntry: false,
-		},
-		{
-			input: null,
-			name: 'a null id',
-			shouldHaveEntry: false,
-		},
-	].forEach(testCase => {
-		it(`returns ${testCase.shouldHaveEntry ? 'a string' : 'an empty string'} for ${testCase.name}`, () => {
-			const result = getNameForProc(testCase.input);
-			expect(typeof result === 'string')
-				.withContext('result is not a string')
-				.toBe(true);
-			if (testCase.shouldHaveEntry) {
-				expect(result.length)
-					.withContext('result is an empty etring')
-					.toBeGreaterThan(0);
-			} else {
-				expect(result.length)
-					.withContext('result is not an empty string')
-					.toBe(0);
-			}
+	const expectNonEmptyString = (result, expected) => {
+		// use 2 expects to guard against result or expected being an empty string
+		expect(result.length)
+			.withContext('result is an empty etring')
+			.toBeGreaterThan(0);
+		expect(result).toBe(expected);
+	};
+
+	describe('for invalid metadata inputs', () => {
+		[
+			{
+				name: 'is null',
+				value: null,
+			},
+			{
+				name: 'is not an object',
+				value: 'some value',
+			},
+		].forEach(testCase => {
+			it(`returns empty string if the metadata parameter ${testCase.name}`, () => {
+				const result = getNameForProc(testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID, testCase.value);
+				expect(result).toBe('');
+			});
 		});
+	});
+
+	describe('when a valid metadata object is passed in', () => {
+		const arbitraryId = 'arbitrary id';
+		const arbitraryMissingId = 'arbitrary missing id';
+
+		[
+			{
+				input: void 0,
+				name: 'an undefined id',
+			},
+			{
+				input: null,
+				name: 'a null id',
+			},
+			{
+				input: arbitraryMissingId,
+				name: 'a proc id not in the metadata',
+			},
+			{
+				input: arbitraryId,
+				name: 'a proc id without a Name',
+			},
+		].forEach(testCase => {
+			it(`returns an empty string for ${testCase.name}`, () => {
+				const metadata = { [arbitraryId]: { ID: arbitraryId } };
+				const result = getNameForProc(testCase.input, metadata);
+				expect(result).toBe('');
+			});
+		});
+
+		it('returns the Name field is of a given metadata entry', () => {
+			const arbitraryName = 'arbitrary name';
+			const metadata = { [arbitraryId]: { ID: arbitraryId, Name: arbitraryName } };
+			const result = getNameForProc(arbitraryId, metadata);
+			expectNonEmptyString(result, arbitraryName);
+		});
+	});
+
+	it('defaults to PROC_METADATA when metadata is not specified', () => {
+		const result = getNameForProc(testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID);
+		expectNonEmptyString(result, PROC_METADATA[testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID].Name);
 	});
 });

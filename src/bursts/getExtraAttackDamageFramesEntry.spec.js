@@ -2,6 +2,7 @@ const testConstants = require('../_test-helpers/constants');
 const buffConstants = require('../buffs/constants');
 const { generateDamageFramesList } = require('../_test-helpers/dataFactories');
 const { getStringValueForLog } = require('../_test-helpers/utils');
+const { ProcBuffType } = require('../buffs/buff-metadata');
 const getExtraAttackDamageFramesEntry = require('./getExtraAttackDamageFramesEntry').default;
 
 describe('getExtraAttackDamageFramesEntry method', () => {
@@ -92,55 +93,105 @@ describe('getExtraAttackDamageFramesEntry method', () => {
 
 	describe('when the damageFrames parameter is a non-empty array', () => {
 		describe('for when there is one applicable frame entry', () => {
+			const arbitraryAttackingId = 'arbitrary attacking id';
+			const arbitraryNonAttackingId = 'arbitrary non attacking id';
+
 			[
 				{
 					name: 'an attacking proc ID',
 					index: 1,
 					key: 'proc id',
-					valueAtIndex: testConstants.ARBITRARY_ATTACKING_PROC_ID,
-					valueAtOtherIndices: testConstants.ARBITRARY_NON_ATTACKING_PROC_ID,
+					valueAtIndex: arbitraryAttackingId,
+					valueAtOtherIndices: arbitraryNonAttackingId,
 				},
 				{
 					name: 'an attacking proc ID that is considered unknown',
 					index: 2,
 					key: 'unknown proc id',
-					valueAtIndex: testConstants.ARBITRARY_ATTACKING_PROC_ID,
-					valueAtOtherIndices: testConstants.ARBITRARY_NON_ATTACKING_PROC_ID,
+					valueAtIndex: arbitraryAttackingId,
+					valueAtOtherIndices: arbitraryNonAttackingId,
 				},
 				{
 					name: 'the burst heal proc ID',
 					index: 1,
 					key: 'proc id',
 					valueAtIndex: buffConstants.KNOWN_PROC_ID.BurstHeal,
-					valueAtOtherIndices: testConstants.ARBITRARY_NON_ATTACKING_PROC_ID,
+					valueAtOtherIndices: arbitraryNonAttackingId,
 				},
 			].forEach(testCase => {
-				it(`returns an identical result when the applicable frame entry has ${testCase.name}`, () => {
+				it(`returns an identical result when the applicable frame entry has ${testCase.name} and metadata is passed in`, () => {
 					const inputFrames = generateDamageFramesList(10, undefined, (obj, index) => {
-						if (index === testCase.index) {
-							obj[testCase.key] = testConstants.ARBITRARY_ATTACKING_PROC_ID;
-						} else {
-							obj[testCase.key] = testConstants.ARBITRARY_NON_ATTACKING_PROC_ID;
-						}
+						obj[testCase.key] = index === testCase.index
+							? arbitraryAttackingId
+							: arbitraryNonAttackingId;
 						return obj;
 					});
+					const metadata = {
+						[arbitraryAttackingId]: {
+							ID: arbitraryAttackingId,
+							Type: ProcBuffType.Attack,
+						},
+						[arbitraryNonAttackingId]: {
+							ID: arbitraryNonAttackingId,
+							Type: 'arbitrary non attacking type',
+						},
+					};
 					const expectedResult = {
 						...inputFrames[testCase.index],
 						'effect delay time(ms)/frame': ARBITRARY_DELAY,
 					};
-					const result = getExtraAttackDamageFramesEntry(inputFrames, ARBITRARY_DELAY);
+					const result = getExtraAttackDamageFramesEntry(inputFrames, ARBITRARY_DELAY, metadata);
 					assertDamageFramesEntry(result, expectedResult);
 				});
+			});
+
+			it('defaults to PROC_METADATA when metadata is not specified', () => {
+				const indexWithAttackingProcId = 1;
+
+				const inputFrames = generateDamageFramesList(10, undefined, (obj, index) => {
+					obj['proc id'] = index === indexWithAttackingProcId
+						? testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID
+						: testConstants.KNOWN_ARBITRARY_NON_ATTACKING_PROC_ID;
+					return obj;
+				});
+				const expectedResult = {
+					...inputFrames[indexWithAttackingProcId],
+					'effect delay time(ms)/frame': ARBITRARY_DELAY,
+				};
+				const result = getExtraAttackDamageFramesEntry(inputFrames, ARBITRARY_DELAY);
+				assertDamageFramesEntry(result, expectedResult);
 			});
 		});
 
 		it('returns an empty damage frames entry if there are no applicable frame entries', () => {
 			const inputFrames = generateDamageFramesList(10, undefined, (obj) => {
-				obj['proc id'] = testConstants.ARBITRARY_NON_ATTACKING_PROC_ID;
+				obj['proc id'] = testConstants.KNOWN_ARBITRARY_NON_ATTACKING_PROC_ID;
 				return obj;
 			});
 			const result = getExtraAttackDamageFramesEntry(inputFrames, ARBITRARY_DELAY);
 			assertDamageFramesEntry(result, emptyDamageFramesEntry);
+		});
+
+		describe('for invalid metadata inputs', () => {
+			[
+				{
+					name: 'is null',
+					value: null,
+				},
+				{
+					name: 'is not an object',
+					value: 'some value',
+				},
+			].forEach(testCase => {
+				it(`returns empty array returns an empty damage frames entry if there are no applicable frame entries and the metadata parameter ${testCase.name}`, () => {
+					const inputFrames = generateDamageFramesList(10, undefined, (obj) => {
+						obj['proc id'] = testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID;
+						return obj;
+					});
+					const result = getExtraAttackDamageFramesEntry(inputFrames, ARBITRARY_DELAY, testCase.value);
+					assertDamageFramesEntry(result, emptyDamageFramesEntry);
+				});
+			});
 		});
 	});
 
@@ -148,13 +199,13 @@ describe('getExtraAttackDamageFramesEntry method', () => {
 		const inputFrames = generateDamageFramesList(5, undefined, (obj, index) => {
 			// mark even frames as attacking frames
 			obj['proc id'] = index % 2 === 0
-				? testConstants.ARBITRARY_ATTACKING_PROC_ID
-				: testConstants.ARBITRARY_NON_ATTACKING_PROC_ID;
+				? testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID
+				: testConstants.KNOWN_ARBITRARY_NON_ATTACKING_PROC_ID;
 			return obj;
 		});
 
 		// compute expected result from input frames
-		const expectedApplicableFrames = inputFrames.filter(f => f['proc id'] === testConstants.ARBITRARY_ATTACKING_PROC_ID);
+		const expectedApplicableFrames = inputFrames.filter(f => f['proc id'] === testConstants.KNOWN_ARBITRARY_ATTACKING_PROC_ID);
 		const frameDamagePairs = expectedApplicableFrames.reduce((acc, frame, frameIndex) => {
 			// conditionally drop the first entry of each array
 			const expectedFrameTimesForFrame = frame['frame times'].slice(frameIndex > 0 ? 1 : 0);

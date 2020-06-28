@@ -12,12 +12,11 @@ function runDev () {
 		logger.log('watching for changes');
 		done();
 	}
-	const onChange = series(cleanupTasks.cleanupCoverageFiles, testTasks.runCoverage, fullBuild, notifyReadiness);
-	watch(['../src/**/*.ts', '../.eslintrc.ts.js', '!../src/**/*.d.ts', '!../src/version.ts'], onChange);
-	watch(['../typedoc.config.js', '../README.md'], series(buildTasks.buildDocs, notifyReadiness));
-	watch(['../test/**/*.js', '../test/jasmine.json', '../nyc.config.js'], series(testTasks.lintTests, cleanupTasks.cleanupCoverageFiles, testTasks.runCoverage, notifyReadiness));
+
+	watch(['../src/**/*.ts', '../.eslintrc.ts.js', '!../src/version.ts'], series(cleanupTasks.cleanupCoverageFiles, testTasks.lintApplication, testTasks.runCoverage, notifyReadiness));
+	watch(['../src/**/*.spec.js', '../src/_test-helpers/**/*.js', '../jasmine.json', '../nyc.config.js'], series(testTasks.lintTests, testTasks.runCoverageTestsOnly, notifyReadiness));
 	watch(['./**/*.js'], series(testTasks.lintTasks, notifyReadiness));
-	return onChange();
+	notifyReadiness(() => {});
 }
 
 module.exports = {

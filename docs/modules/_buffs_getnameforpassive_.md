@@ -12,9 +12,9 @@
 
 ###  getNameForPassive
 
-▸ **getNameForPassive**(`id`: string): *string*
+▸ **getNameForPassive**(`id`: string, `metadata?`: undefined | object): *string*
 
-*Defined in [buffs/getNameForPassive.ts:8](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/getNameForPassive.ts#L8)*
+*Defined in [buffs/getNameForPassive.ts:10](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/getNameForPassive.ts#L10)*
 
 **`description`** Get the associated name for a given passive ID.
 
@@ -23,6 +23,7 @@
 Name | Type | Description |
 ------ | ------ | ------ |
 `id` | string | Passive ID to get the name of. |
+`metadata?` | undefined &#124; object | Optional source to use as metadata; defaults to internal passive metadata. |
 
 **Returns:** *string*
 

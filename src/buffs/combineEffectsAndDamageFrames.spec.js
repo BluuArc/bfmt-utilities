@@ -1,4 +1,4 @@
-const { generateEffectsList, generateDamageFramesList } = require('../_test-helpers/dataFactories');
+const { generateProcEffectsList, generateDamageFramesList } = require('../_test-helpers/dataFactories');
 const datamineTypes = require('../datamine-types');
 const combineEffectsAndDamageFrames = require('./combineEffectsAndDamageFrames').default;
 
@@ -38,14 +38,14 @@ describe('combineEffectsAndDamageFrames method', () => {
 	});
 
 	it('returns an empty array if the damage frames array is empty', () => {
-		const effectsList = generateEffectsList(10);
+		const effectsList = generateProcEffectsList(10);
 		const damageFramesList = [];
 		const result = combineEffectsAndDamageFrames(effectsList, damageFramesList);
 		expect(result).toEqual([]);
 	});
 
 	it('returns an empty array if the length of the effects array does not match the length of the damage frames array', () => {
-		const effectsList = generateEffectsList(10);
+		const effectsList = generateProcEffectsList(10);
 		const damageFramesList = generateDamageFramesList(9);
 		const result = combineEffectsAndDamageFrames(effectsList, damageFramesList);
 		expect(result).toEqual([]);
@@ -109,14 +109,14 @@ describe('combineEffectsAndDamageFrames method', () => {
 		};
 
 		it('returns the expected composite values when using proc id', () => {
-			const effectsList = generateEffectsList(10);
+			const effectsList = generateProcEffectsList(10);
 			const damageFramesList = generateDamageFramesList(10);
 			const result = combineEffectsAndDamageFrames(effectsList, damageFramesList);
 			assertResult(result, effectsList, damageFramesList);
 		});
 
 		it('returns the expected composite values when using unknown proc id', () => {
-			const effectsList = generateEffectsList(10, (propName, index, defaultValue) => {
+			const effectsList = generateProcEffectsList(10, (propName, index, defaultValue) => {
 				switch (propName) {
 				case 'unknown proc id':
 					return `id-${index}`;
@@ -132,7 +132,7 @@ describe('combineEffectsAndDamageFrames method', () => {
 		});
 
 		it('returns the expected composite values when using a mix of unknown proc id and proc id', () => {
-			const effectsList = generateEffectsList(10, (propName, index, defaultValue) => {
+			const effectsList = generateProcEffectsList(10, (propName, index, defaultValue) => {
 				switch (propName) {
 				case 'unknown proc id':
 					return (index % 2 === 0) ? `id-${index}` : undefined;
@@ -148,7 +148,7 @@ describe('combineEffectsAndDamageFrames method', () => {
 		});
 
 		it('returns the expected composite values when using effects with a target area of random attack', () => {
-			const effectsList = generateEffectsList(10, (propName, index, defaultValue) => {
+			const effectsList = generateProcEffectsList(10, (propName, index, defaultValue) => {
 				switch (propName) {
 				case 'random attack':
 					return true;
@@ -162,7 +162,7 @@ describe('combineEffectsAndDamageFrames method', () => {
 		});
 
 		it('returns the expected composite values when using effects with a mix of target areas including random attack', () => {
-			const effectsList = generateEffectsList(10, (propName, index, defaultValue) => {
+			const effectsList = generateProcEffectsList(10, (propName, index, defaultValue) => {
 				switch (propName) {
 				case 'random attack':
 					return index % 2 === 0;

@@ -1172,37 +1172,40 @@ var bfmtUtilities = function (exports) {
   /**
    * @description Get the associated metadata entry for a given proc ID.
    * @param id Proc ID to get metadata for.
+   * @param metadata Optional source to use as metadata; defaults to internal proc metadata.
    * @returns Corresponding proc metadata entry if it exists, undefined otherwise.
    */
 
-  function getMetadataForProc(id) {
-    return Object.hasOwnProperty.call(PROC_METADATA, id) ? PROC_METADATA[id] : void 0;
+  function getMetadataForProc(id, metadata = PROC_METADATA) {
+    return !!metadata && typeof metadata === 'object' && Object.hasOwnProperty.call(metadata, id) ? metadata[id] : void 0;
   }
   /**
    * @description Determine if a given proc ID's type is an attack.
    * @param id Proc ID to check.
+   * @param metadata Optional source to use as metadata; defaults to internal proc metadata.
    * @returns Whether the given ID corresponds to a proc ID whose type is attack.
    */
 
 
-  function isAttackingProcId(id) {
-    const metadataEntry = getMetadataForProc(id);
+  function isAttackingProcId(id, metadata) {
+    const metadataEntry = getMetadataForProc(id, metadata);
     return !!metadataEntry && metadataEntry.Type === ProcBuffType.Attack;
   }
   /**
    * @description Get the extra attack damage frames entry based on the damage frames of a burst. Also apply the given effect delay to the resulting damage frames entry.
    * @param damageFrames Damage frames that each have their own proc ID.
    * @param effectDelay Optional effect delay to apply to the resulting damage frames entry.
+   * @param metadata Optional source to use as metadata; defaults to internal proc metadata.
    * @returns Damage frames entry whose frames are based on the input damage frames.
    */
 
 
-  function getExtraAttackDamageFramesEntry(damageFrames, effectDelay = '0.0/0') {
+  function getExtraAttackDamageFramesEntry(damageFrames, effectDelay = '0.0/0', metadata) {
     // relevant frames are all effects for healing or attacking
     const inputFrames = Array.isArray(damageFrames) ? damageFrames : [];
     const relevantFrames = inputFrames.filter(frame => {
       const procId = getEffectId(frame);
-      return procId === KNOWN_PROC_ID.BurstHeal || isAttackingProcId(procId);
+      return procId === KNOWN_PROC_ID.BurstHeal || isAttackingProcId(procId, metadata);
     });
     const unifiedFrames = relevantFrames.reduce((acc, frameEntry, index) => {
       const keepFirstFrame = index === 0;
@@ -1247,32 +1250,35 @@ var bfmtUtilities = function (exports) {
   /**
    * @description Get the associated metadata entry for a given passive ID.
    * @param id Passive ID to get metadata for.
+   * @param metadata Optional source to use as metadata; defaults to internal passive metadata.
    * @returns Corresponding passive metadata entry if it exists, undefined otherwise.
    */
 
-  function getMetadataForPassive(id) {
-    return Object.hasOwnProperty.call(PASSIVE_METADATA, id) ? PASSIVE_METADATA[id] : void 0;
+  function getMetadataForPassive(id, metadata = PASSIVE_METADATA) {
+    return !!metadata && typeof metadata === 'object' && Object.hasOwnProperty.call(metadata, id) ? metadata[id] : void 0;
   }
   /**
    * @description Get the associated name for a given proc ID.
    * @param id Proc ID to get the name of.
+   * @param metadata Optional source to use as metadata; defaults to internal proc metadata.
    * @returns Name of the proc ID if it exists, empty string otherwise.
    */
 
 
-  function getNameForProc(id) {
-    const metadataEntry = getMetadataForProc(id);
+  function getNameForProc(id, metadata) {
+    const metadataEntry = getMetadataForProc(id, metadata);
     return !!metadataEntry && metadataEntry.Name || '';
   }
   /**
    * @description Get the associated name for a given passive ID.
    * @param id Passive ID to get the name of.
+   * @param metadata Optional source to use as metadata; defaults to internal passive metadata.
    * @returns Name of the passive ID if it exists, empty string otherwise.
    */
 
 
-  function getNameForPassive(id) {
-    const metadataEntry = getMetadataForPassive(id);
+  function getNameForPassive(id, metadata) {
+    const metadataEntry = getMetadataForPassive(id, metadata);
     return !!metadataEntry && metadataEntry.Name || '';
   }
   /**
@@ -1619,18 +1625,19 @@ var bfmtUtilities = function (exports) {
   /**
    * @description Get the name of a given object.
    * @param effect Object to get the name from.
+   * @param metadata Optional sources of metadata for procs and passives; defaults to internal metadata for respective types.
    * @returns Name of the input effect if it exists; empty string otherwise.
    */
 
 
-  function getEffectName(effect) {
+  function getEffectName(effect, metadata = {}) {
     let resultName = '';
     const effectId = getEffectId(effect);
 
     if (isPassiveEffect(effect)) {
-      resultName = getNameForPassive(effectId);
+      resultName = getNameForPassive(effectId, metadata && metadata.passive);
     } else if (isProcEffect(effect)) {
-      resultName = getNameForProc(effectId);
+      resultName = getNameForProc(effectId, metadata && metadata.proc);
     }
 
     return resultName;

@@ -1,6 +1,11 @@
-name: Node CI
+name: Node CI (on master)
 
-on: [push]
+# split from ci-on-pr-push as we may want to add a release step later
+
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:

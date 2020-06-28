@@ -71,16 +71,11 @@ function minifyBrowserBuild () {
 		.pipe(dest('../dist'));
 }
 
-function copyTypeDefinitions () {
-	return src('../src/**/*.d.ts')
-		.pipe(dest(path.join('../dist')));
-}
-
 function buildDocs () {
 	return runNpmCommand(['build:docs']);
 }
 
 module.exports = {
-	buildApp: series(createVersionFile, copyTypeDefinitions, transpileToJs, compileWithRollup, transpileRollupBrowserBuild, minifyBrowserBuild),
+	buildApp: series(createVersionFile, transpileToJs, compileWithRollup, transpileRollupBrowserBuild, minifyBrowserBuild),
 	buildDocs,
 };

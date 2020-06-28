@@ -1,0 +1,33 @@
+name: Node CI (on PR)
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    # Find the PR associated with this push, if there is one
+    - uses: jwalton/gh-find-current-pr@v1
+      id: findPr
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Use Node.js ${{ matrix.node-version }}
+      if: success() && steps.findPr.outputs.pr
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: npm install, build, and test
+      if: success() && steps.findPr.outputs.pr
+      run: |
+        npm ci
+        npm run build --if-present
+        npm run coverage
+      env:
+        CI: true

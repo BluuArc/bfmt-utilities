@@ -12,9 +12,9 @@
 
 ###  getEffectName
 
-▸ **getEffectName**(`effect`: object): *string*
+▸ **getEffectName**(`effect`: object, `metadata`: object): *string*
 
-*Defined in [buffs/getEffectName.ts:12](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/getEffectName.ts#L12)*
+*Defined in [buffs/getEffectName.ts:14](https://github.com/BluuArc/bfmt-utilities/blob/master/src/buffs/getEffectName.ts#L14)*
 
 **`description`** Get the name of a given object.
 
@@ -30,6 +30,15 @@ Name | Type |
 `proc id?` | undefined &#124; string |
 `unknown passive id?` | undefined &#124; string |
 `unknown proc id?` | undefined &#124; string |
+
+▪`Default value`  **metadata**: *object*= {}
+
+Optional sources of metadata for procs and passives; defaults to internal metadata for respective types.
+
+Name | Type |
+------ | ------ |
+`passive?` | undefined &#124; object |
+`proc?` | undefined &#124; object |
 
 **Returns:** *string*
 
