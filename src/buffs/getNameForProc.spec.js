@@ -54,7 +54,7 @@ describe('getNameForProc method', () => {
 			},
 			{
 				input: arbitraryId,
-				name: 'a passive id without a Name',
+				name: 'a proc id without a Name',
 			},
 		].forEach(testCase => {
 			it(`returns an empty string for ${testCase.name}`, () => {
