@@ -3,12 +3,6 @@ const getNameForPassive = require('./getNameForPassive').default;
 const { PASSIVE_METADATA } = require('./buff-metadata');
 
 describe('getNameForPassive method', () => {
-	const expectEmptyString = (result) => {
-		expect(result)
-			.withContext('result is not an empty string')
-			.toBe('');
-	};
-
 	const expectNonEmptyString = (result, expected) => {
 		// use 2 expects to guard against result or expected being an empty string
 		expect(result.length)
@@ -30,7 +24,7 @@ describe('getNameForPassive method', () => {
 		].forEach(testCase => {
 			it(`returns empty string if the metadata parameter ${testCase.name}`, () => {
 				const result = getNameForPassive(testConstants.KNOWN_ARBITRARY_PASSIVE_ID, testCase.value);
-				expectEmptyString(result);
+				expect(result).toBe('');
 			});
 		});
 	});
@@ -60,7 +54,7 @@ describe('getNameForPassive method', () => {
 			it(`returns an empty string for ${testCase.name}`, () => {
 				const metadata = { [arbitraryId]: { ID: arbitraryId } };
 				const result = getNameForPassive(testCase.input, metadata);
-				expectEmptyString(result);
+				expect(result).toBe('');
 			});
 		});
 
