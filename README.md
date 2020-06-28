@@ -1,6 +1,6 @@
 # bfmt-utilities
 
-![](https://github.com/BluuArc/bfmt-utilities/workflows/Node%20CI/badge.svg)
+![](https://github.com/BluuArc/bfmt-utilities/workflows/Node%20CI%20(on%20master)/badge.svg)
 
 ## Description
 
