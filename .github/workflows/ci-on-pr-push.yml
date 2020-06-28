@@ -19,12 +19,12 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Use Node.js ${{ matrix.node-version }}
-      if: success() && steps.findPr.outputs.pr
+      if: success() && steps.findPr.outputs.pr && github.ref != 'refs/heads/master'
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
     - name: npm install, build, and test
-      if: success() && steps.findPr.outputs.pr
+      if: success() && steps.findPr.outputs.pr && github.ref != 'refs/heads/master'
       run: |
         npm ci
         npm run build --if-present
