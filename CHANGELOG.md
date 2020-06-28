@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `getNameForProc`
 	* `isAttackingProcId`
 	* `getEffectName` (allows passing in both passive and proc metadata)
+* bursts: Add optional metadata parameter to `getExtraAttackDamageFramesEntry`.
 
 ## [0.7.0] - 2020-06-26
 ### ⚠ Breaking Changes
