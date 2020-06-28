@@ -20,10 +20,15 @@ function runCoverage () {
 	return runNpmCommand(['coverage']);
 }
 
+function runCoverageTestsOnly () {
+	return runNpmCommand(['coverage:run-tests']);
+}
+
 module.exports = {
 	lintApplication,
 	lintTasks,
 	lintTests,
 	runTests,
 	runCoverage,
+	runCoverageTestsOnly,
 };
