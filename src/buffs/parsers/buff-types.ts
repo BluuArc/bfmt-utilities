@@ -104,6 +104,8 @@ export interface IBuff {
 	 * for possible types of sources.
 	 */
 	sources: string[];
+
+	// TODO: nested buffs, conditions
 };
 
 /**
