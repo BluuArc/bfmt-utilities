@@ -2,6 +2,8 @@ import { ProcEffect } from '../../datamine-types';
 import { IBuff, IEffectToBuffConversionContext, BuffStackType } from './buff-types';
 import { getProcMapping } from './procMapping';
 import getEffectId from '../getEffectId';
+import { KNOWN_PROC_ID } from '../constants';
+import isProcEffect from '../isProcEffect';
 
 /**
  * @description Default function for all buffs that cannot be processed.
@@ -10,7 +12,7 @@ import getEffectId from '../getEffectId';
  * @returns Converted buff(s) from the given proc effect.
  */
 function defaultConversionFunction (effect: ProcEffect, context: IEffectToBuffConversionContext): IBuff[] {
-	const id = getEffectId(effect);
+	const id = (isProcEffect(effect) && getEffectId(effect)) || KNOWN_PROC_ID.Unknown;
 
 	return [{
 		id,
@@ -31,7 +33,16 @@ function defaultConversionFunction (effect: ProcEffect, context: IEffectToBuffCo
  * @returns A collection of one or more buffs found in the given proc effect object.
  */
 export default function convertProcEffectToBuff (effect: ProcEffect, context: IEffectToBuffConversionContext): IBuff[] {
-	const id = getEffectId(effect);
-	const conversionFunction = (id && getProcMapping(context.reloadMapping).get(id)) || defaultConversionFunction;
-	return conversionFunction(effect, context);
+	if (!effect || typeof effect !== 'object') {
+		throw new TypeError('effect parameter should be an object');
+	}
+	if (!context || typeof context !== 'object') {
+		throw new TypeError('context parameter should be an object');
+	}
+
+	const id = (isProcEffect(effect) && getEffectId(effect));
+	const conversionFunction = (id && getProcMapping(context.reloadMapping).get(id));
+	return typeof conversionFunction === 'function'
+		? conversionFunction(effect, context)
+		: defaultConversionFunction(effect, context);
 }
