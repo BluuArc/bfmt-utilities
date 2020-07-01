@@ -11,9 +11,15 @@ export type ProcToBuffFunction = (effect: ProcEffect, context: IEffectToBuffConv
 
 let mapping: Map<string, ProcToBuffFunction>;
 
+/**
+ * @description Retrieve the proc-to-buff conversion function mapping for the library. Internally, this is a
+ * lazy-loaded singleton to not impact first-load performance.
+ * @param reload Optionally re-create the mapping.
+ * @returns Mapping of proc IDs to functions.
+ */
 export function getProcMapping (reload?: boolean): Map<string, ProcToBuffFunction> {
 	if (!mapping || reload) {
-		mapping = new Map();
+		mapping = new Map<string, ProcToBuffFunction>();
 	}
 
 	return mapping;

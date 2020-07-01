@@ -23,8 +23,15 @@ function defaultConversionFunction (effect: ProcEffect, context: IEffectToBuffCo
 	}];
 }
 
+/**
+ * @description Extract the buff(s) from a given proc effect object.
+ * If the buff is not supported, the resulting buff type will be `BuffStackType.Unknown` (see {@link BuffStackType} for more info).
+ * @param effect Proc effect object to extract buffs from.
+ * @param context ggregate object to encapsulate information not in the effect used in the conversion process.
+ * @returns A collection of one or more buffs found in the given proc effect object.
+ */
 export default function convertProcEffectToBuff (effect: ProcEffect, context: IEffectToBuffConversionContext): IBuff[] {
 	const id = getEffectId(effect);
-	const conversionFunction = (id && getProcMapping().get(id)) || defaultConversionFunction;
+	const conversionFunction = (id && getProcMapping(context.reloadMapping).get(id)) || defaultConversionFunction;
 	return conversionFunction(effect, context);
 }

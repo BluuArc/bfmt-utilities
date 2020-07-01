@@ -1,4 +1,4 @@
-import { TargetType, TargetArea } from "../../datamine-types";
+import { TargetType, TargetArea } from '../../datamine-types';
 
 /**
  * @description Provides info at a glance regarding a buff's source and how it stacks.
@@ -47,7 +47,7 @@ export enum BuffStackType {
 	 * @description Only for buffs that cannot be processed by the library yet.
 	 */
 	Unknown = 'unknown',
-};
+}
 
 
 export enum BuffSource {
@@ -79,7 +79,7 @@ export enum BuffSource {
 	 * as well as ambient turn reductions present in some late-game quests.
 	 */
 	Quest = 'quest',
-};
+}
 
 export interface IBuff {
 	id: string;
@@ -106,7 +106,7 @@ export interface IBuff {
 	sources: string[];
 
 	// TODO: nested buffs, conditions
-};
+}
 
 /**
  * @description Dictionary representing a unit's stats and what buffs are affecting each stat.
@@ -118,9 +118,16 @@ export interface IUnitState {
 	rec: IBuff[];
 
 	// TODO: add more as needed
-};
+}
 
 export interface IEffectToBuffConversionContext {
 	source: BuffSource,
 	sourceId: string;
-};
+
+	/**
+	 * @description Recreate the mapping of effect ID to conversion function before
+	 * converting the given effect. Useful if the internal mapping is somehow in a
+	 * bad state.
+	 */
+	reloadMapping?: boolean;
+}
