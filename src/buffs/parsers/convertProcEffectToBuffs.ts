@@ -32,7 +32,7 @@ function defaultConversionFunction (effect: ProcEffect, context: IEffectToBuffCo
  * @param context ggregate object to encapsulate information not in the effect used in the conversion process.
  * @returns A collection of one or more buffs found in the given proc effect object.
  */
-export default function convertProcEffectToBuff (effect: ProcEffect, context: IEffectToBuffConversionContext): IBuff[] {
+export default function convertProcEffectToBuffs (effect: ProcEffect, context: IEffectToBuffConversionContext): IBuff[] {
 	if (!effect || typeof effect !== 'object') {
 		throw new TypeError('effect parameter should be an object');
 	}

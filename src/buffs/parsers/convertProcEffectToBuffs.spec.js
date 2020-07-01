@@ -1,7 +1,7 @@
 const { BuffStackType } = require('./buff-types');
 const { KNOWN_PROC_ID } = require('../constants');
 const { getProcMapping } = require('./procMapping');
-const convertProcEffectToBuff = require('./convertProcEffectToBuff').default;
+const convertProcEffectToBuffs = require('./convertProcEffectToBuffs').default;
 
 describe('convertProcEffectToBuff method', () => {
 	const arbitrarySource = 'arbitrary source';
@@ -76,12 +76,12 @@ describe('convertProcEffectToBuff method', () => {
 			},
 		].forEach(testCase => {
 			it(`throws a TypeError for the effect parameter if the effect parameter ${testCase.name}`, () => {
-				expect(() => convertProcEffectToBuff(testCase.value, { arbitraryContext: 'some context' }))
+				expect(() => convertProcEffectToBuffs(testCase.value, { arbitraryContext: 'some context' }))
 					.toThrowMatching((err) => err instanceof TypeError && err.message === expectedEffectErrorMessage);
 			});
 
 			it(`throws a TypeError for the context parameter if the context parameter ${testCase.name}`, () => {
-				expect(() => convertProcEffectToBuff({ arbitraryEffect: 'some effect' }, testCase.value))
+				expect(() => convertProcEffectToBuffs({ arbitraryEffect: 'some effect' }, testCase.value))
 					.toThrowMatching((err) => err instanceof TypeError && err.message === expectedContextErrorMessage);
 			});
 		});
@@ -94,7 +94,7 @@ describe('convertProcEffectToBuff method', () => {
 			const effect = generateArbitraryEffect(unsupportedEffectId);
 			const context = generateArbitraryContext();
 
-			const result = convertProcEffectToBuff(effect, context);
+			const result = convertProcEffectToBuffs(effect, context);
 			expectUnknownBuffResult(result, unsupportedEffectId);
 		});
 
@@ -106,7 +106,7 @@ describe('convertProcEffectToBuff method', () => {
 			delete effect['proc id'];
 			effect['unknown proc id'] = unsupportedEffectId;
 
-			const result = convertProcEffectToBuff(effect, context);
+			const result = convertProcEffectToBuffs(effect, context);
 			expectUnknownBuffResult(result, unsupportedEffectId);
 		});
 
@@ -118,7 +118,7 @@ describe('convertProcEffectToBuff method', () => {
 			delete effect['proc id'];
 			effect['passive id'] = unsupportedEffectId;
 
-			const result = convertProcEffectToBuff(effect, context);
+			const result = convertProcEffectToBuffs(effect, context);
 			expectUnknownBuffResult(result, KNOWN_PROC_ID.Unknown);
 		});
 
@@ -129,7 +129,7 @@ describe('convertProcEffectToBuff method', () => {
 			effect['proc id'] = void 0;
 			delete effect['proc id'];
 
-			const result = convertProcEffectToBuff(effect, context);
+			const result = convertProcEffectToBuffs(effect, context);
 			expectUnknownBuffResult(result, KNOWN_PROC_ID.Unknown);
 		});
 	});
@@ -144,7 +144,7 @@ describe('convertProcEffectToBuff method', () => {
 
 		const effect = generateArbitraryEffect(effectId);
 		const context = generateArbitraryContext();
-		const result = convertProcEffectToBuff(effect, context);
+		const result = convertProcEffectToBuffs(effect, context);
 		expect(mockConversionFunction).toHaveBeenCalledWith(effect, context);
 		expect(result).toEqual(mockBuffResult);
 	});
@@ -157,7 +157,7 @@ describe('convertProcEffectToBuff method', () => {
 
 		const effect = generateArbitraryEffect(effectId);
 		const context = generateArbitraryContext({ reloadMapping: true });
-		const result = convertProcEffectToBuff(effect, context);
+		const result = convertProcEffectToBuffs(effect, context);
 		expect(mockConversionFunction).not.toHaveBeenCalled();
 		expect(getProcMapping().has(effectId))
 			.withContext('proc mapping should not have arbitrary effect id')
