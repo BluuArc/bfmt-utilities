@@ -7,3 +7,4 @@ export type { IBuff, IUnitState, IEffectToBuffConversionContext } from './buff-t
 
 export { BUFF_METADATA } from './buff-metadata';
 export type { IBuffMetadata } from './buff-metadata'
+export { default as getMetadataForBuff } from'./getMetadataForBuff';

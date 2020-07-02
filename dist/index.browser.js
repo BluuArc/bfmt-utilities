@@ -1728,6 +1728,36 @@ var bfmtUtilities = function (exports) {
     BuffSource["Quest"] = "quest";
   })(BuffSource || (BuffSource = {}));
   /**
+   * @description Stats that a unit can have.
+   */
+
+
+  var UnitStat;
+
+  (function (UnitStat) {
+    UnitStat["hp"] = "hp";
+    UnitStat["atk"] = "atk";
+    UnitStat["def"] = "def";
+    UnitStat["rec"] = "rec";
+    UnitStat["crit"] = "crit";
+  })(UnitStat || (UnitStat = {}));
+
+  var IconId;
+
+  (function (IconId) {
+    IconId["UNKNOWN"] = "UNKNOWN";
+    IconId["BUFF_HPUP"] = "BUFF_HPUP";
+    IconId["BUFF_HPDOWN"] = "BUFF_HPDOWN";
+    IconId["BUFF_ATKUP"] = "BUFF_ATKUP";
+    IconId["BUFF_ATKDOWN"] = "BUFF_ATKDOWN";
+    IconId["BUFF_DEFUP"] = "BUFF_DEFUP";
+    IconId["BUFF_DEFDOWN"] = "BUFF_DEFDOWN";
+    IconId["BUFF_RECUP"] = "BUFF_RECUP";
+    IconId["BUFF_RECDOWN"] = "BUFF_RECDOWN";
+    IconId["BUFF_CRTRATEUP"] = "BUFF_CRTRATEUP";
+    IconId["BUFF_CRTRATEDOWN"] = "BUFF_CRTRATEDOWN";
+  })(IconId || (IconId = {}));
+  /**
    * @description Format of these IDs are `<passive|proc>:<original effect ID>:<stat>`.
    * Usage of passive/proc and original effect ID are for easy tracking of the original effect
    * source of a given buff.
@@ -1737,11 +1767,13 @@ var bfmtUtilities = function (exports) {
   var BuffId;
 
   (function (BuffId) {
+    BuffId["UNKNOWN_PASSIVE_EFFECT_ID"] = "UNKNOWN_PASSIVE_EFFECT_ID";
     BuffId["passive:1:hp"] = "passive:1:hp";
     BuffId["passive:1:atk"] = "passive:1:atk";
     BuffId["passive:1:def"] = "passive:1:def";
     BuffId["passive:1:rec"] = "passive:1:rec";
     BuffId["passive:1:crit"] = "passive:1:crit";
+    BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
   })(BuffId || (BuffId = {}));
 
   let mapping;
@@ -1851,9 +1883,8 @@ var bfmtUtilities = function (exports) {
   function defaultConversionFunction(effect, context) {
     const id = isProcEffect(effect) && getEffectId(effect) || KNOWN_PROC_ID.Unknown;
     return [{
-      id,
+      id: BuffId.UNKNOWN_PROC_EFFECT_ID,
       originalId: id,
-      stackType: BuffStackType.Unknown,
       effectDelay: effect['effect delay time(ms)/frame'],
       targetType: effect['target type'],
       targetArea: effect['target area'],
@@ -1940,7 +1971,6 @@ var bfmtUtilities = function (exports) {
           results.push(Object.assign({
             id: `passive:1:${stat}`,
             originalId: '1',
-            stackType: BuffStackType.Passive,
             sources,
             value: +value,
             conditions: conditionInfo
@@ -1961,9 +1991,8 @@ var bfmtUtilities = function (exports) {
   function defaultConversionFunction$1(effect, context) {
     const id = isPassiveEffect(effect) && getEffectId(effect) || KNOWN_PASSIVE_ID.Unknown;
     return [{
-      id,
+      id: BuffId.UNKNOWN_PASSIVE_EFFECT_ID,
       originalId: id,
-      stackType: BuffStackType.Unknown,
       sources: createSourcesFromContext(context)
     }];
   }
@@ -1990,6 +2019,65 @@ var bfmtUtilities = function (exports) {
     return typeof conversionFunction === 'function' ? conversionFunction(effect, context) : defaultConversionFunction$1(effect, context);
   }
 
+  const BUFF_METADATA = Object.freeze({
+    'UNKNOWN_PASSIVE_EFFECT_ID': {
+      id: BuffId.UNKNOWN_PASSIVE_EFFECT_ID,
+      name: 'Unknown Passive Effect',
+      stackType: BuffStackType.Unknown,
+      icons: () => [IconId.UNKNOWN]
+    },
+    'passive:1:hp': {
+      id: BuffId['passive:1:hp'],
+      name: 'Passive HP Boost',
+      stat: UnitStat.hp,
+      stackType: BuffStackType.Passive,
+      icons: buff => [buff.value && buff.value < 0 ? IconId.BUFF_HPDOWN : IconId.BUFF_HPUP]
+    },
+    'passive:1:atk': {
+      id: BuffId['passive:1:atk'],
+      name: 'Passive Attack Boost',
+      stat: UnitStat.atk,
+      stackType: BuffStackType.Passive,
+      icons: buff => [buff.value && buff.value < 0 ? IconId.BUFF_ATKDOWN : IconId.BUFF_ATKUP]
+    },
+    'passive:1:def': {
+      id: BuffId['passive:1:def'],
+      name: 'Passive Defense Boost',
+      stat: UnitStat.def,
+      stackType: BuffStackType.Passive,
+      icons: buff => [buff.value && buff.value < 0 ? IconId.BUFF_DEFDOWN : IconId.BUFF_DEFUP]
+    },
+    'passive:1:rec': {
+      id: BuffId['passive:1:rec'],
+      name: 'Passive Recovery Boost',
+      stat: UnitStat.rec,
+      stackType: BuffStackType.Passive,
+      icons: buff => [buff.value && buff.value < 0 ? IconId.BUFF_RECDOWN : IconId.BUFF_RECUP]
+    },
+    'passive:1:crit': {
+      id: BuffId['passive:1:crit'],
+      name: 'Passive Critical Hit Rate Boost',
+      stat: UnitStat.crit,
+      stackType: BuffStackType.Passive,
+      icons: buff => [buff.value && buff.value < 0 ? IconId.BUFF_CRTRATEDOWN : IconId.BUFF_CRTRATEUP]
+    },
+    'UNKNOWN_PROC_EFFECT_ID': {
+      id: BuffId.UNKNOWN_PROC_EFFECT_ID,
+      name: 'Unknown Proc Effect',
+      stackType: BuffStackType.Unknown,
+      icons: () => [IconId.UNKNOWN]
+    }
+  });
+  /**
+   * @description Get the associated metadata entry for a given buff ID.
+   * @param id Buff ID to get metadata for.
+   * @returns Corresponding buff metadata entry if it exists, undefined otherwise.
+   */
+
+  function getMetadataForBuff(id, metadata = BUFF_METADATA) {
+    return !!metadata && typeof metadata === 'object' && Object.hasOwnProperty.call(metadata, id) ? metadata[id] : void 0;
+  }
+
   var index$1 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     convertProcEffectToBuffs: convertProcEffectToBuffs,
@@ -2001,8 +2089,10 @@ var bfmtUtilities = function (exports) {
 
     get BuffStackType() {
       return BuffStackType;
-    }
+    },
 
+    BUFF_METADATA: BUFF_METADATA,
+    getMetadataForBuff: getMetadataForBuff
   });
   var index$2 = /*#__PURE__*/Object.freeze({
     __proto__: null,

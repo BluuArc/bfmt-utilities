@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `IEffectToBuffConversionContext` interface
 	* `BUFF_METADATA` object
 	* `IBuffMetadata` interface
+	* `getMetadataForBuff` method
 * datamine-types: Add `IExtraSkillTriggeredEffect`.
 
 ### Δ Changes

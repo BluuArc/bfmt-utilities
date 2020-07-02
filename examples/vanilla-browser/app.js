@@ -158,7 +158,9 @@
 
 		buffs.forEach((buff) => {
 			const buffEntry = document.createElement('li');
-			buffEntry.innerText = JSON.stringify(buff);
+			const metadata = bfmtUtilities.buffs.parsers.getMetadataForBuff(buff.id);
+			const name = (metadata && metadata.name) || `Unknown buff ${buff.id}`;
+			buffEntry.innerText = `${name}: ${JSON.stringify(buff)}`;
 			buffList.appendChild(buffEntry);
 		});
 

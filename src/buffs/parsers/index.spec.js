@@ -9,6 +9,7 @@ describe('buffs index', () => {
 			'BuffSource',
 			'BuffStackType',
 			'BUFF_METADATA',
+			'getMetadataForBuff',
 		]);
 	});
 });
