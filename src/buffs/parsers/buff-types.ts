@@ -1,4 +1,4 @@
-import { TargetType, TargetArea } from '../../datamine-types';
+import { TargetType, TargetArea, SphereTypeId } from '../../datamine-types';
 
 /**
  * @description Provides info at a glance regarding a buff's source and how it stacks.
@@ -80,6 +80,29 @@ export enum BuffSource {
 	Quest = 'quest',
 }
 
+export interface IBuffConditions {
+	/**
+	 * @description Array of unit IDs
+	 */
+	units: string[];
+
+	/**
+	 * @description Array of item IDs
+	 */
+	items: string[];
+
+	/**
+	 * @description Array of sphere type IDs
+	 */
+	sphereTypes: SphereTypeId[];
+
+	/**
+	 * @description Array of unprocessed conditions in the format
+	 * of `type:<typeId>,condition:<conditionId>`.
+	 */
+	unknown: string[];
+}
+
 export interface IBuff {
 	id: string;
 
@@ -106,9 +129,9 @@ export interface IBuff {
 	 */
 	sources: string[];
 
-	// TODO: nested buffs, conditions
-
 	value?: string | number;
+	conditions?: IBuffConditions;
+	// TODO: nested buffs
 }
 
 /**

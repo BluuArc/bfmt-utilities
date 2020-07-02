@@ -1,4 +1,4 @@
-import { PassiveEffect } from '../../datamine-types';
+import { PassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect } from '../../datamine-types';
 import { IEffectToBuffConversionContext, IBuff, BuffStackType } from './buff-types';
 import isPassiveEffect from '../isPassiveEffect';
 import getEffectId from '../getEffectId';
@@ -12,15 +12,15 @@ import { createSourcesFromContext } from './_helpers';
  * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
  * @returns Converted buff(s) from the given passive effect.
  */
-function defaultConversionFunction (effect: PassiveEffect, context: IEffectToBuffConversionContext): IBuff[] {
+function defaultConversionFunction (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext): IBuff[] {
 	const id = (isPassiveEffect(effect) && getEffectId(effect)) || KNOWN_PASSIVE_ID.Unknown;
 
 	return [{
-			id,
-			originalId: id,
-			stackType: BuffStackType.Unknown,
-			sources: createSourcesFromContext(context),
-		}];
+		id,
+		originalId: id,
+		stackType: BuffStackType.Unknown,
+		sources: createSourcesFromContext(context),
+	}];
 }
 
 /**
@@ -30,7 +30,7 @@ function defaultConversionFunction (effect: PassiveEffect, context: IEffectToBuf
  * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
  * @returns A collection of one or more buffs found in the given passive effect object.
  */
-export default function convertPassiveEffectToBuffs (effect: PassiveEffect, context: IEffectToBuffConversionContext): IBuff[] {
+export default function convertPassiveEffectToBuffs (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext): IBuff[] {
 	if (!effect || typeof effect !== 'object') {
 		throw new TypeError('effect parameter should be an object');
 	}

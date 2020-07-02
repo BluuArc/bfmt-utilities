@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased] - YYYY-MM-DD
+### ⚠ Breaking Changes
+* datamine-types: `passive target` is no longer part of `ITriggeredEffect`, as that is only a property of extra skill passive effects.
+
 ### ➕ Additions
 * buffs: add `parsers` property, which contains functions and types to facilitate converting from proc and passive effects into `IBuff` objects. Specifically, the following are available for use:
 	* `convertProcEffectToBuffs` method
@@ -14,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `IBuff` interface
 	* `IUnitState` interface
 	* `IEffectToBuffConversionContext` interface
+* datamine-types: Add `IExtraSkillTriggeredEffect`.
 
 ### Δ Changes
 * buffs: The following methods now have an optional metadata parameters for their respective metadata sources.

@@ -97,7 +97,6 @@ export interface IPassiveEffect {
 
 export interface ITriggeredEffect {
 	'passive id': '66';
-	'passive target': TargetType;
 	'trigger on bb'?: boolean;
 	'trigger on sbb'?: boolean;
 	'trigger on ubb'?: boolean;
@@ -254,7 +253,12 @@ export interface IExtraSkillUnknownPassiveEffect extends IUnknownPassiveEffect {
 	'passive target': TargetType;
 }
 
-export type ExtraSkillPassiveEffect = IExtraSkillPassiveEffect | IExtraSkillUnknownPassiveEffect;
+export interface IExtraSkillTriggeredEffect extends ITriggeredEffect {
+	conditions: ExtraSkillCondition[];
+	'passive target': TargetType;
+}
+
+export type ExtraSkillPassiveEffect = IExtraSkillPassiveEffect | IExtraSkillUnknownPassiveEffect | IExtraSkillTriggeredEffect;
 
 export interface IExtraSkill {
 	/**
