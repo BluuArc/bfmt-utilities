@@ -49,7 +49,6 @@ export enum BuffStackType {
 	Unknown = 'unknown',
 }
 
-
 export enum BuffSource {
 	BraveBurst = 'bb',
 	SuperBraveBurst = 'sbb',
@@ -98,7 +97,9 @@ export interface IBuff {
 	/**
 	 * @description Ordered from the skill that immediately grants the buff on use to
 	 * the original source providing that buff. Typically for active buffs whose sources
-	 * are items or extra skills and SP enhancements that enhance existing skills.
+	 * are items or extra skills and SP enhancements that enhance existing skills.It is
+	 * ordered such that the entry at index 0 is the immediate source of the buff while
+	 * the entry at the last index is the original source of the buff.
 	 *
 	 * Each entry should be in the format of `<BuffSource>-<ID of Buff Source>`. See {@link BuffSource}
 	 * for possible types of sources.
@@ -106,6 +107,8 @@ export interface IBuff {
 	sources: string[];
 
 	// TODO: nested buffs, conditions
+
+	value?: string | number;
 }
 
 /**
@@ -120,6 +123,9 @@ export interface IUnitState {
 	// TODO: add more as needed
 }
 
+/**
+ * @description Aggregate object to encapsulate information not in the effect used in the conversion process.
+ */
 export interface IEffectToBuffConversionContext {
 	source: BuffSource,
 	sourceId: string;
@@ -130,4 +136,19 @@ export interface IEffectToBuffConversionContext {
 	 * bad state.
 	 */
 	reloadMapping?: boolean;
+
+	previousSources?: string[];
+}
+
+/**
+ * @description Format of these IDs are `<passive|proc>:<original effect ID>:<stat>`.
+ * Usage of passive/proc and original effect ID are for easy tracking of the original effect
+ * source of a given buff.
+ */
+export enum BuffId {
+	'passive:1:hp' = 'passive:1:hp',
+	'passive:1:atk' = 'passive:1:atk',
+	'passive:1:def' = 'passive:1:def',
+	'passive:1:rec' = 'passive:1:rec',
+	'passive:1:crit' = 'passive:1:crit',
 }

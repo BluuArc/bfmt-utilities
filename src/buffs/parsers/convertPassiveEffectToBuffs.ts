@@ -4,6 +4,7 @@ import isPassiveEffect from '../isPassiveEffect';
 import getEffectId from '../getEffectId';
 import { KNOWN_PASSIVE_ID } from '../constants';
 import { getPassiveEffectToBuffMapping } from './passive-effect-mapping';
+import { createSourcesFromContext } from './_helpers';
 
 /**
  * @description Default function for all effects that cannot be processed.
@@ -18,7 +19,7 @@ function defaultConversionFunction (effect: PassiveEffect, context: IEffectToBuf
 			id,
 			originalId: id,
 			stackType: BuffStackType.Unknown,
-			sources: [`${context.source}-${context.sourceId}`],
+			sources: createSourcesFromContext(context),
 		}];
 }
 

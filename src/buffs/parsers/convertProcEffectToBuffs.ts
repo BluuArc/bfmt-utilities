@@ -4,6 +4,7 @@ import { getProcEffectToBuffMapping } from './proc-effect-mapping';
 import getEffectId from '../getEffectId';
 import { KNOWN_PROC_ID } from '../constants';
 import isProcEffect from '../isProcEffect';
+import { createSourcesFromContext } from './_helpers';
 
 /**
  * @description Default function for all effects that cannot be processed.
@@ -21,7 +22,7 @@ function defaultConversionFunction (effect: ProcEffect, context: IEffectToBuffCo
 		effectDelay: effect['effect delay time(ms)/frame'],
 		targetType: effect['target type'],
 		targetArea: effect['target area'],
-		sources: [`${context.source}-${context.sourceId}`],
+		sources: createSourcesFromContext(context),
 	}];
 }
 
