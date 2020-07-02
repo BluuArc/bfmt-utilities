@@ -1,6 +1,6 @@
 const testConstants = require('../_test-helpers/constants');
 const getNameForPassive = require('./getNameForPassive').default;
-const { PASSIVE_METADATA } = require('./buff-metadata');
+const { PASSIVE_METADATA } = require('./effect-metadata');
 
 describe('getNameForPassive method', () => {
 	const expectNonEmptyString = (result, expected) => {

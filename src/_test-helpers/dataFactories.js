@@ -26,7 +26,7 @@ const generateDamageFramesList = createObjectListFactoryFromSchema({
 });
 
 /**
- * @type {function(numEntries: number, valueGetter?: (propName: string, index: number, defaultValue: any) => any,  objectExtender?: (obj: object, index: number) => object): { [id: string]: import('../buffs/buff-metadata').IPassiveMetadataEntry }}
+ * @type {function(numEntries: number, valueGetter?: (propName: string, index: number, defaultValue: any) => any,  objectExtender?: (obj: object, index: number) => object): { [id: string]: import('../buffs/effect-metadata').IPassiveMetadataEntry }}
  */
 const generatePassiveMetadataObject = (...args) => createObjectListFactoryFromSchema({
 	ID: (index) => `${index}`,

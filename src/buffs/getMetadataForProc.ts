@@ -1,4 +1,4 @@
-import { IProcMetadataEntry, PROC_METADATA } from './buff-metadata';
+import { IProcMetadataEntry, PROC_METADATA } from './effect-metadata';
 
 /**
  * @description Get the associated metadata entry for a given proc ID.

@@ -2,7 +2,7 @@ const testConstants = require('../_test-helpers/constants');
 const buffConstants = require('../buffs/constants');
 const { generateDamageFramesList } = require('../_test-helpers/dataFactories');
 const { getStringValueForLog } = require('../_test-helpers/utils');
-const { ProcBuffType } = require('../buffs/buff-metadata');
+const { ProcBuffType } = require('../buffs/effect-metadata');
 const getExtraAttackDamageFramesEntry = require('./getExtraAttackDamageFramesEntry').default;
 
 describe('getExtraAttackDamageFramesEntry method', () => {

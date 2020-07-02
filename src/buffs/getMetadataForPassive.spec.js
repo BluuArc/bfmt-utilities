@@ -1,6 +1,6 @@
 const testConstants = require('../_test-helpers/constants');
 const getMetadataForPassive = require('./getMetadataForPassive').default;
-const { PASSIVE_METADATA } = require('./buff-metadata');
+const { PASSIVE_METADATA } = require('./effect-metadata');
 
 describe('getMetadataForPassive method', () => {
 	describe('for invalid metadata inputs', () => {

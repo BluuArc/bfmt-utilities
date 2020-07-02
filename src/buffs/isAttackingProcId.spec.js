@@ -1,6 +1,6 @@
 const testConstants = require('../_test-helpers/constants');
 const isAttackingProcId = require('./isAttackingProcId').default;
-const { ProcBuffType } = require('./buff-metadata');
+const { ProcBuffType } = require('./effect-metadata');
 
 describe('isAttackingProcId method', () => {
 	describe('for invalid metadata inputs', () => {

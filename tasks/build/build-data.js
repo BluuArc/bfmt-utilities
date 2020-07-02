@@ -67,7 +67,7 @@ export const PASSIVE_METADATA: Readonly<{ [id: string]: IPassiveMetadataEntry }>
  */
 export const PROC_METADATA: Readonly<{ [id: string]: IProcMetadataEntry }> = Object.freeze(${JSON.stringify(mapping.proc, null, 2)});
 `;
-				fs.writeFileSync(path.join(__dirname, '..', '..', 'src', 'buffs', 'buff-metadata.ts'), fileContents, 'utf8');
+				fs.writeFileSync(path.join(__dirname, '..', '..', 'src', 'buffs', 'effect-metadata.ts'), fileContents, 'utf8');
 			} else {
 				logger.error('no metadata retrieved');
 			}
