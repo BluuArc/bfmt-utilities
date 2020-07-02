@@ -1,4 +1,4 @@
-const { getProcMapping } = require('./procMapping');
+const { getProcMapping } = require('./proc-effect-mapping');
 
 describe('getProcMapping method', () => {
 	it('uses the same mapping object on multiple calls', () => {

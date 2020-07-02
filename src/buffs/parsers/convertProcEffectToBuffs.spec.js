@@ -1,6 +1,6 @@
 const { BuffStackType } = require('./buff-types');
 const { KNOWN_PROC_ID } = require('../constants');
-const { getProcMapping } = require('./procMapping');
+const { getProcMapping } = require('./proc-effect-mapping');
 const convertProcEffectToBuffs = require('./convertProcEffectToBuffs').default;
 
 describe('convertProcEffectToBuff method', () => {

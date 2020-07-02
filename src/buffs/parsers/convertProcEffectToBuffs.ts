@@ -1,6 +1,6 @@
 import { ProcEffect } from '../../datamine-types';
 import { IBuff, IEffectToBuffConversionContext, BuffStackType } from './buff-types';
-import { getProcMapping } from './procMapping';
+import { getProcMapping } from './proc-effect-mapping';
 import getEffectId from '../getEffectId';
 import { KNOWN_PROC_ID } from '../constants';
 import isProcEffect from '../isProcEffect';

@@ -7,9 +7,9 @@ import { IBuff, IEffectToBuffConversionContext } from './buff-types';
  * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
  * @returns Converted buff(s) from the given proc effect.
  */
-export type ProcToBuffFunction = (effect: ProcEffect, context: IEffectToBuffConversionContext) => IBuff[];
+export type ProcEffectToBuffFunction = (effect: ProcEffect, context: IEffectToBuffConversionContext) => IBuff[];
 
-let mapping: Map<string, ProcToBuffFunction>;
+let mapping: Map<string, ProcEffectToBuffFunction>;
 
 /**
  * @description Retrieve the proc-to-buff conversion function mapping for the library. Internally, this is a
@@ -17,9 +17,9 @@ let mapping: Map<string, ProcToBuffFunction>;
  * @param reload Optionally re-create the mapping.
  * @returns Mapping of proc IDs to functions.
  */
-export function getProcMapping (reload?: boolean): Map<string, ProcToBuffFunction> {
+export function getProcMapping (reload?: boolean): Map<string, ProcEffectToBuffFunction> {
 	if (!mapping || reload) {
-		mapping = new Map<string, ProcToBuffFunction>();
+		mapping = new Map<string, ProcEffectToBuffFunction>();
 	}
 
 	return mapping;
