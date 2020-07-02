@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `isAttackingProcId`
 	* `getEffectName` (allows passing in both passive and proc metadata)
 * bursts: Add optional metadata parameter to `getExtraAttackDamageFramesEntry`.
+* examples/vanilla-browser: Update example to read parse buffs in each effect and use `bfmt-data`.
 
 ## [0.7.0] - 2020-06-26
 ### ⚠ Breaking Changes

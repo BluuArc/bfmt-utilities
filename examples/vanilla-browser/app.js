@@ -1,5 +1,10 @@
 (function(inputWindow) {
-	const BASE_DATAMINE_URL = 'https://raw.githubusercontent.com/cheahjs/bravefrontier_data/master';
+	const BASE_DATAMINE_URL = 'https://joshuacastor.me/bfmt-data/gl';
+
+	function fetchJson (url) {
+		return inputWindow.fetch(url)
+			.then(r => r.ok ? r.json() : (void 0));
+	}
 
 	/**
 	 * @type {import('../../src/index')}
@@ -48,14 +53,13 @@
 		}
 		setOptionsOnSelectElement(unitSelectorElement, options);
 		unitSelectorElement.disabled = false;
-		unitSelectorElement.addEventListener('change', event => onSelectedElementChange(event, unitData));
+		unitSelectorElement.addEventListener('change', (event) => onSelectedElementChange(event, unitData));
 	}
 
 	/**
 	 * @param {Event} event
-	 * @param {UnitData} unitData
 	 */
-	function onSelectedElementChange (event, unitData) {
+	async function onSelectedElementChange (event, unitData) {
 		const unitDetailsArea = inputWindow.document.querySelector('.unit-details');
 		if (!unitDetailsArea) {
 			return;
@@ -71,7 +75,7 @@
 			sp: unitDetailsArea.querySelector('.enhancement-details'),
 		};
 		const selectedId = event && event.target && event.target.value;
-		const unit = !!selectedId && unitData[selectedId];
+		const unit = !!selectedId && unitData[selectedId] && await fetchJson(`${BASE_DATAMINE_URL}/unit/${selectedId}.json`);
 		if (unit) {
 			console.info('selected unit', unit);
 			detailSections.name.innerText = unit.name;
@@ -237,28 +241,8 @@
 		const unitSelectorElement = inputWindow.document.querySelector('select[name="unit-selector"]');
 		setOptionsOnSelectElement(unitSelectorElement, [{ label: 'Loading data...', value: '' }]);
 
-		const unitDataPromise = inputWindow.fetch(`${BASE_DATAMINE_URL}/info.json`)
-			.then(r => r.ok ? r.json() : ({}));
-		const enhancementDataPromise = inputWindow.Promise.resolve().then(() => {
-			/**
-			 * @type {HTMLInputElement}
-			 */
-			const spCheckbox = inputWindow.document.querySelector('input[name="load-sp-checkbox"]');
-			const loadSp = !!spCheckbox && !!spCheckbox.checked;
-			return loadSp ? inputWindow.fetch(`${BASE_DATAMINE_URL}/feskills.json`).then(r => r.ok ? r.json() : ({})) : {};
-		}).catch(() => ({}));
-
-		inputWindow.Promise.all([unitDataPromise, enhancementDataPromise])
-			.then(([unitData = {}, spData = {}]) => {
-				// add SP data to each unit
-				Object.keys(spData).forEach(spKey => {
-					if (unitData.hasOwnProperty(spKey)) {
-						unitData[spKey].feskills = spData[spKey].skills;
-					}
-				});
-
-				return initializeSelect(unitData);
-			});
+		fetchJson(`${BASE_DATAMINE_URL}/unit/bfmt_update-stats.json`)
+			.then((unitData = {}) => initializeSelect(unitData));
 	}
 
 	/**
