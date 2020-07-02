@@ -174,6 +174,20 @@ export interface IEffectToBuffConversionContext {
 	previousSources?: string[];
 }
 
+export enum IconId {
+	UNKNOWN = 'UNKNOWN',
+	BUFF_HPUP = 'BUFF_HPUP',
+	BUFF_HPDOWN = 'BUFF_HPDOWN',
+	BUFF_ATKUP = 'BUFF_ATKUP',
+  BUFF_ATKDOWN = 'BUFF_ATKDOWN',
+  BUFF_DEFUP = 'BUFF_DEFUP',
+  BUFF_DEFDOWN = 'BUFF_DEFDOWN',
+  BUFF_RECUP = 'BUFF_RECUP',
+  BUFF_RECDOWN = 'BUFF_RECDOWN',
+	BUFF_CRTRATEUP = 'BUFF_CRTRATEUP',
+	BUFF_CRTRATEDOWN = 'BUFF_CRTRATEDOWN',
+}
+
 /**
  * @description Format of these IDs are `<passive|proc>:<original effect ID>:<stat>`.
  * Usage of passive/proc and original effect ID are for easy tracking of the original effect
