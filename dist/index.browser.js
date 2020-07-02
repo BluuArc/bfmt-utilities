@@ -56,12 +56,14 @@ var bfmtUtilities = function (exports) {
 
   (function (KNOWN_PROC_ID) {
     KNOWN_PROC_ID["BurstHeal"] = "2";
+    KNOWN_PROC_ID["Unknown"] = "UNKNOWN_PROC_EFFECT_ID";
   })(KNOWN_PROC_ID || (KNOWN_PROC_ID = {}));
 
   var KNOWN_PASSIVE_ID;
 
   (function (KNOWN_PASSIVE_ID) {
     KNOWN_PASSIVE_ID["TriggeredEffect"] = "66";
+    KNOWN_PASSIVE_ID["Unknown"] = "UNKNOWN_PASSIVE_EFFECT_ID";
   })(KNOWN_PASSIVE_ID || (KNOWN_PASSIVE_ID = {}));
 
   var constants = /*#__PURE__*/Object.freeze({
@@ -1642,10 +1644,370 @@ var bfmtUtilities = function (exports) {
 
     return resultName;
   }
+  /**
+   * @description Provides info at a glance regarding a buff's source and how it stacks.
+   */
+
+
+  var BuffStackType;
+
+  (function (BuffStackType) {
+    /**
+     * @description The buff is activated via some skill and lasts for a number of turns.
+     * Sometimes referred to as procs. Buffs of the same type do not stack unless if they're
+     * from different levels. Two possible levels of sources are:
+     * 1. Brave Burst or Super Brave Burst (also includes enemy skills)
+     * 2. Ultimate Brave Burst or Dual Brave Burst
+     */
+    BuffStackType["Active"] = "active";
+    /**
+     * @description The buff is always active provided that the source is not nullified.
+     * Most passive buffs can stack with themselves.
+     */
+
+    BuffStackType["Passive"] = "passive";
+    /**
+     * @description The buff is applied for a number of turns once a certain condition is met.
+     * Buffs of the same type are not able to stack.
+     */
+
+    BuffStackType["ConditionalTimed"] = "conditionalTimed";
+    /**
+     * @description Only one instance of the buff can be active at a time and can last indefinitely.
+     * A couple examples of this are Barrier and Max HP Boost.
+     */
+
+    BuffStackType["Singleton"] = "singleton";
+    /**
+     * @description The buff's effects immediately apply to the target(s). This differs from singleton
+     * in that these values aren't permanent and some effects can "stack" (e.g. using two burst heals results
+     * in the HP bar filling by the sum of those burst heals).
+     */
+
+    BuffStackType["Burst"] = "burst";
+    /**
+     * @description A specific subset of `Burst` type buffs that deal damage to the target.
+     */
+
+    BuffStackType["Attack"] = "attack";
+    /**
+     * @description Only for buffs that cannot be processed by the library yet.
+     */
+
+    BuffStackType["Unknown"] = "unknown";
+  })(BuffStackType || (BuffStackType = {}));
+
+  var BuffSource;
+
+  (function (BuffSource) {
+    BuffSource["BraveBurst"] = "bb";
+    BuffSource["SuperBraveBurst"] = "sbb";
+    BuffSource["UltimateBraveBurst"] = "ubb";
+    BuffSource["DualBraveBurst"] = "dbb";
+    BuffSource["BondedBraveBurst"] = "bbb";
+    BuffSource["BondedSuperBraveBurst"] = "dsbb";
+    BuffSource["SpEnhancement"] = "sp";
+    BuffSource["Item"] = "item";
+    BuffSource["LeaderSkill"] = "ls";
+    BuffSource["ExtraSkill"] = "es";
+    /**
+     * @description Buffs that result of having a number of OE+ units in the squad.
+     */
+
+    BuffSource["OmniParadigm"] = "omniParadigm";
+    /**
+     * @description Buffs based on a units type. See {@link UnitType}.
+     */
+
+    BuffSource["UnitTypeBonus"] = "unitTypeBonus";
+    /**
+     * @description Examples include the passive bonuses available in Frontier Gates and Frontier Rifts
+     * as well as ambient turn reductions present in some late-game quests.
+     */
+
+    BuffSource["Quest"] = "quest";
+  })(BuffSource || (BuffSource = {}));
+  /**
+   * @description Format of these IDs are `<passive|proc>:<original effect ID>:<stat>`.
+   * Usage of passive/proc and original effect ID are for easy tracking of the original effect
+   * source of a given buff.
+   */
+
+
+  var BuffId;
+
+  (function (BuffId) {
+    BuffId["passive:1:hp"] = "passive:1:hp";
+    BuffId["passive:1:atk"] = "passive:1:atk";
+    BuffId["passive:1:def"] = "passive:1:def";
+    BuffId["passive:1:rec"] = "passive:1:rec";
+    BuffId["passive:1:crit"] = "passive:1:crit";
+  })(BuffId || (BuffId = {}));
+
+  let mapping;
+  /**
+   * @description Retrieve the proc-to-buff conversion function mapping for the library. Internally, this is a
+   * lazy-loaded singleton to not impact first-load performance.
+   * @param reload Optionally re-create the mapping.
+   * @returns Mapping of proc IDs to functions.
+   */
+
+  function getProcEffectToBuffMapping(reload) {
+    if (!mapping || reload) {
+      mapping = new Map(); // TODO: processing functions here
+    }
+
+    return mapping;
+  }
+  /**
+   * @description Helper function for creating an entry to be used in the `sources`
+   * property of {@link IBuff}.
+   * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
+   * @returns Entry in the format of `<BuffSource>-<ID of Buff Source>`.
+   */
+
+
+  function createSourceEntryFromContext(context) {
+    return `${context.source}-${context.sourceId}`;
+  }
+  /**
+   * @description Helper function for creating an entries array to be used in the `sources`
+   * property of {@link IBuff}. It handles setting the order of the sources.
+   * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
+   * @returns List of entries in the format of `<BuffSource>-<ID of Buff Source>`.
+   */
+
+
+  function createSourcesFromContext(context) {
+    const resultArray = Array.isArray(context.previousSources) ? context.previousSources.slice() : []; // Ensure that the current source is at the beginning of the array
+
+    resultArray.unshift(createSourceEntryFromContext(context));
+    return resultArray;
+  }
+  /**
+   * @description Given the conditions in an extra skill effect, normalize them into
+   * a simpler object containing the IDs of each condition type.
+   * @param effect Extra skill effect to process conditions from.
+   * @returns Conditions based on type, otherwise `undefined` if no conditions are found.
+   */
+
+
+  function processExtraSkillConditions(effect) {
+    if (!effect || !Array.isArray(effect.conditions) || effect.conditions.length === 0) {
+      return;
+    }
+
+    const units = new Set();
+    const items = new Set();
+    const sphereType = new Set();
+    const unknown = new Set();
+    effect.conditions.forEach(condition => {
+      if ('sphere category required (raw)' in condition) {
+        sphereType.add(condition['sphere category required (raw)']);
+      } else if ('item required' in condition) {
+        condition['item required'].forEach(item => {
+          items.add(item);
+        });
+      } else if ('unit required' in condition) {
+        condition['unit required'].forEach(unit => {
+          units.add(`${unit.id}`);
+        });
+      } else {
+        unknown.add(`type:${condition.type_id || ''},condition:${condition.condition_id || ''}`);
+      }
+    });
+    return {
+      units: Array.from(units),
+      items: Array.from(items),
+      sphereTypes: Array.from(sphereType),
+      unknown: Array.from(unknown)
+    };
+  }
+  /**
+   * @description Extract the target type and target area of a given passive effect.
+   * @param effect Passive effect to extract target data from.
+   * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
+   * @returns The target data for the given effect and context. There are only two possible values:
+   * party (`targetType` is party and `targetArea` is aoe ) and single (`targetType` is self and `targetArea` is single)
+   */
+
+
+  function getPassiveTargetData(effect, context) {
+    const isLeaderSkillEffect = context.source === BuffSource.LeaderSkill || effect.sp_type === SpPassiveType.EnhancePassive;
+    const isPartyEffect = isLeaderSkillEffect || effect['passive target'] === TargetType.Party;
+    return {
+      targetType: isPartyEffect ? TargetType.Party : TargetType.Self,
+      targetArea: isPartyEffect ? TargetArea.Aoe : TargetArea.Single
+    };
+  }
+  /**
+   * @description Default function for all effects that cannot be processed.
+   * @param effect Effect to convert to `IBuff` format.
+   * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
+   * @returns Converted buff(s) from the given proc effect.
+   */
+
+
+  function defaultConversionFunction(effect, context) {
+    const id = isProcEffect(effect) && getEffectId(effect) || KNOWN_PROC_ID.Unknown;
+    return [{
+      id,
+      originalId: id,
+      stackType: BuffStackType.Unknown,
+      effectDelay: effect['effect delay time(ms)/frame'],
+      targetType: effect['target type'],
+      targetArea: effect['target area'],
+      sources: createSourcesFromContext(context)
+    }];
+  }
+  /**
+   * @description Extract the buff(s) from a given proc effect object.
+   * If the buff is not supported, the resulting buff type will be `BuffStackType.Unknown` (see {@link BuffStackType} for more info).
+   * @param effect Proc effect object to extract buffs from.
+   * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
+   * @returns A collection of one or more buffs found in the given proc effect object.
+   */
+
+
+  function convertProcEffectToBuffs(effect, context) {
+    if (!effect || typeof effect !== 'object') {
+      throw new TypeError('effect parameter should be an object');
+    }
+
+    if (!context || typeof context !== 'object') {
+      throw new TypeError('context parameter should be an object');
+    }
+
+    const id = isProcEffect(effect) && getEffectId(effect);
+    const conversionFunction = id && getProcEffectToBuffMapping(context.reloadMapping).get(id);
+    return typeof conversionFunction === 'function' ? conversionFunction(effect, context) : defaultConversionFunction(effect, context);
+  }
+
+  let mapping$1;
+  /**
+   * @description Retrieve the passive-to-buff conversion function mapping for the library. Internally, this is a
+   * lazy-loaded singleton to not impact first-load performance.
+   * @param reload Optionally re-create the mapping.
+   * @returns Mapping of passive IDs to functions.
+   */
+
+  function getPassiveEffectToBuffMapping(reload) {
+    if (!mapping$1 || reload) {
+      mapping$1 = new Map();
+      setMapping(mapping$1);
+    }
+
+    return mapping$1;
+  }
+  /**
+   * @description Apply the mapping of passive effect IDs to conversion functions to the
+   * given Map object.
+   * @param map Map to add conversion mapping onto.
+   * @returns Does not return anything.
+   * @internal
+   */
+
+
+  function setMapping(map) {
+    map.set('1', (effect, context) => {
+      const conditionInfo = processExtraSkillConditions(effect);
+      const targetData = getPassiveTargetData(effect, context);
+      const sources = createSourcesFromContext(context);
+      const typedEffect = effect;
+      const results = [];
+      const stats = {
+        hp: '0',
+        atk: '0',
+        def: '0',
+        rec: '0',
+        crit: '0'
+      };
+
+      if (typedEffect.params) {
+        [stats.atk, stats.def, stats.rec, stats.crit, stats.hp] = typedEffect.params.split(',');
+      } else {
+        stats.hp = typedEffect['hp% buff'];
+        stats.atk = typedEffect['atk% buff'];
+        stats.def = typedEffect['def% buff'];
+        stats.rec = typedEffect['rec% buff'];
+        stats.crit = typedEffect['crit% buff'];
+      }
+
+      Object.keys(stats).forEach(stat => {
+        const value = stats[stat];
+
+        if (value && +value) {
+          results.push(Object.assign({
+            id: `passive:1:${stat}`,
+            originalId: '1',
+            stackType: BuffStackType.Passive,
+            sources,
+            value: +value,
+            conditions: conditionInfo
+          }, targetData));
+        }
+      });
+      return results;
+    });
+  }
+  /**
+   * @description Default function for all effects that cannot be processed.
+   * @param effect Effect to convert to `IBuff` format.
+   * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
+   * @returns Converted buff(s) from the given passive effect.
+   */
+
+
+  function defaultConversionFunction$1(effect, context) {
+    const id = isPassiveEffect(effect) && getEffectId(effect) || KNOWN_PASSIVE_ID.Unknown;
+    return [{
+      id,
+      originalId: id,
+      stackType: BuffStackType.Unknown,
+      sources: createSourcesFromContext(context)
+    }];
+  }
+  /**
+   * @description Extract the buff(s) from a given passive effect object.
+   * If the buff is not supported, the resulting buff type will be `BuffStackType.Unknown` (see {@link BuffStackType} for more info).
+   * @param effect Passive effect object to extract buffs from.
+   * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
+   * @returns A collection of one or more buffs found in the given passive effect object.
+   */
+
+
+  function convertPassiveEffectToBuffs(effect, context) {
+    if (!effect || typeof effect !== 'object') {
+      throw new TypeError('effect parameter should be an object');
+    }
+
+    if (!context || typeof context !== 'object') {
+      throw new TypeError('context parameter should be an object');
+    }
+
+    const id = isPassiveEffect(effect) && getEffectId(effect);
+    const conversionFunction = id && getPassiveEffectToBuffMapping(context.reloadMapping).get(id);
+    return typeof conversionFunction === 'function' ? conversionFunction(effect, context) : defaultConversionFunction$1(effect, context);
+  }
 
   var index$1 = /*#__PURE__*/Object.freeze({
     __proto__: null,
+    convertProcEffectToBuffs: convertProcEffectToBuffs,
+    convertPassiveEffectToBuffs: convertPassiveEffectToBuffs,
+
+    get BuffSource() {
+      return BuffSource;
+    },
+
+    get BuffStackType() {
+      return BuffStackType;
+    }
+
+  });
+  var index$2 = /*#__PURE__*/Object.freeze({
+    __proto__: null,
     constants: constants,
+    parsers: index$1,
     getMetadataForProc: getMetadataForProc,
     getMetadataForPassive: getMetadataForPassive,
     isAttackingProcId: isAttackingProcId,
@@ -1674,7 +2036,7 @@ var bfmtUtilities = function (exports) {
     return skill && Array.isArray(skill.effects) ? skill.effects : [];
   }
 
-  var index$2 = /*#__PURE__*/Object.freeze({
+  var index$3 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForExtraSkill: getEffectsForExtraSkill
   });
@@ -1720,7 +2082,7 @@ var bfmtUtilities = function (exports) {
     return `${baseContentUrl || ''}/item/${fileName || ''}`;
   }
 
-  var index$3 = /*#__PURE__*/Object.freeze({
+  var index$4 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForItem: getEffectsForItem,
     getItemImageUrl: getItemImageUrl
@@ -1735,7 +2097,7 @@ var bfmtUtilities = function (exports) {
     return skill && Array.isArray(skill.effects) ? skill.effects : [];
   }
 
-  var index$4 = /*#__PURE__*/Object.freeze({
+  var index$5 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForLeaderSkill: getEffectsForLeaderSkill
   });
@@ -1767,7 +2129,7 @@ var bfmtUtilities = function (exports) {
     return `${baseContentUrl || ''}/unit/img/${fileName || ''}`;
   }
 
-  var index$5 = /*#__PURE__*/Object.freeze({
+  var index$6 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getUnitImageFileNames: getUnitImageFileNames,
     getUnitImageUrl: getUnitImageUrl
@@ -2013,7 +2375,7 @@ var bfmtUtilities = function (exports) {
     return dependents;
   }
 
-  var index$6 = /*#__PURE__*/Object.freeze({
+  var index$7 = /*#__PURE__*/Object.freeze({
     __proto__: null,
     getEffectsForSpEnhancement: getEffectsForSpEnhancement,
     getSpCategoryName: getSpCategoryName,
@@ -2027,14 +2389,14 @@ var bfmtUtilities = function (exports) {
   /* NOTE: this file is automatically generated; do not edit this file */
 
   var version = '0.7.0';
-  exports.buffs = index$1;
+  exports.buffs = index$2;
   exports.bursts = index;
   exports.datamineTypes = datamineTypes;
-  exports.extraSkills = index$2;
-  exports.items = index$3;
-  exports.leaderSkills = index$4;
-  exports.spEnhancements = index$6;
-  exports.units = index$5;
+  exports.extraSkills = index$3;
+  exports.items = index$4;
+  exports.leaderSkills = index$5;
+  exports.spEnhancements = index$7;
+  exports.units = index$6;
   exports.version = version;
   return exports;
 }({});
