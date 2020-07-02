@@ -1,5 +1,5 @@
 import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect } from '../../datamine-types';
-import { IEffectToBuffConversionContext, IBuff, BuffStackType } from './buff-types';
+import { IEffectToBuffConversionContext, IBuff } from './buff-types';
 import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData } from './_helpers';
 
 /**
@@ -65,7 +65,6 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 				results.push({
 					id: `passive:1:${stat}`,
 					originalId: '1',
-					stackType: BuffStackType.Passive,
 					sources,
 					value: +value,
 					conditions: conditionInfo,

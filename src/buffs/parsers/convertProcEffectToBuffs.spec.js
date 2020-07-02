@@ -1,6 +1,6 @@
-const { BuffStackType } = require('./buff-types');
 const { KNOWN_PROC_ID } = require('../constants');
 const { getProcEffectToBuffMapping } = require('./proc-effect-mapping');
+const { BuffId } = require('./buff-types');
 const convertProcEffectToBuffs = require('./convertProcEffectToBuffs').default;
 
 describe('convertProcEffectToBuff method', () => {
@@ -42,9 +42,8 @@ describe('convertProcEffectToBuff method', () => {
 			.toBe(1);
 		expect(result[0])
 			.toEqual({
-				id,
+				id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 				originalId: id,
-				stackType: BuffStackType.Unknown,
 				effectDelay: arbitraryEffectDelay,
 				targetType: arbitraryTargetType,
 				targetArea: arbitraryTargetArea,

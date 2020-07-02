@@ -1,5 +1,5 @@
 import { ProcEffect } from '../../datamine-types';
-import { IBuff, IEffectToBuffConversionContext, BuffStackType } from './buff-types';
+import { IBuff, IEffectToBuffConversionContext, BuffId } from './buff-types';
 import { getProcEffectToBuffMapping } from './proc-effect-mapping';
 import getEffectId from '../getEffectId';
 import { KNOWN_PROC_ID } from '../constants';
@@ -16,9 +16,8 @@ function defaultConversionFunction (effect: ProcEffect, context: IEffectToBuffCo
 	const id = (isProcEffect(effect) && getEffectId(effect)) || KNOWN_PROC_ID.Unknown;
 
 	return [{
-		id,
+		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		originalId: id,
-		stackType: BuffStackType.Unknown,
 		effectDelay: effect['effect delay time(ms)/frame'],
 		targetType: effect['target type'],
 		targetArea: effect['target area'],

@@ -8,6 +8,7 @@ describe('buffs index', () => {
 			'convertPassiveEffectToBuffs',
 			'BuffSource',
 			'BuffStackType',
+			'BUFF_METADATA',
 		]);
 	});
 });

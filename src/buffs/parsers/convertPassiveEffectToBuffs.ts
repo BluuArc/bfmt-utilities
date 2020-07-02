@@ -1,5 +1,5 @@
 import { PassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect } from '../../datamine-types';
-import { IEffectToBuffConversionContext, IBuff, BuffStackType } from './buff-types';
+import { IEffectToBuffConversionContext, IBuff, BuffId } from './buff-types';
 import isPassiveEffect from '../isPassiveEffect';
 import getEffectId from '../getEffectId';
 import { KNOWN_PASSIVE_ID } from '../constants';
@@ -16,9 +16,8 @@ function defaultConversionFunction (effect: PassiveEffect | ExtraSkillPassiveEff
 	const id = (isPassiveEffect(effect) && getEffectId(effect)) || KNOWN_PASSIVE_ID.Unknown;
 
 	return [{
-		id,
+		id: BuffId.UNKNOWN_PASSIVE_EFFECT_ID,
 		originalId: id,
-		stackType: BuffStackType.Unknown,
 		sources: createSourcesFromContext(context),
 	}];
 }

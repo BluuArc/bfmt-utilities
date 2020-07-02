@@ -1,6 +1,6 @@
-const { BuffStackType } = require('./buff-types');
 const { KNOWN_PASSIVE_ID } = require('../constants');
 const { getPassiveEffectToBuffMapping } = require('./passive-effect-mapping');
+const { BuffId } = require('./buff-types');
 const convertPassiveEffectToBuffs = require('./convertPassiveEffectToBuffs').default;
 
 describe('convertPassiveEffectToBuffs method', () => {
@@ -36,9 +36,8 @@ describe('convertPassiveEffectToBuffs method', () => {
 			.toBe(1);
 		expect(result[0])
 			.toEqual({
-				id,
+				id: BuffId.UNKNOWN_PASSIVE_EFFECT_ID,
 				originalId: id,
-				stackType: BuffStackType.Unknown,
 				sources: [`${arbitrarySource}-${arbitrarySourceId}`],
 			});
 	};

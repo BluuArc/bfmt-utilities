@@ -104,7 +104,7 @@ export interface IBuffConditions {
 }
 
 export interface IBuff {
-	id: string;
+	id: BuffId | string;
 
 	/**
 	 * @description The original proc/passive ID of the buff. This should only differ from the `id`
@@ -112,7 +112,6 @@ export interface IBuff {
 	 */
 	originalId: string;
 
-	stackType: BuffStackType,
 	targetType?: TargetType;
 	targetArea?: TargetArea;
 	effectDelay?: string;
@@ -135,6 +134,17 @@ export interface IBuff {
 }
 
 /**
+ * @description Stats that a unit can have.
+ */
+export enum UnitStat {
+	hp = 'hp',
+	atk = 'atk',
+	def = 'def',
+	rec = 'rec',
+	crit = 'crit',
+};
+
+/**
  * @description Dictionary representing a unit's stats and what buffs are affecting each stat.
  */
 export interface IUnitState {
@@ -142,6 +152,7 @@ export interface IUnitState {
 	atk: IBuff[];
 	def: IBuff[];
 	rec: IBuff[];
+	crit: IBuff[];
 
 	// TODO: add more as needed
 }
@@ -169,9 +180,11 @@ export interface IEffectToBuffConversionContext {
  * source of a given buff.
  */
 export enum BuffId {
+	UNKNOWN_PASSIVE_EFFECT_ID = 'UNKNOWN_PASSIVE_EFFECT_ID',
 	'passive:1:hp' = 'passive:1:hp',
 	'passive:1:atk' = 'passive:1:atk',
 	'passive:1:def' = 'passive:1:def',
 	'passive:1:rec' = 'passive:1:rec',
 	'passive:1:crit' = 'passive:1:crit',
+	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 }
