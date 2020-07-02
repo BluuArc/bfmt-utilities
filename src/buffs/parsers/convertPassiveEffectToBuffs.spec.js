@@ -1,23 +1,17 @@
 const { BuffStackType } = require('./buff-types');
-const { KNOWN_PROC_ID } = require('../constants');
-const { getProcEffectToBuffMapping } = require('./proc-effect-mapping');
-const convertProcEffectToBuffs = require('./convertProcEffectToBuffs').default;
+const { KNOWN_PASSIVE_ID } = require('../constants');
+const { getPassiveEffectToBuffMapping } = require('./passive-effect-mapping');
+const convertPassiveEffectToBuffs = require('./convertPassiveEffectToBuffs').default;
 
-describe('convertProcEffectToBuff method', () => {
+describe('convertPassiveEffectToBuffs method', () => {
 	const arbitrarySource = 'arbitrary source';
 	const arbitrarySourceId = 'arbitrary source id';
-	const arbitraryEffectDelay = 'arbitrary effect delay';
-	const arbitraryTargetType = 'arbitrary target type';
-	const arbitraryTargetArea = 'arbitrary target area';
 
 	/**
-	 * @returns {import('../../datamine-types').IProcEffect}
+	 * @returns {import('../../datamine-types').IPassiveEffect}
 	 */
 	const generateArbitraryEffect = (id, params = {}) => ({
-		'proc id': id,
-		'effect delay time(ms)/frame': arbitraryEffectDelay,
-		'target type': arbitraryTargetType,
-		'target area': arbitraryTargetArea,
+		'passive id': id,
 		...params,
 	});
 
@@ -45,16 +39,13 @@ describe('convertProcEffectToBuff method', () => {
 				id,
 				originalId: id,
 				stackType: BuffStackType.Unknown,
-				effectDelay: arbitraryEffectDelay,
-				targetType: arbitraryTargetType,
-				targetArea: arbitraryTargetArea,
 				sources: [`${arbitrarySource}-${arbitrarySourceId}`],
 			});
 	};
 
 	beforeEach(() => {
-		// start with a fresh copy of the proc mapping on every test
-		getProcEffectToBuffMapping(true);
+		// start with a fresh copy of the passive mapping on every test
+		getPassiveEffectToBuffMapping(true);
 	});
 
 	describe('for invalid inputs', () => {
@@ -76,91 +67,91 @@ describe('convertProcEffectToBuff method', () => {
 			},
 		].forEach(testCase => {
 			it(`throws a TypeError for the effect parameter if the effect parameter ${testCase.name}`, () => {
-				expect(() => convertProcEffectToBuffs(testCase.value, { arbitraryContext: 'some context' }))
+				expect(() => convertPassiveEffectToBuffs(testCase.value, { arbitraryContext: 'some context' }))
 					.toThrowMatching((err) => err instanceof TypeError && err.message === expectedEffectErrorMessage);
 			});
 
 			it(`throws a TypeError for the context parameter if the context parameter ${testCase.name}`, () => {
-				expect(() => convertProcEffectToBuffs({ arbitraryEffect: 'some effect' }, testCase.value))
+				expect(() => convertPassiveEffectToBuffs({ arbitraryEffect: 'some effect' }, testCase.value))
 					.toThrowMatching((err) => err instanceof TypeError && err.message === expectedContextErrorMessage);
 			});
 		});
 	});
 
-	describe('for proc effects that cannot be processed yet', () => {
+	describe('for passive effects that cannot be processed yet', () => {
 		const unsupportedEffectId = 'unsupported effect id';
 
-		it('returns an array containing a single buff denoting an unknown entry for a proc effect', () => {
+		it('returns an array containing a single buff denoting an unknown entry for a passive effect', () => {
 			const effect = generateArbitraryEffect(unsupportedEffectId);
 			const context = generateArbitraryContext();
 
-			const result = convertProcEffectToBuffs(effect, context);
+			const result = convertPassiveEffectToBuffs(effect, context);
 			expectUnknownBuffResult(result, unsupportedEffectId);
 		});
 
-		it('returns an array containing a single buff denoting an unknown entry for a proc effect with an unknown proc id', () => {
+		it('returns an array containing a single buff denoting an unknown entry for a passive effect with an unknown passive id', () => {
 			const effect = generateArbitraryEffect(unsupportedEffectId);
 			const context = generateArbitraryContext();
 
-			effect['proc id'] = void 0;
-			delete effect['proc id'];
-			effect['unknown proc id'] = unsupportedEffectId;
+			effect['passive id'] = void 0;
+			delete effect['passive id'];
+			effect['unknown passive id'] = unsupportedEffectId;
 
-			const result = convertProcEffectToBuffs(effect, context);
+			const result = convertPassiveEffectToBuffs(effect, context);
 			expectUnknownBuffResult(result, unsupportedEffectId);
 		});
 
-		it('returns an array containing a single buff denoting an unknown entry for a non-proc effect', () => {
+		it('returns an array containing a single buff denoting an unknown entry for a non-passive effect', () => {
 			const effect = generateArbitraryEffect(unsupportedEffectId);
 			const context = generateArbitraryContext();
 
-			effect['proc id'] = void 0;
-			delete effect['proc id'];
-			effect['passive id'] = unsupportedEffectId;
+			effect['passive id'] = void 0;
+			delete effect['passive id'];
+			effect['proc id'] = unsupportedEffectId;
 
-			const result = convertProcEffectToBuffs(effect, context);
-			expectUnknownBuffResult(result, KNOWN_PROC_ID.Unknown);
+			const result = convertPassiveEffectToBuffs(effect, context);
+			expectUnknownBuffResult(result, KNOWN_PASSIVE_ID.Unknown);
 		});
 
 		it('returns an array containing a single buff denoting an unknown entry for a non-effect object', () => {
 			const effect = generateArbitraryEffect(unsupportedEffectId);
 			const context = generateArbitraryContext();
 
-			effect['proc id'] = void 0;
-			delete effect['proc id'];
+			effect['passive id'] = void 0;
+			delete effect['passive id'];
 
-			const result = convertProcEffectToBuffs(effect, context);
-			expectUnknownBuffResult(result, KNOWN_PROC_ID.Unknown);
+			const result = convertPassiveEffectToBuffs(effect, context);
+			expectUnknownBuffResult(result, KNOWN_PASSIVE_ID.Unknown);
 		});
 	});
 
-	it('returns the result of the conversion function of a known proc effect ID', () => {
+	it('returns the result of the conversion function of a known passive effect ID', () => {
 		const effectId = 'arbitrary effect id';
 		const mockBuffResult = [{ id: effectId, some: 'buff result' }];
 		const mockConversionFunction = jasmine.createSpy('mockConversionFunction');
 		mockConversionFunction.and.returnValue(mockBuffResult.slice());
-		const mapping = getProcEffectToBuffMapping();
+		const mapping = getPassiveEffectToBuffMapping();
 		mapping.set(effectId, mockConversionFunction);
 
 		const effect = generateArbitraryEffect(effectId);
 		const context = generateArbitraryContext();
-		const result = convertProcEffectToBuffs(effect, context);
+		const result = convertPassiveEffectToBuffs(effect, context);
 		expect(mockConversionFunction).toHaveBeenCalledWith(effect, context);
 		expect(result).toEqual(mockBuffResult);
 	});
 
-	it('reloads the proc mapping if context.reloadMapping is true', () => {
+	it('reloads the passive mapping if context.reloadMapping is true', () => {
 		const effectId = 'arbitrary effect id';
 		const mockConversionFunction = jasmine.createSpy('mockConversionFunction');
-		const mapping = getProcEffectToBuffMapping();
+		const mapping = getPassiveEffectToBuffMapping();
 		mapping.set(effectId, mockConversionFunction);
 
 		const effect = generateArbitraryEffect(effectId);
 		const context = generateArbitraryContext({ reloadMapping: true });
-		const result = convertProcEffectToBuffs(effect, context);
+		const result = convertPassiveEffectToBuffs(effect, context);
 		expect(mockConversionFunction).not.toHaveBeenCalled();
-		expect(getProcEffectToBuffMapping().has(effectId))
-			.withContext('proc mapping should not have arbitrary effect id')
+		expect(getPassiveEffectToBuffMapping().has(effectId))
+			.withContext('passive mapping should not have arbitrary effect id')
 			.toBeFalse();
 		expectUnknownBuffResult(result, effectId);
 	});

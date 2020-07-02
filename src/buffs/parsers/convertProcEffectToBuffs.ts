@@ -1,12 +1,12 @@
 import { ProcEffect } from '../../datamine-types';
 import { IBuff, IEffectToBuffConversionContext, BuffStackType } from './buff-types';
-import { getProcMapping } from './proc-effect-mapping';
+import { getProcEffectToBuffMapping } from './proc-effect-mapping';
 import getEffectId from '../getEffectId';
 import { KNOWN_PROC_ID } from '../constants';
 import isProcEffect from '../isProcEffect';
 
 /**
- * @description Default function for all buffs that cannot be processed.
+ * @description Default function for all effects that cannot be processed.
  * @param effect Effect to convert to `IBuff` format.
  * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
  * @returns Converted buff(s) from the given proc effect.
@@ -29,7 +29,7 @@ function defaultConversionFunction (effect: ProcEffect, context: IEffectToBuffCo
  * @description Extract the buff(s) from a given proc effect object.
  * If the buff is not supported, the resulting buff type will be `BuffStackType.Unknown` (see {@link BuffStackType} for more info).
  * @param effect Proc effect object to extract buffs from.
- * @param context ggregate object to encapsulate information not in the effect used in the conversion process.
+ * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
  * @returns A collection of one or more buffs found in the given proc effect object.
  */
 export default function convertProcEffectToBuffs (effect: ProcEffect, context: IEffectToBuffConversionContext): IBuff[] {
@@ -41,7 +41,7 @@ export default function convertProcEffectToBuffs (effect: ProcEffect, context: I
 	}
 
 	const id = (isProcEffect(effect) && getEffectId(effect));
-	const conversionFunction = (id && getProcMapping(context.reloadMapping).get(id));
+	const conversionFunction = (id && getProcEffectToBuffMapping(context.reloadMapping).get(id));
 	return typeof conversionFunction === 'function'
 		? conversionFunction(effect, context)
 		: defaultConversionFunction(effect, context);

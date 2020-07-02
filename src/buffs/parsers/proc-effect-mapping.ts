@@ -17,9 +17,11 @@ let mapping: Map<string, ProcEffectToBuffFunction>;
  * @param reload Optionally re-create the mapping.
  * @returns Mapping of proc IDs to functions.
  */
-export function getProcMapping (reload?: boolean): Map<string, ProcEffectToBuffFunction> {
+export function getProcEffectToBuffMapping (reload?: boolean): Map<string, ProcEffectToBuffFunction> {
 	if (!mapping || reload) {
 		mapping = new Map<string, ProcEffectToBuffFunction>();
+
+		// TODO: processing functions here
 	}
 
 	return mapping;

@@ -5,6 +5,7 @@ describe('buffs index', () => {
 	it('has expected API surface', () => {
 		assertObjectHasOnlyKeys(index, [
 			'convertProcEffectToBuffs',
+			'convertPassiveEffectToBuffs',
 			'BuffSource',
 			'BuffStackType',
 		]);

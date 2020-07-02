@@ -1,21 +1,21 @@
-const { getProcEffectToBuffMapping } = require('./proc-effect-mapping');
+const { getPassiveEffectToBuffMapping } = require('./passive-effect-mapping');
 
-describe('getProcEffectToBuffMapping method', () => {
+describe('getPassiveEffectToBuffMapping method', () => {
 	it('uses the same mapping object on multiple calls', () => {
-		const initialMapping = getProcEffectToBuffMapping();
+		const initialMapping = getPassiveEffectToBuffMapping();
 		expect(initialMapping).toBeDefined();
 		for (let i = 0; i < 5; ++i) {
-			expect(getProcEffectToBuffMapping()).toBe(initialMapping);
+			expect(getPassiveEffectToBuffMapping()).toBe(initialMapping);
 		}
 	});
 
 	it('returns a new mapping object when the reload parameter is true', () => {
 		const allMappings = new Set();
-		const initialMapping = getProcEffectToBuffMapping();
+		const initialMapping = getPassiveEffectToBuffMapping();
 		expect(initialMapping).toBeDefined();
 		allMappings.add(initialMapping);
 		for (let i = 0; i < 5; ++i) {
-			const newMapping = getProcEffectToBuffMapping(true);
+			const newMapping = getPassiveEffectToBuffMapping(true);
 			expect(newMapping).toBeDefined();
 			expect(allMappings.has(newMapping))
 				.withContext('expect new mapping object to not be in set of previous mappings')
@@ -23,9 +23,9 @@ describe('getProcEffectToBuffMapping method', () => {
 			allMappings.add(newMapping);
 		}
 
-		// should match number of times getProcEffectToBuffMapping was called in this test
+		// should match number of times getPassiveEffectToBuffMapping was called in this test
 		expect(allMappings.size)
-			.withContext('expect number of mappings added to set to match number of times getProcEffectToBuffMapping was called')
+			.withContext('expect number of mappings added to set to match number of times getPassiveEffectToBuffMapping was called')
 			.toBe(6);
 	});
 });

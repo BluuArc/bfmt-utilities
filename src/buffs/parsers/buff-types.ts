@@ -91,9 +91,9 @@ export interface IBuff {
 	originalId: string;
 
 	stackType: BuffStackType,
-	targetType: TargetType;
-	targetArea: TargetArea;
-	effectDelay: string;
+	targetType?: TargetType;
+	targetArea?: TargetArea;
+	effectDelay?: string;
 
 	/**
 	 * @description Ordered from the skill that immediately grants the buff on use to
