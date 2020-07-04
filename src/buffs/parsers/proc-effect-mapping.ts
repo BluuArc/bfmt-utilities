@@ -36,9 +36,8 @@ export function getProcEffectToBuffMapping (reload?: boolean): Map<string, ProcE
  */
 function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	map.set('1', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
-		const sources = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
 		const targetData = ((injectionContext && injectionContext.getProcTargetData) || getProcTargetData)(effect);
-
+		const sources = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
 
 		const hits = +((context.damageFrames && context.damageFrames.hits) || 0);
 		const distribution = +((context.damageFrames && context.damageFrames['hit dmg% distribution (total)']) || 0);
