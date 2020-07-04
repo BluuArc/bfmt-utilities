@@ -1756,6 +1756,8 @@ var bfmtUtilities = function (exports) {
     IconId["BUFF_RECDOWN"] = "BUFF_RECDOWN";
     IconId["BUFF_CRTRATEUP"] = "BUFF_CRTRATEUP";
     IconId["BUFF_CRTRATEDOWN"] = "BUFF_CRTRATEDOWN";
+    IconId["ATK_ST"] = "ATK_ST";
+    IconId["ATK_AOE"] = "ATK_AOE";
   })(IconId || (IconId = {}));
   /**
    * @description Format of these IDs are `<passive|proc>:<original effect ID>:<stat>`.
@@ -1774,23 +1776,8 @@ var bfmtUtilities = function (exports) {
     BuffId["passive:1:rec"] = "passive:1:rec";
     BuffId["passive:1:crit"] = "passive:1:crit";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
+    BuffId["proc:1"] = "proc:1";
   })(BuffId || (BuffId = {}));
-
-  let mapping;
-  /**
-   * @description Retrieve the proc-to-buff conversion function mapping for the library. Internally, this is a
-   * lazy-loaded singleton to not impact first-load performance.
-   * @param reload Optionally re-create the mapping.
-   * @returns Mapping of proc IDs to functions.
-   */
-
-  function getProcEffectToBuffMapping(reload) {
-    if (!mapping || reload) {
-      mapping = new Map(); // TODO: processing functions here
-    }
-
-    return mapping;
-  }
   /**
    * @description Helper function for creating an entry to be used in the `sources`
    * property of {@link IBuff}.
@@ -1833,7 +1820,7 @@ var bfmtUtilities = function (exports) {
     const items = new Set();
     const sphereType = new Set();
     const unknown = new Set();
-    effect.conditions.forEach(condition => {
+    effect.conditions.forEach((condition, index) => {
       if ('sphere category required (raw)' in condition) {
         sphereType.add(condition['sphere category required (raw)']);
       } else if ('item required' in condition) {
@@ -1845,7 +1832,7 @@ var bfmtUtilities = function (exports) {
           units.add(`${unit.id}`);
         });
       } else {
-        unknown.add(`type:${condition.type_id || ''},condition:${condition.condition_id || ''}`);
+        unknown.add(`type:${condition.type_id || index},condition:${condition.condition_id || index}`);
       }
     });
     return {
@@ -1871,6 +1858,84 @@ var bfmtUtilities = function (exports) {
       targetType: isPartyEffect ? TargetType.Party : TargetType.Self,
       targetArea: isPartyEffect ? TargetArea.Aoe : TargetArea.Single
     };
+  }
+  /**
+   * @description Extract the target type and target area of a given proc effect.
+   * @param effect Proc effect to extract target data from.
+   */
+
+
+  function getProcTargetData(effect) {
+    return {
+      targetArea: effect['target area'],
+      targetType: effect['target type']
+    };
+  }
+
+  let mapping;
+  /**
+   * @description Retrieve the proc-to-buff conversion function mapping for the library. Internally, this is a
+   * lazy-loaded singleton to not impact first-load performance.
+   * @param reload Optionally re-create the mapping.
+   * @returns Mapping of proc IDs to functions.
+   */
+
+  function getProcEffectToBuffMapping(reload) {
+    if (!mapping || reload) {
+      mapping = new Map();
+      setMapping(mapping);
+    }
+
+    return mapping;
+  }
+  /**
+   * @description Apply the mapping of proc effect IDs to conversion functions to the given Map object.
+   * @param map Map to add conversion mapping onto.
+   * @returns Does not return anything.
+   * @internal
+   */
+
+
+  function setMapping(map) {
+    map.set('1', (effect, context, injectionContext) => {
+      const sources = (injectionContext && injectionContext.createSourcesFromContext || createSourcesFromContext)(context);
+      const targetData = (injectionContext && injectionContext.getProcTargetData || getProcTargetData)(effect);
+      const hits = +(context.damageFrames && context.damageFrames.hits || 0);
+      const distribution = +(context.damageFrames && context.damageFrames['hit dmg% distribution (total)'] || 0);
+      const params = {
+        'atk%': '0',
+        flatAtk: '0',
+        'crit%': '0',
+        'bc%': '0',
+        'hc%': '0',
+        'dmg%': '0'
+      };
+
+      if (effect.params) {
+        [params['atk%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%']] = effect.params.split(',');
+      } else {
+        params['atk%'] = effect['bb atk%'];
+        params.flatAtk = effect['bb flat atk'];
+        params['crit%'] = effect['bb crit%'];
+        params['bc%'] = effect['bb bc%'];
+        params['hc%'] = effect['bb hc%'];
+        params['dmg%'] = effect['bb dmg%'];
+      }
+
+      const filteredValue = Object.entries(params).filter(([, value]) => value && +value).reduce((acc, [key, value]) => {
+        acc[key] = +value;
+        return acc;
+      }, {});
+      return [Object.assign({
+        id: 'proc:1',
+        originalId: '1',
+        sources,
+        value: Object.assign(Object.assign({}, filteredValue), {
+          hits,
+          distribution
+        })
+      }, targetData)];
+    });
   }
   /**
    * @description Default function for all effects that cannot be processed.
@@ -1925,25 +1990,24 @@ var bfmtUtilities = function (exports) {
   function getPassiveEffectToBuffMapping(reload) {
     if (!mapping$1 || reload) {
       mapping$1 = new Map();
-      setMapping(mapping$1);
+      setMapping$1(mapping$1);
     }
 
     return mapping$1;
   }
   /**
-   * @description Apply the mapping of passive effect IDs to conversion functions to the
-   * given Map object.
+   * @description Apply the mapping of passive effect IDs to conversion functions to the given Map object.
    * @param map Map to add conversion mapping onto.
    * @returns Does not return anything.
    * @internal
    */
 
 
-  function setMapping(map) {
-    map.set('1', (effect, context) => {
-      const conditionInfo = processExtraSkillConditions(effect);
-      const targetData = getPassiveTargetData(effect, context);
-      const sources = createSourcesFromContext(context);
+  function setMapping$1(map) {
+    map.set('1', (effect, context, injectionContext) => {
+      const conditionInfo = (injectionContext && injectionContext.processExtraSkillConditions || processExtraSkillConditions)(effect);
+      const targetData = (injectionContext && injectionContext.getPassiveTargetData || getPassiveTargetData)(effect, context);
+      const sources = (injectionContext && injectionContext.createSourcesFromContext || createSourcesFromContext)(context);
       const typedEffect = effect;
       const results = [];
       const stats = {
@@ -2031,46 +2095,53 @@ var bfmtUtilities = function (exports) {
       name: 'Passive HP Boost',
       stat: UnitStat.hp,
       stackType: BuffStackType.Passive,
-      icons: buff => [buff.value && buff.value < 0 ? IconId.BUFF_HPDOWN : IconId.BUFF_HPUP]
+      icons: buff => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HPDOWN : IconId.BUFF_HPUP]
     },
     'passive:1:atk': {
       id: BuffId['passive:1:atk'],
       name: 'Passive Attack Boost',
       stat: UnitStat.atk,
       stackType: BuffStackType.Passive,
-      icons: buff => [buff.value && buff.value < 0 ? IconId.BUFF_ATKDOWN : IconId.BUFF_ATKUP]
+      icons: buff => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ATKDOWN : IconId.BUFF_ATKUP]
     },
     'passive:1:def': {
       id: BuffId['passive:1:def'],
       name: 'Passive Defense Boost',
       stat: UnitStat.def,
       stackType: BuffStackType.Passive,
-      icons: buff => [buff.value && buff.value < 0 ? IconId.BUFF_DEFDOWN : IconId.BUFF_DEFUP]
+      icons: buff => [buff && buff.value && buff.value < 0 ? IconId.BUFF_DEFDOWN : IconId.BUFF_DEFUP]
     },
     'passive:1:rec': {
       id: BuffId['passive:1:rec'],
       name: 'Passive Recovery Boost',
       stat: UnitStat.rec,
       stackType: BuffStackType.Passive,
-      icons: buff => [buff.value && buff.value < 0 ? IconId.BUFF_RECDOWN : IconId.BUFF_RECUP]
+      icons: buff => [buff && buff.value && buff.value < 0 ? IconId.BUFF_RECDOWN : IconId.BUFF_RECUP]
     },
     'passive:1:crit': {
       id: BuffId['passive:1:crit'],
       name: 'Passive Critical Hit Rate Boost',
       stat: UnitStat.crit,
       stackType: BuffStackType.Passive,
-      icons: buff => [buff.value && buff.value < 0 ? IconId.BUFF_CRTRATEDOWN : IconId.BUFF_CRTRATEUP]
+      icons: buff => [buff && buff.value && buff.value < 0 ? IconId.BUFF_CRTRATEDOWN : IconId.BUFF_CRTRATEUP]
     },
     'UNKNOWN_PROC_EFFECT_ID': {
       id: BuffId.UNKNOWN_PROC_EFFECT_ID,
       name: 'Unknown Proc Effect',
       stackType: BuffStackType.Unknown,
       icons: () => [IconId.UNKNOWN]
+    },
+    'proc:1': {
+      id: BuffId["proc:1"],
+      name: 'Regular Damage',
+      stackType: BuffStackType.Attack,
+      icons: buff => [buff && buff.targetArea === TargetArea.Single ? IconId.ATK_ST : IconId.ATK_AOE]
     }
   });
   /**
    * @description Get the associated metadata entry for a given buff ID.
    * @param id Buff ID to get metadata for.
+   * @param metadata Optional source to use as metadata; defaults to internal buff metadata.
    * @returns Corresponding buff metadata entry if it exists, undefined otherwise.
    */
 

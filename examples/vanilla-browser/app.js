@@ -75,6 +75,9 @@
 			sp: unitDetailsArea.querySelector('.enhancement-details'),
 		};
 		const selectedId = event && event.target && event.target.value;
+		/**
+		 * @type {import('../../src/datamine-types').IUnit}
+		 */
 		const unit = !!selectedId && unitData[selectedId] && await fetchJson(`${BASE_DATAMINE_URL}/unit/${selectedId}.json`);
 		if (unit) {
 			console.info('selected unit', unit);
@@ -83,14 +86,20 @@
 				detailSections.ls,
 				unit['leader skill'] && unit['leader skill'].name,
 				bfmtUtilities.leaderSkills.getEffectsForLeaderSkill(unit['leader skill']),
-				bfmtUtilities.buffs.parsers.BuffSource.LeaderSkill,
+				{
+					source: bfmtUtilities.buffs.parsers.BuffSource.LeaderSkill,
+					sourceId: unit['leader skill'].id,
+				},
 			);
 			if (unit['extra skill']) {
 				setEffectsListForSection(
 					detailSections.es,
 					unit['extra skill'].name,
 					bfmtUtilities.extraSkills.getEffectsForExtraSkill(unit['extra skill']),
-					bfmtUtilities.buffs.parsers.BuffSource.ExtraSkill,
+					{
+						source: bfmtUtilities.buffs.parsers.BuffSource.ExtraSkill,
+						sourceId: unit['extra skill'].id,
+					},
 				);
 				detailSections.es.removeAttribute('hidden');
 			} else {
@@ -101,14 +110,22 @@
 				detailSections.bb,
 				unit.bb && unit.bb.name,
 				bfmtUtilities.bursts.getEffectsForBurst(unit.bb),
-				bfmtUtilities.buffs.parsers.BuffSource.BraveBurst,
+				{
+					source: bfmtUtilities.buffs.parsers.BuffSource.BraveBurst,
+					sourceId: unit.bb.id,
+					damageFrames: unit.bb["damage frames"],
+				},
 			);
 			if (unit.sbb) {
 				setEffectsListForSection(
 					detailSections.sbb,
 					unit.sbb.name,
 					bfmtUtilities.bursts.getEffectsForBurst(unit.sbb),
-					bfmtUtilities.buffs.parsers.BuffSource.SuperBraveBurst,
+					{
+						source: bfmtUtilities.buffs.parsers.BuffSource.SuperBraveBurst,
+						sourceId: unit.sbb.id,
+						damageFrames: unit.sbb["damage frames"],
+					},
 				);
 				detailSections.sbb.removeAttribute('hidden');
 			} else {
@@ -119,7 +136,11 @@
 					detailSections.ubb,
 					unit.ubb.name,
 					bfmtUtilities.bursts.getEffectsForBurst(unit.ubb),
-					bfmtUtilities.buffs.parsers.BuffSource.UltimateBraveBurst,
+					{
+						source: bfmtUtilities.buffs.parsers.BuffSource.UltimateBraveBurst,
+						sourceId: unit.ubb.id,
+						damageFrames: unit.ubb["damage frames"],
+					},
 				);
 				detailSections.ubb.removeAttribute('hidden');
 			} else {
@@ -141,15 +162,11 @@
 
 	/**
 	 * @param {import('../../src/datamine-types').PassiveEffect | import('../../src/datamine-types').ProcEffect} effect
-	 * @param {import('../../src/buffs/parsers/buff-types').BuffSource} type
+	 * @param {import('../../src/buffs/parsers/buff-types').IEffectToBuffConversionContext} context
 	 */
-	function generateBuffListForEffect (effect, type) {
+	function generateBuffListForEffect (effect, context) {
 		const buffList = document.createElement('ul');
 		let buffs;
-		const context = {
-			sourceId: bfmtUtilities.buffs.getEffectId(effect),
-			source: type,
-		};
 		if (bfmtUtilities.buffs.isPassiveEffect(effect)) {
 			buffs = bfmtUtilities.buffs.parsers.convertPassiveEffectToBuffs(effect, context);
 		} else {
@@ -171,9 +188,9 @@
 	 * @param {HTMLElement} section
 	 * @param {string} name
 	 * @param {Array<import('../../src/datamine-types').PassiveEffect | import('../../src/datamine-types').ProcEffect>} effects
-	 * @param {import('../../src/buffs/parsers/buff-types').BuffSource} type
+	 * @param {import('../../src/buffs/parsers/buff-types').IEffectToBuffConversionContext} context
 	 */
-	function setEffectsListForSection (section, name, effects, type) {
+	function setEffectsListForSection (section, name, effects, context) {
 		const nameField = section.querySelector('.name');
 		if (nameField) {
 			nameField.innerText = name || 'None';
@@ -184,10 +201,20 @@
 			effectList.childNodes.forEach(entry => entry.remove());
 			let entries = [];
 			if (effects.length > 0) {
-				entries = effects.map(effect => {
+				const hasMultipleDamageFrames = Array.isArray(context.damageFrames);
+				entries = effects.map((effect, index) => {
+					let localContext;
+					if (hasMultipleDamageFrames) {
+						localContext = {
+							...context,
+							damageFrames: context.damageFrames[index],
+						};
+					} else {
+						localContext = context;
+					}
 					const entry = inputWindow.document.createElement('li');
 					entry.innerText = `${bfmtUtilities.buffs.getEffectName(effect)}: ${JSON.stringify(effect)}`;
-					entry.appendChild(generateBuffListForEffect(effect, type));
+					entry.appendChild(generateBuffListForEffect(effect, localContext));
 					return entry;
 				});
 			} else {
@@ -202,23 +229,32 @@
 	/**
 	 * @param {HTMLElement} section
 	 * @param {import('../../src/datamine-types').ISpEnhancementEntry[]} spEntries
+	 * @param {import('../../src/buffs/parsers/buff-types').IEffectToBuffConversionContext} context
 	 */
-	function setEffectsForSpSection (section, spEntries) {
+	function setEffectsForSpSection (section, spEntries, context) {
 		const skillList = section.querySelector('ol');
 		if (skillList) {
 			skillList.childNodes.forEach(entry => entry.remove());
 			let entries = [];
 			if (spEntries.length > 0) {
-				entries = spEntries.map(spEntry => {
+				entries = spEntries.map((spEntry, index) => {
 					const htmlEntry = inputWindow.document.createElement('li');
 
 					// get effects for current SP entry
 					const effectListWrapper = inputWindow.document.createElement('ul');
 					const effects = bfmtUtilities.spEnhancements.getEffectsForSpEnhancement(spEntry);
+					/**
+					 * @type {import('../../src/buffs/parsers/buff-types').IEffectToBuffConversionContext}
+					 */
+					const localContext = {
+						...context,
+						source: bfmtUtilities.buffs.parsers.BuffSource.SpEnhancement,
+						sourceId: bfmtUtilities.spEnhancements.spIndexToCode(index),
+					};
 					const effectHtmlEntries = effects.map(effect => {
 						const entry = inputWindow.document.createElement('li');
 						entry.innerText = `${bfmtUtilities.buffs.getEffectName(effect)}: ${JSON.stringify(effect)}`;
-						entry.appendChild(generateBuffListForEffect(effect, bfmtUtilities.buffs.parsers.BuffSource.SpEnhancement));
+						entry.appendChild(generateBuffListForEffect(effect, localContext));
 						return entry;
 					});
 					effectListWrapper.append.apply(effectListWrapper, effectHtmlEntries);
