@@ -36,8 +36,44 @@ const generatePassiveMetadataObject = (...args) => createObjectListFactoryFromSc
 	return entry;
 }, {});
 
+const generateNonArrayTestCases = (nonObjectValue = 'some value') => [
+	{
+		desc: 'is null',
+		value: null,
+	},
+	{
+		desc: 'is undefined',
+		value: (void 0),
+	},
+	{
+		desc: 'is not an object',
+		value: nonObjectValue,
+	},
+	{
+		desc: 'is an object but not an array',
+		value: { some: 'value' },
+	},
+];
+
+const generateNonObjectTestCases = (nonObjectValue = 123) => [
+	{
+		desc: 'is undefined',
+		value: (void 0),
+	},
+	{
+		desc: 'is null',
+		value: null,
+	},
+	{
+		desc: 'is not an object',
+		value: nonObjectValue,
+	},
+];
+
 module.exports = {
 	generateDamageFramesList,
 	generateProcEffectsList,
 	generatePassiveMetadataObject,
+	generateNonArrayTestCases,
+	generateNonObjectTestCases,
 };

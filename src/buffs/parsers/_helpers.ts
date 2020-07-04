@@ -53,7 +53,7 @@ export function processExtraSkillConditions (effect: ExtraSkillPassiveEffect): I
 	const items = new Set<string>();
 	const sphereType = new Set<SphereTypeId>();
 	const unknown = new Set<string>();
-	effect.conditions.forEach((condition) => {
+	effect.conditions.forEach((condition, index) => {
 		if ('sphere category required (raw)' in condition) {
 			sphereType.add(condition['sphere category required (raw)']);
 		} else if ('item required' in condition) {
@@ -65,7 +65,7 @@ export function processExtraSkillConditions (effect: ExtraSkillPassiveEffect): I
 				units.add(`${unit.id}`);
 			});
 		} else {
-			unknown.add(`type:${condition.type_id || ''},condition:${condition.condition_id || ''}`);
+			unknown.add(`type:${condition.type_id || index},condition:${condition.condition_id || index}`);
 		}
 	});
 
