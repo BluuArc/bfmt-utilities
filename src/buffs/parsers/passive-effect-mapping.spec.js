@@ -105,7 +105,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						originalId: '1',
 						sources,
 						value: +(splitParams[index]),
-						conditions: undefined,
+						conditions: {},
 						...targetData,
 					};
 				});
@@ -131,7 +131,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						originalId: '1',
 						sources,
 						value: mockValues[index],
-						conditions: undefined,
+						conditions: {},
 						...targetData,
 					};
 				});
@@ -152,7 +152,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 							originalId: '1',
 							sources,
 							value: 123,
-							conditions: undefined,
+							conditions: {},
 							...targetData,
 						},
 					];

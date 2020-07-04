@@ -84,23 +84,23 @@ export interface IBuffConditions {
 	/**
 	 * @description Array of unit IDs
 	 */
-	units: string[];
+	units?: string[];
 
 	/**
 	 * @description Array of item IDs
 	 */
-	items: string[];
+	items?: string[];
 
 	/**
 	 * @description Array of sphere type IDs
 	 */
-	sphereTypes: SphereTypeId[];
+	sphereTypes?: SphereTypeId[];
 
 	/**
 	 * @description Array of unprocessed conditions in the format
 	 * of `type:<typeId>,condition:<conditionId>`.
 	 */
-	unknown: string[];
+	unknowns?: string[];
 }
 
 export interface IBuff {

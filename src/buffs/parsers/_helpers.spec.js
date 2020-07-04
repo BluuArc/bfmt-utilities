@@ -59,21 +59,21 @@ describe('buff helper functions', () => {
 	});
 
 	describe('processExtraSkillConditions method', () => {
-		const RESULT_PROPERTIES = ['units', 'items', 'sphereTypes', 'unknown'];
+		const RESULT_PROPERTIES = ['units', 'items', 'sphereTypes', 'unknowns'];
 
 		describe('for invalid effect inputs', () => {
 			generateNonObjectTestCases().forEach((testCase) => {
-				it(`returns undefined when the effect parameter ${testCase.desc}`, () => {
+				it(`returns an empty object when the effect parameter ${testCase.desc}`, () => {
 					expect(helpers.processExtraSkillConditions(testCase.value))
-						.toBeUndefined();
+						.toEqual({});
 				});
 			});
 
 			generateNonArrayTestCases().forEach((testCase) => {
-				it(`returns undefined when the condition parameter of the effect object ${testCase.desc}`, () => {
+				it(`returns an empty object when the condition parameter of the effect object ${testCase.desc}`, () => {
 					const effect = { condition: testCase.value };
 					expect(helpers.processExtraSkillConditions(effect))
-						.toBeUndefined();
+						.toEqual({});
 				});
 			});
 		});
@@ -108,12 +108,9 @@ describe('buff helper functions', () => {
 					],
 				};
 
-				const expectedResult = RESULT_PROPERTIES.reduce((acc, prop) => {
-					acc[prop] = prop === testCase.resultProperty
-						? testCase.expectedValue
-						: []; // all other properties should be an empty array
-					return acc;
-				}, {});
+				const expectedResult = {
+					[testCase.resultProperty]: testCase.expectedValue,
+				};
 				expect(helpers.processExtraSkillConditions(effect))
 					.toEqual(expectedResult);
 			});
@@ -129,13 +126,10 @@ describe('buff helper functions', () => {
 						},
 					],
 				};
-				const expectedResult = RESULT_PROPERTIES.reduce((acc, prop) => {
-					acc[prop] = prop === 'unknown'
-						? ['type:some type id,condition:some condition id']
-						: []; // all other properties should be an empty array
-					return acc;
-				}, {});
 
+				const expectedResult = {
+					unknowns: ['type:some type id,condition:some condition id'],
+				};
 				expect(helpers.processExtraSkillConditions(effect))
 					.toEqual(expectedResult);
 			});
@@ -149,13 +143,10 @@ describe('buff helper functions', () => {
 						['not a condition'],
 					],
 				};
-				const expectedResult = RESULT_PROPERTIES.reduce((acc, prop) => {
-					acc[prop] = prop === 'unknown'
-						? ['type:0,condition:0', 'type:1,condition:1']
-						: []; // all other properties should be an empty array
-					return acc;
-				}, {});
 
+				const expectedResult = {
+					unknowns: ['type:0,condition:0', 'type:1,condition:1'],
+				};
 				expect(helpers.processExtraSkillConditions(effect))
 					.toEqual(expectedResult);
 			});
@@ -165,14 +156,14 @@ describe('buff helper functions', () => {
 			const allCases = nonUnknownTestCases
 				.concat([{
 					conditionProperty: 'some non-sphere/unit/item property',
-					resultProperty: 'unknown',
+					resultProperty: 'unknowns',
 					inputValue: { type_id: 'some type id', condition_id: 'some condition id' },
 					expectedValue: ['type:some type id,condition:some condition id'],
 				}]);
 			const conditions = allCases.concat(allCases)
 				.map((testCase) => {
 					let condition;
-					if (testCase.resultProperty !== 'unknown') {
+					if (testCase.resultProperty !== 'unknowns') {
 						const value = Array.isArray(testCase.inputValue)
 							? testCase.inputValue.concat(testCase.inputValue)
 							: testCase.inputValue;

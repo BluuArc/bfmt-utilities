@@ -19,7 +19,7 @@ import {
  * @internal
  */
 export interface IPassiveBuffProcessingInjectionContext {
-	processExtraSkillConditions: (effect: ExtraSkillPassiveEffect) => IBuffConditions | undefined;
+	processExtraSkillConditions: (effect: ExtraSkillPassiveEffect) => IBuffConditions;
 	getPassiveTargetData: (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect) => ITargetData;
 	createSourcesFromContext: (context: IEffectToBuffConversionContext) => string[];
 }
@@ -63,38 +63,42 @@ export function createSourcesFromContext (context: IEffectToBuffConversionContex
  * @description Given the conditions in an extra skill effect, normalize them into
  * a simpler object containing the IDs of each condition type.
  * @param effect Extra skill effect to process conditions from.
- * @returns Conditions based on type, otherwise `undefined` if no conditions are found.
+ * @returns Conditions based on type, otherwise an empty object if no conditions are found.
  */
-export function processExtraSkillConditions (effect: ExtraSkillPassiveEffect): IBuffConditions | undefined {
-	if (!effect || !Array.isArray(effect.conditions) || effect.conditions.length === 0) {
-		return;
-	}
-	const units = new Set<string>();
-	const items = new Set<string>();
-	const sphereType = new Set<SphereTypeId>();
-	const unknown = new Set<string>();
-	effect.conditions.forEach((condition, index) => {
+export function processExtraSkillConditions (effect: ExtraSkillPassiveEffect): IBuffConditions {
+	const conditions = (effect && Array.isArray(effect.conditions) && effect.conditions) || [];
+
+	const aggregate = {
+		units: new Set<string>(),
+		items: new Set<string>(),
+		sphereTypes: new Set<SphereTypeId>(),
+		unknowns: new Set<string>(),
+	};
+	conditions.forEach((condition, index) => {
 		if ('sphere category required (raw)' in condition) {
-			sphereType.add(condition['sphere category required (raw)']);
+			aggregate.sphereTypes.add(condition['sphere category required (raw)']);
 		} else if ('item required' in condition) {
 			condition['item required'].forEach((item) => {
-				items.add(item);
+				aggregate.items.add(item);
 			});
 		} else if ('unit required' in condition) {
 			condition['unit required'].forEach((unit) => {
-				units.add(`${unit.id}`);
+				aggregate.units.add(`${unit.id}`);
 			});
 		} else {
-			unknown.add(`type:${condition.type_id || index},condition:${condition.condition_id || index}`);
+			aggregate.unknowns.add(`type:${condition.type_id || index},condition:${condition.condition_id || index}`);
 		}
 	});
 
-	return {
-		units: Array.from(units),
-		items: Array.from(items),
-		sphereTypes: Array.from(sphereType),
-		unknown: Array.from(unknown),
-	};
+	// filter out properties that have no entries
+	const result: IBuffConditions = Object.entries(aggregate)
+		.filter((entry) => (entry[1] as Set<any>).size > 0)
+		.reduce((acc: IBuffConditions, entry) => {
+			acc[(entry[0] as 'units' | 'items' | 'sphereTypes' | 'unknowns')] = Array.from(entry[1] as Set<any>);
+			return acc;
+		}, {});
+
+	return result;
 }
 
 export interface ITargetData {
