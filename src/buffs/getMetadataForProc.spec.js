@@ -60,7 +60,7 @@ describe('getMetadataForProc method', () => {
 				} else {
 					expect(result)
 						.withContext('result is not undefined')
-						.toBe(undefined);
+						.toBeUndefined();
 				}
 			});
 		});

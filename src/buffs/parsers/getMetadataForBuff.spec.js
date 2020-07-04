@@ -1,8 +1,10 @@
-const testConstants = require('../_test-helpers/constants');
-const getMetadataForPassive = require('./getMetadataForPassive').default;
-const { PASSIVE_METADATA } = require('./effect-metadata');
+const getMetadataForBuff = require('./getMetadataForBuff').default;
+const { BUFF_METADATA } = require('./buff-metadata');
+const { BuffId } = require('./buff-types');
 
-describe('getMetadataForPassive method', () => {
+describe('getMetadataForBuff method', () => {
+	const knownBuffId = BuffId.UNKNOWN_PASSIVE_EFFECT_ID;
+
 	describe('for invalid metadata inputs', () => {
 		[
 			{
@@ -13,9 +15,9 @@ describe('getMetadataForPassive method', () => {
 				name: 'is not an object',
 				value: 'some value',
 			},
-		].forEach(testCase => {
-			it(`returns undefined if the metadata parameter ${testCase.name}`, () => {
-				expect(getMetadataForPassive(testConstants.KNOWN_ARBITRARY_PASSIVE_ID, testCase.value)).toBeUndefined();
+		].forEach((testCase) => {
+			it(`returns undefined if the metadata parameter ${testCase.desc}`, () => {
+				expect(getMetadataForBuff(knownBuffId, testCase.value)).toBeUndefined();
 			});
 		});
 	});
@@ -49,7 +51,7 @@ describe('getMetadataForPassive method', () => {
 		].forEach(testCase => {
 			it(`returns ${testCase.shouldHaveEntry ? 'an object' : 'undefined'} for ${testCase.name}`, () => {
 				const metadata = generateMetadata();
-				const result = getMetadataForPassive(testCase.input, metadata);
+				const result = getMetadataForBuff(testCase.input, metadata);
 				if (testCase.shouldHaveEntry) {
 					expect(typeof result)
 						.withContext('result is not an object')
@@ -66,13 +68,13 @@ describe('getMetadataForPassive method', () => {
 		});
 	});
 
-	it('defaults to PASSIVE_METADATA when metadata is not specified', () => {
-		const result = getMetadataForPassive(testConstants.KNOWN_ARBITRARY_PASSIVE_ID);
+	it('defaults to BUFF_METADATA when metadata is not specified', () => {
+		const result = getMetadataForBuff(knownBuffId);
 		expect(result)
 			.withContext('result does not exist')
 			.toBeTruthy();
 		expect(result)
 			.withContext('result does not match metadata')
-			.toBe(PASSIVE_METADATA[testConstants.KNOWN_ARBITRARY_PASSIVE_ID]);
+			.toBe(BUFF_METADATA[knownBuffId]);
 	});
 });
