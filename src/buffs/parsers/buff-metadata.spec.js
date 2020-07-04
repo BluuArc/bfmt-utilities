@@ -1,6 +1,7 @@
 const { BUFF_METADATA } = require('./buff-metadata');
 const { BuffId, IconId } = require('./buff-types');
 const { getStringValueForLog } = require('../../_test-helpers/utils');
+const { TargetArea } = require('../../datamine-types');
 
 
 describe('BUFF_METADATA entries', () => {
@@ -65,5 +66,10 @@ describe('BUFF_METADATA entries', () => {
 
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
+	});
+
+	describe('proc:1', () => {
+		testDefaultIconResult(BuffId['proc:1'], [IconId.ATK_AOE]);
+		testIconResultWithBuff(BuffId['proc:1'], [IconId.ATK_ST], { targetArea: TargetArea.Single });
 	});
 });
