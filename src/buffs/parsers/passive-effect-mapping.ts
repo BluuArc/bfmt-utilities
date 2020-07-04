@@ -43,11 +43,11 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
 		const stats: { [stat: string]: string | number } = {
-			hp: '0',
 			atk: '0',
 			def: '0',
 			rec: '0',
 			crit: '0',
+			hp: '0',
 		};
 		if (typedEffect.params) {
 			[stats.atk, stats.def, stats.rec, stats.crit, stats.hp] = typedEffect.params.split(',');

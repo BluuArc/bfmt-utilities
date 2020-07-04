@@ -1,5 +1,6 @@
 const { getPassiveEffectToBuffMapping } = require('./passive-effect-mapping');
 const { TargetType, TargetArea } = require('../../datamine-types');
+const { BuffId } = require('./buff-types');
 
 describe('getPassiveEffectToBuffMapping method', () => {
 	it('uses the same mapping object on multiple calls', () => {
@@ -31,6 +32,10 @@ describe('getPassiveEffectToBuffMapping method', () => {
 	});
 
 	describe('for default mapping', () => {
+		/**
+			 * @type {import('./passive-effect-mapping').PassiveEffectToBuffFunction}
+			 */
+		let mappingFunction;
 		const arbitraryConditionValue = { condtion: 'value' };
 		const arbitraryTargetData = { targetData: 'data' };
 		const arbitrarySourceValue = ['some source value'];
@@ -69,32 +74,37 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					.toBe('function');
 			});
 		};
+		const expectValidBuffIds = (buffIds = []) => {
+			buffIds.forEach((buffId) => {
+				it(`has a valid buffId entry in BuffId enum for ${buffId}`, () => {
+					expect(buffId in BuffId).toBeTrue();
+					expect(BuffId[buffId]).toEqual(buffId);
+				});
+			});
+		};
 
 		describe('passive 1', () => {
-			const STAT_PROPERTIES = ['hp', 'atk', 'def', 'rec', 'crit'];
 			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
 
-			/**
-			 * @type {import('./passive-effect-mapping').PassiveEffectToBuffFunction}
-			 */
-			let mappingFunction;
 			beforeEach(() => {
 				mappingFunction = getPassiveEffectToBuffMapping().get('1');
 			});
 
 			testFunctionExistence('1');
 
+			expectValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:1:${stat}`));
+
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5';
 				const splitParams = params.split(',');
 				const sources = createExpectedSourcesForArbitraryContext();
 				const targetData = createSelfSingleTargetData();
-				const expectedResult = STAT_PROPERTIES.map((stat) => {
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return {
 						id: `passive:1:${stat}`,
 						originalId: '1',
 						sources,
-						value: +(splitParams[STAT_PARAMS_ORDER.indexOf(stat)]),
+						value: +(splitParams[index]),
 						conditions: undefined,
 						...targetData,
 					};
@@ -108,14 +118,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 			it('falls back to stat-specific properties when the params property does not exist', () => {
 				const mockValues = [6, 7, 8, 9, 10];
-				const effect = STAT_PROPERTIES.reduce((acc, stat, index) => {
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat, index) => {
 					acc[`${stat}% buff`] = mockValues[index];
 					return acc;
 				}, {});
 
 				const sources = createExpectedSourcesForArbitraryContext();
 				const targetData = createSelfSingleTargetData();
-				const expectedResult = STAT_PROPERTIES.map((stat, index) => {
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return {
 						id: `passive:1:${stat}`,
 						originalId: '1',
@@ -131,7 +141,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			STAT_PROPERTIES.forEach((statCase) => {
+			STAT_PARAMS_ORDER.forEach((statCase) => {
 				it(`returns only value for ${statCase} if it is non-zero and other stats are zero`, () => {
 					const params = STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0').join(',');
 					const sources = createExpectedSourcesForArbitraryContext();
