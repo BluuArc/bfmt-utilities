@@ -142,7 +142,7 @@ export enum UnitStat {
 	def = 'def',
 	rec = 'rec',
 	crit = 'crit',
-};
+}
 
 /**
  * @description Dictionary representing a unit's stats and what buffs are affecting each stat.
@@ -172,14 +172,6 @@ export interface IEffectToBuffConversionContext {
 	reloadMapping?: boolean;
 
 	previousSources?: string[];
-}
-
-/**
- * @description Object whose main use is for injecting methods in testing.
- * @internal
- */
-export interface IBuffProcessingInjectionContext {
-	[key: string]: Function;
 }
 
 export enum IconId {

@@ -14,6 +14,16 @@ import {
 } from '../../datamine-types';
 
 /**
+ * @description Object whose main use is for injecting methods in testing.
+ * @internal
+ */
+export interface IBuffProcessingInjectionContext {
+	processExtraSkillConditions: (effect: ExtraSkillPassiveEffect) => IBuffConditions | undefined;
+	getPassiveTargetData: (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect) => ITargetInfo;
+	createSourcesFromContext: (context: IEffectToBuffConversionContext) => string[];
+}
+
+/**
  * @description Helper function for creating an entry to be used in the `sources`
  * property of {@link IBuff}.
  * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
@@ -80,7 +90,7 @@ export function processExtraSkillConditions (effect: ExtraSkillPassiveEffect): I
 export interface ITargetInfo {
 	targetArea: TargetArea,
 	targetType: TargetType,
-};
+}
 
 /**
  * @description Extract the target type and target area of a given passive effect.

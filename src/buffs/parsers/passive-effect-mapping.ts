@@ -1,6 +1,6 @@
 import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect } from '../../datamine-types';
-import { IEffectToBuffConversionContext, IBuff, IBuffProcessingInjectionContext, IBuffConditions } from './buff-types';
-import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, ITargetInfo } from './_helpers';
+import { IEffectToBuffConversionContext, IBuff } from './buff-types';
+import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IBuffProcessingInjectionContext } from './_helpers';
 
 /**
  * @description Default function for all buffs that cannot be processed.
@@ -37,9 +37,9 @@ export function getPassiveEffectToBuffMapping (reload?: boolean): Map<string, Pa
  */
 function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	map.set('1', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IBuffProcessingInjectionContext): IBuff[] => {
-		const conditionInfo: IBuffConditions | undefined = ((injectionContext && injectionContext.processExtraSkillConditions) || processExtraSkillConditions)(effect as ExtraSkillPassiveEffect);
-		const targetData: ITargetInfo = ((injectionContext && injectionContext.getPassiveTargetData) || getPassiveTargetData)(effect, context);
-		const sources: string[] = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
+		const conditionInfo = ((injectionContext && injectionContext.processExtraSkillConditions) || processExtraSkillConditions)(effect as ExtraSkillPassiveEffect);
+		const targetData = ((injectionContext && injectionContext.getPassiveTargetData) || getPassiveTargetData)(effect, context);
+		const sources = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
 
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
