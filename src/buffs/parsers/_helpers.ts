@@ -128,6 +128,7 @@ export function getPassiveTargetData (effect: PassiveEffect | ExtraSkillPassiveE
 /**
  * @description Extract the target type and target area of a given proc effect.
  * @param effect Proc effect to extract target data from.
+ * @returns The target data for the given effect and context.
  */
 export function getProcTargetData (effect: ProcEffect): ITargetData {
 	return {

@@ -78,6 +78,6 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				distribution,
 			},
 			...targetData,
-		}]
+		}];
 	});
 }

@@ -128,7 +128,7 @@ export interface IBuff {
 	 */
 	sources: string[];
 
-	value?: string | number | object;
+	value?: string | number | any;
 	conditions?: IBuffConditions;
 }
 
