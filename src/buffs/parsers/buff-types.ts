@@ -174,6 +174,14 @@ export interface IEffectToBuffConversionContext {
 	previousSources?: string[];
 }
 
+/**
+ * @description Object whose main use is for injecting methods in testing.
+ * @internal
+ */
+export interface IBuffProcessingInjectionContext {
+	[key: string]: Function;
+}
+
 export enum IconId {
 	UNKNOWN = 'UNKNOWN',
 	BUFF_HPUP = 'BUFF_HPUP',

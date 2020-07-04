@@ -1,14 +1,15 @@
 import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect } from '../../datamine-types';
-import { IEffectToBuffConversionContext, IBuff } from './buff-types';
-import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData } from './_helpers';
+import { IEffectToBuffConversionContext, IBuff, IBuffProcessingInjectionContext, IBuffConditions } from './buff-types';
+import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, ITargetInfo } from './_helpers';
 
 /**
  * @description Default function for all buffs that cannot be processed.
  * @param effect Effect to convert to `IBuff` format.
  * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
+ * @param injectionContext Object whose main use is for injecting methods in testing.
  * @returns Converted buff(s) from the given passive effect.
  */
-export type PassiveEffectToBuffFunction = (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext) => IBuff[];
+export type PassiveEffectToBuffFunction = (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IBuffProcessingInjectionContext) => IBuff[];
 
 let mapping: Map<string, PassiveEffectToBuffFunction>;
 
@@ -35,10 +36,10 @@ export function getPassiveEffectToBuffMapping (reload?: boolean): Map<string, Pa
  * @internal
  */
 function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
-	map.set('1', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext): IBuff[] => {
-		const conditionInfo = processExtraSkillConditions(effect as ExtraSkillPassiveEffect);
-		const targetData = getPassiveTargetData(effect, context);
-		const sources = createSourcesFromContext(context);
+	map.set('1', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IBuffProcessingInjectionContext): IBuff[] => {
+		const conditionInfo: IBuffConditions | undefined = ((injectionContext && injectionContext.processExtraSkillConditions) || processExtraSkillConditions)(effect as ExtraSkillPassiveEffect);
+		const targetData: ITargetInfo = ((injectionContext && injectionContext.getPassiveTargetData) || getPassiveTargetData)(effect, context);
+		const sources: string[] = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
 
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];

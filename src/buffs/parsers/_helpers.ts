@@ -77,6 +77,11 @@ export function processExtraSkillConditions (effect: ExtraSkillPassiveEffect): I
 	};
 }
 
+export interface ITargetInfo {
+	targetArea: TargetArea,
+	targetType: TargetType,
+};
+
 /**
  * @description Extract the target type and target area of a given passive effect.
  * @param effect Passive effect to extract target data from.
@@ -84,7 +89,7 @@ export function processExtraSkillConditions (effect: ExtraSkillPassiveEffect): I
  * @returns The target data for the given effect and context. There are only two possible values:
  * party (`targetType` is party and `targetArea` is aoe ) and single (`targetType` is self and `targetArea` is single)
  */
-export function getPassiveTargetData (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext) : { targetArea: TargetArea, targetType: TargetType} {
+export function getPassiveTargetData (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext) : ITargetInfo {
 	const isLeaderSkillEffect = context.source === BuffSource.LeaderSkill ||
 		((effect as SpEnhancementEffect).sp_type === SpPassiveType.EnhancePassive);
 
