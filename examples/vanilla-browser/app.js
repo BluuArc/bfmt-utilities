@@ -198,7 +198,7 @@
 
 		const effectList = section.querySelector('ul');
 		if (effectList) {
-			effectList.childNodes.forEach(entry => entry.remove());
+			effectList.innerHTML = '';
 			let entries = [];
 			if (effects.length > 0) {
 				const hasMultipleDamageFrames = Array.isArray(context.damageFrames);
@@ -234,7 +234,7 @@
 	function setEffectsForSpSection (section, spEntries, context) {
 		const skillList = section.querySelector('ol');
 		if (skillList) {
-			skillList.childNodes.forEach(entry => entry.remove());
+			skillList.innerHTML = '';
 			let entries = [];
 			if (spEntries.length > 0) {
 				entries = spEntries.map((spEntry, index) => {
