@@ -5,6 +5,7 @@ import {
 	IconId,
 	IBuff,
 } from './buff-types';
+import { TargetArea } from '../../datamine-types';
 
 export interface IBuffMetadata {
 	id: BuffId;
@@ -69,4 +70,10 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
 	},
+	'proc:1': {
+		id: BuffId["proc:1"],
+		name: 'Regular Damage',
+		stackType: BuffStackType.Attack,
+		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST : IconId.ATK_AOE],
+	}
 });

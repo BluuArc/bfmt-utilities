@@ -1,4 +1,4 @@
-import { TargetType, TargetArea, SphereTypeId } from '../../datamine-types';
+import { TargetType, TargetArea, SphereTypeId, IBurstDamageFramesEntry } from '../../datamine-types';
 
 /**
  * @description Provides info at a glance regarding a buff's source and how it stacks.
@@ -128,9 +128,8 @@ export interface IBuff {
 	 */
 	sources: string[];
 
-	value?: string | number;
+	value?: string | number | object;
 	conditions?: IBuffConditions;
-	// TODO: nested buffs
 }
 
 /**
@@ -172,6 +171,8 @@ export interface IEffectToBuffConversionContext {
 	reloadMapping?: boolean;
 
 	previousSources?: string[];
+
+	damageFrames?: IBurstDamageFramesEntry;
 }
 
 export enum IconId {
@@ -186,6 +187,9 @@ export enum IconId {
   BUFF_RECDOWN = 'BUFF_RECDOWN',
 	BUFF_CRTRATEUP = 'BUFF_CRTRATEUP',
 	BUFF_CRTRATEDOWN = 'BUFF_CRTRATEDOWN',
+
+	ATK_ST = 'ATK_ST',
+	ATK_AOE = 'ATK_AOE',
 }
 
 /**
@@ -201,4 +205,5 @@ export enum BuffId {
 	'passive:1:rec' = 'passive:1:rec',
 	'passive:1:crit' = 'passive:1:crit',
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
+	'proc:1' = 'proc:1',
 }

@@ -11,15 +11,25 @@ import {
 	SpPassiveType,
 	TargetType,
 	TargetArea,
+	ProcEffect,
 } from '../../datamine-types';
 
 /**
  * @description Object whose main use is for injecting methods in testing.
  * @internal
  */
-export interface IBuffProcessingInjectionContext {
+export interface IPassiveBuffProcessingInjectionContext {
 	processExtraSkillConditions: (effect: ExtraSkillPassiveEffect) => IBuffConditions | undefined;
-	getPassiveTargetData: (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect) => ITargetInfo;
+	getPassiveTargetData: (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect) => ITargetData;
+	createSourcesFromContext: (context: IEffectToBuffConversionContext) => string[];
+}
+
+/**
+ * @description Object whose main use is for injecting methods in testing.
+ * @internal
+ */
+export interface IProcBuffProcessingInjectionContext {
+	getProcTargetData: (effect: ProcEffect) => ITargetData;
 	createSourcesFromContext: (context: IEffectToBuffConversionContext) => string[];
 }
 
@@ -87,7 +97,7 @@ export function processExtraSkillConditions (effect: ExtraSkillPassiveEffect): I
 	};
 }
 
-export interface ITargetInfo {
+export interface ITargetData {
 	targetArea: TargetArea,
 	targetType: TargetType,
 }
@@ -99,7 +109,7 @@ export interface ITargetInfo {
  * @returns The target data for the given effect and context. There are only two possible values:
  * party (`targetType` is party and `targetArea` is aoe ) and single (`targetType` is self and `targetArea` is single)
  */
-export function getPassiveTargetData (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext) : ITargetInfo {
+export function getPassiveTargetData (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext) : ITargetData {
 	const isLeaderSkillEffect = context.source === BuffSource.LeaderSkill ||
 		((effect as SpEnhancementEffect).sp_type === SpPassiveType.EnhancePassive);
 
@@ -108,5 +118,16 @@ export function getPassiveTargetData (effect: PassiveEffect | ExtraSkillPassiveE
 	return {
 		targetType: isPartyEffect ? TargetType.Party : TargetType.Self,
 		targetArea: isPartyEffect ? TargetArea.Aoe : TargetArea.Single,
+	};
+}
+
+/**
+ * @description Extract the target type and target area of a given proc effect.
+ * @param effect Proc effect to extract target data from.
+ */
+export function getProcTargetData (effect: ProcEffect): ITargetData {
+	return {
+		targetArea: effect['target area'],
+		targetType: effect['target type'],
 	};
 }
