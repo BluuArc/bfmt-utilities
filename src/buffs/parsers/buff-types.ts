@@ -209,12 +209,14 @@ export enum IconId {
  */
 export enum BuffId {
 	UNKNOWN_PASSIVE_EFFECT_ID = 'UNKNOWN_PASSIVE_EFFECT_ID',
+	UNKNOWN_PASSIVE_BUFF_PARAMS = 'UNKNOWN_PASSIVE_BUFF_PARAMS',
 	'passive:1:hp' = 'passive:1:hp',
 	'passive:1:atk' = 'passive:1:atk',
 	'passive:1:def' = 'passive:1:def',
 	'passive:1:rec' = 'passive:1:rec',
 	'passive:1:crit' = 'passive:1:crit',
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
+	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 	'proc:1' = 'proc:1',
 	'proc:2' = 'proc:2',
 }

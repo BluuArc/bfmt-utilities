@@ -1,5 +1,5 @@
 import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect } from '../../datamine-types';
-import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue } from './buff-types';
+import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId } from './buff-types';
 import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext, createUnknownParamsValue } from './_helpers';
 
 /**
@@ -54,7 +54,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			let extraParams: string[];
 			[stats.atk, stats.def, stats.rec, stats.crit, stats.hp, ...extraParams] = typedEffect.params.split(',');
 			if (extraParams && extraParams.length > 0) {
-				unknownParams = createUnknownParamsValue(extraParams, 5);
+				unknownParams = ((injectionContext && injectionContext.createUnknownParamsValue) || createUnknownParamsValue)(extraParams, 5);
 			}
 		} else {
 			stats.hp = (typedEffect['hp% buff'] as string);
@@ -80,13 +80,13 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		if (unknownParams && Object.keys(unknownParams).length > 0) {
 			results.push({
-				id: 'passive:1:unknown',
+				id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
 				originalId: '1',
 				sources,
 				value: unknownParams,
 				conditions: { ...conditionInfo },
 				...targetData,
-			})
+			});
 		}
 
 		return results;

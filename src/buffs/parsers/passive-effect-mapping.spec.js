@@ -39,23 +39,33 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		const arbitraryConditionValue = { condtion: 'value' };
 		const arbitraryTargetData = { targetData: 'data' };
 		const arbitrarySourceValue = ['some source value'];
+		const arbitraryUnknownValue = { unknownValue: 'some unknown value' };
 
 		const createDefaultInjectionContext = () => {
+			/**
+			 * @type {import('./_helpers').IPassiveBuffProcessingInjectionContext}
+			 */
 			const injectionContext = {
-				processExtraSkillConditions: jasmine.createSpy('processExtraSkillConditions'),
-				getPassiveTargetData: jasmine.createSpy('getPassiveTargetData'),
-				createSourcesFromContext: jasmine.createSpy('createSourcesFromContext'),
+				processExtraSkillConditions: jasmine.createSpy('processExtraSkillConditionsspy'),
+				getPassiveTargetData: jasmine.createSpy('getPassiveTargetDataSpy'),
+				createSourcesFromContext: jasmine.createSpy('createSourcesFromContextSpy'),
+				createUnknownParamsValue: jasmine.createSpy('createUnkownParamsValueSpy'),
 			};
 			injectionContext.processExtraSkillConditions.and.returnValue(arbitraryConditionValue);
 			injectionContext.getPassiveTargetData.and.returnValue(arbitraryTargetData);
 			injectionContext.createSourcesFromContext.and.returnValue(arbitrarySourceValue);
+			injectionContext.createUnknownParamsValue.and.returnValue(arbitraryUnknownValue);
 			return injectionContext;
 		};
 
-		const expectDefaultInjectionContext = (injectionContext, effect, effectContext) => {
+		/**
+		 * @param {import('./_helpers').IPassiveBuffProcessingInjectionContext} injectionContext
+		 */
+		const expectDefaultInjectionContext = ({ injectionContext, effect, context, unknownParamsArgs = [] }) => {
 			expect(injectionContext.processExtraSkillConditions).toHaveBeenCalledWith(effect);
-			expect(injectionContext.getPassiveTargetData).toHaveBeenCalledWith(effect, effectContext);
-			expect(injectionContext.createSourcesFromContext).toHaveBeenCalledWith(effectContext);
+			expect(injectionContext.getPassiveTargetData).toHaveBeenCalledWith(effect, context);
+			expect(injectionContext.createSourcesFromContext).toHaveBeenCalledWith(context);
+			expect(injectionContext.createUnknownParamsValue).toHaveBeenCalledWith(...unknownParamsArgs);
 		};
 
 		const createArbitraryContext = () => ({
@@ -85,6 +95,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 		describe('passive 1', () => {
 			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
+			const expectedOriginalId = '1';
 
 			beforeEach(() => {
 				mappingFunction = getPassiveEffectToBuffMapping().get('1');
@@ -102,13 +113,46 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return {
 						id: `passive:1:${stat}`,
-						originalId: '1',
+						originalId: expectedOriginalId,
 						sources,
 						value: +(splitParams[index]),
 						conditions: {},
 						...targetData,
 					};
 				});
+
+				const effect = { params };
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,8';
+				const splitParams = params.split(',');
+				const sources = createExpectedSourcesForArbitraryContext();
+				const targetData = createSelfSingleTargetData();
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return {
+						id: `passive:1:${stat}`,
+						originalId: expectedOriginalId,
+						sources,
+						value: +(splitParams[index]),
+						conditions: {},
+						...targetData,
+					};
+				}).concat([{
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					originalId: expectedOriginalId,
+					sources,
+					value: {
+						param_5: '6',
+						param_6: '7',
+						param_7: '8',
+					},
+					conditions: {},
+					...targetData,
+				}]);
 
 				const effect = { params };
 				const context = createArbitraryContext();
@@ -128,7 +172,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return {
 						id: `passive:1:${stat}`,
-						originalId: '1',
+						originalId: expectedOriginalId,
 						sources,
 						value: mockValues[index],
 						conditions: {},
@@ -149,7 +193,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					const expectedResult = [
 						{
 							id: `passive:1:${statCase}`,
-							originalId: '1',
+							originalId: expectedOriginalId,
 							sources,
 							value: 123,
 							conditions: {},
@@ -164,23 +208,33 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 			});
 
-			it('uses processExtraSkillConditions, getPassiveTargetData, and createSourcesfromContext for buffs', () => {
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = {
-					'hp% buff': 456,
+					params: '0,0,0,0,456,789',
 				};
-				const expectedResult = [{
-					id: 'passive:1:hp',
-					originalId: '1',
-					sources: arbitrarySourceValue,
-					value: 456,
-					conditions: arbitraryConditionValue,
-					...arbitraryTargetData,
-				}];
+				const expectedResult = [
+					{
+						id: 'passive:1:hp',
+						originalId: expectedOriginalId,
+						sources: arbitrarySourceValue,
+						value: 456,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					},
+					{
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						originalId: expectedOriginalId,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					},
+				];
 				const context = createArbitraryContext();
 				const injectionContext = createDefaultInjectionContext();
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
-				expectDefaultInjectionContext(injectionContext, effect, context);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 5] });
 			});
 		});
 	});

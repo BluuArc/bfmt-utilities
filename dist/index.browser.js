@@ -1771,12 +1771,14 @@ var bfmtUtilities = function (exports) {
 
   (function (BuffId) {
     BuffId["UNKNOWN_PASSIVE_EFFECT_ID"] = "UNKNOWN_PASSIVE_EFFECT_ID";
+    BuffId["UNKNOWN_PASSIVE_BUFF_PARAMS"] = "UNKNOWN_PASSIVE_BUFF_PARAMS";
     BuffId["passive:1:hp"] = "passive:1:hp";
     BuffId["passive:1:atk"] = "passive:1:atk";
     BuffId["passive:1:def"] = "passive:1:def";
     BuffId["passive:1:rec"] = "passive:1:rec";
     BuffId["passive:1:crit"] = "passive:1:crit";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
+    BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1"] = "proc:1";
     BuffId["proc:2"] = "proc:2";
   })(BuffId || (BuffId = {}));
@@ -2108,7 +2110,7 @@ var bfmtUtilities = function (exports) {
 
       if (unknownParams && Object.keys(unknownParams).length > 0) {
         results.push(Object.assign({
-          id: 'passive:1:unknown',
+          id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
           originalId: '1',
           sources,
           value: unknownParams,
@@ -2165,6 +2167,12 @@ var bfmtUtilities = function (exports) {
       stackType: BuffStackType.Unknown,
       icons: () => [IconId.UNKNOWN]
     },
+    'UNKNOWN_PASSIVE_BUFF_PARAMS': {
+      id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+      name: 'Unknown Passive Buff Parameters',
+      stackType: BuffStackType.Unknown,
+      icons: () => [IconId.UNKNOWN]
+    },
     'passive:1:hp': {
       id: BuffId['passive:1:hp'],
       name: 'Passive HP Boost',
@@ -2203,6 +2211,12 @@ var bfmtUtilities = function (exports) {
     'UNKNOWN_PROC_EFFECT_ID': {
       id: BuffId.UNKNOWN_PROC_EFFECT_ID,
       name: 'Unknown Proc Effect',
+      stackType: BuffStackType.Unknown,
+      icons: () => [IconId.UNKNOWN]
+    },
+    'UNKNOWN_PROC_BUFF_PARAMS': {
+      id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+      name: 'Unknown Proc Buff Parameters',
       stackType: BuffStackType.Unknown,
       icons: () => [IconId.UNKNOWN]
     },

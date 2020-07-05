@@ -19,19 +19,26 @@ import {
  * @description Object whose main use is for injecting methods in testing.
  * @internal
  */
-export interface IPassiveBuffProcessingInjectionContext {
-	processExtraSkillConditions: (effect: ExtraSkillPassiveEffect) => IBuffConditions;
-	getPassiveTargetData: (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect) => ITargetData;
-	createSourcesFromContext: (context: IEffectToBuffConversionContext) => string[];
+interface IBaseBuffProcessingInjectionContext {
+	createSourcesFromContext?: (context: IEffectToBuffConversionContext) => string[];
+	createUnknownParamsValue?: (params: string[], startIndex?: number) => IGenericBuffValue;
 }
 
 /**
  * @description Object whose main use is for injecting methods in testing.
  * @internal
  */
-export interface IProcBuffProcessingInjectionContext {
-	getProcTargetData: (effect: ProcEffect) => ITargetData;
-	createSourcesFromContext: (context: IEffectToBuffConversionContext) => string[];
+export interface IPassiveBuffProcessingInjectionContext extends IBaseBuffProcessingInjectionContext {
+	processExtraSkillConditions?: (effect: ExtraSkillPassiveEffect) => IBuffConditions;
+	getPassiveTargetData?: (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect) => ITargetData;
+}
+
+/**
+ * @description Object whose main use is for injecting methods in testing.
+ * @internal
+ */
+export interface IProcBuffProcessingInjectionContext extends IBaseBuffProcessingInjectionContext {
+	getProcTargetData?: (effect: ProcEffect) => ITargetData;
 }
 
 /**

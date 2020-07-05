@@ -29,6 +29,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
 	},
+	'UNKNOWN_PASSIVE_BUFF_PARAMS': {
+		id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+		name: 'Unknown Passive Buff Parameters',
+		stackType: BuffStackType.Unknown,
+		icons: () => [IconId.UNKNOWN],
+	},
 	'passive:1:hp': {
 		id: BuffId['passive:1:hp'],
 		name: 'Passive HP Boost',
@@ -67,6 +73,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
+		stackType: BuffStackType.Unknown,
+		icons: () => [IconId.UNKNOWN],
+	},
+	'UNKNOWN_PROC_BUFF_PARAMS': {
+		id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+		name: 'Unknown Proc Buff Parameters',
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
 	},
