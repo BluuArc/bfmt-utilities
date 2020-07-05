@@ -291,4 +291,52 @@ describe('buff helper functions', () => {
 			expect(helpers.parseNumberOrDefault('7.89')).toBe(7.89);
 		});
 	});
+
+	describe('createUnknownParamsValue method', () => {
+		it('returns an empty object when no parameters are passed in', () => {
+			expect(helpers.createUnknownParamsValue()).toEqual({});
+		});
+
+		it('returns an empty object when en empty array is passed in', () => {
+			expect(helpers.createUnknownParamsValue([])).toEqual({});
+		});
+
+		it('returns an object with parameters keyed by index starting at 0 when no start index is passed in', () => {
+			const params = ['1', '2', '3'];
+			const expectedResult = {
+				param_0: '1',
+				param_1: '2',
+				param_2: '3',
+			};
+			expect(helpers.createUnknownParamsValue(params)).toEqual(expectedResult);
+		});
+
+		it('returns an object with parameters keyed by index starting with the given start index', () => {
+			const params = ['1', '2', '3'];
+			const expectedResult = {
+				param_3: '1',
+				param_4: '2',
+				param_5: '3',
+			};
+			expect(helpers.createUnknownParamsValue(params, 3)).toEqual(expectedResult);
+		});
+
+		it('skips values equal to "0" while keeping parameter index', () => {
+			const params = ['1', '0', '2', '0'];
+			const expectedResult = {
+				param_0: '1',
+				param_2: '2',
+			};
+			expect(helpers.createUnknownParamsValue(params)).toEqual(expectedResult);
+		});
+
+		it('skips empty strings while keeping parameter index', () => {
+			const params = ['', '1', '', '2'];
+			const expectedResult = {
+				param_1: '1',
+				param_3: '2',
+			};
+			expect(helpers.createUnknownParamsValue(params)).toEqual(expectedResult);
+		});
+	});
 });

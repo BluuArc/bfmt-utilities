@@ -39,6 +39,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PASSIVE_EFFECT_ID, [IconId.UNKNOWN]);
 	});
 
+	describe('UNKNOWN_PASSIVE_BUFF_PARAMS', () => {
+		testDefaultIconResult(BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS, [IconId.UNKNOWN]);
+	});
+
 	describe('passive:1:hp', () => {
 		testDefaultIconResult(BuffId['passive:1:hp'], [IconId.BUFF_HPUP]);
 		testIconResultWithBuff(BuffId['passive:1:hp'], [IconId.BUFF_HPDOWN], { value: -1 }, 'buff value is less than 0');
@@ -66,6 +70,10 @@ describe('BUFF_METADATA entries', () => {
 
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
+	});
+
+	describe('UNKNOWN_PROC_BUFF_PARAMS', () => {
+		testDefaultIconResult(BuffId.UNKNOWN_PROC_BUFF_PARAMS, [IconId.UNKNOWN]);
 	});
 
 	describe('proc:1', () => {

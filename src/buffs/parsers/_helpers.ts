@@ -164,9 +164,10 @@ export function parseNumberOrDefault (value: string | number, defaultValue = 0):
  */
 export function createUnknownParamsValue (params: string[] = [], startIndex = 0): IGenericBuffValue {
 	return params
-		.filter((value) => value && value !== '0')
 		.reduce((acc, value, index) => {
-			acc[`param_${startIndex + index}`] = value;
+			if (value && value !== '0') {
+				acc[`param_${startIndex + index}`] = value;
+			}
 			return acc;
 		}, {} as IGenericBuffValue);
 }
