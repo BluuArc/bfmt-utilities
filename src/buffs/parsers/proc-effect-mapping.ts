@@ -1,6 +1,6 @@
 import { ProcEffect } from '../../datamine-types';
 import { IBuff, IEffectToBuffConversionContext } from './buff-types';
-import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext } from './_helpers';
+import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault } from './_helpers';
 
 /**
  * @description Default function for all buffs that cannot be processed.
@@ -49,6 +49,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			'hc%': '0',
 			'dmg%': '0',
 		};
+		// TODO: extra params
 
 		if (effect.params) {
 			[params['atk%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%']] = effect.params.split(',');
@@ -77,6 +78,40 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				hits,
 				distribution,
 			},
+			...targetData,
+		}];
+	});
+
+	map.set('2', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const targetData = ((injectionContext && injectionContext.getProcTargetData) || getProcTargetData)(effect);
+		const sources = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
+
+		const params = {
+			healLow: '0' as string | number,
+			healHigh: '0' as string | number,
+			'healerRec%': 0,
+		};
+
+		if (effect.params) {
+			let recX, recY;
+			[params.healLow, params.healHigh, recX, recY] = effect.params.split(',');
+			params['healerRec%'] = ((100 + parseNumberOrDefault(recX)) * (1 + parseNumberOrDefault(recY) / 100)) / 10;
+		} else {
+			params.healLow = (effect['heal low'] as number);
+			params.healHigh = (effect['heal high'] as number);
+			params['healerRec%'] = (effect['rec added% (from healer)'] as number);
+		}
+
+		// ensure every property is a number
+		Object.keys(params).forEach((key) => {
+			params[key as 'healLow' | 'healHigh' | 'healerRec%'] = parseNumberOrDefault(params[key as 'healLow' | 'healHigh' | 'healerRec%']);
+		});
+
+		return [{
+			id: 'proc:2',
+			originalId: '2',
+			sources,
+			value: params,
 			...targetData,
 		}];
 	});

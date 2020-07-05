@@ -187,6 +187,7 @@ export enum IconId {
   BUFF_RECDOWN = 'BUFF_RECDOWN',
 	BUFF_CRTRATEUP = 'BUFF_CRTRATEUP',
 	BUFF_CRTRATEDOWN = 'BUFF_CRTRATEDOWN',
+	BUFF_HPREC = 'BUFF_HPREC',
 
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
@@ -206,4 +207,5 @@ export enum BuffId {
 	'passive:1:crit' = 'passive:1:crit',
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	'proc:1' = 'proc:1',
+	'proc:2' = 'proc:2',
 }

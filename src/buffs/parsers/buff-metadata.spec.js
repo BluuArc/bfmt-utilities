@@ -72,4 +72,8 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:1'], [IconId.ATK_AOE]);
 		testIconResultWithBuff(BuffId['proc:1'], [IconId.ATK_ST], { targetArea: TargetArea.Single });
 	});
+
+	describe('proc:2', () => {
+		testDefaultIconResult(BuffId['proc:2'], [IconId.BUFF_HPREC]);
+	});
 });

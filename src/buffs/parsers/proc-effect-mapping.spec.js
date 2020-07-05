@@ -293,5 +293,209 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 		});
+
+		describe('proc 2', () => {
+			const expectedBuffId = 'proc:2';
+			const expectedOriginalId = '2';
+
+			const arbitraryRecX = 120;
+			const arbitraryRecY = 25;
+			const expectedRecAddedForArbitraryValues = 27.5;
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get('2');
+			});
+
+			testFunctionExistence('2');
+			expectValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,${arbitraryRecX},${arbitraryRecY}`;
+				const effect = {
+					params,
+					...createArbitraryTargetDataForEffect(),
+				};
+				const context = createArbitraryContext();
+				const expectedResult = [{
+					id: expectedBuffId,
+					originalId: expectedOriginalId,
+					sources: createExpectedSourcesForArbitraryContext(),
+					value: {
+						healLow: 1,
+						healHigh: 2,
+						'healerRec%': expectedRecAddedForArbitraryValues,
+					},
+					...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
+				}];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = {
+					'heal low': 3,
+					'heal high': 4,
+					'rec added% (from healer)': 5,
+					...createArbitraryTargetDataForEffect(),
+				};
+				const context = createArbitraryContext();
+				const expectedResult = [{
+					id: expectedBuffId,
+					originalId: expectedOriginalId,
+					sources: createExpectedSourcesForArbitraryContext(),
+					value: {
+						healLow: 3,
+						healHigh: 4,
+						'healerRec%': 5,
+					},
+					...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
+				}];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('converts effect properties to numbers when params property does not exist', () => {
+				const effect = {
+					'heal low': '6',
+					'heal high': '7',
+					'rec added% (from healer)': '8',
+					...createArbitraryTargetDataForEffect(),
+				};
+				const context = createArbitraryContext();
+				const expectedResult = [{
+					id: expectedBuffId,
+					originalId: expectedOriginalId,
+					sources: createExpectedSourcesForArbitraryContext(),
+					value: {
+						healLow: 6,
+						healHigh: 7,
+						'healerRec%': 8,
+					},
+					...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
+				}];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				const effectPropToResultPropMapping = {
+					'heal low': 'healLow',
+					'heal high': 'healHigh',
+					'rec added% (from healer)': 'healerRec%',
+				};
+				Object.keys(effectPropToResultPropMapping).forEach((effectProp) => {
+					it(`defaults to 0 for missing ${effectProp} value`, () => {
+						const valuesInEffect = Object.keys(effectPropToResultPropMapping)
+							.filter((prop) => prop !== effectProp)
+							.reduce((acc, prop) => {
+								acc[prop] = 123;
+								return acc;
+							}, {});
+						const effect = {
+							...valuesInEffect,
+							...createArbitraryTargetDataForEffect(),
+						};
+						const context = createArbitraryContext();
+						const expectedValues = Object.entries(effectPropToResultPropMapping)
+							.reduce((acc, [localEffectProp, resultProp]) => {
+								acc[resultProp] = localEffectProp === effectProp ? 0 : 123;
+								return acc;
+							}, {});
+						const expectedResult = [{
+							id: expectedBuffId,
+							originalId: expectedOriginalId,
+							sources: createExpectedSourcesForArbitraryContext(),
+							value: expectedValues,
+							...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
+						}];
+
+						const result = mappingFunction(effect, context);
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('defaults all effect properties to 0 for non-number values', () => {
+					const valuesInEffect = Object.keys(effectPropToResultPropMapping)
+						.reduce((acc, prop) => {
+							acc[prop] = 'not a number';
+							return acc;
+						}, {});
+					const effect = {
+						...valuesInEffect,
+						...createArbitraryTargetDataForEffect(),
+					};
+					const context = createArbitraryContext();
+					const expectedResult = [{
+						id: expectedBuffId,
+						originalId: expectedOriginalId,
+						sources: createExpectedSourcesForArbitraryContext(),
+						value: {
+							healLow: 0,
+							healHigh: 0,
+							'healerRec%': 0,
+						},
+						...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
+					}];
+
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults values for effect params to 0 if they are non-number or missing', () => {
+					const effect = {
+						params: 'non-number',
+						...createArbitraryTargetDataForEffect(),
+					};
+					const context = createArbitraryContext();
+					const expectedResult = [{
+						id: expectedBuffId,
+						originalId: expectedOriginalId,
+						sources: createExpectedSourcesForArbitraryContext(),
+						value: {
+							healLow: 0,
+							healHigh: 0,
+							'healerRec%': 10,
+						},
+						...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
+					}];
+
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('uses getProcTargetData and createSourcesFromContext for buffs', () => {
+				const effect = {};
+				const context = createArbitraryContext();
+				const expectedResult = [{
+					id: expectedBuffId,
+					originalId: expectedOriginalId,
+					sources: arbitrarySourceValue,
+					value: { healHigh: 0, healLow: 0, 'healerRec%': 0 },
+					...arbitraryTargetData,
+				}];
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext(injectionContext, effect, context);
+			});
+
+			it('uses a buff ID present in the BuffId enum', () => {
+				const effect = createArbitraryTargetDataForEffect();
+				const context = createArbitraryContext();
+				const expectedResult = [{
+					id: expectedBuffId,
+					originalId: expectedOriginalId,
+					sources: createExpectedSourcesForArbitraryContext(),
+					value: { healHigh: 0, healLow: 0, 'healerRec%': 0 },
+					...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
+				}];
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+		});
 	});
 });

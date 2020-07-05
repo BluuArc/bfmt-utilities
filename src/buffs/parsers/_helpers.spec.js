@@ -247,4 +247,48 @@ describe('buff helper functions', () => {
 			});
 		});
 	});
+
+	describe('parseNumberOrDefault method', () => {
+		describe('for non-number parameters', () => {
+			[
+				{
+					desc: 'is null',
+					value: null,
+				},
+				{
+					desc: 'is undefined',
+					value: (void 0),
+				},
+				{
+					desc: 'is a non-number string',
+					value: 'a non-number string',
+				},
+				{
+					desc: 'is an object',
+					value: { some: 'value' },
+				},
+			].forEach((testCase) => {
+				it(`returns 0 by default when value ${testCase.desc}`, () => {
+					expect(helpers.parseNumberOrDefault(testCase.value)).toBe(0);
+				});
+
+				it(`returns given default value when value ${testCase.desc}`, () => {
+					const arbitraryDefaultValue = 'arbitrary default value';
+					expect(helpers.parseNumberOrDefault(testCase.value, arbitraryDefaultValue)).toEqual(arbitraryDefaultValue);
+				});
+			});
+		});
+
+		it('returns the value when it is a number', () => {
+			expect(helpers.parseNumberOrDefault(123)).toBe(123);
+		});
+
+		it('returns the value as a number when it is a numerical integer string', () => {
+			expect(helpers.parseNumberOrDefault('456')).toBe(456);
+		});
+
+		it('returns the value as a number when it is a numerical decimal string', () => {
+			expect(helpers.parseNumberOrDefault('7.89')).toBe(7.89);
+		});
+	});
 });
