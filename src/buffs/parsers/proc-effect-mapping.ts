@@ -1,6 +1,6 @@
 import { ProcEffect } from '../../datamine-types';
-import { IBuff, IEffectToBuffConversionContext } from './buff-types';
-import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault } from './_helpers';
+import { IBuff, IEffectToBuffConversionContext, IGenericBuffValue, BuffId } from './buff-types';
+import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault, createUnknownParamsValue } from './_helpers';
 
 /**
  * @description Default function for all buffs that cannot be processed.
@@ -49,10 +49,14 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			'hc%': '0',
 			'dmg%': '0',
 		};
-		// TODO: extra params
 
+		let unknownParams: IGenericBuffValue | undefined;
 		if (effect.params) {
-			[params['atk%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%']] = effect.params.split(',');
+			let extraParams: string[];
+			[params['atk%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], ...extraParams] = effect.params.split(',');
+			if (extraParams && extraParams.length > 0) {
+				unknownParams = ((injectionContext && injectionContext.createUnknownParamsValue) || createUnknownParamsValue)(extraParams, 6);
+			}
 		} else {
 			params['atk%'] = (effect['bb atk%'] as number);
 			params.flatAtk = (effect['bb flat atk'] as number);
@@ -69,7 +73,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				return acc;
 			}, {});
 
-		return [{
+		const results: IBuff[] = [{
 			id: 'proc:1',
 			originalId: '1',
 			sources,
@@ -80,6 +84,18 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			},
 			...targetData,
 		}];
+
+		if (unknownParams && Object.keys(unknownParams).length > 0) {
+			results.push({
+				id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+				originalId: '1',
+				sources,
+				value: unknownParams,
+				...targetData,
+			});
+		}
+
+		return results;
 	});
 
 	map.set('2', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
@@ -92,10 +108,16 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			'healerRec%': 0,
 		};
 
+		let unknownParams: IGenericBuffValue | undefined;
 		if (effect.params) {
-			let recX, recY;
-			[params.healLow, params.healHigh, recX, recY] = effect.params.split(',');
+			let recX: string, recY: string;
+			let extraParams: string[];
+			[params.healLow, params.healHigh, recX, recY, ...extraParams] = effect.params.split(',');
 			params['healerRec%'] = ((100 + parseNumberOrDefault(recX)) * (1 + parseNumberOrDefault(recY) / 100)) / 10;
+
+			if (extraParams && extraParams.length > 0) {
+				unknownParams = ((injectionContext && injectionContext.createUnknownParamsValue) || createUnknownParamsValue)(extraParams, 4);
+			}
 		} else {
 			params.healLow = (effect['heal low'] as number);
 			params.healHigh = (effect['heal high'] as number);
@@ -107,12 +129,24 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			params[key as 'healLow' | 'healHigh' | 'healerRec%'] = parseNumberOrDefault(params[key as 'healLow' | 'healHigh' | 'healerRec%']);
 		});
 
-		return [{
+		const results: IBuff[] = [{
 			id: 'proc:2',
 			originalId: '2',
 			sources,
 			value: params,
 			...targetData,
 		}];
+
+		if (unknownParams && Object.keys(unknownParams).length > 0) {
+			results.push({
+				id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+				originalId: '2',
+				sources,
+				value: unknownParams,
+				...targetData,
+			});
+		}
+
+		return results;
 	});
 }

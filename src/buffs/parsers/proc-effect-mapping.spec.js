@@ -37,24 +37,31 @@ describe('getProcEffectToBuffMapping method', () => {
 		let mappingFunction;
 		const arbitraryTargetData = { targetData: 'data' };
 		const arbitrarySourceValue = ['some source value'];
+		const arbitraryUnknownValue = { unknownValue: 'some unknown value' };
 		const arbitraryHitCount = 123;
 		const arbitraryDamageDistribution = 456;
 
 		const HIT_DMG_DISTRIBUTION_TOTAL_KEY = 'hit dmg% distribution (total)';
 
 		const createDefaultInjectionContext = () => {
+			/**
+			 * @type {import('./_helpers').IProcBuffProcessingInjectionContext}
+			 */
 			const injectionContext = {
-				getProcTargetData: jasmine.createSpy('getProcTargetData'),
-				createSourcesFromContext: jasmine.createSpy('createSourcesFromContext'),
+				getProcTargetData: jasmine.createSpy('getProcTargetDataSpy'),
+				createSourcesFromContext: jasmine.createSpy('createSourcesFromContextSpy'),
+				createUnknownParamsValue: jasmine.createSpy('createUnkownParamsValueSpy'),
 			};
 			injectionContext.getProcTargetData.and.returnValue(arbitraryTargetData);
 			injectionContext.createSourcesFromContext.and.returnValue(arbitrarySourceValue);
+			injectionContext.createUnknownParamsValue.and.returnValue(arbitraryUnknownValue);
 			return injectionContext;
 		};
 
-		const expectDefaultInjectionContext = (injectionContext, effect, effectContext) => {
+		const expectDefaultInjectionContext = ({ injectionContext, effect, context, unknownParamsArgs = [] }) => {
 			expect(injectionContext.getProcTargetData).toHaveBeenCalledWith(effect);
-			expect(injectionContext.createSourcesFromContext).toHaveBeenCalledWith(effectContext);
+			expect(injectionContext.createSourcesFromContext).toHaveBeenCalledWith(context);
+			expect(injectionContext.createUnknownParamsValue).toHaveBeenCalledWith(...unknownParamsArgs);
 		};
 
 		const createArbitraryContext = (params = {}) => ({
@@ -130,6 +137,52 @@ describe('getProcEffectToBuffMapping method', () => {
 					},
 					...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
 				}];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,8,9';
+				const splitParams = params.split(',');
+				const effect = {
+					params,
+					...createArbitraryTargetDataForEffect(),
+				};
+				const context = createArbitraryContext({
+					damageFrames: {
+						hits: arbitraryHitCount,
+						[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
+					},
+				});
+				const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+					acc[param] = +splitParams[index];
+					return acc;
+				}, {});
+				const expectedResult = [
+					{
+						id: expectedBuffId,
+						originalId: expectedOriginalId,
+						sources: createExpectedSourcesForArbitraryContext(),
+						value: {
+							...expectedValuesForParams,
+							hits: arbitraryHitCount,
+							distribution: arbitraryDamageDistribution,
+						},
+						...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
+					},
+					{
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						originalId: expectedOriginalId,
+						sources: createExpectedSourcesForArbitraryContext(),
+						value: {
+							param_6: '7',
+							param_7: '8',
+							param_8: '9',
+						},
+						...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
+					},
+				];
 
 				const result = mappingFunction(effect, context);
 				expect(result).toEqual(expectedResult);
@@ -260,37 +313,31 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 			});
 
-			it('uses getProcTargetData and createSourcesFromContext for buffs', () => {
-				const effect = {};
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,0,0,0,123',
+				};
 				const context = createArbitraryContext();
-				const expectedResult = [{
-					id: expectedBuffId,
-					originalId: expectedOriginalId,
-					sources: arbitrarySourceValue,
-					value: { hits: 0, distribution: 0 },
-					...arbitraryTargetData,
-				}];
+				const expectedResult = [
+					{
+						id: expectedBuffId,
+						originalId: expectedOriginalId,
+						sources: arbitrarySourceValue,
+						value: { hits: 0, distribution: 0 },
+						...arbitraryTargetData,
+					},
+					{
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						originalId: expectedOriginalId,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					},
+				];
 				const injectionContext = createDefaultInjectionContext();
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
-				expectDefaultInjectionContext(injectionContext, effect, context);
-			});
-
-			it('uses a buff ID present in the BuffId enum', () => {
-				const effect = createArbitraryTargetDataForEffect();
-				const context = createArbitraryContext();
-				const expectedResult = [{
-					id: expectedBuffId,
-					originalId: expectedOriginalId,
-					sources: createExpectedSourcesForArbitraryContext(),
-					value: {
-						hits: 0,
-						distribution: 0,
-					},
-					...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
-				}];
-				const result = mappingFunction(effect, context);
-				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 6] });
 			});
 		});
 
@@ -327,6 +374,42 @@ describe('getProcEffectToBuffMapping method', () => {
 					},
 					...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
 				}];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `1,2,${arbitraryRecX},${arbitraryRecY},5,6,7`;
+				const effect = {
+					params,
+					...createArbitraryTargetDataForEffect(),
+				};
+				const context = createArbitraryContext();
+				const expectedResult = [
+					{
+						id: expectedBuffId,
+						originalId: expectedOriginalId,
+						sources: createExpectedSourcesForArbitraryContext(),
+						value: {
+							healLow: 1,
+							healHigh: 2,
+							'healerRec%': expectedRecAddedForArbitraryValues,
+						},
+						...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
+					},
+					{
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						originalId: expectedOriginalId,
+						sources: createExpectedSourcesForArbitraryContext(),
+						value: {
+							param_4: '5',
+							param_5: '6',
+							param_6: '7',
+						},
+						...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
+					},
+				];
 
 				const result = mappingFunction(effect, context);
 				expect(result).toEqual(expectedResult);
@@ -467,34 +550,31 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 			});
 
-			it('uses getProcTargetData and createSourcesFromContext for buffs', () => {
-				const effect = {};
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: `0,0,${arbitraryRecX},${arbitraryRecY},123`,
+				};
 				const context = createArbitraryContext();
-				const expectedResult = [{
-					id: expectedBuffId,
-					originalId: expectedOriginalId,
-					sources: arbitrarySourceValue,
-					value: { healHigh: 0, healLow: 0, 'healerRec%': 0 },
-					...arbitraryTargetData,
-				}];
+				const expectedResult = [
+					{
+						id: expectedBuffId,
+						originalId: expectedOriginalId,
+						sources: arbitrarySourceValue,
+						value: { healHigh: 0, healLow: 0, 'healerRec%': expectedRecAddedForArbitraryValues },
+						...arbitraryTargetData,
+					},
+					{
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						originalId: expectedOriginalId,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					},
+				];
 				const injectionContext = createDefaultInjectionContext();
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
-				expectDefaultInjectionContext(injectionContext, effect, context);
-			});
-
-			it('uses a buff ID present in the BuffId enum', () => {
-				const effect = createArbitraryTargetDataForEffect();
-				const context = createArbitraryContext();
-				const expectedResult = [{
-					id: expectedBuffId,
-					originalId: expectedOriginalId,
-					sources: createExpectedSourcesForArbitraryContext(),
-					value: { healHigh: 0, healLow: 0, 'healerRec%': 0 },
-					...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
-				}];
-				const result = mappingFunction(effect, context);
-				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 4] });
 			});
 		});
 	});

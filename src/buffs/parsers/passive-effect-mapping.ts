@@ -49,6 +49,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			crit: '0' as string | number,
 			hp: '0' as string | number,
 		};
+
 		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
 			let extraParams: string[];
