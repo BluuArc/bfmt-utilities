@@ -2,6 +2,7 @@ import {
 	IEffectToBuffConversionContext,
 	IBuffConditions,
 	BuffSource,
+	IGenericBuffValue,
 } from './buff-types';
 import {
 	ExtraSkillPassiveEffect,
@@ -145,4 +146,20 @@ export function getProcTargetData (effect: ProcEffect): ITargetData {
  */
 export function parseNumberOrDefault (value: string | number, defaultValue = 0): number {
 	return (value !== null && !isNaN(value as number)) ? +value : defaultValue;
+}
+
+/**
+ * @description Create an object denoting values that cannot be processed yet. To be used
+ * in the `value` property of `IBuff` as needed.
+ * @param params Array of values that cannot be processed yet.
+ * @param startIndex The first index before which we know how to process an effect's values.
+ * @returns Dictionary object where every parameter is keyed by its index in the format of `param_${startIndex + indexInParams}`
+ */
+export function createUnknownParamsValue (params: string[] = [], startIndex = 0): IGenericBuffValue {
+	return params
+		.filter((value) => value && value !== '0')
+		.reduce((acc, value, index) => {
+			acc[`param_${startIndex + index}`] = value;
+			return acc;
+		}, {} as IGenericBuffValue);
 }

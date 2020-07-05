@@ -1,6 +1,6 @@
 import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect } from '../../datamine-types';
-import { IEffectToBuffConversionContext, IBuff } from './buff-types';
-import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext } from './_helpers';
+import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue } from './buff-types';
+import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext, createUnknownParamsValue } from './_helpers';
 
 /**
  * @description Default function for all buffs that cannot be processed.
@@ -42,36 +42,52 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
-		const stats: { [stat: string]: string | number } = {
-			atk: '0',
-			def: '0',
-			rec: '0',
-			crit: '0',
-			hp: '0',
+		let stats = {
+			atk: '0' as string | number,
+			def: '0' as string | number,
+			rec: '0' as string | number,
+			crit: '0' as string | number,
+			hp: '0' as string | number,
 		};
+		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
-			[stats.atk, stats.def, stats.rec, stats.crit, stats.hp] = typedEffect.params.split(',');
+			let extraParams: string[];
+			[stats.atk, stats.def, stats.rec, stats.crit, stats.hp, ...extraParams] = typedEffect.params.split(',');
+			if (extraParams && extraParams.length > 0) {
+				unknownParams = createUnknownParamsValue(extraParams, 5);
+			}
 		} else {
-			stats.hp = (typedEffect['hp% buff'] as number);
-			stats.atk = (typedEffect['atk% buff'] as number);
-			stats.def = (typedEffect['def% buff'] as number);
-			stats.rec = (typedEffect['rec% buff'] as number);
-			stats.crit = (typedEffect['crit% buff'] as number);
+			stats.hp = (typedEffect['hp% buff'] as string);
+			stats.atk = (typedEffect['atk% buff'] as string);
+			stats.def = (typedEffect['def% buff'] as string);
+			stats.rec = (typedEffect['rec% buff'] as string);
+			stats.crit = (typedEffect['crit% buff'] as string);
 		}
 
 		Object.keys(stats).forEach((stat) => {
-			const value = stats[stat];
+			const value = stats[stat as 'atk' | 'def' | 'rec' | 'crit' | 'hp'];
 			if (value && +value) {
 				results.push({
 					id: `passive:1:${stat}`,
 					originalId: '1',
 					sources,
 					value: +value,
-					conditions: conditionInfo,
+					conditions: { ...conditionInfo },
 					...targetData,
 				});
 			}
 		});
+
+		if (unknownParams && Object.keys(unknownParams).length > 0) {
+			results.push({
+				id: 'passive:1:unknown',
+				originalId: '1',
+				sources,
+				value: unknownParams,
+				conditions: { ...conditionInfo },
+				...targetData,
+			})
+		}
 
 		return results;
 	});

@@ -1756,6 +1756,7 @@ var bfmtUtilities = function (exports) {
     IconId["BUFF_RECDOWN"] = "BUFF_RECDOWN";
     IconId["BUFF_CRTRATEUP"] = "BUFF_CRTRATEUP";
     IconId["BUFF_CRTRATEDOWN"] = "BUFF_CRTRATEDOWN";
+    IconId["BUFF_HPREC"] = "BUFF_HPREC";
     IconId["ATK_ST"] = "ATK_ST";
     IconId["ATK_AOE"] = "ATK_AOE";
   })(IconId || (IconId = {}));
@@ -1777,6 +1778,7 @@ var bfmtUtilities = function (exports) {
     BuffId["passive:1:crit"] = "passive:1:crit";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["proc:1"] = "proc:1";
+    BuffId["proc:2"] = "proc:2";
   })(BuffId || (BuffId = {}));
   /**
    * @description Helper function for creating an entry to be used in the `sources`
@@ -1807,40 +1809,39 @@ var bfmtUtilities = function (exports) {
    * @description Given the conditions in an extra skill effect, normalize them into
    * a simpler object containing the IDs of each condition type.
    * @param effect Extra skill effect to process conditions from.
-   * @returns Conditions based on type, otherwise `undefined` if no conditions are found.
+   * @returns Conditions based on type, otherwise an empty object if no conditions are found.
    */
 
 
   function processExtraSkillConditions(effect) {
-    if (!effect || !Array.isArray(effect.conditions) || effect.conditions.length === 0) {
-      return;
-    }
-
-    const units = new Set();
-    const items = new Set();
-    const sphereType = new Set();
-    const unknown = new Set();
-    effect.conditions.forEach((condition, index) => {
+    const conditions = effect && Array.isArray(effect.conditions) && effect.conditions || [];
+    const aggregate = {
+      units: new Set(),
+      items: new Set(),
+      sphereTypes: new Set(),
+      unknowns: new Set()
+    };
+    conditions.forEach((condition, index) => {
       if ('sphere category required (raw)' in condition) {
-        sphereType.add(condition['sphere category required (raw)']);
+        aggregate.sphereTypes.add(condition['sphere category required (raw)']);
       } else if ('item required' in condition) {
         condition['item required'].forEach(item => {
-          items.add(item);
+          aggregate.items.add(item);
         });
       } else if ('unit required' in condition) {
         condition['unit required'].forEach(unit => {
-          units.add(`${unit.id}`);
+          aggregate.units.add(`${unit.id}`);
         });
       } else {
-        unknown.add(`type:${condition.type_id || index},condition:${condition.condition_id || index}`);
+        aggregate.unknowns.add(`type:${condition.type_id || index},condition:${condition.condition_id || index}`);
       }
-    });
-    return {
-      units: Array.from(units),
-      items: Array.from(items),
-      sphereTypes: Array.from(sphereType),
-      unknown: Array.from(unknown)
-    };
+    }); // filter out properties that have no entries
+
+    const result = Object.entries(aggregate).filter(entry => entry[1].size > 0).reduce((acc, entry) => {
+      acc[entry[0]] = Array.from(entry[1]);
+      return acc;
+    }, {});
+    return result;
   }
   /**
    * @description Extract the target type and target area of a given passive effect.
@@ -1862,6 +1863,7 @@ var bfmtUtilities = function (exports) {
   /**
    * @description Extract the target type and target area of a given proc effect.
    * @param effect Proc effect to extract target data from.
+   * @returns The target data for the given effect and context.
    */
 
 
@@ -1870,6 +1872,32 @@ var bfmtUtilities = function (exports) {
       targetArea: effect['target area'],
       targetType: effect['target type']
     };
+  }
+  /**
+   * @description Try to parse the given value into a number or return a value if it is not a number.
+   * @param value Value to parse into a number.
+   * @param defaultValue Value to return if `value` is not a number.
+   * @returns Parsed value as a number or the `defaultValue` if the value is not a number.
+   */
+
+
+  function parseNumberOrDefault(value, defaultValue = 0) {
+    return value !== null && !isNaN(value) ? +value : defaultValue;
+  }
+  /**
+   * @description Create an object denoting values that cannot be processed yet. To be used
+   * in the `value` property of `IBuff` as needed.
+   * @param params Array of values that cannot be processed yet.
+   * @param startIndex The first index before which we know how to process an effect's values.
+   * @returns Dictionary object where every parameter is keyed by its index in the format of `param_${startIndex + indexInParams}`
+   */
+
+
+  function createUnknownParamsValue(params = [], startIndex = 0) {
+    return params.filter(value => value && value !== '0').reduce((acc, value, index) => {
+      acc[`param_${startIndex + index}`] = value;
+      return acc;
+    }, {});
   }
 
   let mapping;
@@ -1898,8 +1926,8 @@ var bfmtUtilities = function (exports) {
 
   function setMapping(map) {
     map.set('1', (effect, context, injectionContext) => {
-      const sources = (injectionContext && injectionContext.createSourcesFromContext || createSourcesFromContext)(context);
       const targetData = (injectionContext && injectionContext.getProcTargetData || getProcTargetData)(effect);
+      const sources = (injectionContext && injectionContext.createSourcesFromContext || createSourcesFromContext)(context);
       const hits = +(context.damageFrames && context.damageFrames.hits || 0);
       const distribution = +(context.damageFrames && context.damageFrames['hit dmg% distribution (total)'] || 0);
       const params = {
@@ -1909,7 +1937,7 @@ var bfmtUtilities = function (exports) {
         'bc%': '0',
         'hc%': '0',
         'dmg%': '0'
-      };
+      }; // TODO: extra params
 
       if (effect.params) {
         [params['atk%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%']] = effect.params.split(',');
@@ -1934,6 +1962,36 @@ var bfmtUtilities = function (exports) {
           hits,
           distribution
         })
+      }, targetData)];
+    });
+    map.set('2', (effect, context, injectionContext) => {
+      const targetData = (injectionContext && injectionContext.getProcTargetData || getProcTargetData)(effect);
+      const sources = (injectionContext && injectionContext.createSourcesFromContext || createSourcesFromContext)(context);
+      const params = {
+        healLow: '0',
+        healHigh: '0',
+        'healerRec%': 0
+      };
+
+      if (effect.params) {
+        let recX, recY;
+        [params.healLow, params.healHigh, recX, recY] = effect.params.split(',');
+        params['healerRec%'] = (100 + parseNumberOrDefault(recX)) * (1 + parseNumberOrDefault(recY) / 100) / 10;
+      } else {
+        params.healLow = effect['heal low'];
+        params.healHigh = effect['heal high'];
+        params['healerRec%'] = effect['rec added% (from healer)'];
+      } // ensure every property is a number
+
+
+      Object.keys(params).forEach(key => {
+        params[key] = parseNumberOrDefault(params[key]);
+      });
+      return [Object.assign({
+        id: 'proc:2',
+        originalId: '2',
+        sources,
+        value: params
       }, targetData)];
     });
   }
@@ -2010,16 +2068,22 @@ var bfmtUtilities = function (exports) {
       const sources = (injectionContext && injectionContext.createSourcesFromContext || createSourcesFromContext)(context);
       const typedEffect = effect;
       const results = [];
-      const stats = {
-        hp: '0',
+      let stats = {
         atk: '0',
         def: '0',
         rec: '0',
-        crit: '0'
+        crit: '0',
+        hp: '0'
       };
+      let unknownParams;
 
       if (typedEffect.params) {
-        [stats.atk, stats.def, stats.rec, stats.crit, stats.hp] = typedEffect.params.split(',');
+        let extraParams;
+        [stats.atk, stats.def, stats.rec, stats.crit, stats.hp, ...extraParams] = typedEffect.params.split(',');
+
+        if (extraParams && extraParams.length > 0) {
+          unknownParams = createUnknownParamsValue(extraParams, 5);
+        }
       } else {
         stats.hp = typedEffect['hp% buff'];
         stats.atk = typedEffect['atk% buff'];
@@ -2037,10 +2101,21 @@ var bfmtUtilities = function (exports) {
             originalId: '1',
             sources,
             value: +value,
-            conditions: conditionInfo
+            conditions: Object.assign({}, conditionInfo)
           }, targetData));
         }
       });
+
+      if (unknownParams && Object.keys(unknownParams).length > 0) {
+        results.push(Object.assign({
+          id: 'passive:1:unknown',
+          originalId: '1',
+          sources,
+          value: unknownParams,
+          conditions: Object.assign({}, conditionInfo)
+        }, targetData));
+      }
+
       return results;
     });
   }
@@ -2132,10 +2207,16 @@ var bfmtUtilities = function (exports) {
       icons: () => [IconId.UNKNOWN]
     },
     'proc:1': {
-      id: BuffId["proc:1"],
+      id: BuffId['proc:1'],
       name: 'Regular Damage',
       stackType: BuffStackType.Attack,
       icons: buff => [buff && buff.targetArea === TargetArea.Single ? IconId.ATK_ST : IconId.ATK_AOE]
+    },
+    'proc:2': {
+      id: BuffId['proc:2'],
+      name: 'Burst Heal',
+      stackType: BuffStackType.Burst,
+      icons: () => [IconId.BUFF_HPREC]
     }
   });
   /**

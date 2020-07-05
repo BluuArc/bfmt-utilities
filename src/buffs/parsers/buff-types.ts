@@ -103,6 +103,15 @@ export interface IBuffConditions {
 	unknowns?: string[];
 }
 
+/**
+ * @description Interface for buffs that have unknown parameters (but can still be
+ * partially processed). The format of the name for these unknown parameter properties
+ * is `param_<index>`, where `index` is the index of that property in the `effect.params` string.
+ */
+export interface IGenericBuffValue {
+	[param: string]: string;
+}
+
 export interface IBuff {
 	id: BuffId | string;
 
@@ -128,7 +137,7 @@ export interface IBuff {
 	 */
 	sources: string[];
 
-	value?: string | number | any;
+	value?: string | number | IGenericBuffValue | any;
 	conditions?: IBuffConditions;
 }
 
