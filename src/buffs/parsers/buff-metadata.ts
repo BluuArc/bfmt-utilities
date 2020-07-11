@@ -82,11 +82,14 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 					}
 
 					if (buff.conditions && buff.conditions.targetElements) {
-						element = buff.conditions.targetElements[0] || '';
+						element = buff.conditions.targetElements[0];
 					}
 				}
+				if (typeof element !== 'string') {
+					element = '';
+				}
 				let iconKey = `BUFF_${element.toUpperCase()}${stat}${polarity}`;
-				if (!(iconKey in IconId)) {
+				if (!element || !(iconKey in IconId)) {
 					iconKey = `BUFF_ELEMENT${stat}${polarity}`;
 				}
 				return [IconId[iconKey as IconId]];
@@ -129,8 +132,8 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('CRTRATE'),
 			},
-		}
-	}),
+		};
+	})(),
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
