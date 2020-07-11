@@ -1,4 +1,4 @@
-import { TargetType, TargetArea, SphereTypeId, IBurstDamageFramesEntry } from '../../datamine-types';
+import { TargetType, TargetArea, SphereTypeId, IBurstDamageFramesEntry, UnitElement } from '../../datamine-types';
 
 /**
  * @description Provides info at a glance regarding a buff's source and how it stacks.
@@ -80,6 +80,14 @@ export enum BuffSource {
 	Quest = 'quest',
 }
 
+/**
+ * @description Extra element values that can be used in addition to {@link UnitElement}.
+ */
+export enum BuffConditionElement {
+	Unknown = 'unknown',
+	OmniParadigm = 'omniParadigm',
+}
+
 export interface IBuffConditions {
 	/**
 	 * @description Array of unit IDs
@@ -101,6 +109,11 @@ export interface IBuffConditions {
 	 * of `type:<typeId>,condition:<conditionId>`.
 	 */
 	unknowns?: string[];
+
+	/**
+	 * @description Array of elements required for this buff to activate.
+	 */
+	targetElements?: (UnitElement | BuffConditionElement)[];
 }
 
 /**
@@ -286,46 +299,11 @@ export enum BuffId {
 	'passive:1:def' = 'passive:1:def',
 	'passive:1:rec' = 'passive:1:rec',
 	'passive:1:crit' = 'passive:1:crit',
-	'passive:2:fire,hp' = 'passive:2:fire,hp',
-	'passive:2:fire,atk' = 'passive:2:fire,atk',
-	'passive:2:fire,def' = 'passive:2:fire,def',
-	'passive:2:fire,rec' = 'passive:2:fire,rec',
-	'passive:2:fire,crit' = 'passive:2:fire,crit',
-	'passive:2:water,hp' = 'passive:2:water,hp',
-	'passive:2:water,atk' = 'passive:2:water,atk',
-	'passive:2:water,def' = 'passive:2:water,def',
-	'passive:2:water,rec' = 'passive:2:water,rec',
-	'passive:2:water,crit' = 'passive:2:water,crit',
-	'passive:2:earth,hp' = 'passive:2:earth,hp',
-	'passive:2:earth,atk' = 'passive:2:earth,atk',
-	'passive:2:earth,def' = 'passive:2:earth,def',
-	'passive:2:earth,rec' = 'passive:2:earth,rec',
-	'passive:2:earth,crit' = 'passive:2:earth,crit',
-	'passive:2:thunder,hp' = 'passive:2:thunder,hp',
-	'passive:2:thunder,atk' = 'passive:2:thunder,atk',
-	'passive:2:thunder,def' = 'passive:2:thunder,def',
-	'passive:2:thunder,rec' = 'passive:2:thunder,rec',
-	'passive:2:thunder,crit' = 'passive:2:thunder,crit',
-	'passive:2:light,hp' = 'passive:2:light,hp',
-	'passive:2:light,atk' = 'passive:2:light,atk',
-	'passive:2:light,def' = 'passive:2:light,def',
-	'passive:2:light,rec' = 'passive:2:light,rec',
-	'passive:2:light,crit' = 'passive:2:light,crit',
-	'passive:2:dark,hp' = 'passive:2:dark,hp',
-	'passive:2:dark,atk' = 'passive:2:dark,atk',
-	'passive:2:dark,def' = 'passive:2:dark,def',
-	'passive:2:dark,rec' = 'passive:2:dark,rec',
-	'passive:2:dark,crit' = 'passive:2:dark,crit',
-	'passive:2:element,hp' = 'passive:2:element,hp',
-	'passive:2:element,atk' = 'passive:2:element,atk',
-	'passive:2:element,def' = 'passive:2:element,def',
-	'passive:2:element,rec' = 'passive:2:element,rec',
-	'passive:2:element,crit' = 'passive:2:element,crit',
-	'passive:2:unknown,hp' = 'passive:2:unknown,hp',
-	'passive:2:unknown,atk' = 'passive:2:unknown,atk',
-	'passive:2:unknown,def' = 'passive:2:unknown,def',
-	'passive:2:unknown,rec' = 'passive:2:unknown,rec',
-	'passive:2:unknown,crit' = 'passive:2:unknown,crit',
+	'passive:2:hp' = 'passive:2:hp',
+	'passive:2:atk' = 'passive:2:atk',
+	'passive:2:def' = 'passive:2:def',
+	'passive:2:rec' = 'passive:2:rec',
+	'passive:2:crit' = 'passive:2:crit',
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 	'proc:1' = 'proc:1',

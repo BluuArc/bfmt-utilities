@@ -257,10 +257,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 			testFunctionExistence('2');
 
-			expectValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => {
-				const elementKey = element !== 'omniParadigm' ? element : 'element';
-				return STAT_PARAMS_ORDER.map((stat) => `passive:2:${elementKey},${stat}`);
-			}).reduce((acc, val) => acc.concat(val), []));
+			expectValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:2:${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6,7';
@@ -270,11 +267,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const expectedResult = [UnitElement.Fire, UnitElement.Water].map((element) => {
 					return STAT_PARAMS_ORDER.map((stat, index) => {
 						return {
-							id: `passive:2:${element},${stat}`,
+							id: `passive:2:${stat}`,
 							originalId: expectedOriginalId,
 							sources,
 							value: +(splitParams[index + 2]),
-							conditions: {},
+							conditions: {
+								targetElements: [element],
+							},
 							...targetData,
 						};
 					});
@@ -287,18 +286,20 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			it('returns a buff entry for extra parameters', () => {
-				const params = '3,4,3,4,5,6,7,8,9,10';
+				const params = '5,6,3,4,5,6,7,8,9,10';
 				const splitParams = params.split(',');
 				const sources = createExpectedSourcesForArbitraryContext();
 				const targetData = createSelfSingleTargetData();
-				const expectedResult = [UnitElement.Earth, UnitElement.Thunder].map((element) => {
+				const expectedResult = [UnitElement.Light, UnitElement.Dark].map((element) => {
 					return STAT_PARAMS_ORDER.map((stat, index) => {
 						return {
-							id: `passive:2:${element},${stat}`,
+							id: `passive:2:${stat}`,
 							originalId: expectedOriginalId,
 							sources,
 							value: +(splitParams[index + 2]),
-							conditions: {},
+							conditions: {
+								targetElements: [element],
+							},
 							...targetData,
 						};
 					});
@@ -335,11 +336,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const expectedResult = ['element1', 'element2', 'element3'].map((element) => {
 					return STAT_PARAMS_ORDER.map((stat, index) => {
 						return {
-							id: `passive:2:${element},${stat}`,
+							id: `passive:2:${stat}`,
 							originalId: expectedOriginalId,
 							sources,
 							value: mockValues[index],
-							conditions: {},
+							conditions: {
+								targetElements: [element],
+							},
 							...targetData,
 						};
 					});
@@ -358,16 +361,15 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						const sources = createExpectedSourcesForArbitraryContext();
 						const targetData = createSelfSingleTargetData();
 
-						const expectedElementValue = elementValue !== 'omniParadigm'
-							? elementValue
-							: 'element';
 						const expectedResult = [
 							{
-								id: `passive:2:${expectedElementValue},${statCase}`,
+								id: `passive:2:${statCase}`,
 								originalId: expectedOriginalId,
 								sources,
 								value: 123,
-								conditions: {},
+								conditions: {
+									targetElements: [elementValue],
+								},
 								...targetData,
 							},
 						];
@@ -387,19 +389,23 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 					const expectedResult = [
 						{
-							id: `passive:2:unknown,${statCase}`,
+							id: `passive:2:${statCase}`,
 							originalId: expectedOriginalId,
 							sources,
 							value: 123,
-							conditions: {},
+							conditions: {
+								targetElements: ['unknown'],
+							},
 							...targetData,
 						},
 						{
-							id: `passive:2:unknown,${statCase}`,
+							id: `passive:2:${statCase}`,
 							originalId: expectedOriginalId,
 							sources,
 							value: 123,
-							conditions: {},
+							conditions: {
+								targetElements: ['unknown'],
+							},
 							...targetData,
 						},
 					];
@@ -418,11 +424,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 					const expectedResult = [
 						{
-							id: `passive:2:unknown,${statCase}`,
+							id: `passive:2:${statCase}`,
 							originalId: expectedOriginalId,
 							sources,
 							value: 123,
-							conditions: {},
+							conditions: {
+								targetElements: ['unknown'],
+							},
 							...targetData,
 						},
 					];
@@ -442,11 +450,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return {
-						id: `passive:2:unknown,${stat}`,
+						id: `passive:2:${stat}`,
 						originalId: expectedOriginalId,
 						sources,
 						value: index + 1,
-						conditions: {},
+						conditions: {
+							targetElements: ['unknown'],
+						},
 						...targetData,
 					};
 				});
@@ -463,11 +473,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					{
-						id: 'passive:2:unknown,hp',
+						id: 'passive:2:hp',
 						originalId: expectedOriginalId,
 						sources: arbitrarySourceValue,
 						value: 456,
-						conditions: arbitraryConditionValue,
+						conditions: {
+							...arbitraryConditionValue,
+							targetElements: ['unknown'],
+						},
 						...arbitraryTargetData,
 					},
 					{

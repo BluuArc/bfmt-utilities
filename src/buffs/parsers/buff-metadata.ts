@@ -4,8 +4,9 @@ import {
 	BuffStackType,
 	IconId,
 	IBuff,
+	BuffConditionElement,
 } from './buff-types';
-import { TargetArea } from '../../datamine-types';
+import { TargetArea, UnitElement } from '../../datamine-types';
 
 export interface IBuffMetadata {
 	id: BuffId;
@@ -71,55 +72,65 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_CRTRATEDOWN : IconId.BUFF_CRTRATEUP],
 	},
 	...(() => {
-		let elementalStatBoosts: { [id: string]: IBuffMetadata } = {};
-		['fire', 'water', 'earth', 'thunder', 'light', 'dark', 'omniParadigm', 'unknown'].forEach((element) => {
-			const buffElementKey = element !== 'omniParadigm'
-				? element
-				: 'element';
-			const iconElementKey = (element !== 'omniParadigm' && element !== 'unknown')
-				? element.toUpperCase()
-				: 'ELEMENT';
-			elementalStatBoosts = {
-				...elementalStatBoosts,
-				[`passive:2:${buffElementKey},hp`]: {
-					id: `passive:2:${element},hp` as BuffId,
-					name: 'Passive HP Boost',
-					stat: UnitStat.hp,
-					stackType: BuffStackType.Passive,
-					icons: (buff: IBuff) => [((buff && buff.value && buff.value < 0) ? `BUFF_${iconElementKey}HPDOWN`: `BUFF_${iconElementKey}HPUP`) as IconId],
-				},
-				[`passive:2:${buffElementKey},atk`]: {
-					id: `passive:2:${buffElementKey},atk` as BuffId,
-					name: 'Passive Attack Boost',
-					stat: UnitStat.atk,
-					stackType: BuffStackType.Passive,
-					icons: (buff: IBuff) => [((buff && buff.value && buff.value < 0) ? `BUFF_${iconElementKey}ATKDOWN`: `BUFF_${iconElementKey}ATKUP`) as IconId],
-				},
-				[`passive:2:${buffElementKey},def`]: {
-					id: `passive:2:${buffElementKey},def` as BuffId,
-					name: 'Passive Defense Boost',
-					stat: UnitStat.def,
-					stackType: BuffStackType.Passive,
-					icons: (buff: IBuff) => [((buff && buff.value && buff.value < 0) ? `BUFF_${iconElementKey}DEFDOWN`: `BUFF_${iconElementKey}DEFUP`) as IconId],
-				},
-				[`passive:2:${buffElementKey},rec`]: {
-					id: `passive:2:${buffElementKey},rec` as BuffId,
-					name: 'Passive Recovery Boost',
-					stat: UnitStat.rec,
-					stackType: BuffStackType.Passive,
-					icons: (buff: IBuff) => [((buff && buff.value && buff.value < 0) ? `BUFF_${iconElementKey}RECDOWN`: `BUFF_${iconElementKey}RECUP`) as IconId],
-				},
-				[`passive:2:${buffElementKey},crit`]: {
-					id: `passive:2:${buffElementKey},crit` as BuffId,
-					name: 'Passive Critical Hit Rate Boost',
-					stat: UnitStat.crit,
-					stackType: BuffStackType.Passive,
-					icons: (buff: IBuff) => [((buff && buff.value && buff.value < 0) ? `BUFF_${iconElementKey}CRTRATEDOWN`: `BUFF_${iconElementKey}CRTRATEUP`) as IconId],
-				},
+		const createIconGetterForStat = (stat: string) => {
+			return (buff: IBuff) => {
+				let element: UnitElement | BuffConditionElement | string = '';
+				let polarity = 'UP';
+				if (buff) {
+					if (buff.value && buff.value < 0) {
+						polarity = 'DOWN';
+					}
+
+					if (buff.conditions && buff.conditions.targetElements) {
+						element = buff.conditions.targetElements[0] || '';
+					}
+				}
+				let iconKey = `BUFF_${element.toUpperCase()}${stat}${polarity}`;
+				if (!(iconKey in IconId)) {
+					iconKey = `BUFF_ELEMENT${stat}${polarity}`;
+				}
+				return [IconId[iconKey as IconId]];
 			};
-		});
-		return elementalStatBoosts;
-	})(),
+		};
+
+		return {
+			'passive:2:hp': {
+				id: BuffId['passive:2:hp'],
+				name: 'Passive Elemental HP Boost',
+				stat: UnitStat.hp,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('HP'),
+			},
+			'passive:2:atk': {
+				id: BuffId['passive:2:atk'],
+				name: 'Passive Elemental Attack Boost',
+				stat: UnitStat.atk,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('ATK'),
+			},
+			'passive:2:def': {
+				id: BuffId['passive:2:def'],
+				name: 'Passive Elemental Defense Boost',
+				stat: UnitStat.def,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('DEF'),
+			},
+			'passive:2:rec': {
+				id: BuffId['passive:2:rec'],
+				name: 'Passive Elemental Recovery Boost',
+				stat: UnitStat.rec,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('REC'),
+			},
+			'passive:2:crit': {
+				id: BuffId['passive:2:crit'],
+				name: 'Passive Elemental Critical Hit Rate Boost',
+				stat: UnitStat.crit,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('CRTRATE'),
+			},
+		}
+	}),
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

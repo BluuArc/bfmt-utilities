@@ -1,5 +1,5 @@
 import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect, UnitElement } from '../../datamine-types';
-import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId } from './buff-types';
+import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement } from './buff-types';
 import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext, createUnknownParamsValue } from './_helpers';
 
 /**
@@ -35,14 +35,14 @@ export function getPassiveEffectToBuffMapping (reload?: boolean): Map<string, Pa
  * @internal
  */
 function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
-	const ELEMENT_MAPPING: { [key: string]: UnitElement | string } = {
+	const ELEMENT_MAPPING: { [key: string]: UnitElement | BuffConditionElement } = {
 		1: UnitElement.Fire,
 		2: UnitElement.Water,
 		3: UnitElement.Earth,
 		4: UnitElement.Thunder,
 		5: UnitElement.Light,
 		6: UnitElement.Dark,
-		X: 'omniParadigm',
+		X: BuffConditionElement.OmniParadigm,
 	};
 
 	const STATS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
@@ -113,7 +113,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
 		let stats = {
-			elements: [] as (UnitElement | string)[],
+			elements: [] as (UnitElement | BuffConditionElement)[],
 			atk: '0' as string | number,
 			def: '0' as string | number,
 			rec: '0' as string | number,
@@ -129,7 +129,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 			[element1, element2].forEach((elementValue) => {
 				if (elementValue && elementValue !== '0') {
-					stats.elements.push(ELEMENT_MAPPING[elementValue] || 'unknown');
+					stats.elements.push(ELEMENT_MAPPING[elementValue] || BuffConditionElement.Unknown);
 				}
 			});
 
@@ -145,21 +145,24 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			stats.crit = (typedEffect['crit% buff'] as string);
 		}
 
+		const createBaseStatObject = (stat: 'atk' | 'def' | 'rec' | 'crit' | 'hp') => ({
+			id: `passive:2:${stat}`,
+			originalId: '2',
+			sources,
+			value: +(stats[stat]),
+			...targetData,
+		});
 		if (stats.elements.length > 0) {
 			stats.elements.forEach((element) => {
-				const elementKey = element !== 'omniParadigm'
-					? element
-					: 'element';
 				STATS_ORDER.forEach((stat) => {
 					const value = stats[stat as 'atk' | 'def' | 'rec' | 'crit' | 'hp'];
 					if (value && +value) {
 						results.push({
-							id: `passive:2:${elementKey},${stat}`,
-							originalId: '2',
-							sources,
-							value: +value,
-							conditions: { ...conditionInfo },
-							...targetData,
+							...createBaseStatObject(stat as 'atk' | 'def' | 'rec' | 'crit' | 'hp'),
+							conditions: {
+								...conditionInfo,
+								targetElements: [element],
+							},
 						});
 					}
 				});
@@ -169,12 +172,11 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 				const value = stats[stat as 'atk' | 'def' | 'rec' | 'crit' | 'hp'];
 				if (value && +value) {
 					results.push({
-						id: `passive:2:unknown,${stat}`,
-						originalId: '2',
-						sources,
-						value: +value,
-						conditions: { ...conditionInfo },
-						...targetData,
+						...createBaseStatObject(stat as 'atk' | 'def' | 'rec' | 'crit' | 'hp'),
+						conditions: {
+							...conditionInfo,
+							targetElements: [BuffConditionElement.Unknown],
+						},
 					});
 				}
 			});
