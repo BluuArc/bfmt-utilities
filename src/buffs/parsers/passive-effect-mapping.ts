@@ -54,7 +54,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
-		let stats = {
+		const stats = {
 			atk: '0' as string | number,
 			def: '0' as string | number,
 			rec: '0' as string | number,
@@ -112,7 +112,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
-		let stats = {
+		const stats = {
 			elements: [] as (UnitElement | BuffConditionElement)[],
 			atk: '0' as string | number,
 			def: '0' as string | number,
