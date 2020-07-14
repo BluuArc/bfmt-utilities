@@ -51,7 +51,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		3: UnitType.Breaker,
 		4: UnitType.Guardian,
 		5: UnitType.Oracle,
-		6: UnitType.Rex, // untested
+		6: UnitType.Rex, // no known entries have this value at the time of writing
 	};
 
 	const STATS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];

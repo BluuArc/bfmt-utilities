@@ -1,5 +1,5 @@
 const { getPassiveEffectToBuffMapping } = require('./passive-effect-mapping');
-const { TargetType, TargetArea, UnitElement } = require('../../datamine-types');
+const { TargetType, TargetArea, UnitElement, UnitType } = require('../../datamine-types');
 const { BuffId } = require('./buff-types');
 
 describe('getPassiveEffectToBuffMapping method', () => {
@@ -497,6 +497,250 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 7] });
+			});
+		});
+
+		describe('passive 3', () => {
+			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
+			const UNIT_TYPE_MAPPING = {
+				1: UnitType.Lord,
+				2: UnitType.Anima,
+				3: UnitType.Breaker,
+				4: UnitType.Guardian,
+				5: UnitType.Oracle,
+				6: UnitType.Rex,
+			};
+			const expectedOriginalId = '3';
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get('3');
+			});
+
+			testFunctionExistence('3');
+
+			expectValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:3:${stat}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6';
+				const splitParams = params.split(',');
+				const sources = createExpectedSourcesForArbitraryContext();
+				const targetData = createSelfSingleTargetData();
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return {
+						id: `passive:3:${stat}`,
+						originalId: expectedOriginalId,
+						sources,
+						value: +(splitParams[index + 1]),
+						conditions: {
+							targetUnitType: UnitType.Lord,
+						},
+						...targetData,
+					};
+				});
+
+				const effect = { params };
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '5,2,3,4,5,6,7,8,9';
+				const splitParams = params.split(',');
+				const sources = createExpectedSourcesForArbitraryContext();
+				const targetData = createSelfSingleTargetData();
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return {
+						id: `passive:3:${stat}`,
+						originalId: expectedOriginalId,
+						sources,
+						value: +(splitParams[index + 1]),
+						conditions: {
+							targetUnitType: UnitType.Oracle,
+						},
+						...targetData,
+					};
+				}).concat([{
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					originalId: expectedOriginalId,
+					sources,
+					value: {
+						param_6: '7',
+						param_7: '8',
+						param_8: '9',
+					},
+					conditions: {},
+					...targetData,
+				}]);
+
+				const effect = { params };
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when the params property does not exist', () => {
+				const mockValues = [8, 9, 10, 11, 12];
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat, index) => {
+					acc[`${stat}% buff`] = mockValues[index];
+					return acc;
+				}, {});
+				effect['unit type buffed'] = 'arbitrary type'; // types are taken at face value
+
+				const sources = createExpectedSourcesForArbitraryContext();
+				const targetData = createSelfSingleTargetData();
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return {
+						id: `passive:3:${stat}`,
+						originalId: expectedOriginalId,
+						sources,
+						value: mockValues[index],
+						conditions: {
+							targetUnitType: 'arbitrary type',
+						},
+						...targetData,
+					};
+				});
+
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			STAT_PARAMS_ORDER.forEach((statCase) => {
+				Object.entries(UNIT_TYPE_MAPPING).forEach(([typeKey, typeValue]) => {
+					it(`returns only value for ${statCase} and ${typeValue} if it is non-zero and other stats are zero`, () => {
+						const params = [typeKey, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
+
+						const sources = createExpectedSourcesForArbitraryContext();
+						const targetData = createSelfSingleTargetData();
+
+						const expectedResult = [
+							{
+								id: `passive:3:${statCase}`,
+								originalId: expectedOriginalId,
+								sources,
+								value: 123,
+								conditions: {
+									targetUnitType: typeValue,
+								},
+								...targetData,
+							},
+						];
+
+						const effect = { params };
+						const context = createArbitraryContext();
+						const result = mappingFunction(effect, context);
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it(`converts unit type values with no mapping to "unknown" and the only non-zero stat is ${statCase}`, () => {
+					const params = ['123', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
+
+					const sources = createExpectedSourcesForArbitraryContext();
+					const targetData = createSelfSingleTargetData();
+
+					const expectedResult = [
+						{
+							id: `passive:3:${statCase}`,
+							originalId: expectedOriginalId,
+							sources,
+							value: 123,
+							conditions: {
+								targetUnitType: 'unknown',
+							},
+							...targetData,
+						},
+					];
+
+					const effect = { params };
+					const context = createArbitraryContext();
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`outputs stat buffs when no unit types are specified and the only non-zero stat is ${statCase}`, () => {
+					const params = ['0', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
+
+					const sources = createExpectedSourcesForArbitraryContext();
+					const targetData = createSelfSingleTargetData();
+
+					const expectedResult = [
+						{
+							id: `passive:3:${statCase}`,
+							originalId: expectedOriginalId,
+							sources,
+							value: 123,
+							conditions: {
+								targetUnitType: 'unknown',
+							},
+							...targetData,
+						},
+					];
+
+					const effect = { params };
+					const context = createArbitraryContext();
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('outputs stat buffs when no unit types are given', () => {
+				const params = ['0', ...STAT_PARAMS_ORDER.map((stat, index) => index + 1)].join(',');
+
+				const sources = createExpectedSourcesForArbitraryContext();
+				const targetData = createSelfSingleTargetData();
+
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return {
+						id: `passive:3:${stat}`,
+						originalId: expectedOriginalId,
+						sources,
+						value: index + 1,
+						conditions: {
+							targetUnitType: 'unknown',
+						},
+						...targetData,
+					};
+				});
+
+				const effect = { params };
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,0,0,456,789',
+				};
+				const expectedResult = [
+					{
+						id: 'passive:3:hp',
+						originalId: expectedOriginalId,
+						sources: arbitrarySourceValue,
+						value: 456,
+						conditions: {
+							...arbitraryConditionValue,
+							targetUnitType: 'unknown',
+						},
+						...arbitraryTargetData,
+					},
+					{
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						originalId: expectedOriginalId,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					},
+				];
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
 			});
 		});
 	});

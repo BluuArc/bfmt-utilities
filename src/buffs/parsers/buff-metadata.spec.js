@@ -1,7 +1,7 @@
 const { BUFF_METADATA } = require('./buff-metadata');
 const { BuffId, IconId } = require('./buff-types');
 const { getStringValueForLog } = require('../../_test-helpers/utils');
-const { TargetArea, UnitElement } = require('../../datamine-types');
+const { TargetArea, UnitElement, UnitType } = require('../../datamine-types');
 
 describe('BUFF_METADATA entries', () => {
 	const expectIconsToBeValid = (icons = []) => {
@@ -99,7 +99,7 @@ describe('BUFF_METADATA entries', () => {
 					BuffId[`passive:2:${stat}`],
 					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue },
-					`buff value is ${polarityCase} and conditions are given`,
+					`buff value is ${polarityCase} and no conditions are given`,
 				);
 
 				testIconResultWithBuff(
@@ -131,6 +131,7 @@ describe('BUFF_METADATA entries', () => {
 				);
 			});
 		};
+
 		describe('passive:2:hp', () => {
 			testDefaultIconResult(BuffId['passive:2:hp'], [IconId.BUFF_ELEMENTHPUP]);
 			testElementalVariantsAndPolarities('hp');
@@ -154,6 +155,96 @@ describe('BUFF_METADATA entries', () => {
 		describe('passive:2:crit', () => {
 			testDefaultIconResult(BuffId['passive:2:crit'], [IconId.BUFF_ELEMENTCRTRATEUP]);
 			testElementalVariantsAndPolarities('crit');
+		});
+	});
+
+	describe('passive 3 buffs', () => {
+		const POSSIBLE_KNOWN_UNIT_TYPES = [
+			UnitType.Lord,
+			UnitType.Anima,
+			UnitType.Breaker,
+			UnitType.Guardian,
+			UnitType.Oracle,
+			UnitType.Rex,
+		];
+
+		/**
+		 * @param {string} stat
+		 */
+		const testUnitTypeVariantsAndPolarities = (stat) => {
+			[-1, 1].forEach((polarityValue) => {
+				const polarityKey = polarityValue < 0 ? 'DOWN' : 'UP';
+				const polarityCase = polarityValue < 0 ? 'negative' : 'positive';
+				const iconStatKey = stat !== 'crit' ? stat.toUpperCase() : 'CRTRATE';
+				POSSIBLE_KNOWN_UNIT_TYPES.forEach((unitType) => {
+					testIconResultWithBuff(
+						BuffId[`passive:3:${stat}`],
+						[IconId[`BUFF_${unitType.toUpperCase()}${iconStatKey}${polarityKey}`]],
+						{ value: polarityValue, conditions: { targetUnitType: unitType } },
+						`buff value is ${polarityCase} and target unit type is ${unitType}`,
+					);
+				});
+
+				testIconResultWithBuff(
+					BuffId[`passive:3:${stat}`],
+					[IconId[`BUFF_UNITTYPE${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue },
+					`buff value is ${polarityCase} and no conditions are given`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`passive:3:${stat}`],
+					[IconId[`BUFF_UNITTYPE${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: {} },
+					`buff value is ${polarityCase} and no unit type conditions are given`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`passive:3:${stat}`],
+					[IconId[`BUFF_UNITTYPE${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetUnitType: '' } },
+					`buff value is ${polarityCase} and unit type condition is empty`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`passive:3:${stat}`],
+					[IconId[`BUFF_UNITTYPE${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetUnitType: { arbitrary: 'value' } } },
+					`buff value is ${polarityCase} and a non-string unit type is given`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`passive:3:${stat}`],
+					[IconId[`BUFF_UNITTYPE${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetUnitType: 'a fake type' } },
+					`buff value is ${polarityCase} and an invalid target unit type is given`,
+				);
+			});
+		};
+
+		describe('passive:3:hp', () => {
+			testDefaultIconResult(BuffId['passive:3:hp'], [IconId.BUFF_UNITTYPEHPUP]);
+			testUnitTypeVariantsAndPolarities('hp');
+		});
+
+		describe('passive:3:atk', () => {
+			testDefaultIconResult(BuffId['passive:3:atk'], [IconId.BUFF_UNITTYPEATKUP]);
+			testUnitTypeVariantsAndPolarities('atk');
+		});
+
+		describe('passive:3:def', () => {
+			testDefaultIconResult(BuffId['passive:3:def'], [IconId.BUFF_UNITTYPEDEFUP]);
+			testUnitTypeVariantsAndPolarities('def');
+		});
+
+		describe('passive:3:rec', () => {
+			testDefaultIconResult(BuffId['passive:3:rec'], [IconId.BUFF_UNITTYPERECUP]);
+			testUnitTypeVariantsAndPolarities('rec');
+		});
+
+		describe('passive:3:crit', () => {
+			testDefaultIconResult(BuffId['passive:3:crit'], [IconId.BUFF_UNITTYPECRTRATEUP]);
+			testUnitTypeVariantsAndPolarities('crit');
 		});
 	});
 
