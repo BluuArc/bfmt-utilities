@@ -1,5 +1,5 @@
 import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect, UnitElement } from '../../datamine-types';
-import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement } from './buff-types';
+import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement, UnitStat } from './buff-types';
 import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext, createUnknownParamsValue } from './_helpers';
 
 /**
@@ -45,12 +45,27 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		X: BuffConditionElement.OmniParadigm,
 	};
 
+	// const TYPE_MAPPING: { [key: string]: UnitType } = {
+	// 	1: UnitType.Lord,
+	// 	2: UnitType.Anima,
+	// 	3: UnitType.Breaker,
+	// 	4: UnitType.Guardian,
+	// 	5: UnitType.Oracle,
+	// 	6: UnitType.Rex, // untested
+	// }
+
 	const STATS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
 
-	map.set('1', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+	const retrieveCommonInfoForEffects = (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext) => {
 		const conditionInfo = ((injectionContext && injectionContext.processExtraSkillConditions) || processExtraSkillConditions)(effect as ExtraSkillPassiveEffect);
 		const targetData = ((injectionContext && injectionContext.getPassiveTargetData) || getPassiveTargetData)(effect, context);
 		const sources = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
+
+		return { conditionInfo, targetData, sources };
+	};
+
+	map.set('1', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
@@ -78,7 +93,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}
 
 		STATS_ORDER.forEach((stat) => {
-			const value = stats[stat as 'atk' | 'def' | 'rec' | 'crit' | 'hp'];
+			const value = stats[stat as UnitStat];
 			if (value && +value) {
 				results.push({
 					id: `passive:1:${stat}`,
@@ -106,9 +121,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	});
 
 	map.set('2', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
-		const conditionInfo = ((injectionContext && injectionContext.processExtraSkillConditions) || processExtraSkillConditions)(effect as ExtraSkillPassiveEffect);
-		const targetData = ((injectionContext && injectionContext.getPassiveTargetData) || getPassiveTargetData)(effect, context);
-		const sources = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
@@ -145,7 +158,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			stats.crit = (typedEffect['crit% buff'] as string);
 		}
 
-		const createBaseStatObject = (stat: 'atk' | 'def' | 'rec' | 'crit' | 'hp') => ({
+		const createBaseStatObject = (stat: UnitStat) => ({
 			id: `passive:2:${stat}`,
 			originalId: '2',
 			sources,
@@ -155,10 +168,10 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		if (stats.elements.length > 0) {
 			stats.elements.forEach((element) => {
 				STATS_ORDER.forEach((stat) => {
-					const value = stats[stat as 'atk' | 'def' | 'rec' | 'crit' | 'hp'];
+					const value = stats[stat as UnitStat];
 					if (value && +value) {
 						results.push({
-							...createBaseStatObject(stat as 'atk' | 'def' | 'rec' | 'crit' | 'hp'),
+							...createBaseStatObject(stat as UnitStat),
 							conditions: {
 								...conditionInfo,
 								targetElements: [element],
@@ -169,10 +182,10 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			});
 		} else {
 			STATS_ORDER.forEach((stat) => {
-				const value = stats[stat as 'atk' | 'def' | 'rec' | 'crit' | 'hp'];
+				const value = stats[stat as UnitStat];
 				if (value && +value) {
 					results.push({
-						...createBaseStatObject(stat as 'atk' | 'def' | 'rec' | 'crit' | 'hp'),
+						...createBaseStatObject(stat as UnitStat),
 						conditions: {
 							...conditionInfo,
 							targetElements: [BuffConditionElement.Unknown],
