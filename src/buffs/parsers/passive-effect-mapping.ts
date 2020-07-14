@@ -1,4 +1,4 @@
-import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect, UnitElement } from '../../datamine-types';
+import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect, UnitElement, UnitType } from '../../datamine-types';
 import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement, UnitStat } from './buff-types';
 import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext, createUnknownParamsValue } from './_helpers';
 
@@ -45,14 +45,14 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		X: BuffConditionElement.OmniParadigm,
 	};
 
-	// const TYPE_MAPPING: { [key: string]: UnitType } = {
-	// 	1: UnitType.Lord,
-	// 	2: UnitType.Anima,
-	// 	3: UnitType.Breaker,
-	// 	4: UnitType.Guardian,
-	// 	5: UnitType.Oracle,
-	// 	6: UnitType.Rex, // untested
-	// }
+	const TYPE_MAPPING: { [key: string]: UnitType } = {
+		1: UnitType.Lord,
+		2: UnitType.Anima,
+		3: UnitType.Breaker,
+		4: UnitType.Guardian,
+		5: UnitType.Oracle,
+		6: UnitType.Rex, // untested
+	};
 
 	const STATS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
 
@@ -199,6 +199,74 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			results.push({
 				id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
 				originalId: '2',
+				sources,
+				value: unknownParams,
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		return results;
+	});
+
+	map.set('3', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+		const stats = {
+			unitType: '' as UnitType | 'unknown',
+			atk: '0' as string | number,
+			def: '0' as string | number,
+			rec: '0' as string | number,
+			crit: '0' as string | number,
+			hp: '0' as string | number,
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			let unitType: string;
+			[unitType, stats.atk, stats.def, stats.rec, stats.crit, stats.hp, ...extraParams] = typedEffect.params.split(',');
+
+			if (unitType && unitType !== '0') {
+				stats.unitType = TYPE_MAPPING[unitType] || 'unknown';
+			}
+
+			if (extraParams && extraParams.length > 0) {
+				unknownParams = ((injectionContext && injectionContext.createUnknownParamsValue) || createUnknownParamsValue)(extraParams, 6);
+			}
+		} else {
+			stats.unitType = (typedEffect['unit type buffed'] as UnitType);
+			stats.hp = (typedEffect['hp% buff'] as string);
+			stats.atk = (typedEffect['atk% buff'] as string);
+			stats.def = (typedEffect['def% buff'] as string);
+			stats.rec = (typedEffect['rec% buff'] as string);
+			stats.crit = (typedEffect['crit% buff'] as string);
+		}
+
+		const targetUnitType = stats.unitType || 'unknown';
+		STATS_ORDER.forEach((stat) => {
+			const value = stats[stat as UnitStat];
+			if (value && +value) {
+				results.push({
+					id: `passive:3:${stat}`,
+					originalId: '3',
+					sources,
+					value: +value,
+					conditions: {
+						...conditionInfo,
+						targetUnitType,
+					},
+					...targetData,
+				});
+			}
+		});
+
+		if (unknownParams && Object.keys(unknownParams).length > 0) {
+			results.push({
+				id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+				originalId: '3',
 				sources,
 				value: unknownParams,
 				conditions: { ...conditionInfo },

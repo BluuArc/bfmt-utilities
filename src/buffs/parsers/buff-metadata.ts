@@ -6,7 +6,7 @@ import {
 	IBuff,
 	BuffConditionElement,
 } from './buff-types';
-import { TargetArea, UnitElement } from '../../datamine-types';
+import { TargetArea, UnitElement, UnitType } from '../../datamine-types';
 
 export interface IBuffMetadata {
 	id: BuffId;
@@ -128,6 +128,69 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 			'passive:2:crit': {
 				id: BuffId['passive:2:crit'],
 				name: 'Passive Elemental Critical Hit Rate Boost',
+				stat: UnitStat.crit,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('CRTRATE'),
+			},
+		};
+	})(),
+	...(() => {
+		const createIconGetterForStat = (stat: string) => {
+			return (buff: IBuff) => {
+				let unitType: UnitType | 'unknown' | string = '';
+				let polarity = 'UP';
+				if (buff) {
+					if (buff.value && buff.value < 0) {
+						polarity = 'DOWN';
+					}
+
+					if (buff.conditions) {
+						unitType = buff.conditions.targetUnitType || '';
+					}
+				}
+				if (typeof unitType !== 'string' || !unitType) {
+					unitType = 'unknown';
+				}
+				let iconKey = `BUFF_${unitType.toUpperCase()}${stat}${polarity}`;
+				if (!unitType || !(iconKey in IconId)) {
+					iconKey = `BUFF_UNITTYPE${stat}${polarity}`;
+				}
+				return [IconId[iconKey as IconId]];
+			};
+		};
+
+		return {
+			'passive:3:hp': {
+				id: BuffId['passive:3:hp'],
+				name: 'Passive Type-Based HP Boost',
+				stat: UnitStat.hp,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('HP'),
+			},
+			'passive:3:atk': {
+				id: BuffId['passive:3:atk'],
+				name: 'Passive Type-Based Attack Boost',
+				stat: UnitStat.atk,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('ATK'),
+			},
+			'passive:3:def': {
+				id: BuffId['passive:3:def'],
+				name: 'Passive Type-Based Defense Boost',
+				stat: UnitStat.def,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('DEF'),
+			},
+			'passive:3:rec': {
+				id: BuffId['passive:3:rec'],
+				name: 'Passive Type-Based Recovery Boost',
+				stat: UnitStat.rec,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('REC'),
+			},
+			'passive:3:crit': {
+				id: BuffId['passive:3:crit'],
+				name: 'Passive Type-Based Critical Hit Rate Boost',
 				stat: UnitStat.crit,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('CRTRATE'),
