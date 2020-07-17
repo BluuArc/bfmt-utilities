@@ -35,9 +35,15 @@ export function getProcEffectToBuffMapping (reload?: boolean): Map<string, ProcE
  * @internal
  */
 function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
-	map.set('1', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+	const retrieveCommonInfoForEffects = (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext) => {
 		const targetData = ((injectionContext && injectionContext.getProcTargetData) || getProcTargetData)(effect);
 		const sources = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
+
+		return { targetData, sources };
+	};
+
+	map.set('1', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const hits = +((context.damageFrames && context.damageFrames.hits) || 0);
 		const distribution = +((context.damageFrames && context.damageFrames['hit dmg% distribution (total)']) || 0);
@@ -99,8 +105,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	});
 
 	map.set('2', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
-		const targetData = ((injectionContext && injectionContext.getProcTargetData) || getProcTargetData)(effect);
-		const sources = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
+		const { targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const params = {
 			healLow: '0' as string | number,
