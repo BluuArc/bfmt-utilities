@@ -1,6 +1,6 @@
 import { ProcEffect } from '../../datamine-types';
 import { IBuff, IEffectToBuffConversionContext, IGenericBuffValue, BuffId } from './buff-types';
-import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault, createUnknownParamsValue } from './_helpers';
+import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault, createUnknownParamsValue, ITargetData } from './_helpers';
 
 /**
  * @description Default function for all buffs that cannot be processed.
@@ -43,6 +43,38 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		return { targetData, sources, effectDelay };
 	};
 
+	interface IUnknownParamsContext {
+		originalId: string;
+		sources: string[];
+		targetData: ITargetData;
+		effectDelay: string;
+	}
+
+	const createUnknownParamsEntry = (
+		unknownParams: IGenericBuffValue | undefined,
+		{
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		}: IUnknownParamsContext,
+	): IBuff => ({
+		id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+		originalId,
+		effectDelay,
+		sources,
+		value: unknownParams,
+		...targetData,
+	});
+
+	const createUnknownParamsEntryFromExtraParams = (extraParams: string[], startIndex: number, injectionContext?: IProcBuffProcessingInjectionContext): IGenericBuffValue | undefined => {
+		let unknownParams: IGenericBuffValue | undefined;
+		if (extraParams && extraParams.length > 0) {
+			unknownParams = ((injectionContext && injectionContext.createUnknownParamsValue) || createUnknownParamsValue)(extraParams, startIndex);
+		}
+		return unknownParams;
+	};
+
 	map.set('1', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
@@ -61,9 +93,8 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		if (effect.params) {
 			let extraParams: string[];
 			[params['atk%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], ...extraParams] = effect.params.split(',');
-			if (extraParams && extraParams.length > 0) {
-				unknownParams = ((injectionContext && injectionContext.createUnknownParamsValue) || createUnknownParamsValue)(extraParams, 6);
-			}
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
 		} else {
 			params['atk%'] = (effect['bb atk%'] as number);
 			params.flatAtk = (effect['bb flat atk'] as number);
@@ -93,15 +124,13 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			...targetData,
 		}];
 
-		if (unknownParams && Object.keys(unknownParams).length > 0) {
-			results.push({
-				id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '1',
-				effectDelay,
 				sources,
-				value: unknownParams,
-				...targetData,
-			});
+				targetData,
+				effectDelay,
+			}));
 		}
 
 		return results;
@@ -123,9 +152,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			[params.healLow, params.healHigh, recX, recY, ...extraParams] = effect.params.split(',');
 			params['healerRec%'] = ((100 + parseNumberOrDefault(recX)) * (1 + parseNumberOrDefault(recY) / 100)) / 10;
 
-			if (extraParams && extraParams.length > 0) {
-				unknownParams = ((injectionContext && injectionContext.createUnknownParamsValue) || createUnknownParamsValue)(extraParams, 4);
-			}
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
 		} else {
 			params.healLow = (effect['heal low'] as number);
 			params.healHigh = (effect['heal high'] as number);
@@ -146,15 +173,13 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			...targetData,
 		}];
 
-		if (unknownParams && Object.keys(unknownParams).length > 0) {
-			results.push({
-				id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '2',
 				sources,
+				targetData,
 				effectDelay,
-				value: unknownParams,
-				...targetData,
-			});
+			}));
 		}
 
 		return results;
