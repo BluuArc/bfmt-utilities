@@ -93,7 +93,6 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		/**
-		 * @param {string} buffId
 		 * @param {string} originalId
 		 * @returns {(params?: object, propsToDelete?: string[]) => import('./buff-types').IBuff}
 		 */

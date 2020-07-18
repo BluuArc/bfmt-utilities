@@ -36,10 +36,16 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			 * @type {import('./passive-effect-mapping').PassiveEffectToBuffFunction}
 			 */
 		let mappingFunction;
+		/**
+		 * @type {(params?: object, propsToDelete?: string[]) => import('./buff-types').IBuff}
+		 */
+		let baseBuffFactory;
 		const arbitraryConditionValue = { condtion: 'value' };
 		const arbitraryTargetData = { targetData: 'data' };
 		const arbitrarySourceValue = ['some source value'];
 		const arbitraryUnknownValue = { unknownValue: 'some unknown value' };
+
+		const BUFF_TARGET_PROPS = ['targetType', 'targetArea'];
 
 		const createDefaultInjectionContext = () => {
 			/**
@@ -77,6 +83,30 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			targetType: TargetType.Self,
 			targetArea: TargetArea.Single,
 		});
+		/**
+		 * @param {string} originalId
+		 * @returns {(params?: object, propsToDelete?: string[]) => import('./buff-types').IBuff}
+		 */
+		const createFactoryForBaseBuffFromArbitraryEffect = (originalId) => {
+			return (params = {}, propsToDelete = []) => {
+				const result = {
+					originalId,
+					sources: createExpectedSourcesForArbitraryContext(),
+					conditions: {},
+					...createSelfSingleTargetData(), // single target by default
+					...params,
+				};
+				if (propsToDelete && propsToDelete.length > 0) {
+					propsToDelete.forEach((prop) => {
+						if (prop in result) {
+							delete result[prop];
+						}
+					});
+				}
+				return result;
+			};
+		};
+
 		const testFunctionExistence = (mapKey) => {
 			it('has a function on the map', () => {
 				const map = getPassiveEffectToBuffMapping();
@@ -95,10 +125,10 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 		describe('passive 1', () => {
 			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
-			const expectedOriginalId = '1';
 
 			beforeEach(() => {
 				mappingFunction = getPassiveEffectToBuffMapping().get('1');
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect('1');
 			});
 
 			testFunctionExistence('1');
@@ -108,17 +138,11 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5';
 				const splitParams = params.split(',');
-				const sources = createExpectedSourcesForArbitraryContext();
-				const targetData = createSelfSingleTargetData();
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
-					return {
+					return baseBuffFactory({
 						id: `passive:1:${stat}`,
-						originalId: expectedOriginalId,
-						sources,
 						value: +(splitParams[index]),
-						conditions: {},
-						...targetData,
-					};
+					});
 				});
 
 				const effect = { params };
@@ -130,29 +154,19 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('returns a buff entry for extra parameters', () => {
 				const params = '1,2,3,4,5,6,7,8';
 				const splitParams = params.split(',');
-				const sources = createExpectedSourcesForArbitraryContext();
-				const targetData = createSelfSingleTargetData();
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
-					return {
+					return baseBuffFactory({
 						id: `passive:1:${stat}`,
-						originalId: expectedOriginalId,
-						sources,
 						value: +(splitParams[index]),
-						conditions: {},
-						...targetData,
-					};
-				}).concat([{
+					});
+				}).concat([baseBuffFactory({
 					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
-					originalId: expectedOriginalId,
-					sources,
 					value: {
 						param_5: '6',
 						param_6: '7',
 						param_7: '8',
 					},
-					conditions: {},
-					...targetData,
-				}]);
+				})]);
 
 				const effect = { params };
 				const context = createArbitraryContext();
@@ -167,17 +181,11 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					return acc;
 				}, {});
 
-				const sources = createExpectedSourcesForArbitraryContext();
-				const targetData = createSelfSingleTargetData();
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
-					return {
+					return baseBuffFactory({
 						id: `passive:1:${stat}`,
-						originalId: expectedOriginalId,
-						sources,
 						value: mockValues[index],
-						conditions: {},
-						...targetData,
-					};
+					});
 				});
 
 				const context = createArbitraryContext();
@@ -188,18 +196,10 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			STAT_PARAMS_ORDER.forEach((statCase) => {
 				it(`returns only value for ${statCase} if it is non-zero and other stats are zero`, () => {
 					const params = STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0').join(',');
-					const sources = createExpectedSourcesForArbitraryContext();
-					const targetData = createSelfSingleTargetData();
-					const expectedResult = [
-						{
-							id: `passive:1:${statCase}`,
-							originalId: expectedOriginalId,
-							sources,
-							value: 123,
-							conditions: {},
-							...targetData,
-						},
-					];
+					const expectedResult = [baseBuffFactory({
+						id: `passive:1:${statCase}`,
+						value: 123,
+					})];
 
 					const effect = { params };
 					const context = createArbitraryContext();
@@ -213,22 +213,20 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					params: '0,0,0,0,456,789',
 				};
 				const expectedResult = [
-					{
+					baseBuffFactory({
 						id: 'passive:1:hp',
-						originalId: expectedOriginalId,
 						sources: arbitrarySourceValue,
 						value: 456,
 						conditions: arbitraryConditionValue,
 						...arbitraryTargetData,
-					},
-					{
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
 						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
-						originalId: expectedOriginalId,
 						sources: arbitrarySourceValue,
 						value: arbitraryUnknownValue,
 						conditions: arbitraryConditionValue,
 						...arbitraryTargetData,
-					},
+					}, BUFF_TARGET_PROPS),
 				];
 				const context = createArbitraryContext();
 				const injectionContext = createDefaultInjectionContext();
@@ -249,10 +247,10 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				6: UnitElement.Dark,
 				X: 'omniParadigm',
 			};
-			const expectedOriginalId = '2';
 
 			beforeEach(() => {
 				mappingFunction = getPassiveEffectToBuffMapping().get('2');
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect('2');
 			});
 
 			testFunctionExistence('2');
@@ -262,20 +260,15 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6,7';
 				const splitParams = params.split(',');
-				const sources = createExpectedSourcesForArbitraryContext();
-				const targetData = createSelfSingleTargetData();
 				const expectedResult = [UnitElement.Fire, UnitElement.Water].map((element) => {
 					return STAT_PARAMS_ORDER.map((stat, index) => {
-						return {
+						return baseBuffFactory({
 							id: `passive:2:${stat}`,
-							originalId: expectedOriginalId,
-							sources,
 							value: +(splitParams[index + 2]),
 							conditions: {
 								targetElements: [element],
 							},
-							...targetData,
-						};
+						});
 					});
 				}).reduce((acc, val) => acc.concat(val), []);
 
@@ -288,34 +281,25 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('returns a buff entry for extra parameters', () => {
 				const params = '5,6,3,4,5,6,7,8,9,10';
 				const splitParams = params.split(',');
-				const sources = createExpectedSourcesForArbitraryContext();
-				const targetData = createSelfSingleTargetData();
 				const expectedResult = [UnitElement.Light, UnitElement.Dark].map((element) => {
 					return STAT_PARAMS_ORDER.map((stat, index) => {
-						return {
+						return baseBuffFactory({
 							id: `passive:2:${stat}`,
-							originalId: expectedOriginalId,
-							sources,
 							value: +(splitParams[index + 2]),
 							conditions: {
 								targetElements: [element],
 							},
-							...targetData,
-						};
+						});
 					});
 				}).reduce((acc, val) => acc.concat(val), [])
-					.concat([{
+					.concat([baseBuffFactory({
 						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
-						originalId: expectedOriginalId,
-						sources,
 						value: {
 							param_7: '8',
 							param_8: '9',
 							param_9: '10',
 						},
-						conditions: {},
-						...targetData,
-					}]);
+					})]);
 
 				const effect = { params };
 				const context = createArbitraryContext();
@@ -331,20 +315,15 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				}, {});
 				effect['elements buffed'] = ['element1', 'element2', 'element3']; // elements are taken at face value
 
-				const sources = createExpectedSourcesForArbitraryContext();
-				const targetData = createSelfSingleTargetData();
 				const expectedResult = ['element1', 'element2', 'element3'].map((element) => {
 					return STAT_PARAMS_ORDER.map((stat, index) => {
-						return {
+						return baseBuffFactory({
 							id: `passive:2:${stat}`,
-							originalId: expectedOriginalId,
-							sources,
 							value: mockValues[index],
 							conditions: {
 								targetElements: [element],
 							},
-							...targetData,
-						};
+						});
 					});
 				}).reduce((acc, val) => acc.concat(val), []);
 
@@ -357,22 +336,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				Object.entries(ELEMENT_MAPPING).forEach(([elementKey, elementValue]) => {
 					it(`returns only value for ${statCase} and ${elementValue} if it is non-zero and other stats are zero and only one element is specified`, () => {
 						const params = [elementKey, '0', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
-
-						const sources = createExpectedSourcesForArbitraryContext();
-						const targetData = createSelfSingleTargetData();
-
-						const expectedResult = [
-							{
-								id: `passive:2:${statCase}`,
-								originalId: expectedOriginalId,
-								sources,
-								value: 123,
-								conditions: {
-									targetElements: [elementValue],
-								},
-								...targetData,
+						const expectedResult = [baseBuffFactory({
+							id: `passive:2:${statCase}`,
+							value: 123,
+							conditions: {
+								targetElements: [elementValue],
 							},
-						];
+						})];
 
 						const effect = { params };
 						const context = createArbitraryContext();
@@ -383,31 +353,21 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				it(`converts element values with no mapping to "unknown" and the only non-zero stat is ${statCase}`, () => {
 					const params = ['123', '456', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
-
-					const sources = createExpectedSourcesForArbitraryContext();
-					const targetData = createSelfSingleTargetData();
-
 					const expectedResult = [
-						{
+						baseBuffFactory({
 							id: `passive:2:${statCase}`,
-							originalId: expectedOriginalId,
-							sources,
 							value: 123,
 							conditions: {
 								targetElements: ['unknown'],
 							},
-							...targetData,
-						},
-						{
+						}),
+						baseBuffFactory({
 							id: `passive:2:${statCase}`,
-							originalId: expectedOriginalId,
-							sources,
 							value: 123,
 							conditions: {
 								targetElements: ['unknown'],
 							},
-							...targetData,
-						},
+						}),
 					];
 
 					const effect = { params };
@@ -418,22 +378,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				it(`outputs stat buffs when no elements are given and the only non-zero stat is ${statCase}`, () => {
 					const params = ['0', '0', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
-
-					const sources = createExpectedSourcesForArbitraryContext();
-					const targetData = createSelfSingleTargetData();
-
-					const expectedResult = [
-						{
-							id: `passive:2:${statCase}`,
-							originalId: expectedOriginalId,
-							sources,
-							value: 123,
-							conditions: {
-								targetElements: ['unknown'],
-							},
-							...targetData,
+					const expectedResult = [baseBuffFactory({
+						id: `passive:2:${statCase}`,
+						value: 123,
+						conditions: {
+							targetElements: ['unknown'],
 						},
-					];
+					})];
 
 					const effect = { params };
 					const context = createArbitraryContext();
@@ -444,21 +395,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 			it('outputs stat buffs when no elements are given', () => {
 				const params = ['0', '0', ...STAT_PARAMS_ORDER.map((stat, index) => index + 1)].join(',');
-
-				const sources = createExpectedSourcesForArbitraryContext();
-				const targetData = createSelfSingleTargetData();
-
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
-					return {
+					return baseBuffFactory({
 						id: `passive:2:${stat}`,
-						originalId: expectedOriginalId,
-						sources,
 						value: index + 1,
 						conditions: {
 							targetElements: ['unknown'],
 						},
-						...targetData,
-					};
+					});
 				});
 
 				const effect = { params };
@@ -472,9 +416,8 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					params: '0,0,0,0,0,0,456,789',
 				};
 				const expectedResult = [
-					{
+					baseBuffFactory({
 						id: 'passive:2:hp',
-						originalId: expectedOriginalId,
 						sources: arbitrarySourceValue,
 						value: 456,
 						conditions: {
@@ -482,15 +425,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 							targetElements: ['unknown'],
 						},
 						...arbitraryTargetData,
-					},
-					{
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
 						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
-						originalId: expectedOriginalId,
 						sources: arbitrarySourceValue,
 						value: arbitraryUnknownValue,
 						conditions: arbitraryConditionValue,
 						...arbitraryTargetData,
-					},
+					}, BUFF_TARGET_PROPS),
 				];
 				const context = createArbitraryContext();
 				const injectionContext = createDefaultInjectionContext();
@@ -510,10 +452,10 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				5: UnitType.Oracle,
 				6: UnitType.Rex,
 			};
-			const expectedOriginalId = '3';
 
 			beforeEach(() => {
 				mappingFunction = getPassiveEffectToBuffMapping().get('3');
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect('3');
 			});
 
 			testFunctionExistence('3');
@@ -523,19 +465,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6';
 				const splitParams = params.split(',');
-				const sources = createExpectedSourcesForArbitraryContext();
-				const targetData = createSelfSingleTargetData();
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
-					return {
+					return baseBuffFactory({
 						id: `passive:3:${stat}`,
-						originalId: expectedOriginalId,
-						sources,
 						value: +(splitParams[index + 1]),
 						conditions: {
 							targetUnitType: UnitType.Lord,
 						},
-						...targetData,
-					};
+					});
 				});
 
 				const effect = { params };
@@ -547,31 +484,22 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('returns a buff entry for extra parameters', () => {
 				const params = '5,2,3,4,5,6,7,8,9';
 				const splitParams = params.split(',');
-				const sources = createExpectedSourcesForArbitraryContext();
-				const targetData = createSelfSingleTargetData();
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
-					return {
+					return baseBuffFactory({
 						id: `passive:3:${stat}`,
-						originalId: expectedOriginalId,
-						sources,
 						value: +(splitParams[index + 1]),
 						conditions: {
 							targetUnitType: UnitType.Oracle,
 						},
-						...targetData,
-					};
-				}).concat([{
+					});
+				}).concat([baseBuffFactory({
 					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
-					originalId: expectedOriginalId,
-					sources,
 					value: {
 						param_6: '7',
 						param_7: '8',
 						param_8: '9',
 					},
-					conditions: {},
-					...targetData,
-				}]);
+				})]);
 
 				const effect = { params };
 				const context = createArbitraryContext();
@@ -587,19 +515,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				}, {});
 				effect['unit type buffed'] = 'arbitrary type'; // types are taken at face value
 
-				const sources = createExpectedSourcesForArbitraryContext();
-				const targetData = createSelfSingleTargetData();
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
-					return {
+					return baseBuffFactory({
 						id: `passive:3:${stat}`,
-						originalId: expectedOriginalId,
-						sources,
 						value: mockValues[index],
 						conditions: {
 							targetUnitType: 'arbitrary type',
 						},
-						...targetData,
-					};
+					});
 				});
 
 				const context = createArbitraryContext();
@@ -611,22 +534,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				Object.entries(UNIT_TYPE_MAPPING).forEach(([typeKey, typeValue]) => {
 					it(`returns only value for ${statCase} and ${typeValue} if it is non-zero and other stats are zero`, () => {
 						const params = [typeKey, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
-
-						const sources = createExpectedSourcesForArbitraryContext();
-						const targetData = createSelfSingleTargetData();
-
-						const expectedResult = [
-							{
-								id: `passive:3:${statCase}`,
-								originalId: expectedOriginalId,
-								sources,
-								value: 123,
-								conditions: {
-									targetUnitType: typeValue,
-								},
-								...targetData,
+						const expectedResult = [baseBuffFactory({
+							id: `passive:3:${statCase}`,
+							value: 123,
+							conditions: {
+								targetUnitType: typeValue,
 							},
-						];
+						})];
 
 						const effect = { params };
 						const context = createArbitraryContext();
@@ -637,22 +551,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				it(`converts unit type values with no mapping to "unknown" and the only non-zero stat is ${statCase}`, () => {
 					const params = ['123', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
-
-					const sources = createExpectedSourcesForArbitraryContext();
-					const targetData = createSelfSingleTargetData();
-
-					const expectedResult = [
-						{
-							id: `passive:3:${statCase}`,
-							originalId: expectedOriginalId,
-							sources,
-							value: 123,
-							conditions: {
-								targetUnitType: 'unknown',
-							},
-							...targetData,
+					const expectedResult = [baseBuffFactory({
+						id: `passive:3:${statCase}`,
+						value: 123,
+						conditions: {
+							targetUnitType: 'unknown',
 						},
-					];
+					})];
 
 					const effect = { params };
 					const context = createArbitraryContext();
@@ -662,22 +567,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				it(`outputs stat buffs when no unit types are specified and the only non-zero stat is ${statCase}`, () => {
 					const params = ['0', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
-
-					const sources = createExpectedSourcesForArbitraryContext();
-					const targetData = createSelfSingleTargetData();
-
-					const expectedResult = [
-						{
-							id: `passive:3:${statCase}`,
-							originalId: expectedOriginalId,
-							sources,
-							value: 123,
-							conditions: {
-								targetUnitType: 'unknown',
-							},
-							...targetData,
+					const expectedResult = [baseBuffFactory({
+						id: `passive:3:${statCase}`,
+						value: 123,
+						conditions: {
+							targetUnitType: 'unknown',
 						},
-					];
+					})];
 
 					const effect = { params };
 					const context = createArbitraryContext();
@@ -689,20 +585,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('outputs stat buffs when no unit types are given', () => {
 				const params = ['0', ...STAT_PARAMS_ORDER.map((stat, index) => index + 1)].join(',');
 
-				const sources = createExpectedSourcesForArbitraryContext();
-				const targetData = createSelfSingleTargetData();
-
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
-					return {
+					return baseBuffFactory({
 						id: `passive:3:${stat}`,
-						originalId: expectedOriginalId,
-						sources,
 						value: index + 1,
 						conditions: {
 							targetUnitType: 'unknown',
 						},
-						...targetData,
-					};
+					});
 				});
 
 				const effect = { params };
@@ -716,9 +606,8 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					params: '0,0,0,0,0,456,789',
 				};
 				const expectedResult = [
-					{
+					baseBuffFactory({
 						id: 'passive:3:hp',
-						originalId: expectedOriginalId,
 						sources: arbitrarySourceValue,
 						value: 456,
 						conditions: {
@@ -726,15 +615,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 							targetUnitType: 'unknown',
 						},
 						...arbitraryTargetData,
-					},
-					{
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
 						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
-						originalId: expectedOriginalId,
 						sources: arbitrarySourceValue,
 						value: arbitraryUnknownValue,
 						conditions: arbitraryConditionValue,
 						...arbitraryTargetData,
-					},
+					}, BUFF_TARGET_PROPS),
 				];
 				const context = createArbitraryContext();
 				const injectionContext = createDefaultInjectionContext();
