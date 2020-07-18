@@ -38,12 +38,13 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	const retrieveCommonInfoForEffects = (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext) => {
 		const targetData = ((injectionContext && injectionContext.getProcTargetData) || getProcTargetData)(effect);
 		const sources = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
+		const effectDelay = effect['effect delay time(ms)/frame'];
 
-		return { targetData, sources };
+		return { targetData, sources, effectDelay };
 	};
 
 	map.set('1', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
-		const { targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const hits = +((context.damageFrames && context.damageFrames.hits) || 0);
 		const distribution = +((context.damageFrames && context.damageFrames['hit dmg% distribution (total)']) || 0);
@@ -83,6 +84,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			id: 'proc:1',
 			originalId: '1',
 			sources,
+			effectDelay,
 			value: {
 				...filteredValue,
 				hits,
@@ -95,6 +97,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push({
 				id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
 				originalId: '1',
+				effectDelay,
 				sources,
 				value: unknownParams,
 				...targetData,
@@ -105,7 +108,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	});
 
 	map.set('2', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
-		const { targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const params = {
 			healLow: '0' as string | number,
@@ -138,6 +141,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			id: 'proc:2',
 			originalId: '2',
 			sources,
+			effectDelay,
 			value: params,
 			...targetData,
 		}];
@@ -147,6 +151,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
 				originalId: '2',
 				sources,
+				effectDelay,
 				value: unknownParams,
 				...targetData,
 			});

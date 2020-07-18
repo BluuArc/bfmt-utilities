@@ -38,9 +38,11 @@ describe('getProcEffectToBuffMapping method', () => {
 		const arbitraryTargetData = { targetData: 'data' };
 		const arbitrarySourceValue = ['some source value'];
 		const arbitraryUnknownValue = { unknownValue: 'some unknown value' };
+		const arbitraryEffectDelay = 'arbitrary effect delay';
 		const arbitraryHitCount = 123;
 		const arbitraryDamageDistribution = 456;
 
+		const EFFECT_DELAY_KEY = 'effect delay time(ms)/frame';
 		const HIT_DMG_DISTRIBUTION_TOTAL_KEY = 'hit dmg% distribution (total)';
 
 		const createDefaultInjectionContext = () => {
@@ -79,6 +81,12 @@ describe('getProcEffectToBuffMapping method', () => {
 			targetArea: 'arbitrary target area',
 		});
 
+		const createArbitraryBaseEffect = (params = {}) => ({
+			[EFFECT_DELAY_KEY]: arbitraryEffectDelay,
+			...createArbitraryTargetDataForEffect(),
+			...params,
+		});
+
 		const testFunctionExistence = (mapKey) => {
 			it('has a function on the map', () => {
 				const map = getProcEffectToBuffMapping();
@@ -112,10 +120,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6';
 				const splitParams = params.split(',');
-				const effect = {
-					params,
-					...createArbitraryTargetDataForEffect(),
-				};
+				const effect = createArbitraryBaseEffect({ params });
 				const context = createArbitraryContext({
 					damageFrames: {
 						hits: arbitraryHitCount,
@@ -130,6 +135,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					id: expectedBuffId,
 					originalId: expectedOriginalId,
 					sources: createExpectedSourcesForArbitraryContext(),
+					effectDelay: arbitraryEffectDelay,
 					value: {
 						...expectedValuesForParams,
 						hits: arbitraryHitCount,
@@ -145,10 +151,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			it('returns a buff entry for extra parameters', () => {
 				const params = '1,2,3,4,5,6,7,8,9';
 				const splitParams = params.split(',');
-				const effect = {
-					params,
-					...createArbitraryTargetDataForEffect(),
-				};
+				const effect = createArbitraryBaseEffect({ params });
 				const context = createArbitraryContext({
 					damageFrames: {
 						hits: arbitraryHitCount,
@@ -164,6 +167,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: expectedBuffId,
 						originalId: expectedOriginalId,
 						sources: createExpectedSourcesForArbitraryContext(),
+						effectDelay: arbitraryEffectDelay,
 						value: {
 							...expectedValuesForParams,
 							hits: arbitraryHitCount,
@@ -175,6 +179,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
 						originalId: expectedOriginalId,
 						sources: createExpectedSourcesForArbitraryContext(),
+						effectDelay: arbitraryEffectDelay,
 						value: {
 							param_6: '7',
 							param_7: '8',
@@ -197,10 +202,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					acc[key] = mockValues[index];
 					return acc;
 				}, {});
-				const effect = {
-					...valuesInEffect,
-					...createArbitraryTargetDataForEffect(),
-				};
+				const effect = createArbitraryBaseEffect(valuesInEffect);
 				const context = createArbitraryContext({
 					damageFrames: {
 						hits: arbitraryHitCount,
@@ -215,6 +217,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					id: expectedBuffId,
 					originalId: expectedOriginalId,
 					sources: createExpectedSourcesForArbitraryContext(),
+					effectDelay: arbitraryEffectDelay,
 					value: {
 						...expectedValuesForParams,
 						hits: arbitraryHitCount,
@@ -229,12 +232,13 @@ describe('getProcEffectToBuffMapping method', () => {
 
 			describe('for missing parts of context.damageFrames', () => {
 				it('defaults to 0 for hits and distribution if context.damageFrames does not exist', () => {
-					const effect = createArbitraryTargetDataForEffect();
+					const effect = createArbitraryBaseEffect();
 					const context = createArbitraryContext();
 					const expectedResult = [{
 						id: expectedBuffId,
 						originalId: expectedOriginalId,
 						sources: createExpectedSourcesForArbitraryContext(),
+						effectDelay: arbitraryEffectDelay,
 						value: {
 							hits: 0,
 							distribution: 0,
@@ -246,7 +250,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 
 				it('defaults to 0 for hits if context.damageFrames.hits does not exist', () => {
-					const effect = createArbitraryTargetDataForEffect();
+					const effect = createArbitraryBaseEffect();
 					const context = createArbitraryContext({
 						damageFrames: {
 							[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
@@ -256,6 +260,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: expectedBuffId,
 						originalId: expectedOriginalId,
 						sources: createExpectedSourcesForArbitraryContext(),
+						effectDelay: arbitraryEffectDelay,
 						value: {
 							hits: 0,
 							distribution: arbitraryDamageDistribution,
@@ -267,7 +272,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 
 				it('defaults to 0 for distribution if context.damageFrames["hit dmg% distribution (total)"] does not exist', () => {
-					const effect = createArbitraryTargetDataForEffect();
+					const effect = createArbitraryBaseEffect();
 					const context = createArbitraryContext({
 						damageFrames: {
 							hits: arbitraryHitCount,
@@ -277,6 +282,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: expectedBuffId,
 						originalId: expectedOriginalId,
 						sources: createExpectedSourcesForArbitraryContext(),
+						effectDelay: arbitraryEffectDelay,
 						value: {
 							hits: arbitraryHitCount,
 							distribution: 0,
@@ -291,14 +297,12 @@ describe('getProcEffectToBuffMapping method', () => {
 			PARAMS_ORDER.forEach((paramCase) => {
 				it(`returns only value for ${paramCase} if it is non-zero and other stats are zero`, () => {
 					const params = PARAMS_ORDER.map((param) => param === paramCase ? '789' : '0').join(',');
-					const effect = {
-						params,
-						...createArbitraryTargetDataForEffect(),
-					};
+					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [{
 						id: expectedBuffId,
 						originalId: expectedOriginalId,
 						sources: createExpectedSourcesForArbitraryContext(),
+						effectDelay: arbitraryEffectDelay,
 						value: {
 							[paramCase]: 789,
 							hits: 0,
@@ -314,15 +318,14 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
-				const effect = {
-					params: '0,0,0,0,0,0,123',
-				};
+				const effect = createArbitraryBaseEffect({ params: '0,0,0,0,0,0,123' });
 				const context = createArbitraryContext();
 				const expectedResult = [
 					{
 						id: expectedBuffId,
 						originalId: expectedOriginalId,
 						sources: arbitrarySourceValue,
+						effectDelay: arbitraryEffectDelay,
 						value: { hits: 0, distribution: 0 },
 						...arbitraryTargetData,
 					},
@@ -330,6 +333,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
 						originalId: expectedOriginalId,
 						sources: arbitrarySourceValue,
+						effectDelay: arbitraryEffectDelay,
 						value: arbitraryUnknownValue,
 						...arbitraryTargetData,
 					},
@@ -358,15 +362,13 @@ describe('getProcEffectToBuffMapping method', () => {
 
 			it('uses the params property when it exists', () => {
 				const params = `1,2,${arbitraryRecX},${arbitraryRecY}`;
-				const effect = {
-					params,
-					...createArbitraryTargetDataForEffect(),
-				};
+				const effect = createArbitraryBaseEffect({ params });
 				const context = createArbitraryContext();
 				const expectedResult = [{
 					id: expectedBuffId,
 					originalId: expectedOriginalId,
 					sources: createExpectedSourcesForArbitraryContext(),
+					effectDelay: arbitraryEffectDelay,
 					value: {
 						healLow: 1,
 						healHigh: 2,
@@ -381,16 +383,14 @@ describe('getProcEffectToBuffMapping method', () => {
 
 			it('returns a buff entry for extra parameters', () => {
 				const params = `1,2,${arbitraryRecX},${arbitraryRecY},5,6,7`;
-				const effect = {
-					params,
-					...createArbitraryTargetDataForEffect(),
-				};
+				const effect = createArbitraryBaseEffect({ params });
 				const context = createArbitraryContext();
 				const expectedResult = [
 					{
 						id: expectedBuffId,
 						originalId: expectedOriginalId,
 						sources: createExpectedSourcesForArbitraryContext(),
+						effectDelay: arbitraryEffectDelay,
 						value: {
 							healLow: 1,
 							healHigh: 2,
@@ -402,6 +402,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
 						originalId: expectedOriginalId,
 						sources: createExpectedSourcesForArbitraryContext(),
+						effectDelay: arbitraryEffectDelay,
 						value: {
 							param_4: '5',
 							param_5: '6',
@@ -416,17 +417,17 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			it('falls back to effect properties when params property does not exist', () => {
-				const effect = {
+				const effect = createArbitraryBaseEffect({
 					'heal low': 3,
 					'heal high': 4,
 					'rec added% (from healer)': 5,
-					...createArbitraryTargetDataForEffect(),
-				};
+				});
 				const context = createArbitraryContext();
 				const expectedResult = [{
 					id: expectedBuffId,
 					originalId: expectedOriginalId,
 					sources: createExpectedSourcesForArbitraryContext(),
+					effectDelay: arbitraryEffectDelay,
 					value: {
 						healLow: 3,
 						healHigh: 4,
@@ -440,17 +441,17 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			it('converts effect properties to numbers when params property does not exist', () => {
-				const effect = {
+				const effect = createArbitraryBaseEffect({
 					'heal low': '6',
 					'heal high': '7',
 					'rec added% (from healer)': '8',
-					...createArbitraryTargetDataForEffect(),
-				};
+				});
 				const context = createArbitraryContext();
 				const expectedResult = [{
 					id: expectedBuffId,
 					originalId: expectedOriginalId,
 					sources: createExpectedSourcesForArbitraryContext(),
+					effectDelay: arbitraryEffectDelay,
 					value: {
 						healLow: 6,
 						healHigh: 7,
@@ -477,10 +478,7 @@ describe('getProcEffectToBuffMapping method', () => {
 								acc[prop] = 123;
 								return acc;
 							}, {});
-						const effect = {
-							...valuesInEffect,
-							...createArbitraryTargetDataForEffect(),
-						};
+						const effect = createArbitraryBaseEffect(valuesInEffect);
 						const context = createArbitraryContext();
 						const expectedValues = Object.entries(effectPropToResultPropMapping)
 							.reduce((acc, [localEffectProp, resultProp]) => {
@@ -491,6 +489,7 @@ describe('getProcEffectToBuffMapping method', () => {
 							id: expectedBuffId,
 							originalId: expectedOriginalId,
 							sources: createExpectedSourcesForArbitraryContext(),
+							effectDelay: arbitraryEffectDelay,
 							value: expectedValues,
 							...createExpectedTargetDataForBuffFromArbitraryTargetDataInEffect(),
 						}];
@@ -506,15 +505,13 @@ describe('getProcEffectToBuffMapping method', () => {
 							acc[prop] = 'not a number';
 							return acc;
 						}, {});
-					const effect = {
-						...valuesInEffect,
-						...createArbitraryTargetDataForEffect(),
-					};
+					const effect = createArbitraryBaseEffect(valuesInEffect);
 					const context = createArbitraryContext();
 					const expectedResult = [{
 						id: expectedBuffId,
 						originalId: expectedOriginalId,
 						sources: createExpectedSourcesForArbitraryContext(),
+						effectDelay: arbitraryEffectDelay,
 						value: {
 							healLow: 0,
 							healHigh: 0,
@@ -528,15 +525,13 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 
 				it('defaults values for effect params to 0 if they are non-number or missing', () => {
-					const effect = {
-						params: 'non-number',
-						...createArbitraryTargetDataForEffect(),
-					};
+					const effect = createArbitraryBaseEffect({ params: 'non-number' });
 					const context = createArbitraryContext();
 					const expectedResult = [{
 						id: expectedBuffId,
 						originalId: expectedOriginalId,
 						sources: createExpectedSourcesForArbitraryContext(),
+						effectDelay: arbitraryEffectDelay,
 						value: {
 							healLow: 0,
 							healHigh: 0,
@@ -551,15 +546,16 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
-				const effect = {
+				const effect = createArbitraryBaseEffect({
 					params: `0,0,${arbitraryRecX},${arbitraryRecY},123`,
-				};
+				});
 				const context = createArbitraryContext();
 				const expectedResult = [
 					{
 						id: expectedBuffId,
 						originalId: expectedOriginalId,
 						sources: arbitrarySourceValue,
+						effectDelay: arbitraryEffectDelay,
 						value: { healHigh: 0, healLow: 0, 'healerRec%': expectedRecAddedForArbitraryValues },
 						...arbitraryTargetData,
 					},
@@ -567,6 +563,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
 						originalId: expectedOriginalId,
 						sources: arbitrarySourceValue,
+						effectDelay: arbitraryEffectDelay,
 						value: arbitraryUnknownValue,
 						...arbitraryTargetData,
 					},
