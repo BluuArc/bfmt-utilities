@@ -184,4 +184,61 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('3', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const params = {
+			healLow: '0' as string | number,
+			healHigh: '0' as string | number,
+			'targetRec%': 0,
+			turnDuration: '0' as string | number,
+			// TODO: handle unknown 5th parameter once it's figured out
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let rec: string;
+			let extraParams: string[];
+			[params.healLow, params.healHigh, rec, params.turnDuration, ...extraParams] = effect.params.split(',');
+			params['targetRec%'] = (1 + parseNumberOrDefault(rec) / 100) * 10;
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+		} else {
+			params.healLow = (effect['gradual heal low'] as number);
+			params.healHigh = (effect['gradual heal high'] as number);
+			params['targetRec%'] = (effect['rec added% (from target)'] as number);
+			params.turnDuration = (effect['gradual heal turns (8)'] as number);
+		}
+
+		// ensure every property is a number
+		Object.keys(params).forEach((key) => {
+			params[key as 'healLow' | 'healHigh' | 'targetRec%' | 'turnDuration'] = parseNumberOrDefault(params[key as 'healLow' | 'healHigh' | 'targetRec%' | 'turnDuration']);
+		});
+
+		const results: IBuff[] = [{
+			id: 'proc:3',
+			originalId: '3',
+			sources,
+			effectDelay,
+			duration: params.turnDuration as number,
+			value: {
+				healLow: params.healLow,
+				healHigh: params.healHigh,
+				'targetRec%': params['targetRec%'],
+			},
+			...targetData,
+		}];
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '3',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }

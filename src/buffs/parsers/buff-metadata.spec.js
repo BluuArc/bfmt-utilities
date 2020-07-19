@@ -264,4 +264,8 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:2', () => {
 		testDefaultIconResult(BuffId['proc:2'], [IconId.BUFF_HPREC]);
 	});
+
+	describe('proc:3', () => {
+		testDefaultIconResult(BuffId['proc:3'], [IconId.BUFF_HPREC]);
+	});
 });

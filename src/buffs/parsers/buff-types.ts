@@ -139,6 +139,7 @@ export interface IBuff {
 	targetType?: TargetType;
 	targetArea?: TargetArea;
 	effectDelay?: string;
+	duration?: number;
 
 	/**
 	 * @description Ordered from the skill that immediately grants the buff on use to
@@ -388,4 +389,5 @@ export enum BuffId {
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 	'proc:1' = 'proc:1',
 	'proc:2' = 'proc:2',
+	'proc:3' = 'proc:3',
 }

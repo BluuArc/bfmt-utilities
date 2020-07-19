@@ -222,4 +222,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_HPREC],
 	},
+	'proc:3': {
+		id: BuffId['proc:3'],
+		name: 'Gradual Heal',
+		stat: UnitStat.hp,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_HPREC],
+	},
 });

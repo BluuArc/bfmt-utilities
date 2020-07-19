@@ -45,6 +45,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		const arbitraryEffectDelay = 'arbitrary effect delay';
 		const arbitraryHitCount = 123;
 		const arbitraryDamageDistribution = 456;
+		const arbitraryTurnDuration = 789;
 
 		const EFFECT_DELAY_KEY = 'effect delay time(ms)/frame';
 		const HIT_DMG_DISTRIBUTION_TOTAL_KEY = 'hit dmg% distribution (total)';
@@ -519,6 +520,218 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: expectedBuffId,
 						sources: arbitrarySourceValue,
 						value: { healHigh: 0, healLow: 0, 'healerRec%': expectedRecAddedForArbitraryValues },
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 4] });
+			});
+		});
+
+		describe('proc 3', () => {
+			const expectedBuffId = 'proc:3';
+
+			const arbitraryRecParam = 80;
+			const expectedRecAddedForArbitraryValues = 18;
+
+			const EFFECT_TURN_DURATION_KEY = 'gradual heal turns (8)';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get('3');
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect('3');
+			});
+
+			testFunctionExistence('3');
+			expectValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,${arbitraryRecParam},${arbitraryTurnDuration}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const context = createArbitraryContext();
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: arbitraryTurnDuration,
+					value: {
+						healLow: 1,
+						healHigh: 2,
+						'targetRec%': expectedRecAddedForArbitraryValues,
+					},
+				})];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `1,2,${arbitraryRecParam},${arbitraryTurnDuration},5,6,7`;
+				const effect = createArbitraryBaseEffect({ params });
+				const context = createArbitraryContext();
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						duration: arbitraryTurnDuration,
+						value: {
+							healLow: 1,
+							healHigh: 2,
+							'targetRec%': expectedRecAddedForArbitraryValues,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_4: '5',
+							param_5: '6',
+							param_6: '7',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					'gradual heal low': 3,
+					'gradual heal high': 4,
+					'rec added% (from target)': 5,
+					[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+				});
+				const context = createArbitraryContext();
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: arbitraryTurnDuration,
+					value: {
+						healLow: 3,
+						healHigh: 4,
+						'targetRec%': 5,
+					},
+				})];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					'gradual heal low': '6',
+					'gradual heal high': '7',
+					'rec added% (from target)': '8',
+					[EFFECT_TURN_DURATION_KEY]: '9',
+				});
+				const context = createArbitraryContext();
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 9,
+					value: {
+						healLow: 6,
+						healHigh: 7,
+						'targetRec%': 8,
+					},
+				})];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				const effectPropToResultPropMapping = {
+					'gradual heal low': 'healLow',
+					'gradual heal high': 'healHigh',
+					'rec added% (from target)': 'targetRec%',
+				};
+				Object.keys(effectPropToResultPropMapping).forEach((effectProp) => {
+					it(`defaults to 0 for missing ${effectProp} value`, () => {
+						const valuesInEffect = Object.keys(effectPropToResultPropMapping)
+							.filter((prop) => prop !== effectProp)
+							.reduce((acc, prop) => {
+								acc[prop] = 123;
+								return acc;
+							}, {});
+						const effect = createArbitraryBaseEffect({
+							...valuesInEffect,
+							[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+						});
+						const context = createArbitraryContext();
+						const expectedValues = Object.entries(effectPropToResultPropMapping)
+							.reduce((acc, [localEffectProp, resultProp]) => {
+								acc[resultProp] = localEffectProp === effectProp ? 0 : 123;
+								return acc;
+							}, {});
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							duration: arbitraryTurnDuration,
+							value: expectedValues,
+						})];
+
+						const result = mappingFunction(effect, context);
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('defaults all effect properties to 0 for non-number values', () => {
+					const valuesInEffect = Object.keys(effectPropToResultPropMapping)
+						.reduce((acc, prop) => {
+							acc[prop] = 'not a number';
+							return acc;
+						}, {});
+					const effect = createArbitraryBaseEffect({
+						...valuesInEffect,
+						[EFFECT_TURN_DURATION_KEY]: 'not a number',
+					});
+					const context = createArbitraryContext();
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: 0,
+						value: {
+							healLow: 0,
+							healHigh: 0,
+							'targetRec%': 0,
+						},
+					})];
+
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults values for effect params to 0 if they are non-number or missing', () => {
+					const effect = createArbitraryBaseEffect({ params: 'non-number' });
+					const context = createArbitraryContext();
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: 0,
+						value: {
+							healLow: 0,
+							healHigh: 0,
+							'targetRec%': 10,
+						},
+					})];
+
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: `0,0,${arbitraryRecParam},${arbitraryTurnDuration},123`,
+				});
+				const context = createArbitraryContext();
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: { healHigh: 0, healLow: 0, 'targetRec%': expectedRecAddedForArbitraryValues },
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 					baseBuffFactory({
