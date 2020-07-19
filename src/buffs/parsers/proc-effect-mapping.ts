@@ -241,4 +241,61 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('4', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let flatFill = 0;
+		let percentFill = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawFlatFill, rawPercentFill, ...extraParams] = effect.params.split(',');
+			flatFill = parseNumberOrDefault(rawFlatFill);
+			percentFill = parseNumberOrDefault(rawPercentFill);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		} else {
+			if ('bb bc fill' in effect) {
+				flatFill = parseNumberOrDefault(effect['bb bc fill'] as number);
+			}
+			if ('bb bc fill%' in effect) {
+				percentFill = parseNumberOrDefault(effect['bb bc fill%'] as number);
+			}
+		}
+
+		const results: IBuff[] = [];
+		if (flatFill > 0) {
+			results.push({
+				id: 'proc:4:flat',
+				originalId: '4',
+				sources,
+				effectDelay,
+				value: flatFill,
+				...targetData,
+			});
+		}
+
+		if (percentFill > 0) {
+			results.push({
+				id: 'proc:4:percent',
+				originalId: '4',
+				sources,
+				effectDelay,
+				value: percentFill,
+				...targetData,
+			});
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '4',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }

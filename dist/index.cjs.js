@@ -1607,7 +1607,7 @@ var BuffConditionElement;
     BuffConditionElement["OmniParadigm"] = "omniParadigm";
 })(BuffConditionElement || (BuffConditionElement = {}));
 /**
- * @description Stats that a unit can have.
+ * @description Stats on a unit that a buff can affect.
  */
 var UnitStat;
 (function (UnitStat) {
@@ -1616,6 +1616,7 @@ var UnitStat;
     UnitStat["def"] = "def";
     UnitStat["rec"] = "rec";
     UnitStat["crit"] = "crit";
+    UnitStat["bbGauge"] = "bbGauge";
 })(UnitStat || (UnitStat = {}));
 var IconId;
 (function (IconId) {
@@ -1631,6 +1632,7 @@ var IconId;
     IconId["BUFF_CRTRATEUP"] = "BUFF_CRTRATEUP";
     IconId["BUFF_CRTRATEDOWN"] = "BUFF_CRTRATEDOWN";
     IconId["BUFF_HPREC"] = "BUFF_HPREC";
+    IconId["BUFF_BBREC"] = "BUFF_BBREC";
     IconId["BUFF_FIREHPUP"] = "BUFF_FIREHPUP";
     IconId["BUFF_FIREHPDOWN"] = "BUFF_FIREHPDOWN";
     IconId["BUFF_FIREATKUP"] = "BUFF_FIREATKUP";
@@ -1803,6 +1805,8 @@ var BuffId;
     BuffId["proc:1"] = "proc:1";
     BuffId["proc:2"] = "proc:2";
     BuffId["proc:3"] = "proc:3";
+    BuffId["proc:4:flat"] = "proc:4:flat";
+    BuffId["proc:4:percent"] = "proc:4:percent";
 })(BuffId || (BuffId = {}));
 
 /**
@@ -1899,7 +1903,7 @@ function getProcTargetData(effect) {
 /**
  * @description Try to parse the given value into a number or return a value if it is not a number.
  * @param value Value to parse into a number.
- * @param defaultValue Value to return if `value` is not a number.
+ * @param defaultValue Value to return if `value` is not a number; defaults to 0.
  * @returns Parsed value as a number or the `defaultValue` if the value is not a number.
  */
 function parseNumberOrDefault(value, defaultValue = 0) {
@@ -2075,6 +2079,44 @@ function setMapping(map) {
         if (unknownParams) {
             results.push(createUnknownParamsEntry(unknownParams, {
                 originalId: '3',
+                sources,
+                targetData,
+                effectDelay,
+            }));
+        }
+        return results;
+    });
+    map.set('4', (effect, context, injectionContext) => {
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        let flatFill = 0;
+        let percentFill = 0;
+        let unknownParams;
+        if (effect.params) {
+            const [rawFlatFill, rawPercentFill, ...extraParams] = effect.params.split(',');
+            flatFill = parseNumberOrDefault(rawFlatFill);
+            percentFill = parseNumberOrDefault(rawPercentFill);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        }
+        else {
+            if ('bb bc fill' in effect) {
+                flatFill = parseNumberOrDefault(effect['bb bc fill']);
+            }
+            if ('bb bc fill%' in effect) {
+                percentFill = parseNumberOrDefault(effect['bb bc fill%']);
+            }
+        }
+        const results = [];
+        if (flatFill > 0) {
+            results.push(Object.assign({ id: 'proc:4:flat', originalId: '4', sources,
+                effectDelay, value: flatFill }, targetData));
+        }
+        if (percentFill > 0) {
+            results.push(Object.assign({ id: 'proc:4:percent', originalId: '4', sources,
+                effectDelay, value: percentFill }, targetData));
+        }
+        if (unknownParams) {
+            results.push(createUnknownParamsEntry(unknownParams, {
+                originalId: '4',
                 sources,
                 targetData,
                 effectDelay,
@@ -2548,6 +2590,18 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign({ 
         stat: UnitStat.hp,
         stackType: BuffStackType.Active,
         icons: () => [IconId.BUFF_HPREC],
+    }, 'proc:4:flat': {
+        id: BuffId['proc:4:flat'],
+        name: 'Burst BB Gauge Fill (Flat Amount)',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Burst,
+        icons: () => [IconId.BUFF_BBREC],
+    }, 'proc:4:percent': {
+        id: BuffId['proc:4:percent'],
+        name: 'Burst BB Gauge Fill (Percentage)',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Burst,
+        icons: () => [IconId.BUFF_BBREC],
     } }));
 
 /**

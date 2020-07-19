@@ -158,7 +158,7 @@ export interface IBuff {
 }
 
 /**
- * @description Stats that a unit can have.
+ * @description Stats on a unit that a buff can affect.
  */
 export enum UnitStat {
 	hp = 'hp',
@@ -166,6 +166,7 @@ export enum UnitStat {
 	def = 'def',
 	rec = 'rec',
 	crit = 'crit',
+	bbGauge = 'bbGauge',
 }
 
 /**
@@ -177,6 +178,8 @@ export interface IUnitState {
 	def: IBuff[];
 	rec: IBuff[];
 	crit: IBuff[];
+
+	bbGauge: IBuff[];
 
 	// TODO: add more as needed
 }
@@ -215,6 +218,7 @@ export enum IconId {
 	BUFF_CRTRATEDOWN = 'BUFF_CRTRATEDOWN',
 
 	BUFF_HPREC = 'BUFF_HPREC',
+	BUFF_BBREC = 'BUFF_BBREC',
 
 	BUFF_FIREHPUP = 'BUFF_FIREHPUP',
 	BUFF_FIREHPDOWN = 'BUFF_FIREHPDOWN',
@@ -390,4 +394,6 @@ export enum BuffId {
 	'proc:1' = 'proc:1',
 	'proc:2' = 'proc:2',
 	'proc:3' = 'proc:3',
+	'proc:4:flat' = 'proc:4:flat',
+	'proc:4:percent' = 'proc:4:percent',
 }

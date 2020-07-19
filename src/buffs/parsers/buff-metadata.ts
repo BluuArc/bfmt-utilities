@@ -229,4 +229,18 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_HPREC],
 	},
+	'proc:4:flat': {
+		id: BuffId['proc:4:flat'],
+		name: 'Burst BB Gauge Fill (Flat Amount)',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_BBREC],
+	},
+	'proc:4:percent': {
+		id: BuffId['proc:4:percent'],
+		name: 'Burst BB Gauge Fill (Percentage)',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_BBREC],
+	},
 });

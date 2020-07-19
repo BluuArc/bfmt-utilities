@@ -1,5 +1,5 @@
 import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect, UnitElement, UnitType } from '../../datamine-types';
-import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement, UnitStat, IBuffConditions } from './buff-types';
+import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement, IBuffConditions } from './buff-types';
 import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext, createUnknownParamsValue, ITargetData } from './_helpers';
 
 /**
@@ -53,6 +53,8 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		5: UnitType.Oracle,
 		6: UnitType.Rex, // no known entries have this value at the time of writing
 	};
+
+	type CoreStat = 'hp' | 'atk' | 'def' | 'rec' | 'crit';
 
 	const STATS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
 
@@ -124,7 +126,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}
 
 		STATS_ORDER.forEach((stat) => {
-			const value = stats[stat as UnitStat];
+			const value = stats[stat as CoreStat];
 			if (value && +value) {
 				results.push({
 					id: `passive:1:${stat}`,
@@ -185,7 +187,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			stats.crit = (typedEffect['crit% buff'] as string);
 		}
 
-		const createBaseStatObject = (stat: UnitStat) => ({
+		const createBaseStatObject = (stat: CoreStat) => ({
 			id: `passive:2:${stat}`,
 			originalId: '2',
 			sources,
@@ -195,10 +197,10 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		if (stats.elements.length > 0) {
 			stats.elements.forEach((element) => {
 				STATS_ORDER.forEach((stat) => {
-					const value = stats[stat as UnitStat];
+					const value = stats[stat as CoreStat];
 					if (value && +value) {
 						results.push({
-							...createBaseStatObject(stat as UnitStat),
+							...createBaseStatObject(stat as CoreStat),
 							conditions: {
 								...conditionInfo,
 								targetElements: [element],
@@ -209,10 +211,10 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			});
 		} else {
 			STATS_ORDER.forEach((stat) => {
-				const value = stats[stat as UnitStat];
+				const value = stats[stat as CoreStat];
 				if (value && +value) {
 					results.push({
-						...createBaseStatObject(stat as UnitStat),
+						...createBaseStatObject(stat as CoreStat),
 						conditions: {
 							...conditionInfo,
 							targetElements: [BuffConditionElement.Unknown],
@@ -270,7 +272,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		const targetUnitType = stats.unitType || 'unknown';
 		STATS_ORDER.forEach((stat) => {
-			const value = stats[stat as UnitStat];
+			const value = stats[stat as CoreStat];
 			if (value && +value) {
 				results.push({
 					id: `passive:3:${stat}`,
