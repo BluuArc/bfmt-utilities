@@ -197,6 +197,48 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 			},
 		};
 	})(),
+	'passive:4:poison': {
+		id: BuffId['passive:4:poison'],
+		name: 'Passive Poison Resist',
+		stat: UnitStat.poisonResist,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_POISONBLK],
+	},
+	'passive:4:weak': {
+		id: BuffId['passive:4:weak'],
+		name: 'Passive Weak Resist',
+		stat: UnitStat.weakResist,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_WEAKBLK],
+	},
+	'passive:4:sick': {
+		id: BuffId['passive:4:sick'],
+		name: 'Passive Sick Resist',
+		stat: UnitStat.sickResist,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_SICKBLK],
+	},
+	'passive:4:injury': {
+		id: BuffId['passive:4:injury'],
+		name: 'Passive Injury Resist',
+		stat: UnitStat.injuryResist,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_INJURYBLK],
+	},
+	'passive:4:curse': {
+		id: BuffId['passive:4:curse'],
+		name: 'Passive Curse Resist',
+		stat: UnitStat.curseResist,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_CURSEBLK],
+	},
+	'passive:4:paralysis': {
+		id: BuffId['passive:4:paralysis'],
+		name: 'Passive Payalysis Resist',
+		stat: UnitStat.poisonResist,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_PARALYSISBLK],
+	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

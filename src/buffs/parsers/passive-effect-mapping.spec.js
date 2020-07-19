@@ -46,6 +46,8 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		const arbitraryUnknownValue = { unknownValue: 'some unknown value' };
 
 		const BUFF_TARGET_PROPS = ['targetType', 'targetArea'];
+		const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
+		const AILMENTS_ORDER = ['poison', 'weak', 'sick', 'injury', 'curse', 'paralysis'];
 
 		const createDefaultInjectionContext = () => {
 			/**
@@ -124,15 +126,12 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		};
 
 		describe('passive 1', () => {
-			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
-
 			beforeEach(() => {
 				mappingFunction = getPassiveEffectToBuffMapping().get('1');
 				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect('1');
 			});
 
 			testFunctionExistence('1');
-
 			expectValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:1:${stat}`));
 
 			it('uses the params property when it exists', () => {
@@ -237,7 +236,6 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 2', () => {
-			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
 			const ELEMENT_MAPPING = {
 				1: UnitElement.Fire,
 				2: UnitElement.Water,
@@ -443,7 +441,6 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 3', () => {
-			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
 			const UNIT_TYPE_MAPPING = {
 				1: UnitType.Lord,
 				2: UnitType.Anima,
@@ -614,6 +611,116 @@ describe('getPassiveEffectToBuffMapping method', () => {
 							...arbitraryConditionValue,
 							targetUnitType: 'unknown',
 						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
+			});
+		});
+
+		describe('passive 4', () => {
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get('4');
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect('4');
+			});
+
+			testFunctionExistence('4');
+			expectValidBuffIds(AILMENTS_ORDER.map((ailment) => `passive:4:${ailment}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6';
+				const splitParams = params.split(',');
+				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
+					return baseBuffFactory({
+						id: `passive:4:${ailment}`,
+						value: +(splitParams[index]),
+					});
+				});
+
+				const effect = { params };
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,8,9';
+				const splitParams = params.split(',');
+				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
+					return baseBuffFactory({
+						id: `passive:4:${ailment}`,
+						value: +(splitParams[index]),
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_6: '7',
+						param_7: '8',
+						param_8: '9',
+					},
+				})]);
+
+				const effect = { params };
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to ailment-specific properties when the params property does not exist', () => {
+				const mockValues = [7, 8, 9, 10, 11, 12];
+				const effect = AILMENTS_ORDER.reduce((acc, ailment, index) => {
+					acc[`${ailment !== 'weak' ? ailment : 'weaken'} resist%`] = mockValues[index];
+					return acc;
+				}, {});
+
+				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
+					return baseBuffFactory({
+						id: `passive:4:${ailment}`,
+						value: mockValues[index],
+					});
+				});
+
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			AILMENTS_ORDER.forEach((ailmentCase) => {
+				it(`returns only value for ${ailmentCase} if it is non-zero and other stats are zero`, () => {
+					const params = AILMENTS_ORDER.map((ailment) => ailment === ailmentCase ? '123' : '0').join(',');
+					const expectedResult = [baseBuffFactory({
+						id: `passive:4:${ailmentCase}`,
+						value: 123,
+					})];
+
+					const effect = { params };
+					const context = createArbitraryContext();
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,0,0,456,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:4:paralysis',
+						sources: arbitrarySourceValue,
+						value: 456,
+						conditions: arbitraryConditionValue,
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 					baseBuffFactory({

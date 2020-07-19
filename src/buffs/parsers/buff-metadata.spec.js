@@ -248,6 +248,32 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 4 buffs', () => {
+		describe('passive:4:poison', () => {
+			testDefaultIconResult(BuffId['passive:4:poison'], [IconId.BUFF_POISONBLK]);
+		});
+
+		describe('passive:4:weak', () => {
+			testDefaultIconResult(BuffId['passive:4:weak'], [IconId.BUFF_WEAKBLK]);
+		});
+
+		describe('passive:4:sick', () => {
+			testDefaultIconResult(BuffId['passive:4:sick'], [IconId.BUFF_SICKBLK]);
+		});
+
+		describe('passive:4:injury', () => {
+			testDefaultIconResult(BuffId['passive:4:injury'], [IconId.BUFF_INJURYBLK]);
+		});
+
+		describe('passive:4:curse', () => {
+			testDefaultIconResult(BuffId['passive:4:curse'], [IconId.BUFF_CURSEBLK]);
+		});
+
+		describe('passive:4:paralysis', () => {
+			testDefaultIconResult(BuffId['passive:4:paralysis'], [IconId.BUFF_PARALYSISBLK]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

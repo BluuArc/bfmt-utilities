@@ -167,6 +167,12 @@ export enum UnitStat {
 	rec = 'rec',
 	crit = 'crit',
 	bbGauge = 'bbGauge',
+	poisonResist = 'poisonResist',
+	weakResist = 'weakResist',
+	sickResist = 'sickResist',
+	injuryResist = 'injuryResist',
+	curseResist = 'curseResist',
+	paralysisResist = 'paralysisResist',
 }
 
 /**
@@ -180,6 +186,13 @@ export interface IUnitState {
 	crit: IBuff[];
 
 	bbGauge: IBuff[];
+
+	poisonResist: IBuff[];
+	weakResist: IBuff[];
+	sickResist: IBuff[];
+	injuryResist: IBuff[];
+	curseResist: IBuff[];
+	paralysisResist: IBuff[];
 
 	// TODO: add more as needed
 }
@@ -362,6 +375,13 @@ export enum IconId {
 	BUFF_UNITTYPECRTRATEUP = 'BUFF_UNITTYPECRTRATEUP',
 	BUFF_UNITTYPECRTRATEDOWN = 'BUFF_UNITTYPECRTRATEDOWN',
 
+	BUFF_POISONBLK = 'BUFF_POISONBLK',
+	BUFF_WEAKBLK = 'BUFF_WEAKBLK',
+	BUFF_SICKBLK = 'BUFF_SICKBLK',
+	BUFF_INJURYBLK = 'BUFF_INJURYBLK',
+	BUFF_CURSEBLK = 'BUFF_CURSEBLK',
+	BUFF_PARALYSISBLK = 'BUFF_PARALYSISBLK',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 }
@@ -374,26 +394,39 @@ export enum IconId {
 export enum BuffId {
 	UNKNOWN_PASSIVE_EFFECT_ID = 'UNKNOWN_PASSIVE_EFFECT_ID',
 	UNKNOWN_PASSIVE_BUFF_PARAMS = 'UNKNOWN_PASSIVE_BUFF_PARAMS',
+
 	'passive:1:hp' = 'passive:1:hp',
 	'passive:1:atk' = 'passive:1:atk',
 	'passive:1:def' = 'passive:1:def',
 	'passive:1:rec' = 'passive:1:rec',
 	'passive:1:crit' = 'passive:1:crit',
+
 	'passive:2:hp' = 'passive:2:hp',
 	'passive:2:atk' = 'passive:2:atk',
 	'passive:2:def' = 'passive:2:def',
 	'passive:2:rec' = 'passive:2:rec',
 	'passive:2:crit' = 'passive:2:crit',
+
 	'passive:3:hp' = 'passive:3:hp',
 	'passive:3:atk' = 'passive:3:atk',
 	'passive:3:def' = 'passive:3:def',
 	'passive:3:rec' = 'passive:3:rec',
 	'passive:3:crit' = 'passive:3:crit',
+
+	'passive:4:poison' = 'passive:4:poison',
+	'passive:4:weak' = 'passive:4:weak',
+	'passive:4:sick' = 'passive:4:sick',
+	'passive:4:injury' = 'passive:4:injury',
+	'passive:4:curse' = 'passive:4:curse',
+	'passive:4:paralysis' = 'passive:4:paralysis',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
+
 	'proc:1' = 'proc:1',
 	'proc:2' = 'proc:2',
 	'proc:3' = 'proc:3',
+
 	'proc:4:flat' = 'proc:4:flat',
 	'proc:4:percent' = 'proc:4:percent',
 }
