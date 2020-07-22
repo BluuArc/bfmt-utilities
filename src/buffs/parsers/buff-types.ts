@@ -166,13 +166,23 @@ export enum UnitStat {
 	def = 'def',
 	rec = 'rec',
 	crit = 'crit',
+
 	bbGauge = 'bbGauge',
+
 	poisonResist = 'poisonResist',
 	weakResist = 'weakResist',
 	sickResist = 'sickResist',
 	injuryResist = 'injuryResist',
 	curseResist = 'curseResist',
 	paralysisResist = 'paralysisResist',
+
+	mitigation = 'mitigation',
+	fireMitigation = 'fireMitigation',
+	waterMitigation = 'waterMitigation',
+	earthMitigation = 'earthMitigation',
+	thunderMitigation = 'thunderMitigation',
+	lightMitigation = 'lightMitigation',
+	darkMitigation = 'darkMitigation',
 }
 
 /**
@@ -193,6 +203,14 @@ export interface IUnitState {
 	injuryResist: IBuff[];
 	curseResist: IBuff[];
 	paralysisResist: IBuff[];
+
+	mitigation: IBuff[],
+	fireMitigation: IBuff[],
+	waterMitigation: IBuff[],
+	earthMitigation: IBuff[],
+	thunderMitigation: IBuff[],
+	lightMitigation: IBuff[],
+	darkMitigation: IBuff[],
 
 	// TODO: add more as needed
 }
@@ -382,6 +400,14 @@ export enum IconId {
 	BUFF_CURSEBLK = 'BUFF_CURSEBLK',
 	BUFF_PARALYSISBLK = 'BUFF_PARALYSISBLK',
 
+	BUFF_FIREDMGDOWN = 'BUFF_FIREDMGDOWN',
+	BUFF_WATERDMGDOWN = 'BUFF_WATERDMGDOWN',
+	BUFF_EARTHDMGDOWN = 'BUFF_EARTHDMGDOWN',
+	BUFF_THUNDERDMGDOWN = 'BUFF_THUNDERDMGDOWN',
+	BUFF_LIGHTDMGDOWN = 'BUFF_LIGHTDMGDOWN',
+	BUFF_DARKDMGDOWN = 'BUFF_DARKDMGDOWN',
+	BUFF_ELEMENTDMGDOWN = 'BUFF_ELEMENTDMGDOWN',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 }
@@ -419,6 +445,14 @@ export enum BuffId {
 	'passive:4:injury' = 'passive:4:injury',
 	'passive:4:curse' = 'passive:4:curse',
 	'passive:4:paralysis' = 'passive:4:paralysis',
+
+	'passive:5:fire' = 'passive:5:fire',
+	'passive:5:water' = 'passive:5:water',
+	'passive:5:earth' = 'passive:5:earth',
+	'passive:5:thunder' = 'passive:5:thunder',
+	'passive:5:light' = 'passive:5:light',
+	'passive:5:dark' = 'passive:5:dark',
+	'passive:5:unknown' = 'passive:5:unknown',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
