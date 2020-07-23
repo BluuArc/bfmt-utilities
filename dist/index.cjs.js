@@ -1631,6 +1631,7 @@ var UnitStat;
     UnitStat["thunderMitigation"] = "thunderMitigation";
     UnitStat["lightMitigation"] = "lightMitigation";
     UnitStat["darkMitigation"] = "darkMitigation";
+    UnitStat["turnDurationModification"] = "turnDurationModification";
 })(UnitStat || (UnitStat = {}));
 var IconId;
 (function (IconId) {
@@ -2013,6 +2014,11 @@ function setMapping(map) {
     const createUnknownParamsEntry = (unknownParams, { originalId, sources, targetData, effectDelay, }) => (Object.assign({ id: BuffId.UNKNOWN_PROC_BUFF_PARAMS, originalId,
         effectDelay,
         sources, value: unknownParams }, targetData));
+    const createTurnDurationEntry = ({ originalId, sources, buffs, duration, targetData, }) => (Object.assign({ id: BuffId.TURN_DURATION_MODIFICATION, originalId,
+        sources, value: {
+            buffs,
+            duration: duration,
+        } }, targetData));
     const createUnknownParamsEntryFromExtraParams = (extraParams, startIndex, injectionContext) => {
         let unknownParams;
         if (extraParams && extraParams.length > 0) {
@@ -2127,12 +2133,25 @@ function setMapping(map) {
         Object.keys(params).forEach((key) => {
             params[key] = parseNumberOrDefault(params[key]);
         });
-        const results = [Object.assign({ id: 'proc:3', originalId: '3', sources,
+        const hasAnyHealValues = params.healLow !== 0 || params.healHigh !== 0;
+        const results = [];
+        if (hasAnyHealValues) {
+            results.push(Object.assign({ id: 'proc:3', originalId: '3', sources,
                 effectDelay, duration: params.turnDuration, value: {
                     healLow: params.healLow,
                     healHigh: params.healHigh,
                     'targetRec%': params['targetRec%'],
-                } }, targetData)];
+                } }, targetData));
+        }
+        else {
+            results.push(createTurnDurationEntry({
+                originalId: '3',
+                sources,
+                buffs: ['proc:3'],
+                duration: params.turnDuration,
+                targetData,
+            }));
+        }
         if (unknownParams) {
             results.push(createUnknownParamsEntry(unknownParams, {
                 originalId: '3',
@@ -2198,7 +2217,7 @@ function setMapping(map) {
             let rawElement;
             [rawElement, params.atk, params.def, params.rec, params.crit, params.turnDuration, ...extraParams] = splitEffectParams(effect);
             params.element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
-            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
         }
         else {
             const effectElement = effect['element buffed'];
@@ -2230,22 +2249,29 @@ function setMapping(map) {
             coreStatProperties.forEach((statKey) => {
                 const value = params[statKey];
                 if (value !== 0) {
-                    results.push(Object.assign({ id: `proc:5:${statKey}`, originalId: '5', sources,
-                        effectDelay, duration: params.turnDuration, value, conditions: {
+                    const buffEntry = Object.assign({ id: `proc:5:${statKey}`, originalId: '5', sources,
+                        effectDelay, duration: params.turnDuration, value }, targetData);
+                    if (params.element !== BuffConditionElement.All) {
+                        buffEntry.conditions = {
                             targetElements: [params.element],
-                        } }, targetData));
+                        };
+                    }
+                    results.push(buffEntry);
                 }
             });
         }
         else {
-            results.push(Object.assign({ id: BuffId.TURN_DURATION_MODIFICATION, originalId: '5', sources, value: {
-                    buffs: coreStatProperties.map((statKey) => `proc:5:${statKey}`),
-                    duration: params.turnDuration,
-                } }, targetData));
+            results.push(createTurnDurationEntry({
+                originalId: '5',
+                sources,
+                buffs: coreStatProperties.map((statKey) => `proc:5:${statKey}`),
+                duration: params.turnDuration,
+                targetData,
+            }));
         }
         if (unknownParams) {
             results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '3',
+                originalId: '5',
                 sources,
                 targetData,
                 effectDelay,
@@ -2623,8 +2649,14 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
     }, 'TURN_DURATION_MODIFICATION': {
         id: BuffId.TURN_DURATION_MODIFICATION,
         name: 'Passive Turn Duration Modification',
+        stat: UnitStat.turnDurationModification,
         stackType: BuffStackType.Passive,
-        icons: (buff) => [(buff && buff.value && buff.value.duration < 0) ? IconId.TURN_DURATION_DOWN : IconId.TURN_DURATION_UP],
+        icons: (buff) => [
+            (buff && buff.value &&
+                buff.value.duration &&
+                buff.value.duration < 0) ?
+                IconId.TURN_DURATION_DOWN : IconId.TURN_DURATION_UP
+        ],
     }, 'passive:1:hp': {
         id: BuffId['passive:1:hp'],
         name: 'Passive HP Boost',
@@ -2896,6 +2928,7 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
     const createIconGetterForStat = (stat) => {
         return (buff) => {
             let element = '';
+            let hasElement = false;
             let polarity = 'UP';
             if (buff) {
                 if (buff.value && buff.value < 0) {
@@ -2903,6 +2936,7 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
                 }
                 if (buff.conditions && buff.conditions.targetElements) {
                     element = buff.conditions.targetElements[0];
+                    hasElement = true;
                 }
             }
             if (typeof element !== 'string') {
@@ -2910,7 +2944,7 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
             }
             let iconKey = `BUFF_${element.toUpperCase()}${stat}${polarity}`;
             if (!element || !(iconKey in IconId)) {
-                iconKey = `BUFF_ELEMENT${stat}${polarity}`;
+                iconKey = `BUFF_${hasElement ? 'ELEMENT' : ''}${stat}${polarity}`;
             }
             return [IconId[iconKey]];
         };

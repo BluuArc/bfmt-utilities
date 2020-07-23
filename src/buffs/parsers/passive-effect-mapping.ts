@@ -376,7 +376,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			}
 		}
 
-		const value = parseNumberOrDefault(mitigation)
+		const value = parseNumberOrDefault(mitigation);
 		if (value !== 0) {
 			results.push({
 				id: `passive:5:${element}`,

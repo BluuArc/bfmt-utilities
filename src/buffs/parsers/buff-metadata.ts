@@ -41,7 +41,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		name: 'Passive Turn Duration Modification',
 		stat: UnitStat.turnDurationModification,
 		stackType: BuffStackType.Passive,
-		icons: (buff: IBuff) => [(buff && buff.value && buff.value.duration < 0) ? IconId.TURN_DURATION_DOWN : IconId.TURN_DURATION_UP],
+		icons: (buff: IBuff) => [
+			(buff && buff.value &&
+				(buff.value as { duration?: number }).duration &&
+				(buff.value as { duration: number }).duration < 0) ?
+				IconId.TURN_DURATION_DOWN : IconId.TURN_DURATION_UP],
 	},
 	'passive:1:hp': {
 		id: BuffId['passive:1:hp'],

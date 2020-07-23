@@ -680,7 +680,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					});
 				});
 
-				it('defaults all effect properties to 0 for non-number values', () => {
+				it('returns nothing if all effect properties are non-number values', () => {
 					const valuesInEffect = Object.keys(effectPropToResultPropMapping)
 						.reduce((acc, prop) => {
 							acc[prop] = 'not a number';
@@ -691,41 +691,41 @@ describe('getProcEffectToBuffMapping method', () => {
 						[EFFECT_TURN_DURATION_KEY]: 'not a number',
 					});
 					const context = createArbitraryContext();
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						duration: 0,
-						value: {
-							healLow: 0,
-							healHigh: 0,
-							'targetRec%': 0,
-						},
-					})];
+					const expectedResult = [];
 
 					const result = mappingFunction(effect, context);
 					expect(result).toEqual(expectedResult);
 				});
 
-				it('defaults values for effect params to 0 if they are non-number or missing', () => {
+				it('returns nothing if they effect params are non-number or missing', () => {
 					const effect = createArbitraryBaseEffect({ params: 'non-number' });
 					const context = createArbitraryContext();
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						duration: 0,
-						value: {
-							healLow: 0,
-							healHigh: 0,
-							'targetRec%': 10,
-						},
-					})];
+					const expectedResult = [];
 
 					const result = mappingFunction(effect, context);
 					expect(result).toEqual(expectedResult);
 				});
 			});
 
+			it('returns a turn modification buff if all stats are 0 and turn duration is non-zero', () => {
+				const params = `0,0,0,${arbitraryTurnDuration}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const context = createArbitraryContext();
+				const expectedResult = [baseBuffFactory({
+					id: BuffId.TURN_DURATION_MODIFICATION,
+					value: {
+						buffs: ['proc:3'],
+						duration: arbitraryTurnDuration,
+					},
+				}, [EFFECT_DELAY_BUFF_PROP])];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = createArbitraryBaseEffect({
-					params: `0,0,${arbitraryRecParam},${arbitraryTurnDuration},123`,
+					params: `1,2,${arbitraryRecParam},${arbitraryTurnDuration},123`,
 				});
 				const context = createArbitraryContext();
 				const expectedResult = [
@@ -733,7 +733,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: expectedBuffId,
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
-						value: { healHigh: 0, healLow: 0, 'targetRec%': expectedRecAddedForArbitraryValues },
+						value: { healLow: 1, healHigh: 2, 'targetRec%': expectedRecAddedForArbitraryValues },
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 					baseBuffFactory({
@@ -1127,6 +1127,16 @@ describe('getProcEffectToBuffMapping method', () => {
 						duration: arbitraryTurnDuration,
 					},
 				}, [EFFECT_DELAY_BUFF_PROP])];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns nothing when turn duration and all stat values are zero', () => {
+				const params = '0,0,0,0,0,0';
+				const effect = createArbitraryBaseEffect({ params });
+				const context = createArbitraryContext();
+				const expectedResult = [];
 
 				const result = mappingFunction(effect, context);
 				expect(result).toEqual(expectedResult);

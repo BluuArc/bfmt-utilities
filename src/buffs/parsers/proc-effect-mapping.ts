@@ -53,6 +53,8 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		return { targetData, sources, effectDelay };
 	};
 
+	// Disable rule as this function is only called once it's confirmed that `effect.params` exists
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const splitEffectParams = (effect: ProcEffect): string[] => effect.params!.split(',');
 
 	interface IUnknownParamsContext {
@@ -60,6 +62,14 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		sources: string[];
 		targetData: ITargetData;
 		effectDelay: string;
+	}
+
+	interface ITurnDurationContext {
+		originalId: string;
+		sources: string[];
+		targetData: ITargetData;
+		buffs: (string | BuffId)[],
+		duration: number,
 	}
 
 	const createUnknownParamsEntry = (
@@ -76,6 +86,25 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		effectDelay,
 		sources,
 		value: unknownParams,
+		...targetData,
+	});
+
+	const createTurnDurationEntry = (
+		{
+			originalId,
+			sources,
+			buffs,
+			duration,
+			targetData,
+		}: ITurnDurationContext,
+	): IBuff => ({
+		id: BuffId.TURN_DURATION_MODIFICATION,
+		originalId,
+		sources,
+		value: {
+			buffs,
+			duration: duration,
+		},
 		...targetData,
 	});
 
@@ -228,19 +257,31 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			params[key as 'healLow' | 'healHigh' | 'targetRec%' | 'turnDuration'] = parseNumberOrDefault(params[key as 'healLow' | 'healHigh' | 'targetRec%' | 'turnDuration']);
 		});
 
-		const results: IBuff[] = [{
-			id: 'proc:3',
-			originalId: '3',
-			sources,
-			effectDelay,
-			duration: params.turnDuration as number,
-			value: {
-				healLow: params.healLow,
-				healHigh: params.healHigh,
-				'targetRec%': params['targetRec%'],
-			},
-			...targetData,
-		}];
+		const hasAnyHealValues = params.healLow !== 0 || params.healHigh !== 0;
+		const results: IBuff[] = [];
+		if (hasAnyHealValues) {
+			results.push({
+				id: 'proc:3',
+				originalId: '3',
+				sources,
+				effectDelay,
+				duration: params.turnDuration as number,
+				value: {
+					healLow: params.healLow,
+					healHigh: params.healHigh,
+					'targetRec%': params['targetRec%'],
+				},
+				...targetData,
+			});
+		} else if (params.turnDuration !== 0) {
+			results.push(createTurnDurationEntry({
+				originalId: '3',
+				sources,
+				buffs: ['proc:3'],
+				duration: params.turnDuration as number,
+				targetData,
+			}));
+		}
 
 		if (unknownParams) {
 			results.push(createUnknownParamsEntry(unknownParams, {
@@ -359,8 +400,8 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		(coreStatProperties as string[]).concat(['turnDuration']).forEach((prop) => {
 			params[prop as CoreStatProperty | 'turnDuration'] = parseNumberOrDefault(params[prop as CoreStatProperty | 'turnDuration']);
 		});
-		const hasAnyStats = coreStatProperties.some((statKey) => params[statKey] !== 0);
 
+		const hasAnyStats = coreStatProperties.some((statKey) => params[statKey] !== 0);
 		const results: IBuff[] = [];
 		if (hasAnyStats) {
 			coreStatProperties.forEach((statKey) => {
@@ -383,17 +424,14 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 					results.push(buffEntry);
 				}
 			});
-		} else {
-			results.push({
-				id: BuffId.TURN_DURATION_MODIFICATION,
+		} else if (params.turnDuration !== 0) {
+			results.push(createTurnDurationEntry({
 				originalId: '5',
 				sources,
-				value: {
-					buffs: coreStatProperties.map((statKey) => `proc:5:${statKey}`),
-					duration: params.turnDuration as number,
-				},
-				...targetData,
-			});
+				buffs: coreStatProperties.map((statKey) => `proc:5:${statKey}`),
+				duration: params.turnDuration as number,
+				targetData,
+			}));
 		}
 
 		if (unknownParams) {
