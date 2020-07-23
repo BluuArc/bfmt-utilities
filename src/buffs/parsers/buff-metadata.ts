@@ -345,6 +345,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		const createIconGetterForStat = (stat: string) => {
 			return (buff: IBuff) => {
 				let element: UnitElement | BuffConditionElement | string = '';
+				let hasElement = false;
 				let polarity = 'UP';
 				if (buff) {
 					if (buff.value && buff.value < 0) {
@@ -353,6 +354,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 
 					if (buff.conditions && buff.conditions.targetElements) {
 						element = buff.conditions.targetElements[0];
+						hasElement = true;
 					}
 				}
 				if (typeof element !== 'string') {
@@ -360,7 +362,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 				}
 				let iconKey = `BUFF_${element.toUpperCase()}${stat}${polarity}`;
 				if (!element || !(iconKey in IconId)) {
-					iconKey = `BUFF_ELEMENT${stat}${polarity}`;
+					iconKey = `BUFF_${hasElement ? 'ELEMENT' : ''}${stat}${polarity}`;
 				}
 				return [IconId[iconKey as IconId]];
 			};

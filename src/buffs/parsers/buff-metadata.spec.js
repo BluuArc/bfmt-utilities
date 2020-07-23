@@ -42,6 +42,13 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS, [IconId.UNKNOWN]);
 	});
 
+	describe('TURN_DURATION_MODIFICATION', () => {
+		testDefaultIconResult(BuffId.TURN_DURATION_MODIFICATION, [IconId.TURN_DURATION_UP]);
+		testIconResultWithBuff(BuffId.TURN_DURATION_MODIFICATION, [IconId.TURN_DURATION_UP], {}, 'no value property is given');
+		testIconResultWithBuff(BuffId.TURN_DURATION_MODIFICATION, [IconId.TURN_DURATION_UP], { value: {} }, 'value property exists but no duration value is given');
+		testIconResultWithBuff(BuffId.TURN_DURATION_MODIFICATION, [IconId.TURN_DURATION_DOWN], { value: { duration: -1 } }, 'buff duration value is less than 0');
+	});
+
 	describe('passive 1 buffs', () => {
 		describe('passive:1:hp', () => {
 			testDefaultIconResult(BuffId['passive:1:hp'], [IconId.BUFF_HPUP]);
@@ -332,6 +339,90 @@ describe('BUFF_METADATA entries', () => {
 
 		describe('proc:4:percent', () => {
 			testDefaultIconResult(BuffId['proc:4:percent'], [IconId.BUFF_BBREC]);
+		});
+	});
+
+	describe('proc 5 buffs', () => {
+		const POSSIBLE_KNOWN_ELEMENTS = [
+			UnitElement.Fire,
+			UnitElement.Water,
+			UnitElement.Earth,
+			UnitElement.Thunder,
+			UnitElement.Light,
+			UnitElement.Dark,
+		];
+		/**
+		 * @param {string} stat
+		 */
+		const testElementalVariantsAndPolarities = (stat) => {
+			[-1, 1].forEach((polarityValue) => {
+				const polarityKey = polarityValue < 0 ? 'DOWN' : 'UP';
+				const polarityCase = polarityValue < 0 ? 'negative' : 'positive';
+				const iconStatKey = stat !== 'crit' ? stat.toUpperCase() : 'CRTRATE';
+				POSSIBLE_KNOWN_ELEMENTS.forEach((element) => {
+					testIconResultWithBuff(
+						BuffId[`proc:5:${stat}`],
+						[IconId[`BUFF_${element.toUpperCase()}${iconStatKey}${polarityKey}`]],
+						{ value: polarityValue, conditions: { targetElements: [element] } },
+						`buff value is ${polarityCase} and first target element condition is ${element}`,
+					);
+				});
+
+				testIconResultWithBuff(
+					BuffId[`proc:5:${stat}`],
+					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue },
+					`buff value is ${polarityCase} and no conditions are given`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`proc:5:${stat}`],
+					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: {} },
+					`buff value is ${polarityCase} and no target element conditions are given`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`proc:5:${stat}`],
+					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetConditions: [] } },
+					`buff value is ${polarityCase} and target element conditions array is empty`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`proc:5:${stat}`],
+					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetElements: [{ arbitrary: 'value' }] } },
+					`buff value is ${polarityCase} and a non-string element is given`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`proc:5:${stat}`],
+					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetElements: ['a fake element'] } },
+					`buff value is ${polarityCase} and an invalid target condition element is given`,
+				);
+			});
+		};
+
+		describe('proc:5:atk', () => {
+			testDefaultIconResult(BuffId['proc:5:atk'], [IconId.BUFF_ATKUP]);
+			testElementalVariantsAndPolarities('atk');
+		});
+
+		describe('proc:5:def', () => {
+			testDefaultIconResult(BuffId['proc:5:def'], [IconId.BUFF_DEFUP]);
+			testElementalVariantsAndPolarities('def');
+		});
+
+		describe('proc:5:rec', () => {
+			testDefaultIconResult(BuffId['proc:5:rec'], [IconId.BUFF_RECUP]);
+			testElementalVariantsAndPolarities('rec');
+		});
+
+		describe('proc:5:crit', () => {
+			testDefaultIconResult(BuffId['proc:5:crit'], [IconId.BUFF_CRTRATEUP]);
+			testElementalVariantsAndPolarities('crit');
 		});
 	});
 });

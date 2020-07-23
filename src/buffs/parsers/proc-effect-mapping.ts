@@ -333,7 +333,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			[rawElement, params.atk, params.def, params.rec, params.crit, params.turnDuration, ...extraParams] = splitEffectParams(effect);
 			params.element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
 
-			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
 		} else {
 			const effectElement = effect['element buffed'] as string;
 			if (effectElement === 'all') {
@@ -366,18 +366,21 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			coreStatProperties.forEach((statKey) => {
 				const value = params[statKey];
 				if (value !== 0) {
-					results.push({
+					const buffEntry: IBuff = {
 						id: `proc:5:${statKey}`,
 						originalId: '5',
 						sources,
 						effectDelay,
 						duration: params.turnDuration as number,
 						value,
-						conditions: {
-							targetElements: [params.element],
-						},
 						...targetData,
-					});
+					};
+					if (params.element !== BuffConditionElement.All) {
+						buffEntry.conditions = {
+							targetElements: [params.element],
+						};
+					}
+					results.push(buffEntry);
 				}
 			});
 		} else {
@@ -395,7 +398,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		if (unknownParams) {
 			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId: '3',
+				originalId: '5',
 				sources,
 				targetData,
 				effectDelay,
