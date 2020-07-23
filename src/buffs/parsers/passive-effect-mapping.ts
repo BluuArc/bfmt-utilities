@@ -399,4 +399,43 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('8', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+		let mitigation: string | number = '0';
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			[mitigation, ...extraParams] = typedEffect.params.split(',');
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+		} else {
+			mitigation = (typedEffect['dmg% mitigation'] as number);
+		}
+
+		const value = parseNumberOrDefault(mitigation);
+		if (value !== 0) {
+			results.push({
+				id: 'passive:8',
+				originalId: '8',
+				sources,
+				value,
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		if (unknownParams) {
+			results.push(createaUnknownParamsEntry(unknownParams, {
+				originalId: '8',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
 }

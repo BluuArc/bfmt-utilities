@@ -1799,6 +1799,7 @@ var IconId;
     IconId["BUFF_INJURYBLK"] = "BUFF_INJURYBLK";
     IconId["BUFF_CURSEBLK"] = "BUFF_CURSEBLK";
     IconId["BUFF_PARALYSISBLK"] = "BUFF_PARALYSISBLK";
+    IconId["BUFF_DAMAGECUT"] = "BUFF_DAMAGECUT";
     IconId["BUFF_FIREDMGDOWN"] = "BUFF_FIREDMGDOWN";
     IconId["BUFF_WATERDMGDOWN"] = "BUFF_WATERDMGDOWN";
     IconId["BUFF_EARTHDMGDOWN"] = "BUFF_EARTHDMGDOWN";
@@ -1853,6 +1854,7 @@ var BuffId;
     BuffId["passive:5:light"] = "passive:5:light";
     BuffId["passive:5:dark"] = "passive:5:dark";
     BuffId["passive:5:unknown"] = "passive:5:unknown";
+    BuffId["passive:8"] = "passive:8";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1"] = "proc:1";
@@ -2306,7 +2308,7 @@ function setMapping(map) {
         if (effect.params) {
             let extraParams;
             [params.bc, params.hc, params.item, params.turnDuration, ...extraParams] = splitEffectParams(effect);
-            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
         }
         else {
             params.bc = effect['bc drop rate% buff (10)'];
@@ -2667,6 +2669,35 @@ function setMapping$1(map) {
         }
         return results;
     });
+    map.set('8', (effect, context, injectionContext) => {
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const results = [];
+        let mitigation = '0';
+        let unknownParams;
+        if (typedEffect.params) {
+            let extraParams;
+            [mitigation, ...extraParams] = typedEffect.params.split(',');
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+        }
+        else {
+            mitigation = typedEffect['dmg% mitigation'];
+        }
+        const value = parseNumberOrDefault(mitigation);
+        if (value !== 0) {
+            results.push(Object.assign({ id: 'passive:8', originalId: '8', sources,
+                value, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        if (unknownParams) {
+            results.push(createaUnknownParamsEntry(unknownParams, {
+                originalId: '8',
+                sources,
+                targetData,
+                conditionInfo,
+            }));
+        }
+        return results;
+    });
 }
 
 /**
@@ -2953,6 +2984,12 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.mitigation,
         stackType: BuffStackType.Passive,
         icons: () => [IconId.BUFF_ELEMENTDMGDOWN],
+    }, 'passive:8': {
+        id: BuffId['passive:8'],
+        name: 'Passive Damage Reduction',
+        stat: UnitStat.mitigation,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_DAMAGECUT],
     }, 'UNKNOWN_PROC_EFFECT_ID': {
         id: BuffId.UNKNOWN_PROC_EFFECT_ID,
         name: 'Unknown Proc Effect',

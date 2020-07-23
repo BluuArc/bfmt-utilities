@@ -414,6 +414,8 @@ export enum IconId {
 	BUFF_CURSEBLK = 'BUFF_CURSEBLK',
 	BUFF_PARALYSISBLK = 'BUFF_PARALYSISBLK',
 
+	BUFF_DAMAGECUT = 'BUFF_DAMAGECUT',
+
 	BUFF_FIREDMGDOWN = 'BUFF_FIREDMGDOWN',
 	BUFF_WATERDMGDOWN = 'BUFF_WATERDMGDOWN',
 	BUFF_EARTHDMGDOWN = 'BUFF_EARTHDMGDOWN',
@@ -475,6 +477,8 @@ export enum BuffId {
 	'passive:5:light' = 'passive:5:light',
 	'passive:5:dark' = 'passive:5:dark',
 	'passive:5:unknown' = 'passive:5:unknown',
+
+	'passive:8' = 'passive:8',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
