@@ -86,6 +86,7 @@ export enum BuffSource {
 export enum BuffConditionElement {
 	Unknown = 'unknown',
 	OmniParadigm = 'omniParadigm',
+	All = 'all',
 }
 
 export interface IBuffConditions {
@@ -183,6 +184,8 @@ export enum UnitStat {
 	thunderMitigation = 'thunderMitigation',
 	lightMitigation = 'lightMitigation',
 	darkMitigation = 'darkMitigation',
+
+	turnDurationModification = 'turnDurationModification',
 }
 
 /**
@@ -212,6 +215,7 @@ export interface IUnitState {
 	lightMitigation: IBuff[],
 	darkMitigation: IBuff[],
 
+	turnDurationModification: IBuff[];
 	// TODO: add more as needed
 }
 
@@ -236,6 +240,8 @@ export interface IEffectToBuffConversionContext {
 
 export enum IconId {
 	UNKNOWN = 'UNKNOWN',
+	TURN_DURATION_UP = 'TURN_DURATION_UP',
+	TURN_DURATION_DOWN = 'TURN_DURATION_DOWN',
 
 	BUFF_HPUP = 'BUFF_HPUP',
 	BUFF_HPDOWN = 'BUFF_HPDOWN',
@@ -420,6 +426,7 @@ export enum IconId {
 export enum BuffId {
 	UNKNOWN_PASSIVE_EFFECT_ID = 'UNKNOWN_PASSIVE_EFFECT_ID',
 	UNKNOWN_PASSIVE_BUFF_PARAMS = 'UNKNOWN_PASSIVE_BUFF_PARAMS',
+	TURN_DURATION_MODIFICATION = 'TURN_DURATION_MODIFICATION',
 
 	'passive:1:hp' = 'passive:1:hp',
 	'passive:1:atk' = 'passive:1:atk',
@@ -463,4 +470,9 @@ export enum BuffId {
 
 	'proc:4:flat' = 'proc:4:flat',
 	'proc:4:percent' = 'proc:4:percent',
+
+	'proc:5:atk' = 'proc:5:atk',
+	'proc:5:def' = 'proc:5:def',
+	'proc:5:rec' = 'proc:5:rec',
+	'proc:5:crit' = 'proc:5:crit',
 }

@@ -36,6 +36,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
 	},
+	'TURN_DURATION_MODIFICATION': {
+		id: BuffId.TURN_DURATION_MODIFICATION,
+		name: 'Passive Turn Duration Modification',
+		stat: UnitStat.turnDurationModification,
+		stackType: BuffStackType.Passive,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value.duration < 0) ? IconId.TURN_DURATION_DOWN : IconId.TURN_DURATION_UP],
+	},
 	'passive:1:hp': {
 		id: BuffId['passive:1:hp'],
 		name: 'Passive HP Boost',
@@ -334,4 +341,60 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_BBREC],
 	},
+	...(() => {
+		const createIconGetterForStat = (stat: string) => {
+			return (buff: IBuff) => {
+				let element: UnitElement | BuffConditionElement | string = '';
+				let polarity = 'UP';
+				if (buff) {
+					if (buff.value && buff.value < 0) {
+						polarity = 'DOWN';
+					}
+
+					if (buff.conditions && buff.conditions.targetElements) {
+						element = buff.conditions.targetElements[0];
+					}
+				}
+				if (typeof element !== 'string') {
+					element = '';
+				}
+				let iconKey = `BUFF_${element.toUpperCase()}${stat}${polarity}`;
+				if (!element || !(iconKey in IconId)) {
+					iconKey = `BUFF_ELEMENT${stat}${polarity}`;
+				}
+				return [IconId[iconKey as IconId]];
+			};
+		};
+
+		return {
+			'proc:5:atk': {
+				id: BuffId['proc:5:atk'],
+				name: 'Active Regular/Elemental Attack Boost',
+				stat: UnitStat.atk,
+				stackType: BuffStackType.Active,
+				icons: createIconGetterForStat('ATK'),
+			},
+			'proc:5:def': {
+				id: BuffId['proc:5:def'],
+				name: 'Active Regular/Elemental Defense Boost',
+				stat: UnitStat.def,
+				stackType: BuffStackType.Active,
+				icons: createIconGetterForStat('DEF'),
+			},
+			'proc:5:rec': {
+				id: BuffId['proc:5:rec'],
+				name: 'Active Regular/Elemental Recovery Boost',
+				stat: UnitStat.rec,
+				stackType: BuffStackType.Active,
+				icons: createIconGetterForStat('REC'),
+			},
+			'proc:5:crit': {
+				id: BuffId['proc:5:crit'],
+				name: 'Active Regular/Elemental Critical Hit Rate Boost',
+				stat: UnitStat.crit,
+				stackType: BuffStackType.Active,
+				icons: createIconGetterForStat('CRTRATE'),
+			},
+		};
+	})(),
 });
