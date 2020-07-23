@@ -53,6 +53,8 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		return { targetData, sources, effectDelay };
 	};
 
+	type AlphaNumeric = string | number;
+
 	// Disable rule as this function is only called once it's confirmed that `effect.params` exists
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const splitEffectParams = (effect: ProcEffect): string[] => effect.params!.split(',');
@@ -121,7 +123,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		const hits = +((context.damageFrames && context.damageFrames.hits) || 0);
 		const distribution = +((context.damageFrames && context.damageFrames['hit dmg% distribution (total)']) || 0);
-		const params : { [param: string]: string | number } = {
+		const params: { [param: string]: AlphaNumeric } = {
 			'atk%': '0',
 			flatAtk: '0',
 			'crit%': '0',
@@ -181,8 +183,8 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const params = {
-			healLow: '0' as string | number,
-			healHigh: '0' as string | number,
+			healLow: '0' as AlphaNumeric,
+			healHigh: '0' as AlphaNumeric,
 			'healerRec%': 0,
 		};
 
@@ -230,11 +232,10 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const params = {
-			healLow: '0' as string | number,
-			healHigh: '0' as string | number,
+			healLow: '0' as AlphaNumeric,
+			healHigh: '0' as AlphaNumeric,
 			'targetRec%': 0,
-			turnDuration: '0' as string | number,
-			// TODO: handle unknown 5th parameter once it's figured out
+			turnDuration: '0' as AlphaNumeric,
 		};
 
 		let unknownParams: IGenericBuffValue | undefined;
@@ -357,12 +358,11 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		const params = {
 			element: BuffConditionElement.All as (UnitElement | BuffConditionElement),
-			atk: '0' as string | number,
-			def: '0' as string | number,
-			rec: '0' as string | number,
-			crit: '0' as string | number,
-			turnDuration: '0' as string | number,
-			// TODO: handle unknown 7th parameter once it's figured out
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+			crit: '0' as AlphaNumeric,
+			turnDuration: '0' as AlphaNumeric,
 		};
 		type CoreStatProperty = 'atk' | 'def' | 'rec' | 'crit';
 		const coreStatProperties: CoreStatProperty[] = ['atk', 'def', 'rec', 'crit'];
@@ -437,6 +437,73 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		if (unknownParams) {
 			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '5',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
+
+	map.set('6', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const params = {
+			bc: '0' as AlphaNumeric,
+			hc: '0' as AlphaNumeric,
+			item: '0' as AlphaNumeric,
+			turnDuration: '0' as AlphaNumeric,
+		};
+		type DropRateProperty = 'bc' | 'hc' | 'item';
+		const dropRateProperties: DropRateProperty[] = ['bc', 'hc', 'item'];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			[params.bc, params.hc, params.item, params.turnDuration, ...extraParams] = splitEffectParams(effect);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+		} else {
+			params.bc = (effect['bc drop rate% buff (10)'] as number);
+			params.hc = (effect['hc drop rate% buff (9)'] as number);
+			params.item = (effect['item drop rate% buff (11)'] as number);
+			params.turnDuration = (effect['drop buff rate turns'] as number);
+		}
+
+		(dropRateProperties as string[]).concat(['turnDuration']).forEach((prop) => {
+			params[prop as DropRateProperty | 'turnDuration'] = parseNumberOrDefault(params[prop as DropRateProperty | 'turnDuration']);
+		});
+
+		const hasAnyRates = dropRateProperties.some((key) => params[key] !== 0);
+		const results: IBuff[] = [];
+		if (hasAnyRates) {
+			dropRateProperties.forEach((key) => {
+				const value = params[key];
+				if (value !== 0) {
+					results.push({
+						id: `proc:6:${key}`,
+						originalId: '6',
+						sources,
+						effectDelay,
+						duration: params.turnDuration as number,
+						value,
+						...targetData,
+					});
+				}
+			});
+		} else if (params.turnDuration !== 0) {
+			results.push(createTurnDurationEntry({
+				originalId: '6',
+				sources,
+				buffs: dropRateProperties.map((key) => `proc:6:${key}`),
+				duration: params.turnDuration as number,
+				targetData,
+			}));
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '6',
 				sources,
 				targetData,
 				effectDelay,

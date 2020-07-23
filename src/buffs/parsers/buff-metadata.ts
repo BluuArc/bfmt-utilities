@@ -20,7 +20,7 @@ export interface IBuffMetadata {
 	stackType: BuffStackType;
 
 	icons: (buff: IBuff) => IconId[];
-	// TODO: value schema?
+	// TODO: value schema for filters?
 }
 
 export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.freeze({
@@ -403,4 +403,25 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 			},
 		};
 	})(),
+	'proc:6:bc': {
+		id: BuffId['proc:6:bc'],
+		name: 'Active Battle Crystal Drop Rate Boost',
+		stat: UnitStat.bcDropRate,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_BCDOWN : IconId.BUFF_BCDROP],
+	},
+	'proc:6:hc': {
+		id: BuffId['proc:6:hc'],
+		name: 'Active Heart Crystal Drop Rate Boost',
+		stat: UnitStat.hcDropRate,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HCDOWN : IconId.BUFF_HCDROP],
+	},
+	'proc:6:item': {
+		id: BuffId['proc:6:item'],
+		name: 'Active Item Drop Rate Boost',
+		stat: UnitStat.itemDropRate,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ITEMDOWN : IconId.BUFF_ITEMDROP],
+	},
 });

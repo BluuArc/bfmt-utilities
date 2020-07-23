@@ -170,6 +170,10 @@ export enum UnitStat {
 
 	bbGauge = 'bbGauge',
 
+	bcDropRate = 'bcDropRate',
+	hcDropRate = 'hcDropRate',
+	itemDropRate = 'itemDropRate',
+
 	poisonResist = 'poisonResist',
 	weakResist = 'weakResist',
 	sickResist = 'sickResist',
@@ -199,6 +203,10 @@ export interface IUnitState {
 	crit: IBuff[];
 
 	bbGauge: IBuff[];
+
+	bcDropRate: IBuff[];
+	hcDropRate: IBuff[];
+	itemDropRate: IBuff[];
 
 	poisonResist: IBuff[];
 	weakResist: IBuff[];
@@ -414,6 +422,13 @@ export enum IconId {
 	BUFF_DARKDMGDOWN = 'BUFF_DARKDMGDOWN',
 	BUFF_ELEMENTDMGDOWN = 'BUFF_ELEMENTDMGDOWN',
 
+	BUFF_HCDROP = 'BUFF_HCDROP',
+	BUFF_HCDOWN = 'BUFF_HCDOWN',
+	BUFF_BCDROP = 'BUFF_BCDROP',
+	BUFF_BCDOWN = 'BUFF_BCDOWN',
+	BUFF_ITEMDROP = 'BUFF_ITEMDROP',
+	BUFF_ITEMDOWN = 'BUFF_ITEMDOWN',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 }
@@ -475,4 +490,8 @@ export enum BuffId {
 	'proc:5:def' = 'proc:5:def',
 	'proc:5:rec' = 'proc:5:rec',
 	'proc:5:crit' = 'proc:5:crit',
+
+	'proc:6:bc' = 'proc:6:bc',
+	'proc:6:hc' = 'proc:6:hc',
+	'proc:6:item' = 'proc:6:item',
 }

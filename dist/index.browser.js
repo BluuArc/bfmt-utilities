@@ -1753,6 +1753,9 @@ var bfmtUtilities = function (exports) {
     UnitStat["rec"] = "rec";
     UnitStat["crit"] = "crit";
     UnitStat["bbGauge"] = "bbGauge";
+    UnitStat["bcDropRate"] = "bcDropRate";
+    UnitStat["hcDropRate"] = "hcDropRate";
+    UnitStat["itemDropRate"] = "itemDropRate";
     UnitStat["poisonResist"] = "poisonResist";
     UnitStat["weakResist"] = "weakResist";
     UnitStat["sickResist"] = "sickResist";
@@ -1940,6 +1943,12 @@ var bfmtUtilities = function (exports) {
     IconId["BUFF_LIGHTDMGDOWN"] = "BUFF_LIGHTDMGDOWN";
     IconId["BUFF_DARKDMGDOWN"] = "BUFF_DARKDMGDOWN";
     IconId["BUFF_ELEMENTDMGDOWN"] = "BUFF_ELEMENTDMGDOWN";
+    IconId["BUFF_HCDROP"] = "BUFF_HCDROP";
+    IconId["BUFF_HCDOWN"] = "BUFF_HCDOWN";
+    IconId["BUFF_BCDROP"] = "BUFF_BCDROP";
+    IconId["BUFF_BCDOWN"] = "BUFF_BCDOWN";
+    IconId["BUFF_ITEMDROP"] = "BUFF_ITEMDROP";
+    IconId["BUFF_ITEMDOWN"] = "BUFF_ITEMDOWN";
     IconId["ATK_ST"] = "ATK_ST";
     IconId["ATK_AOE"] = "ATK_AOE";
   })(IconId || (IconId = {}));
@@ -1995,6 +2004,9 @@ var bfmtUtilities = function (exports) {
     BuffId["proc:5:def"] = "proc:5:def";
     BuffId["proc:5:rec"] = "proc:5:rec";
     BuffId["proc:5:crit"] = "proc:5:crit";
+    BuffId["proc:6:bc"] = "proc:6:bc";
+    BuffId["proc:6:hc"] = "proc:6:hc";
+    BuffId["proc:6:item"] = "proc:6:item";
   })(BuffId || (BuffId = {}));
   /**
    * @description Helper function for creating an entry to be used in the `sources`
@@ -2163,7 +2175,9 @@ var bfmtUtilities = function (exports) {
         sources,
         effectDelay
       };
-    };
+    }; // Disable rule as this function is only called once it's confirmed that `effect.params` exists
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
 
     const splitEffectParams = effect => effect.params.split(',');
 
@@ -2358,7 +2372,7 @@ var bfmtUtilities = function (exports) {
             'targetRec%': params['targetRec%']
           }
         }, targetData));
-      } else {
+      } else if (params.turnDuration !== 0) {
         results.push(createTurnDurationEntry({
           originalId: '3',
           sources,
@@ -2512,7 +2526,7 @@ var bfmtUtilities = function (exports) {
             results.push(buffEntry);
           }
         });
-      } else {
+      } else if (params.turnDuration !== 0) {
         results.push(createTurnDurationEntry({
           originalId: '5',
           sources,
@@ -2525,6 +2539,74 @@ var bfmtUtilities = function (exports) {
       if (unknownParams) {
         results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '5',
+          sources,
+          targetData,
+          effectDelay
+        }));
+      }
+
+      return results;
+    });
+    map.set('6', (effect, context, injectionContext) => {
+      const {
+        targetData,
+        sources,
+        effectDelay
+      } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+      const params = {
+        bc: '0',
+        hc: '0',
+        item: '0',
+        turnDuration: '0'
+      };
+      const dropRateProperties = ['bc', 'hc', 'item'];
+      let unknownParams;
+
+      if (effect.params) {
+        let extraParams;
+        [params.bc, params.hc, params.item, params.turnDuration, ...extraParams] = splitEffectParams(effect);
+        unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+      } else {
+        params.bc = effect['bc drop rate% buff (10)'];
+        params.hc = effect['hc drop rate% buff (9)'];
+        params.item = effect['item drop rate% buff (11)'];
+        params.turnDuration = effect['drop buff rate turns'];
+      }
+
+      dropRateProperties.concat(['turnDuration']).forEach(prop => {
+        params[prop] = parseNumberOrDefault(params[prop]);
+      });
+      const hasAnyRates = dropRateProperties.some(key => params[key] !== 0);
+      const results = [];
+
+      if (hasAnyRates) {
+        dropRateProperties.forEach(key => {
+          const value = params[key];
+
+          if (value !== 0) {
+            results.push(Object.assign({
+              id: `proc:6:${key}`,
+              originalId: '6',
+              sources,
+              effectDelay,
+              duration: params.turnDuration,
+              value
+            }, targetData));
+          }
+        });
+      } else if (params.turnDuration !== 0) {
+        results.push(createTurnDurationEntry({
+          originalId: '6',
+          sources,
+          buffs: dropRateProperties.map(key => `proc:6:${key}`),
+          duration: params.turnDuration,
+          targetData
+        }));
+      }
+
+      if (unknownParams) {
+        results.push(createUnknownParamsEntry(unknownParams, {
+          originalId: '6',
           sources,
           targetData,
           effectDelay
@@ -3000,7 +3082,7 @@ var bfmtUtilities = function (exports) {
     return typeof conversionFunction === 'function' ? conversionFunction(effect, context) : defaultConversionFunction$1(effect, context);
   }
 
-  const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Object.assign({
+  const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({
     'UNKNOWN_PASSIVE_EFFECT_ID': {
       id: BuffId.UNKNOWN_PASSIVE_EFFECT_ID,
       name: 'Unknown Passive Effect',
@@ -3389,7 +3471,29 @@ var bfmtUtilities = function (exports) {
         icons: createIconGetterForStat('CRTRATE')
       }
     };
-  })()));
+  })()), {
+    'proc:6:bc': {
+      id: BuffId['proc:6:bc'],
+      name: 'Active Battle Crystal Drop Rate Boost',
+      stat: UnitStat.bcDropRate,
+      stackType: BuffStackType.Active,
+      icons: buff => [buff && buff.value && buff.value < 0 ? IconId.BUFF_BCDOWN : IconId.BUFF_BCDROP]
+    },
+    'proc:6:hc': {
+      id: BuffId['proc:6:hc'],
+      name: 'Active Heart Crystal Drop Rate Boost',
+      stat: UnitStat.hcDropRate,
+      stackType: BuffStackType.Active,
+      icons: buff => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HCDOWN : IconId.BUFF_HCDROP]
+    },
+    'proc:6:item': {
+      id: BuffId['proc:6:item'],
+      name: 'Active Item Drop Rate Boost',
+      stat: UnitStat.itemDropRate,
+      stackType: BuffStackType.Active,
+      icons: buff => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ITEMDOWN : IconId.BUFF_ITEMDROP]
+    }
+  }));
   /**
    * @description Get the associated metadata entry for a given buff ID.
    * @param id Buff ID to get metadata for.

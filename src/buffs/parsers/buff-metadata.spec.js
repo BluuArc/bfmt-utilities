@@ -425,4 +425,21 @@ describe('BUFF_METADATA entries', () => {
 			testElementalVariantsAndPolarities('crit');
 		});
 	});
+
+	describe('proc 6 buffs', () => {
+		describe('proc:6:bc', () => {
+			testDefaultIconResult(BuffId['proc:6:bc'], [IconId.BUFF_BCDROP]);
+			testIconResultWithBuff(BuffId['proc:6:bc'], [IconId.BUFF_BCDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('proc:6:hc', () => {
+			testDefaultIconResult(BuffId['proc:6:hc'], [IconId.BUFF_HCDROP]);
+			testIconResultWithBuff(BuffId['proc:6:hc'], [IconId.BUFF_HCDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('proc:6:item', () => {
+			testDefaultIconResult(BuffId['proc:6:item'], [IconId.BUFF_ITEMDROP]);
+			testIconResultWithBuff(BuffId['proc:6:item'], [IconId.BUFF_ITEMDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+	});
 });
