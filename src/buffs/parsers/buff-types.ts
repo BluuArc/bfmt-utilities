@@ -174,6 +174,8 @@ export enum UnitStat {
 	hcDropRate = 'hcDropRate',
 	itemDropRate = 'itemDropRate',
 
+	hcEfficacy = 'hcEfficacy',
+
 	poisonResist = 'poisonResist',
 	weakResist = 'weakResist',
 	sickResist = 'sickResist',
@@ -209,6 +211,8 @@ export interface IUnitState {
 	bcDropRate: IBuff[];
 	hcDropRate: IBuff[];
 	itemDropRate: IBuff[];
+
+	hcEfficacy: IBuff[];
 
 	poisonResist: IBuff[];
 	weakResist: IBuff[];
@@ -434,6 +438,8 @@ export enum IconId {
 	BUFF_ITEMDROP = 'BUFF_ITEMDROP',
 	BUFF_ITEMDOWN = 'BUFF_ITEMDOWN',
 
+	BUFF_HCREC = 'BUFF_HCREC',
+
 	BUFF_KOBLK = 'BUFF_KOBLK', // guaranteed AI
 
 	ATK_ST = 'ATK_ST',
@@ -485,6 +491,7 @@ export enum BuffId {
 
 	'passive:8' = 'passive:8',
 	'passive:9' = 'passive:9',
+	'passive:10' = 'passive:10',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

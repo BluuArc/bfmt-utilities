@@ -308,10 +308,17 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'passive:9': {
 		id: BuffId['passive:9'],
-		name: 'Gradual BB Gauge Fill',
+		name: 'Passive Gradual BB Gauge Fill',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
+	},
+	'passive:10': {
+		id: BuffId['passive:10'],
+		name: 'Passive HC Efficacy',
+		stat: UnitStat.hcEfficacy,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_HCREC],
 	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
@@ -340,7 +347,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'proc:3': {
 		id: BuffId['proc:3'],
-		name: 'Gradual Heal',
+		name: 'Active Gradual Heal',
 		stat: UnitStat.hp,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_HPREC],

@@ -474,4 +474,15 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			originalId: '9',
 		});
 	});
+
+	map.set('10', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parsePassiveWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			effectKey: 'hc effectiveness%',
+			buffId: 'passive:10',
+			originalId: '10',
+		});
+	});
 }

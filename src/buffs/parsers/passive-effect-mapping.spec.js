@@ -997,5 +997,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				effectKey: 'bc fill per turn',
 			});
 		});
+
+		describe('passive 10', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '10',
+				expectedBuffId: 'passive:10',
+				effectKey: 'hc effectiveness%',
+			});
+		});
 	});
 });
