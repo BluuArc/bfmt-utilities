@@ -405,23 +405,22 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
-		let mitigation: string | number = '0';
+		let mitigation = 0;
 		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
-			let extraParams: string[];
-			[mitigation, ...extraParams] = typedEffect.params.split(',');
+			const [rawMitigation, ...extraParams] = typedEffect.params.split(',');
+			mitigation = parseNumberOrDefault(rawMitigation);
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
 		} else {
-			mitigation = (typedEffect['dmg% mitigation'] as number);
+			mitigation = parseNumberOrDefault(typedEffect['dmg% mitigation'] as number);
 		}
 
-		const value = parseNumberOrDefault(mitigation);
-		if (value !== 0) {
+		if (mitigation !== 0) {
 			results.push({
 				id: 'passive:8',
 				originalId: '8',
 				sources,
-				value,
+				value: mitigation,
 				conditions: { ...conditionInfo },
 				...targetData,
 			});
@@ -430,6 +429,44 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		if (unknownParams) {
 			results.push(createaUnknownParamsEntry(unknownParams, {
 				originalId: '8',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
+
+	map.set('9', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+		let bcFill = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawBcFill, ...extraParams] = typedEffect.params.split(',');
+			bcFill = parseNumberOrDefault(rawBcFill);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+		} else {
+			bcFill = parseNumberOrDefault(typedEffect['bc fill per turn'] as number);
+		}
+
+		if (bcFill !== 0) {
+			results.push({
+				id: 'passive:9',
+				originalId: '9',
+				sources,
+				value: bcFill,
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		if (unknownParams) {
+			results.push(createaUnknownParamsEntry(unknownParams, {
+				originalId: '9',
 				sources,
 				targetData,
 				conditionInfo,
