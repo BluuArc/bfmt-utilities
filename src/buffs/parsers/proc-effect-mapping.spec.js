@@ -100,7 +100,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		/**
 		 * @param {string} originalId
-		 * @returns {(params?: object, propsToDelete?: string[]) => import('./buff-types').IBuff}
+		 * @returns {(params?: import('./buff-types').IBuff, propsToDelete?: string[]) => import('./buff-types').IBuff}
 		 */
 		const createFactoryForBaseBuffFromArbitraryEffect = (originalId) => {
 			return (params = {}, propsToDelete = []) => {
@@ -142,14 +142,14 @@ describe('getProcEffectToBuffMapping method', () => {
 		describe('proc 1', () => {
 			const PARAMS_ORDER = ['atk%', 'flatAtk', 'crit%', 'bc%', 'hc%', 'dmg%'];
 			const expectedBuffId = 'proc:1';
-			const originalId = '1';
+			const expectedOriginalId = '1';
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 
 			expectValidBuffIds([expectedBuffId]);
 
@@ -345,18 +345,18 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 2', () => {
 			const expectedBuffId = 'proc:2';
-			const originalId = '2';
+			const expectedOriginalId = '2';
 
 			const arbitraryRecX = 120;
 			const arbitraryRecY = 25;
 			const expectedRecAddedForArbitraryValues = 27.5;
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 			expectValidBuffIds([expectedBuffId]);
 
 			it('uses the params property when it exists', () => {
@@ -534,7 +534,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 3', () => {
 			const expectedBuffId = 'proc:3';
-			const originalId = '3';
+			const expectedOriginalId = '3';
 
 			const arbitraryRecParam = 80;
 			const expectedRecAddedForArbitraryValues = 18;
@@ -542,11 +542,11 @@ describe('getProcEffectToBuffMapping method', () => {
 			const EFFECT_TURN_DURATION_KEY = 'gradual heal turns (8)';
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 			expectValidBuffIds([expectedBuffId]);
 
 			it('uses the params property when it exists', () => {
@@ -742,14 +742,14 @@ describe('getProcEffectToBuffMapping method', () => {
 			const expectedPercentFillId = 'proc:4:percent';
 			const FLAT_FILL_KEY = 'bb bc fill';
 			const PERCENT_FILL_KEY = 'bb bc fill%';
-			const originalId = '4';
+			const expectedOriginalId = '4';
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 			expectValidBuffIds([expectedFlatFillId, expectedPercentFillId]);
 
 			it('uses the params property when it exists', () => {
@@ -923,14 +923,14 @@ describe('getProcEffectToBuffMapping method', () => {
 			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit'];
 			const TURN_DURATION_KEY = 'buff turns';
 			const ELEMENT_BUFFED_KEY = 'element buffed';
-			const originalId = '5';
+			const expectedOriginalId = '5';
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 			expectValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `proc:5:${stat}`));
 
 			it('uses the params property when it exists', () => {
@@ -1148,14 +1148,14 @@ describe('getProcEffectToBuffMapping method', () => {
 				turnDuration: 'drop buff rate turns',
 			};
 			const DROP_PARAMS_ORDER = ['bc', 'hc', 'item'];
-			const originalId = '6';
+			const expectedOriginalId = '6';
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 			expectValidBuffIds(DROP_PARAMS_ORDER.map((p) => `proc:6:${p}`));
 
 			it('uses the params property when it exists', () => {
@@ -1361,14 +1361,14 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 7', () => {
 			const AI_EFFECT_KEY = 'angel idol recover hp%';
-			const originalId = '7';
+			const expectedOriginalId = '7';
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 			expectValidBuffIds(['proc:7']);
 
 			it('uses the params property when it exists', () => {

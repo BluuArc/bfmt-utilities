@@ -37,7 +37,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			 */
 		let mappingFunction;
 		/**
-		 * @type {(params?: object, propsToDelete?: string[]) => import('./buff-types').IBuff}
+		 * @type {(params?: import('./buff-types').IBuff, propsToDelete?: string[]) => import('./buff-types').IBuff}
 		 */
 		let baseBuffFactory;
 		const arbitraryConditionValue = { condtion: 'value' };
@@ -87,7 +87,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 		/**
 		 * @param {string} originalId
-		 * @returns {(params?: object, propsToDelete?: string[]) => import('./buff-types').IBuff}
+		 * @returns {(params?: import('./buff-types').IBuff, propsToDelete?: string[]) => import('./buff-types').IBuff}
 		 */
 		const createFactoryForBaseBuffFromArbitraryEffect = (originalId) => {
 			return (params = {}, propsToDelete = []) => {
@@ -126,13 +126,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		};
 
 		describe('passive 1', () => {
-			const originalId = '1';
+			const expectedOriginalId = '1';
 			beforeEach(() => {
-				mappingFunction = getPassiveEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 			expectValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:1:${stat}`));
 
 			it('uses the params property when it exists', () => {
@@ -146,8 +146,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -169,8 +168,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				})]);
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -188,8 +186,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					});
 				});
 
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -202,8 +199,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					})];
 
 					const effect = { params };
-					const context = createArbitraryContext();
-					const result = mappingFunction(effect, context);
+					const result = mappingFunction(effect, createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
 			});
@@ -228,6 +224,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 				];
+
 				const context = createArbitraryContext();
 				const injectionContext = createDefaultInjectionContext();
 				const result = mappingFunction(effect, context, injectionContext);
@@ -237,7 +234,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 2', () => {
-			const originalId = '2';
+			const expectedOriginalId = '2';
 			const ELEMENT_MAPPING = {
 				1: UnitElement.Fire,
 				2: UnitElement.Water,
@@ -249,11 +246,11 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			};
 
 			beforeEach(() => {
-				mappingFunction = getPassiveEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 			expectValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:2:${stat}`));
 
 			it('uses the params property when it exists', () => {
@@ -272,8 +269,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				}).reduce((acc, val) => acc.concat(val), []);
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -301,8 +297,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					})]);
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -326,8 +321,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					});
 				}).reduce((acc, val) => acc.concat(val), []);
 
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -344,8 +338,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						})];
 
 						const effect = { params };
-						const context = createArbitraryContext();
-						const result = mappingFunction(effect, context);
+						const result = mappingFunction(effect, createArbitraryContext());
 						expect(result).toEqual(expectedResult);
 					});
 				});
@@ -370,8 +363,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					];
 
 					const effect = { params };
-					const context = createArbitraryContext();
-					const result = mappingFunction(effect, context);
+					const result = mappingFunction(effect, createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
 
@@ -386,8 +378,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					})];
 
 					const effect = { params };
-					const context = createArbitraryContext();
-					const result = mappingFunction(effect, context);
+					const result = mappingFunction(effect, createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
 			});
@@ -405,8 +396,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -433,6 +423,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 				];
+
 				const context = createArbitraryContext();
 				const injectionContext = createDefaultInjectionContext();
 				const result = mappingFunction(effect, context, injectionContext);
@@ -442,7 +433,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 3', () => {
-			const originalId = '3';
+			const expectedOriginalId = '3';
 			const UNIT_TYPE_MAPPING = {
 				1: UnitType.Lord,
 				2: UnitType.Anima,
@@ -453,11 +444,11 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			};
 
 			beforeEach(() => {
-				mappingFunction = getPassiveEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 			expectValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:3:${stat}`));
 
 			it('uses the params property when it exists', () => {
@@ -474,8 +465,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -500,8 +490,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				})]);
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -523,8 +512,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					});
 				});
 
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -541,8 +529,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						})];
 
 						const effect = { params };
-						const context = createArbitraryContext();
-						const result = mappingFunction(effect, context);
+						const result = mappingFunction(effect, createArbitraryContext());
 						expect(result).toEqual(expectedResult);
 					});
 				});
@@ -558,8 +545,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					})];
 
 					const effect = { params };
-					const context = createArbitraryContext();
-					const result = mappingFunction(effect, context);
+					const result = mappingFunction(effect, createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
 
@@ -574,8 +560,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					})];
 
 					const effect = { params };
-					const context = createArbitraryContext();
-					const result = mappingFunction(effect, context);
+					const result = mappingFunction(effect, createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
 			});
@@ -594,8 +579,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -622,6 +606,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 				];
+
 				const context = createArbitraryContext();
 				const injectionContext = createDefaultInjectionContext();
 				const result = mappingFunction(effect, context, injectionContext);
@@ -631,14 +616,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 4', () => {
-			const originalId = '4';
+			const expectedOriginalId = '4';
 
 			beforeEach(() => {
-				mappingFunction = getPassiveEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 			expectValidBuffIds(AILMENTS_ORDER.map((ailment) => `passive:4:${ailment}`));
 
 			it('uses the params property when it exists', () => {
@@ -652,8 +637,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -675,8 +659,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				})]);
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -694,8 +677,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					});
 				});
 
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -708,8 +690,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					})];
 
 					const effect = { params };
-					const context = createArbitraryContext();
-					const result = mappingFunction(effect, context);
+					const result = mappingFunction(effect, createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
 			});
@@ -734,6 +715,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 				];
+
 				const context = createArbitraryContext();
 				const injectionContext = createDefaultInjectionContext();
 				const result = mappingFunction(effect, context, injectionContext);
@@ -743,7 +725,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 5', () => {
-			const originalId = '5';
+			const expectedOriginalId = '5';
 			const ELEMENT_MAPPING = {
 				1: UnitElement.Fire,
 				2: UnitElement.Water,
@@ -754,11 +736,11 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			};
 
 			beforeEach(() => {
-				mappingFunction = getPassiveEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 			expectValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((elem) => `passive:5:${elem}`));
 
 			it('uses the params property when it exists', () => {
@@ -792,8 +774,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				];
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -805,8 +786,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					value: 5,
 				})];
 
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -819,8 +799,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					})];
 
 					const effect = { params };
-					const context = createArbitraryContext();
-					const result = mappingFunction(effect, context);
+					const result = mappingFunction(effect, createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
 
@@ -840,8 +819,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					const effect = { [`${knownElementValue} resist%`]: 0 };
 					const expectedResult = [];
 
-					const context = createArbitraryContext();
-					const result = mappingFunction(effect, context);
+					const result = mappingFunction(effect, createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
 			});
@@ -854,8 +832,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				})];
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -864,8 +841,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const expectedResult = [];
 
 				const effect = { params };
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -873,8 +849,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const effect = { 'fake-element resist%': 123 };
 				const expectedResult = [];
 
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -898,6 +873,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 				];
+
 				const context = createArbitraryContext();
 				const injectionContext = createDefaultInjectionContext();
 				const result = mappingFunction(effect, context, injectionContext);
@@ -907,16 +883,16 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 8', () => {
-			const originalId = '8';
+			const expectedOriginalId = '8';
 			const expectedBuffId = 'passive:8';
 			const DAMAGE_MITIGATION_KEY = 'dmg% mitigation';
 
 			beforeEach(() => {
-				mappingFunction = getPassiveEffectToBuffMapping().get(originalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
-			testFunctionExistence(originalId);
+			testFunctionExistence(expectedOriginalId);
 			expectValidBuffIds([expectedBuffId]);
 
 			it('uses the params property when it exists', () => {
@@ -926,8 +902,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					value: 123,
 				})];
 
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -948,8 +923,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					}),
 				];
 
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -960,8 +934,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					value: 456,
 				})];
 
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -969,8 +942,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const effect = { params: '0' };
 				const expectedResult = [];
 
-				const context = createArbitraryContext();
-				const result = mappingFunction(effect, context);
+				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
 
@@ -994,6 +966,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 				];
+
 				const context = createArbitraryContext();
 				const injectionContext = createDefaultInjectionContext();
 				const result = mappingFunction(effect, context, injectionContext);
