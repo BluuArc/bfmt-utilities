@@ -450,4 +450,14 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:7', () => {
 		testDefaultIconResult(BuffId['proc:7'], [IconId.BUFF_KOBLK]);
 	});
+
+	describe('proc 8 buffs', () => {
+		describe('proc:8:flat', () => {
+			testDefaultIconResult(BuffId['proc:8:flat'], [IconId.BUFF_HPUP]);
+		});
+
+		describe('proc:8:percent', () => {
+			testDefaultIconResult(BuffId['proc:8:percent'], [IconId.BUFF_HPUP]);
+		});
+	});
 });

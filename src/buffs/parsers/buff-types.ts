@@ -505,4 +505,7 @@ export enum BuffId {
 	'proc:6:item' = 'proc:6:item',
 
 	'proc:7' = 'proc:7',
+
+	'proc:8:flat' = 'proc:8:flat',
+	'proc:8:percent' = 'proc:8:percent',
 }

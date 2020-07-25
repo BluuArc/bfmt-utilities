@@ -438,4 +438,18 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_KOBLK],
 	},
+	'proc:8:flat': {
+		id: BuffId['proc:8:flat'],
+		name: 'Max HP Boost (Flat Amount)',
+		stat: UnitStat.hp,
+		stackType: BuffStackType.Singleton,
+		icons: () => [IconId.BUFF_HPUP],
+	},
+	'proc:8:percent': {
+		id: BuffId['proc:8:percent'],
+		name: 'Max HP Boost (Percentage)',
+		stat: UnitStat.hp,
+		stackType: BuffStackType.Singleton,
+		icons: () => [IconId.BUFF_HPUP],
+	},
 });

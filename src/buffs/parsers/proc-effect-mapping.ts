@@ -548,4 +548,61 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('8', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let flatHpBoost = 0;
+		let percentHpBoost = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawFlatBoost, rawPercentBoost, ...extraParams] = splitEffectParams(effect);
+			flatHpBoost = parseNumberOrDefault(rawFlatBoost);
+			percentHpBoost = parseNumberOrDefault(rawPercentBoost);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		} else {
+			if ('max hp increase' in effect) {
+				flatHpBoost = parseNumberOrDefault(effect['max hp increase'] as number);
+			}
+			if ('max hp% increase' in effect) {
+				percentHpBoost = parseNumberOrDefault(effect['max hp% increase'] as number);
+			}
+		}
+
+		const results: IBuff[] = [];
+		if (flatHpBoost !== 0) {
+			results.push({
+				id: 'proc:8:flat',
+				originalId: '8',
+				sources,
+				effectDelay,
+				value: flatHpBoost,
+				...targetData,
+			});
+		}
+
+		if (percentHpBoost !== 0) {
+			results.push({
+				id: 'proc:8:percent',
+				originalId: '8',
+				sources,
+				effectDelay,
+				value: percentHpBoost,
+				...targetData,
+			});
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '8',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }
