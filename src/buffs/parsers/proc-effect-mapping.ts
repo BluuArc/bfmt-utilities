@@ -512,4 +512,40 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('7', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let recoveredHpPercent = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			let rawRecoveredHp: string;
+			[rawRecoveredHp, ...extraParams] = splitEffectParams(effect);
+			recoveredHpPercent = parseNumberOrDefault(rawRecoveredHp);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+		} else {
+			recoveredHpPercent = parseNumberOrDefault(effect['angel idol recover hp%']);
+		}
+
+		const results: IBuff[] = [{
+			id: 'proc:7',
+			originalId: '7',
+			sources,
+			effectDelay,
+			value: recoveredHpPercent,
+			...targetData,
+		}];
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '7',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }

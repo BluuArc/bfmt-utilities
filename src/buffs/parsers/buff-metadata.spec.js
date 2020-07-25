@@ -446,4 +446,8 @@ describe('BUFF_METADATA entries', () => {
 			testIconResultWithBuff(BuffId['proc:6:item'], [IconId.BUFF_ITEMDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 	});
+
+	describe('proc:7', () => {
+		testDefaultIconResult(BuffId['proc:7'], [IconId.BUFF_KOBLK]);
+	});
 });

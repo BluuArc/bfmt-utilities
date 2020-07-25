@@ -190,6 +190,8 @@ export enum UnitStat {
 	darkMitigation = 'darkMitigation',
 
 	turnDurationModification = 'turnDurationModification',
+
+	koResistance = 'koResistance',
 }
 
 /**
@@ -224,7 +226,8 @@ export interface IUnitState {
 	darkMitigation: IBuff[],
 
 	turnDurationModification: IBuff[];
-	// TODO: add more as needed
+
+	koResistance: IBuff[];
 }
 
 /**
@@ -431,6 +434,8 @@ export enum IconId {
 	BUFF_ITEMDROP = 'BUFF_ITEMDROP',
 	BUFF_ITEMDOWN = 'BUFF_ITEMDOWN',
 
+	BUFF_KOBLK = 'BUFF_KOBLK', // guaranteed AI
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 }
@@ -498,4 +503,6 @@ export enum BuffId {
 	'proc:6:bc' = 'proc:6:bc',
 	'proc:6:hc' = 'proc:6:hc',
 	'proc:6:item' = 'proc:6:item',
+
+	'proc:7' = 'proc:7',
 }

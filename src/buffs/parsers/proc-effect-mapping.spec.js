@@ -37,7 +37,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			 */
 		let mappingFunction;
 		/**
-		 * @type {(params?: object, propsToDelete?: string[]) => import('./buff-types').IBuff}
+		 * @type {(params?: import('./buff-types').IBuff, propsToDelete?: string[]) => import('./buff-types').IBuff}
 		 */
 		let baseBuffFactory;
 		const arbitraryTargetData = { targetData: 'data' };
@@ -89,6 +89,9 @@ describe('getProcEffectToBuffMapping method', () => {
 			targetArea: 'arbitrary target area',
 		});
 
+		/**
+		 * @type {import('../../datamine-types').ProcEffect?}
+		 */
 		const createArbitraryBaseEffect = (params = {}) => ({
 			[EFFECT_DELAY_KEY]: arbitraryEffectDelay,
 			...createArbitraryTargetDataForEffect(),
@@ -139,13 +142,14 @@ describe('getProcEffectToBuffMapping method', () => {
 		describe('proc 1', () => {
 			const PARAMS_ORDER = ['atk%', 'flatAtk', 'crit%', 'bc%', 'hc%', 'dmg%'];
 			const expectedBuffId = 'proc:1';
+			const originalId = '1';
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get('1');
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect('1');
+				mappingFunction = getProcEffectToBuffMapping().get(originalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
 			});
 
-			testFunctionExistence('1');
+			testFunctionExistence(originalId);
 
 			expectValidBuffIds([expectedBuffId]);
 
@@ -346,17 +350,18 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 2', () => {
 			const expectedBuffId = 'proc:2';
+			const originalId = '2';
 
 			const arbitraryRecX = 120;
 			const arbitraryRecY = 25;
 			const expectedRecAddedForArbitraryValues = 27.5;
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get('2');
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect('2');
+				mappingFunction = getProcEffectToBuffMapping().get(originalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
 			});
 
-			testFunctionExistence('2');
+			testFunctionExistence(originalId);
 			expectValidBuffIds([expectedBuffId]);
 
 			it('uses the params property when it exists', () => {
@@ -541,6 +546,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 3', () => {
 			const expectedBuffId = 'proc:3';
+			const originalId = '3';
 
 			const arbitraryRecParam = 80;
 			const expectedRecAddedForArbitraryValues = 18;
@@ -548,11 +554,11 @@ describe('getProcEffectToBuffMapping method', () => {
 			const EFFECT_TURN_DURATION_KEY = 'gradual heal turns (8)';
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get('3');
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect('3');
+				mappingFunction = getProcEffectToBuffMapping().get(originalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
 			});
 
-			testFunctionExistence('3');
+			testFunctionExistence(originalId);
 			expectValidBuffIds([expectedBuffId]);
 
 			it('uses the params property when it exists', () => {
@@ -756,13 +762,14 @@ describe('getProcEffectToBuffMapping method', () => {
 			const expectedPercentFillId = 'proc:4:percent';
 			const FLAT_FILL_KEY = 'bb bc fill';
 			const PERCENT_FILL_KEY = 'bb bc fill%';
+			const originalId = '4';
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get('4');
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect('4');
+				mappingFunction = getProcEffectToBuffMapping().get(originalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
 			});
 
-			testFunctionExistence('4');
+			testFunctionExistence(originalId);
 			expectValidBuffIds([expectedFlatFillId, expectedPercentFillId]);
 
 			it('uses the params property when it exists', () => {
@@ -943,13 +950,14 @@ describe('getProcEffectToBuffMapping method', () => {
 			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit'];
 			const TURN_DURATION_KEY = 'buff turns';
 			const ELEMENT_BUFFED_KEY = 'element buffed';
+			const originalId = '5';
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get('5');
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect('5');
+				mappingFunction = getProcEffectToBuffMapping().get(originalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
 			});
 
-			testFunctionExistence('5');
+			testFunctionExistence(originalId);
 			expectValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `proc:5:${stat}`));
 
 			it('uses the params property when it exists', () => {
@@ -1178,13 +1186,14 @@ describe('getProcEffectToBuffMapping method', () => {
 				turnDuration: 'drop buff rate turns',
 			};
 			const DROP_PARAMS_ORDER = ['bc', 'hc', 'item'];
+			const originalId = '6';
 
 			beforeEach(() => {
-				mappingFunction = getProcEffectToBuffMapping().get('6');
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect('6');
+				mappingFunction = getProcEffectToBuffMapping().get(originalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
 			});
 
-			testFunctionExistence('6');
+			testFunctionExistence(originalId);
 			expectValidBuffIds(DROP_PARAMS_ORDER.map((p) => `proc:6:${p}`));
 
 			it('uses the params property when it exists', () => {
@@ -1393,6 +1402,119 @@ describe('getProcEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 4] });
+			});
+		});
+
+		describe('proc 7', () => {
+			const AI_EFFECT_KEY = 'angel idol recover hp%';
+			const originalId = '7';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(originalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(originalId);
+			});
+
+			testFunctionExistence(originalId);
+			expectValidBuffIds(['proc:7']);
+
+			it('uses the params property when it exists', () => {
+				const effect = createArbitraryBaseEffect({ params: '1' });
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:7',
+					value: 1,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const effect = createArbitraryBaseEffect({ params: '1,2,3,4' });
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:7',
+						value: 1,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_1: '2',
+							param_2: '3',
+							param_3: '4',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({ [AI_EFFECT_KEY]: 1234 });
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:7',
+					value: 1234,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('converts effect properties to numbers when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({ [AI_EFFECT_KEY]: '5678' });
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:7',
+					value: 5678,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff value when params value is 0', () => {
+				const effect = createArbitraryBaseEffect({ params: '0' });
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:7',
+					value: 0,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff value when params property and AI property on effect do not exist', () => {
+				const effect = createArbitraryBaseEffect();
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:7',
+					value: 0,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({ params: '10,123' });
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:7',
+						sources: arbitrarySourceValue,
+						value: 10,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 1] });
 			});
 		});
 	});

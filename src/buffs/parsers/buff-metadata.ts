@@ -431,4 +431,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ITEMDOWN : IconId.BUFF_ITEMDROP],
 	},
+	'proc:7': {
+		id: BuffId['proc:7'],
+		name: 'Guaranteed KO Resistance',
+		stat: UnitStat.koResistance,
+		stackType: BuffStackType.Singleton,
+		icons: () => [IconId.BUFF_KOBLK],
+	},
 });
