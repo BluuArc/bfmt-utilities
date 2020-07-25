@@ -460,4 +460,87 @@ describe('BUFF_METADATA entries', () => {
 			testDefaultIconResult(BuffId['proc:8:percent'], [IconId.BUFF_HPUP]);
 		});
 	});
+
+	describe('proc 9 buffs', () => {
+		const POSSIBLE_KNOWN_ELEMENTS = [
+			UnitElement.Fire,
+			UnitElement.Water,
+			UnitElement.Earth,
+			UnitElement.Thunder,
+			UnitElement.Light,
+			UnitElement.Dark,
+		];
+		/**
+		 * @param {string} stat
+		 */
+		const testElementalVariantsAndPolarities = (stat) => {
+			[-1, 1].forEach((polarityValue) => {
+				const polarityKey = polarityValue < 0 ? 'DOWN' : 'UP';
+				const polarityCase = polarityValue < 0 ? 'negative' : 'positive';
+				const iconStatKey = stat !== 'crit' ? stat.toUpperCase() : 'CRTRATE';
+				POSSIBLE_KNOWN_ELEMENTS.forEach((element) => {
+					testIconResultWithBuff(
+						BuffId[`proc:9:${stat}`],
+						[IconId[`BUFF_${element.toUpperCase()}${iconStatKey}${polarityKey}`]],
+						{ value: polarityValue, conditions: { targetElements: [element] } },
+						`buff value is ${polarityCase} and first target element condition is ${element}`,
+					);
+				});
+
+				testIconResultWithBuff(
+					BuffId[`proc:9:${stat}`],
+					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue },
+					`buff value is ${polarityCase} and no conditions are given`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`proc:9:${stat}`],
+					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: {} },
+					`buff value is ${polarityCase} and no target element conditions are given`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`proc:9:${stat}`],
+					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetConditions: [] } },
+					`buff value is ${polarityCase} and target element conditions array is empty`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`proc:9:${stat}`],
+					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetElements: [{ arbitrary: 'value' }] } },
+					`buff value is ${polarityCase} and a non-string element is given`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`proc:9:${stat}`],
+					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetElements: ['a fake element'] } },
+					`buff value is ${polarityCase} and an invalid target condition element is given`,
+				);
+			});
+		};
+
+		describe('proc:9:atk', () => {
+			testDefaultIconResult(BuffId['proc:9:atk'], [IconId.BUFF_ATKDOWN]);
+			testElementalVariantsAndPolarities('atk');
+		});
+
+		describe('proc:9:def', () => {
+			testDefaultIconResult(BuffId['proc:9:def'], [IconId.BUFF_DEFDOWN]);
+			testElementalVariantsAndPolarities('def');
+		});
+
+		describe('proc:9:rec', () => {
+			testDefaultIconResult(BuffId['proc:9:rec'], [IconId.BUFF_RECDOWN]);
+			testElementalVariantsAndPolarities('rec');
+		});
+
+		describe('proc:9:unknown', () => {
+			testDefaultIconResult(BuffId['proc:9:unknown'], [IconId.UNKNOWN]);
+		});
+	});
 });

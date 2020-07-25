@@ -389,11 +389,11 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			coreStatProperties.forEach((statType) => {
 				const effectKey = keys.find((k) => k.startsWith(`${statType}% buff`));
 				if (effectKey) {
-					params[statType] = effect[effectKey] as number;
+					params[statType] = parseNumberOrDefault(effect[effectKey] as number);
 				}
 			});
 
-			params.turnDuration = effect['buff turns'] as number;
+			params.turnDuration = parseNumberOrDefault(effect['buff turns'] as number);
 		}
 
 		// ensure numerical properties are actually numbers
@@ -519,9 +519,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		let unknownParams: IGenericBuffValue | undefined;
 		if (effect.params) {
-			let extraParams: string[];
-			let rawRecoveredHp: string;
-			[rawRecoveredHp, ...extraParams] = splitEffectParams(effect);
+			const [rawRecoveredHp, ...extraParams] = splitEffectParams(effect);
 			recoveredHpPercent = parseNumberOrDefault(rawRecoveredHp);
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
 		} else {
@@ -597,6 +595,136 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		if (unknownParams) {
 			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '8',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
+
+	map.set('9', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const STAT_TYPE_MAPPING = {
+			0: 'atk',
+			1: 'def',
+			2: 'rec',
+		};
+		type CoreStatProperty = 'atk' | 'def' | 'rec' | 'unknown';
+		interface IStatReductionEntry {
+			stat: CoreStatProperty;
+			value: number,
+			chance: number;
+		}
+		const coreStatProperties: CoreStatProperty[] = ['atk', 'def', 'rec'];
+
+		const params = {
+			element: BuffConditionElement.All as (UnitElement | BuffConditionElement),
+			statReductionEntries: [] as IStatReductionEntry[],
+			turnDuration: 0,
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawElement, statType1, value1, procChance1, statType2, value2, procChance2, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			params.element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+			params.turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			[
+				[statType1, value1, procChance1],
+				[statType2, value2, procChance2],
+			].forEach(([rawStatType, rawValue, rawProcChance]) => {
+				const statType = parseNumberOrDefault(rawStatType) - 1;
+				const value = parseNumberOrDefault(rawValue);
+				const chance = parseNumberOrDefault(rawProcChance);
+
+				if (statType === 3) { // all stats
+					params.statReductionEntries.push(...coreStatProperties.map((stat) => ({
+						stat,
+						value,
+						chance,
+					})));
+				} else {
+					params.statReductionEntries.push({
+						stat: (STAT_TYPE_MAPPING[statType as 0 | 1 | 2] as CoreStatProperty) || 'unknown',
+						value,
+						chance,
+					});
+				}
+			});
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
+		} else {
+			const effectElement = effect['element buffed'] as string;
+			if (effectElement === 'all') {
+				params.element = BuffConditionElement.All;
+			} else if (!effectElement) {
+				params.element = BuffConditionElement.Unknown;
+			} else {
+				params.element = effectElement as UnitElement;
+			}
+
+			['buff #1', 'buff #2'].forEach((buffKey) => {
+				const entry = effect[buffKey] as { [key: string]: number };
+				if (entry) {
+					const chance = parseNumberOrDefault(entry['proc chance%']);
+					const keys = Object.keys(entry);
+					coreStatProperties.forEach((statType) => {
+						const effectKey = keys.find((k) => k.startsWith(`${statType}% buff`));
+						if (effectKey) {
+							params.statReductionEntries.push({
+								stat: statType,
+								value: parseNumberOrDefault(entry[effectKey]),
+								chance,
+							});
+						}
+					});
+				}
+			});
+
+			params.turnDuration = parseNumberOrDefault(effect['buff turns'] as number);
+		}
+
+		const results: IBuff[] = [];
+		let hasAnyValues = false;
+		params.statReductionEntries.forEach(({ stat, value, chance }) => {
+			if (value !== 0 || chance !== 0) {
+				hasAnyValues = true;
+
+				const buffEntry: IBuff = {
+					id: `proc:9:${stat}`,
+					originalId: '9',
+					sources,
+					effectDelay,
+					duration: params.turnDuration,
+					value: { value, chance },
+					...targetData,
+				};
+
+				if (params.element !== BuffConditionElement.All) {
+					buffEntry.conditions = {
+						targetElements: [params.element],
+					};
+				}
+				results.push(buffEntry);
+			}
+		});
+
+		if (!hasAnyValues && params.turnDuration !== 0) {
+			results.push(createTurnDurationEntry({
+				originalId: '9',
+				sources,
+				buffs: coreStatProperties.map((statKey) => `proc:9:${statKey}`),
+				duration: params.turnDuration,
+				targetData,
+			}));
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '9',
 				sources,
 				targetData,
 				effectDelay,

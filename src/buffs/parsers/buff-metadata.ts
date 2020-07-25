@@ -452,4 +452,61 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_HPUP],
 	},
+	...(() => {
+		const createIconGetterForStat = (stat: string) => {
+			return (buff: IBuff) => {
+				let element: UnitElement | BuffConditionElement | string = '';
+				let hasElement = false;
+				let polarity = 'DOWN'; // default to down since these are reduction buffs
+				if (buff) {
+					if (buff.value && buff.value > 0) {
+						polarity = 'UP';
+					}
+
+					if (buff.conditions && buff.conditions.targetElements) {
+						element = buff.conditions.targetElements[0];
+						hasElement = true;
+					}
+				}
+				if (typeof element !== 'string') {
+					element = '';
+				}
+				let iconKey = `BUFF_${element.toUpperCase()}${stat}${polarity}`;
+				if (!element || !(iconKey in IconId)) {
+					iconKey = `BUFF_${hasElement ? 'ELEMENT' : ''}${stat}${polarity}`;
+				}
+				return [IconId[iconKey as IconId]];
+			};
+		};
+
+		return {
+			'proc:9:atk': {
+				id: BuffId['proc:9:atk'],
+				name: 'Active Regular/Elemental Attack Reduction',
+				stat: UnitStat.atk,
+				stackType: BuffStackType.Active,
+				icons: createIconGetterForStat('ATK'),
+			},
+			'proc:9:def': {
+				id: BuffId['proc:9:def'],
+				name: 'Active Regular/Elemental Defense Reduction',
+				stat: UnitStat.def,
+				stackType: BuffStackType.Active,
+				icons: createIconGetterForStat('DEF'),
+			},
+			'proc:9:rec': {
+				id: BuffId['proc:9:rec'],
+				name: 'Active Regular/Elemental Recovery Reduction',
+				stat: UnitStat.rec,
+				stackType: BuffStackType.Active,
+				icons: createIconGetterForStat('REC'),
+			},
+			'proc:9:unknown': {
+				id: BuffId['proc:9:unknown'],
+				name: 'Active Regular/Elemental Unknown Stat Reduction',
+				stackType: BuffStackType.Active,
+				icons: () => [IconId.UNKNOWN],
+			},
+		};
+	})(),
 });

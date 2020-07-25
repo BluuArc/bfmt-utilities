@@ -1635,6 +1635,7 @@ var UnitStat;
     UnitStat["lightMitigation"] = "lightMitigation";
     UnitStat["darkMitigation"] = "darkMitigation";
     UnitStat["turnDurationModification"] = "turnDurationModification";
+    UnitStat["koResistance"] = "koResistance";
 })(UnitStat || (UnitStat = {}));
 var IconId;
 (function (IconId) {
@@ -1813,6 +1814,7 @@ var IconId;
     IconId["BUFF_BCDOWN"] = "BUFF_BCDOWN";
     IconId["BUFF_ITEMDROP"] = "BUFF_ITEMDROP";
     IconId["BUFF_ITEMDOWN"] = "BUFF_ITEMDOWN";
+    IconId["BUFF_KOBLK"] = "BUFF_KOBLK";
     IconId["ATK_ST"] = "ATK_ST";
     IconId["ATK_AOE"] = "ATK_AOE";
 })(IconId || (IconId = {}));
@@ -1869,6 +1871,12 @@ var BuffId;
     BuffId["proc:6:bc"] = "proc:6:bc";
     BuffId["proc:6:hc"] = "proc:6:hc";
     BuffId["proc:6:item"] = "proc:6:item";
+    BuffId["proc:7"] = "proc:7";
+    BuffId["proc:8:flat"] = "proc:8:flat";
+    BuffId["proc:8:percent"] = "proc:8:percent";
+    BuffId["proc:9:atk"] = "proc:9:atk";
+    BuffId["proc:9:def"] = "proc:9:def";
+    BuffId["proc:9:rec"] = "proc:9:rec";
 })(BuffId || (BuffId = {}));
 
 /**
@@ -2250,10 +2258,10 @@ function setMapping(map) {
             coreStatProperties.forEach((statType) => {
                 const effectKey = keys.find((k) => k.startsWith(`${statType}% buff`));
                 if (effectKey) {
-                    params[statType] = effect[effectKey];
+                    params[statType] = parseNumberOrDefault(effect[effectKey]);
                 }
             });
-            params.turnDuration = effect['buff turns'];
+            params.turnDuration = parseNumberOrDefault(effect['buff turns']);
         }
         // ensure numerical properties are actually numbers
         coreStatProperties.concat(['turnDuration']).forEach((prop) => {
@@ -2342,6 +2350,176 @@ function setMapping(map) {
         if (unknownParams) {
             results.push(createUnknownParamsEntry(unknownParams, {
                 originalId: '6',
+                sources,
+                targetData,
+                effectDelay,
+            }));
+        }
+        return results;
+    });
+    map.set('7', (effect, context, injectionContext) => {
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        let recoveredHpPercent = 0;
+        let unknownParams;
+        if (effect.params) {
+            let extraParams;
+            let rawRecoveredHp;
+            [rawRecoveredHp, ...extraParams] = splitEffectParams(effect);
+            recoveredHpPercent = parseNumberOrDefault(rawRecoveredHp);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+        }
+        else {
+            recoveredHpPercent = parseNumberOrDefault(effect['angel idol recover hp%']);
+        }
+        const results = [Object.assign({ id: 'proc:7', originalId: '7', sources,
+                effectDelay, value: recoveredHpPercent }, targetData)];
+        if (unknownParams) {
+            results.push(createUnknownParamsEntry(unknownParams, {
+                originalId: '7',
+                sources,
+                targetData,
+                effectDelay,
+            }));
+        }
+        return results;
+    });
+    map.set('8', (effect, context, injectionContext) => {
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        let flatHpBoost = 0;
+        let percentHpBoost = 0;
+        let unknownParams;
+        if (effect.params) {
+            const [rawFlatBoost, rawPercentBoost, ...extraParams] = splitEffectParams(effect);
+            flatHpBoost = parseNumberOrDefault(rawFlatBoost);
+            percentHpBoost = parseNumberOrDefault(rawPercentBoost);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        }
+        else {
+            if ('max hp increase' in effect) {
+                flatHpBoost = parseNumberOrDefault(effect['max hp increase']);
+            }
+            if ('max hp% increase' in effect) {
+                percentHpBoost = parseNumberOrDefault(effect['max hp% increase']);
+            }
+        }
+        const results = [];
+        if (flatHpBoost !== 0) {
+            results.push(Object.assign({ id: 'proc:8:flat', originalId: '8', sources,
+                effectDelay, value: flatHpBoost }, targetData));
+        }
+        if (percentHpBoost !== 0) {
+            results.push(Object.assign({ id: 'proc:8:percent', originalId: '8', sources,
+                effectDelay, value: percentHpBoost }, targetData));
+        }
+        if (unknownParams) {
+            results.push(createUnknownParamsEntry(unknownParams, {
+                originalId: '8',
+                sources,
+                targetData,
+                effectDelay,
+            }));
+        }
+        return results;
+    });
+    map.set('9', (effect, context, injectionContext) => {
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const STAT_TYPE_MAPPING = {
+            0: 'atk',
+            1: 'def',
+            2: 'rec',
+        };
+        const coreStatProperties = ['atk', 'def', 'rec'];
+        const params = {
+            element: BuffConditionElement.All,
+            statReductionEntries: [],
+            turnDuration: 0,
+        };
+        let unknownParams;
+        if (effect.params) {
+            let [rawElement, statType1, value1, procChance1, statType2, value2, procChance2, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+            params.element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+            params.turnDuration = parseNumberOrDefault(rawTurnDuration);
+            [
+                [statType1, value1, procChance1],
+                [statType2, value2, procChance2],
+            ].forEach(([rawStatType, rawValue, rawProcChance]) => {
+                const statType = parseNumberOrDefault(rawStatType) - 1;
+                const value = parseNumberOrDefault(rawValue);
+                const chance = parseNumberOrDefault(rawProcChance);
+                if (statType === 3) { // all stats
+                    params.statReductionEntries.push(...coreStatProperties.map((stat) => ({
+                        stat,
+                        value,
+                        chance,
+                    })));
+                }
+                else {
+                    params.statReductionEntries.push({
+                        stat: STAT_TYPE_MAPPING[statType] || 'unknown',
+                        value,
+                        chance,
+                    });
+                }
+            });
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
+        }
+        else {
+            const effectElement = effect['element buffed'];
+            if (effectElement === 'all') {
+                params.element = BuffConditionElement.All;
+            }
+            else if (!effectElement) {
+                params.element = BuffConditionElement.Unknown;
+            }
+            else {
+                params.element = effectElement;
+            }
+            ['buff #1', 'buff #2'].forEach((buffKey) => {
+                const entry = effect[buffKey];
+                if (entry) {
+                    const chance = parseNumberOrDefault(entry['proc chance%']);
+                    const keys = Object.keys(entry);
+                    coreStatProperties.forEach((statType) => {
+                        const effectKey = keys.find((k) => k.startsWith(`${statType}% buff`));
+                        if (effectKey) {
+                            params.statReductionEntries.push({
+                                stat: statType,
+                                value: parseNumberOrDefault(entry[effectKey]),
+                                chance,
+                            });
+                        }
+                    });
+                }
+            });
+            params.turnDuration = parseNumberOrDefault(effect['buff turns']);
+        }
+        const results = [];
+        let hasAnyValues = false;
+        params.statReductionEntries.forEach(({ stat, value, chance }) => {
+            if (value !== 0 || chance !== 0) {
+                hasAnyValues = true;
+                const buffEntry = Object.assign({ id: `proc:9:${stat}`, originalId: '9', sources,
+                    effectDelay, duration: params.turnDuration, value: { value, chance } }, targetData);
+                if (params.element !== BuffConditionElement.All) {
+                    buffEntry.conditions = {
+                        targetElements: [params.element],
+                    };
+                }
+                results.push(buffEntry);
+            }
+        });
+        if (!hasAnyValues && params.turnDuration !== 0) {
+            results.push(createTurnDurationEntry({
+                originalId: '9',
+                sources,
+                buffs: coreStatProperties.map((statKey) => `proc:9:${statKey}`),
+                duration: params.turnDuration,
+                targetData,
+            }));
+        }
+        if (unknownParams) {
+            results.push(createUnknownParamsEntry(unknownParams, {
+                originalId: '9',
                 sources,
                 targetData,
                 effectDelay,
@@ -2735,7 +2913,7 @@ function convertPassiveEffectToBuffs(effect, context) {
         : defaultConversionFunction$1(effect, context);
 }
 
-const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ 'UNKNOWN_PASSIVE_EFFECT_ID': {
+const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ 'UNKNOWN_PASSIVE_EFFECT_ID': {
         id: BuffId.UNKNOWN_PASSIVE_EFFECT_ID,
         name: 'Unknown Passive Effect',
         stackType: BuffStackType.Unknown,
@@ -3102,7 +3280,73 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.itemDropRate,
         stackType: BuffStackType.Active,
         icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ITEMDOWN : IconId.BUFF_ITEMDROP],
-    } }));
+    }, 'proc:7': {
+        id: BuffId['proc:7'],
+        name: 'Guaranteed KO Resistance',
+        stat: UnitStat.koResistance,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_KOBLK],
+    }, 'proc:8:flat': {
+        id: BuffId['proc:8:flat'],
+        name: 'Max HP Boost (Flat Amount)',
+        stat: UnitStat.hp,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_HPUP],
+    }, 'proc:8:percent': {
+        id: BuffId['proc:8:percent'],
+        name: 'Max HP Boost (Percentage)',
+        stat: UnitStat.hp,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_HPUP],
+    } }), (() => {
+    const createIconGetterForStat = (stat) => {
+        return (buff) => {
+            let element = '';
+            let hasElement = false;
+            let polarity = 'DOWN'; // default to down since these are reduction buffs
+            if (buff) {
+                if (buff.value && buff.value > 0) {
+                    polarity = 'UP';
+                }
+                if (buff.conditions && buff.conditions.targetElements) {
+                    element = buff.conditions.targetElements[0];
+                    hasElement = true;
+                }
+            }
+            if (typeof element !== 'string') {
+                element = '';
+            }
+            let iconKey = `BUFF_${element.toUpperCase()}${stat}${polarity}`;
+            if (!element || !(iconKey in IconId)) {
+                iconKey = `BUFF_${hasElement ? 'ELEMENT' : ''}${stat}${polarity}`;
+            }
+            return [IconId[iconKey]];
+        };
+    };
+    return {
+        'proc:9:atk': {
+            id: BuffId['proc:9:atk'],
+            name: 'Active Regular/Elemental Attack Reduction',
+            stat: UnitStat.atk,
+            stackType: BuffStackType.Active,
+            icons: createIconGetterForStat('ATK'),
+        },
+        'proc:9:def': {
+            id: BuffId['proc:9:def'],
+            name: 'Active Regular/Elemental Defense Reduction',
+            stat: UnitStat.def,
+            stackType: BuffStackType.Active,
+            icons: createIconGetterForStat('DEF'),
+        },
+        'proc:9:rec': {
+            id: BuffId['proc:9:rec'],
+            name: 'Active Regular/Elemental Recovery Reduction',
+            stat: UnitStat.rec,
+            stackType: BuffStackType.Active,
+            icons: createIconGetterForStat('REC'),
+        },
+    };
+})()));
 
 /**
  * @description Get the associated metadata entry for a given buff ID.
