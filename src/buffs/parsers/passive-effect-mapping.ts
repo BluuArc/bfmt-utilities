@@ -107,7 +107,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		effectKey: string;
 		buffId: string;
 		originalId: string;
-	};
+	}
 	const parsePassiveWithSingleNumericalParameter = ({
 		effect,
 		context,

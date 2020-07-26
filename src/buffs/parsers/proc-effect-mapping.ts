@@ -733,4 +733,67 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('10', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		type Ailment = 'poison' | 'weak' | 'sick' | 'injury' | 'curse' | 'paralysis' | 'atk down' | 'def down' | 'rec down' | 'unknown';
+		const AILMENT_MAPPING: { [param: string]: Ailment } = { // TODO: consider refactoring the strings here to a separate enum
+			1: 'poison',
+			2: 'weak',
+			3: 'sick',
+			4: 'injury',
+			5: 'curse',
+			6: 'paralysis',
+			7: 'atk down',
+			8: 'def down',
+			9: 'rec down',
+		};
+		const curedAilments: Ailment[] = [];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const splitParams = splitEffectParams(effect);
+			const knownParams = splitParams.slice(0, 8);
+			const extraParams = splitParams.slice(8);
+
+			knownParams
+				.filter((p) => p !== '0')
+				.forEach((param) => {
+					curedAilments.push(AILMENT_MAPPING[param] || 'unknown');
+				});
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
+		} else {
+			Object.values(AILMENT_MAPPING).forEach((ailment) => {
+				if (`remove ${ailment}` in effect) { // mainly for items
+					curedAilments.push(ailment);
+				}
+			});
+
+			if ('remove all status ailments' in effect) {
+				curedAilments.push('unknown'); // generic value for skills; unknown at a glance which ailments are cured
+			}
+		}
+
+		const results: IBuff[] = curedAilments.map((ailment) => ({
+			id: `proc:10:${ailment}`,
+			originalId: '10',
+			sources,
+			effectDelay,
+			value: true,
+			...targetData,
+		}));
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '10',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }

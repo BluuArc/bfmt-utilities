@@ -183,6 +183,10 @@ export enum UnitStat {
 	curseResist = 'curseResist',
 	paralysisResist = 'paralysisResist',
 
+	atkDownResist = 'atkDownResist',
+	defDownResist = 'defDownResist',
+	recDownResist = 'recDownResist',
+
 	mitigation = 'mitigation',
 	fireMitigation = 'fireMitigation',
 	waterMitigation = 'waterMitigation',
@@ -220,6 +224,10 @@ export interface IUnitState {
 	injuryResist: IBuff[];
 	curseResist: IBuff[];
 	paralysisResist: IBuff[];
+
+	atkDownResist: IBuff[];
+	defDownResist: IBuff[];
+	recDownResist: IBuff[];
 
 	mitigation: IBuff[],
 	fireMitigation: IBuff[],
@@ -421,6 +429,11 @@ export enum IconId {
 	BUFF_CURSEBLK = 'BUFF_CURSEBLK',
 	BUFF_PARALYSISBLK = 'BUFF_PARALYSISBLK',
 
+	BUFF_ATKDOWNBLK = 'BUFF_ATKDOWNBLK',
+	BUFF_DEFDOWNBLK = 'BUFF_DEFDOWNBLK',
+	BUFF_RECDOWNBLK = 'BUFF_RECDOWNBLK',
+	BUFF_AILMENTBLK = 'BUFF_AILMENTBLK',
+
 	BUFF_DAMAGECUT = 'BUFF_DAMAGECUT',
 
 	BUFF_FIREDMGDOWN = 'BUFF_FIREDMGDOWN',
@@ -521,4 +534,15 @@ export enum BuffId {
 	'proc:9:def' = 'proc:9:def',
 	'proc:9:rec' = 'proc:9:rec',
 	'proc:9:unknown' = 'proc:9:unknown',
+
+	'proc:10:poison' = 'proc:10:poison',
+	'proc:10:weak' = 'proc:10:weak',
+	'proc:10:sick' = 'proc:10:sick',
+	'proc:10:injury' = 'proc:10:injury',
+	'proc:10:curse' = 'proc:10:curse',
+	'proc:10:paralysis' = 'proc:10:paralysis',
+	'proc:10:atk down' = 'proc:10:atk down',
+	'proc:10:def down' = 'proc:10:def down',
+	'proc:10:rec down' = 'proc:10:rec down',
+	'proc:10:unknown' = 'proc:10:unknown',
 }
