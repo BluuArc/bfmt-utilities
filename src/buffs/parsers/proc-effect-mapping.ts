@@ -826,8 +826,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				}
 			}
 		} else {
-			Object.values(AILMENT_MAPPING)
-				.forEach((ailment) => {
+			Object.values(AILMENT_MAPPING).forEach((ailment) => {
 				let effectKey: string;
 				if (ailment === Ailment.Weak) {
 					effectKey = 'weaken%';

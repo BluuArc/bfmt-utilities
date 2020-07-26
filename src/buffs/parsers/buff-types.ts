@@ -117,6 +117,9 @@ export interface IBuffConditions {
 	targetElements?: (UnitElement | BuffConditionElement)[];
 
 	targetUnitType?: UnitType | 'unknown';
+
+	hpGreaterThanOrEqualTo?: number;
+	hpLessThanOrEqualTo?: number;
 }
 
 /**
@@ -298,6 +301,15 @@ export enum IconId {
   BUFF_RECDOWN = 'BUFF_RECDOWN',
 	BUFF_CRTRATEUP = 'BUFF_CRTRATEUP',
 	BUFF_CRTRATEDOWN = 'BUFF_CRTRATEDOWN',
+
+	BUFF_HPTHRESHATKUP = 'BUFF_HPTHRESHATKUP',
+	BUFF_HPTHRESHATKDOWN = 'BUFF_HPTHRESHATKDOWN',
+	BUFF_HPTHRESHDEFUP = 'BUFF_HPTHRESHDEFUP',
+	BUFF_HPTHRESHDEFDOWN = 'BUFF_HPTHRESHDEFDOWN',
+	BUFF_HPTHRESHRECUP = 'BUFF_HPTHRESHRECUP',
+	BUFF_HPTHRESHRECDOWN = 'BUFF_HPTHRESHRECDOWN',
+	BUFF_HPTHRESHCRTRATEUP = 'BUFF_HPTHRESHCRTRATEUP',
+	BUFF_HPTHRESHCRTRATEDOWN = 'BUFF_HPTHRESHCRTRATEDOWN',
 
 	BUFF_HPREC = 'BUFF_HPREC',
 	BUFF_BBREC = 'BUFF_BBREC',
@@ -535,6 +547,11 @@ export enum BuffId {
 	'passive:8' = 'passive:8',
 	'passive:9' = 'passive:9',
 	'passive:10' = 'passive:10',
+
+	'passive:11:atk' = 'passive:11:atk',
+	'passive:11:def' = 'passive:11:def',
+	'passive:11:rec' = 'passive:11:rec',
+	'passive:11:crit' = 'passive:11:crit',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

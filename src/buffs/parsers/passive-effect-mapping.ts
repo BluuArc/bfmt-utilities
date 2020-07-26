@@ -489,4 +489,79 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			originalId: '10',
 		});
 	});
+
+	map.set('11', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+		const stats = {
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+			crit: '0' as AlphaNumeric,
+		};
+		let requireHpAbove = false;
+		let hpThreshold = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			let rawRequireHpAboveFlag: string;
+			let rawHpThreshold: string;
+			[stats.atk, stats.def, stats.rec, stats.crit, rawHpThreshold, rawRequireHpAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+			requireHpAbove = rawRequireHpAboveFlag === '1';
+			hpThreshold = parseNumberOrDefault(rawHpThreshold);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+		} else {
+			stats.atk = (typedEffect['atk% buff'] as string);
+			stats.def = (typedEffect['def% buff'] as string);
+			stats.rec = (typedEffect['rec% buff'] as string);
+			stats.crit = (typedEffect['crit% buff'] as string);
+			if ('hp above % buff requirement' in typedEffect) {
+				hpThreshold = parseNumberOrDefault(typedEffect['hp above % buff requirement'] as string);
+				requireHpAbove = true;
+			} else {
+				hpThreshold = parseNumberOrDefault(typedEffect['hp below % buff requirement'] as string);
+				requireHpAbove = false;
+			}
+		}
+
+		STATS_ORDER.forEach((stat) => {
+			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec' | 'crit']);
+			if (stat !== 'hp' && value !== 0) {
+				const entry: IBuff = {
+					id: `passive:11:${stat}`,
+					originalId: '11',
+					sources,
+					value,
+					conditions: { ...conditionInfo },
+					...targetData,
+				};
+
+				// disabling no-non-null-assertion rule because `conditions` is defined above
+				/* eslint-disable @typescript-eslint/no-non-null-assertion */
+				if (requireHpAbove) {
+					entry.conditions!.hpGreaterThanOrEqualTo = hpThreshold;
+				} else {
+					entry.conditions!.hpLessThanOrEqualTo = hpThreshold;
+				}
+				/* eslint-enable @typescript-eslint/no-non-null-assertion */
+
+				results.push(entry);
+			}
+		});
+
+		if (unknownParams) {
+			results.push(createaUnknownParamsEntry(unknownParams, {
+				originalId: '11',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
 }

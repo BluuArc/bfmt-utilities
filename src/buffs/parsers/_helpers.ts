@@ -172,5 +172,5 @@ export function createUnknownParamsValue (params: string[] = [], startIndex = 0)
 			}
 			return acc;
 		}, {} as IGenericBuffValue);
-		return hasValue ? result : (void 0);
+	return hasValue ? result : (void 0);
 }
