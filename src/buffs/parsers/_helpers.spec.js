@@ -293,12 +293,17 @@ describe('buff helper functions', () => {
 	});
 
 	describe('createUnknownParamsValue method', () => {
-		it('returns an empty object when no parameters are passed in', () => {
-			expect(helpers.createUnknownParamsValue()).toEqual({});
+		it('returns undefined when no parameters are passed in', () => {
+			expect(helpers.createUnknownParamsValue()).toBeUndefined();
 		});
 
-		it('returns an empty object when en empty array is passed in', () => {
-			expect(helpers.createUnknownParamsValue([])).toEqual({});
+		it('returns undefined when en empty array is passed in', () => {
+			expect(helpers.createUnknownParamsValue([])).toBeUndefined();
+		});
+
+		it('returns undefined when all values passed in are 0', () => {
+			const params = ['0', '0', '0'];
+			expect(helpers.createUnknownParamsValue(params)).toBeUndefined();
 		});
 
 		it('returns an object with parameters keyed by index starting at 0 when no start index is passed in', () => {

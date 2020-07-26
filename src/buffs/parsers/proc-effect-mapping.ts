@@ -795,4 +795,75 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('11', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		interface IAilmentInflictionPair {
+			ailment: Ailment;
+			chance: number;
+		}
+		const inflictedAilments: IAilmentInflictionPair[] = [];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let params = splitEffectParams(effect);
+			if (params.length % 2 !== 0 && params[params.length - 1] !== '0') {
+				unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(-1), params.length - 1, injectionContext);
+				params = params.slice(0, params.length - 1);
+			}
+
+			const numParams = params.length;
+			for (let index = 0; index < numParams; index += 2) {
+				const ailmentValue = params[index];
+				const chance = parseNumberOrDefault(params[index + 1]);
+				if (ailmentValue !== '0' || chance !== 0) {
+					const ailmentType = AILMENT_MAPPING[ailmentValue] || Ailment.Unknown;
+					inflictedAilments.push({
+						ailment: ailmentType,
+						chance,
+					});
+				}
+			}
+		} else {
+			Object.values(AILMENT_MAPPING)
+				.forEach((ailment) => {
+				let effectKey: string;
+				if (ailment === Ailment.Weak) {
+					effectKey = 'weaken%';
+				} else if (ailment === Ailment.AttackReduction || ailment === Ailment.DefenseReduction || ailment === Ailment.RecoveryReduction) {
+					effectKey = ailment;
+				} else {
+					effectKey = `${ailment}%`;
+				}
+
+				if (effectKey in effect) {
+					inflictedAilments.push({
+						ailment,
+						chance: parseNumberOrDefault(effect[effectKey] as number),
+					});
+				}
+			});
+		}
+
+		const results: IBuff[] = inflictedAilments.map(({ ailment, chance }) => ({
+			id: `proc:11:${ailment}`,
+			originalId: '11',
+			sources,
+			effectDelay,
+			value: chance,
+			...targetData,
+		}));
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '11',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }

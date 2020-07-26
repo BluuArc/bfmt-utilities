@@ -183,9 +183,20 @@ export enum UnitStat {
 	curseResist = 'curseResist',
 	paralysisResist = 'paralysisResist',
 
+	poisonInflict = 'poisonInflict',
+	weakInflict = 'weakInflict',
+	sickInflict = 'sickInflict',
+	injuryInflict = 'injuryInflict',
+	curseInflict = 'curseInflict',
+	paralysisInflict = 'paralysisInflict',
+
 	atkDownResist = 'atkDownResist',
 	defDownResist = 'defDownResist',
 	recDownResist = 'recDownResist',
+
+	atkDownInflict = 'atkDownInflict',
+	defDownInflict = 'defDownInflict',
+	recDownInflict = 'recDownInflict',
 
 	mitigation = 'mitigation',
 	fireMitigation = 'fireMitigation',
@@ -225,9 +236,20 @@ export interface IUnitState {
 	curseResist: IBuff[];
 	paralysisResist: IBuff[];
 
+	poisonInflict: IBuff[];
+	weakInflict: IBuff[];
+	sickInflict: IBuff[];
+	injuryInflict: IBuff[];
+	curseInflict: IBuff[];
+	paralysisInflict: IBuff[];
+
 	atkDownResist: IBuff[];
 	defDownResist: IBuff[];
 	recDownResist: IBuff[];
+
+	atkDownInflict: IBuff[];
+	defDownInflict: IBuff[];
+	recDownInflict: IBuff[];
 
 	mitigation: IBuff[],
 	fireMitigation: IBuff[],
@@ -434,6 +456,14 @@ export enum IconId {
 	BUFF_RECDOWNBLK = 'BUFF_RECDOWNBLK',
 	BUFF_AILMENTBLK = 'BUFF_AILMENTBLK',
 
+	DEBUFF_POISON = 'DEBUFF_POISON',
+	DEBUFF_WEAK = 'DEBUFF_WEAK',
+	DEBUFF_SICK = 'DEBUFF_SICK',
+	DEBUFF_INJURY = 'DEBUFF_INJURY',
+	DEBUFF_CURSE = 'DEBUFF_CURSE',
+	DEBUFF_PARALYSIS = 'DEBUFF_PARALYSIS',
+	DEBUFF_AILMENT = 'DEBUFF_AILMENT',
+
 	BUFF_DAMAGECUT = 'BUFF_DAMAGECUT',
 
 	BUFF_FIREDMGDOWN = 'BUFF_FIREDMGDOWN',
@@ -545,4 +575,15 @@ export enum BuffId {
 	'proc:10:def down' = 'proc:10:def down',
 	'proc:10:rec down' = 'proc:10:rec down',
 	'proc:10:unknown' = 'proc:10:unknown',
+
+	'proc:11:poison' = 'proc:11:poison',
+	'proc:11:weak' = 'proc:11:weak',
+	'proc:11:sick' = 'proc:11:sick',
+	'proc:11:injury' = 'proc:11:injury',
+	'proc:11:curse' = 'proc:11:curse',
+	'proc:11:paralysis' = 'proc:11:paralysis',
+	'proc:11:atk down' = 'proc:11:atk down',
+	'proc:11:def down' = 'proc:11:def down',
+	'proc:11:rec down' = 'proc:11:rec down',
+	'proc:11:unknown' = 'proc:11:unknown',
 }

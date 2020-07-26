@@ -593,4 +593,46 @@ describe('BUFF_METADATA entries', () => {
 			testDefaultIconResult(BuffId['proc:10:unknown'], [IconId.BUFF_AILMENTBLK]);
 		});
 	});
+
+	describe('proc 11 buffs', () => {
+		describe('proc:11:poison', () => {
+			testDefaultIconResult(BuffId['proc:11:poison'], [IconId.DEBUFF_POISON]);
+		});
+
+		describe('proc:11:weak', () => {
+			testDefaultIconResult(BuffId['proc:11:weak'], [IconId.DEBUFF_WEAK]);
+		});
+
+		describe('proc:11:sick', () => {
+			testDefaultIconResult(BuffId['proc:11:sick'], [IconId.DEBUFF_SICK]);
+		});
+
+		describe('proc:11:injury', () => {
+			testDefaultIconResult(BuffId['proc:11:injury'], [IconId.DEBUFF_INJURY]);
+		});
+
+		describe('proc:11:curse', () => {
+			testDefaultIconResult(BuffId['proc:11:curse'], [IconId.DEBUFF_CURSE]);
+		});
+
+		describe('proc:11:paralysis', () => {
+			testDefaultIconResult(BuffId['proc:11:paralysis'], [IconId.DEBUFF_PARALYSIS]);
+		});
+
+		describe('proc:11:atk down', () => {
+			testDefaultIconResult(BuffId['proc:11:atk down'], [IconId.BUFF_ATKDOWN]);
+		});
+
+		describe('proc:11:def down', () => {
+			testDefaultIconResult(BuffId['proc:11:def down'], [IconId.BUFF_DEFDOWN]);
+		});
+
+		describe('proc:11:rec down', () => {
+			testDefaultIconResult(BuffId['proc:11:rec down'], [IconId.BUFF_RECDOWN]);
+		});
+
+		describe('proc:11:unknown', () => {
+			testDefaultIconResult(BuffId['proc:11:unknown'], [IconId.DEBUFF_AILMENT]);
+		});
+	});
 });

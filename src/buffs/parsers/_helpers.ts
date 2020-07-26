@@ -162,12 +162,15 @@ export function parseNumberOrDefault (value: string | number, defaultValue = 0):
  * @param startIndex The first index before which we know how to process an effect's values.
  * @returns Dictionary object where every parameter is keyed by its index in the format of `param_${startIndex + indexInParams}`
  */
-export function createUnknownParamsValue (params: string[] = [], startIndex = 0): IGenericBuffValue {
-	return params
+export function createUnknownParamsValue (params: string[] = [], startIndex = 0): IGenericBuffValue | undefined {
+	let hasValue = false;
+	const result = params
 		.reduce((acc, value, index) => {
 			if (value && value !== '0') {
 				acc[`param_${startIndex + index}`] = value;
+				hasValue = true;
 			}
 			return acc;
 		}, {} as IGenericBuffValue);
+		return hasValue ? result : (void 0);
 }
