@@ -724,4 +724,10 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.DEBUFF_AILMENT],
 	},
+	'proc:12': {
+		id: BuffId['proc:12'],
+		name: 'Instant Revive (Guaranteed)',
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_KOBLK],
+	},
 });

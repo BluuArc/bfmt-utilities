@@ -865,4 +865,38 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('12', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let reviveToHp = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawReviveToHp, ...extraParams] = splitEffectParams(effect);
+			reviveToHp = parseNumberOrDefault(rawReviveToHp);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+		} else {
+			reviveToHp = parseNumberOrDefault(effect['revive to hp%']);
+		}
+
+		const results: IBuff[] = [{
+			id: 'proc:12',
+			originalId: '12',
+			sources,
+			effectDelay,
+			value: reviveToHp,
+			...targetData,
+		}];
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '12',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }

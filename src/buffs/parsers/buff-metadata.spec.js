@@ -684,4 +684,8 @@ describe('BUFF_METADATA entries', () => {
 			testDefaultIconResult(BuffId['proc:11:unknown'], [IconId.DEBUFF_AILMENT]);
 		});
 	});
+
+	describe('proc:12', () => {
+		testDefaultIconResult(BuffId['proc:12'], [IconId.BUFF_KOBLK]);
+	});
 });

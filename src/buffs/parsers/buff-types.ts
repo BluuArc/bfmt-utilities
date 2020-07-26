@@ -214,6 +214,7 @@ export enum UnitStat {
 	turnDurationModification = 'turnDurationModification',
 
 	koResistance = 'koResistance',
+	revive = 'revive',
 }
 
 /**
@@ -269,6 +270,7 @@ export interface IUnitState {
 	turnDurationModification: IBuff[];
 
 	koResistance: IBuff[];
+	revive: IBuff[];
 }
 
 /**
@@ -617,4 +619,6 @@ export enum BuffId {
 	'proc:11:def down' = 'proc:11:def down',
 	'proc:11:rec down' = 'proc:11:rec down',
 	'proc:11:unknown' = 'proc:11:unknown',
+
+	'proc:12' = 'proc:12',
 }
