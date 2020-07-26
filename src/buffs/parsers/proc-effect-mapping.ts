@@ -1,4 +1,4 @@
-import { ProcEffect, UnitElement } from '../../datamine-types';
+import { ProcEffect, UnitElement, Ailment } from '../../datamine-types';
 import { IBuff, IEffectToBuffConversionContext, IGenericBuffValue, BuffId, BuffConditionElement } from './buff-types';
 import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault, createUnknownParamsValue, ITargetData } from './_helpers';
 
@@ -43,6 +43,18 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		4: UnitElement.Thunder,
 		5: UnitElement.Light,
 		6: UnitElement.Dark,
+	};
+
+	const AILMENT_MAPPING: { [param: string]: Ailment } = {
+		1: Ailment.Poison,
+		2: Ailment.Weak,
+		3: Ailment.Sick,
+		4: Ailment.Injury,
+		5: Ailment.Curse,
+		6: Ailment.Paralysis,
+		7: Ailment.AttackReduction,
+		8: Ailment.DefenseReduction,
+		9: Ailment.RecoveryReduction,
 	};
 
 	const retrieveCommonInfoForEffects = (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext) => {
@@ -736,19 +748,6 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 	map.set('10', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-
-		type Ailment = 'poison' | 'weak' | 'sick' | 'injury' | 'curse' | 'paralysis' | 'atk down' | 'def down' | 'rec down' | 'unknown';
-		const AILMENT_MAPPING: { [param: string]: Ailment } = { // TODO: consider refactoring the strings here to a separate enum
-			1: 'poison',
-			2: 'weak',
-			3: 'sick',
-			4: 'injury',
-			5: 'curse',
-			6: 'paralysis',
-			7: 'atk down',
-			8: 'def down',
-			9: 'rec down',
-		};
 		const curedAilments: Ailment[] = [];
 
 		let unknownParams: IGenericBuffValue | undefined;
@@ -760,7 +759,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			knownParams
 				.filter((p) => p !== '0')
 				.forEach((param) => {
-					curedAilments.push(AILMENT_MAPPING[param] || 'unknown');
+					curedAilments.push(AILMENT_MAPPING[param] || Ailment.Unknown);
 				});
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
@@ -772,7 +771,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			});
 
 			if ('remove all status ailments' in effect) {
-				curedAilments.push('unknown'); // generic value for skills; unknown at a glance which ailments are cured
+				curedAilments.push(Ailment.Unknown); // generic value for skills; unknown at a glance which ailments are cured
 			}
 		}
 

@@ -11,6 +11,19 @@ export interface IBfmtMetadata {
 	removed?: boolean;
 }
 
+export enum Ailment {
+	Poison = 'poison',
+	Weak = 'weak',
+	Sick = 'sick',
+	Injury = 'injury',
+	Curse = 'curse',
+	Paralysis = 'paralysis',
+	AttackReduction = 'atk down',
+	DefenseReduction = 'def down',
+	RecoveryReduction = 'rec down',
+	Unknown = 'unknown',
+}
+
 export enum ArenaCondition {
 	hp_50pr_under = 'hp_50pr_under',
 	hp_50pr_over = 'hp_50pr_over',

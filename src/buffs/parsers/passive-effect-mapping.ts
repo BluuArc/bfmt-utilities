@@ -54,8 +54,8 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		6: UnitType.Rex, // no known entries have this value at the time of writing
 	};
 
+	type AlphaNumeric = string | number;
 	type CoreStat = 'hp' | 'atk' | 'def' | 'rec' | 'crit';
-	type StatusAilment = 'poison' | 'weak' | 'sick' | 'injury' | 'curse' | 'paralysis';
 
 	const STATS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
 	const AILMENTS_ORDER = ['poison', 'weak', 'sick', 'injury', 'curse', 'paralysis'];
@@ -67,6 +67,10 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return { conditionInfo, targetData, sources };
 	};
+
+	// Disable rule as this function is only called once it's confirmed that `effect.params` exists
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const splitEffectParams = (effect: IPassiveEffect): string[] => effect.params!.split(',');
 
 	interface IUnknownParamsContext {
 		originalId: string;
@@ -123,7 +127,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		let value = 0;
 		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
-			const [rawValue, ...extraParams] = typedEffect.params.split(',');
+			const [rawValue, ...extraParams] = splitEffectParams(typedEffect);
 			value = parseNumberOrDefault(rawValue);
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
 		} else {
@@ -159,17 +163,17 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
 		const stats = {
-			atk: '0' as string | number,
-			def: '0' as string | number,
-			rec: '0' as string | number,
-			crit: '0' as string | number,
-			hp: '0' as string | number,
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+			crit: '0' as AlphaNumeric,
+			hp: '0' as AlphaNumeric,
 		};
 
 		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
 			let extraParams: string[];
-			[stats.atk, stats.def, stats.rec, stats.crit, stats.hp, ...extraParams] = typedEffect.params.split(',');
+			[stats.atk, stats.def, stats.rec, stats.crit, stats.hp, ...extraParams] = splitEffectParams(typedEffect);
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
 		} else {
@@ -213,18 +217,18 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		const stats = {
 			elements: [] as (UnitElement | BuffConditionElement)[],
-			atk: '0' as string | number,
-			def: '0' as string | number,
-			rec: '0' as string | number,
-			crit: '0' as string | number,
-			hp: '0' as string | number,
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+			crit: '0' as AlphaNumeric,
+			hp: '0' as AlphaNumeric,
 		};
 
 		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
 			let extraParams: string[];
 			let element1: string, element2: string;
-			[element1, element2, stats.atk, stats.def, stats.rec, stats.crit, stats.hp, ...extraParams] = typedEffect.params.split(',');
+			[element1, element2, stats.atk, stats.def, stats.rec, stats.crit, stats.hp, ...extraParams] = splitEffectParams(typedEffect);
 
 			[element1, element2].forEach((elementValue) => {
 				if (elementValue && elementValue !== '0') {
@@ -298,18 +302,18 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		const stats = {
 			unitType: '' as UnitType | 'unknown',
-			atk: '0' as string | number,
-			def: '0' as string | number,
-			rec: '0' as string | number,
-			crit: '0' as string | number,
-			hp: '0' as string | number,
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+			crit: '0' as AlphaNumeric,
+			hp: '0' as AlphaNumeric,
 		};
 
 		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
 			let extraParams: string[];
 			let unitType: string;
-			[unitType, stats.atk, stats.def, stats.rec, stats.crit, stats.hp, ...extraParams] = typedEffect.params.split(',');
+			[unitType, stats.atk, stats.def, stats.rec, stats.crit, stats.hp, ...extraParams] = splitEffectParams(typedEffect);
 
 			if (unitType && unitType !== '0') {
 				stats.unitType = TYPE_MAPPING[unitType] || 'unknown';
@@ -360,29 +364,29 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
-		const resistances = {
-			poison: '0' as string | number,
-			weak: '0' as string | number,
-			sick: '0' as string | number,
-			injury: '0' as string | number,
-			curse: '0' as string | number,
-			paralysis: '0' as string | number,
+		const resistances: { [ailment: string]: AlphaNumeric } = {
+			poison: '0',
+			weak: '0',
+			sick: '0',
+			injury: '0',
+			curse: '0',
+			paralysis: '0',
 		};
 
 		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
 			let extraParams: string[];
-			[resistances.poison, resistances.weak, resistances.sick, resistances.injury, resistances.curse, resistances.paralysis, ...extraParams] = typedEffect.params.split(',');
+			[resistances.poison, resistances.weak, resistances.sick, resistances.injury, resistances.curse, resistances.paralysis, ...extraParams] = splitEffectParams(typedEffect);
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
 		} else {
 			AILMENTS_ORDER.forEach((ailment) => {
 				const effectKey = ailment !== 'weak' ? ailment : 'weaken';
-				resistances[ailment as StatusAilment] = (typedEffect[`${effectKey} resist%`] as string);
+				resistances[ailment] = (typedEffect[`${effectKey} resist%`] as string);
 			});
 		}
 
 		AILMENTS_ORDER.forEach((ailment) => {
-			const value = parseNumberOrDefault(resistances[ailment as StatusAilment]);
+			const value = parseNumberOrDefault(resistances[ailment]);
 			if (value !== 0) {
 				results.push({
 					id: `passive:4:${ailment}`,
@@ -418,7 +422,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		if (typedEffect.params) {
 			let extraParams: string[];
 			let rawElement: string;
-			[rawElement, mitigation, ...extraParams] = typedEffect.params.split(',');
+			[rawElement, mitigation, ...extraParams] = splitEffectParams(typedEffect);
 
 			element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
