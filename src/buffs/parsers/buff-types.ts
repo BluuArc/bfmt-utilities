@@ -176,6 +176,8 @@ export enum UnitStat {
 	bcDropRate = 'bcDropRate',
 	hcDropRate = 'hcDropRate',
 	itemDropRate = 'itemDropRate',
+	zelDropRate = 'zelDropRate',
+	karmaDropRate = 'karmaDropRate',
 
 	hcEfficacy = 'hcEfficacy',
 
@@ -229,6 +231,8 @@ export interface IUnitState {
 	bcDropRate: IBuff[];
 	hcDropRate: IBuff[];
 	itemDropRate: IBuff[];
+	zelDropRate: IBuff[];
+	karmaDropRate: IBuff[];
 
 	hcEfficacy: IBuff[];
 
@@ -492,6 +496,10 @@ export enum IconId {
 	BUFF_BCDOWN = 'BUFF_BCDOWN',
 	BUFF_ITEMDROP = 'BUFF_ITEMDROP',
 	BUFF_ITEMDOWN = 'BUFF_ITEMDOWN',
+	BUFF_ZELDROP = 'BUFF_ZELDROP',
+	BUFF_ZELDOWN = 'BUFF_ZELDOWN',
+	BUFF_KARMADROP = 'BUFF_KARMADROP',
+	BUFF_KARMADOWN = 'BUFF_KARMADOWN',
 
 	BUFF_HCREC = 'BUFF_HCREC',
 
@@ -552,6 +560,12 @@ export enum BuffId {
 	'passive:11:def' = 'passive:11:def',
 	'passive:11:rec' = 'passive:11:rec',
 	'passive:11:crit' = 'passive:11:crit',
+
+	'passive:12:bc' = 'passive:12:bc',
+	'passive:12:hc' = 'passive:12:hc',
+	'passive:12:item' = 'passive:12:item',
+	'passive:12:zel' = 'passive:12:zel',
+	'passive:12:karma' = 'passive:12:karma',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

@@ -45,6 +45,9 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		const arbitrarySourceValue = ['some source value'];
 		const arbitraryUnknownValue = { unknownValue: 'some unknown value' };
 
+		const HP_ABOVE_EFFECT_KEY = 'hp above % buff requirement';
+		const HP_BELOW_EFFECT_KEY = 'hp below % buff requirement';
+
 		const BUFF_TARGET_PROPS = ['targetType', 'targetArea'];
 		const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
 		const AILMENTS_ORDER = ['poison', 'weak', 'sick', 'injury', 'curse', 'paralysis'];
@@ -1019,8 +1022,6 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 		describe('passive 11', () => {
 			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit'];
-			const HP_ABOVE_EFFECT_KEY = 'hp above % buff requirement';
-			const HP_BELOW_EFFECT_KEY = 'hp below % buff requirement';
 			const expectedOriginalId = '11';
 			beforeEach(() => {
 				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
@@ -1168,6 +1169,159 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
+			});
+		});
+
+		describe('passive 12', () => {
+			const DROP_TYPE_ORDER = ['bc', 'hc', 'item', 'zel', 'karma'];
+
+			const expectedOriginalId = '12';
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(DROP_TYPE_ORDER.map((dropType) => `passive:12:${dropType}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6,1';
+				const splitParams = params.split(',');
+				const expectedResult = DROP_TYPE_ORDER.map((dropType, index) => {
+					return baseBuffFactory({
+						id: `passive:12:${dropType}`,
+						value: +(splitParams[index]),
+						conditions: {
+							hpGreaterThanOrEqualTo: 6,
+						},
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,2,8,9,10';
+				const splitParams = params.split(',');
+				const expectedResult = DROP_TYPE_ORDER.map((dropType, index) => {
+					return baseBuffFactory({
+						id: `passive:12:${dropType}`,
+						value: +(splitParams[index]),
+						conditions: {
+							hpLessThanOrEqualTo: 6,
+						},
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_7: '8',
+						param_8: '9',
+						param_9: '10',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to stat-specific properties when the params property does not exist', () => {
+				const mockValues = [6, 7, 8, 9, 10];
+				const effect = DROP_TYPE_ORDER.reduce((acc, dropType, index) => {
+					acc[`${dropType} drop rate% buff`] = mockValues[index];
+					return acc;
+				}, {});
+				effect[HP_ABOVE_EFFECT_KEY] = 11;
+
+				const expectedResult = DROP_TYPE_ORDER.map((dropType, index) => {
+					return baseBuffFactory({
+						id: `passive:12:${dropType}`,
+						value: mockValues[index],
+						conditions: {
+							hpGreaterThanOrEqualTo: 11,
+						},
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			DROP_TYPE_ORDER.forEach((dropTypeCase) => {
+				[1, 2].forEach((hpThresholdCase) => {
+					it(`returns only value for ${dropTypeCase} if it is non-zero and other rates are zero and hp threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'}`, () => {
+						const params = DROP_TYPE_ORDER.map((dropType) => dropType === dropTypeCase ? '123' : '0').concat(['456', hpThresholdCase]).join(',');
+						const expectedConditions = {};
+						if (hpThresholdCase === 1) {
+							expectedConditions.hpGreaterThanOrEqualTo = 456;
+						} else {
+							expectedConditions.hpLessThanOrEqualTo = 456;
+						}
+						const expectedResult = [baseBuffFactory({
+							id: `passive:12:${dropTypeCase}`,
+							value: 123,
+							conditions: expectedConditions,
+						})];
+
+						const effect = { params };
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns only value for ${dropTypeCase} if it is non-zero and other rates are zero and hp threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'} and params property does not exist`, () => {
+						const effect = {
+							[`${dropTypeCase} drop rate% buff`]: 123,
+							[hpThresholdCase === 1 ? HP_ABOVE_EFFECT_KEY : HP_BELOW_EFFECT_KEY]: 456,
+						};
+						const expectedConditions = {};
+						if (hpThresholdCase === 1) {
+							expectedConditions.hpGreaterThanOrEqualTo = 456;
+						} else {
+							expectedConditions.hpLessThanOrEqualTo = 456;
+						}
+						const expectedResult = [baseBuffFactory({
+							id: `passive:12:${dropTypeCase}`,
+							value: 123,
+							conditions: expectedConditions,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,0,1,456,1,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:12:karma',
+						sources: arbitrarySourceValue,
+						value: 1,
+						conditions: {
+							...arbitraryConditionValue,
+							hpGreaterThanOrEqualTo: 456,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 7] });
 			});
 		});
 	});

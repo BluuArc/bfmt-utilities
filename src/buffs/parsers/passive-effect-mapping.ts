@@ -540,7 +540,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 					...targetData,
 				};
 
-				// disabling no-non-null-assertion rule because `conditions` is defined above
+				// disabling no-non-null-assertion rule because `conditions` property is defined above
 				/* eslint-disable @typescript-eslint/no-non-null-assertion */
 				if (requireHpAbove) {
 					entry.conditions!.hpGreaterThanOrEqualTo = hpThreshold;
@@ -556,6 +556,83 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		if (unknownParams) {
 			results.push(createaUnknownParamsEntry(unknownParams, {
 				originalId: '11',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
+
+	map.set('12', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		type DropType = 'bc' | 'hc' | 'item' | 'zel' | 'karma';
+		const DROP_TYPES_ORDER: DropType[] = ['bc', 'hc', 'item', 'zel', 'karma'];
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+		const dropRates = {
+			bc: '0' as AlphaNumeric,
+			hc: '0' as AlphaNumeric,
+			item: '0' as AlphaNumeric,
+			zel: '0' as AlphaNumeric,
+			karma: '0' as AlphaNumeric,
+		};
+		let requireHpAbove = false;
+		let hpThreshold = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			let rawRequireHpAboveFlag: string;
+			let rawHpThreshold: string;
+			[dropRates.bc, dropRates.hc, dropRates.item, dropRates.zel, dropRates.karma, rawHpThreshold, rawRequireHpAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+			requireHpAbove = rawRequireHpAboveFlag === '1';
+			hpThreshold = parseNumberOrDefault(rawHpThreshold);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
+		} else {
+			DROP_TYPES_ORDER.forEach((dropType) => {
+				dropRates[dropType] = (typedEffect[`${dropType} drop rate% buff`] as string);
+			});
+			if ('hp above % buff requirement' in typedEffect) {
+				hpThreshold = parseNumberOrDefault(typedEffect['hp above % buff requirement'] as string);
+				requireHpAbove = true;
+			} else {
+				hpThreshold = parseNumberOrDefault(typedEffect['hp below % buff requirement'] as string);
+				requireHpAbove = false;
+			}
+		}
+
+		DROP_TYPES_ORDER.forEach((dropType) => {
+			const value = parseNumberOrDefault(dropRates[dropType]);
+			if (value !== 0) {
+				const entry: IBuff = {
+					id: `passive:12:${dropType}`,
+					originalId: '12',
+					sources,
+					value,
+					conditions: { ...conditionInfo },
+					...targetData,
+				};
+
+				// disabling no-non-null-assertion rule because `conditions` property is defined above
+				/* eslint-disable @typescript-eslint/no-non-null-assertion */
+				if (requireHpAbove) {
+					entry.conditions!.hpGreaterThanOrEqualTo = hpThreshold;
+				} else {
+					entry.conditions!.hpLessThanOrEqualTo = hpThreshold;
+				}
+				/* eslint-enable @typescript-eslint/no-non-null-assertion */
+
+				results.push(entry);
+			}
+		});
+
+		if (unknownParams) {
+			results.push(createaUnknownParamsEntry(unknownParams, {
+				originalId: '12',
 				sources,
 				targetData,
 				conditionInfo,
