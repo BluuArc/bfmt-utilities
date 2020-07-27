@@ -120,6 +120,8 @@ export interface IBuffConditions {
 
 	hpGreaterThanOrEqualTo?: number;
 	hpLessThanOrEqualTo?: number;
+
+	onEnemyDefeat?: boolean,
 }
 
 /**
@@ -569,6 +571,8 @@ export enum BuffId {
 	'passive:12:item' = 'passive:12:item',
 	'passive:12:zel' = 'passive:12:zel',
 	'passive:12:karma' = 'passive:12:karma',
+
+	'passive:13' = 'passive:13',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

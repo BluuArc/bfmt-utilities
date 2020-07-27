@@ -641,4 +641,51 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('13', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let fillLow: number, fillHigh: number, chance: number;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawFillLow, rawFillHigh, rawChance, ...extraParams] = splitEffectParams(typedEffect);
+			fillLow = parseNumberOrDefault(rawFillLow) / 100;
+			fillHigh = parseNumberOrDefault(rawFillHigh) / 100;
+			chance = parseNumberOrDefault(rawChance);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			fillLow = parseNumberOrDefault(typedEffect['bc fill on enemy defeat low'] as number);
+			fillHigh = parseNumberOrDefault(typedEffect['bc fill on enemy defeat high'] as number);
+			chance = parseNumberOrDefault(typedEffect['bc fill on enemy defeat%'] as number);
+		}
+
+		const results: IBuff[] = [{
+			id: 'passive:13',
+			originalId: '13',
+			sources,
+			value: {
+				fillLow,
+				fillHigh,
+				chance,
+			},
+			conditions: {
+				...conditionInfo,
+				onEnemyDefeat: true,
+			},
+			...targetData,
+		}];
+
+		if (unknownParams) {
+			results.push(createaUnknownParamsEntry(unknownParams, {
+				originalId: '13',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
 }
