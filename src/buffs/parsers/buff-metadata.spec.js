@@ -34,6 +34,12 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	it('all have IDs matching their key', () => {
+		Object.entries(BUFF_METADATA).forEach(([key, entry]) => {
+			expect(key).toEqual(entry.id);
+		});
+	});
+
 	describe('UNKNOWN_PASSIVE_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PASSIVE_EFFECT_ID, [IconId.UNKNOWN]);
 	});
@@ -374,6 +380,10 @@ describe('BUFF_METADATA entries', () => {
 
 	describe('passive:13', () => {
 		testDefaultIconResult(BuffId['passive:13'], [IconId.BUFF_BBREC]);
+	});
+
+	describe('passive:14', () => {
+		testDefaultIconResult(BuffId['passive:14'], [IconId.BUFF_DAMAGECUT]);
 	});
 
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {

@@ -384,11 +384,18 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_KARMADOWN : IconId.BUFF_KARMADROP],
 	},
 	'passive:13': {
-		id: BuffId['proc:13'],
+		id: BuffId['passive:13'],
 		name: 'BB Gauge Fill on Enemy Defeat',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_BBREC],
+	},
+	'passive:14': {
+		id: BuffId['passive:14'],
+		name: 'Passive Damage Reduction (Chance)',
+		stat: UnitStat.mitigation,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_DAMAGECUT],
 	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
