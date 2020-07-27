@@ -688,4 +688,8 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:12', () => {
 		testDefaultIconResult(BuffId['proc:12'], [IconId.BUFF_KOBLK]);
 	});
+
+	describe('proc:13', () => {
+		testDefaultIconResult(BuffId['proc:13'], [IconId.ATK_RT]);
+	});
 });

@@ -1635,6 +1635,8 @@ var UnitStat;
     UnitStat["bcDropRate"] = "bcDropRate";
     UnitStat["hcDropRate"] = "hcDropRate";
     UnitStat["itemDropRate"] = "itemDropRate";
+    UnitStat["zelDropRate"] = "zelDropRate";
+    UnitStat["karmaDropRate"] = "karmaDropRate";
     UnitStat["hcEfficacy"] = "hcEfficacy";
     UnitStat["poisonResist"] = "poisonResist";
     UnitStat["weakResist"] = "weakResist";
@@ -1663,6 +1665,7 @@ var UnitStat;
     UnitStat["darkMitigation"] = "darkMitigation";
     UnitStat["turnDurationModification"] = "turnDurationModification";
     UnitStat["koResistance"] = "koResistance";
+    UnitStat["revive"] = "revive";
 })(UnitStat || (UnitStat = {}));
 var IconId;
 (function (IconId) {
@@ -1679,6 +1682,14 @@ var IconId;
     IconId["BUFF_RECDOWN"] = "BUFF_RECDOWN";
     IconId["BUFF_CRTRATEUP"] = "BUFF_CRTRATEUP";
     IconId["BUFF_CRTRATEDOWN"] = "BUFF_CRTRATEDOWN";
+    IconId["BUFF_HPTHRESHATKUP"] = "BUFF_HPTHRESHATKUP";
+    IconId["BUFF_HPTHRESHATKDOWN"] = "BUFF_HPTHRESHATKDOWN";
+    IconId["BUFF_HPTHRESHDEFUP"] = "BUFF_HPTHRESHDEFUP";
+    IconId["BUFF_HPTHRESHDEFDOWN"] = "BUFF_HPTHRESHDEFDOWN";
+    IconId["BUFF_HPTHRESHRECUP"] = "BUFF_HPTHRESHRECUP";
+    IconId["BUFF_HPTHRESHRECDOWN"] = "BUFF_HPTHRESHRECDOWN";
+    IconId["BUFF_HPTHRESHCRTRATEUP"] = "BUFF_HPTHRESHCRTRATEUP";
+    IconId["BUFF_HPTHRESHCRTRATEDOWN"] = "BUFF_HPTHRESHCRTRATEDOWN";
     IconId["BUFF_HPREC"] = "BUFF_HPREC";
     IconId["BUFF_BBREC"] = "BUFF_BBREC";
     IconId["BUFF_FIREHPUP"] = "BUFF_FIREHPUP";
@@ -1852,10 +1863,15 @@ var IconId;
     IconId["BUFF_BCDOWN"] = "BUFF_BCDOWN";
     IconId["BUFF_ITEMDROP"] = "BUFF_ITEMDROP";
     IconId["BUFF_ITEMDOWN"] = "BUFF_ITEMDOWN";
+    IconId["BUFF_ZELDROP"] = "BUFF_ZELDROP";
+    IconId["BUFF_ZELDOWN"] = "BUFF_ZELDOWN";
+    IconId["BUFF_KARMADROP"] = "BUFF_KARMADROP";
+    IconId["BUFF_KARMADOWN"] = "BUFF_KARMADOWN";
     IconId["BUFF_HCREC"] = "BUFF_HCREC";
     IconId["BUFF_KOBLK"] = "BUFF_KOBLK";
     IconId["ATK_ST"] = "ATK_ST";
     IconId["ATK_AOE"] = "ATK_AOE";
+    IconId["ATK_RT"] = "ATK_RT";
 })(IconId || (IconId = {}));
 /**
  * @description Format of these IDs are `<passive|proc>:<original effect ID>:<stat>`.
@@ -1898,6 +1914,15 @@ var BuffId;
     BuffId["passive:8"] = "passive:8";
     BuffId["passive:9"] = "passive:9";
     BuffId["passive:10"] = "passive:10";
+    BuffId["passive:11:atk"] = "passive:11:atk";
+    BuffId["passive:11:def"] = "passive:11:def";
+    BuffId["passive:11:rec"] = "passive:11:rec";
+    BuffId["passive:11:crit"] = "passive:11:crit";
+    BuffId["passive:12:bc"] = "passive:12:bc";
+    BuffId["passive:12:hc"] = "passive:12:hc";
+    BuffId["passive:12:item"] = "passive:12:item";
+    BuffId["passive:12:zel"] = "passive:12:zel";
+    BuffId["passive:12:karma"] = "passive:12:karma";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1"] = "proc:1";
@@ -1939,6 +1964,8 @@ var BuffId;
     BuffId["proc:11:def down"] = "proc:11:def down";
     BuffId["proc:11:rec down"] = "proc:11:rec down";
     BuffId["proc:11:unknown"] = "proc:11:unknown";
+    BuffId["proc:12"] = "proc:12";
+    BuffId["proc:13"] = "proc:13";
 })(BuffId || (BuffId = {}));
 
 /**
@@ -2049,13 +2076,16 @@ function parseNumberOrDefault(value, defaultValue = 0) {
  * @returns Dictionary object where every parameter is keyed by its index in the format of `param_${startIndex + indexInParams}`
  */
 function createUnknownParamsValue(params = [], startIndex = 0) {
-    return params
+    let hasValue = false;
+    const result = params
         .reduce((acc, value, index) => {
         if (value && value !== '0') {
             acc[`param_${startIndex + index}`] = value;
+            hasValue = true;
         }
         return acc;
     }, {});
+    return hasValue ? result : (void 0);
 }
 
 let mapping;
@@ -2152,7 +2182,7 @@ function setMapping(map) {
         const filteredValue = Object.entries(params)
             .filter(([, value]) => value && +value)
             .reduce((acc, [key, value]) => {
-            acc[key] = +value;
+            acc[key] = parseNumberOrDefault(value);
             return acc;
         }, {});
         const results = [Object.assign({ id: 'proc:1', originalId: '1', sources,
@@ -2659,8 +2689,7 @@ function setMapping(map) {
             }
         }
         else {
-            Object.values(AILMENT_MAPPING)
-                .forEach((ailment) => {
+            Object.values(AILMENT_MAPPING).forEach((ailment) => {
                 let effectKey;
                 if (ailment === Ailment.Weak) {
                     effectKey = 'weaken%';
@@ -2684,6 +2713,83 @@ function setMapping(map) {
         if (unknownParams) {
             results.push(createUnknownParamsEntry(unknownParams, {
                 originalId: '11',
+                sources,
+                targetData,
+                effectDelay,
+            }));
+        }
+        return results;
+    });
+    map.set('12', (effect, context, injectionContext) => {
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        let reviveToHp = 0;
+        let unknownParams;
+        if (effect.params) {
+            const [rawReviveToHp, ...extraParams] = splitEffectParams(effect);
+            reviveToHp = parseNumberOrDefault(rawReviveToHp);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+        }
+        else {
+            reviveToHp = parseNumberOrDefault(effect['revive to hp%']);
+        }
+        const results = [Object.assign({ id: 'proc:12', originalId: '12', sources,
+                effectDelay, value: reviveToHp }, targetData)];
+        if (unknownParams) {
+            results.push(createUnknownParamsEntry(unknownParams, {
+                originalId: '12',
+                sources,
+                targetData,
+                effectDelay,
+            }));
+        }
+        return results;
+    });
+    map.set('13', (effect, context, injectionContext) => {
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        let hits = 0;
+        const distribution = +((context.damageFrames && context.damageFrames['hit dmg% distribution (total)']) || 0);
+        const params = {
+            'atk%': '0',
+            flatAtk: '0',
+            'crit%': '0',
+            'bc%': '0',
+            'hc%': '0',
+        };
+        let unknownParams;
+        if (effect.params) {
+            let extraParams;
+            let rawHits;
+            [params['atk%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], rawHits, ...extraParams] = splitEffectParams(effect);
+            hits = parseNumberOrDefault(rawHits);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+        }
+        else {
+            params['atk%'] = effect['bb atk%'];
+            params.flatAtk = effect['bb flat atk'];
+            params['crit%'] = effect['bb crit%'];
+            params['bc%'] = effect['bb bc%'];
+            params['hc%'] = effect['bb hc%'];
+            hits = parseNumberOrDefault(effect.hits);
+        }
+        const filteredValue = Object.entries(params)
+            .filter(([, value]) => value && +value)
+            .reduce((acc, [key, value]) => {
+            acc[key] = parseNumberOrDefault(value);
+            return acc;
+        }, {});
+        const results = [{
+                id: 'proc:13',
+                originalId: '13',
+                sources,
+                effectDelay,
+                value: Object.assign(Object.assign({}, filteredValue), { hits,
+                    distribution }),
+                targetType: targetData.targetType,
+                targetArea: TargetArea.Random,
+            }];
+        if (unknownParams) {
+            results.push(createUnknownParamsEntry(unknownParams, {
+                originalId: '13',
                 sources,
                 targetData,
                 effectDelay,
@@ -3073,6 +3179,133 @@ function setMapping$1(map) {
             originalId: '10',
         });
     });
+    map.set('11', (effect, context, injectionContext) => {
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const results = [];
+        const stats = {
+            atk: '0',
+            def: '0',
+            rec: '0',
+            crit: '0',
+        };
+        let requireHpAbove = false;
+        let hpThreshold = 0;
+        let unknownParams;
+        if (typedEffect.params) {
+            let extraParams;
+            let rawRequireHpAboveFlag;
+            let rawHpThreshold;
+            [stats.atk, stats.def, stats.rec, stats.crit, rawHpThreshold, rawRequireHpAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+            requireHpAbove = rawRequireHpAboveFlag === '1';
+            hpThreshold = parseNumberOrDefault(rawHpThreshold);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+        }
+        else {
+            stats.atk = typedEffect['atk% buff'];
+            stats.def = typedEffect['def% buff'];
+            stats.rec = typedEffect['rec% buff'];
+            stats.crit = typedEffect['crit% buff'];
+            if ('hp above % buff requirement' in typedEffect) {
+                hpThreshold = parseNumberOrDefault(typedEffect['hp above % buff requirement']);
+                requireHpAbove = true;
+            }
+            else {
+                hpThreshold = parseNumberOrDefault(typedEffect['hp below % buff requirement']);
+                requireHpAbove = false;
+            }
+        }
+        STATS_ORDER.forEach((stat) => {
+            const value = parseNumberOrDefault(stats[stat]);
+            if (stat !== 'hp' && value !== 0) {
+                const entry = Object.assign({ id: `passive:11:${stat}`, originalId: '11', sources,
+                    value, conditions: Object.assign({}, conditionInfo) }, targetData);
+                // disabling no-non-null-assertion rule because `conditions` property is defined above
+                /* eslint-disable @typescript-eslint/no-non-null-assertion */
+                if (requireHpAbove) {
+                    entry.conditions.hpGreaterThanOrEqualTo = hpThreshold;
+                }
+                else {
+                    entry.conditions.hpLessThanOrEqualTo = hpThreshold;
+                }
+                /* eslint-enable @typescript-eslint/no-non-null-assertion */
+                results.push(entry);
+            }
+        });
+        if (unknownParams) {
+            results.push(createaUnknownParamsEntry(unknownParams, {
+                originalId: '11',
+                sources,
+                targetData,
+                conditionInfo,
+            }));
+        }
+        return results;
+    });
+    map.set('12', (effect, context, injectionContext) => {
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const DROP_TYPES_ORDER = ['bc', 'hc', 'item', 'zel', 'karma'];
+        const typedEffect = effect;
+        const results = [];
+        const dropRates = {
+            bc: '0',
+            hc: '0',
+            item: '0',
+            zel: '0',
+            karma: '0',
+        };
+        let requireHpAbove = false;
+        let hpThreshold = 0;
+        let unknownParams;
+        if (typedEffect.params) {
+            let extraParams;
+            let rawRequireHpAboveFlag;
+            let rawHpThreshold;
+            [dropRates.bc, dropRates.hc, dropRates.item, dropRates.zel, dropRates.karma, rawHpThreshold, rawRequireHpAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+            requireHpAbove = rawRequireHpAboveFlag === '1';
+            hpThreshold = parseNumberOrDefault(rawHpThreshold);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
+        }
+        else {
+            DROP_TYPES_ORDER.forEach((dropType) => {
+                dropRates[dropType] = typedEffect[`${dropType} drop rate% buff`];
+            });
+            if ('hp above % buff requirement' in typedEffect) {
+                hpThreshold = parseNumberOrDefault(typedEffect['hp above % buff requirement']);
+                requireHpAbove = true;
+            }
+            else {
+                hpThreshold = parseNumberOrDefault(typedEffect['hp below % buff requirement']);
+                requireHpAbove = false;
+            }
+        }
+        DROP_TYPES_ORDER.forEach((dropType) => {
+            const value = parseNumberOrDefault(dropRates[dropType]);
+            if (value !== 0) {
+                const entry = Object.assign({ id: `passive:12:${dropType}`, originalId: '12', sources,
+                    value, conditions: Object.assign({}, conditionInfo) }, targetData);
+                // disabling no-non-null-assertion rule because `conditions` property is defined above
+                /* eslint-disable @typescript-eslint/no-non-null-assertion */
+                if (requireHpAbove) {
+                    entry.conditions.hpGreaterThanOrEqualTo = hpThreshold;
+                }
+                else {
+                    entry.conditions.hpLessThanOrEqualTo = hpThreshold;
+                }
+                /* eslint-enable @typescript-eslint/no-non-null-assertion */
+                results.push(entry);
+            }
+        });
+        if (unknownParams) {
+            results.push(createaUnknownParamsEntry(unknownParams, {
+                originalId: '12',
+                sources,
+                targetData,
+                conditionInfo,
+            }));
+        }
+        return results;
+    });
 }
 
 /**
@@ -3377,6 +3610,60 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.hcEfficacy,
         stackType: BuffStackType.Passive,
         icons: () => [IconId.BUFF_HCREC],
+    }, 'passive:11:atk': {
+        id: BuffId['passive:11:atk'],
+        name: 'Passive HP-Conditional Attack Boost',
+        stat: UnitStat.atk,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_HPTHRESHATKDOWN : IconId.BUFF_HPTHRESHATKUP],
+    }, 'passive:11:def': {
+        id: BuffId['passive:11:def'],
+        name: 'Passive HP-Conditional Defense Boost',
+        stat: UnitStat.def,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_HPTHRESHDEFDOWN : IconId.BUFF_HPTHRESHDEFUP],
+    }, 'passive:11:rec': {
+        id: BuffId['passive:11:rec'],
+        name: 'Passive HP-Conditional Recovery Boost',
+        stat: UnitStat.rec,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_HPTHRESHRECDOWN : IconId.BUFF_HPTHRESHRECUP],
+    }, 'passive:11:crit': {
+        id: BuffId['passive:11:crit'],
+        name: 'Passive HP-Conditional Critical Hit Rate Boost',
+        stat: UnitStat.crit,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_HPTHRESHCRTRATEDOWN : IconId.BUFF_HPTHRESHCRTRATEUP],
+    }, 'passive:12:bc': {
+        id: BuffId['passive:12:bc'],
+        name: 'Passive Battle Crystal Drop Rate Boost',
+        stat: UnitStat.bcDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_BCDOWN : IconId.BUFF_BCDROP],
+    }, 'passive:12:hc': {
+        id: BuffId['passive:12:hc'],
+        name: 'Passive Heart Crystal Drop Rate Boost',
+        stat: UnitStat.hcDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HCDOWN : IconId.BUFF_HCDROP],
+    }, 'passive:12:item': {
+        id: BuffId['passive:12:item'],
+        name: 'Passive Item Drop Rate Boost',
+        stat: UnitStat.itemDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ITEMDOWN : IconId.BUFF_ITEMDROP],
+    }, 'passive:12:zel': {
+        id: BuffId['passive:12:zel'],
+        name: 'Passive Zel Drop Rate Boost',
+        stat: UnitStat.zelDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ZELDOWN : IconId.BUFF_ZELDROP],
+    }, 'passive:12:karma': {
+        id: BuffId['passive:12:karma'],
+        name: 'Passive Karma Drop Rate Boost',
+        stat: UnitStat.karmaDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_KARMADOWN : IconId.BUFF_KARMADROP],
     }, 'UNKNOWN_PROC_EFFECT_ID': {
         id: BuffId.UNKNOWN_PROC_EFFECT_ID,
         name: 'Unknown Proc Effect',
@@ -3679,6 +3966,16 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         name: 'Unknown Ailment Infliction',
         stackType: BuffStackType.Unknown,
         icons: () => [IconId.DEBUFF_AILMENT],
+    }, 'proc:12': {
+        id: BuffId['proc:12'],
+        name: 'Instant Revive (Guaranteed)',
+        stackType: BuffStackType.Burst,
+        icons: () => [IconId.BUFF_KOBLK],
+    }, 'proc:13': {
+        id: BuffId['proc:13'],
+        name: 'Random Target Damage',
+        stackType: BuffStackType.Attack,
+        icons: () => [IconId.ATK_RT],
     } }));
 
 /**

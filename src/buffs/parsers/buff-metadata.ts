@@ -730,4 +730,10 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_KOBLK],
 	},
+	'proc:13': {
+		id: BuffId['proc:13'],
+		name: 'Random Target Damage',
+		stackType: BuffStackType.Attack,
+		icons: () => [IconId.ATK_RT],
+	},
 });

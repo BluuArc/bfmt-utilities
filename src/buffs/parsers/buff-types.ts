@@ -509,6 +509,7 @@ export enum IconId {
 
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
+	ATK_RT = 'ATK_RT',
 }
 
 /**
@@ -621,4 +622,5 @@ export enum BuffId {
 	'proc:11:unknown' = 'proc:11:unknown',
 
 	'proc:12' = 'proc:12',
+	'proc:13' = 'proc:13',
 }

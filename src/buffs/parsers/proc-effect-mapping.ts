@@ -1,4 +1,4 @@
-import { ProcEffect, UnitElement, Ailment } from '../../datamine-types';
+import { ProcEffect, UnitElement, Ailment, TargetArea } from '../../datamine-types';
 import { IBuff, IEffectToBuffConversionContext, IGenericBuffValue, BuffId, BuffConditionElement } from './buff-types';
 import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault, createUnknownParamsValue, ITargetData } from './_helpers';
 
@@ -162,7 +162,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const filteredValue = Object.entries(params)
 			.filter(([,value]) => value && +value)
 			.reduce((acc: { [param: string]: number }, [key, value]) => {
-				acc[key] = +value;
+				acc[key] = parseNumberOrDefault(value);
 				return acc;
 			}, {});
 
@@ -891,6 +891,69 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		if (unknownParams) {
 			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '12',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
+
+	map.set('13', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let hits = 0;
+		const distribution = +((context.damageFrames && context.damageFrames['hit dmg% distribution (total)']) || 0);
+		const params: { [param: string]: AlphaNumeric } = {
+			'atk%': '0',
+			flatAtk: '0',
+			'crit%': '0',
+			'bc%': '0',
+			'hc%': '0',
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			let rawHits: string;
+			[params['atk%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], rawHits, ...extraParams] = splitEffectParams(effect);
+			hits = parseNumberOrDefault(rawHits);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+		} else {
+			params['atk%'] = (effect['bb atk%'] as number);
+			params.flatAtk = (effect['bb flat atk'] as number);
+			params['crit%'] = (effect['bb crit%'] as number);
+			params['bc%'] = (effect['bb bc%'] as number);
+			params['hc%'] = (effect['bb hc%'] as number);
+			hits = parseNumberOrDefault(effect.hits as number);
+		}
+
+		const filteredValue = Object.entries(params)
+			.filter(([, value]) => value && +value)
+			.reduce((acc: { [param: string]: number }, [key, value]) => {
+				acc[key] = parseNumberOrDefault(value);
+				return acc;
+			}, {});
+
+		const results: IBuff[] = [{
+			id: 'proc:13',
+			originalId: '13',
+			sources,
+			effectDelay,
+			value: {
+				...filteredValue,
+				hits,
+				distribution,
+			},
+			targetType: targetData.targetType,
+			targetArea: TargetArea.Random,
+		}];
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '13',
 				sources,
 				targetData,
 				effectDelay,
