@@ -962,4 +962,69 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('14', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const hits = +((context.damageFrames && context.damageFrames.hits) || 0);
+		const distribution = +((context.damageFrames && context.damageFrames['hit dmg% distribution (total)']) || 0);
+		const params: { [param: string]: AlphaNumeric } = {
+			'atk%': '0',
+			flatAtk: '0',
+			'crit%': '0',
+			'bc%': '0',
+			'hc%': '0',
+			'dmg%': '0',
+			'drainLow%': '0',
+			'drainHigh%': '0',
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			[params['atk%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], params['drainLow%'], params['drainHigh%'], ...extraParams] = splitEffectParams(effect);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
+		} else {
+			params['atk%'] = (effect['bb atk%'] as number);
+			params.flatAtk = (effect['bb flat atk'] as number);
+			params['crit%'] = (effect['bb crit%'] as number);
+			params['bc%'] = (effect['bb bc%'] as number);
+			params['hc%'] = (effect['bb hc%'] as number);
+			params['dmg%'] = (effect['bb dmg%'] as number);
+			params['drainLow%'] = (effect['hp drain% low'] as number);
+			params['drainHigh%'] = (effect['hp drain% high'] as number);
+		}
+
+		const filteredValue = Object.entries(params)
+			.filter(([, value]) => value && +value)
+			.reduce((acc: { [param: string]: number }, [key, value]) => {
+				acc[key] = parseNumberOrDefault(value);
+				return acc;
+			}, {});
+
+		const results: IBuff[] = [{
+			id: 'proc:14',
+			originalId: '14',
+			sources,
+			effectDelay,
+			value: {
+				...filteredValue,
+				hits,
+				distribution,
+			},
+			...targetData,
+		}];
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '14',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }

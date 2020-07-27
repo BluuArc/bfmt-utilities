@@ -2637,5 +2637,215 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 6] });
 			});
 		});
+
+		describe('proc 14', () => {
+			const PARAMS_ORDER = ['atk%', 'flatAtk', 'crit%', 'bc%', 'hc%', 'dmg%', 'drainLow%', 'drainHigh%'];
+			const expectedBuffId = 'proc:14';
+			const expectedOriginalId = '14';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			expectValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6,7,8';
+				const splitParams = params.split(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const context = createArbitraryContext({
+					damageFrames: {
+						hits: arbitraryHitCount,
+						[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
+					},
+				});
+				const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+					acc[param] = +splitParams[index];
+					return acc;
+				}, {});
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						...expectedValuesForParams,
+						hits: arbitraryHitCount,
+						distribution: arbitraryDamageDistribution,
+					},
+				})];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,8,9,10,11';
+				const splitParams = params.split(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const context = createArbitraryContext({
+					damageFrames: {
+						hits: arbitraryHitCount,
+						[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
+					},
+				});
+				const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+					acc[param] = +splitParams[index];
+					return acc;
+				}, {});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							...expectedValuesForParams,
+							hits: arbitraryHitCount,
+							distribution: arbitraryDamageDistribution,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_8: '9',
+							param_9: '10',
+							param_10: '11',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const mockValues = [7, 8, 9, 10, 11, 12, 13, 14];
+				const valuesInEffect = PARAMS_ORDER.reduce((acc, stat, index) => {
+					let key;
+					if (stat === 'flatAtk') {
+						key = 'bb flat atk';
+					} else if (stat === 'drainLow%') {
+						key = 'hp drain% low';
+					} else if (stat === 'drainHigh%') {
+						key = 'hp drain% high';
+					} else {
+						key = `bb ${stat}`;
+					}
+					acc[key] = mockValues[index];
+					return acc;
+				}, {});
+				const effect = createArbitraryBaseEffect(valuesInEffect);
+				const context = createArbitraryContext({
+					damageFrames: {
+						hits: arbitraryHitCount,
+						[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
+					},
+				});
+				const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+					acc[param] = +mockValues[index];
+					return acc;
+				}, {});
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						...expectedValuesForParams,
+						hits: arbitraryHitCount,
+						distribution: arbitraryDamageDistribution,
+					},
+				})];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('for missing parts of context.damageFrames', () => {
+				it('defaults to 0 for hits and distribution if context.damageFrames does not exist', () => {
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							hits: 0,
+							distribution: 0,
+						},
+					})];
+					const result = mappingFunction(createArbitraryBaseEffect(), createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults to 0 for hits if context.damageFrames.hits does not exist', () => {
+					const context = createArbitraryContext({
+						damageFrames: {
+							[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
+						},
+					});
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							hits: 0,
+							distribution: arbitraryDamageDistribution,
+						},
+					})];
+
+					const result = mappingFunction(createArbitraryBaseEffect(), context);
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults to 0 for distribution if context.damageFrames["hit dmg% distribution (total)"] does not exist', () => {
+					const context = createArbitraryContext({
+						damageFrames: {
+							hits: arbitraryHitCount,
+						},
+					});
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							hits: arbitraryHitCount,
+							distribution: 0,
+						},
+					})];
+
+					const result = mappingFunction(createArbitraryBaseEffect(), context);
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			PARAMS_ORDER.forEach((paramCase) => {
+				it(`returns only value for ${paramCase} if it is non-zero and other stats are zero`, () => {
+					const params = PARAMS_ORDER.map((param) => param === paramCase ? '789' : '0').join(',');
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							[paramCase]: 789,
+							hits: 0,
+							distribution: 0,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({ params: '0,0,0,0,0,0,0,0,123' });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						value: { hits: 0, distribution: 0 },
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 8] });
+			});
+		});
 	});
 });

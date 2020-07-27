@@ -396,7 +396,7 @@ describe('BUFF_METADATA entries', () => {
 
 	describe('proc:1', () => {
 		testDefaultIconResult(BuffId['proc:1'], [IconId.ATK_AOE]);
-		testIconResultWithBuff(BuffId['proc:1'], [IconId.ATK_ST], { targetArea: TargetArea.Single });
+		testIconResultWithBuff(BuffId['proc:1'], [IconId.ATK_ST], { targetArea: TargetArea.Single }, 'target area is single');
 	});
 
 	describe('proc:2', () => {
@@ -705,5 +705,10 @@ describe('BUFF_METADATA entries', () => {
 
 	describe('proc:13', () => {
 		testDefaultIconResult(BuffId['proc:13'], [IconId.ATK_RT]);
+	});
+
+	describe('proc:14', () => {
+		testDefaultIconResult(BuffId['proc:14'], [IconId.ATK_AOE_HPREC]);
+		testIconResultWithBuff(BuffId['proc:14'], [IconId.ATK_ST_HPREC], { targetArea: TargetArea.Single }, 'target area is single');
 	});
 });

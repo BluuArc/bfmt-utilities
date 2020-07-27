@@ -750,4 +750,10 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Attack,
 		icons: () => [IconId.ATK_RT],
 	},
+	'proc:14': {
+		id: BuffId['proc:14'],
+		name: 'Lifesteal Damage',
+		stackType: BuffStackType.Attack,
+		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_HPREC : IconId.ATK_AOE_HPREC],
+	},
 });
