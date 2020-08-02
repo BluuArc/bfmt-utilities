@@ -747,7 +747,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			healLow = parseNumberOrDefault(typedEffect['hp% recover on enemy defeat low'] as number);
 			healHigh = parseNumberOrDefault(typedEffect['hp% recover on enemy defeat high'] as number);
 
-			 // currently deathmax's datamine misses this value, but all known entries have 100% chance
+			// currently deathmax's datamine misses this value, but all known entries have 100% chance
 			chance = parseNumberOrDefault(typedEffect['hp% recover on enemy defeat chance%'] as number, 100);
 		}
 
@@ -770,6 +770,50 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		if (unknownParams) {
 			results.push(createaUnknownParamsEntry(unknownParams, {
 				originalId: '15',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
+
+	map.set('16', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let healLow: number, healHigh: number;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawHealLow, rawHealHigh, ...extraParams] = splitEffectParams(typedEffect);
+			healLow = parseNumberOrDefault(rawHealLow);
+			healHigh = parseNumberOrDefault(rawHealHigh);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		} else {
+			healLow = parseNumberOrDefault(typedEffect['hp% recover on battle win low'] as number);
+			healHigh = parseNumberOrDefault(typedEffect['hp% recover on battle win high'] as number);
+		}
+
+		const results: IBuff[] = [{
+			id: 'passive:16',
+			originalId: '16',
+			sources,
+			value: {
+				healLow,
+				healHigh,
+			},
+			conditions: {
+				...conditionInfo,
+				onBattleWin: true,
+			},
+			...targetData,
+		}];
+
+		if (unknownParams) {
+			results.push(createaUnknownParamsEntry(unknownParams, {
+				originalId: '16',
 				sources,
 				targetData,
 				conditionInfo,
