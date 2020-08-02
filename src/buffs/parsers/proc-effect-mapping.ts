@@ -1084,4 +1084,73 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('17', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const AILMENTS_ORDER = [Ailment.Poison, Ailment.Weak, Ailment.Sick, Ailment.Injury, Ailment.Curse, Ailment.Paralysis];
+		const resistances: { [ailment: string]: AlphaNumeric } = {
+			poison: '0',
+			weak: '0',
+			sick: '0',
+			injury: '0',
+			curse: '0',
+			paralysis: '0',
+		};
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let rawDuration: string, extraParams: string[];
+			[resistances.poison, resistances.weak, resistances.sick, resistances.injury, resistances.curse, resistances.paralysis, rawDuration, ...extraParams] = splitEffectParams(effect);
+			turnDuration = parseNumberOrDefault(rawDuration);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
+		} else {
+			const ailmentKeysInEffect = Object.keys(effect).filter((k) => k.startsWith('resist'));
+			AILMENTS_ORDER.forEach((ailment) => {
+				const correspondingKey = ailmentKeysInEffect.find((k) => k.includes(ailment));
+				if (correspondingKey) {
+					resistances[ailment] = effect[correspondingKey] as number;
+				}
+			});
+			turnDuration = parseNumberOrDefault(effect['resist status ails turns'] as number);
+		}
+
+		const results: IBuff[] = [];
+		AILMENTS_ORDER.forEach((ailment) => {
+			const value = parseNumberOrDefault(resistances[ailment]);
+			if (value !== 0) {
+				results.push({
+					id: `proc:17:${ailment}`,
+					originalId: '17',
+					sources,
+					effectDelay,
+					value,
+					duration: turnDuration,
+					...targetData,
+				});
+			}
+		});
+
+		if (results.length === 0 && turnDuration !== 0) {
+			results.push(createTurnDurationEntry({
+				originalId: '17',
+				sources,
+				buffs: AILMENTS_ORDER.map((a) => `proc:17:${a}`),
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '17',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }

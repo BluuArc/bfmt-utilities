@@ -650,4 +650,11 @@ export enum BuffId {
 	'proc:16:dark' = 'proc:16:dark',
 	'proc:16:all' = 'proc:16:all',
 	'proc:16:unknown' = 'proc:16:unknown',
+
+	'proc:17:poison' = 'proc:17:poison',
+	'proc:17:weak' = 'proc:17:weak',
+	'proc:17:sick' = 'proc:17:sick',
+	'proc:17:injury' = 'proc:17:injury',
+	'proc:17:curse' = 'proc:17:curse',
+	'proc:17:paralysis' = 'proc:17:paralysis',
 }
