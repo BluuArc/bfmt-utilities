@@ -1,4 +1,4 @@
-import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect, UnitElement, UnitType } from '../../datamine-types';
+import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect, UnitElement, UnitType, Ailment } from '../../datamine-types';
 import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement, IBuffConditions } from './buff-types';
 import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext, createUnknownParamsValue, ITargetData, parseNumberOrDefault } from './_helpers';
 
@@ -54,6 +54,18 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		6: UnitType.Rex, // no known entries have this value at the time of writing
 	};
 
+	const AILMENT_MAPPING: { [param: string]: Ailment } = {
+		1: Ailment.Poison,
+		2: Ailment.Weak,
+		3: Ailment.Sick,
+		4: Ailment.Injury,
+		5: Ailment.Curse,
+		6: Ailment.Paralysis,
+		7: Ailment.AttackReduction,
+		8: Ailment.DefenseReduction,
+		9: Ailment.RecoveryReduction,
+	};
+
 	type AlphaNumeric = string | number;
 	type CoreStat = 'hp' | 'atk' | 'def' | 'rec' | 'crit';
 
@@ -79,7 +91,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		conditionInfo: IBuffConditions;
 	}
 
-	const createaUnknownParamsEntry = (
+	const createUnknownParamsEntry = (
 		unknownParams: IGenericBuffValue | undefined,
 		{
 			originalId,
@@ -146,7 +158,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId,
 				sources,
 				targetData,
@@ -199,7 +211,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		});
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '1',
 				sources,
 				targetData,
@@ -284,7 +296,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '2',
 				sources,
 				targetData,
@@ -348,7 +360,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		});
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '3',
 				sources,
 				targetData,
@@ -400,7 +412,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		});
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '4',
 				sources,
 				targetData,
@@ -446,7 +458,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '5',
 				sources,
 				targetData,
@@ -554,7 +566,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		});
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '11',
 				sources,
 				targetData,
@@ -631,7 +643,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		});
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '12',
 				sources,
 				targetData,
@@ -678,7 +690,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}];
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '13',
 				sources,
 				targetData,
@@ -719,7 +731,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}];
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '14',
 				sources,
 				targetData,
@@ -768,7 +780,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}];
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '15',
 				sources,
 				targetData,
@@ -812,7 +824,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}];
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '16',
 				sources,
 				targetData,
@@ -856,7 +868,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}];
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '17',
 				sources,
 				targetData,
@@ -909,8 +921,77 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		});
 
 		if (unknownParams) {
-			results.push(createaUnknownParamsEntry(unknownParams, {
+			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '19',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
+
+	map.set('20', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		interface IAilmentInflictionPair {
+			ailment: Ailment;
+			chance: number;
+		}
+		const inflictedAilments: IAilmentInflictionPair[] = [];
+		const typedEffect = (effect as IPassiveEffect);
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let params = splitEffectParams(typedEffect);
+			if (params.length % 2 !== 0 && params[params.length - 1] !== '0') {
+				unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(-1), params.length - 1, injectionContext);
+				params = params.slice(0, params.length - 1);
+			}
+
+			const numParams = params.length;
+			for (let index = 0; index < numParams; index += 2) {
+				const ailmentValue = params[index];
+				const chance = parseNumberOrDefault(params[index + 1]);
+				if (ailmentValue !== '0' || chance !== 0) {
+					const ailmentType = AILMENT_MAPPING[ailmentValue] || Ailment.Unknown;
+					inflictedAilments.push({
+						ailment: ailmentType,
+						chance,
+					});
+				}
+			}
+		} else {
+			Object.values(AILMENT_MAPPING).forEach((ailment) => {
+				let effectKey: string;
+				if (ailment === Ailment.Weak) {
+					effectKey = 'weaken%';
+				} else if (ailment === Ailment.AttackReduction || ailment === Ailment.DefenseReduction || ailment === Ailment.RecoveryReduction) {
+					effectKey = ailment;
+				} else {
+					effectKey = `${ailment}%`;
+				}
+
+				if (effectKey in effect) {
+					inflictedAilments.push({
+						ailment,
+						chance: parseNumberOrDefault(typedEffect[effectKey] as number),
+					});
+				}
+			});
+		}
+
+		const results: IBuff[] = inflictedAilments.map(({ ailment, chance }) => ({
+			id: `passive:20:${ailment}`,
+			originalId: '20',
+			sources,
+			value: chance,
+			conditions: { ...conditionInfo },
+			...targetData,
+		}));
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '20',
 				sources,
 				targetData,
 				conditionInfo,

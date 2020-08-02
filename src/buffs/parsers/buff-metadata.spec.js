@@ -425,6 +425,48 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 20 buffs', () => {
+		describe('passive:20:poison', () => {
+			testDefaultIconResult(BuffId['passive:20:poison'], [IconId.BUFF_ADDPOISON]);
+		});
+
+		describe('passive:20:weak', () => {
+			testDefaultIconResult(BuffId['passive:20:weak'], [IconId.BUFF_ADDWEAK]);
+		});
+
+		describe('passive:20:sick', () => {
+			testDefaultIconResult(BuffId['passive:20:sick'], [IconId.BUFF_ADDSICK]);
+		});
+
+		describe('passive:20:injury', () => {
+			testDefaultIconResult(BuffId['passive:20:injury'], [IconId.BUFF_ADDINJURY]);
+		});
+
+		describe('passive:20:curse', () => {
+			testDefaultIconResult(BuffId['passive:20:curse'], [IconId.BUFF_ADDCURSE]);
+		});
+
+		describe('passive:20:paralysis', () => {
+			testDefaultIconResult(BuffId['passive:20:paralysis'], [IconId.BUFF_ADDPARA]);
+		});
+
+		describe('passive:20:atk down', () => {
+			testDefaultIconResult(BuffId['passive:20:atk down'], [IconId.BUFF_ADDATKDOWN]);
+		});
+
+		describe('passive:20:def down', () => {
+			testDefaultIconResult(BuffId['passive:20:def down'], [IconId.BUFF_ADDDEFDOWN]);
+		});
+
+		describe('passive:20:rec down', () => {
+			testDefaultIconResult(BuffId['passive:20:rec down'], [IconId.BUFF_ADDRECDOWN]);
+		});
+
+		describe('passive:20:unknown', () => {
+			testDefaultIconResult(BuffId['passive:20:unknown'], [IconId.BUFF_ADDAILMENT]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

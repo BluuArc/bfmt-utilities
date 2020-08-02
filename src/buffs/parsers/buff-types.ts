@@ -495,6 +495,18 @@ export enum IconId {
 	DEBUFF_PARALYSIS = 'DEBUFF_PARALYSIS',
 	DEBUFF_AILMENT = 'DEBUFF_AILMENT',
 
+	BUFF_ADDPOISON = 'BUFF_ADDPOISON',
+  BUFF_ADDWEAK = 'BUFF_ADDWEAK',
+  BUFF_ADDSICK = 'BUFF_ADDSICK',
+  BUFF_ADDINJURY = 'BUFF_ADDINJURY',
+  BUFF_ADDCURSE = 'BUFF_ADDCURSE',
+	BUFF_ADDPARA = 'BUFF_ADDPARA',
+	BUFF_ADDAILMENT = 'BUFF_ADDAILMENT',
+
+	BUFF_ADDATKDOWN = 'BUFF_ADDATKDOWN',
+  BUFF_ADDDEFDOWN = 'BUFF_ADDDEFDOWN',
+  BUFF_ADDRECDOWN = 'BUFF_ADDRECDOWN',
+
 	BUFF_DAMAGECUT = 'BUFF_DAMAGECUT',
 
 	BUFF_FIREDMGDOWN = 'BUFF_FIREDMGDOWN',
@@ -598,6 +610,17 @@ export enum BuffId {
 	'passive:19:item' = 'passive:19:item',
 	'passive:19:zel' = 'passive:19:zel',
 	'passive:19:karma' = 'passive:19:karma',
+
+	'passive:20:poison' = 'passive:20:poison',
+	'passive:20:weak' = 'passive:20:weak',
+	'passive:20:sick' = 'passive:20:sick',
+	'passive:20:injury' = 'passive:20:injury',
+	'passive:20:curse' = 'passive:20:curse',
+	'passive:20:paralysis' = 'passive:20:paralysis',
+	'passive:20:atk down' = 'passive:20:atk down',
+	'passive:20:def down' = 'passive:20:def down',
+	'passive:20:rec down' = 'passive:20:rec down',
+	'passive:20:unknown' = 'passive:20:unknown',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

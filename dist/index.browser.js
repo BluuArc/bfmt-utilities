@@ -1772,6 +1772,7 @@ var bfmtUtilities = function (exports) {
     UnitStat["rec"] = "rec";
     UnitStat["crit"] = "crit";
     UnitStat["bbGauge"] = "bbGauge";
+    UnitStat["bcFillOnHit"] = "bcFillOnHit";
     UnitStat["bcDropRate"] = "bcDropRate";
     UnitStat["hcDropRate"] = "hcDropRate";
     UnitStat["itemDropRate"] = "itemDropRate";
@@ -1835,6 +1836,7 @@ var bfmtUtilities = function (exports) {
     IconId["BUFF_HPTHRESHCRTRATEDOWN"] = "BUFF_HPTHRESHCRTRATEDOWN";
     IconId["BUFF_HPREC"] = "BUFF_HPREC";
     IconId["BUFF_BBREC"] = "BUFF_BBREC";
+    IconId["BUFF_DAMAGEBB"] = "BUFF_DAMAGEBB";
     IconId["BUFF_FIREHPUP"] = "BUFF_FIREHPUP";
     IconId["BUFF_FIREHPDOWN"] = "BUFF_FIREHPDOWN";
     IconId["BUFF_FIREATKUP"] = "BUFF_FIREATKUP";
@@ -1992,6 +1994,16 @@ var bfmtUtilities = function (exports) {
     IconId["DEBUFF_CURSE"] = "DEBUFF_CURSE";
     IconId["DEBUFF_PARALYSIS"] = "DEBUFF_PARALYSIS";
     IconId["DEBUFF_AILMENT"] = "DEBUFF_AILMENT";
+    IconId["BUFF_ADDPOISON"] = "BUFF_ADDPOISON";
+    IconId["BUFF_ADDWEAK"] = "BUFF_ADDWEAK";
+    IconId["BUFF_ADDSICK"] = "BUFF_ADDSICK";
+    IconId["BUFF_ADDINJURY"] = "BUFF_ADDINJURY";
+    IconId["BUFF_ADDCURSE"] = "BUFF_ADDCURSE";
+    IconId["BUFF_ADDPARA"] = "BUFF_ADDPARA";
+    IconId["BUFF_ADDAILMENT"] = "BUFF_ADDAILMENT";
+    IconId["BUFF_ADDATKDOWN"] = "BUFF_ADDATKDOWN";
+    IconId["BUFF_ADDDEFDOWN"] = "BUFF_ADDDEFDOWN";
+    IconId["BUFF_ADDRECDOWN"] = "BUFF_ADDRECDOWN";
     IconId["BUFF_DAMAGECUT"] = "BUFF_DAMAGECUT";
     IconId["BUFF_FIREDMGDOWN"] = "BUFF_FIREDMGDOWN";
     IconId["BUFF_WATERDMGDOWN"] = "BUFF_WATERDMGDOWN";
@@ -2082,6 +2094,16 @@ var bfmtUtilities = function (exports) {
     BuffId["passive:19:item"] = "passive:19:item";
     BuffId["passive:19:zel"] = "passive:19:zel";
     BuffId["passive:19:karma"] = "passive:19:karma";
+    BuffId["passive:20:poison"] = "passive:20:poison";
+    BuffId["passive:20:weak"] = "passive:20:weak";
+    BuffId["passive:20:sick"] = "passive:20:sick";
+    BuffId["passive:20:injury"] = "passive:20:injury";
+    BuffId["passive:20:curse"] = "passive:20:curse";
+    BuffId["passive:20:paralysis"] = "passive:20:paralysis";
+    BuffId["passive:20:atk down"] = "passive:20:atk down";
+    BuffId["passive:20:def down"] = "passive:20:def down";
+    BuffId["passive:20:rec down"] = "passive:20:rec down";
+    BuffId["passive:20:unknown"] = "passive:20:unknown";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1"] = "proc:1";
@@ -2142,6 +2164,7 @@ var bfmtUtilities = function (exports) {
     BuffId["proc:17:paralysis"] = "proc:17:paralysis";
     BuffId["proc:18"] = "proc:18";
     BuffId["proc:19"] = "proc:19";
+    BuffId["proc:20"] = "proc:20";
   })(BuffId || (BuffId = {}));
   /**
    * @description Helper function for creating an entry to be used in the `sources`
@@ -3484,6 +3507,69 @@ var bfmtUtilities = function (exports) {
         originalId: '19'
       });
     });
+    map.set('20', (effect, context, injectionContext) => {
+      const {
+        targetData,
+        sources,
+        effectDelay
+      } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+      let fillLow = 0;
+      let fillHigh = 0;
+      let chance = 0;
+      let turnDuration = 0;
+      let unknownParams;
+
+      if (effect.params) {
+        const [rawFillLow, rawFillHigh, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+        fillLow = parseNumberOrDefault(rawFillLow) / 100;
+        fillHigh = parseNumberOrDefault(rawFillHigh) / 100;
+        chance = parseNumberOrDefault(rawChance);
+        turnDuration = parseNumberOrDefault(rawTurnDuration);
+        unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+      } else {
+        fillLow = parseNumberOrDefault(effect['bc fill when attacked low']);
+        fillHigh = parseNumberOrDefault(effect['bc fill when attacked high']);
+        chance = parseNumberOrDefault(effect['bc fill when attacked%']);
+        turnDuration = parseNumberOrDefault(effect['bc fill when attacked turns (38)']);
+      }
+
+      const hasAnyFillValues = fillLow !== 0 || fillHigh !== 0;
+      const results = [];
+
+      if (hasAnyFillValues) {
+        results.push(Object.assign({
+          id: 'proc:20',
+          originalId: '20',
+          sources,
+          effectDelay,
+          duration: turnDuration,
+          value: {
+            fillLow,
+            fillHigh,
+            chance
+          }
+        }, targetData));
+      } else if (turnDuration !== 0) {
+        results.push(createTurnDurationEntry({
+          originalId: '20',
+          sources,
+          buffs: ['proc:20'],
+          duration: turnDuration,
+          targetData
+        }));
+      }
+
+      if (unknownParams) {
+        results.push(createUnknownParamsEntry(unknownParams, {
+          originalId: '20',
+          sources,
+          targetData,
+          effectDelay
+        }));
+      }
+
+      return results;
+    });
   }
   /**
    * @description Default function for all effects that cannot be processed.
@@ -3569,6 +3655,17 @@ var bfmtUtilities = function (exports) {
       5: UnitType.Oracle,
       6: UnitType.Rex
     };
+    const AILMENT_MAPPING = {
+      1: Ailment.Poison,
+      2: Ailment.Weak,
+      3: Ailment.Sick,
+      4: Ailment.Injury,
+      5: Ailment.Curse,
+      6: Ailment.Paralysis,
+      7: Ailment.AttackReduction,
+      8: Ailment.DefenseReduction,
+      9: Ailment.RecoveryReduction
+    };
     const STATS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
     const AILMENTS_ORDER = ['poison', 'weak', 'sick', 'injury', 'curse', 'paralysis'];
 
@@ -3587,7 +3684,7 @@ var bfmtUtilities = function (exports) {
 
     const splitEffectParams = effect => effect.params.split(',');
 
-    const createaUnknownParamsEntry = (unknownParams, {
+    const createUnknownParamsEntry = (unknownParams, {
       originalId,
       sources,
       targetData,
@@ -3647,7 +3744,7 @@ var bfmtUtilities = function (exports) {
       }
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId,
           sources,
           targetData,
@@ -3702,7 +3799,7 @@ var bfmtUtilities = function (exports) {
       });
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '1',
           sources,
           targetData,
@@ -3785,7 +3882,7 @@ var bfmtUtilities = function (exports) {
       }
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '2',
           sources,
           targetData,
@@ -3850,7 +3947,7 @@ var bfmtUtilities = function (exports) {
       });
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '3',
           sources,
           targetData,
@@ -3904,7 +4001,7 @@ var bfmtUtilities = function (exports) {
       });
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '4',
           sources,
           targetData,
@@ -3953,7 +4050,7 @@ var bfmtUtilities = function (exports) {
       }
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '5',
           sources,
           targetData,
@@ -4061,7 +4158,7 @@ var bfmtUtilities = function (exports) {
       });
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '11',
           sources,
           targetData,
@@ -4140,7 +4237,7 @@ var bfmtUtilities = function (exports) {
       });
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '12',
           sources,
           targetData,
@@ -4187,7 +4284,7 @@ var bfmtUtilities = function (exports) {
       }, targetData)];
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '13',
           sources,
           targetData,
@@ -4229,7 +4326,7 @@ var bfmtUtilities = function (exports) {
       }, targetData)];
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '14',
           sources,
           targetData,
@@ -4277,7 +4374,7 @@ var bfmtUtilities = function (exports) {
       }, targetData)];
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '15',
           sources,
           targetData,
@@ -4321,7 +4418,7 @@ var bfmtUtilities = function (exports) {
       }, targetData)];
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '16',
           sources,
           targetData,
@@ -4366,7 +4463,7 @@ var bfmtUtilities = function (exports) {
       }, targetData)];
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '17',
           sources,
           targetData,
@@ -4419,8 +4516,83 @@ var bfmtUtilities = function (exports) {
       });
 
       if (unknownParams) {
-        results.push(createaUnknownParamsEntry(unknownParams, {
+        results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '19',
+          sources,
+          targetData,
+          conditionInfo
+        }));
+      }
+
+      return results;
+    });
+    map.set('20', (effect, context, injectionContext) => {
+      const {
+        conditionInfo,
+        targetData,
+        sources
+      } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+      const inflictedAilments = [];
+      const typedEffect = effect;
+      let unknownParams;
+
+      if (typedEffect.params) {
+        let params = splitEffectParams(typedEffect);
+
+        if (params.length % 2 !== 0 && params[params.length - 1] !== '0') {
+          unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(-1), params.length - 1, injectionContext);
+          params = params.slice(0, params.length - 1);
+        }
+
+        const numParams = params.length;
+
+        for (let index = 0; index < numParams; index += 2) {
+          const ailmentValue = params[index];
+          const chance = parseNumberOrDefault(params[index + 1]);
+
+          if (ailmentValue !== '0' || chance !== 0) {
+            const ailmentType = AILMENT_MAPPING[ailmentValue] || Ailment.Unknown;
+            inflictedAilments.push({
+              ailment: ailmentType,
+              chance
+            });
+          }
+        }
+      } else {
+        Object.values(AILMENT_MAPPING).forEach(ailment => {
+          let effectKey;
+
+          if (ailment === Ailment.Weak) {
+            effectKey = 'weaken%';
+          } else if (ailment === Ailment.AttackReduction || ailment === Ailment.DefenseReduction || ailment === Ailment.RecoveryReduction) {
+            effectKey = ailment;
+          } else {
+            effectKey = `${ailment}%`;
+          }
+
+          if (effectKey in effect) {
+            inflictedAilments.push({
+              ailment,
+              chance: parseNumberOrDefault(typedEffect[effectKey])
+            });
+          }
+        });
+      }
+
+      const results = inflictedAilments.map(({
+        ailment,
+        chance
+      }) => Object.assign({
+        id: `passive:20:${ailment}`,
+        originalId: '20',
+        sources,
+        value: chance,
+        conditions: Object.assign({}, conditionInfo)
+      }, targetData));
+
+      if (unknownParams) {
+        results.push(createUnknownParamsEntry(unknownParams, {
+          originalId: '20',
           sources,
           targetData,
           conditionInfo
@@ -4904,6 +5076,75 @@ var bfmtUtilities = function (exports) {
       stackType: BuffStackType.Passive,
       icons: buff => [buff && buff.value && buff.value < 0 ? IconId.BUFF_KARMADOWN : IconId.BUFF_KARMADROP]
     },
+    'passive:20:poison': {
+      id: BuffId['passive:20:poison'],
+      name: 'Passive Poison Infliction',
+      stat: UnitStat.poisonInflict,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_ADDPOISON]
+    },
+    'passive:20:weak': {
+      id: BuffId['passive:20:weak'],
+      name: 'Passive Weak Infliction',
+      stat: UnitStat.weakInflict,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_ADDWEAK]
+    },
+    'passive:20:sick': {
+      id: BuffId['passive:20:sick'],
+      name: 'Passive Sick Infliction',
+      stat: UnitStat.sickInflict,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_ADDSICK]
+    },
+    'passive:20:injury': {
+      id: BuffId['passive:20:injury'],
+      name: 'Passive Injury Infliction',
+      stat: UnitStat.injuryInflict,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_ADDINJURY]
+    },
+    'passive:20:curse': {
+      id: BuffId['passive:20:curse'],
+      name: 'Passive Curse Infliction',
+      stat: UnitStat.curseInflict,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_ADDCURSE]
+    },
+    'passive:20:paralysis': {
+      id: BuffId['passive:20:paralysis'],
+      name: 'Passive Paralysis Infliction',
+      stat: UnitStat.poisonInflict,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_ADDPARA]
+    },
+    'passive:20:atk down': {
+      id: BuffId['passive:20:atk down'],
+      name: 'Passive Attack Reduction Infliction',
+      stat: UnitStat.atkDownInflict,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_ADDATKDOWN]
+    },
+    'passive:20:def down': {
+      id: BuffId['passive:20:def down'],
+      name: 'Passive Defense Reduction Infliction',
+      stat: UnitStat.defDownInflict,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_ADDDEFDOWN]
+    },
+    'passive:20:rec down': {
+      id: BuffId['passive:20:rec down'],
+      name: 'Passive Recovery Reduction Infliction',
+      stat: UnitStat.recDownInflict,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_ADDRECDOWN]
+    },
+    'passive:20:unknown': {
+      id: BuffId['passive:20:unknown'],
+      name: 'Passive Unknown Ailment Infliction',
+      stackType: BuffStackType.Unknown,
+      icons: () => [IconId.BUFF_ADDAILMENT]
+    },
     'UNKNOWN_PROC_EFFECT_ID': {
       id: BuffId.UNKNOWN_PROC_EFFECT_ID,
       name: 'Unknown Proc Effect',
@@ -5384,6 +5625,13 @@ var bfmtUtilities = function (exports) {
       stat: UnitStat.bbGauge,
       stackType: BuffStackType.Active,
       icons: () => [IconId.BUFF_BBREC]
+    },
+    'proc:20': {
+      id: BuffId['proc:20'],
+      name: 'Active BC Fill when attacked',
+      stat: UnitStat.bcFillOnHit,
+      stackType: BuffStackType.Active,
+      icons: () => [IconId.BUFF_DAMAGEBB]
     }
   }));
   /**
