@@ -1027,4 +1027,61 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('16', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let mitigation = 0;
+		let element: UnitElement | BuffConditionElement;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawElement, rawMitigation, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+
+			element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+			mitigation = parseNumberOrDefault(rawMitigation);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			const mitigationKey = Object.keys(effect).find((k) => k.startsWith('mitigate'));
+			element = (mitigationKey && Object.values(ELEMENT_MAPPING).find((e) => mitigationKey.includes(e))) || BuffConditionElement.Unknown;
+			if (mitigationKey) {
+				mitigation = parseNumberOrDefault(effect[mitigationKey] as number);
+			}
+
+			turnDuration = parseNumberOrDefault(effect['buff turns'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (mitigation !== 0) {
+			results.push({
+				id: `proc:16:${element}`,
+				originalId: '16',
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: mitigation,
+				...targetData,
+			});
+		} else if (turnDuration !== 0) {
+			results.push(createTurnDurationEntry({
+				originalId: '16',
+				sources,
+				buffs: Object.values(ELEMENT_MAPPING).concat([BuffConditionElement.Unknown]).map((e) => `proc:16:${e}`),
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '16',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }

@@ -711,4 +711,38 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:14'], [IconId.ATK_AOE_HPREC]);
 		testIconResultWithBuff(BuffId['proc:14'], [IconId.ATK_ST_HPREC], { targetArea: TargetArea.Single }, 'target area is single');
 	});
+
+	describe('proc 16 buffs', () => {
+		describe('proc:16:fire', () => {
+			testDefaultIconResult(BuffId['proc:16:fire'], [IconId.BUFF_FIREDMGDOWN]);
+		});
+
+		describe('proc:16:water', () => {
+			testDefaultIconResult(BuffId['proc:16:water'], [IconId.BUFF_WATERDMGDOWN]);
+		});
+
+		describe('proc:16:earth', () => {
+			testDefaultIconResult(BuffId['proc:16:earth'], [IconId.BUFF_EARTHDMGDOWN]);
+		});
+
+		describe('proc:16:thunder', () => {
+			testDefaultIconResult(BuffId['proc:16:thunder'], [IconId.BUFF_THUNDERDMGDOWN]);
+		});
+
+		describe('proc:16:light', () => {
+			testDefaultIconResult(BuffId['proc:16:light'], [IconId.BUFF_LIGHTDMGDOWN]);
+		});
+
+		describe('proc:16:dark', () => {
+			testDefaultIconResult(BuffId['proc:16:dark'], [IconId.BUFF_DARKDMGDOWN]);
+		});
+
+		describe('proc:16:all', () => {
+			testDefaultIconResult(BuffId['proc:16:all'], [IconId.BUFF_ELEMENTDMGDOWN]);
+		});
+
+		describe('proc:16:unknown', () => {
+			testDefaultIconResult(BuffId['proc:16:unknown'], [IconId.BUFF_ELEMENTDMGDOWN]);
+		});
+	});
 });

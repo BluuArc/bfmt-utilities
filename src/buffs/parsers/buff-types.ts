@@ -631,4 +631,13 @@ export enum BuffId {
 	'proc:12' = 'proc:12',
 	'proc:13' = 'proc:13',
 	'proc:14' = 'proc:14',
+
+	'proc:16:fire' = 'proc:16:fire',
+	'proc:16:water' = 'proc:16:water',
+	'proc:16:earth' = 'proc:16:earth',
+	'proc:16:thunder' = 'proc:16:thunder',
+	'proc:16:light' = 'proc:16:light',
+	'proc:16:dark' = 'proc:16:dark',
+	'proc:16:all' = 'proc:16:all',
+	'proc:16:unknown' = 'proc:16:unknown',
 }
