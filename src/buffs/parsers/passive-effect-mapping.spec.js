@@ -1718,5 +1718,220 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
 			});
 		});
+
+		describe('passive 15', () => {
+			const expectedBuffId = 'passive:15';
+			const expectedOriginalId = '15';
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3';
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						healLow: 1,
+						healHigh: 2,
+						chance: 3,
+					},
+					conditions: {
+						onEnemyDefeat: true,
+					},
+				})];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							healLow: 1,
+							healHigh: 2,
+							chance: 3,
+						},
+						conditions: {
+							onEnemyDefeat: true,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_3: '4',
+							param_4: '5',
+							param_5: '6',
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = {
+					'hp% recover on enemy defeat low': 3,
+					'hp% recover on enemy defeat high': 4,
+					'hp% recover on enemy defeat chance%': 5,
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						healLow: 3,
+						healHigh: 4,
+						chance: 5,
+					},
+					conditions: {
+						onEnemyDefeat: true,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('converts effect properties to numbers when params property does not exist', () => {
+				const effect = {
+					'hp% recover on enemy defeat low': '6',
+					'hp% recover on enemy defeat high': '7',
+					'hp% recover on enemy defeat chance%': '8',
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						healLow: 6,
+						healHigh: 7,
+						chance: 8,
+					},
+					conditions: {
+						onEnemyDefeat: true,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				const effectPropToResultPropMapping = {
+					'hp% recover on enemy defeat low': 'healLow',
+					'hp% recover on enemy defeat high': 'healHigh',
+					'hp% recover on enemy defeat chance%': 'chance',
+				};
+
+				Object.keys(effectPropToResultPropMapping).forEach((effectProp) => {
+					const expectedDefaultValue = effectProp.includes('chance') ? 100 : 0;
+					it(`defaults to ${expectedDefaultValue} for missing ${effectProp} value`, () => {
+						const effect = Object.keys(effectPropToResultPropMapping)
+							.filter((prop) => prop !== effectProp)
+							.reduce((acc, prop) => {
+								acc[prop] = 123;
+								return acc;
+							}, {});
+						const expectedValues = Object.entries(effectPropToResultPropMapping)
+							.reduce((acc, [localEffectProp, resultProp]) => {
+								acc[resultProp] = localEffectProp === effectProp ? expectedDefaultValue : 123;
+								return acc;
+							}, {});
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							value: expectedValues,
+							conditions: {
+								onEnemyDefeat: true,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('defaults chance to 100 and all other effect properties to 0 for non-number values', () => {
+					const effect = Object.keys(effectPropToResultPropMapping)
+						.reduce((acc, prop) => {
+							acc[prop] = 'not a number';
+							return acc;
+						}, {});
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							healLow: 0,
+							healHigh: 0,
+							chance: 100,
+						},
+						conditions: {
+							onEnemyDefeat: true,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults values for effect params to 0 if they are non-number or missing', () => {
+					const effect = { params: 'non-number' };
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							healLow: 0,
+							healHigh: 0,
+							chance: 0,
+						},
+						conditions: {
+							onEnemyDefeat: true,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						value: {
+							healLow: 0,
+							healHigh: 0,
+							chance: 0,
+						},
+						conditions: {
+							...arbitraryConditionValue,
+							onEnemyDefeat: true,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 3] });
+			});
+		});
 	});
 });

@@ -729,4 +729,53 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('15', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let healLow: number, healHigh: number, chance: number;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawHealLow, rawHealHigh, rawChance, ...extraParams] = splitEffectParams(typedEffect);
+			healLow = parseNumberOrDefault(rawHealLow);
+			healHigh = parseNumberOrDefault(rawHealHigh);
+			chance = parseNumberOrDefault(rawChance);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			healLow = parseNumberOrDefault(typedEffect['hp% recover on enemy defeat low'] as number);
+			healHigh = parseNumberOrDefault(typedEffect['hp% recover on enemy defeat high'] as number);
+
+			 // currently deathmax's datamine misses this value, but all known entries have 100% chance
+			chance = parseNumberOrDefault(typedEffect['hp% recover on enemy defeat chance%'] as number, 100);
+		}
+
+		const results: IBuff[] = [{
+			id: 'passive:15',
+			originalId: '15',
+			sources,
+			value: {
+				healLow,
+				healHigh,
+				chance,
+			},
+			conditions: {
+				...conditionInfo,
+				onEnemyDefeat: true,
+			},
+			...targetData,
+		}];
+
+		if (unknownParams) {
+			results.push(createaUnknownParamsEntry(unknownParams, {
+				originalId: '15',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
 }
