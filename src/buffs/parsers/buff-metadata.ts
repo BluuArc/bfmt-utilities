@@ -522,6 +522,34 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.BUFF_ADDAILMENT]
 	},
+	'passive:21:atk': {
+		id: BuffId['passive:21:atk'],
+		name: 'Attack Boost for X Turns',
+		stat: UnitStat.atk,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_ATKDOWN : IconId.BUFF_ATKUP],
+	},
+	'passive:21:def': {
+		id: BuffId['passive:21:def'],
+		name: 'Defense Boost for X Turns',
+		stat: UnitStat.def,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_DEFDOWN : IconId.BUFF_DEFUP],
+	},
+	'passive:21:rec': {
+		id: BuffId['passive:21:rec'],
+		name: 'Recovery Boost for X Turns',
+		stat: UnitStat.rec,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_RECDOWN : IconId.BUFF_RECUP],
+	},
+	'passive:21:crit': {
+		id: BuffId['passive:21:crit'],
+		name: 'Critical Hit Rate Boost for X Turns',
+		stat: UnitStat.crit,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_CRTRATEDOWN : IconId.BUFF_CRTRATEUP],
+	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

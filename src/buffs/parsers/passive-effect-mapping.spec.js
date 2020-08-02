@@ -2651,5 +2651,142 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
 			});
 		});
+
+		describe('passive 21', () => {
+			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit'];
+			const EFFECT_KEY_MAPPING = {
+				atk: 'first x turns atk% (1)',
+				def: 'first x turns def% (3)',
+				rec: 'first x turns rec% (5)',
+				crit: 'first x turns crit% (7)',
+				turnDuration: 'first x turns',
+			};
+			const expectedOriginalId = '21';
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:21:${stat}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:21:${stat}`,
+						duration: 5,
+						value: +(splitParams[index]),
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,8';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:21:${stat}`,
+						duration: 5,
+						value: +(splitParams[index]),
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_5: '6',
+						param_6: '7',
+						param_7: '8',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to stat-specific properties when the params property does not exist', () => {
+				const mockValues = [5, 6, 7, 8];
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat, index) => {
+					acc[EFFECT_KEY_MAPPING[stat]] = mockValues[index];
+					return acc;
+				}, {});
+				effect[EFFECT_KEY_MAPPING.turnDuration] = 9;
+
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:21:${stat}`,
+						duration: 9,
+						value: mockValues[index],
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			STAT_PARAMS_ORDER.forEach((statCase) => {
+				it(`returns only value for ${statCase} if it is non-zero and other stats are zero`, () => {
+					const params = STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0').concat(['456']).join(',');
+					const expectedResult = [baseBuffFactory({
+						id: `passive:21:${statCase}`,
+						value: 123,
+						duration: 456,
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`returns only value for ${statCase} if it is non-zero and other stats are zero and params property does not exist`, () => {
+					const effect = {
+						[EFFECT_KEY_MAPPING[statCase]]: 123,
+						[EFFECT_KEY_MAPPING.turnDuration]: 456,
+					};
+					const expectedResult = [baseBuffFactory({
+						id: `passive:21:${statCase}`,
+						value: 123,
+						duration: 456,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,1,2,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:21:crit',
+						sources: arbitrarySourceValue,
+						value: 1,
+						duration: 2,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 5] });
+			});
+		});
 	});
 });

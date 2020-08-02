@@ -1000,4 +1000,61 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('21', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+		const stats = {
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+			crit: '0' as AlphaNumeric,
+		};
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let rawDuration: string, extraParams: string[];
+			[stats.atk, stats.def, stats.rec, stats.crit, rawDuration, ...extraParams] = splitEffectParams(typedEffect);
+			turnDuration = parseNumberOrDefault(rawDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+		} else {
+			stats.atk = (typedEffect['first x turns atk% (1)'] as string);
+			stats.def = (typedEffect['first x turns def% (3)'] as string);
+			stats.rec = (typedEffect['first x turns rec% (5)'] as string);
+			stats.crit = (typedEffect['first x turns crit% (7)'] as string);
+			turnDuration = parseNumberOrDefault(typedEffect['first x turns'] as string);
+		}
+
+		STATS_ORDER.forEach((stat) => {
+			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec' | 'crit']);
+			if (stat !== 'hp' && value !== 0) {
+				const entry: IBuff = {
+					id: `passive:21:${stat}`,
+					originalId: '21',
+					sources,
+					value,
+					duration: turnDuration,
+					conditions: { ...conditionInfo },
+					...targetData,
+				};
+
+				results.push(entry);
+			}
+		});
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '21',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
 }
