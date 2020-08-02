@@ -917,4 +917,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_DAMAGECUT],
 	},
+	'proc:19': {
+		id: BuffId['proc:19'],
+		name: 'Active Gradual BB Gauge Fill',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_BBREC],
+	},
 });

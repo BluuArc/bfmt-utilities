@@ -665,4 +665,5 @@ export enum BuffId {
 	'proc:17:paralysis' = 'proc:17:paralysis',
 
 	'proc:18' = 'proc:18',
+	'proc:19' = 'proc:19',
 }
