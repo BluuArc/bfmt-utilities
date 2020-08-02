@@ -924,4 +924,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_BBREC],
 	},
+	'proc:20': {
+		id: BuffId['proc:20'],
+		name: 'Active BC Fill when attacked',
+		stat: UnitStat.bcFillOnHit,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_DAMAGEBB],
+	},
 });

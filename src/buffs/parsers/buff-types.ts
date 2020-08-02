@@ -176,6 +176,8 @@ export enum UnitStat {
 
 	bbGauge = 'bbGauge',
 
+	bcFillOnHit = 'bcFillOnHit',
+
 	bcDropRate = 'bcDropRate',
 	hcDropRate = 'hcDropRate',
 	itemDropRate = 'itemDropRate',
@@ -233,6 +235,8 @@ export interface IUnitState {
 	crit: IBuff[];
 
 	bbGauge: IBuff[];
+
+	bcFillOnHit: IBuff[];
 
 	bcDropRate: IBuff[];
 	hcDropRate: IBuff[];
@@ -326,6 +330,8 @@ export enum IconId {
 
 	BUFF_HPREC = 'BUFF_HPREC',
 	BUFF_BBREC = 'BUFF_BBREC',
+
+	BUFF_DAMAGEBB = 'BUFF_DAMAGEBB',
 
 	BUFF_FIREHPUP = 'BUFF_FIREHPUP',
 	BUFF_FIREHPDOWN = 'BUFF_FIREHPDOWN',
@@ -666,4 +672,5 @@ export enum BuffId {
 
 	'proc:18' = 'proc:18',
 	'proc:19' = 'proc:19',
+	'proc:20' = 'proc:20',
 }

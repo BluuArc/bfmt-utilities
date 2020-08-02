@@ -1246,4 +1246,66 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			originalId: '19',
 		});
 	});
+
+	map.set('20', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let fillLow = 0;
+		let fillHigh = 0;
+		let chance = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawFillLow, rawFillHigh, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			fillLow = parseNumberOrDefault(rawFillLow) / 100;
+			fillHigh = parseNumberOrDefault(rawFillHigh) / 100;
+			chance = parseNumberOrDefault(rawChance);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+		} else {
+			fillLow = parseNumberOrDefault(effect['bc fill when attacked low'] as number);
+			fillHigh = parseNumberOrDefault(effect['bc fill when attacked high'] as number);
+			chance = parseNumberOrDefault(effect['bc fill when attacked%'] as number);
+			turnDuration = parseNumberOrDefault(effect['bc fill when attacked turns (38)'] as number);
+		}
+
+		const hasAnyFillValues = fillLow !== 0 || fillHigh !== 0;
+		const results: IBuff[] = [];
+		if (hasAnyFillValues) {
+			results.push({
+				id: 'proc:20',
+				originalId: '20',
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: {
+					fillLow,
+					fillHigh,
+					chance,
+				},
+				...targetData,
+			});
+		} else if (turnDuration !== 0) {
+			results.push(createTurnDurationEntry({
+				originalId: '20',
+				sources,
+				buffs: ['proc:20'],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '20',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }
