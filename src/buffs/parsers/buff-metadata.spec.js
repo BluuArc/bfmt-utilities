@@ -756,31 +756,35 @@ describe('BUFF_METADATA entries', () => {
 		describe('proc:16:unknown', () => {
 			testDefaultIconResult(BuffId['proc:16:unknown'], [IconId.BUFF_ELEMENTDMGDOWN]);
 		});
+	});
 
-		describe('proc 17 buffs', () => {
-			describe('proc:17:poison', () => {
-				testDefaultIconResult(BuffId['proc:17:poison'], [IconId.BUFF_POISONBLK]);
-			});
-
-			describe('proc:17:weak', () => {
-				testDefaultIconResult(BuffId['proc:17:weak'], [IconId.BUFF_WEAKBLK]);
-			});
-
-			describe('proc:17:sick', () => {
-				testDefaultIconResult(BuffId['proc:17:sick'], [IconId.BUFF_SICKBLK]);
-			});
-
-			describe('proc:17:injury', () => {
-				testDefaultIconResult(BuffId['proc:17:injury'], [IconId.BUFF_INJURYBLK]);
-			});
-
-			describe('proc:17:curse', () => {
-				testDefaultIconResult(BuffId['proc:17:curse'], [IconId.BUFF_CURSEBLK]);
-			});
-
-			describe('proc:17:paralysis', () => {
-				testDefaultIconResult(BuffId['proc:17:paralysis'], [IconId.BUFF_PARALYSISBLK]);
-			});
+	describe('proc 17 buffs', () => {
+		describe('proc:17:poison', () => {
+			testDefaultIconResult(BuffId['proc:17:poison'], [IconId.BUFF_POISONBLK]);
 		});
+
+		describe('proc:17:weak', () => {
+			testDefaultIconResult(BuffId['proc:17:weak'], [IconId.BUFF_WEAKBLK]);
+		});
+
+		describe('proc:17:sick', () => {
+			testDefaultIconResult(BuffId['proc:17:sick'], [IconId.BUFF_SICKBLK]);
+		});
+
+		describe('proc:17:injury', () => {
+			testDefaultIconResult(BuffId['proc:17:injury'], [IconId.BUFF_INJURYBLK]);
+		});
+
+		describe('proc:17:curse', () => {
+			testDefaultIconResult(BuffId['proc:17:curse'], [IconId.BUFF_CURSEBLK]);
+		});
+
+		describe('proc:17:paralysis', () => {
+			testDefaultIconResult(BuffId['proc:17:paralysis'], [IconId.BUFF_PARALYSISBLK]);
+		});
+	});
+
+	describe('proc:18', () => {
+		testDefaultIconResult(BuffId['proc:18'], [IconId.BUFF_DAMAGECUT]);
 	});
 });
