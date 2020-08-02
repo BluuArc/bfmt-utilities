@@ -787,4 +787,31 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:18', () => {
 		testDefaultIconResult(BuffId['proc:18'], [IconId.BUFF_DAMAGECUT]);
 	});
+
+	describe('passive 19 buffs', () => {
+		describe('passive:19:bc', () => {
+			testDefaultIconResult(BuffId['passive:19:bc'], [IconId.BUFF_BCDROP]);
+			testIconResultWithBuff(BuffId['passive:19:bc'], [IconId.BUFF_BCDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:19:hc', () => {
+			testDefaultIconResult(BuffId['passive:19:hc'], [IconId.BUFF_HCDROP]);
+			testIconResultWithBuff(BuffId['passive:19:hc'], [IconId.BUFF_HCDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:19:item', () => {
+			testDefaultIconResult(BuffId['passive:19:item'], [IconId.BUFF_ITEMDROP]);
+			testIconResultWithBuff(BuffId['passive:19:item'], [IconId.BUFF_ITEMDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:19:zel', () => {
+			testDefaultIconResult(BuffId['passive:19:zel'], [IconId.BUFF_ZELDROP]);
+			testIconResultWithBuff(BuffId['passive:19:zel'], [IconId.BUFF_ZELDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:19:karma', () => {
+			testDefaultIconResult(BuffId['passive:19:karma'], [IconId.BUFF_KARMADROP]);
+			testIconResultWithBuff(BuffId['passive:19:karma'], [IconId.BUFF_KARMADOWN], { value: -1 }, 'buff value is less than 0');
+		});
+	});
 });

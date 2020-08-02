@@ -866,4 +866,57 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('19', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		type DropType = 'bc' | 'hc' | 'item' | 'zel' | 'karma';
+		const DROP_TYPES_ORDER: DropType[] = ['bc', 'hc', 'item', 'zel', 'karma'];
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+		const dropRates = {
+			bc: '0' as AlphaNumeric,
+			hc: '0' as AlphaNumeric,
+			item: '0' as AlphaNumeric,
+			zel: '0' as AlphaNumeric,
+			karma: '0' as AlphaNumeric,
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			[dropRates.bc, dropRates.hc, dropRates.item, dropRates.zel, dropRates.karma, ...extraParams] = splitEffectParams(typedEffect);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+		} else {
+			DROP_TYPES_ORDER.forEach((dropType) => {
+				dropRates[dropType] = (typedEffect[`${dropType} drop rate% buff`] as string);
+			});
+		}
+
+		DROP_TYPES_ORDER.forEach((dropType) => {
+			const value = parseNumberOrDefault(dropRates[dropType]);
+			if (value !== 0) {
+				results.push({
+					id: `passive:19:${dropType}`,
+					originalId: '19',
+					sources,
+					value,
+					conditions: { ...conditionInfo },
+					...targetData,
+				});
+			}
+		});
+
+		if (unknownParams) {
+			results.push(createaUnknownParamsEntry(unknownParams, {
+				originalId: '19',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
 }
