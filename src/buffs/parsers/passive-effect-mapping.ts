@@ -822,4 +822,48 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('17', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let drainHealLow: number, drainHealHigh: number, chance: number;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawHealLow, rawHealHigh, rawChance, ...extraParams] = splitEffectParams(typedEffect);
+			drainHealLow = parseNumberOrDefault(rawHealLow);
+			drainHealHigh = parseNumberOrDefault(rawHealHigh);
+			chance = parseNumberOrDefault(rawChance);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			drainHealLow = parseNumberOrDefault(typedEffect['hp drain% low'] as number);
+			drainHealHigh = parseNumberOrDefault(typedEffect['hp drain% high'] as number);
+			chance = parseNumberOrDefault(typedEffect['hp drain chance%'] as number);
+		}
+
+		const results: IBuff[] = [{
+			id: 'passive:17',
+			originalId: '17',
+			sources,
+			value: {
+				drainHealLow,
+				drainHealHigh,
+				chance,
+			},
+			conditions: { ...conditionInfo },
+			...targetData,
+		}];
+
+		if (unknownParams) {
+			results.push(createaUnknownParamsEntry(unknownParams, {
+				originalId: '17',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
 }

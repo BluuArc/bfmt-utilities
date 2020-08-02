@@ -218,6 +218,8 @@ export enum UnitStat {
 
 	koResistance = 'koResistance',
 	revive = 'revive',
+
+	healOnAttack = 'healOnAttack',
 }
 
 /**
@@ -274,6 +276,8 @@ export interface IUnitState {
 
 	koResistance: IBuff[];
 	revive: IBuff[];
+
+	healOnAttack: IBuff[];
 }
 
 /**
@@ -510,6 +514,8 @@ export enum IconId {
 
 	BUFF_KOBLK = 'BUFF_KOBLK', // guaranteed AI
 
+	BUFF_HPABS = 'BUFF_HPABS',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -579,6 +585,7 @@ export enum BuffId {
 	'passive:14' = 'passive:14',
 	'passive:15' = 'passive:15',
 	'passive:16' = 'passive:16',
+	'passive:17' = 'passive:17',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
