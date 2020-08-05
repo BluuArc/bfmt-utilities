@@ -39,6 +39,7 @@ export default function convertPassiveEffectToBuffs (effect: PassiveEffect | Ext
 
 	const id = (isPassiveEffect(effect) && getEffectId(effect));
 	const conversionFunction = (id && getPassiveEffectToBuffMapping(context.reloadMapping).get(id));
+	// TODO: warning if result is empty?
 	return typeof conversionFunction === 'function'
 		? conversionFunction(effect, context)
 		: defaultConversionFunction(effect, context);

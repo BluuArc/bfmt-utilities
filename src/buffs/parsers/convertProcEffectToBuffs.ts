@@ -42,6 +42,7 @@ export default function convertProcEffectToBuffs (effect: ProcEffect, context: I
 
 	const id = (isProcEffect(effect) && getEffectId(effect));
 	const conversionFunction = (id && getProcEffectToBuffMapping(context.reloadMapping).get(id));
+	// TODO: warning if result is empty?
 	return typeof conversionFunction === 'function'
 		? conversionFunction(effect, context)
 		: defaultConversionFunction(effect, context);

@@ -1301,28 +1301,11 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('returns a turn modification buff if all stats are 0 and turn duration is non-zero', () => {
-				const params = `0,0,0,0,0,${arbitraryTurnDuration}`;
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [baseBuffFactory({
-					id: BuffId.TURN_DURATION_MODIFICATION,
-					value: {
-						buffs: STAT_PARAMS_ORDER.map((stat) => `proc:5:${stat}`),
-						duration: arbitraryTurnDuration,
-					},
-				}, [EFFECT_DELAY_BUFF_PROP])];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
-			});
-
-			it('returns nothing when turn duration and all stat values are zero', () => {
-				const params = '0,0,0,0,0,0';
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+			describe('when all stats are 0', () => {
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,${duration}`,
+					buffIdsInTurnDurationBuff: STAT_PARAMS_ORDER.map((stat) => `proc:5:${stat}`),
+				});
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
@@ -1529,19 +1512,11 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 			});
 
-			it('returns a turn modification buff if all rates are 0 and turn duration is non-zero', () => {
-				const params = `0,0,0,${arbitraryTurnDuration}`;
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [baseBuffFactory({
-					id: BuffId.TURN_DURATION_MODIFICATION,
-					value: {
-						buffs: DROP_PARAMS_ORDER.map((p) => `proc:6:${p}`),
-						duration: arbitraryTurnDuration,
-					},
-				}, [EFFECT_DELAY_BUFF_PROP])];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+			describe('when all rates are 0', () => {
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,${duration}`,
+					buffIdsInTurnDurationBuff: DROP_PARAMS_ORDER.map((p) => `proc:6:${p}`),
+				});
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
@@ -2141,28 +2116,11 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('returns a turn modification buff if all stats are 0 and turn duration is non-zero', () => {
-				const params = `0,0,0,0,0,0,0,${arbitraryTurnDuration}`;
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [baseBuffFactory({
-					id: BuffId.TURN_DURATION_MODIFICATION,
-					value: {
-						buffs: STAT_PARAMS_ORDER.map((stat) => `proc:9:${stat}`),
-						duration: arbitraryTurnDuration,
-					},
-				}, [EFFECT_DELAY_BUFF_PROP])];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
-			});
-
-			it('returns nothing when turn duration and all stat values are zero', () => {
-				const params = '0,0,0,0,0,0,0,0';
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+			describe('when all stats are 0', () => {
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,0,${duration}`,
+					buffIdsInTurnDurationBuff: STAT_PARAMS_ORDER.map((stat) => `proc:9:${stat}`),
+				});
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
@@ -3159,46 +3117,30 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('returns a turn modification buff when no mitigation value is given', () => {
-				const params = `0,0,${arbitraryTurnDuration}`;
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [baseBuffFactory({
-					id: BuffId.TURN_DURATION_MODIFICATION,
-					value: {
-						buffs: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:16:${stat}`),
-						duration: arbitraryTurnDuration,
-					},
-				}, [EFFECT_DELAY_BUFF_PROP])];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
-			});
-
-			it('returns a turn modification buff when no mitigation value is given and params property does not exist', () => {
-				const effect = createArbitraryBaseEffect({
-					'attacks': 456,
-					[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+			describe('when no mitigation value is given', () => {
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,${duration}`,
+					buffIdsInTurnDurationBuff: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:16:${stat}`),
 				});
-				const expectedResult = [baseBuffFactory({
-					id: BuffId.TURN_DURATION_MODIFICATION,
-					value: {
-						buffs: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:16:${stat}`),
-						duration: arbitraryTurnDuration,
-					},
-				}, [EFFECT_DELAY_BUFF_PROP])];
 
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+				it('returns a turn modification buff when no mitigation value is given and params property does not exist', () => {
+					const effect = createArbitraryBaseEffect({
+						'attacks': 456,
+						[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: BuffId.TURN_DURATION_MODIFICATION,
+						value: {
+							buffs: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:16:${stat}`),
+							duration: arbitraryTurnDuration,
+						},
+					}, [EFFECT_DELAY_BUFF_PROP])];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
 			});
 
-			it('returns a turn modification buff when no mitigation value is given and turn duration is zero', () => {
-				const params = '0,0,0';
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
-			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = createArbitraryBaseEffect({
@@ -3331,28 +3273,11 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 			});
 
-			it('returns a turn modification buff if all stats are 0 and turn duration is non-zero', () => {
-				const params = `0,0,0,0,0,0,${arbitraryTurnDuration}`;
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [baseBuffFactory({
-					id: BuffId.TURN_DURATION_MODIFICATION,
-					value: {
-						buffs: AILMENTS_ORDER.map((ailment) => `proc:17:${ailment}`),
-						duration: arbitraryTurnDuration,
-					},
-				}, [EFFECT_DELAY_BUFF_PROP])];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
-			});
-
-			it('returns nothing when turn duration and all stat values are zero', () => {
-				const params = '0,0,0,0,0,0,0';
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+			describe('when all resistances are 0', () => {
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,${duration}`,
+					buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((ailment) => `proc:17:${ailment}`),
+				});
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
@@ -3563,19 +3488,11 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 			});
 
-			it('returns a turn modification buff if all values are 0 and turn duration is non-zero', () => {
-				const params = `0,0,0,${arbitraryTurnDuration}`;
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [baseBuffFactory({
-					id: BuffId.TURN_DURATION_MODIFICATION,
-					value: {
-						buffs: ['proc:20'],
-						duration: arbitraryTurnDuration,
-					},
-				}, [EFFECT_DELAY_BUFF_PROP])];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+			describe('when values are 0', () => {
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,${duration}`,
+					buffIdsInTurnDurationBuff: [expectedBuffId],
+				});
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {

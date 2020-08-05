@@ -520,7 +520,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 					results.push(buffEntry);
 				}
 			});
-		} else if (params.turnDuration !== 0) {
+		} else if (isTurnDurationBuff(context, params.turnDuration as number, injectionContext)) {
 			results.push(createTurnDurationEntry({
 				originalId: '5',
 				sources,
@@ -587,7 +587,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 					});
 				}
 			});
-		} else if (params.turnDuration !== 0) {
+		} else if (isTurnDurationBuff(context, params.turnDuration as number, injectionContext)) {
 			results.push(createTurnDurationEntry({
 				originalId: '6',
 				sources,
@@ -808,7 +808,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			}
 		});
 
-		if (!hasAnyValues && params.turnDuration !== 0) {
+		if (!hasAnyValues && isTurnDurationBuff(context, params.turnDuration as number, injectionContext)) {
 			results.push(createTurnDurationEntry({
 				originalId: '9',
 				sources,
@@ -1147,7 +1147,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				value: mitigation,
 				...targetData,
 			});
-		} else if (turnDuration !== 0) {
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
 			results.push(createTurnDurationEntry({
 				originalId: '16',
 				sources,
@@ -1216,7 +1216,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			}
 		});
 
-		if (results.length === 0 && turnDuration !== 0) {
+		if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
 			results.push(createTurnDurationEntry({
 				originalId: '17',
 				sources,
@@ -1303,7 +1303,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				},
 				...targetData,
 			});
-		} else if (turnDuration !== 0) {
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
 			results.push(createTurnDurationEntry({
 				originalId: '20',
 				sources,
