@@ -39,6 +39,7 @@ export interface IPassiveBuffProcessingInjectionContext extends IBaseBuffProcess
  */
 export interface IProcBuffProcessingInjectionContext extends IBaseBuffProcessingInjectionContext {
 	getProcTargetData?: (effect: ProcEffect) => ITargetData;
+	buffSourceIsBurstType?: (source: BuffSource) => boolean;
 }
 
 /**
@@ -173,4 +174,18 @@ export function createUnknownParamsValue (params: string[] = [], startIndex = 0)
 			return acc;
 		}, {} as IGenericBuffValue);
 	return hasValue ? result : (void 0);
+}
+
+/**
+ * @description Decide whether a given source value is one of the burst types in {@link BuffSource}.
+ * @param source Source value to check.
+ * @returns Whether the given source value is a burst type. Returns true when the source is determined to
+ * be any one of the following: brave burst, super brave burst, ultimate brave burst, bonded brave burst,
+ * bonded super brave burst, or bonded dual brave burst.
+ */
+export function buffSourceIsBurstType (source: BuffSource): boolean {
+	return !!source && [
+		BuffSource.BraveBurst, BuffSource.SuperBraveBurst, BuffSource.UltimateBraveBurst,
+		BuffSource.BondedBraveBurst, BuffSource.BondedSuperBraveBurst, BuffSource.DualBraveBurst,
+	].includes(source);
 }

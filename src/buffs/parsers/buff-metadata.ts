@@ -520,7 +520,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		id: BuffId['passive:20:unknown'],
 		name: 'Passive Unknown Ailment Infliction',
 		stackType: BuffStackType.Unknown,
-		icons: () => [IconId.BUFF_ADDAILMENT]
+		icons: () => [IconId.BUFF_ADDAILMENT],
 	},
 	'passive:21:atk': {
 		id: BuffId['passive:21:atk'],

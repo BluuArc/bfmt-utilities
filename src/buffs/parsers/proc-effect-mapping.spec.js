@@ -47,6 +47,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		const arbitraryHitCount = 123;
 		const arbitraryDamageDistribution = 456;
 		const arbitraryTurnDuration = 789;
+		const arbitraryBuffSourceOfBurstType = 'bb';
 
 		const EFFECT_DELAY_KEY = 'effect delay time(ms)/frame';
 		const HIT_DMG_DISTRIBUTION_TOTAL_KEY = 'hit dmg% distribution (total)';
@@ -84,19 +85,44 @@ describe('getProcEffectToBuffMapping method', () => {
 				getProcTargetData: jasmine.createSpy('getProcTargetDataSpy'),
 				createSourcesFromContext: jasmine.createSpy('createSourcesFromContextSpy'),
 				createUnknownParamsValue: jasmine.createSpy('createUnkownParamsValueSpy'),
+				buffSourceIsBurstType: jasmine.createSpy('buffSourceIsBurstType'),
 			};
 			injectionContext.getProcTargetData.and.returnValue(arbitraryTargetData);
 			injectionContext.createSourcesFromContext.and.returnValue(arbitrarySourceValue);
 			injectionContext.createUnknownParamsValue.and.returnValue(arbitraryUnknownValue);
+			injectionContext.buffSourceIsBurstType.and.returnValue(true);
 			return injectionContext;
 		};
 
-		const expectDefaultInjectionContext = ({ injectionContext, effect, context, unknownParamsArgs = [] }) => {
-			expect(injectionContext.getProcTargetData).toHaveBeenCalledWith(effect);
-			expect(injectionContext.createSourcesFromContext).toHaveBeenCalledWith(context);
-			expect(injectionContext.createUnknownParamsValue).toHaveBeenCalledWith(...unknownParamsArgs);
+		const expectDefaultInjectionContext = ({ injectionContext, effect, context, unknownParamsArgs = [], buffSourceIsBurstTypeArgs = [] }) => {
+			let hasAnyChecks = false;
+			if (effect) {
+				hasAnyChecks = true;
+				expect(injectionContext.getProcTargetData).toHaveBeenCalledWith(effect);
+			}
+
+			if (context) {
+				hasAnyChecks = true;
+				expect(injectionContext.createSourcesFromContext).toHaveBeenCalledWith(context);
+			}
+
+			if (unknownParamsArgs.length > 0) {
+				hasAnyChecks = true;
+				expect(injectionContext.createUnknownParamsValue).toHaveBeenCalledWith(...unknownParamsArgs);
+			}
+
+			if (buffSourceIsBurstTypeArgs.length > 0) {
+				hasAnyChecks = true;
+				expect(injectionContext.buffSourceIsBurstType).toHaveBeenCalledWith(...buffSourceIsBurstTypeArgs);
+			}
+
+			expect(hasAnyChecks).toBeTrue(); // ensure that this checker function is called correctly
 		};
 
+		/**
+		 * @param {import('./buff-types').IEffectToBuffConversionContext} params
+		 * @returns {import('./buff-types').IEffectToBuffConversionContext}
+		 */
 		const createArbitraryContext = (params = {}) => ({
 			source: 'arbitrary source',
 			sourceId: 'arbitrary source id',
@@ -253,28 +279,53 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('returns a turn modification buff if mitigation value is 0 and turn duration is non-zero', () => {
-				const params = `0,${arbitraryTurnDuration}`;
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [baseBuffFactory({
-					id: BuffId.TURN_DURATION_MODIFICATION,
-					value: {
-						buffs: [expectedBuffId],
-						duration: arbitraryTurnDuration,
-					},
-				}, [EFFECT_DELAY_BUFF_PROP])];
+			describe('when value is 0', () => {
+				it('returns nothing if turn duration is non-zero and source is of burst type', () => {
+					const params = `0,${arbitraryTurnDuration}`;
+					const effect = createArbitraryBaseEffect({ params });
+					const context = createArbitraryContext({ source: arbitraryBuffSourceOfBurstType });
+					const expectedResult = [];
 
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
-			});
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+				});
 
-			it('returns nothing if mitigation value and turn duration are 0', () => {
-				const params = '0,0';
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [];
+				it('returns a turn modification buff if turn duration is non-zero and source is not burst type', () => {
+					const params = `0,${arbitraryTurnDuration}`;
+					const effect = createArbitraryBaseEffect({ params });
+					const context = createArbitraryContext();
+					const expectedResult = [baseBuffFactory({
+						id: BuffId.TURN_DURATION_MODIFICATION,
+						value: {
+							buffs: [expectedBuffId],
+							duration: arbitraryTurnDuration,
+						},
+					}, [EFFECT_DELAY_BUFF_PROP])];
 
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns nothing if turn duration is 0', () => {
+					const params = '0,0';
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('uses buffSourceIsBurstType for checking whether source type is burst', () => {
+					const params = '0,1';
+					const effect = createArbitraryBaseEffect({ params });
+					const context = createArbitraryContext({ source: arbitraryBuffSourceOfBurstType });
+					const expectedResult = [];
+
+					const injectionContext = createDefaultInjectionContext();
+					const result = mappingFunction(effect, context, injectionContext);
+					expect(result).toEqual(expectedResult);
+					expectDefaultInjectionContext({ injectionContext, buffSourceIsBurstTypeArgs: [arbitraryBuffSourceOfBurstType] });
+				});
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {

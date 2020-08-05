@@ -1,6 +1,6 @@
 import { ProcEffect, UnitElement, Ailment, TargetArea } from '../../datamine-types';
 import { IBuff, IEffectToBuffConversionContext, IGenericBuffValue, BuffId, BuffConditionElement } from './buff-types';
-import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault, createUnknownParamsValue, ITargetData } from './_helpers';
+import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault, createUnknownParamsValue, ITargetData, buffSourceIsBurstType } from './_helpers';
 
 /**
  * @description Default function for all buffs that cannot be processed.
@@ -130,6 +130,22 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		return unknownParams;
 	};
 
+	/**
+	 * @description Decide whether the effect being parsed is a turn duration buff. This should only be
+	 * checked if all other known values in the effect are 0.
+	 * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
+	 * @param turnDuration Parsed turn duration value to check.
+	 * @param injectionContext Object whose main use is for injecting methods in testing.
+	 * @returns True if the turn duration value is non-zero and the source type is not a burst type.
+	 */
+	const isTurnDurationBuff = (context: IEffectToBuffConversionContext, turnDuration: number, injectionContext?: IProcBuffProcessingInjectionContext): boolean => {
+		let result = turnDuration !== 0;
+		if (result) {
+			result = !((injectionContext && injectionContext.buffSourceIsBurstType) || buffSourceIsBurstType)(context.source);
+		}
+		return result;
+	};
+
 	interface IProcWithSingleNumericalParameterAndTurnDurationContext {
 		effect: ProcEffect;
 		context: IEffectToBuffConversionContext,
@@ -176,7 +192,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				value,
 				...targetData,
 			});
-		} else if (turnDuration !== 0) {
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,

@@ -344,4 +344,23 @@ describe('buff helper functions', () => {
 			expect(helpers.createUnknownParamsValue(params)).toEqual(expectedResult);
 		});
 	});
+
+	describe('buffSourceIsBurstType method', () => {
+		[
+			BuffSource.BraveBurst, BuffSource.SuperBraveBurst, BuffSource.UltimateBraveBurst,
+			BuffSource.BondedBraveBurst, BuffSource.BondedSuperBraveBurst, BuffSource.DualBraveBurst,
+		].forEach((expectedTrueValue) => {
+			it(`returns true when source is ${expectedTrueValue}`, () => {
+				expect(helpers.buffSourceIsBurstType(expectedTrueValue)).toBeTrue();
+			});
+		});
+
+		it('returns false when source is not a valid burst value', () => {
+			expect(helpers.buffSourceIsBurstType('arbitrary value')).toBeFalse();
+		});
+
+		it('returns false when no value is passed in', () => {
+			expect(helpers.buffSourceIsBurstType()).toBeFalse();
+		});
+	});
 });
