@@ -190,6 +190,63 @@ describe('getProcEffectToBuffMapping method', () => {
 		};
 
 		/**
+		 * @param {object} arg0
+		 * @param {(turnDuration: number) => string} arg0.createParamsWithZeroValueAndTurnDuration
+		 * @param {string[]} arg0.buffIdsInTurnDurationBuff
+		 */
+		const testTurnDurationScenarios = ({
+			createParamsWithZeroValueAndTurnDuration,
+			buffIdsInTurnDurationBuff,
+		}) => {
+			it('returns a turn modification buff if turn duration is non-zero and source is not burst type', () => {
+				const params = createParamsWithZeroValueAndTurnDuration(arbitraryTurnDuration);
+				const effect = createArbitraryBaseEffect({ params });
+				const context = createArbitraryContext();
+				const expectedResult = [baseBuffFactory({
+					id: BuffId.TURN_DURATION_MODIFICATION,
+					value: {
+						buffs: buffIdsInTurnDurationBuff,
+						duration: arbitraryTurnDuration,
+					},
+				}, [EFFECT_DELAY_BUFF_PROP])];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns nothing if turn duration is non-zero and source is of burst type', () => {
+				const params = createParamsWithZeroValueAndTurnDuration(arbitraryTurnDuration);
+				const effect = createArbitraryBaseEffect({ params });
+				const context = createArbitraryContext({ source: arbitraryBuffSourceOfBurstType });
+				const expectedResult = [];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns nothing if turn duration is 0', () => {
+				const params = createParamsWithZeroValueAndTurnDuration(0);
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses buffSourceIsBurstType for checking whether source type is burst', () => {
+				const params = createParamsWithZeroValueAndTurnDuration(1);
+				const effect = createArbitraryBaseEffect({ params });
+				const context = createArbitraryContext({ source: arbitraryBuffSourceOfBurstType });
+				const expectedResult = [];
+
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, buffSourceIsBurstTypeArgs: [arbitraryBuffSourceOfBurstType] });
+			});
+		};
+
+		/**
 		 * @description Common set of tests for passives that contain only one numerical parameter and turn duration.
 		 * @param {object} context
 		 * @param {string} context.expectedOriginalId
@@ -280,51 +337,9 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			describe('when value is 0', () => {
-				it('returns nothing if turn duration is non-zero and source is of burst type', () => {
-					const params = `0,${arbitraryTurnDuration}`;
-					const effect = createArbitraryBaseEffect({ params });
-					const context = createArbitraryContext({ source: arbitraryBuffSourceOfBurstType });
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, context);
-					expect(result).toEqual(expectedResult);
-				});
-
-				it('returns a turn modification buff if turn duration is non-zero and source is not burst type', () => {
-					const params = `0,${arbitraryTurnDuration}`;
-					const effect = createArbitraryBaseEffect({ params });
-					const context = createArbitraryContext();
-					const expectedResult = [baseBuffFactory({
-						id: BuffId.TURN_DURATION_MODIFICATION,
-						value: {
-							buffs: [expectedBuffId],
-							duration: arbitraryTurnDuration,
-						},
-					}, [EFFECT_DELAY_BUFF_PROP])];
-
-					const result = mappingFunction(effect, context);
-					expect(result).toEqual(expectedResult);
-				});
-
-				it('returns nothing if turn duration is 0', () => {
-					const params = '0,0';
-					const effect = createArbitraryBaseEffect({ params });
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
-				});
-
-				it('uses buffSourceIsBurstType for checking whether source type is burst', () => {
-					const params = '0,1';
-					const effect = createArbitraryBaseEffect({ params });
-					const context = createArbitraryContext({ source: arbitraryBuffSourceOfBurstType });
-					const expectedResult = [];
-
-					const injectionContext = createDefaultInjectionContext();
-					const result = mappingFunction(effect, context, injectionContext);
-					expect(result).toEqual(expectedResult);
-					expectDefaultInjectionContext({ injectionContext, buffSourceIsBurstTypeArgs: [arbitraryBuffSourceOfBurstType] });
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,${duration}`,
+					buffIdsInTurnDurationBuff: [expectedBuffId],
 				});
 			});
 
@@ -910,19 +925,11 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 			});
 
-			it('returns a turn modification buff if all stats are 0 and turn duration is non-zero', () => {
-				const params = `0,0,0,${arbitraryTurnDuration}`;
-				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [baseBuffFactory({
-					id: BuffId.TURN_DURATION_MODIFICATION,
-					value: {
-						buffs: ['proc:3'],
-						duration: arbitraryTurnDuration,
-					},
-				}, [EFFECT_DELAY_BUFF_PROP])];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+			describe('when all stats are 0', () => {
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,${duration}`,
+					buffIdsInTurnDurationBuff: [expectedBuffId],
+				});
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {

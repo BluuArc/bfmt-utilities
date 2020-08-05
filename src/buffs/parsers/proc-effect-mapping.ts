@@ -370,7 +370,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				},
 				...targetData,
 			});
-		} else if (params.turnDuration !== 0) {
+		} else if (isTurnDurationBuff(context, params.turnDuration as number, injectionContext)) {
 			results.push(createTurnDurationEntry({
 				originalId: '3',
 				sources,
