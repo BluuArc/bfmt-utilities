@@ -3352,6 +3352,9 @@ describe('getProcEffectToBuffMapping method', () => {
 						fillHigh: 2,
 						chance: 3,
 					},
+					conditions: {
+						whenAttacked: true,
+					},
 				})];
 
 				const result = mappingFunction(effect, createArbitraryContext());
@@ -3369,6 +3372,9 @@ describe('getProcEffectToBuffMapping method', () => {
 							fillLow: 1,
 							fillHigh: 2,
 							chance: 3,
+						},
+						conditions: {
+							whenAttacked: true,
 						},
 					}),
 					baseBuffFactory({
@@ -3401,6 +3407,9 @@ describe('getProcEffectToBuffMapping method', () => {
 						fillHigh: 4,
 						chance: 5,
 					},
+					conditions: {
+						whenAttacked: true,
+					},
 				})];
 
 				const result = mappingFunction(effect, createArbitraryContext());
@@ -3422,6 +3431,9 @@ describe('getProcEffectToBuffMapping method', () => {
 						fillLow: 6,
 						fillHigh: 7,
 						chance: 8,
+					},
+					conditions: {
+						whenAttacked: true,
 					},
 				})];
 
@@ -3456,6 +3468,9 @@ describe('getProcEffectToBuffMapping method', () => {
 							id: expectedBuffId,
 							duration: arbitraryTurnDuration,
 							value: expectedValues,
+							conditions: {
+								whenAttacked: true,
+							},
 						})];
 
 						const result = mappingFunction(effect, createArbitraryContext());
@@ -3505,6 +3520,9 @@ describe('getProcEffectToBuffMapping method', () => {
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: { fillLow: 1, fillHigh: 2, chance: 3 },
+						conditions: {
+							whenAttacked: true,
+						},
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 					baseBuffFactory({

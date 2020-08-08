@@ -123,6 +123,7 @@ export interface IBuffConditions {
 
 	onEnemyDefeat?: boolean;
 	onBattleWin?: boolean;
+	whenAttacked?: boolean;
 }
 
 /**
@@ -175,8 +176,6 @@ export enum UnitStat {
 	crit = 'crit',
 
 	bbGauge = 'bbGauge',
-
-	bcFillOnHit = 'bcFillOnHit',
 
 	bcDropRate = 'bcDropRate',
 	hcDropRate = 'hcDropRate',
@@ -237,8 +236,6 @@ export interface IUnitState {
 	crit: IBuff[];
 
 	bbGauge: IBuff[];
-
-	bcFillOnHit: IBuff[];
 
 	bcDropRate: IBuff[];
 	hcDropRate: IBuff[];
