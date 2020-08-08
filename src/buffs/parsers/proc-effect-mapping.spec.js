@@ -336,7 +336,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			describe('when value is 0', () => {
+			describe('when non-turn duration value is 0', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,${duration}`,
 					buffIdsInTurnDurationBuff: [expectedBuffId],
@@ -3488,7 +3488,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 			});
 
-			describe('when values are 0', () => {
+			describe('when non-turn duration values are 0', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,${duration}`,
 					buffIdsInTurnDurationBuff: [expectedBuffId],
@@ -3520,6 +3520,15 @@ describe('getProcEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 4] });
+			});
+		});
+
+		describe('proc 22', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '22',
+				expectedBuffId: 'proc:22',
+				effectValueKey: 'defense% ignore',
+				effectTurnDurationKey: 'defense% ignore turns (39)',
 			});
 		});
 	});

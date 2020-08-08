@@ -1028,4 +1028,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_DAMAGEBB],
 	},
+	'proc:22': {
+		id: BuffId['proc:22'],
+		name: 'Active Defense Ignore',
+		stat: UnitStat.defenseIgnore,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_IGNOREDEF],
+	},
 });

@@ -886,4 +886,8 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:20', () => {
 		testDefaultIconResult(BuffId['proc:20'], [IconId.BUFF_DAMAGEBB]);
 	});
+
+	describe('proc:22', () => {
+		testDefaultIconResult(BuffId['proc:22'], [IconId.BUFF_IGNOREDEF]);
+	});
 });

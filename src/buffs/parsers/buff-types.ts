@@ -222,6 +222,8 @@ export enum UnitStat {
 	revive = 'revive',
 
 	healOnAttack = 'healOnAttack',
+
+	defenseIgnore = 'defenseIgnore',
 }
 
 /**
@@ -282,6 +284,8 @@ export interface IUnitState {
 	revive: IBuff[];
 
 	healOnAttack: IBuff[];
+
+	defenseIgnore: IBuff[];
 }
 
 /**
@@ -534,6 +538,8 @@ export enum IconId {
 
 	BUFF_HPABS = 'BUFF_HPABS',
 
+	BUFF_IGNOREDEF = 'BUFF_IGNOREDEF',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -701,4 +707,5 @@ export enum BuffId {
 	'proc:18' = 'proc:18',
 	'proc:19' = 'proc:19',
 	'proc:20' = 'proc:20',
+	'proc:22' = 'proc:22',
 }
