@@ -1057,4 +1057,48 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('23', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let fillLow: number, fillHigh: number;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawFillLow, rawFillHigh, ...extraParams] = splitEffectParams(typedEffect);
+			fillLow = parseNumberOrDefault(rawFillLow) / 100;
+			fillHigh = parseNumberOrDefault(rawFillHigh) / 100;
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		} else {
+			fillLow = parseNumberOrDefault(typedEffect['battle end bc fill low'] as number);
+			fillHigh = parseNumberOrDefault(typedEffect['battle end bc fill high'] as number);
+		}
+
+		const results: IBuff[] = [{
+			id: 'passive:23',
+			originalId: '23',
+			sources,
+			value: {
+				fillLow,
+				fillHigh,
+			},
+			conditions: {
+				...conditionInfo,
+				onBattleWin: true,
+			},
+			...targetData,
+		}];
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '23',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
 }

@@ -550,6 +550,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_CRTRATEDOWN : IconId.BUFF_CRTRATEUP],
 	},
+	'passive:23': {
+		id: BuffId['passive:23'],
+		name: 'BC Fill on Battle Win',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_BBREC],
+	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

@@ -633,6 +633,8 @@ export enum BuffId {
 	'passive:21:rec' = 'passive:21:rec',
 	'passive:21:crit' = 'passive:21:crit',
 
+	'passive:23' = 'passive:23',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 
