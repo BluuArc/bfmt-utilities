@@ -180,6 +180,8 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		buffKeyLow: string;
 		buffKeyHigh: string;
 
+		defaultEffectChance?: number;
+
 		/**
 		 * @description this refers to the parsing of low/high values, not chance
 		 */
@@ -197,6 +199,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		effectKeyChance,
 		buffKeyLow,
 		buffKeyHigh,
+		defaultEffectChance = 0,
 		parseParamValue = (rawValue: string) => parseNumberOrDefault(rawValue),
 		generateBaseConditions = () => ({}),
 		buffId,
@@ -216,7 +219,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		} else {
 			valueLow = parseNumberOrDefault(typedEffect[effectKeyLow] as number);
 			valueHigh = parseNumberOrDefault(typedEffect[effectKeyHigh] as number);
-			chance = parseNumberOrDefault(typedEffect[effectKeyChance] as number);
+			chance = parseNumberOrDefault(typedEffect[effectKeyChance] as number, defaultEffectChance);
 		}
 
 		const results: IBuff[] = [{
@@ -791,52 +794,20 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	});
 
 	map.set('15', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
-		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-
-		const typedEffect = (effect as IPassiveEffect);
-		let healLow: number, healHigh: number, chance: number;
-		let unknownParams: IGenericBuffValue | undefined;
-		if (typedEffect.params) {
-			const [rawHealLow, rawHealHigh, rawChance, ...extraParams] = splitEffectParams(typedEffect);
-			healLow = parseNumberOrDefault(rawHealLow);
-			healHigh = parseNumberOrDefault(rawHealHigh);
-			chance = parseNumberOrDefault(rawChance);
-
-			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
-		} else {
-			healLow = parseNumberOrDefault(typedEffect['hp% recover on enemy defeat low'] as number);
-			healHigh = parseNumberOrDefault(typedEffect['hp% recover on enemy defeat high'] as number);
-
-			// currently deathmax's datamine misses this value, but all known entries have 100% chance
-			chance = parseNumberOrDefault(typedEffect['hp% recover on enemy defeat chance%'] as number, 100);
-		}
-
-		const results: IBuff[] = [{
-			id: 'passive:15',
+		return parsePassiveWithNumericalValueRangeAndChance({
+			effect,
+			context,
+			injectionContext,
 			originalId: '15',
-			sources,
-			value: {
-				healLow,
-				healHigh,
-				chance,
-			},
-			conditions: {
-				...conditionInfo,
-				onEnemyDefeat: true,
-			},
-			...targetData,
-		}];
-
-		if (unknownParams) {
-			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId: '15',
-				sources,
-				targetData,
-				conditionInfo,
-			}));
-		}
-
-		return results;
+			effectKeyLow: 'hp% recover on enemy defeat low',
+			effectKeyHigh: 'hp% recover on enemy defeat high',
+			effectKeyChance: 'hp% recover on enemy defeat chance%',
+			buffKeyLow: 'healLow',
+			buffKeyHigh: 'healHigh',
+			generateBaseConditions: () => ({ onEnemyDefeat: true }),
+			defaultEffectChance: 100, // currently deathmax's datamine misses this value, but all known entries have 100% chance
+			buffId: 'passive:15',
+		});
 	});
 
 	map.set('16', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
@@ -884,47 +855,18 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	});
 
 	map.set('17', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
-		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-
-		const typedEffect = (effect as IPassiveEffect);
-		let drainHealLow: number, drainHealHigh: number, chance: number;
-		let unknownParams: IGenericBuffValue | undefined;
-		if (typedEffect.params) {
-			const [rawHealLow, rawHealHigh, rawChance, ...extraParams] = splitEffectParams(typedEffect);
-			drainHealLow = parseNumberOrDefault(rawHealLow);
-			drainHealHigh = parseNumberOrDefault(rawHealHigh);
-			chance = parseNumberOrDefault(rawChance);
-
-			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
-		} else {
-			drainHealLow = parseNumberOrDefault(typedEffect['hp drain% low'] as number);
-			drainHealHigh = parseNumberOrDefault(typedEffect['hp drain% high'] as number);
-			chance = parseNumberOrDefault(typedEffect['hp drain chance%'] as number);
-		}
-
-		const results: IBuff[] = [{
-			id: 'passive:17',
+		return parsePassiveWithNumericalValueRangeAndChance({
+			effect,
+			context,
+			injectionContext,
 			originalId: '17',
-			sources,
-			value: {
-				drainHealLow,
-				drainHealHigh,
-				chance,
-			},
-			conditions: { ...conditionInfo },
-			...targetData,
-		}];
-
-		if (unknownParams) {
-			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId: '17',
-				sources,
-				targetData,
-				conditionInfo,
-			}));
-		}
-
-		return results;
+			effectKeyLow: 'hp drain% low',
+			effectKeyHigh: 'hp drain% high',
+			effectKeyChance: 'hp drain chance%',
+			buffKeyLow: 'drainHealLow',
+			buffKeyHigh: 'drainHealHigh',
+			buffId: 'passive:17',
+		});
 	});
 
 	map.set('19', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
