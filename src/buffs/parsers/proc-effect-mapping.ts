@@ -1339,4 +1339,55 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			originalId: '22',
 		});
 	});
+
+	map.set('23', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let value = 0, turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+
+		if (effect.params) {
+			const params = splitEffectParams(effect);
+			value = parseNumberOrDefault(params[0]);
+			turnDuration = parseNumberOrDefault(params[6]);
+
+			const extraParams = ['0', ...params.slice(1, 6), '0', ...params.slice(7)];
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 0, injectionContext);
+		} else {
+			value = parseNumberOrDefault(effect['spark dmg% buff (40)'] as number);
+			turnDuration = parseNumberOrDefault(effect['buff turns'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (value !== 0) {
+			results.push({
+				id: 'proc:23',
+				originalId: '23',
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value,
+				...targetData,
+			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId: '23',
+				sources,
+				buffs: ['proc:23'],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '23',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }
