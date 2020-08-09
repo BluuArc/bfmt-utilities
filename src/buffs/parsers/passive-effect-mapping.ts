@@ -121,7 +121,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		context: IEffectToBuffConversionContext;
 		injectionContext?: IPassiveBuffProcessingInjectionContext;
 		originalId: string;
-	};
+	}
 
 	interface IPassiveWithSingleNumericalParameterContext extends ITemplatedParsingFunctionContext {
 		effectKey: string;

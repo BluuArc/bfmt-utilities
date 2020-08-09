@@ -808,7 +808,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			}
 		});
 
-		if (!hasAnyValues && isTurnDurationBuff(context, params.turnDuration as number, injectionContext)) {
+		if (!hasAnyValues && isTurnDurationBuff(context, params.turnDuration, injectionContext)) {
 			results.push(createTurnDurationEntry({
 				originalId: '9',
 				sources,
