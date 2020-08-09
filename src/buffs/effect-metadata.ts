@@ -43,10 +43,6 @@ export const PASSIVE_METADATA: Readonly<{ [id: string]: IPassiveMetadataEntry }>
     "ID": "6",
     "Name": ""
   },
-  "7": {
-    "ID": "7",
-    "Name": ""
-  },
   "8": {
     "ID": "8",
     "Name": "Damage Reduction"

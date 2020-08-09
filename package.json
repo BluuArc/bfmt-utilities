@@ -53,7 +53,7 @@
     "gulp-typescript": "^5.0.1",
     "jasmine": "^3.6.1",
     "nyc": "^15.1.0",
-    "puppeteer": "^4.0.1",
+    "puppeteer": "^5.2.1",
     "rollup": "^2.23.1",
     "typedoc": "^0.17.8",
     "typedoc-plugin-markdown": "^2.4.0",
