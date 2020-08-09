@@ -175,6 +175,7 @@ export enum UnitStat {
 	rec = 'rec',
 	crit = 'crit',
 
+	hpRecovery = 'hpRecovery',
 	bbGauge = 'bbGauge',
 
 	bcDropRate = 'bcDropRate',
@@ -220,8 +221,6 @@ export enum UnitStat {
 	koResistance = 'koResistance',
 	revive = 'revive',
 
-	healOnAttack = 'healOnAttack',
-
 	defenseIgnore = 'defenseIgnore',
 }
 
@@ -235,6 +234,7 @@ export interface IUnitState {
 	rec: IBuff[];
 	crit: IBuff[];
 
+	hpRecovery: IBuff[];
 	bbGauge: IBuff[];
 
 	bcDropRate: IBuff[];
