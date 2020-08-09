@@ -2649,5 +2649,18 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
 			});
 		});
+
+		describe('passive 24', () => {
+			testPassiveWithNumericalValueRangeAndChance({
+				expectedOriginalId: '24',
+				expectedBuffId: 'passive:24',
+				effectKeyLow: 'dmg% to hp when attacked low',
+				effectKeyHigh: 'dmg% to hp when attacked high',
+				effectKeyChance: 'dmg% to hp when attacked chance%',
+				buffKeyLow: 'healLow',
+				buffKeyHigh: 'healHigh',
+				generateBaseConditions: () => ({ whenAttacked: true }),
+			});
+		});
 	});
 });

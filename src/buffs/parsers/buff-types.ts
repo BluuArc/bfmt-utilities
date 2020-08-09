@@ -335,6 +335,7 @@ export enum IconId {
 	BUFF_BBREC = 'BUFF_BBREC',
 
 	BUFF_DAMAGEBB = 'BUFF_DAMAGEBB',
+	BUFF_BEENATK_HPREC = 'BUFF_BEENATK_HPREC',
 
 	BUFF_FIREHPUP = 'BUFF_FIREHPUP',
 	BUFF_FIREHPDOWN = 'BUFF_FIREHPDOWN',
@@ -642,6 +643,7 @@ export enum BuffId {
 	'passive:21:crit' = 'passive:21:crit',
 
 	'passive:23' = 'passive:23',
+	'passive:24' = 'passive:24',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
