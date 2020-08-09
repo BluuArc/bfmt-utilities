@@ -223,6 +223,8 @@ export enum UnitStat {
 
 	defenseIgnore = 'defenseIgnore',
 	sparkDamage = 'sparkDamage',
+
+	hitCountModification = 'hitCountModification',
 }
 
 /**
@@ -285,6 +287,8 @@ export interface IUnitState {
 
 	defenseIgnore: IBuff[];
 	sparkDamage: IBuff[];
+
+	hitCountModification: IBuff[];
 }
 
 /**
@@ -549,6 +553,8 @@ export enum IconId {
 
 	BUFF_SPARKUP = 'BUFF_SPARKUP',
 
+	BUFF_HITUP = 'BUFF_HITUP',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -726,4 +732,6 @@ export enum BuffId {
 	'proc:24:atk' = 'proc:24:atk',
 	'proc:24:def' = 'proc:24:def',
 	'proc:24:rec' = 'proc:24:rec',
+
+	'proc:26' = 'proc:26',
 }

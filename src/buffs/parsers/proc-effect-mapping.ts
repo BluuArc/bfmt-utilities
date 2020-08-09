@@ -1343,9 +1343,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	map.set('23', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 		let value = 0, turnDuration = 0;
-
 		let unknownParams: IGenericBuffValue | undefined;
-
 		if (effect.params) {
 			const params = splitEffectParams(effect);
 			value = parseNumberOrDefault(params[0]);
@@ -1476,6 +1474,60 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		if (unknownParams) {
 			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '24',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
+
+	map.set('26', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let hitIncreasePerHit = 0, extraHitDamage = 0, turnDuration = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const params = splitEffectParams(effect);
+			hitIncreasePerHit = parseNumberOrDefault(params[0]);
+			extraHitDamage = parseNumberOrDefault(params[2]);
+			turnDuration = parseNumberOrDefault(params[7]);
+
+			const extraParams = ['0', params[1], '0', ...params.slice(3, 7), '0', ...params.slice(8)]
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 0, injectionContext);
+		} else {
+			hitIncreasePerHit = parseNumberOrDefault(effect['hit increase/hit'] as number);
+			extraHitDamage = parseNumberOrDefault(effect['extra hits dmg%'] as number);
+			turnDuration = parseNumberOrDefault(effect['hit increase buff turns (50)'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (hitIncreasePerHit !== 0 || extraHitDamage !== 0) {
+			results.push({
+				id: 'proc:26',
+				originalId: '26',
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: {
+					hitIncreasePerHit,
+					extraHitDamage,
+				},
+				...targetData,
+			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId: '26',
+				sources,
+				buffs: ['proc:26'],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '26',
 				sources,
 				targetData,
 				effectDelay,

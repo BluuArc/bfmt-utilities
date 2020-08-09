@@ -1084,4 +1084,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_CONVERTRECDOWN : IconId.BUFF_CONVERTRECUP],
 	},
+	'proc:26': {
+		id: BuffId['proc:26'],
+		name: 'Active Hit Count Boost',
+		stat: UnitStat.hitCountModification,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_HITUP],
+	},
 });

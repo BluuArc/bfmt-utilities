@@ -926,4 +926,8 @@ describe('BUFF_METADATA entries', () => {
 			testIconResultWithBuff(BuffId['proc:24:rec'], [IconId.BUFF_CONVERTRECDOWN], { value: { value: -1 } }, 'buff value is less than 0');
 		});
 	});
+
+	describe('proc:26', () => {
+		testDefaultIconResult(BuffId['proc:26'], [IconId.BUFF_HITUP]);
+	});
 });
