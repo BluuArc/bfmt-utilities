@@ -1049,4 +1049,25 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_SPARKUP],
 	},
+	'proc:24:atk': {
+		id: BuffId['proc:24:atk'],
+		name: 'Active Converted Attack Boost',
+		stat: UnitStat.atk,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value.value && buff.value.value < 0) ? IconId.BUFF_CONVERTATKDOWN : IconId.BUFF_CONVERTATKUP],
+	},
+	'proc:24:def': {
+		id: BuffId['proc:24:def'],
+		name: 'Active Converted Defense Boost',
+		stat: UnitStat.def,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value.value && buff.value.value < 0) ? IconId.BUFF_CONVERTDEFDOWN : IconId.BUFF_CONVERTDEFUP],
+	},
+	'proc:24:rec': {
+		id: BuffId['proc:24:rec'],
+		name: 'Active Converted Recovery Boost',
+		stat: UnitStat.rec,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value.value && buff.value.value < 0) ? IconId.BUFF_CONVERTRECDOWN : IconId.BUFF_CONVERTRECUP],
+	},
 });

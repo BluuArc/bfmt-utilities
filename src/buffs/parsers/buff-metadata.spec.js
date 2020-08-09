@@ -898,4 +898,24 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:23', () => {
 		testDefaultIconResult(BuffId['proc:23'], [IconId.BUFF_SPARKUP]);
 	});
+
+	describe('proc 24 buffs', () => {
+		describe('proc:24:atk', () => {
+			testDefaultIconResult(BuffId['proc:24:atk'], [IconId.BUFF_CONVERTATKUP]);
+			testIconResultWithBuff(BuffId['proc:24:atk'], [IconId.BUFF_CONVERTATKUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['proc:24:atk'], [IconId.BUFF_CONVERTATKDOWN], { value: { value: -1 } }, 'buff value is less than 0');
+		});
+
+		describe('proc:24:def', () => {
+			testDefaultIconResult(BuffId['proc:24:def'], [IconId.BUFF_CONVERTDEFUP]);
+			testIconResultWithBuff(BuffId['proc:24:def'], [IconId.BUFF_CONVERTDEFUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['proc:24:def'], [IconId.BUFF_CONVERTDEFDOWN], { value: { value: -1 } }, 'buff value is less than 0');
+		});
+
+		describe('proc:24:rec', () => {
+			testDefaultIconResult(BuffId['proc:24:rec'], [IconId.BUFF_CONVERTRECUP]);
+			testIconResultWithBuff(BuffId['proc:24:rec'], [IconId.BUFF_CONVERTRECUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['proc:24:rec'], [IconId.BUFF_CONVERTRECDOWN], { value: { value: -1 } }, 'buff value is less than 0');
+		});
+	});
 });

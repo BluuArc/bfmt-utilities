@@ -1390,4 +1390,98 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('24', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		type CoreStatProperty = 'atk' | 'def' | 'rec' | 'hp' | 'unknown';
+		const coreStatProperties: CoreStatProperty[] = ['atk', 'def', 'rec'];
+		const coreStatPropertyMapping: { [key: string]: CoreStatProperty } = {
+			1: 'atk',
+			2: 'def',
+			3: 'rec',
+			4: 'hp',
+		};
+		const effectToCoreStatMapping = {
+			attack: 'atk',
+			defense: 'def',
+			recovery: 'rec',
+			hp: 'hp',
+		};
+		const stats = {
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+		};
+		let turnDuration = 0;
+		let convertedStat: CoreStatProperty = 'unknown';
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			let rawConvertedStat: string, rawTurnDuration: string;
+			[rawConvertedStat, stats.atk, stats.def, stats.rec, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			convertedStat = coreStatPropertyMapping[rawConvertedStat] || 'unknown';
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+		} else {
+			const rawConvertedStat = effect['converted attribute'] as string;
+			if (rawConvertedStat in effectToCoreStatMapping) {
+				convertedStat = effectToCoreStatMapping[rawConvertedStat as 'attack' | 'defense' | 'recovery' | 'hp'] as CoreStatProperty;
+			} else {
+				convertedStat = 'unknown';
+			}
+
+			const keys = Object.keys(effect);
+			coreStatProperties.forEach((statType) => {
+				const effectKey = keys.find((k) => k.startsWith(`${statType}% buff`));
+				if (effectKey) {
+					stats[statType as 'atk' | 'def' | 'rec'] = parseNumberOrDefault(effect[effectKey] as number);
+				}
+			});
+
+			turnDuration = parseNumberOrDefault(effect['% converted turns'] as number);
+		}
+
+		const results: IBuff[] = [];
+		coreStatProperties.forEach((stat) => {
+			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec']);
+			if (value !== 0) {
+				results.push({
+					id: `proc:24:${stat}`,
+					originalId: '24',
+					sources,
+					effectDelay,
+					duration: turnDuration,
+					value: {
+						convertedStat,
+						value,
+					},
+					...targetData,
+				});
+			}
+		});
+
+		if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId: '24',
+				sources,
+				buffs: coreStatProperties.map((statKey) => `proc:24:${statKey}`),
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '24',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }
