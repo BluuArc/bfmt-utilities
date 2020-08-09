@@ -497,6 +497,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:24'], [IconId.BUFF_BEENATK_HPREC]);
 	});
 
+	describe('passive:25', () => {
+		testDefaultIconResult(BuffId['passive:25'], [IconId.BUFF_DAMAGEBB]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

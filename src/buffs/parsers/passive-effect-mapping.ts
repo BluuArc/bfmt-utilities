@@ -1107,4 +1107,21 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffId: 'passive:24',
 		});
 	});
+
+	map.set('25', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parsePassiveWithNumericalValueRangeAndChance({
+			effect,
+			context,
+			injectionContext,
+			originalId: '25',
+			effectKeyLow: 'bc fill when attacked low',
+			effectKeyHigh: 'bc fill when attacked high',
+			effectKeyChance: 'bc fill when attacked%',
+			buffKeyLow: 'fillLow',
+			buffKeyHigh: 'fillHigh',
+			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
+			generateBaseConditions: () => ({ whenAttacked: true }),
+			buffId: 'passive:25',
+		});
+	});
 }

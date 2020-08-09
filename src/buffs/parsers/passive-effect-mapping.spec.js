@@ -2662,5 +2662,19 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				generateBaseConditions: () => ({ whenAttacked: true }),
 			});
 		});
+
+		describe('passive 25', () => {
+			testPassiveWithNumericalValueRangeAndChance({
+				expectedOriginalId: '25',
+				expectedBuffId: 'passive:25',
+				effectKeyLow: 'bc fill when attacked low',
+				effectKeyHigh: 'bc fill when attacked high',
+				effectKeyChance: 'bc fill when attacked%',
+				buffKeyLow: 'fillLow',
+				buffKeyHigh: 'fillHigh',
+				getExpectedValueFromParam: (param) => +param / 100,
+				generateBaseConditions: () => ({ whenAttacked: true }),
+			});
+		});
 	});
 });

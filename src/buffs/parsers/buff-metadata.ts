@@ -385,7 +385,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'passive:13': {
 		id: BuffId['passive:13'],
-		name: 'BB Gauge Fill on Enemy Defeat',
+		name: 'Passive BB Gauge Fill on Enemy Defeat',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
@@ -399,14 +399,14 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'passive:15': {
 		id: BuffId['passive:15'],
-		name: 'Heal on Enemy Defeat',
+		name: 'Passive Heal on Enemy Defeat',
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_HPREC],
 	},
 	'passive:16': {
 		id: BuffId['passive:16'],
-		name: 'Heal on Battle Win',
+		name: 'Passive Heal on Battle Win',
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_HPREC],
@@ -552,17 +552,24 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'passive:23': {
 		id: BuffId['passive:23'],
-		name: 'BC Fill on Battle Win',
+		name: 'Passive BC Fill on Battle Win',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
 	},
 	'passive:24': {
 		id: BuffId['passive:24'],
-		name: 'Heal when Attacked',
+		name: 'Passive Heal when Attacked',
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BEENATK_HPREC],
+	},
+	'passive:25': {
+		id: BuffId['passive:25'],
+		name: 'Passive BC Fill when Attacked',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_DAMAGEBB],
 	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
