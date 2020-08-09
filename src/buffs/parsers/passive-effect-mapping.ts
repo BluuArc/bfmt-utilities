@@ -116,21 +116,24 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		return unknownParams;
 	};
 
-	interface IPassiveWithSingleNumericalParameterContext {
+	interface ITemplatedParsingFunctionContext {
 		effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect;
 		context: IEffectToBuffConversionContext;
 		injectionContext?: IPassiveBuffProcessingInjectionContext;
+		originalId: string;
+	};
+
+	interface IPassiveWithSingleNumericalParameterContext extends ITemplatedParsingFunctionContext {
 		effectKey: string;
 		buffId: string;
-		originalId: string;
 	}
 	const parsePassiveWithSingleNumericalParameter = ({
 		effect,
 		context,
 		injectionContext,
+		originalId,
 		effectKey,
 		buffId,
-		originalId,
 	}: IPassiveWithSingleNumericalParameterContext): IBuff[] => {
 		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
@@ -156,6 +159,81 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 				...targetData,
 			});
 		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId,
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	};
+
+	interface IPassiveWithNumericalValueRangeAndChanceContext extends ITemplatedParsingFunctionContext {
+		effectKeyLow: string;
+		effectKeyHigh: string;
+		effectKeyChance: string;
+
+		buffKeyLow: string;
+		buffKeyHigh: string;
+
+		/**
+		 * @description this refers to the parsing of low/high values, not chance
+		 */
+		parseParamValue?: (rawValue: string) => number;
+		generateBaseConditions?: () => IBuffConditions,
+		buffId: string;
+	}
+	const parsePassiveWithNumericalValueRangeAndChance = ({
+		effect,
+		context,
+		injectionContext,
+		originalId,
+		effectKeyLow,
+		effectKeyHigh,
+		effectKeyChance,
+		buffKeyLow,
+		buffKeyHigh,
+		parseParamValue = (rawValue: string) => parseNumberOrDefault(rawValue),
+		generateBaseConditions = () => ({}),
+		buffId,
+	}: IPassiveWithNumericalValueRangeAndChanceContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let valueLow: number, valueHigh: number, chance: number;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawLowValue, rawHighValue, rawChance, ...extraParams] = splitEffectParams(typedEffect);
+			valueLow = parseParamValue(rawLowValue);
+			valueHigh = parseParamValue(rawHighValue);
+			chance = parseNumberOrDefault(rawChance);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			valueLow = parseNumberOrDefault(typedEffect[effectKeyLow] as number);
+			valueHigh = parseNumberOrDefault(typedEffect[effectKeyHigh] as number);
+			chance = parseNumberOrDefault(typedEffect[effectKeyChance] as number);
+		}
+
+		const results: IBuff[] = [{
+			id: buffId,
+			originalId,
+			sources,
+			value: {
+				[buffKeyLow]: valueLow,
+				[buffKeyHigh]: valueHigh,
+				chance,
+			},
+			conditions: {
+				...conditionInfo,
+				...generateBaseConditions(),
+			},
+			...targetData,
+		}];
 
 		if (unknownParams) {
 			results.push(createUnknownParamsEntry(unknownParams, {
@@ -655,50 +733,20 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	});
 
 	map.set('13', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
-		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-
-		const typedEffect = (effect as IPassiveEffect);
-		let fillLow: number, fillHigh: number, chance: number;
-		let unknownParams: IGenericBuffValue | undefined;
-		if (typedEffect.params) {
-			const [rawFillLow, rawFillHigh, rawChance, ...extraParams] = splitEffectParams(typedEffect);
-			fillLow = parseNumberOrDefault(rawFillLow) / 100;
-			fillHigh = parseNumberOrDefault(rawFillHigh) / 100;
-			chance = parseNumberOrDefault(rawChance);
-
-			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
-		} else {
-			fillLow = parseNumberOrDefault(typedEffect['bc fill on enemy defeat low'] as number);
-			fillHigh = parseNumberOrDefault(typedEffect['bc fill on enemy defeat high'] as number);
-			chance = parseNumberOrDefault(typedEffect['bc fill on enemy defeat%'] as number);
-		}
-
-		const results: IBuff[] = [{
-			id: 'passive:13',
+		return parsePassiveWithNumericalValueRangeAndChance({
+			effect,
+			context,
+			injectionContext,
 			originalId: '13',
-			sources,
-			value: {
-				fillLow,
-				fillHigh,
-				chance,
-			},
-			conditions: {
-				...conditionInfo,
-				onEnemyDefeat: true,
-			},
-			...targetData,
-		}];
-
-		if (unknownParams) {
-			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId: '13',
-				sources,
-				targetData,
-				conditionInfo,
-			}));
-		}
-
-		return results;
+			effectKeyLow: 'bc fill on enemy defeat low',
+			effectKeyHigh: 'bc fill on enemy defeat high',
+			effectKeyChance: 'bc fill on enemy defeat%',
+			buffKeyLow: 'fillLow',
+			buffKeyHigh: 'fillHigh',
+			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
+			generateBaseConditions: () => ({ onEnemyDefeat: true }),
+			buffId: 'passive:13',
+		});
 	});
 
 	map.set('14', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
