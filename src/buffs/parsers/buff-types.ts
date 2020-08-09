@@ -225,6 +225,8 @@ export enum UnitStat {
 	sparkDamage = 'sparkDamage',
 
 	hitCountModification = 'hitCountModification',
+
+	damageReflect = 'damageReflect',
 }
 
 /**
@@ -283,12 +285,12 @@ export interface IUnitState {
 	koResistance: IBuff[];
 	revive: IBuff[];
 
-	healOnAttack: IBuff[];
-
 	defenseIgnore: IBuff[];
 	sparkDamage: IBuff[];
 
 	hitCountModification: IBuff[];
+
+	damageReflect: IBuff[];
 }
 
 /**
@@ -555,6 +557,8 @@ export enum IconId {
 
 	BUFF_HITUP = 'BUFF_HITUP',
 
+	BUFF_COUNTERDAMAGE = 'BUFF_COUNTERDAMAGE',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -651,6 +655,7 @@ export enum BuffId {
 	'passive:23' = 'passive:23',
 	'passive:24' = 'passive:24',
 	'passive:25' = 'passive:25',
+	'passive:26' = 'passive:26',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
