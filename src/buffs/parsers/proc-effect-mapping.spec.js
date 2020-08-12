@@ -251,10 +251,24 @@ describe('getProcEffectToBuffMapping method', () => {
 		 * @description Common set of tests for passives that contain only one numerical parameter and turn duration.
 		 * @param {object} context
 		 * @param {string} context.expectedBuffId
+		 * @param {string} context.expectedTargetArea
+		 * @param {boolean} context.testHits,
 		 * @param {(param: string) => number} context.getExpectedValueFromParam
 		 */
-		const testMissingDamageFramesScenarios = ({ expectedBuffId }) => {
+		const testMissingDamageFramesScenarios = ({
+			expectedBuffId,
+			expectedTargetArea,
+			testHits = true,
+		}) => {
 			describe('for missing parts of context.damageFrames', () => {
+				/**
+				 * @param {import('./buff-types').IBuff} buff
+				 */
+				const applyTargetAreaAsNeeded = (buff) => {
+					if (expectedTargetArea) {
+						buff.targetArea = expectedTargetArea;
+					}
+				};
 				it('defaults to 0 for hits and distribution if context.damageFrames does not exist', () => {
 					const expectedResult = [baseBuffFactory({
 						id: expectedBuffId,
@@ -263,41 +277,49 @@ describe('getProcEffectToBuffMapping method', () => {
 							distribution: 0,
 						},
 					})];
+					applyTargetAreaAsNeeded(expectedResult[0]);
+
 					const result = mappingFunction(createArbitraryBaseEffect(), createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
 
-				it('defaults to 0 for hits if context.damageFrames.hits does not exist', () => {
-					const context = createArbitraryContext({
-						damageFrames: {
-							[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
-						},
-					});
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							hits: 0,
-							distribution: arbitraryDamageDistribution,
-						},
-					})];
+				if (testHits) {
+					it('defaults to 0 for hits if context.damageFrames.hits does not exist', () => {
+						const context = createArbitraryContext({
+							damageFrames: {
+								[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
+							},
+						});
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							value: {
+								hits: 0,
+								distribution: arbitraryDamageDistribution,
+							},
+						})];
+						applyTargetAreaAsNeeded(expectedResult[0]);
 
-					const result = mappingFunction(createArbitraryBaseEffect(), context);
-					expect(result).toEqual(expectedResult);
-				});
+						const result = mappingFunction(createArbitraryBaseEffect(), context);
+						expect(result).toEqual(expectedResult);
+					});
+				}
 
 				it('defaults to 0 for distribution if context.damageFrames["hit dmg% distribution (total)"] does not exist', () => {
-					const context = createArbitraryContext({
-						damageFrames: {
-							hits: arbitraryHitCount,
-						},
-					});
+					const damageFrames = {};
+					let expectedFinalHits = 0;
+					if (testHits) {
+						damageFrames.hits = arbitraryHitCount;
+						expectedFinalHits = arbitraryHitCount;
+					}
+					const context = createArbitraryContext({ damageFrames });
 					const expectedResult = [baseBuffFactory({
 						id: expectedBuffId,
 						value: {
-							hits: arbitraryHitCount,
+							hits: expectedFinalHits,
 							distribution: 0,
 						},
 					})];
+					applyTargetAreaAsNeeded(expectedResult[0]);
 
 					const result = mappingFunction(createArbitraryBaseEffect(), context);
 					expect(result).toEqual(expectedResult);
@@ -540,55 +562,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			describe('for missing parts of context.damageFrames', () => {
-				it('defaults to 0 for hits and distribution if context.damageFrames does not exist', () => {
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							hits: 0,
-							distribution: 0,
-						},
-					})];
-					const result = mappingFunction(createArbitraryBaseEffect(), createArbitraryContext());
-					expect(result).toEqual(expectedResult);
-				});
-
-				it('defaults to 0 for hits if context.damageFrames.hits does not exist', () => {
-					const context = createArbitraryContext({
-						damageFrames: {
-							[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
-						},
-					});
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							hits: 0,
-							distribution: arbitraryDamageDistribution,
-						},
-					})];
-
-					const result = mappingFunction(createArbitraryBaseEffect(), context);
-					expect(result).toEqual(expectedResult);
-				});
-
-				it('defaults to 0 for distribution if context.damageFrames["hit dmg% distribution (total)"] does not exist', () => {
-					const context = createArbitraryContext({
-						damageFrames: {
-							hits: arbitraryHitCount,
-						},
-					});
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							hits: arbitraryHitCount,
-							distribution: 0,
-						},
-					})];
-
-					const result = mappingFunction(createArbitraryBaseEffect(), context);
-					expect(result).toEqual(expectedResult);
-				});
-			});
+			testMissingDamageFramesScenarios({ expectedBuffId });
 
 			PARAMS_ORDER.forEach((paramCase) => {
 				it(`returns only value for ${paramCase} if it is non-zero and other stats are zero`, () => {
@@ -2769,36 +2743,10 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			describe('for missing parts of context.damageFrames', () => {
-				it('defaults to 0 for distribution if context.damageFrames does not exist', () => {
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							hits: 0,
-							distribution: 0,
-						},
-						targetArea: expectedTargetArea,
-					})];
-					const result = mappingFunction(createArbitraryBaseEffect(), createArbitraryContext());
-					expect(result).toEqual(expectedResult);
-				});
-
-				it('defaults to 0 for distribution if context.damageFrames["hit dmg% distribution (total)"] does not exist', () => {
-					const context = createArbitraryContext({
-						damageFrames: {},
-					});
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							hits: 0,
-							distribution: 0,
-						},
-						targetArea: expectedTargetArea,
-					})];
-
-					const result = mappingFunction(createArbitraryBaseEffect(), context);
-					expect(result).toEqual(expectedResult);
-				});
+			testMissingDamageFramesScenarios({
+				expectedBuffId,
+				expectedTargetArea,
+				testHits: false, // proc 13 does not get hit value from context
 			});
 
 			PARAMS_ORDER.forEach((paramCase) => {
@@ -2963,55 +2911,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			describe('for missing parts of context.damageFrames', () => {
-				it('defaults to 0 for hits and distribution if context.damageFrames does not exist', () => {
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							hits: 0,
-							distribution: 0,
-						},
-					})];
-					const result = mappingFunction(createArbitraryBaseEffect(), createArbitraryContext());
-					expect(result).toEqual(expectedResult);
-				});
-
-				it('defaults to 0 for hits if context.damageFrames.hits does not exist', () => {
-					const context = createArbitraryContext({
-						damageFrames: {
-							[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
-						},
-					});
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							hits: 0,
-							distribution: arbitraryDamageDistribution,
-						},
-					})];
-
-					const result = mappingFunction(createArbitraryBaseEffect(), context);
-					expect(result).toEqual(expectedResult);
-				});
-
-				it('defaults to 0 for distribution if context.damageFrames["hit dmg% distribution (total)"] does not exist', () => {
-					const context = createArbitraryContext({
-						damageFrames: {
-							hits: arbitraryHitCount,
-						},
-					});
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							hits: arbitraryHitCount,
-							distribution: 0,
-						},
-					})];
-
-					const result = mappingFunction(createArbitraryBaseEffect(), context);
-					expect(result).toEqual(expectedResult);
-				});
-			});
+			testMissingDamageFramesScenarios({ expectedBuffId });
 
 			PARAMS_ORDER.forEach((paramCase) => {
 				it(`returns only value for ${paramCase} if it is non-zero and other stats are zero`, () => {

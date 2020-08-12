@@ -158,7 +158,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			hits,
 			distribution,
 		};
-	}
+	};
 
 	interface IProcWithSingleNumericalParameterAndTurnDurationContext {
 		effect: ProcEffect;
@@ -1505,7 +1505,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			extraHitDamage = parseNumberOrDefault(params[2]);
 			turnDuration = parseNumberOrDefault(params[7]);
 
-			const extraParams = ['0', params[1], '0', ...params.slice(3, 7), '0', ...params.slice(8)]
+			const extraParams = ['0', params[1], '0', ...params.slice(3, 7), '0', ...params.slice(8)];
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 0, injectionContext);
 		} else {
 			hitIncreasePerHit = parseNumberOrDefault(effect['hit increase/hit'] as number);
