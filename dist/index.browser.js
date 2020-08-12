@@ -1806,6 +1806,8 @@ var bfmtUtilities = function (exports) {
     UnitStat["defenseIgnore"] = "defenseIgnore";
     UnitStat["sparkDamage"] = "sparkDamage";
     UnitStat["hitCountModification"] = "hitCountModification";
+    UnitStat["damageReflect"] = "damageReflect";
+    UnitStat["targetingModification"] = "targetingModification";
   })(UnitStat || (UnitStat = {}));
 
   var IconId;
@@ -2033,11 +2035,16 @@ var bfmtUtilities = function (exports) {
     IconId["BUFF_IGNOREDEF"] = "BUFF_IGNOREDEF";
     IconId["BUFF_SPARKUP"] = "BUFF_SPARKUP";
     IconId["BUFF_HITUP"] = "BUFF_HITUP";
+    IconId["BUFF_COUNTERDAMAGE"] = "BUFF_COUNTERDAMAGE";
+    IconId["BUFF_GETENEATT"] = "BUFF_GETENEATT";
+    IconId["BUFF_REPENEATT"] = "BUFF_REPENEATT";
     IconId["ATK_ST"] = "ATK_ST";
     IconId["ATK_AOE"] = "ATK_AOE";
     IconId["ATK_RT"] = "ATK_RT";
     IconId["ATK_ST_HPREC"] = "ATK_ST_HPREC";
     IconId["ATK_AOE_HPREC"] = "ATK_AOE_HPREC";
+    IconId["ATK_ST_PROPORTIONAL"] = "ATK_ST_PROPORTIONAL";
+    IconId["ATK_AOE_PROPORTIONAL"] = "ATK_AOE_PROPORTIONAL";
   })(IconId || (IconId = {}));
   /**
    * @description Format of these IDs are `<passive|proc>:<original effect ID>:<stat>`.
@@ -2119,6 +2126,8 @@ var bfmtUtilities = function (exports) {
     BuffId["passive:23"] = "passive:23";
     BuffId["passive:24"] = "passive:24";
     BuffId["passive:25"] = "passive:25";
+    BuffId["passive:26"] = "passive:26";
+    BuffId["passive:27"] = "passive:27";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1"] = "proc:1";
@@ -2186,6 +2195,7 @@ var bfmtUtilities = function (exports) {
     BuffId["proc:24:def"] = "proc:24:def";
     BuffId["proc:24:rec"] = "proc:24:rec";
     BuffId["proc:26"] = "proc:26";
+    BuffId["proc:27"] = "proc:27";
   })(BuffId || (BuffId = {}));
   /**
    * @description Helper function for creating an entry to be used in the `sources`
@@ -2443,6 +2453,21 @@ var bfmtUtilities = function (exports) {
 
       return result;
     };
+    /**
+     * @description Helper function to get attack information common across most attacks from the conversion context.
+     * @param context Given context that may contain attack information like damage frames.
+     * @returns Extracted attack information from the context (with defaults where applicable).
+     */
+
+
+    const getAttackInformationFromContext = context => {
+      const hits = parseNumberOrDefault(context.damageFrames && context.damageFrames.hits || 0);
+      const distribution = parseNumberOrDefault(context.damageFrames && context.damageFrames['hit dmg% distribution (total)']);
+      return {
+        hits,
+        distribution
+      };
+    };
 
     const parseProcWithSingleNumericalParameterAndTurnDuration = ({
       effect,
@@ -2512,8 +2537,10 @@ var bfmtUtilities = function (exports) {
         sources,
         effectDelay
       } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-      const hits = +(context.damageFrames && context.damageFrames.hits || 0);
-      const distribution = +(context.damageFrames && context.damageFrames['hit dmg% distribution (total)'] || 0);
+      const {
+        hits,
+        distribution
+      } = getAttackInformationFromContext(context);
       const params = {
         'atk%': '0',
         flatAtk: '0',
@@ -3290,7 +3317,9 @@ var bfmtUtilities = function (exports) {
         effectDelay
       } = retrieveCommonInfoForEffects(effect, context, injectionContext);
       let hits = 0;
-      const distribution = +(context.damageFrames && context.damageFrames['hit dmg% distribution (total)'] || 0);
+      const {
+        distribution
+      } = getAttackInformationFromContext(context);
       const params = {
         'atk%': '0',
         flatAtk: '0',
@@ -3349,8 +3378,10 @@ var bfmtUtilities = function (exports) {
         sources,
         effectDelay
       } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-      const hits = +(context.damageFrames && context.damageFrames.hits || 0);
-      const distribution = +(context.damageFrames && context.damageFrames['hit dmg% distribution (total)'] || 0);
+      const {
+        hits,
+        distribution
+      } = getAttackInformationFromContext(context);
       const params = {
         'atk%': '0',
         flatAtk: '0',
@@ -3835,6 +3866,71 @@ var bfmtUtilities = function (exports) {
       if (unknownParams) {
         results.push(createUnknownParamsEntry(unknownParams, {
           originalId: '26',
+          sources,
+          targetData,
+          effectDelay
+        }));
+      }
+
+      return results;
+    });
+    map.set('27', (effect, context, injectionContext) => {
+      const {
+        targetData,
+        sources,
+        effectDelay
+      } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+      const {
+        hits,
+        distribution
+      } = getAttackInformationFromContext(context);
+      const params = {
+        'hpDamageLow%': '0',
+        'hpDamageHigh%': '0',
+        'hpDamageChance%': '0',
+        'atk%': '0',
+        flatAtk: '0',
+        'crit%': '0',
+        'bc%': '0',
+        'hc%': '0',
+        'dmg%': '0'
+      };
+      let unknownParams;
+
+      if (effect.params) {
+        let extraParams;
+        [params['hpDamageLow%'], params['hpDamageHigh%'], params['hpDamageChance%'], params['atk%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], ...extraParams] = splitEffectParams(effect);
+        unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 9, injectionContext);
+      } else {
+        params['hpDamageLow%'] = effect['hp% damage low'];
+        params['hpDamageHigh%'] = effect['hp% damage high'];
+        params['hpDamageChance%'] = effect['hp% damage chance%'];
+        params['atk%'] = effect['bb atk%'];
+        params.flatAtk = effect['bb flat atk'];
+        params['crit%'] = effect['bb crit%'];
+        params['bc%'] = effect['bb bc%'];
+        params['hc%'] = effect['bb hc%'];
+        params['dmg%'] = effect['bb dmg%'];
+      }
+
+      const filteredValue = Object.entries(params).filter(([, value]) => value && +value).reduce((acc, [key, value]) => {
+        acc[key] = parseNumberOrDefault(value);
+        return acc;
+      }, {});
+      const results = [Object.assign({
+        id: 'proc:27',
+        originalId: '27',
+        sources,
+        effectDelay,
+        value: Object.assign(Object.assign({}, filteredValue), {
+          hits,
+          distribution
+        })
+      }, targetData)];
+
+      if (unknownParams) {
+        results.push(createUnknownParamsEntry(unknownParams, {
+          originalId: '27',
           sources,
           targetData,
           effectDelay
@@ -4981,6 +5077,33 @@ var bfmtUtilities = function (exports) {
         buffId: 'passive:25'
       });
     });
+    map.set('26', (effect, context, injectionContext) => {
+      return parsePassiveWithNumericalValueRangeAndChance({
+        effect,
+        context,
+        injectionContext,
+        originalId: '26',
+        effectKeyLow: 'dmg% reflect low',
+        effectKeyHigh: 'dmg% reflect high',
+        effectKeyChance: 'dmg% reflect chance%',
+        buffKeyLow: 'damageReflectLow',
+        buffKeyHigh: 'damageReflectHigh',
+        generateBaseConditions: () => ({
+          whenAttacked: true
+        }),
+        buffId: 'passive:26'
+      });
+    });
+    map.set('27', (effect, context, injectionContext) => {
+      return parsePassiveWithSingleNumericalParameter({
+        effect,
+        context,
+        injectionContext,
+        effectKey: 'target% chance',
+        buffId: 'passive:27',
+        originalId: '27'
+      });
+    });
   }
   /**
    * @description Default function for all effects that cannot be processed.
@@ -5575,6 +5698,20 @@ var bfmtUtilities = function (exports) {
       stackType: BuffStackType.Passive,
       icons: () => [IconId.BUFF_DAMAGEBB]
     },
+    'passive:26': {
+      id: BuffId['passive:26'],
+      name: 'Passive Damage Counter',
+      stat: UnitStat.damageReflect,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_COUNTERDAMAGE]
+    },
+    'passive:27': {
+      id: BuffId['passive:27'],
+      name: 'Passive Target Chance Modification',
+      stat: UnitStat.targetingModification,
+      stackType: BuffStackType.Passive,
+      icons: buff => [buff && buff.value && buff.value < 0 ? IconId.BUFF_REPENEATT : IconId.BUFF_GETENEATT]
+    },
     'UNKNOWN_PROC_EFFECT_ID': {
       id: BuffId.UNKNOWN_PROC_EFFECT_ID,
       name: 'Unknown Proc Effect',
@@ -6104,6 +6241,12 @@ var bfmtUtilities = function (exports) {
       stat: UnitStat.hitCountModification,
       stackType: BuffStackType.Active,
       icons: () => [IconId.BUFF_HITUP]
+    },
+    'proc:27': {
+      id: BuffId['proc:27'],
+      name: 'Proportional Damage',
+      stackType: BuffStackType.Attack,
+      icons: buff => [buff && buff.targetArea === TargetArea.Single ? IconId.ATK_ST_PROPORTIONAL : IconId.ATK_AOE_PROPORTIONAL]
     }
   }));
   /**

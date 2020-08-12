@@ -939,4 +939,9 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:26', () => {
 		testDefaultIconResult(BuffId['proc:26'], [IconId.BUFF_HITUP]);
 	});
+
+	describe('proc:27', () => {
+		testDefaultIconResult(BuffId['proc:27'], [IconId.ATK_AOE_PROPORTIONAL]);
+		testIconResultWithBuff(BuffId['proc:27'], [IconId.ATK_ST_PROPORTIONAL], { targetArea: TargetArea.Single }, 'target area is single');
+	});
 });

@@ -1105,4 +1105,10 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_HITUP],
 	},
+	'proc:27': {
+		id: BuffId['proc:27'],
+		name: 'Proportional Damage',
+		stackType: BuffStackType.Attack,
+		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_PROPORTIONAL : IconId.ATK_AOE_PROPORTIONAL],
+	},
 });
