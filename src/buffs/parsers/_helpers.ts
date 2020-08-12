@@ -152,8 +152,8 @@ export function getProcTargetData (effect: ProcEffect): ITargetData {
  * @param defaultValue Value to return if `value` is not a number; defaults to 0.
  * @returns Parsed value as a number or the `defaultValue` if the value is not a number.
  */
-export function parseNumberOrDefault (value: string | number, defaultValue = 0): number {
-	return (value !== null && !isNaN(value as number)) ? +value : defaultValue;
+export function parseNumberOrDefault (value: string | number | undefined, defaultValue = 0): number {
+	return (value !== null && !isNaN(value as number)) ? +(value as number) : defaultValue;
 }
 
 /**

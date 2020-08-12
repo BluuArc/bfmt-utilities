@@ -146,6 +146,20 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		return result;
 	};
 
+	/**
+	 * @description Helper function to get attack information common across most attacks from the conversion context.
+	 * @param context Given context that may contain attack information like damage frames.
+	 * @returns Extracted attack information from the context (with defaults where applicable).
+	 */
+	const getAttackInformationFromContext = (context: IEffectToBuffConversionContext): { hits: number, distribution: number } => {
+		const hits = parseNumberOrDefault(context.damageFrames && context.damageFrames.hits || 0);
+		const distribution = parseNumberOrDefault(context.damageFrames && context.damageFrames['hit dmg% distribution (total)']);
+		return {
+			hits,
+			distribution,
+		};
+	}
+
 	interface IProcWithSingleNumericalParameterAndTurnDurationContext {
 		effect: ProcEffect;
 		context: IEffectToBuffConversionContext,
@@ -217,8 +231,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	map.set('1', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
-		const hits = +((context.damageFrames && context.damageFrames.hits) || 0);
-		const distribution = +((context.damageFrames && context.damageFrames['hit dmg% distribution (total)']) || 0);
+		const { hits, distribution } = getAttackInformationFromContext(context);
 		const params: { [param: string]: AlphaNumeric } = {
 			'atk%': '0',
 			flatAtk: '0',
@@ -988,7 +1001,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		let hits = 0;
-		const distribution = +((context.damageFrames && context.damageFrames['hit dmg% distribution (total)']) || 0);
+		const { distribution } = getAttackInformationFromContext(context);
 		const params: { [param: string]: AlphaNumeric } = {
 			'atk%': '0',
 			flatAtk: '0',
@@ -1050,8 +1063,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	map.set('14', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
-		const hits = +((context.damageFrames && context.damageFrames.hits) || 0);
-		const distribution = +((context.damageFrames && context.damageFrames['hit dmg% distribution (total)']) || 0);
+		const { hits, distribution } = getAttackInformationFromContext(context);
 		const params: { [param: string]: AlphaNumeric } = {
 			'atk%': '0',
 			flatAtk: '0',
