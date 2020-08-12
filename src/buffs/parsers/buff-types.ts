@@ -227,6 +227,8 @@ export enum UnitStat {
 	hitCountModification = 'hitCountModification',
 
 	damageReflect = 'damageReflect',
+
+	targetingModification = 'targetingModification',
 }
 
 /**
@@ -291,6 +293,8 @@ export interface IUnitState {
 	hitCountModification: IBuff[];
 
 	damageReflect: IBuff[];
+
+	targetingModification: IBuff[];
 }
 
 /**
@@ -559,6 +563,9 @@ export enum IconId {
 
 	BUFF_COUNTERDAMAGE = 'BUFF_COUNTERDAMAGE',
 
+	BUFF_GETENEATT = 'BUFF_GETENEATT',
+	BUFF_REPENEATT = 'BUFF_REPENEATT',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -656,6 +663,7 @@ export enum BuffId {
 	'passive:24' = 'passive:24',
 	'passive:25' = 'passive:25',
 	'passive:26' = 'passive:26',
+	'passive:27' = 'passive:27',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

@@ -2689,5 +2689,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				generateBaseConditions: () => ({ whenAttacked: true }),
 			});
 		});
+
+		describe('passive 27', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '27',
+				expectedBuffId: 'passive:27',
+				effectKey: 'target% chance',
+			});
+		});
 	});
 });
