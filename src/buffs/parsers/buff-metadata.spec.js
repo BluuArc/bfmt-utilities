@@ -353,28 +353,28 @@ describe('BUFF_METADATA entries', () => {
 
 	describe('passive 12 buffs', () => {
 		describe('passive:12:bc', () => {
-			testDefaultIconResult(BuffId['passive:12:bc'], [IconId.BUFF_BCDROP]);
-			testIconResultWithBuff(BuffId['passive:12:bc'], [IconId.BUFF_BCDOWN], { value: -1 }, 'buff value is less than 0');
+			testDefaultIconResult(BuffId['passive:12:bc'], [IconId.BUFF_HPTHRESHBCDROP]);
+			testIconResultWithBuff(BuffId['passive:12:bc'], [IconId.BUFF_HPTHRESHBCDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
 		describe('passive:12:hc', () => {
-			testDefaultIconResult(BuffId['passive:12:hc'], [IconId.BUFF_HCDROP]);
-			testIconResultWithBuff(BuffId['passive:12:hc'], [IconId.BUFF_HCDOWN], { value: -1 }, 'buff value is less than 0');
+			testDefaultIconResult(BuffId['passive:12:hc'], [IconId.BUFF_HPTHRESHHCDROP]);
+			testIconResultWithBuff(BuffId['passive:12:hc'], [IconId.BUFF_HPTHRESHHCDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
 		describe('passive:12:item', () => {
-			testDefaultIconResult(BuffId['passive:12:item'], [IconId.BUFF_ITEMDROP]);
-			testIconResultWithBuff(BuffId['passive:12:item'], [IconId.BUFF_ITEMDOWN], { value: -1 }, 'buff value is less than 0');
+			testDefaultIconResult(BuffId['passive:12:item'], [IconId.BUFF_HPTHRESHITEMDROP]);
+			testIconResultWithBuff(BuffId['passive:12:item'], [IconId.BUFF_HPTHRESHITEMDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
 		describe('passive:12:zel', () => {
-			testDefaultIconResult(BuffId['passive:12:zel'], [IconId.BUFF_ZELDROP]);
-			testIconResultWithBuff(BuffId['passive:12:zel'], [IconId.BUFF_ZELDOWN], { value: -1 }, 'buff value is less than 0');
+			testDefaultIconResult(BuffId['passive:12:zel'], [IconId.BUFF_HPTHRESHZELDROP]);
+			testIconResultWithBuff(BuffId['passive:12:zel'], [IconId.BUFF_HPTHRESHZELDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
 		describe('passive:12:karma', () => {
-			testDefaultIconResult(BuffId['passive:12:karma'], [IconId.BUFF_KARMADROP]);
-			testIconResultWithBuff(BuffId['passive:12:karma'], [IconId.BUFF_KARMADOWN], { value: -1 }, 'buff value is less than 0');
+			testDefaultIconResult(BuffId['passive:12:karma'], [IconId.BUFF_HPTHRESHKARMADROP]);
+			testIconResultWithBuff(BuffId['passive:12:karma'], [IconId.BUFF_HPTHRESHKARMADOWN], { value: -1 }, 'buff value is less than 0');
 		});
 	});
 

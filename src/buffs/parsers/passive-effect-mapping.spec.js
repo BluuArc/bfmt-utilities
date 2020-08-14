@@ -1388,6 +1388,15 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 			});
 
+			it('returns nothing if all stats are 0', () => {
+				const params = '0,0,0,0,2,1';
+				const expectedResult = [];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = {
 					params: '0,0,0,1,456,1,789',
@@ -1475,7 +1484,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('falls back to stat-specific properties when the params property does not exist', () => {
+			it('falls back to rate-specific properties when the params property does not exist', () => {
 				const mockValues = [6, 7, 8, 9, 10];
 				const effect = DROP_TYPE_ORDER.reduce((acc, dropType, index) => {
 					acc[`${dropType} drop rate% buff`] = mockValues[index];
@@ -1539,6 +1548,15 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						expect(result).toEqual(expectedResult);
 					});
 				});
+			});
+
+			it('returns nothing if all rates are 0', () => {
+				const params = '0,0,0,0,0,2,1';
+				const expectedResult = [];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
