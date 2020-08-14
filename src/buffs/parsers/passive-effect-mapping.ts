@@ -1151,4 +1151,65 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			originalId: '27',
 		});
 	});
+
+	map.set('28', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const typedEffect = (effect as IPassiveEffect);
+		let value = 0;
+		let requireHpAbove = false;
+		let hpThreshold = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawValue, rawHpThreshold, rawRequireHpAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+			value = parseNumberOrDefault(rawValue);
+			requireHpAbove = rawRequireHpAboveFlag === '1';
+			hpThreshold = parseNumberOrDefault(rawHpThreshold);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			value = parseNumberOrDefault(typedEffect['target% chance'] as string);
+			if ('hp above % buff requirement' in typedEffect) {
+				hpThreshold = parseNumberOrDefault(typedEffect['hp above % buff requirement'] as string);
+				requireHpAbove = true;
+			} else {
+				hpThreshold = parseNumberOrDefault(typedEffect['hp below % buff requirement'] as string);
+				requireHpAbove = false;
+			}
+		}
+
+		const results: IBuff[] = [];
+		if (value !== 0) {
+			const entry: IBuff = {
+				id: 'passive:28',
+				originalId: '28',
+				sources,
+				value,
+				conditions: { ...conditionInfo },
+				...targetData,
+			};
+
+			// disabling no-non-null-assertion rule because `conditions` property is defined above
+			/* eslint-disable @typescript-eslint/no-non-null-assertion */
+			if (requireHpAbove) {
+				entry.conditions!.hpGreaterThanOrEqualTo = hpThreshold;
+			} else {
+				entry.conditions!.hpLessThanOrEqualTo = hpThreshold;
+			}
+			/* eslint-enable @typescript-eslint/no-non-null-assertion */
+
+			results.push(entry);
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '28',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
 }

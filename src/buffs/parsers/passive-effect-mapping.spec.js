@@ -2697,5 +2697,157 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				effectKey: 'target% chance',
 			});
 		});
+
+		describe('passive 28', () => {
+			const expectedOriginalId = '28';
+			const expectedBuffId = 'passive:28';
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,1';
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: 1,
+					conditions: {
+						hpGreaterThanOrEqualTo: 2,
+					},
+				})];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,3,2,4,5,6';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: 1,
+						conditions: {
+							hpLessThanOrEqualTo: 3,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_3: '4',
+							param_4: '5',
+							param_5: '6',
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when the params property does not exist', () => {
+				const effect = {
+					'target% chance': 4,
+					[HP_ABOVE_EFFECT_KEY]: 5,
+				};
+
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: 4,
+					conditions: {
+						hpGreaterThanOrEqualTo: 5,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			[1, 2].forEach((hpThresholdCase) => {
+				it(`returns value if target value is non-zero and hp threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'}`, () => {
+					const params = `123,456,${hpThresholdCase}`;
+					const expectedConditions = {};
+					if (hpThresholdCase === 1) {
+						expectedConditions.hpGreaterThanOrEqualTo = 456;
+					} else {
+						expectedConditions.hpLessThanOrEqualTo = 456;
+					}
+					const expectedResult = [baseBuffFactory({
+						id: 'passive:28',
+						value: 123,
+						conditions: expectedConditions,
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`returns value if target value is non-zero and hp threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'} and params property does not exist`, () => {
+					const effect = {
+						['target% chance']: 123,
+						[hpThresholdCase === 1 ? HP_ABOVE_EFFECT_KEY : HP_BELOW_EFFECT_KEY]: 456,
+					};
+					const expectedConditions = {};
+					if (hpThresholdCase === 1) {
+						expectedConditions.hpGreaterThanOrEqualTo = 456;
+					} else {
+						expectedConditions.hpLessThanOrEqualTo = 456;
+					}
+					const expectedResult = [baseBuffFactory({
+						id: 'passive:28',
+						value: 123,
+						conditions: expectedConditions,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('returns nothing if target value is 0', () => {
+				const params = '0,2,1';
+				const expectedResult = [];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '1,456,1,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:28',
+						sources: arbitrarySourceValue,
+						value: 1,
+						conditions: {
+							...arbitraryConditionValue,
+							hpGreaterThanOrEqualTo: 456,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 3] });
+			});
+		});
 	});
 });
