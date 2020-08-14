@@ -515,6 +515,10 @@ describe('BUFF_METADATA entries', () => {
 		testIconResultWithBuff(BuffId['passive:28'], [IconId.BUFF_HPTHRESHREPENEATT], { value: -1 }, 'buff value is less than 0');
 	});
 
+	describe('passive:29', () => {
+		testDefaultIconResult(BuffId['passive:29'], [IconId.BUFF_IGNOREDEF]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

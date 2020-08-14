@@ -592,6 +592,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_HPTHRESHREPENEATT : IconId.BUFF_HPTHRESHGETENEATT],
 	},
+	'passive:29': {
+		id: BuffId['passive:29'],
+		name: 'Passive Defense Ignore (Chance)',
+		stat: UnitStat.defenseIgnore,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_IGNOREDEF],
+	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
