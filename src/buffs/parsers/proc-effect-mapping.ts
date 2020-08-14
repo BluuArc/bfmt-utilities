@@ -1614,4 +1614,45 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('28', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const { hits, distribution } = getAttackInformationFromContext(context);
+		let value = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawValue, ...extraParams] = splitEffectParams(effect);
+			value = parseNumberOrDefault(rawValue);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+		} else {
+			value = parseNumberOrDefault(effect['fixed damage'] as number);
+		}
+
+		const results: IBuff[] = [{
+			id: 'proc:28',
+			originalId: '28',
+			sources,
+			effectDelay,
+			value: {
+				hits,
+				distribution,
+			},
+			...targetData,
+		}];
+
+		if (value !== 0) {
+			results[0].value.value = value;
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '28',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }

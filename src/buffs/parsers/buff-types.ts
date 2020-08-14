@@ -573,6 +573,8 @@ export enum IconId {
 	ATK_AOE_HPREC = 'ATK_AOE_HPREC',
 	ATK_ST_PROPORTIONAL = 'ATK_ST_PROPORTIONAL',
 	ATK_AOE_PROPORTIONAL = 'ATK_AOE_PROPORTIONAL',
+	ATK_ST_FIXED = 'ATK_ST_FIXED',
+	ATK_AOE_FIXED = 'ATK_AOE_FIXED',
 }
 
 /**
@@ -750,4 +752,5 @@ export enum BuffId {
 
 	'proc:26' = 'proc:26',
 	'proc:27' = 'proc:27',
+	'proc:28' = 'proc:28',
 }
