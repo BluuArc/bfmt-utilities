@@ -1641,7 +1641,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		}];
 
 		if (value !== 0) {
-			results[0].value.value = value;
+			(results[0].value as { value: number }).value = value;
 		}
 
 		if (unknownParams) {
