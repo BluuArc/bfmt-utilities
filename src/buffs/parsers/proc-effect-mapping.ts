@@ -1655,4 +1655,79 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('29', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const { hits, distribution } = getAttackInformationFromContext(context);
+		const params: { [param: string]: AlphaNumeric } = {
+			'atk%': '0',
+			flatAtk: '0',
+			'crit%': '0',
+			'bc%': '0',
+			'hc%': '0',
+			'dmg%': '0',
+		};
+		let attackElements: (UnitElement | BuffConditionElement)[] = [];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let element1: string, element2: string, element3: string;
+			let extraParams: string[];
+			[element1, element2, element3, params['atk%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], ...extraParams] = splitEffectParams(effect);
+
+			[element1, element2, element3].forEach((rawElement) => {
+				if (rawElement !== '0') {
+					attackElements.push(ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown);
+				}
+
+				unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 9, injectionContext);
+			});
+		} else {
+			if (Array.isArray(effect['bb elements'] as UnitElement[])) {
+				attackElements = (effect['bb elements'] as UnitElement[]).slice();
+			}
+
+			params['atk%'] = (effect['bb atk%'] as number);
+			params.flatAtk = (effect['bb flat atk'] as number);
+			params['crit%'] = (effect['bb crit%'] as number);
+			params['bc%'] = (effect['bb bc%'] as number);
+			params['hc%'] = (effect['bb hc%'] as number);
+			params['dmg%'] = (effect['bb dmg%'] as number);
+		}
+
+		const filteredValue = Object.entries(params)
+			.filter(([, value]) => value && +value)
+			.reduce((acc: { [param: string]: number }, [key, value]) => {
+				acc[key] = parseNumberOrDefault(value);
+				return acc;
+			}, {});
+
+		const results: IBuff[] = [{
+			id: 'proc:29',
+			originalId: '29',
+			sources,
+			effectDelay,
+			value: {
+				...filteredValue,
+				hits,
+				distribution,
+			},
+			...targetData,
+		}];
+		if (attackElements.length > 0) {
+			(results[0].value as { elements: (UnitElement | BuffConditionElement)[] }).elements = attackElements;
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '29',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }

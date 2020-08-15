@@ -588,6 +588,8 @@ export enum IconId {
 	ATK_AOE_PROPORTIONAL = 'ATK_AOE_PROPORTIONAL',
 	ATK_ST_FIXED = 'ATK_ST_FIXED',
 	ATK_AOE_FIXED = 'ATK_AOE_FIXED',
+	ATK_ST_MULTIELEMENT = 'ATK_ST_MULTIELEMENT',
+	ATK_AOE_MULTIELEMENT = 'ATK_AOE_MULTIELEMENT',
 }
 
 /**
@@ -768,4 +770,5 @@ export enum BuffId {
 	'proc:26' = 'proc:26',
 	'proc:27' = 'proc:27',
 	'proc:28' = 'proc:28',
+	'proc:29' = 'proc:29',
 }
