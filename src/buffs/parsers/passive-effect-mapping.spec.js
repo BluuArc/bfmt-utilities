@@ -2719,6 +2719,8 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 28', () => {
 			const expectedOriginalId = '28';
 			const expectedBuffId = 'passive:28';
+			const hpAboveEffectKey = 'hp above % passive requirement';
+			const hpBelowEffectKey = 'hp below % passive requirement';
 			beforeEach(() => {
 				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
 				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
@@ -2770,7 +2772,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('falls back to effect properties when the params property does not exist', () => {
 				const effect = {
 					'target% chance': 4,
-					[HP_ABOVE_EFFECT_KEY]: 5,
+					[hpAboveEffectKey]: 5,
 				};
 
 				const expectedResult = [baseBuffFactory({
@@ -2808,7 +2810,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`returns value if target value is non-zero and hp threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'} and params property does not exist`, () => {
 					const effect = {
 						['target% chance']: 123,
-						[hpThresholdCase === 1 ? HP_ABOVE_EFFECT_KEY : HP_BELOW_EFFECT_KEY]: 456,
+						[hpThresholdCase === 1 ? hpAboveEffectKey : hpBelowEffectKey]: 456,
 					};
 					const expectedConditions = {};
 					if (hpThresholdCase === 1) {

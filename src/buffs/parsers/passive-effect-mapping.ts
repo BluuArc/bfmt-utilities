@@ -135,7 +135,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 	const parseThresholdValuesFromEffect = (effect: IPassiveEffect, thresholdType: ThresholdType, suffix = 'buff requirement'): IThresholdActivationInfo => {
 		let threshold = 0, requireAbove = false;
-		if (`${thresholdType} above % buff requirement` in effect) {
+		if (`${thresholdType} above % ${suffix}` in effect) {
 			threshold = parseNumberOrDefault(effect[`${thresholdType} above % ${suffix}`] as string);
 			requireAbove = true;
 		} else {
@@ -1196,7 +1196,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		} else {
 			value = parseNumberOrDefault(typedEffect['target% chance'] as string);
 			// TODO: change to be "passive requirement"
-			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.Hp);
+			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.Hp, 'passive requirement');
 		}
 
 		const results: IBuff[] = [];
