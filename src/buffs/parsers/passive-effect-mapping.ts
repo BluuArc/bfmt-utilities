@@ -123,13 +123,14 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	interface IThresholdActivationInfo {
 		threshold: number;
 		requireAbove: boolean;
-		type?: ThresholdType;
+		type: ThresholdType;
 	}
 
-	const parseThresholdValuesFromParamsProperty = (rawThreshold: string, rawRequireAboveFlag: string): IThresholdActivationInfo => {
+	const parseThresholdValuesFromParamsProperty = (rawThreshold: string, rawRequireAboveFlag: string, thresholdType: ThresholdType): IThresholdActivationInfo => {
 		return {
 			threshold: parseNumberOrDefault(rawThreshold),
 			requireAbove: rawRequireAboveFlag === '1',
+			type: thresholdType,
 		};
 	};
 
@@ -143,7 +144,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			requireAbove = false;
 		}
 
-		return { threshold, requireAbove };
+		return { threshold, requireAbove, type: thresholdType };
 	};
 
 	const getThresholdConditions = ({ threshold, requireAbove, type }: IThresholdActivationInfo): IBuffConditions | undefined => {
@@ -654,7 +655,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			let rawRequireAboveFlag: string;
 			let rawThreshold: string;
 			[stats.atk, stats.def, stats.rec, stats.crit, rawThreshold, rawRequireAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
-			thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag);
+			thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag, ThresholdType.Hp);
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
 		} else {
@@ -665,7 +666,6 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.Hp);
 		}
 
-		thresholdInfo.type = ThresholdType.Hp;
 		const thresholdConditions = getThresholdConditions(thresholdInfo);
 		STATS_ORDER.forEach((stat) => {
 			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec' | 'crit']);
@@ -717,7 +717,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			let rawRequireAboveFlag: string;
 			let rawThreshold: string;
 			[dropRates.bc, dropRates.hc, dropRates.item, dropRates.zel, dropRates.karma, rawThreshold, rawRequireAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
-			thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag);
+			thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag, ThresholdType.Hp);
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
 		} else {
@@ -727,7 +727,6 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.Hp);
 		}
 
-		thresholdInfo.type = ThresholdType.Hp;
 		const thresholdConditions = getThresholdConditions(thresholdInfo);
 		DROP_TYPES_ORDER.forEach((dropType) => {
 			const value = parseNumberOrDefault(dropRates[dropType]);
@@ -1184,7 +1183,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		if (typedEffect.params) {
 			const [rawValue, rawThreshold, rawRequireAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
 			value = parseNumberOrDefault(rawValue);
-			thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag);
+			thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag, ThresholdType.Hp);
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
 		} else {
@@ -1195,7 +1194,6 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		const results: IBuff[] = [];
 		if (value !== 0) {
-			thresholdInfo.type = ThresholdType.Hp;
 			const thresholdConditions = getThresholdConditions(thresholdInfo);
 			const entry: IBuff = {
 				id: 'passive:28',
