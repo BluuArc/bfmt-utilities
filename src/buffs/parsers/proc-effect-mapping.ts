@@ -1730,4 +1730,64 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('30', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let elements: (UnitElement | BuffConditionElement)[] = [];
+		let turnDuration = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const params = splitEffectParams(effect);
+			elements = params
+				.slice(0, 6)
+				.filter((p) => p !== '0')
+				.map((p) => ELEMENT_MAPPING[p] || BuffConditionElement.Unknown);
+			turnDuration = parseNumberOrDefault(params[6]);
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(7), 7, injectionContext);
+		} else {
+			if ('elements added' in effect) {
+				if (Array.isArray(effect['elements added'] as (UnitElement | BuffConditionElement)[])) {
+					elements = (effect['elements added'] as (UnitElement | BuffConditionElement)[]);
+				} else {
+					elements = [BuffConditionElement.Unknown];
+				}
+			}
+			turnDuration = parseNumberOrDefault(effect['elements added turns'] as number);
+		}
+
+		const results: IBuff[] = [];
+		const validElements = Object.values(ELEMENT_MAPPING).filter((e) => e !== BuffConditionElement.All);
+		if (elements.length > 0) {
+			elements.forEach((inputElement) => {
+				const sanitizedElement = validElements.includes(inputElement) ? inputElement : BuffConditionElement.Unknown;
+				results.push({
+					id: `proc:30:${sanitizedElement}`,
+					originalId: '30',
+					sources,
+					effectDelay,
+					duration: turnDuration,
+					...targetData,
+				});
+			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId: '30',
+				sources,
+				buffs: validElements.concat([BuffConditionElement.Unknown]).map((e) => `proc:30:${e}`),
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '30',
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+
+		return results;
+	});
 }

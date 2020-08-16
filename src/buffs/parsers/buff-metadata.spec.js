@@ -963,4 +963,34 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:29'], [IconId.ATK_AOE_MULTIELEMENT]);
 		testIconResultWithBuff(BuffId['proc:29'], [IconId.ATK_ST_MULTIELEMENT], { targetArea: TargetArea.Single }, 'target area is single');
 	});
+
+	describe('proc 30 buffs', () => {
+		describe('proc:30:fire', () => {
+			testDefaultIconResult(BuffId['proc:30:fire'], [IconId.BUFF_ADDFIRE]);
+		});
+
+		describe('proc:30:water', () => {
+			testDefaultIconResult(BuffId['proc:30:water'], [IconId.BUFF_ADDWATER]);
+		});
+
+		describe('proc:30:earth', () => {
+			testDefaultIconResult(BuffId['proc:30:earth'], [IconId.BUFF_ADDEARTH]);
+		});
+
+		describe('proc:30:thunder', () => {
+			testDefaultIconResult(BuffId['proc:30:thunder'], [IconId.BUFF_ADDTHUNDER]);
+		});
+
+		describe('proc:30:light', () => {
+			testDefaultIconResult(BuffId['proc:30:light'], [IconId.BUFF_ADDLIGHT]);
+		});
+
+		describe('proc:30:dark', () => {
+			testDefaultIconResult(BuffId['proc:30:dark'], [IconId.BUFF_ADDDARK]);
+		});
+
+		describe('proc:30:unknown', () => {
+			testDefaultIconResult(BuffId['proc:30:unknown'], [IconId.BUFF_ADDELEMENT]);
+		});
+	});
 });

@@ -19,6 +19,14 @@ export interface IBuffMetadata {
 
 	stackType: BuffStackType;
 
+	/**
+	 * @description Retrieves set of icons that represents this specific buff. Most buffs have a single icon, but
+	 * more can be specified if an effect affects multiple parts of a unit state. For example, the stealth effect affects both targeting
+	 * and self-stats but in-game it only shows a single icon; implementation in this library is such that there is a stealth entry
+	 * and separate stat entries that a given stealth effect may change, and those separate stat entries have two icons: the stealth
+	 * icon and the self-boost stat icon. On the contrary, the add elements effect can add multiple elements, but because it shows
+	 * up as individual buffs in-game, there is a separate buff entry for each added element.
+	 */
 	icons: (buff: IBuff) => IconId[];
 	// TODO: value schema for filters?
 }
@@ -1136,5 +1144,54 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		name: 'Multi-Element Damage',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_MULTIELEMENT : IconId.ATK_AOE_MULTIELEMENT],
+	},
+	'proc:30:fire': {
+		id: BuffId['proc:30:fire'],
+		name: 'Active Added Element to Attack (Fire)',
+		stat: UnitStat.elementModification,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ADDFIRE],
+	},
+	'proc:30:water': {
+		id: BuffId['proc:30:water'],
+		name: 'Active Added Element to Attack (Water)',
+		stat: UnitStat.elementModification,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ADDWATER],
+	},
+	'proc:30:earth': {
+		id: BuffId['proc:30:earth'],
+		name: 'Active Added Element to Attack (Earth)',
+		stat: UnitStat.elementModification,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ADDEARTH],
+	},
+	'proc:30:thunder': {
+		id: BuffId['proc:30:thunder'],
+		name: 'Active Added Element to Attack (Thunder)',
+		stat: UnitStat.elementModification,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ADDTHUNDER],
+	},
+	'proc:30:light': {
+		id: BuffId['proc:30:light'],
+		name: 'Active Added Element to Attack (Light)',
+		stat: UnitStat.elementModification,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ADDLIGHT],
+	},
+	'proc:30:dark': {
+		id: BuffId['proc:30:dark'],
+		name: 'Active Added Element to Attack (Dark)',
+		stat: UnitStat.elementModification,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ADDDARK],
+	},
+	'proc:30:unknown': {
+		id: BuffId['proc:30:unknown'],
+		name: 'Active Added Element to Attack (Unspecified Element)',
+		stat: UnitStat.elementModification,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ADDELEMENT],
 	},
 });

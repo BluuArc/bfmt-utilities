@@ -229,6 +229,8 @@ export enum UnitStat {
 	damageReflect = 'damageReflect',
 
 	targetingModification = 'targetingModification',
+
+	elementModification = 'elementModification',
 }
 
 /**
@@ -295,6 +297,8 @@ export interface IUnitState {
 	damageReflect: IBuff[];
 
 	targetingModification: IBuff[];
+
+	elementModification: IBuff[];
 }
 
 /**
@@ -579,6 +583,14 @@ export enum IconId {
 	BUFF_HPTHRESHGETENEATT = 'BUFF_HPTHRESHGETENEATT',
 	BUFF_HPTHRESHREPENEATT = 'BUFF_HPTHRESHREPENEATT',
 
+	BUFF_ADDFIRE = 'BUFF_ADDFIRE',
+	BUFF_ADDWATER = 'BUFF_ADDWATER',
+	BUFF_ADDEARTH = 'BUFF_ADDEARTH',
+	BUFF_ADDTHUNDER = 'BUFF_ADDTHUNDER',
+	BUFF_ADDLIGHT = 'BUFF_ADDLIGHT',
+	BUFF_ADDDARK = 'BUFF_ADDDARK',
+	BUFF_ADDELEMENT = 'BUFF_ADDELEMENT',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -771,4 +783,12 @@ export enum BuffId {
 	'proc:27' = 'proc:27',
 	'proc:28' = 'proc:28',
 	'proc:29' = 'proc:29',
+
+	'proc:30:fire' = 'proc:30:fire',
+	'proc:30:water' = 'proc:30:water',
+	'proc:30:earth' = 'proc:30:earth',
+	'proc:30:thunder' = 'proc:30:thunder',
+	'proc:30:light' = 'proc:30:light',
+	'proc:30:dark' = 'proc:30:dark',
+	'proc:30:unknown' = 'proc:30:unknown',
 }
