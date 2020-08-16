@@ -519,6 +519,28 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:29'], [IconId.BUFF_IGNOREDEF]);
 	});
 
+	describe('passive 30 buffs', () => {
+		describe('passive:30:atk', () => {
+			testDefaultIconResult(BuffId['passive:30:atk'], [IconId.BUFF_BBGAUGETHRESHATKUP]);
+			testIconResultWithBuff(BuffId['passive:30:atk'], [IconId.BUFF_BBGAUGETHRESHATKDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:30:def', () => {
+			testDefaultIconResult(BuffId['passive:30:def'], [IconId.BUFF_BBGAUGETHRESHDEFUP]);
+			testIconResultWithBuff(BuffId['passive:30:def'], [IconId.BUFF_BBGAUGETHRESHDEFDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:30:rec', () => {
+			testDefaultIconResult(BuffId['passive:30:rec'], [IconId.BUFF_BBGAUGETHRESHRECUP]);
+			testIconResultWithBuff(BuffId['passive:30:rec'], [IconId.BUFF_BBGAUGETHRESHRECDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:30:crit', () => {
+			testDefaultIconResult(BuffId['passive:30:crit'], [IconId.BUFF_BBGAUGETHRESHCRTRATEUP]);
+			testIconResultWithBuff(BuffId['passive:30:crit'], [IconId.BUFF_BBGAUGETHRESHCRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

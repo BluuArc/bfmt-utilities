@@ -149,23 +149,20 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 	const getThresholdConditions = ({ threshold, requireAbove, type }: IThresholdActivationInfo): IBuffConditions | undefined => {
 		let conditions: IBuffConditions | undefined;
-		switch (type) {
-			case ThresholdType.Hp:
-				if (requireAbove) {
-					conditions = { hpGreaterThanOrEqualTo: threshold };
-				} else {
-					conditions = { hpLessThanOrEqualTo: threshold };
-				}
-				break;
-			case ThresholdType.Bb:
-				if (requireAbove) {
-					conditions = { bbGaugeGreaterThanOrEqualTo: threshold };
-				} else {
-					conditions = { bbGaugeLessThanOrEqualTo: threshold };
-				}
-				break;
-			default: break;
+		if (type === ThresholdType.Hp) {
+			if (requireAbove) {
+				conditions = { hpGreaterThanOrEqualTo: threshold };
+			} else {
+				conditions = { hpLessThanOrEqualTo: threshold };
+			}
+		} else if (type === ThresholdType.Bb) {
+			if (requireAbove) {
+				conditions = { bbGaugeGreaterThanOrEqualTo: threshold };
+			} else {
+				conditions = { bbGaugeLessThanOrEqualTo: threshold };
+			}
 		}
+
 		return conditions;
 	};
 
@@ -1228,5 +1225,64 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffId: 'passive:29',
 			originalId: '29',
 		});
+	});
+
+	map.set('30', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+		const stats = {
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+			crit: '0' as AlphaNumeric,
+		};
+		let thresholdInfo: IThresholdActivationInfo;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			let rawRequireAboveFlag: string;
+			let rawThreshold: string;
+			[stats.atk, stats.def, stats.rec, stats.crit, rawThreshold, rawRequireAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+			thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag, ThresholdType.Bb);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+		} else {
+			stats.atk = (typedEffect['atk% buff'] as string);
+			stats.def = (typedEffect['def% buff'] as string);
+			stats.rec = (typedEffect['rec% buff'] as string);
+			stats.crit = (typedEffect['crit% buff'] as string);
+			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.Bb);
+		}
+
+		const thresholdConditions = getThresholdConditions(thresholdInfo);
+		STATS_ORDER.forEach((stat) => {
+			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec' | 'crit']);
+			if (stat !== 'hp' && value !== 0) {
+				const entry: IBuff = {
+					id: `passive:30:${stat}`,
+					originalId: '30',
+					sources,
+					value,
+					conditions: { ...conditionInfo, ...thresholdConditions },
+					...targetData,
+				};
+
+				results.push(entry);
+			}
+		});
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '30',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
 	});
 }

@@ -48,6 +48,9 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		const HP_ABOVE_EFFECT_KEY = 'hp above % buff requirement';
 		const HP_BELOW_EFFECT_KEY = 'hp below % buff requirement';
 
+		const BB_GAUGE_ABOVE_EFFECT_KEY = 'bb gauge above % buff requirement';
+		const BB_GAUGE_BELOW_EFFECT_KEY = 'bb gauge below % buff requirement';
+
 		const BUFF_TARGET_PROPS = ['targetType', 'targetArea'];
 		const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
 		const AILMENTS_ORDER = ['poison', 'weak', 'sick', 'injury', 'curse', 'paralysis'];
@@ -2875,6 +2878,167 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectedOriginalId: '29',
 				expectedBuffId: 'passive:29',
 				effectKey: 'ignore def%',
+			});
+		});
+
+		describe('passive 30', () => {
+			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec', 'crit'];
+			const expectedOriginalId = '30';
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:30:${stat}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,1';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:30:${stat}`,
+						value: +(splitParams[index]),
+						conditions: {
+							bbGaugeGreaterThanOrEqualTo: 5,
+						},
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,2,7,8,9';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:30:${stat}`,
+						value: +(splitParams[index]),
+						conditions: {
+							bbGaugeLessThanOrEqualTo: 5,
+						},
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_6: '7',
+						param_7: '8',
+						param_8: '9',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to stat-specific properties when the params property does not exist', () => {
+				const mockValues = [5, 6, 7, 8];
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat, index) => {
+					acc[`${stat}% buff`] = mockValues[index];
+					return acc;
+				}, {});
+				effect[BB_GAUGE_ABOVE_EFFECT_KEY] = 9;
+
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:30:${stat}`,
+						value: mockValues[index],
+						conditions: {
+							bbGaugeGreaterThanOrEqualTo: 9,
+						},
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			STAT_PARAMS_ORDER.forEach((statCase) => {
+				[1, 2].forEach((hpThresholdCase) => {
+					it(`returns only value for ${statCase} if it is non-zero and other stats are zero and bb gauge threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'}`, () => {
+						const params = STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0').concat(['456', hpThresholdCase]).join(',');
+						const expectedConditions = {};
+						if (hpThresholdCase === 1) {
+							expectedConditions.bbGaugeGreaterThanOrEqualTo = 456;
+						} else {
+							expectedConditions.bbGaugeLessThanOrEqualTo = 456;
+						}
+						const expectedResult = [baseBuffFactory({
+							id: `passive:30:${statCase}`,
+							value: 123,
+							conditions: expectedConditions,
+						})];
+
+						const effect = { params };
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns only value for ${statCase} if it is non-zero and other stats are zero and bb gauge threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'} and params property does not exist`, () => {
+						const effect = {
+							[`${statCase}% buff`]: 123,
+							[hpThresholdCase === 1 ? BB_GAUGE_ABOVE_EFFECT_KEY : BB_GAUGE_BELOW_EFFECT_KEY]: 456,
+						};
+						const expectedConditions = {};
+						if (hpThresholdCase === 1) {
+							expectedConditions.bbGaugeGreaterThanOrEqualTo = 456;
+						} else {
+							expectedConditions.bbGaugeLessThanOrEqualTo = 456;
+						}
+						const expectedResult = [baseBuffFactory({
+							id: `passive:30:${statCase}`,
+							value: 123,
+							conditions: expectedConditions,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+			});
+
+			it('returns nothing if all stats are 0', () => {
+				const params = '0,0,0,0,2,1';
+				const expectedResult = [];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,1,456,1,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:30:crit',
+						sources: arbitrarySourceValue,
+						value: 1,
+						conditions: {
+							...arbitraryConditionValue,
+							bbGaugeGreaterThanOrEqualTo: 456,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
 			});
 		});
 	});
