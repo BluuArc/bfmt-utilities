@@ -120,6 +120,8 @@ export interface IBuffConditions {
 
 	hpGreaterThanOrEqualTo?: number;
 	hpLessThanOrEqualTo?: number;
+	bbGaugeGreaterThanOrEqualTo?: number;
+	bbGaugeLessThanOrEqualTo?: number;
 
 	onEnemyDefeat?: boolean;
 	onBattleWin?: boolean;

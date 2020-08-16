@@ -11,7 +11,7 @@ module.exports = {
 	],
 	globals: {
 		Atomics: 'readonly',
-		SharedArrayBuffer: 'readonly'
+		SharedArrayBuffer: 'readonly',
 	},
 	parser: '@typescript-eslint/parser',
 	parserOptions: {
@@ -20,24 +20,25 @@ module.exports = {
 		project: 'tsconfig.json',
 	},
 	plugins: [
-		'@typescript-eslint'
+		'@typescript-eslint',
 	],
 	rules: {
 		indent: [
 			'error',
-			'tab'
+			'tab',
+			{ SwitchCase: 1 },
 		],
 		'linebreak-style': [
 			'error',
-			'unix'
+			'unix',
 		],
 		quotes: [
 			'error',
-			'single'
+			'single',
 		],
 		semi: [
 			'error',
-			'always'
+			'always',
 		],
 		'comma-dangle': [
 			'error',
@@ -62,7 +63,7 @@ module.exports = {
 			{
 				requireParamType: false,
 				requireReturnType: false,
-			}
+			},
 		],
-	}
+	},
 };

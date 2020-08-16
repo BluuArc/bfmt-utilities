@@ -116,6 +116,64 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		return unknownParams;
 	};
 
+	enum ThresholdType {
+		Hp = 'hp',
+		Bb = 'bb gauge',
+	}
+	interface IThresholdActivationInfo {
+		threshold: number;
+		requireAbove: boolean;
+		type?: ThresholdType;
+	}
+
+	const parseThresholdValuesFromParamsProperty = (rawThreshold: string, rawRequireAboveFlag: string): IThresholdActivationInfo => {
+		return {
+			threshold: parseNumberOrDefault(rawThreshold),
+			requireAbove: rawRequireAboveFlag === '1',
+		};
+	};
+
+	const parseThresholdValuesFromEffect = (effect: IPassiveEffect, thresholdType: ThresholdType, suffix = 'buff requirement'): IThresholdActivationInfo => {
+		let threshold = 0, requireAbove = false;
+		if (`${thresholdType} above % buff requirement` in effect) {
+			threshold = parseNumberOrDefault(effect[`${thresholdType} above % ${suffix}`] as string);
+			requireAbove = true;
+		} else {
+			threshold = parseNumberOrDefault(effect[`${thresholdType} below % ${suffix}`] as string);
+			requireAbove = false;
+		}
+
+		return { threshold, requireAbove };
+	};
+
+	const applyThresholdValuesToBuff = (buff: IBuff, { threshold, requireAbove, type }: IThresholdActivationInfo): void => {
+		switch (type) {
+			case ThresholdType.Hp:
+				if (!buff.conditions) {
+					buff.conditions = {};
+				}
+
+				if (requireAbove) {
+					buff.conditions.hpGreaterThanOrEqualTo = threshold;
+				} else {
+					buff.conditions.hpLessThanOrEqualTo = threshold;
+				}
+				break;
+			case ThresholdType.Bb:
+				if (!buff.conditions) {
+					buff.conditions = {};
+				}
+
+				if (requireAbove) {
+					buff.conditions.bbGaugeGreaterThanOrEqualTo = threshold;
+				} else {
+					buff.conditions.bbGaugeLessThanOrEqualTo = threshold;
+				}
+				break;
+			default: break;
+		}
+	};
+
 	interface ITemplatedParsingFunctionContext {
 		effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect;
 		context: IEffectToBuffConversionContext;
@@ -594,17 +652,15 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			rec: '0' as AlphaNumeric,
 			crit: '0' as AlphaNumeric,
 		};
-		let requireHpAbove = false;
-		let hpThreshold = 0;
+		let thresholdInfo: IThresholdActivationInfo;
 
 		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
 			let extraParams: string[];
-			let rawRequireHpAboveFlag: string;
-			let rawHpThreshold: string;
-			[stats.atk, stats.def, stats.rec, stats.crit, rawHpThreshold, rawRequireHpAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
-			requireHpAbove = rawRequireHpAboveFlag === '1';
-			hpThreshold = parseNumberOrDefault(rawHpThreshold);
+			let rawRequireAboveFlag: string;
+			let rawThreshold: string;
+			[stats.atk, stats.def, stats.rec, stats.crit, rawThreshold, rawRequireAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+			thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag);
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
 		} else {
@@ -612,15 +668,10 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			stats.def = (typedEffect['def% buff'] as string);
 			stats.rec = (typedEffect['rec% buff'] as string);
 			stats.crit = (typedEffect['crit% buff'] as string);
-			if ('hp above % buff requirement' in typedEffect) {
-				hpThreshold = parseNumberOrDefault(typedEffect['hp above % buff requirement'] as string);
-				requireHpAbove = true;
-			} else {
-				hpThreshold = parseNumberOrDefault(typedEffect['hp below % buff requirement'] as string);
-				requireHpAbove = false;
-			}
+			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.Hp);
 		}
 
+		thresholdInfo.type = ThresholdType.Hp;
 		STATS_ORDER.forEach((stat) => {
 			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec' | 'crit']);
 			if (stat !== 'hp' && value !== 0) {
@@ -632,15 +683,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 					conditions: { ...conditionInfo },
 					...targetData,
 				};
-
-				// disabling no-non-null-assertion rule because `conditions` property is defined above
-				/* eslint-disable @typescript-eslint/no-non-null-assertion */
-				if (requireHpAbove) {
-					entry.conditions!.hpGreaterThanOrEqualTo = hpThreshold;
-				} else {
-					entry.conditions!.hpLessThanOrEqualTo = hpThreshold;
-				}
-				/* eslint-enable @typescript-eslint/no-non-null-assertion */
+				applyThresholdValuesToBuff(entry, thresholdInfo);
 
 				results.push(entry);
 			}
@@ -672,32 +715,25 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			zel: '0' as AlphaNumeric,
 			karma: '0' as AlphaNumeric,
 		};
-		let requireHpAbove = false;
-		let hpThreshold = 0;
+		let thresholdInfo: IThresholdActivationInfo;
 
 		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
 			let extraParams: string[];
-			let rawRequireHpAboveFlag: string;
-			let rawHpThreshold: string;
-			[dropRates.bc, dropRates.hc, dropRates.item, dropRates.zel, dropRates.karma, rawHpThreshold, rawRequireHpAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
-			requireHpAbove = rawRequireHpAboveFlag === '1';
-			hpThreshold = parseNumberOrDefault(rawHpThreshold);
+			let rawRequireAboveFlag: string;
+			let rawThreshold: string;
+			[dropRates.bc, dropRates.hc, dropRates.item, dropRates.zel, dropRates.karma, rawThreshold, rawRequireAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+			thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag);
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
 		} else {
 			DROP_TYPES_ORDER.forEach((dropType) => {
 				dropRates[dropType] = (typedEffect[`${dropType} drop rate% buff`] as string);
 			});
-			if ('hp above % buff requirement' in typedEffect) {
-				hpThreshold = parseNumberOrDefault(typedEffect['hp above % buff requirement'] as string);
-				requireHpAbove = true;
-			} else {
-				hpThreshold = parseNumberOrDefault(typedEffect['hp below % buff requirement'] as string);
-				requireHpAbove = false;
-			}
+			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.Hp);
 		}
 
+		thresholdInfo.type = ThresholdType.Hp;
 		DROP_TYPES_ORDER.forEach((dropType) => {
 			const value = parseNumberOrDefault(dropRates[dropType]);
 			if (value !== 0) {
@@ -709,15 +745,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 					conditions: { ...conditionInfo },
 					...targetData,
 				};
-
-				// disabling no-non-null-assertion rule because `conditions` property is defined above
-				/* eslint-disable @typescript-eslint/no-non-null-assertion */
-				if (requireHpAbove) {
-					entry.conditions!.hpGreaterThanOrEqualTo = hpThreshold;
-				} else {
-					entry.conditions!.hpLessThanOrEqualTo = hpThreshold;
-				}
-				/* eslint-enable @typescript-eslint/no-non-null-assertion */
+				applyThresholdValuesToBuff(entry, thresholdInfo);
 
 				results.push(entry);
 			}
@@ -1156,26 +1184,19 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 		const typedEffect = (effect as IPassiveEffect);
 		let value = 0;
-		let requireHpAbove = false;
-		let hpThreshold = 0;
+		let thresholdInfo: IThresholdActivationInfo;
 
 		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
-			const [rawValue, rawHpThreshold, rawRequireHpAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+			const [rawValue, rawThreshold, rawRequireAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
 			value = parseNumberOrDefault(rawValue);
-			requireHpAbove = rawRequireHpAboveFlag === '1';
-			hpThreshold = parseNumberOrDefault(rawHpThreshold);
+			thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag);
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
 		} else {
 			value = parseNumberOrDefault(typedEffect['target% chance'] as string);
-			if ('hp above % buff requirement' in typedEffect) {
-				hpThreshold = parseNumberOrDefault(typedEffect['hp above % buff requirement'] as string);
-				requireHpAbove = true;
-			} else {
-				hpThreshold = parseNumberOrDefault(typedEffect['hp below % buff requirement'] as string);
-				requireHpAbove = false;
-			}
+			// TODO: change to be "passive requirement"
+			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.Hp);
 		}
 
 		const results: IBuff[] = [];
@@ -1188,15 +1209,8 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 				conditions: { ...conditionInfo },
 				...targetData,
 			};
-
-			// disabling no-non-null-assertion rule because `conditions` property is defined above
-			/* eslint-disable @typescript-eslint/no-non-null-assertion */
-			if (requireHpAbove) {
-				entry.conditions!.hpGreaterThanOrEqualTo = hpThreshold;
-			} else {
-				entry.conditions!.hpLessThanOrEqualTo = hpThreshold;
-			}
-			/* eslint-enable @typescript-eslint/no-non-null-assertion */
+			thresholdInfo.type = ThresholdType.Hp;
+			applyThresholdValuesToBuff(entry, thresholdInfo);
 
 			results.push(entry);
 		}
