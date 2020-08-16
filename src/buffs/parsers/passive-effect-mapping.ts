@@ -146,32 +146,26 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		return { threshold, requireAbove };
 	};
 
-	const applyThresholdValuesToBuff = (buff: IBuff, { threshold, requireAbove, type }: IThresholdActivationInfo): void => {
+	const getThresholdConditions = ({ threshold, requireAbove, type }: IThresholdActivationInfo): IBuffConditions | undefined => {
+		let conditions: IBuffConditions | undefined;
 		switch (type) {
 			case ThresholdType.Hp:
-				if (!buff.conditions) {
-					buff.conditions = {};
-				}
-
 				if (requireAbove) {
-					buff.conditions.hpGreaterThanOrEqualTo = threshold;
+					conditions = { hpGreaterThanOrEqualTo: threshold };
 				} else {
-					buff.conditions.hpLessThanOrEqualTo = threshold;
+					conditions = { hpLessThanOrEqualTo: threshold };
 				}
 				break;
 			case ThresholdType.Bb:
-				if (!buff.conditions) {
-					buff.conditions = {};
-				}
-
 				if (requireAbove) {
-					buff.conditions.bbGaugeGreaterThanOrEqualTo = threshold;
+					conditions = { bbGaugeGreaterThanOrEqualTo: threshold };
 				} else {
-					buff.conditions.bbGaugeLessThanOrEqualTo = threshold;
+					conditions = { bbGaugeLessThanOrEqualTo: threshold };
 				}
 				break;
 			default: break;
 		}
+		return conditions;
 	};
 
 	interface ITemplatedParsingFunctionContext {
@@ -672,6 +666,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}
 
 		thresholdInfo.type = ThresholdType.Hp;
+		const thresholdConditions = getThresholdConditions(thresholdInfo);
 		STATS_ORDER.forEach((stat) => {
 			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec' | 'crit']);
 			if (stat !== 'hp' && value !== 0) {
@@ -680,10 +675,9 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 					originalId: '11',
 					sources,
 					value,
-					conditions: { ...conditionInfo },
+					conditions: { ...conditionInfo, ...thresholdConditions },
 					...targetData,
 				};
-				applyThresholdValuesToBuff(entry, thresholdInfo);
 
 				results.push(entry);
 			}
@@ -734,6 +728,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}
 
 		thresholdInfo.type = ThresholdType.Hp;
+		const thresholdConditions = getThresholdConditions(thresholdInfo);
 		DROP_TYPES_ORDER.forEach((dropType) => {
 			const value = parseNumberOrDefault(dropRates[dropType]);
 			if (value !== 0) {
@@ -742,10 +737,9 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 					originalId: '12',
 					sources,
 					value,
-					conditions: { ...conditionInfo },
+					conditions: { ...conditionInfo, ...thresholdConditions },
 					...targetData,
 				};
-				applyThresholdValuesToBuff(entry, thresholdInfo);
 
 				results.push(entry);
 			}
@@ -1201,16 +1195,16 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		const results: IBuff[] = [];
 		if (value !== 0) {
+			thresholdInfo.type = ThresholdType.Hp;
+			const thresholdConditions = getThresholdConditions(thresholdInfo);
 			const entry: IBuff = {
 				id: 'passive:28',
 				originalId: '28',
 				sources,
 				value,
-				conditions: { ...conditionInfo },
+				conditions: { ...conditionInfo, ...thresholdConditions },
 				...targetData,
 			};
-			thresholdInfo.type = ThresholdType.Hp;
-			applyThresholdValuesToBuff(entry, thresholdInfo);
 
 			results.push(entry);
 		}
