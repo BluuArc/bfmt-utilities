@@ -541,6 +541,38 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 31 buffs', () => {
+		describe('passive:31:damage', () => {
+			testDefaultIconResult(BuffId['passive:31:damage'], [IconId.BUFF_SPARKUP]);
+			testIconResultWithBuff(BuffId['passive:31:damage'], [IconId.BUFF_SPARKDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:31:bc', () => {
+			testDefaultIconResult(BuffId['passive:31:bc'], [IconId.BUFF_SPARKBC]);
+			testIconResultWithBuff(BuffId['passive:31:bc'], [IconId.BUFF_BCDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:31:hc', () => {
+			testDefaultIconResult(BuffId['passive:31:hc'], [IconId.BUFF_SPARKHC]);
+			testIconResultWithBuff(BuffId['passive:31:hc'], [IconId.BUFF_HCDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:31:item', () => {
+			testDefaultIconResult(BuffId['passive:31:item'], [IconId.BUFF_SPARKITEM]);
+			testIconResultWithBuff(BuffId['passive:31:item'], [IconId.BUFF_ITEMDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:31:zel', () => {
+			testDefaultIconResult(BuffId['passive:31:zel'], [IconId.BUFF_SPARKZEL]);
+			testIconResultWithBuff(BuffId['passive:31:zel'], [IconId.BUFF_ZELDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:31:karma', () => {
+			testDefaultIconResult(BuffId['passive:31:karma'], [IconId.BUFF_SPARKKARMA]);
+			testIconResultWithBuff(BuffId['passive:31:karma'], [IconId.BUFF_KARMADOWN], { value: -1 }, 'buff value is less than 0');
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
@@ -945,6 +977,7 @@ describe('BUFF_METADATA entries', () => {
 
 	describe('proc:23', () => {
 		testDefaultIconResult(BuffId['proc:23'], [IconId.BUFF_SPARKUP]);
+		testIconResultWithBuff(BuffId['proc:23'], [IconId.BUFF_SPARKDOWN], { value: -1 }, 'buff value is less than 0');
 	});
 
 	describe('proc 24 buffs', () => {

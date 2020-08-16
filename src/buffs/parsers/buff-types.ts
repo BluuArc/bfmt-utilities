@@ -584,6 +584,13 @@ export enum IconId {
 	BUFF_IGNOREDEF = 'BUFF_IGNOREDEF',
 
 	BUFF_SPARKUP = 'BUFF_SPARKUP',
+	BUFF_SPARKDOWN = 'BUFF_SPARKDOWN',
+
+	BUFF_SPARKHC = 'BUFF_SPARKHC',
+	BUFF_SPARKBC = 'BUFF_SPARKBC',
+	BUFF_SPARKITEM = 'BUFF_SPARKITEM',
+	BUFF_SPARKZEL = 'BUFF_SPARKZEL',
+	BUFF_SPARKKARMA = 'BUFF_SPARKKARMA',
 
 	BUFF_HITUP = 'BUFF_HITUP',
 
@@ -713,6 +720,13 @@ export enum BuffId {
 	'passive:30:def' = 'passive:30:def',
 	'passive:30:rec' = 'passive:30:rec',
 	'passive:30:crit' = 'passive:30:crit',
+
+	'passive:31:damage' = 'passive:31:damage',
+	'passive:31:bc' = 'passive:31:bc',
+	'passive:31:hc' = 'passive:31:hc',
+	'passive:31:item' = 'passive:31:item',
+	'passive:31:zel' = 'passive:31:zel',
+	'passive:31:karma' = 'passive:31:karma',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

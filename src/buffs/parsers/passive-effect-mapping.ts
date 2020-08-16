@@ -68,9 +68,11 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 	type AlphaNumeric = string | number;
 	type CoreStat = 'hp' | 'atk' | 'def' | 'rec' | 'crit';
+	type DropType = 'bc' | 'hc' | 'item' | 'zel' | 'karma';
 
 	const STATS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
 	const AILMENTS_ORDER = ['poison', 'weak', 'sick', 'injury', 'curse', 'paralysis'];
+	const DROP_TYPES_ORDER: DropType[] = ['bc', 'hc', 'item', 'zel', 'karma'];
 
 	const retrieveCommonInfoForEffects = (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext) => {
 		const conditionInfo = ((injectionContext && injectionContext.processExtraSkillConditions) || processExtraSkillConditions)(effect as ExtraSkillPassiveEffect);
@@ -695,8 +697,6 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	map.set('12', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
 		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
-		type DropType = 'bc' | 'hc' | 'item' | 'zel' | 'karma';
-		const DROP_TYPES_ORDER: DropType[] = ['bc', 'hc', 'item', 'zel', 'karma'];
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
 		const dropRates = {
@@ -890,8 +890,6 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	map.set('19', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
 		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
-		type DropType = 'bc' | 'hc' | 'item' | 'zel' | 'karma';
-		const DROP_TYPES_ORDER: DropType[] = ['bc', 'hc', 'item', 'zel', 'karma'];
 		const typedEffect = (effect as IPassiveEffect);
 		const results: IBuff[] = [];
 		const dropRates = {
@@ -1277,6 +1275,72 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		if (unknownParams) {
 			results.push(createUnknownParamsEntry(unknownParams, {
 				originalId: '30',
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+
+		return results;
+	});
+
+	map.set('31', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const dropRates = {
+			bc: '0' as AlphaNumeric,
+			hc: '0' as AlphaNumeric,
+			item: '0' as AlphaNumeric,
+			zel: '0' as AlphaNumeric,
+			karma: '0' as AlphaNumeric,
+		};
+		let sparkDamageBoost = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			let rawSparkDamageBoost: string;
+			[rawSparkDamageBoost, dropRates.bc, dropRates.hc, dropRates.item, dropRates.zel, dropRates.karma, ...extraParams] = splitEffectParams(typedEffect);
+			sparkDamageBoost = parseNumberOrDefault(rawSparkDamageBoost);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+		} else {
+			sparkDamageBoost = parseNumberOrDefault(typedEffect['damage% for spark'] as string);
+			DROP_TYPES_ORDER.forEach((dropType) => {
+				dropRates[dropType] = (typedEffect[`${dropType} drop% for spark`] as string);
+			});
+		}
+
+		const results: IBuff[] = [];
+		if (sparkDamageBoost !== 0) {
+			results.push({
+				id: 'passive:31:damage',
+				originalId: '31',
+				sources,
+				value: sparkDamageBoost,
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		DROP_TYPES_ORDER.forEach((dropType) => {
+			const value = parseNumberOrDefault(dropRates[dropType]);
+			if (value !== 0) {
+				results.push({
+					id: `passive:31:${dropType}`,
+					originalId: '31',
+					sources,
+					value,
+					conditions: { ...conditionInfo },
+					...targetData,
+				});
+			}
+		});
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId: '31',
 				sources,
 				targetData,
 				conditionInfo,
