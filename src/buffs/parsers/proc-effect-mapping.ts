@@ -71,19 +71,15 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const splitEffectParams = (effect: ProcEffect): string[] => effect.params!.split(',');
 
-	interface IUnknownParamsContext {
+	interface IBaseLocalParamsContext {
 		originalId: string;
 		sources: string[];
-		targetData: ITargetData;
-		effectDelay: string;
+		targetData?: ITargetData;
 	}
 
-	interface ITurnDurationContext {
-		originalId: string;
-		sources: string[];
+	interface IUnknownParamsContext extends IBaseLocalParamsContext {
+		effectDelay: string;
 		targetData: ITargetData;
-		buffs: (string | BuffId)[],
-		duration: number,
 	}
 
 	const createUnknownParamsEntry = (
@@ -103,6 +99,11 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		...targetData,
 	});
 
+	interface ITurnDurationContext extends IBaseLocalParamsContext {
+		buffs: (string | BuffId)[];
+		duration: number;
+	}
+
 	const createTurnDurationEntry = (
 		{
 			originalId,
@@ -120,6 +121,17 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			duration: duration,
 		},
 		...targetData,
+	});
+
+	const createNoParamsEntry = (
+		{
+			originalId,
+			sources,
+		}: IBaseLocalParamsContext,
+	): IBuff => ({
+		id: BuffId.NO_PARAMS_SPECIFIED,
+		originalId,
+		sources,
 	});
 
 	const createUnknownParamsEntryFromExtraParams = (extraParams: string[], startIndex: number, injectionContext?: IProcBuffProcessingInjectionContext): IGenericBuffValue | undefined => {
@@ -229,6 +241,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	};
 
 	map.set('1', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '1';
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const { hits, distribution } = getAttackInformationFromContext(context);
@@ -263,22 +276,27 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				return acc;
 			}, {});
 
-		const results: IBuff[] = [{
-			id: 'proc:1',
-			originalId: '1',
-			sources,
-			effectDelay,
-			value: {
-				...filteredValue,
-				hits,
-				distribution,
-			},
-			...targetData,
-		}];
+		const results: IBuff[] = [];
+		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+			results.push({
+				id: 'proc:1',
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					...filteredValue,
+					hits,
+					distribution,
+				},
+				...targetData,
+			});
+		} else {
+			results.push(createNoParamsEntry({ originalId, sources }));
+		}
 
 		if (unknownParams) {
 			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId: '1',
+				originalId,
 				sources,
 				targetData,
 				effectDelay,
@@ -289,6 +307,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	});
 
 	map.set('2', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '2';
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const params = {
@@ -316,18 +335,23 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			params[key as 'healLow' | 'healHigh' | 'healerRec%'] = parseNumberOrDefault(params[key as 'healLow' | 'healHigh' | 'healerRec%']);
 		});
 
-		const results: IBuff[] = [{
-			id: 'proc:2',
-			originalId: '2',
-			sources,
-			effectDelay,
-			value: params,
-			...targetData,
-		}];
+		const results: IBuff[] = [];
+		if (params.healHigh !== 0 || params.healLow !== 0) {
+			results.push({
+				id: 'proc:2',
+				originalId,
+				sources,
+				effectDelay,
+				value: params,
+				...targetData,
+			});
+		} else {
+			results.push(createNoParamsEntry({ originalId, sources }));
+		}
 
 		if (unknownParams) {
 			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId: '2',
+				originalId,
 				sources,
 				targetData,
 				effectDelay,

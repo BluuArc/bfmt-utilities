@@ -40,19 +40,23 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('TURN_DURATION_MODIFICATION', () => {
+		testDefaultIconResult(BuffId.TURN_DURATION_MODIFICATION, [IconId.TURN_DURATION_UP]);
+		testIconResultWithBuff(BuffId.TURN_DURATION_MODIFICATION, [IconId.TURN_DURATION_UP], {}, 'no value property is given');
+		testIconResultWithBuff(BuffId.TURN_DURATION_MODIFICATION, [IconId.TURN_DURATION_UP], { value: {} }, 'value property exists but no duration value is given');
+		testIconResultWithBuff(BuffId.TURN_DURATION_MODIFICATION, [IconId.TURN_DURATION_DOWN], { value: { duration: -1 } }, 'buff duration value is less than 0');
+	});
+
+	describe('NO_PARAMS_SPECIFIED', () => {
+		testDefaultIconResult(BuffId.NO_PARAMS_SPECIFIED, [IconId.UNKNOWN]);
+	});
+
 	describe('UNKNOWN_PASSIVE_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PASSIVE_EFFECT_ID, [IconId.UNKNOWN]);
 	});
 
 	describe('UNKNOWN_PASSIVE_BUFF_PARAMS', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS, [IconId.UNKNOWN]);
-	});
-
-	describe('TURN_DURATION_MODIFICATION', () => {
-		testDefaultIconResult(BuffId.TURN_DURATION_MODIFICATION, [IconId.TURN_DURATION_UP]);
-		testIconResultWithBuff(BuffId.TURN_DURATION_MODIFICATION, [IconId.TURN_DURATION_UP], {}, 'no value property is given');
-		testIconResultWithBuff(BuffId.TURN_DURATION_MODIFICATION, [IconId.TURN_DURATION_UP], { value: {} }, 'value property exists but no duration value is given');
-		testIconResultWithBuff(BuffId.TURN_DURATION_MODIFICATION, [IconId.TURN_DURATION_DOWN], { value: { duration: -1 } }, 'buff duration value is less than 0');
 	});
 
 	describe('passive 1 buffs', () => {

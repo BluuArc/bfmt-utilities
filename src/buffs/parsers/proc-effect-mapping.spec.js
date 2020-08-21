@@ -119,6 +119,15 @@ describe('getProcEffectToBuffMapping method', () => {
 			expect(hasAnyChecks).toBeTrue(); // ensure that this checker function is called correctly
 		};
 
+		const expectNoParamsBuffWithEffectAndContext = ({ effect, context }) => {
+			const expectedResult = [baseBuffFactory({
+				id: BuffId.NO_PARAMS_SPECIFIED,
+			}, [EFFECT_DELAY_BUFF_PROP, ...BUFF_TARGET_PROPS])];
+
+			const result = mappingFunction(effect, context);
+			expect(result).toEqual(expectedResult);
+		};
+
 		/**
 		 * @param {import('./buff-types').IEffectToBuffConversionContext} params
 		 * @returns {import('./buff-types').IEffectToBuffConversionContext}
@@ -269,18 +278,8 @@ describe('getProcEffectToBuffMapping method', () => {
 						buff.targetArea = expectedTargetArea;
 					}
 				};
-				it('defaults to 0 for hits and distribution if context.damageFrames does not exist', () => {
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							hits: 0,
-							distribution: 0,
-						},
-					})];
-					applyTargetAreaAsNeeded(expectedResult[0]);
-
-					const result = mappingFunction(createArbitraryBaseEffect(), createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+				it('returns a no params buff if context.damageFrames does not exist and no other parameters are specified', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: createArbitraryBaseEffect(), context: createArbitraryContext() });
 				});
 
 				if (testHits) {
@@ -583,12 +582,12 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
-				const effect = createArbitraryBaseEffect({ params: '0,0,0,0,0,0,123' });
+				const effect = createArbitraryBaseEffect({ params: '0,1,0,0,0,0,123' });
 				const expectedResult = [
 					baseBuffFactory({
 						id: expectedBuffId,
 						sources: arbitrarySourceValue,
-						value: { hits: 0, distribution: 0 },
+						value: { flatAtk: 1, hits: 0, distribution: 0 },
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 					baseBuffFactory({
@@ -733,6 +732,11 @@ describe('getProcEffectToBuffMapping method', () => {
 					});
 				});
 
+				it('returns a no params buff when no parameters are given', () => {
+					const effect = createArbitraryBaseEffect();
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
 				it('defaults all effect properties to 0 for non-number values', () => {
 					const valuesInEffect = Object.keys(effectPropToResultPropMapping)
 						.reduce((acc, prop) => {
@@ -740,44 +744,24 @@ describe('getProcEffectToBuffMapping method', () => {
 							return acc;
 						}, {});
 					const effect = createArbitraryBaseEffect(valuesInEffect);
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							healLow: 0,
-							healHigh: 0,
-							'healerRec%': 0,
-						},
-					})];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 
 				it('defaults values for effect params to 0 if they are non-number or missing', () => {
 					const effect = createArbitraryBaseEffect({ params: 'non-number' });
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							healLow: 0,
-							healHigh: 0,
-							'healerRec%': 10,
-						},
-					})];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = createArbitraryBaseEffect({
-					params: `0,0,${arbitraryRecX},${arbitraryRecY},123`,
+					params: `0,1,${arbitraryRecX},${arbitraryRecY},123`,
 				});
 				const expectedResult = [
 					baseBuffFactory({
 						id: expectedBuffId,
 						sources: arbitrarySourceValue,
-						value: { healHigh: 0, healLow: 0, 'healerRec%': expectedRecAddedForArbitraryValues },
+						value: { healHigh: 1, healLow: 0, 'healerRec%': expectedRecAddedForArbitraryValues },
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 					baseBuffFactory({

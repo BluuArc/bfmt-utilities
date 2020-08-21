@@ -32,6 +32,23 @@ export interface IBuffMetadata {
 }
 
 export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.freeze({
+	'TURN_DURATION_MODIFICATION': {
+		id: BuffId.TURN_DURATION_MODIFICATION,
+		name: 'Passive Turn Duration Modification',
+		stat: UnitStat.turnDurationModification,
+		stackType: BuffStackType.Passive,
+		icons: (buff: IBuff) => [
+			(buff && buff.value &&
+				(buff.value as { duration?: number }).duration &&
+				(buff.value as { duration: number }).duration < 0) ?
+				IconId.TURN_DURATION_DOWN : IconId.TURN_DURATION_UP],
+	},
+	'NO_PARAMS_SPECIFIED': {
+		id: BuffId.NO_PARAMS_SPECIFIED,
+		name: 'No Parameters Specified',
+		stackType: BuffStackType.Unknown,
+		icons: () => [IconId.UNKNOWN],
+	},
 	'UNKNOWN_PASSIVE_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PASSIVE_EFFECT_ID,
 		name: 'Unknown Passive Effect',
@@ -43,17 +60,6 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		name: 'Unknown Passive Buff Parameters',
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
-	},
-	'TURN_DURATION_MODIFICATION': {
-		id: BuffId.TURN_DURATION_MODIFICATION,
-		name: 'Passive Turn Duration Modification',
-		stat: UnitStat.turnDurationModification,
-		stackType: BuffStackType.Passive,
-		icons: (buff: IBuff) => [
-			(buff && buff.value &&
-				(buff.value as { duration?: number }).duration &&
-				(buff.value as { duration: number }).duration < 0) ?
-				IconId.TURN_DURATION_DOWN : IconId.TURN_DURATION_UP],
 	},
 	'passive:1:hp': {
 		id: BuffId['passive:1:hp'],
