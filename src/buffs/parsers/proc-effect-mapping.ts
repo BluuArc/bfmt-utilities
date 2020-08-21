@@ -362,6 +362,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	});
 
 	map.set('3', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '3';
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const params = {
@@ -396,7 +397,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		if (hasAnyHealValues) {
 			results.push({
 				id: 'proc:3',
-				originalId: '3',
+				originalId,
 				sources,
 				effectDelay,
 				duration: params.turnDuration as number,
@@ -409,17 +410,19 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			});
 		} else if (isTurnDurationBuff(context, params.turnDuration as number, injectionContext)) {
 			results.push(createTurnDurationEntry({
-				originalId: '3',
+				originalId,
 				sources,
 				buffs: ['proc:3'],
 				duration: params.turnDuration as number,
 				targetData,
 			}));
+		} else {
+			results.push(createNoParamsEntry({ originalId, sources }));
 		}
 
 		if (unknownParams) {
 			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId: '3',
+				originalId,
 				sources,
 				targetData,
 				effectDelay,

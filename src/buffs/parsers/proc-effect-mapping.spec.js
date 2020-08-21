@@ -119,12 +119,15 @@ describe('getProcEffectToBuffMapping method', () => {
 			expect(hasAnyChecks).toBeTrue(); // ensure that this checker function is called correctly
 		};
 
-		const expectNoParamsBuffWithEffectAndContext = ({ effect, context }) => {
+		const expectNoParamsBuffWithEffectAndContext = ({ effect, context, injectionContext, expectedSources }) => {
 			const expectedResult = [baseBuffFactory({
 				id: BuffId.NO_PARAMS_SPECIFIED,
 			}, [EFFECT_DELAY_BUFF_PROP, ...BUFF_TARGET_PROPS])];
+			if (expectedSources) {
+				expectedResult[0].sources = expectedSources;
+			}
 
-			const result = mappingFunction(effect, context);
+			const result = mappingFunction(effect, context, injectionContext);
 			expect(result).toEqual(expectedResult);
 		};
 
@@ -223,35 +226,27 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('returns nothing if turn duration is non-zero and source is of burst type', () => {
+			it('returns a no params buff if turn duration is non-zero and source is of burst type', () => {
 				const params = createParamsWithZeroValueAndTurnDuration(arbitraryTurnDuration);
 				const effect = createArbitraryBaseEffect({ params });
 				const context = createArbitraryContext({ source: arbitraryBuffSourceOfBurstType });
-				const expectedResult = [];
-
-				const result = mappingFunction(effect, context);
-				expect(result).toEqual(expectedResult);
+				expectNoParamsBuffWithEffectAndContext({ effect, context, expectedSources: [`${arbitraryBuffSourceOfBurstType}-arbitrary source id`] });
 			});
 
-			it('returns nothing if turn duration is 0', () => {
+			it('returns a no params buff if turn duration is 0', () => {
 				const params = createParamsWithZeroValueAndTurnDuration(0);
 				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses buffSourceIsBurstType for checking whether source type is burst', () => {
 				const params = createParamsWithZeroValueAndTurnDuration(1);
 				const effect = createArbitraryBaseEffect({ params });
 				const context = createArbitraryContext({ source: arbitraryBuffSourceOfBurstType });
-				const expectedResult = [];
 
 				const injectionContext = createDefaultInjectionContext();
 				injectionContext.createUnknownParamsValue = null;
-				const result = mappingFunction(effect, context, injectionContext);
-				expect(result).toEqual(expectedResult);
+				expectNoParamsBuffWithEffectAndContext({ effect, context, injectionContext, expectedSources: arbitrarySourceValue });
 				expectDefaultInjectionContext({ injectionContext, buffSourceIsBurstTypeArgs: [arbitraryBuffSourceOfBurstType] });
 			});
 		};
@@ -917,7 +912,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					});
 				});
 
-				it('returns nothing if all effect properties are non-number values', () => {
+				it('returns a no params buff when all effect properties are non-number values', () => {
 					const valuesInEffect = Object.keys(effectPropToResultPropMapping)
 						.reduce((acc, prop) => {
 							acc[prop] = 'not a number';
@@ -927,18 +922,12 @@ describe('getProcEffectToBuffMapping method', () => {
 						...valuesInEffect,
 						[EFFECT_TURN_DURATION_KEY]: 'not a number',
 					});
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 
-				it('returns nothing if they effect params are non-number or missing', () => {
+				it('returns a no params buff when the effect params are non-number or missing', () => {
 					const effect = createArbitraryBaseEffect({ params: 'non-number' });
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
