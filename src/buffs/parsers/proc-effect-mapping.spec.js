@@ -233,7 +233,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectNoParamsBuffWithEffectAndContext({ effect, context, expectedSources: [`${arbitraryBuffSourceOfBurstType}-arbitrary source id`] });
 			});
 
-			it('returns a no params buff if turn duration is 0', () => {
+			it('returns a no params buff if turn duration is 0', () => { // basically tests when no params are given
 				const params = createParamsWithZeroValueAndTurnDuration(0);
 				const effect = createArbitraryBaseEffect({ params });
 				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
@@ -306,17 +306,22 @@ describe('getProcEffectToBuffMapping method', () => {
 						expectedFinalHits = arbitraryHitCount;
 					}
 					const context = createArbitraryContext({ damageFrames });
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							hits: expectedFinalHits,
-							distribution: 0,
-						},
-					})];
-					applyTargetAreaAsNeeded(expectedResult[0]);
+					if (testHits) {
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							value: {
+								hits: expectedFinalHits,
+								distribution: 0,
+							},
+						})];
+						applyTargetAreaAsNeeded(expectedResult[0]);
 
-					const result = mappingFunction(createArbitraryBaseEffect(), context);
-					expect(result).toEqual(expectedResult);
+						const result = mappingFunction(createArbitraryBaseEffect(), context);
+						expect(result).toEqual(expectedResult);
+					} else {
+						// buff gets hit value from elseewhere, so specifying only hits is identical to specifying nothing for damage frames
+						expectNoParamsBuffWithEffectAndContext({ effect: createArbitraryBaseEffect(), context });
+					}
 				});
 			});
 		};
@@ -1511,12 +1516,9 @@ describe('getProcEffectToBuffMapping method', () => {
 						});
 					});
 
-				it('returns nothing if they effect params are non-number or missing', () => {
+				it('returns a no params buff if the effect params are non-number or missing', () => {
 					const effect = createArbitraryBaseEffect({ params: 'non-number' });
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
@@ -1798,15 +1800,17 @@ describe('getProcEffectToBuffMapping method', () => {
 					expect(result).toEqual(expectedResult);
 				});
 
+				it('returns a no params buff when no parameters are given', () => {
+					const effect = createArbitraryBaseEffect();
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
 				it('defaults all effect properties to 0 for non-number values', () => {
 					const effect = createArbitraryBaseEffect({
 						[FLAT_FILL_KEY]: 'not a number',
 						[PERCENT_FILL_KEY]: 'not a number',
 					});
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
@@ -2285,13 +2289,10 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('returns nothing if all params are 0', () => {
+			it('returns a no params buff if all params are 0', () => {
 				const params = new Array(8).fill('0').join(',');
 				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
@@ -2475,13 +2476,10 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('returns nothing if all params are 0', () => {
+			it('returns a no params buff if all params are 0', () => {
 				const params = new Array(8).fill('0').join(',');
 				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = [];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
@@ -2744,12 +2742,12 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
-				const effect = createArbitraryBaseEffect({ params: '0,0,0,0,0,0,123' });
+				const effect = createArbitraryBaseEffect({ params: '0,1,0,0,0,0,123' });
 				const expectedResult = [
 					baseBuffFactory({
 						id: expectedBuffId,
 						sources: arbitrarySourceValue,
-						value: { hits: 0, distribution: 0 },
+						value: { flatAtk: 1, hits: 0, distribution: 0 },
 						targetType: undefined,
 						targetArea: expectedTargetArea,
 					}),
@@ -2907,12 +2905,12 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
-				const effect = createArbitraryBaseEffect({ params: '0,0,0,0,0,0,0,0,123' });
+				const effect = createArbitraryBaseEffect({ params: '0,1,0,0,0,0,0,0,123' });
 				const expectedResult = [
 					baseBuffFactory({
 						id: expectedBuffId,
 						sources: arbitrarySourceValue,
-						value: { hits: 0, distribution: 0 },
+						value: { flatAtk: 1, hits: 0, distribution: 0 },
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 					baseBuffFactory({
@@ -3412,7 +3410,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					});
 				});
 
-				it('returns nothing if all effect properties are non-number values', () => {
+				it('returns a no params buff if all effect properties are non-number values', () => {
 					const valuesInEffect = Object.keys(effectPropToResultPropMapping)
 						.reduce((acc, prop) => {
 							acc[prop] = 'not a number';
@@ -3422,18 +3420,12 @@ describe('getProcEffectToBuffMapping method', () => {
 						...valuesInEffect,
 						[EFFECT_TURN_DURATION_KEY]: 'not a number',
 					});
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 
-				it('returns nothing if they effect params are non-number or missing', () => {
+				it('returns a no params buff if they effect params are non-number or missing', () => {
 					const effect = createArbitraryBaseEffect({ params: 'non-number' });
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
@@ -4017,7 +4009,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					});
 				});
 
-				it('returns nothing if all effect properties are non-number values', () => {
+				it('returns a no params buff if all effect properties are non-number values', () => {
 					const valuesInEffect = Object.keys(effectPropToResultPropMapping)
 						.reduce((acc, prop) => {
 							acc[prop] = 'not a number';
@@ -4027,18 +4019,12 @@ describe('getProcEffectToBuffMapping method', () => {
 						...valuesInEffect,
 						[effectTurnDurationKey]: 'not a number',
 					});
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 
-				it('returns nothing if they effect params are non-number or missing', () => {
+				it('returns a no params buff if they effect params are non-number or missing', () => {
 					const effect = createArbitraryBaseEffect({ params: 'non-number' });
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
@@ -4212,12 +4198,12 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
-				const effect = createArbitraryBaseEffect({ params: '0,0,0,0,0,0,0,0,0,123' });
+				const effect = createArbitraryBaseEffect({ params: '0,0,0,0,1,0,0,0,0,123' });
 				const expectedResult = [
 					baseBuffFactory({
 						id: expectedBuffId,
 						sources: arbitrarySourceValue,
-						value: { hits: 0, distribution: 0 },
+						value: { flatAtk: 1, hits: 0, distribution: 0 },
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 					baseBuffFactory({
@@ -4324,12 +4310,12 @@ describe('getProcEffectToBuffMapping method', () => {
 			testMissingDamageFramesScenarios({ expectedBuffId });
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
-				const effect = createArbitraryBaseEffect({ params: '0,123' });
+				const effect = createArbitraryBaseEffect({ params: '1,123' });
 				const expectedResult = [
 					baseBuffFactory({
 						id: expectedBuffId,
 						sources: arbitrarySourceValue,
-						value: { hits: 0, distribution: 0 },
+						value: { value: 1, hits: 0, distribution: 0 },
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 					baseBuffFactory({
@@ -4522,28 +4508,24 @@ describe('getProcEffectToBuffMapping method', () => {
 					expect(result).toEqual(expectedResult);
 				});
 
+				it('returns a no params buff when no parameters are given', () => {
+					const effect = createArbitraryBaseEffect();
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
 				it('does not parse effect["bb elements"] if it is not an array and params property does not exist', () => {
 					const effect = createArbitraryBaseEffect({ 'bb elements': 'not an array' });
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							hits: 0,
-							distribution: 0,
-						},
-					})];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
-				const effect = createArbitraryBaseEffect({ params: '0,0,0,0,0,0,0,0,0,123' });
+				const effect = createArbitraryBaseEffect({ params: '0,0,0,0,1,0,0,0,0,123' });
 				const expectedResult = [
 					baseBuffFactory({
 						id: expectedBuffId,
 						sources: arbitrarySourceValue,
-						value: { hits: 0, distribution: 0 },
+						value: { flatAtk: 1, hits: 0, distribution: 0 },
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 					baseBuffFactory({
@@ -4713,14 +4695,11 @@ describe('getProcEffectToBuffMapping method', () => {
 					expect(result).toEqual(expectedResult);
 				});
 
-				it('returns nothing when params property does not exist and effect["elements added"] property is not defined and turn duration is 0', () => {
+				it('returns a no params buff when params property does not exist and effect["elements added"] property is not defined and turn duration is 0', () => {
 					const effect = createArbitraryBaseEffect({
 						[effectTurnDurationKey]: 0,
 					});
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
