@@ -219,12 +219,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('returns no values if parsed value from params is zero', () => {
-				const effect = { params: '0' };
-				const expectedResult = [];
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
 
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+			it('returns a no parmas buff if parsed value from params is zero', () => {
+				const effect = { params: '0' };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
@@ -425,40 +426,39 @@ describe('getPassiveEffectToBuffMapping method', () => {
 							acc[prop] = 'not a number';
 							return acc;
 						}, {});
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							[buffKeyLow]: 0,
-							[buffKeyHigh]: 0,
-							chance: defaultEffectChance,
-						},
-					})];
-					applyBaseConditionsAsNeeded(expectedResult[0]);
+					if (defaultEffectChance === 0) {
+						expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+					} else {
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							value: {
+								[buffKeyLow]: 0,
+								[buffKeyHigh]: 0,
+								chance: defaultEffectChance,
+							},
+						})];
+						applyBaseConditionsAsNeeded(expectedResult[0]);
 
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					}
 				});
 
-				it('defaults values for effect params to 0 if they are non-number or missing', () => {
-					const effect = { params: 'non-number' };
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							[buffKeyLow]: 0,
-							[buffKeyHigh]: 0,
-							chance: 0,
-						},
-					})];
-					applyBaseConditionsAsNeeded(expectedResult[0]);
+				if (defaultEffectChance === 0) {
+					it('returns a no params buff when no parameters are given', () => {
+						expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+					});
 
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
-				});
+					it('defaults values for effect params to 0 if they are non-number or missing', () => {
+						const effect = { params: 'non-number' };
+						expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+					});
+				}
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = {
-					params: '0,0,0,789',
+					params: '0,0,1,789',
 				};
 				const expectedResult = [
 					baseBuffFactory({
@@ -467,7 +467,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						value: {
 							[buffKeyLow]: 0,
 							[buffKeyHigh]: 0,
-							chance: 0,
+							chance: 1,
 						},
 						conditions: {
 							...arbitraryConditionValue,
@@ -1004,6 +1004,18 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat) => {
+					acc[`${stat}% buff`] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = {
 					params: '0,0,0,0,0,456,789',
@@ -1114,6 +1126,18 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					const result = mappingFunction(effect, createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = AILMENTS_ORDER.reduce((acc, ailment) => {
+					acc[`${ailment !== 'weak' ? ailment : 'weaken'} resist%`] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
@@ -1236,12 +1260,9 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					expect(result).toEqual(expectedResult);
 				});
 
-				it(`returns no mitigation value for ${knownElementValue} when not given params property and value is zero`, () => {
+				it(`returns a no params buff for ${knownElementValue} when not given params property and value is zero`, () => {
 					const effect = { [`${knownElementValue} resist%`]: 0 };
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
@@ -1257,21 +1278,15 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('returns no mitigation value if parsed mitigation value from params is zero', () => {
+			it('returns a no params buff if parsed mitigation value from params is zero', () => {
 				const params = '3,0';
-				const expectedResult = [];
-
 				const effect = { params };
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
-			it('returns no mitigation value if no elemental value is found in effect without params', () => {
+			it('returns a no params buff if no elemental value is found in effect without params', () => {
 				const effect = { 'fake-element resist%': 123 };
-				const expectedResult = [];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
@@ -1447,13 +1462,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 			});
 
-			it('returns nothing if all stats are 0', () => {
-				const params = '0,0,0,0,2,1';
-				const expectedResult = [];
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
 
+			it('returns a no params buff if all stats are 0', () => {
+				const params = '0,0,0,0,2,1';
 				const effect = { params };
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
@@ -1608,13 +1624,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 			});
 
-			it('returns nothing if all rates are 0', () => {
-				const params = '0,0,0,0,0,2,1';
-				const expectedResult = [];
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
 
+			it('returns a no params buff if all rates are 0', () => {
+				const params = '0,0,0,0,0,2,1';
 				const effect = { params };
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
@@ -1778,49 +1795,35 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					});
 				});
 
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
 				it('defaults all effect properties to 0 for non-number values', () => {
 					const effect = Object.keys(effectPropToResultPropMapping)
 						.reduce((acc, prop) => {
 							acc[prop] = 'not a number';
 							return acc;
 						}, {});
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							value: 0,
-							chance: 0,
-						},
-					})];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 
 				it('defaults values for effect params to 0 if they are non-number or missing', () => {
 					const effect = { params: 'non-number' };
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							value: 0,
-							chance: 0,
-						},
-					})];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = {
-					params: '0,0,789',
+					params: '1,0,789',
 				};
 				const expectedResult = [
 					baseBuffFactory({
 						id: expectedBuffId,
 						sources: arbitrarySourceValue,
 						value: {
-							value: 0,
+							value: 1,
 							chance: 0,
 						},
 						conditions: arbitraryConditionValue,
@@ -1987,48 +1990,28 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					});
 				});
 
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
 				it('defaults all effect properties to 0 for non-number values', () => {
 					const effect = Object.keys(effectPropToResultPropMapping)
 						.reduce((acc, prop) => {
 							acc[prop] = 'not a number';
 							return acc;
 						}, {});
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							healLow: 0,
-							healHigh: 0,
-						},
-						conditions: {
-							onBattleWin: true,
-						},
-					})];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 
 				it('defaults values for effect params to 0 if they are non-number or missing', () => {
 					const effect = { params: 'non-number' };
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							healLow: 0,
-							healHigh: 0,
-						},
-						conditions: {
-							onBattleWin: true,
-						},
-					})];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = {
-					params: '0,0,789',
+					params: '0,1,789',
 				};
 				const expectedResult = [
 					baseBuffFactory({
@@ -2036,7 +2019,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						sources: arbitrarySourceValue,
 						value: {
 							healLow: 0,
-							healHigh: 0,
+							healHigh: 1,
 						},
 						conditions: {
 							...arbitraryConditionValue,
@@ -2164,6 +2147,18 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					const result = mappingFunction(effect, createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = DROP_TYPE_ORDER.reduce((acc, dropType) => {
+					acc[`${dropType} drop rate% buff`] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
@@ -2346,13 +2341,22 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('returns nothing if all params are 0', () => {
-				const params = new Array(8).fill('0').join(',');
-				const expectedResult = [];
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
 
+			it('returns a no params buff if all params are 0', () => {
+				const params = new Array(8).fill('0').join(',');
 				const effect = { params };
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = Object.values(AILMENT_EFFECT_KEY_MAPPING).reduce((acc, ailment) => {
+					acc[ailment] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
@@ -2489,6 +2493,29 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					const result = mappingFunction(effect, createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff if only turn duration is specified', () => {
+				const params = '0,0,0,0,123';
+				const effect = { params };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff if only turn duration is specified and params property does not exist', () => {
+				const effect = { [EFFECT_KEY_MAPPING.turnDuration]: 123 };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = Object.values(EFFECT_KEY_MAPPING).reduce((acc, prop) => {
+					acc[prop] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
@@ -2651,48 +2678,28 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					});
 				});
 
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
 				it('defaults all effect properties to 0 for non-number values', () => {
 					const effect = Object.keys(effectPropToResultPropMapping)
 						.reduce((acc, prop) => {
 							acc[prop] = 'not a number';
 							return acc;
 						}, {});
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							fillLow: 0,
-							fillHigh: 0,
-						},
-						conditions: {
-							onBattleWin: true,
-						},
-					})];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 
 				it('defaults values for effect params to 0 if they are non-number or missing', () => {
 					const effect = { params: 'non-number' };
-					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: {
-							fillLow: 0,
-							fillHigh: 0,
-						},
-						conditions: {
-							onBattleWin: true,
-						},
-					})];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = {
-					params: '0,0,789',
+					params: '0,100,789',
 				};
 				const expectedResult = [
 					baseBuffFactory({
@@ -2700,7 +2707,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						sources: arbitrarySourceValue,
 						value: {
 							fillLow: 0,
-							fillHigh: 0,
+							fillHigh: 1,
 						},
 						conditions: {
 							...arbitraryConditionValue,
@@ -2886,13 +2893,28 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 			});
 
-			it('returns nothing if target value is 0', () => {
-				const params = '0,2,1';
-				const expectedResult = [];
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
 
+			it('returns a no params buff if target value is 0', () => {
+				const params = '0,2,1';
 				const effect = { params };
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('defaults all parameters to 0 if they are non-number or missing', () => {
+				const params = 'not a number';
+				const effect = { params };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = {
+					'target% chance': 'not a number',
+					[hpAboveEffectKey]: 'not a number',
+				};
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
@@ -3055,13 +3077,28 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 			});
 
-			it('returns nothing if all stats are 0', () => {
-				const params = '0,0,0,0,2,1';
-				const expectedResult = [];
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
 
+			it('returns a no params buff if all stats are 0', () => {
+				const params = '0,0,0,0,2,1';
 				const effect = { params };
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('defaults all parameters to 0 if they are non-number or missing', () => {
+				const params = 'not a number';
+				const effect = { params };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number stat values', () => {
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat) => {
+					acc[`${stat}% buff`] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
@@ -3196,6 +3233,18 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					const result = mappingFunction(effect, createArbitraryContext());
 					expect(result).toEqual(expectedResult);
 				});
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number stat values', () => {
+				const effect = allParamTypes.reduce((acc, paramType) => {
+					acc[effectKeyMapping[paramType]] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
