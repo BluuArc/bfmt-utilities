@@ -453,6 +453,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	});
 
 	map.set('4', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '4';
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		let flatFill = 0;
@@ -461,7 +462,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		let unknownParams: IGenericBuffValue | undefined;
 		if (effect.params) {
 			const [rawFlatFill, rawPercentFill, ...extraParams] = splitEffectParams(effect);
-			flatFill = parseNumberOrDefault(rawFlatFill);
+			flatFill = parseNumberOrDefault(rawFlatFill) / 100;
 			percentFill = parseNumberOrDefault(rawPercentFill);
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
@@ -478,7 +479,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		if (flatFill !== 0) {
 			results.push({
 				id: 'proc:4:flat',
-				originalId: '4',
+				originalId,
 				sources,
 				effectDelay,
 				value: flatFill,
@@ -489,7 +490,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		if (percentFill !== 0) {
 			results.push({
 				id: 'proc:4:percent',
-				originalId: '4',
+				originalId,
 				sources,
 				effectDelay,
 				value: percentFill,
@@ -497,14 +498,12 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			});
 		}
 
-		if (unknownParams) {
-			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId: '4',
-				sources,
-				targetData,
-				effectDelay,
-			}));
-		}
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
 
 		return results;
 	});

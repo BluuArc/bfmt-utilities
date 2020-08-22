@@ -982,7 +982,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			testValidBuffIds([expectedFlatFillId, expectedPercentFillId]);
 
 			it('uses the params property when it exists', () => {
-				const params = '1,2';
+				const params = '100,2';
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
@@ -1000,7 +1000,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			it('returns a buff entry for extra parameters', () => {
-				const params = '1,2,3,4,5';
+				const params = '100,2,3,4,5';
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
@@ -1096,20 +1096,22 @@ describe('getProcEffectToBuffMapping method', () => {
 					expect(result).toEqual(expectedResult);
 				});
 
+				it('returns a no params buff when no parameters are given', () => {
+					const effect = createArbitraryBaseEffect();
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
 				it('defaults all effect properties to 0 for non-number values', () => {
 					const effect = createArbitraryBaseEffect({
 						[FLAT_FILL_KEY]: 'not a number',
 						[PERCENT_FILL_KEY]: 'not a number',
 					});
-					const expectedResult = [];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 			});
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
-				const effect = createArbitraryBaseEffect({ params: '1,2,123' });
+				const effect = createArbitraryBaseEffect({ params: '100,2,123' });
 				const expectedResult = [
 					baseBuffFactory({
 						id: expectedFlatFillId,
