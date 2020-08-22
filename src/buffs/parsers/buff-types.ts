@@ -234,6 +234,8 @@ export enum UnitStat {
 	targetingModification = 'targetingModification',
 
 	elementModification = 'elementModification',
+
+	buffStabilityModification = 'buffStabilityModification',
 }
 
 /**
@@ -303,6 +305,8 @@ export interface IUnitState {
 	targetingModification: IBuff[];
 
 	elementModification: IBuff[];
+
+	buffStabilityModification: IBuff[];
 }
 
 /**
@@ -620,6 +624,8 @@ export enum IconId {
 	BUFF_SHIFTDARK = 'BUFF_SHIFTDARK',
 	BUFF_SHIFTELEMENT = 'BUFF_SHIFTELEMENT',
 
+	BUFF_REMOVEBUFF = 'BUFF_REMOVEBUFF',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -848,4 +854,6 @@ export enum BuffId {
 	'proc:32:light' = 'proc:32:light',
 	'proc:32:dark' = 'proc:32:dark',
 	'proc:32:unknown' = 'proc:32:unknown',
+
+	'proc:33' = 'proc:33',
 }

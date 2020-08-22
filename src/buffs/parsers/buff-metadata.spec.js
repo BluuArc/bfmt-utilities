@@ -1100,4 +1100,8 @@ describe('BUFF_METADATA entries', () => {
 			testDefaultIconResult(BuffId['proc:32:unknown'], [IconId.BUFF_SHIFTELEMENT]);
 		});
 	});
+
+	describe('proc:33', () => {
+		testDefaultIconResult(BuffId['proc:33'], [IconId.BUFF_REMOVEBUFF]);
+	});
 });

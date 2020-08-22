@@ -1347,4 +1347,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_SHIFTELEMENT],
 	},
+	'proc:33': {
+		id: BuffId['proc:33'],
+		name: 'Buff Removal',
+		stat: UnitStat.buffStabilityModification,
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_REMOVEBUFF],
+	},
 });

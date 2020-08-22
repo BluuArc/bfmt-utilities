@@ -1023,14 +1023,12 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			...targetData,
 		}];
 
-		if (unknownParams) {
-			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId,
-				sources,
-				targetData,
-				effectDelay,
-			}));
-		}
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
 
 		return results;
 	});
@@ -1921,6 +1919,42 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				sources,
 				effectDelay,
 				value: true,
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
+
+	map.set('33', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '33';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let chance = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawValue, ...extraParams] = splitEffectParams(effect);
+			chance = parseNumberOrDefault(rawValue);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+		} else {
+			chance = parseNumberOrDefault(effect['clear buff chance%'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (chance !== 0) {
+			results.push({
+				id: 'proc:33',
+				originalId,
+				sources,
+				effectDelay,
+				value: chance,
 				...targetData,
 			});
 		}
