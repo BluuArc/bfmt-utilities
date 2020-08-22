@@ -86,11 +86,14 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const splitEffectParams = (effect: IPassiveEffect): string[] => effect.params!.split(',');
 
-	interface IUnknownParamsContext {
+	interface IBaseLocalParamsContext {
 		originalId: string;
 		sources: string[];
-		targetData: ITargetData;
+	}
+
+	interface IUnknownParamsContext extends IBaseLocalParamsContext {
 		conditionInfo: IBuffConditions;
+		targetData: ITargetData;
 	}
 
 	const createUnknownParamsEntry = (
@@ -109,6 +112,49 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		conditions: { ...conditionInfo },
 		...targetData,
 	});
+
+	const createNoParamsEntry = (
+		{
+			originalId,
+			sources,
+		}: IBaseLocalParamsContext,
+	): IBuff => ({
+		id: BuffId.NO_PARAMS_SPECIFIED,
+		originalId,
+		sources,
+	});
+
+	/**
+	 * @description Common checks that are run for most effects after the params have been parsed
+	 * into an array of {@link IBuff} but before said array is returned.
+	 * @param results List of buffs from the given effect.
+	 * @param unknownParams Any unknown parameters from the given effect.
+	 * @param parsingContext Extra metadata extracted from the given effect.
+	 * @returns {undefined} No value is returned, but it does update the `results` array.
+	 */
+	const handlePostParse = (
+		results: IBuff[],
+		unknownParams: IGenericBuffValue | undefined,
+		{
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		}: IUnknownParamsContext,
+	): void => {
+		if (results.length === 0) {
+			results.push(createNoParamsEntry({ originalId, sources }));
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId,
+				sources,
+				targetData,
+				conditionInfo,
+			}));
+		}
+	};
 
 	const createUnknownParamsEntryFromExtraParams = (extraParams: string[], startIndex: number, injectionContext?: IPassiveBuffProcessingInjectionContext): IGenericBuffValue | undefined => {
 		let unknownParams: IGenericBuffValue | undefined;
@@ -303,6 +349,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	};
 
 	map.set('1', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '1';
 		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const typedEffect = (effect as IPassiveEffect);
@@ -334,7 +381,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			if (value !== 0) {
 				results.push({
 					id: `passive:1:${stat}`,
-					originalId: '1',
+					originalId,
 					sources,
 					value,
 					conditions: { ...conditionInfo },
@@ -343,19 +390,18 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			}
 		});
 
-		if (unknownParams) {
-			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId: '1',
-				sources,
-				targetData,
-				conditionInfo,
-			}));
-		}
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
 
 		return results;
 	});
 
 	map.set('2', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '2';
 		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const typedEffect = (effect as IPassiveEffect);
@@ -383,7 +429,9 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
 		} else {
-			stats.elements = (typedEffect['elements buffed'] as UnitElement[]);
+			if (Array.isArray(typedEffect['elements buffed'] as UnitElement[])) {
+				stats.elements = (typedEffect['elements buffed'] as UnitElement[]);
+			}
 			stats.hp = (typedEffect['hp% buff'] as string);
 			stats.atk = (typedEffect['atk% buff'] as string);
 			stats.def = (typedEffect['def% buff'] as string);
@@ -393,7 +441,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		const createBaseStatObject = (stat: CoreStat) => ({
 			id: `passive:2:${stat}`,
-			originalId: '2',
+			originalId,
 			sources,
 			value: parseNumberOrDefault(stats[stat]),
 			...targetData,
@@ -428,14 +476,12 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			});
 		}
 
-		if (unknownParams) {
-			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId: '2',
-				sources,
-				targetData,
-				conditionInfo,
-			}));
-		}
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
 
 		return results;
 	});

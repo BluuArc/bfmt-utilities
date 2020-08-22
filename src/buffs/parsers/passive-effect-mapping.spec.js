@@ -95,6 +95,18 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			expect(injectionContext.createUnknownParamsValue).toHaveBeenCalledWith(...unknownParamsArgs);
 		};
 
+		const expectNoParamsBuffWithEffectAndContext = ({ effect, context, injectionContext, expectedSources }) => {
+			const expectedResult = [baseBuffFactory({
+				id: BuffId.NO_PARAMS_SPECIFIED,
+			}, ['conditions', ...BUFF_TARGET_PROPS])];
+			if (expectedSources) {
+				expectedResult[0].sources = expectedSources;
+			}
+
+			const result = mappingFunction(effect, context, injectionContext);
+			expect(result).toEqual(expectedResult);
+		};
+
 		const createArbitraryContext = () => ({
 			source: 'arbitrary source',
 			sourceId: 'arbitrary source id',
@@ -570,6 +582,18 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 			});
 
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat) => {
+					acc[`${stat}% buff`] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = {
 					params: '0,0,0,0,456,789',
@@ -764,6 +788,37 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const effect = { params };
 				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
+			});
+
+			it('outputs stat buffs when no elements are given and params property does not exist', () => {
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat, index) => {
+					acc[`${stat}% buff`] = index + 1;
+					return acc;
+				}, {});
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:2:${stat}`,
+						value: index + 1,
+						conditions: {
+							targetElements: ['unknown'],
+						},
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number stat values', () => {
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat) => {
+					acc[`${stat}% buff`] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
