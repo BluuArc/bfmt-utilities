@@ -1559,6 +1559,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 7', () => {
 			const AI_EFFECT_KEY = 'angel idol recover hp%';
+			const expectedBuffId = 'proc:7';
 			const expectedOriginalId = '7';
 
 			beforeEach(() => {
@@ -1567,12 +1568,12 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(['proc:7']);
+			testValidBuffIds([expectedBuffId]);
 
 			it('uses the params property when it exists', () => {
 				const effect = createArbitraryBaseEffect({ params: '1' });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:7',
+					id: expectedBuffId,
 					value: 1,
 				})];
 
@@ -1584,7 +1585,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params: '1,2,3,4' });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:7',
+						id: expectedBuffId,
 						value: 1,
 					}),
 					baseBuffFactory({
@@ -1604,7 +1605,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			it('falls back to effect properties when params property does not exist', () => {
 				const effect = createArbitraryBaseEffect({ [AI_EFFECT_KEY]: 1234 });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:7',
+					id: expectedBuffId,
 					value: 1234,
 				})];
 
@@ -1615,7 +1616,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			it('converts effect properties to numbers when params property does not exist', () => {
 				const effect = createArbitraryBaseEffect({ [AI_EFFECT_KEY]: '5678' });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:7',
+					id: expectedBuffId,
 					value: 5678,
 				})];
 
@@ -1626,7 +1627,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			it('returns a buff value when params value is 0', () => {
 				const effect = createArbitraryBaseEffect({ params: '0' });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:7',
+					id: expectedBuffId,
 					value: 0,
 				})];
 
@@ -1637,7 +1638,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			it('returns a buff value when params property and AI property on effect do not exist', () => {
 				const effect = createArbitraryBaseEffect();
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:7',
+					id: expectedBuffId,
 					value: 0,
 				})];
 
@@ -1649,7 +1650,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params: '10,123' });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:7',
+						id: expectedBuffId,
 						sources: arbitrarySourceValue,
 						value: 10,
 						...arbitraryTargetData,
@@ -4867,6 +4868,166 @@ describe('getProcEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 2] });
+			});
+		});
+
+		describe('proc 32', () => {
+			const EFFECT_KEY = 'set attack element attribute';
+			const ELEMENT_MAPPING = {
+				1: UnitElement.Fire,
+				2: UnitElement.Water,
+				3: UnitElement.Earth,
+				4: UnitElement.Thunder,
+				5: UnitElement.Light,
+				6: UnitElement.Dark,
+			};
+			const expectedOriginalId = '32';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:32:${element}`));
+
+			it('uses the params property when it exists', () => {
+				const effect = createArbitraryBaseEffect({ params: '1' });
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:32:fire',
+					value: true,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const effect = createArbitraryBaseEffect({ params: '2,2,3,4' });
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:32:water',
+						value: true,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_1: '2',
+							param_2: '3',
+							param_3: '4',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({ [EFFECT_KEY]: 'earth' });
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:32:earth',
+					value: true,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			Object.entries(ELEMENT_MAPPING).forEach(([elementKey, elementValue]) => {
+				it(`parses value for ${elementValue}`, () => {
+					const effect = createArbitraryBaseEffect({ params: `${elementKey}` });
+					const expectedResult = [baseBuffFactory({
+						id: `proc:32:${elementValue}`,
+						value: true,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`parses value for ${elementValue} when params property does not exist`, () => {
+					const effect = createArbitraryBaseEffect({
+						[EFFECT_KEY]: elementValue,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: `proc:32:${elementValue}`,
+						value: true,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('parses unknown elements to "unknown"', () => {
+				const effect = createArbitraryBaseEffect({ params: '1234' });
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:32:unknown',
+					value: true,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('parses unknown elements to "unknown" when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[EFFECT_KEY]: 'arbitrary unknown element',
+				});
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:32:unknown',
+					value: true,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('parses "all" buff in effect parameters to "unknown" when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[EFFECT_KEY]: 'all',
+				});
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:32:unknown',
+					value: true,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff if param is 0', () => {
+				const effect = createArbitraryBaseEffect({ params: '0' });
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({ params: '5,123' });
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:32:light',
+						sources: arbitrarySourceValue,
+						value: true,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 1] });
 			});
 		});
 	});

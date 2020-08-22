@@ -1062,4 +1062,34 @@ describe('BUFF_METADATA entries', () => {
 			testDefaultIconResult(BuffId['proc:31:percent'], [IconId.BUFF_BBREC]);
 		});
 	});
+
+	describe('proc 32 buffs', () => {
+		describe('proc:32:fire', () => {
+			testDefaultIconResult(BuffId['proc:32:fire'], [IconId.BUFF_SHIFTFIRE]);
+		});
+
+		describe('proc:32:water', () => {
+			testDefaultIconResult(BuffId['proc:32:water'], [IconId.BUFF_SHIFTWATER]);
+		});
+
+		describe('proc:32:earth', () => {
+			testDefaultIconResult(BuffId['proc:32:earth'], [IconId.BUFF_SHIFTEARTH]);
+		});
+
+		describe('proc:32:thunder', () => {
+			testDefaultIconResult(BuffId['proc:32:thunder'], [IconId.BUFF_SHIFTTHUNDER]);
+		});
+
+		describe('proc:32:light', () => {
+			testDefaultIconResult(BuffId['proc:32:light'], [IconId.BUFF_SHIFTLIGHT]);
+		});
+
+		describe('proc:32:dark', () => {
+			testDefaultIconResult(BuffId['proc:32:dark'], [IconId.BUFF_SHIFTDARK]);
+		});
+
+		describe('proc:32:unknown', () => {
+			testDefaultIconResult(BuffId['proc:32:unknown'], [IconId.BUFF_SHIFTELEMENT]);
+		});
+	});
 });

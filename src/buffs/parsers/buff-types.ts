@@ -609,6 +609,14 @@ export enum IconId {
 	BUFF_ADDDARK = 'BUFF_ADDDARK',
 	BUFF_ADDELEMENT = 'BUFF_ADDELEMENT',
 
+	BUFF_SHIFTFIRE = 'BUFF_SHIFTFIRE',
+	BUFF_SHIFTWATER = 'BUFF_SHIFTWATER',
+	BUFF_SHIFTEARTH = 'BUFF_SHIFTEARTH',
+	BUFF_SHIFTTHUNDER = 'BUFF_SHIFTTHUNDER',
+	BUFF_SHIFTLIGHT = 'BUFF_SHIFTLIGHT',
+	BUFF_SHIFTDARK = 'BUFF_SHIFTDARK',
+	BUFF_SHIFTELEMENT = 'BUFF_SHIFTELEMENT',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -826,4 +834,12 @@ export enum BuffId {
 
 	'proc:31:flat' = 'proc:31:flat',
 	'proc:31:percent' = 'proc:31:percent',
+
+	'proc:32:fire' = 'proc:32:fire',
+	'proc:32:water' = 'proc:32:water',
+	'proc:32:earth' = 'proc:32:earth',
+	'proc:32:thunder' = 'proc:32:thunder',
+	'proc:32:light' = 'proc:32:light',
+	'proc:32:dark' = 'proc:32:dark',
+	'proc:32:unknown' = 'proc:32:unknown',
 }

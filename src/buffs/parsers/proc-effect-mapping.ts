@@ -1887,4 +1887,51 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('32', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '32';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let element: UnitElement | BuffConditionElement | undefined;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawElement, ...extraParams] = splitEffectParams(effect);
+			if (rawElement && rawElement !== '0') {
+				element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+			}
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+		} else {
+			const effectElement = effect['set attack element attribute'] as string;
+			if (effectElement) {
+				const sanitizedElement = Object.values(ELEMENT_MAPPING).find((e) => effectElement === e);
+				if (sanitizedElement && sanitizedElement !== BuffConditionElement.All) {
+					element = sanitizedElement;
+				} else {
+					element = BuffConditionElement.Unknown;
+				}
+			}
+		}
+
+		const results: IBuff[] = [];
+		if (element) {
+			results.push({
+				id: `proc:32:${element}`,
+				originalId,
+				sources,
+				effectDelay,
+				value: true,
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }
