@@ -1832,4 +1832,59 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('31', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '31';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let flatFill = 0;
+		let percentFill = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawFlatFill, rawPercentFill, ...extraParams] = splitEffectParams(effect);
+			flatFill = parseNumberOrDefault(rawFlatFill) / 100;
+			percentFill = parseNumberOrDefault(rawPercentFill);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		} else {
+			if ('increase bb gauge' in effect) {
+				flatFill = parseNumberOrDefault(effect['increase bb gauge'] as number);
+			}
+			// NOTE: Deathmax's datamine only recognizes one value. We think the second parameter is percent fill
+			// due to it being tied to a Tilith skill (a unit who's known for BC filling skillsets)
+		}
+
+		const results: IBuff[] = [];
+		if (flatFill !== 0) {
+			results.push({
+				id: 'proc:31:flat',
+				originalId,
+				sources,
+				effectDelay,
+				value: flatFill,
+				...targetData,
+			});
+		}
+
+		if (percentFill !== 0) {
+			results.push({
+				id: 'proc:31:percent',
+				originalId,
+				sources,
+				effectDelay,
+				value: percentFill,
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

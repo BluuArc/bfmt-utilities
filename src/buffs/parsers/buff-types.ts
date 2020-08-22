@@ -823,4 +823,7 @@ export enum BuffId {
 	'proc:30:light' = 'proc:30:light',
 	'proc:30:dark' = 'proc:30:dark',
 	'proc:30:unknown' = 'proc:30:unknown',
+
+	'proc:31:flat' = 'proc:31:flat',
+	'proc:31:percent' = 'proc:31:percent',
 }
