@@ -134,6 +134,38 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		sources,
 	});
 
+	/**
+	 * @description Common checks that are run for most effects after the params have been parsed
+	 * into an array of {@link IBuff} but before said array is returned.
+	 * @param results List of buffs from the given effect.
+	 * @param unknownParams Any unknown parameters from the given effect.
+	 * @param parsingContext Extra metadata extracted from the given effect.
+	 * @returns {undefined} No value is returned, but it does update the `results` array.
+	 */
+	const handlePostParse = (
+		results: IBuff[],
+		unknownParams: IGenericBuffValue | undefined,
+		{
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		}: IUnknownParamsContext,
+	): void => {
+		if (results.length === 0) {
+			results.push(createNoParamsEntry({ originalId, sources }));
+		}
+
+		if (unknownParams) {
+			results.push(createUnknownParamsEntry(unknownParams, {
+				originalId,
+				sources,
+				targetData,
+				effectDelay,
+			}));
+		}
+	};
+
 	const createUnknownParamsEntryFromExtraParams = (extraParams: string[], startIndex: number, injectionContext?: IProcBuffProcessingInjectionContext): IGenericBuffValue | undefined => {
 		let unknownParams: IGenericBuffValue | undefined;
 		if (extraParams && extraParams.length > 0) {
@@ -290,18 +322,14 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				},
 				...targetData,
 			});
-		} else {
-			results.push(createNoParamsEntry({ originalId, sources }));
 		}
 
-		if (unknownParams) {
-			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId,
-				sources,
-				targetData,
-				effectDelay,
-			}));
-		}
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
 
 		return results;
 	});
@@ -345,18 +373,14 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				value: params,
 				...targetData,
 			});
-		} else {
-			results.push(createNoParamsEntry({ originalId, sources }));
 		}
 
-		if (unknownParams) {
-			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId,
-				sources,
-				targetData,
-				effectDelay,
-			}));
-		}
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
 
 		return results;
 	});
@@ -416,18 +440,14 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				duration: params.turnDuration as number,
 				targetData,
 			}));
-		} else {
-			results.push(createNoParamsEntry({ originalId, sources }));
 		}
 
-		if (unknownParams) {
-			results.push(createUnknownParamsEntry(unknownParams, {
-				originalId,
-				sources,
-				targetData,
-				effectDelay,
-			}));
-		}
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
 
 		return results;
 	});
