@@ -1404,4 +1404,50 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			originalId: '32',
 		});
 	});
+
+	map.set('33', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '33';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let healLow: number, healHigh: number, addedRec: number;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawHealLow, rawHealHigh, rawAddedRec, ...extraParams] = splitEffectParams(typedEffect);
+			healLow = parseNumberOrDefault(rawHealLow);
+			healHigh = parseNumberOrDefault(rawHealHigh);
+			addedRec = (1 + parseNumberOrDefault(rawAddedRec) / 100) * 10;
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			healLow = parseNumberOrDefault(typedEffect['turn heal low'] as number);
+			healHigh = parseNumberOrDefault(typedEffect['turn heal high'] as number);
+			addedRec = parseNumberOrDefault(typedEffect['rec% added (turn heal)'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (healLow !== 0 || healHigh !== 0) {
+			results.push({
+				id: 'passive:33',
+				originalId,
+				sources,
+				value: {
+					healLow,
+					healHigh,
+					'addedRec%': addedRec,
+				},
+				conditions: { ...conditionInfo, },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

@@ -3283,5 +3283,186 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				effectKey: 'bb gauge fill rate%',
 			});
 		});
+
+		describe('passive 33', () => {
+			const expectedBuffId = 'passive:33';
+			const expectedOriginalId = '33';
+
+			const HEAL_LOW_EFFECT_KEY = 'turn heal low';
+			const HEAL_HIGH_EFFECT_KEY = 'turn heal high';
+			const ADDED_REC_EFFECT_KEY = 'rec% added (turn heal)';
+			const ADDED_REC_BUFF_KEY = 'addedRec%';
+			const arbitraryRecParam = 80;
+			const expectedRecAddedForArbitraryValue = 18;
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,${arbitraryRecParam}`;
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						healLow: 1,
+						healHigh: 2,
+						[ADDED_REC_BUFF_KEY]: expectedRecAddedForArbitraryValue,
+					},
+				})];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `1,2,${arbitraryRecParam},4,5,6`;
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							healLow: 1,
+							healHigh: 2,
+							[ADDED_REC_BUFF_KEY]: expectedRecAddedForArbitraryValue,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_3: '4',
+							param_4: '5',
+							param_5: '6',
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = {
+					[HEAL_LOW_EFFECT_KEY]: 4,
+					[HEAL_HIGH_EFFECT_KEY]: 5,
+					[ADDED_REC_EFFECT_KEY]: 6,
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						healLow: 4,
+						healHigh: 5,
+						[ADDED_REC_BUFF_KEY]: 6,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('converts effect properties to numbers when params property does not exist', () => {
+				const effect = {
+					[HEAL_LOW_EFFECT_KEY]: '7',
+					[HEAL_HIGH_EFFECT_KEY]: '8',
+					[ADDED_REC_EFFECT_KEY]: '9',
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						healLow: 7,
+						healHigh: 8,
+						[ADDED_REC_BUFF_KEY]: 9,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				const effectPropToResultPropMapping = {
+					[HEAL_LOW_EFFECT_KEY]: 'healLow',
+					[HEAL_HIGH_EFFECT_KEY]: 'healHigh',
+					[ADDED_REC_EFFECT_KEY]: ADDED_REC_BUFF_KEY,
+				};
+
+				Object.keys(effectPropToResultPropMapping).forEach((effectProp) => {
+					it(`defaults to 0 for missing ${effectProp} value`, () => {
+						const effect = Object.keys(effectPropToResultPropMapping)
+							.filter((prop) => prop !== effectProp)
+							.reduce((acc, prop) => {
+								acc[prop] = 123;
+								return acc;
+							}, {});
+						const expectedValues = Object.entries(effectPropToResultPropMapping)
+							.reduce((acc, [localEffectProp, resultProp]) => {
+								acc[resultProp] = localEffectProp === effectProp ? 0 : 123;
+								return acc;
+							}, {});
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							value: expectedValues,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
+				it('returns a no params buff when all effect properties are non-number values', () => {
+					const effect = Object.keys(effectPropToResultPropMapping)
+						.reduce((acc, prop) => {
+							acc[prop] = 'not a number';
+							return acc;
+						}, {});
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('defaults values for effect params to 0 if they are non-number or missing', () => {
+					const effect = { params: 'non-number' };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: `0,1,${arbitraryRecParam},789`,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						value: {
+							healLow: 0,
+							healHigh: 1,
+							[ADDED_REC_BUFF_KEY]: expectedRecAddedForArbitraryValue,
+						},
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 3] });
+			});
+		});
 	});
 });
