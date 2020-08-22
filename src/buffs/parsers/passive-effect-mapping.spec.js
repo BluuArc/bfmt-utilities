@@ -3275,5 +3275,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
 			});
 		});
+
+		describe('passive 32', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '32',
+				expectedBuffId: 'passive:32',
+				effectKey: 'bb gauge fill rate%',
+			});
+		});
 	});
 });

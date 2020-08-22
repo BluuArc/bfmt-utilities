@@ -186,6 +186,7 @@ export enum UnitStat {
 	zelDropRate = 'zelDropRate',
 	karmaDropRate = 'karmaDropRate',
 
+	bcEfficacy = 'bcEfficacy',
 	hcEfficacy = 'hcEfficacy',
 
 	poisonResist = 'poisonResist',
@@ -254,6 +255,7 @@ export interface IUnitState {
 	zelDropRate: IBuff[];
 	karmaDropRate: IBuff[];
 
+	bcEfficacy: IBuff[];
 	hcEfficacy: IBuff[];
 
 	poisonResist: IBuff[];
@@ -575,6 +577,7 @@ export enum IconId {
 	BUFF_HPTHRESHKARMADROP = 'BUFF_HPTHRESHKARMADROP',
 	BUFF_HPTHRESHKARMADOWN = 'BUFF_HPTHRESHKARMADOWN',
 
+	BUFF_BBFILL = 'BUFF_BBFILL',
 	BUFF_HCREC = 'BUFF_HCREC',
 
 	BUFF_KOBLK = 'BUFF_KOBLK', // guaranteed AI
@@ -737,6 +740,8 @@ export enum BuffId {
 	'passive:31:item' = 'passive:31:item',
 	'passive:31:zel' = 'passive:31:zel',
 	'passive:31:karma' = 'passive:31:karma',
+
+	'passive:32' = 'passive:32',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
