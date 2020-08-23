@@ -1403,4 +1403,10 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_DISABLELS],
 	},
+	'proc:37': {
+		id: BuffId['proc:37'],
+		name: 'Summon Unit',
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_SUMMONUNIT],
+	},
 });

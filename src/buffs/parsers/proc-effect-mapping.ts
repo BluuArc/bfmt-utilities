@@ -35,6 +35,7 @@ export function getProcEffectToBuffMapping (reload?: boolean): Map<string, ProcE
  * @internal
  */
 function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
+	const UNKNOWN_PROC_PARAM_EFFECT_KEY = 'unknown proc param';
 	const ELEMENT_MAPPING: { [key: string]: UnitElement | BuffConditionElement } = {
 		0: BuffConditionElement.All,
 		1: UnitElement.Fire,
@@ -2046,5 +2047,41 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			buffId: 'proc:36',
 			originalId: '36',
 		});
+	});
+
+	map.set('37', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '37';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const rawParams: string = effect.params || effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] || '';
+		const [summonGroup = '', summonId = '', rawPositionX, rawPositionY, ...extraParams] = splitEffectParams({ params: rawParams } as ProcEffect);
+		const positionX = parseNumberOrDefault(rawPositionX);
+		const positionY = parseNumberOrDefault(rawPositionY);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+
+		const results: IBuff[] = [];
+		if (summonGroup || summonId) {
+			results.push({
+				id: 'proc:37',
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					summonGroup,
+					summonId,
+					positionX,
+					positionY,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
 	});
 }

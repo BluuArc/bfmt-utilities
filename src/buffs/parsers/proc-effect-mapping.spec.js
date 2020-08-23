@@ -5403,5 +5403,159 @@ describe('getProcEffectToBuffMapping method', () => {
 				effectTurnDurationKey: 'invalidate LS turns (60)',
 			});
 		});
+
+		describe('proc 37', () => {
+			const expectedBuffId = 'proc:37';
+			const expectedOriginalId = '37';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						summonGroup: '1',
+						summonId: '2',
+						positionX: 3,
+						positionY: 4,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6,7';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							summonGroup: '1',
+							summonId: '2',
+							positionX: 3,
+							positionY: 4,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_4: '5',
+							param_5: '6',
+							param_6: '7',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to unknown proc params property when params property does not exist', () => {
+				const params = '5,6,7,8';
+				const effect = createArbitraryBaseEffect({ 'unknown proc param': params });
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						summonGroup: '5',
+						summonId: '6',
+						positionX: 7,
+						positionY: 8,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				// order of test cases should match order in params property
+				[
+					{ property: 'summonGroup', expectedDefault: '' },
+					{ property: 'summonId', expectedDefault: '' },
+					{ property: 'positionX', expectedDefault: 0 },
+					{ property: 'positionY', expectedDefault: 0 },
+				].forEach((testCase, index) => {
+					it(`defaults to ${testCase.expectedDefault === '' ? 'empty string' : testCase.expectedDefault} for missing ${testCase.property} value`, () => {
+						const params = Array.from({ length: 4 }).fill(0).map((_, i) => i === index ? '' : (i + 1)).join(',');
+						const effect = createArbitraryBaseEffect({ params });
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							value: {
+								summonGroup: testCase.property === 'summonGroup' ? testCase.expectedDefault : '1',
+								summonId: testCase.property === 'summonId' ? testCase.expectedDefault : '2',
+								positionX: testCase.property === 'positionX' ? testCase.expectedDefault : 3,
+								positionY: testCase.property === 'positionY' ? testCase.expectedDefault : 4,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					const effect = createArbitraryBaseEffect();
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('returns a no params buff when summonGroup and summonId are missing', () => {
+					const effect = createArbitraryBaseEffect({ params: ',,1,2' });
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('defaults position properties to 0 for non-number values', () => {
+					const params = '1,2,not a number,not a number';
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							summonGroup: '1',
+							summonId: '2',
+							positionX: 0,
+							positionY: 0,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: '1,2,3,4,123',
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						value: { summonGroup: '1', summonId: '2', positionX: 3, positionY: 4 },
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 4] });
+			});
+		});
 	});
 });

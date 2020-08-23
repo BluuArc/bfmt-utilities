@@ -1134,4 +1134,8 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:36', () => {
 		testDefaultIconResult(BuffId['proc:36'], [IconId.BUFF_DISABLELS]);
 	});
+
+	describe('proc:37', () => {
+		testDefaultIconResult(BuffId['proc:37'], [IconId.BUFF_SUMMONUNIT]);
+	});
 });
