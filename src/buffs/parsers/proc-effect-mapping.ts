@@ -1968,4 +1968,71 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('34', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '34';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let flatDrainLow = 0, flatDrainHigh = 0;
+		let percentDrainLow = 0, percentDrainHigh = 0;
+		let chance = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawFlatLow, rawFlatHigh, rawPercentLow, rawPercentHigh, rawChance, ...extraParams] = splitEffectParams(effect);
+			flatDrainLow = parseNumberOrDefault(rawFlatLow) / 100;
+			flatDrainHigh = parseNumberOrDefault(rawFlatHigh) / 100;
+			percentDrainLow = parseNumberOrDefault(rawPercentLow);
+			percentDrainHigh = parseNumberOrDefault(rawPercentHigh);
+			chance = parseNumberOrDefault(rawChance);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+		} else {
+			flatDrainLow = parseNumberOrDefault(effect['base bb gauge reduction low'] as number);
+			flatDrainHigh = parseNumberOrDefault(effect['base bb gauge reduction high'] as number);
+			percentDrainLow = parseNumberOrDefault(effect['bb gauge% reduction low'] as number);
+			percentDrainHigh = parseNumberOrDefault(effect['bb gauge% reduction high'] as number);
+			chance = parseNumberOrDefault(effect['bb gauge reduction chance%'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (flatDrainLow !== 0 || flatDrainHigh !== 0) {
+			results.push({
+				id: 'proc:34:flat',
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					drainLow: flatDrainLow,
+					drainHigh: flatDrainHigh,
+					chance,
+				},
+				...targetData,
+			});
+		}
+
+		if (percentDrainLow !== 0 || percentDrainHigh !== 0) {
+			results.push({
+				id: 'proc:34:percent',
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					drainLow: percentDrainLow,
+					drainHigh: percentDrainHigh,
+					chance,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

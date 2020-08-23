@@ -1436,7 +1436,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 					healHigh,
 					'addedRec%': addedRec,
 				},
-				conditions: { ...conditionInfo, },
+				conditions: { ...conditionInfo },
 				...targetData,
 			});
 		}

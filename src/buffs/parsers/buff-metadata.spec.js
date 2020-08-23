@@ -1104,4 +1104,14 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:33', () => {
 		testDefaultIconResult(BuffId['proc:33'], [IconId.BUFF_REMOVEBUFF]);
 	});
+
+	describe('proc 34 buffs', () => {
+		describe('proc:34:flat', () => {
+			testDefaultIconResult(BuffId['proc:34:flat'], [IconId.BUFF_BBFILLDOWN]);
+		});
+
+		describe('proc:34:percent', () => {
+			testDefaultIconResult(BuffId['proc:34:percent'], [IconId.BUFF_BBFILLDOWN]);
+		});
+	});
 });

@@ -582,6 +582,7 @@ export enum IconId {
 	BUFF_HPTHRESHKARMADOWN = 'BUFF_HPTHRESHKARMADOWN',
 
 	BUFF_BBFILL = 'BUFF_BBFILL',
+	BUFF_BBFILLDOWN = 'BUFF_BBFILLDOWN',
 	BUFF_HCREC = 'BUFF_HCREC',
 
 	BUFF_KOBLK = 'BUFF_KOBLK', // guaranteed AI
@@ -856,4 +857,7 @@ export enum BuffId {
 	'proc:32:unknown' = 'proc:32:unknown',
 
 	'proc:33' = 'proc:33',
+
+	'proc:34:flat' = 'proc:34:flat',
+	'proc:34:percent' = 'proc:34:percent',
 }
