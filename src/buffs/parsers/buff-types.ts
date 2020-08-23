@@ -126,6 +126,7 @@ export interface IBuffConditions {
 	onEnemyDefeat?: boolean;
 	onBattleWin?: boolean;
 	whenAttacked?: boolean;
+	onNormalAttack?: boolean;
 }
 
 /**
@@ -755,6 +756,7 @@ export enum BuffId {
 	'passive:32' = 'passive:32',
 	'passive:33' = 'passive:33',
 	'passive:34' = 'passive:34',
+	'passive:35' = 'passive:35',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

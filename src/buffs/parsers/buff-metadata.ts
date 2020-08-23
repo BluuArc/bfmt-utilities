@@ -704,6 +704,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_CRTUP],
 	},
+	'passive:35': {
+		id: BuffId['passive:35'],
+		name: 'Passive BB Gauge Fill when Normal Attacking',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_BBREC],
+	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
