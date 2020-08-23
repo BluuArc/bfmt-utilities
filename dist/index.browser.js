@@ -1812,6 +1812,7 @@ var bfmtUtilities = function (exports) {
     UnitStat["targetingModification"] = "targetingModification";
     UnitStat["elementModification"] = "elementModification";
     UnitStat["buffStabilityModification"] = "buffStabilityModification";
+    UnitStat["extraAction"] = "extraAction";
   })(UnitStat || (UnitStat = {}));
 
   var IconId;
@@ -2086,6 +2087,8 @@ var bfmtUtilities = function (exports) {
     IconId["BUFF_SHIFTDARK"] = "BUFF_SHIFTDARK";
     IconId["BUFF_SHIFTELEMENT"] = "BUFF_SHIFTELEMENT";
     IconId["BUFF_REMOVEBUFF"] = "BUFF_REMOVEBUFF";
+    IconId["BUFF_DISABLELS"] = "BUFF_DISABLELS";
+    IconId["BUFF_DBLSTRIKE"] = "BUFF_DBLSTRIKE";
     IconId["ATK_ST"] = "ATK_ST";
     IconId["ATK_AOE"] = "ATK_AOE";
     IconId["ATK_RT"] = "ATK_RT";
@@ -2196,6 +2199,9 @@ var bfmtUtilities = function (exports) {
     BuffId["passive:32"] = "passive:32";
     BuffId["passive:33"] = "passive:33";
     BuffId["passive:34"] = "passive:34";
+    BuffId["passive:35"] = "passive:35";
+    BuffId["passive:36"] = "passive:36";
+    BuffId["passive:37"] = "passive:37";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1"] = "proc:1";
@@ -2285,6 +2291,7 @@ var bfmtUtilities = function (exports) {
     BuffId["proc:33"] = "proc:33";
     BuffId["proc:34:flat"] = "proc:34:flat";
     BuffId["proc:34:percent"] = "proc:34:percent";
+    BuffId["proc:36"] = "proc:36";
   })(BuffId || (BuffId = {}));
   /**
    * @description Helper function for creating an entry to be used in the `sources`
@@ -4442,6 +4449,17 @@ var bfmtUtilities = function (exports) {
       });
       return results;
     });
+    map.set('36', (effect, context, injectionContext) => {
+      return parseProcWithSingleNumericalParameterAndTurnDuration({
+        effect,
+        context,
+        injectionContext,
+        effectValueKey: 'invalidate LS chance%',
+        effectTurnDurationKey: 'invalidate LS turns (60)',
+        buffId: 'proc:36',
+        originalId: '36'
+      });
+    });
   }
   /**
    * @description Default function for all effects that cannot be processed.
@@ -5902,6 +5920,117 @@ var bfmtUtilities = function (exports) {
         parseParamValue: rawValue => parseNumberOrDefault(rawValue) * 100
       });
     });
+    map.set('35', (effect, context, injectionContext) => {
+      return parsePassiveWithNumericalValueRangeAndChance({
+        effect,
+        context,
+        injectionContext,
+        originalId: '35',
+        effectKeyLow: 'bc fill when attacking low',
+        effectKeyHigh: 'bc fill when attacking high',
+        effectKeyChance: 'bc fill when attacking%',
+        buffKeyLow: 'fillLow',
+        buffKeyHigh: 'fillHigh',
+        parseParamValue: rawValue => parseNumberOrDefault(rawValue) / 100,
+        generateBaseConditions: () => ({
+          onNormalAttack: true
+        }),
+        buffId: 'passive:35'
+      });
+    });
+    map.set('36', (effect, context, injectionContext) => {
+      const originalId = '36';
+      const {
+        conditionInfo,
+        targetData,
+        sources
+      } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+      const typedEffect = effect;
+      let additionalActions = 0,
+          damageModifier = 0,
+          chance = 0;
+      let unknownParams;
+
+      if (typedEffect.params) {
+        const [rawAdditionalActions, rawDamageModifier, rawChance, ...extraParams] = splitEffectParams(typedEffect);
+        additionalActions = parseNumberOrDefault(rawAdditionalActions);
+        damageModifier = parseNumberOrDefault(rawDamageModifier);
+        chance = parseNumberOrDefault(rawChance);
+        unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+      } else {
+        additionalActions = parseNumberOrDefault(typedEffect['additional actions']);
+      }
+
+      const results = [];
+
+      if (additionalActions !== 0 || damageModifier !== 0 || chance !== 0) {
+        results.push(Object.assign({
+          id: 'passive:36',
+          originalId,
+          sources,
+          value: {
+            additionalActions,
+            damageModifier,
+            chance
+          },
+          conditions: Object.assign({}, conditionInfo)
+        }, targetData));
+      }
+
+      handlePostParse(results, unknownParams, {
+        originalId,
+        sources,
+        targetData,
+        conditionInfo
+      });
+      return results;
+    });
+    map.set('37', (effect, context, injectionContext) => {
+      const originalId = '37';
+      const {
+        conditionInfo,
+        targetData,
+        sources
+      } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+      const typedEffect = effect;
+      let hitIncreasePerHit = 0,
+          extraHitDamage = 0;
+      let unknownParams;
+
+      if (typedEffect.params) {
+        const params = splitEffectParams(typedEffect);
+        hitIncreasePerHit = parseNumberOrDefault(params[0]);
+        extraHitDamage = parseNumberOrDefault(params[2]);
+        const extraParams = ['0', params[1], '0', ...params.slice(3)];
+        unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 0, injectionContext);
+      } else {
+        hitIncreasePerHit = parseNumberOrDefault(typedEffect['hit increase/hit']);
+        extraHitDamage = parseNumberOrDefault(typedEffect['extra hits dmg%']);
+      }
+
+      const results = [];
+
+      if (hitIncreasePerHit !== 0 || extraHitDamage !== 0) {
+        results.push(Object.assign({
+          id: 'passive:37',
+          originalId,
+          sources,
+          value: {
+            hitIncreasePerHit,
+            extraHitDamage
+          },
+          conditions: Object.assign({}, conditionInfo)
+        }, targetData));
+      }
+
+      handlePostParse(results, unknownParams, {
+        originalId,
+        sources,
+        targetData,
+        conditionInfo
+      });
+      return results;
+    });
   }
   /**
    * @description Default function for all effects that cannot be processed.
@@ -6621,6 +6750,27 @@ var bfmtUtilities = function (exports) {
       stackType: BuffStackType.Passive,
       icons: () => [IconId.BUFF_CRTUP]
     },
+    'passive:35': {
+      id: BuffId['passive:35'],
+      name: 'Passive BB Gauge Fill when Normal Attacking',
+      stat: UnitStat.bbGauge,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_BBREC]
+    },
+    'passive:36': {
+      id: BuffId['passive:36'],
+      name: 'Passive Extra Action',
+      stat: UnitStat.extraAction,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_DBLSTRIKE]
+    },
+    'passive:37': {
+      id: BuffId['passive:37'],
+      name: 'Passive Hit Count Boost',
+      stat: UnitStat.hitCountModification,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_HITUP]
+    },
     'UNKNOWN_PROC_EFFECT_ID': {
       id: BuffId.UNKNOWN_PROC_EFFECT_ID,
       name: 'Unknown Proc Effect',
@@ -7301,6 +7451,13 @@ var bfmtUtilities = function (exports) {
       stat: UnitStat.bbGauge,
       stackType: BuffStackType.Burst,
       icons: () => [IconId.BUFF_BBFILLDOWN]
+    },
+    'proc:36': {
+      id: BuffId['proc:36'],
+      name: 'Active Leader Skill Lock',
+      stat: UnitStat.buffStabilityModification,
+      stackType: BuffStackType.Active,
+      icons: () => [IconId.BUFF_DISABLELS]
     }
   }));
   /**

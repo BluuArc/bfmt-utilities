@@ -1525,4 +1525,48 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('37', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '37';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let hitIncreasePerHit = 0, extraHitDamage = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			hitIncreasePerHit = parseNumberOrDefault(params[0]);
+			extraHitDamage = parseNumberOrDefault(params[2]);
+
+			const extraParams = ['0', params[1], '0', ...params.slice(3)];
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 0, injectionContext);
+		} else {
+			hitIncreasePerHit = parseNumberOrDefault(typedEffect['hit increase/hit'] as number);
+			extraHitDamage = parseNumberOrDefault(typedEffect['extra hits dmg%'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (hitIncreasePerHit !==0 || extraHitDamage !== 0) {
+			results.push({
+				id: 'passive:37',
+				originalId,
+				sources,
+				value: {
+					hitIncreasePerHit,
+					extraHitDamage,
+				},
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }
