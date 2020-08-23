@@ -2228,7 +2228,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 			Object.entries(AILMENT_MAPPING).forEach(([ailmentKey, ailmentName]) => {
 				it(`returns an entry for ${ailmentName} when it is present in the params property`, () => {
-					const params = [ailmentKey, '0,0,0,0,0,0'].join(',');
+					const params = [ailmentKey, '0,0,0,0,0,0,0'].join(',');
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
 						id: `proc:10:${ailmentName}`,
@@ -2268,7 +2268,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			it('parses params outside of the known ailments as unknown', () => {
-				const params = '123,0,0,0,0,0,0';
+				const params = '123,0,0,0,0,0,0,0';
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [baseBuffFactory({
 					id: 'proc:10:unknown',
@@ -2288,6 +2288,11 @@ describe('getProcEffectToBuffMapping method', () => {
 
 				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				const effect = createArbitraryBaseEffect();
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
 
 			it('returns a no params buff if all params are 0', () => {
@@ -5555,6 +5560,174 @@ describe('getProcEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 4] });
+			});
+		});
+
+		describe('proc 38', () => {
+			const expectedOriginalId = '38';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(Object.values(AILMENT_MAPPING).concat(['unknown']).map((a) => `proc:38:${a}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6,7,8,9';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = Object.values(AILMENT_MAPPING)
+					.map((ailment) => baseBuffFactory({
+						id: `proc:38:${ailment}`,
+						value: true,
+					}));
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,8,9,10,11,12';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = Object.values(AILMENT_MAPPING)
+					.map((ailment) => baseBuffFactory({
+						id: `proc:38:${ailment}`,
+						value: true,
+					})).concat([baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_9: '10',
+							param_10: '11',
+							param_11: '12',
+						},
+					})]);
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					'ailments cured': ['rec down'],
+				});
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:38:rec down',
+					value: true,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			Object.entries(AILMENT_MAPPING).forEach(([ailmentKey, ailmentName]) => {
+				it(`returns an entry for ${ailmentName} when it is present in the params property`, () => {
+					const params = [ailmentKey, '0,0,0,0,0,0,0,0'].join(',');
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: `proc:38:${ailmentName}`,
+						value: true,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`returns an entry for ${ailmentName} when it is present in the effect and no params property does not exist`, () => {
+					const effectKey = ailmentName !== 'weak' ? ailmentName : 'weaken';
+					const effect = createArbitraryBaseEffect({ 'ailments cured': [effectKey] });
+					const expectedResult = [baseBuffFactory({
+						id: `proc:38:${ailmentName}`,
+						value: true,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('parses multiple cleanse entries in effect when params property does not exist', () => {
+				const curedAilments = Object.values(AILMENT_MAPPING)
+					.map((ailment) => ailment !== 'weak' ? ailment : 'weaken');
+				const effect = createArbitraryBaseEffect({ 'ailments cured': curedAilments });
+				const expectedResult = Object.values(AILMENT_MAPPING)
+					.map((ailment) => baseBuffFactory({
+						id: `proc:38:${ailment}`,
+						value: true,
+					}));
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('parses params outside of the known ailments as unknown', () => {
+				const params = '123,0,0,0,0,0,0';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:38:unknown',
+					value: true,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('parses params outside of the known ailments as unknown when parms property does not exist', () => {
+				const effect = createArbitraryBaseEffect({ 'ailments cured': ['fake', 'not an ailment', 'poison'] });
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:38:poison',
+						value: true,
+					}),
+					baseBuffFactory({
+						id: 'proc:38:unknown',
+						value: true,
+					}),
+					baseBuffFactory({
+						id: 'proc:38:unknown',
+						value: true,
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				const effect = createArbitraryBaseEffect();
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff if all params are 0', () => {
+				const params = new Array(9).fill('0').join(',');
+				const effect = createArbitraryBaseEffect({ params });
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: '0,0,0,0,0,0,0,0,1,123',
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:38:poison',
+						sources: arbitrarySourceValue,
+						value: true,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 9] });
 			});
 		});
 	});

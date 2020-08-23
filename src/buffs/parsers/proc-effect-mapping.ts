@@ -2052,8 +2052,8 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	map.set('37', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '37';
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-		const rawParams: string = effect.params || effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] || '';
-		const [summonGroup = '', summonId = '', rawPositionX, rawPositionY, ...extraParams] = splitEffectParams({ params: rawParams } as ProcEffect);
+		const rawParams: string = effect.params || (effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] as string) || '';
+		const [summonGroup, summonId = '', rawPositionX, rawPositionY, ...extraParams] = splitEffectParams({ params: rawParams } as ProcEffect);
 		const positionX = parseNumberOrDefault(rawPositionX);
 		const positionY = parseNumberOrDefault(rawPositionY);
 		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
@@ -2074,6 +2074,59 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				...targetData,
 			});
 		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
+
+	map.set('38', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '38';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const curedAilments: Ailment[] = [];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const splitParams = splitEffectParams(effect);
+			const knownParams = splitParams.slice(0, 9);
+			const extraParams = splitParams.slice(9);
+
+			knownParams
+				.filter((p) => p !== '0')
+				.forEach((param) => {
+					curedAilments.push(AILMENT_MAPPING[param] || Ailment.Unknown);
+				});
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 9, injectionContext);
+		} else if (Array.isArray(effect['ailments cured'] as string[])) {
+			const effectAilmentsCured = effect['ailments cured'] as string[];
+			Object.values(AILMENT_MAPPING).forEach((ailment) => {
+				const effectKey = ailment !== Ailment.Weak ? ailment : 'weaken';
+				if (effectAilmentsCured.includes(effectKey)) {
+					curedAilments.push(ailment);
+				}
+			});
+			if (effectAilmentsCured.length > curedAilments.length) {
+				const unknownAilmentCount = effectAilmentsCured.length - curedAilments.length;
+				for (let i = 0; i < unknownAilmentCount; ++i) {
+					curedAilments.push(Ailment.Unknown);
+				}
+			}
+		}
+
+		const results: IBuff[] = curedAilments.map((ailment) => ({
+			id: `proc:38:${ailment}`,
+			originalId,
+			sources,
+			effectDelay,
+			value: true,
+			...targetData,
+		}));
 
 		handlePostParse(results, unknownParams, {
 			originalId,
