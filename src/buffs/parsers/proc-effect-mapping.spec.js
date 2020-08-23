@@ -3061,7 +3061,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					buffIdsInTurnDurationBuff: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:16:${stat}`),
 				});
 
-				it('returns a turn modification buff when no mitigation value is given and params property does not exist', () => {
+				it('returns a turn modification buff when turn duration is non-zero and params property does not exist', () => {
 					const effect = createArbitraryBaseEffect({
 						'attacks': 456,
 						[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
@@ -3078,7 +3078,6 @@ describe('getProcEffectToBuffMapping method', () => {
 					expect(result).toEqual(expectedResult);
 				});
 			});
-
 
 			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = createArbitraryBaseEffect({
@@ -5728,6 +5727,193 @@ describe('getProcEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 9] });
+			});
+		});
+
+		describe('proc 39', () => {
+			const ELEMENT_MAPPING = {
+				1: UnitElement.Fire,
+				2: UnitElement.Water,
+				3: UnitElement.Earth,
+				4: UnitElement.Thunder,
+				5: UnitElement.Light,
+				6: UnitElement.Dark,
+			};
+			const EFFECT_MITIGATION_KEY = 'dmg% mitigation for elemental attacks';
+			const EFFECT_TURN_DURATION_KEY = 'dmg% mitigation for elemental attacks buff turns';
+			const expectedOriginalId = '39';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:39:${element}`));
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,3,4,5,6,7,${arbitraryTurnDuration}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
+					return baseBuffFactory({
+						id: `proc:39:${element}`,
+						duration: arbitraryTurnDuration,
+						value: 7,
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `1,2,3,4,5,6,7,${arbitraryTurnDuration},9,10,11`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
+					return baseBuffFactory({
+						id: `proc:39:${element}`,
+						duration: arbitraryTurnDuration,
+						value: 7,
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_8: '9',
+						param_9: '10',
+						param_10: '11',
+					},
+				})]);
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const valuesInEffect = Object.values(ELEMENT_MAPPING).reduce((acc, element) => {
+					acc[`mitigate ${element} attacks`] = true;
+					return acc;
+				}, {});
+				valuesInEffect[EFFECT_MITIGATION_KEY] = 9;
+				valuesInEffect[EFFECT_TURN_DURATION_KEY] = arbitraryTurnDuration;
+				const effect = createArbitraryBaseEffect(valuesInEffect);
+				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
+					return baseBuffFactory({
+						id: `proc:39:${element}`,
+						duration: arbitraryTurnDuration,
+						value: 9,
+					});
+				});
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			Object.entries(ELEMENT_MAPPING).forEach(([elementKey, elementValue]) => {
+				it(`parses value for ${elementValue}`, () => {
+					const params = `${elementKey},0,0,0,0,0,123,${arbitraryTurnDuration}`;
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: `proc:39:${elementValue}`,
+						duration: arbitraryTurnDuration,
+						value: 123,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`parses value for ${elementValue} when params property does not exist`, () => {
+					const effect = createArbitraryBaseEffect({
+						[`mitigate ${elementValue} attacks`]: true,
+						[EFFECT_MITIGATION_KEY]: 456,
+						[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: `proc:39:${elementValue}`,
+						duration: arbitraryTurnDuration,
+						value: 456,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('parses unknown elements to "unknown"', () => {
+				const params = `1234,0,0,0,0,0,123,${arbitraryTurnDuration}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:39:unknown',
+					duration: arbitraryTurnDuration,
+					value: 123,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('parses lack of elements to "unknown" when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[EFFECT_MITIGATION_KEY]: 456,
+					[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+				});
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:39:unknown',
+					duration: arbitraryTurnDuration,
+					value: 456,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when no mitigation value is given', () => {
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,0,${duration}`,
+					buffIdsInTurnDurationBuff: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:39:${stat}`),
+				});
+
+				it('returns a turn modification buff turn duration is non-zero and params property does not exist', () => {
+					const effect = createArbitraryBaseEffect({
+						[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: BuffId.TURN_DURATION_MODIFICATION,
+						value: {
+							buffs: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:39:${stat}`),
+							duration: arbitraryTurnDuration,
+						},
+					}, [EFFECT_DELAY_BUFF_PROP])];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: `5,0,0,0,0,0,1,${arbitraryTurnDuration},123`,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:39:light',
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: 1,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 8] });
 			});
 		});
 	});

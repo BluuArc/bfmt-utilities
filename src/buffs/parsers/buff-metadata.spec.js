@@ -1200,4 +1200,34 @@ describe('BUFF_METADATA entries', () => {
 			testDefaultIconResult(BuffId['proc:38:unknown'], [IconId.BUFF_AILMENTBLK]);
 		});
 	});
+
+	describe('proc 39 buffs', () => {
+		describe('proc:39:fire', () => {
+			testDefaultIconResult(BuffId['proc:39:fire'], [IconId.BUFF_FIREDMGDOWN]);
+		});
+
+		describe('proc:39:water', () => {
+			testDefaultIconResult(BuffId['proc:39:water'], [IconId.BUFF_WATERDMGDOWN]);
+		});
+
+		describe('proc:39:earth', () => {
+			testDefaultIconResult(BuffId['proc:39:earth'], [IconId.BUFF_EARTHDMGDOWN]);
+		});
+
+		describe('proc:39:thunder', () => {
+			testDefaultIconResult(BuffId['proc:39:thunder'], [IconId.BUFF_THUNDERDMGDOWN]);
+		});
+
+		describe('proc:39:light', () => {
+			testDefaultIconResult(BuffId['proc:39:light'], [IconId.BUFF_LIGHTDMGDOWN]);
+		});
+
+		describe('proc:39:dark', () => {
+			testDefaultIconResult(BuffId['proc:39:dark'], [IconId.BUFF_DARKDMGDOWN]);
+		});
+
+		describe('proc:39:unknown', () => {
+			testDefaultIconResult(BuffId['proc:39:unknown'], [IconId.BUFF_ELEMENTDMGDOWN]);
+		});
+	});
 });

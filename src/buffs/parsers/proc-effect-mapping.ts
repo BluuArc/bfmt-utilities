@@ -2137,4 +2137,87 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('39', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '39';
+		const ELEMENT_MAPPING: { [key: string]: UnitElement | BuffConditionElement } = {
+			1: UnitElement.Fire,
+			2: UnitElement.Water,
+			3: UnitElement.Earth,
+			4: UnitElement.Thunder,
+			5: UnitElement.Light,
+			6: UnitElement.Dark,
+		};
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const elements: (UnitElement | BuffConditionElement)[] = [];
+		let mitigation = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const params = splitEffectParams(effect);
+			const rawElementsMitigated = params.slice(0, 6);
+			mitigation = parseNumberOrDefault(params[6]);
+			turnDuration = parseNumberOrDefault(params[7]);
+
+			rawElementsMitigated.forEach((rawElement) => {
+				if (rawElement !== '0') {
+					elements.push(ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown);
+				}
+			});
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(8), 8, injectionContext);
+		} else {
+			Object.values(ELEMENT_MAPPING).forEach((element) => {
+				if (effect[`mitigate ${element} attacks`]) {
+					elements.push(element);
+				}
+			});
+
+			mitigation = parseNumberOrDefault(effect['dmg% mitigation for elemental attacks'] as number);
+			turnDuration = parseNumberOrDefault(effect['dmg% mitigation for elemental attacks buff turns'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (elements.length > 0) {
+			elements.forEach((element) => {
+				results.push({
+					id: `proc:39:${element}`,
+					originalId,
+					sources,
+					effectDelay,
+					duration: turnDuration,
+					value: mitigation,
+					...targetData,
+				});
+			});
+		} else if (mitigation !== 0) {
+			results.push({
+				id: 'proc:39:unknown',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: mitigation,
+				...targetData,
+			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: Object.values(ELEMENT_MAPPING).concat([BuffConditionElement.Unknown]).map((e) => `proc:39:${e}`),
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

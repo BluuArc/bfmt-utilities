@@ -896,4 +896,12 @@ export enum BuffId {
 	'proc:38:def down' = 'proc:38:def down',
 	'proc:38:rec down' = 'proc:38:rec down',
 	'proc:38:unknown' = 'proc:38:unknown',
+
+	'proc:39:fire' = 'proc:39:fire',
+	'proc:39:water' = 'proc:39:water',
+	'proc:39:earth' = 'proc:39:earth',
+	'proc:39:thunder' = 'proc:39:thunder',
+	'proc:39:light' = 'proc:39:light',
+	'proc:39:dark' = 'proc:39:dark',
+	'proc:39:unknown' = 'proc:39:unknown',
 }
