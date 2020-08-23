@@ -5394,5 +5394,14 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 5] });
 			});
 		});
+
+		describe('proc 36', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '36',
+				expectedBuffId: 'proc:36',
+				effectValueKey: 'invalidate LS chance%',
+				effectTurnDurationKey: 'invalidate LS turns (60)',
+			});
+		});
 	});
 });

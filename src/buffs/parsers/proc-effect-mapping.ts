@@ -2035,4 +2035,16 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('36', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithSingleNumericalParameterAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			effectValueKey: 'invalidate LS chance%',
+			effectTurnDurationKey: 'invalidate LS turns (60)',
+			buffId: 'proc:36',
+			originalId: '36',
+		});
+	});
 }

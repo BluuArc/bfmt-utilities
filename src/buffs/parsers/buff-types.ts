@@ -631,6 +631,7 @@ export enum IconId {
 	BUFF_SHIFTELEMENT = 'BUFF_SHIFTELEMENT',
 
 	BUFF_REMOVEBUFF = 'BUFF_REMOVEBUFF',
+	BUFF_DISABLELS = 'BUFF_DISABLELS',
 
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
@@ -867,4 +868,6 @@ export enum BuffId {
 
 	'proc:34:flat' = 'proc:34:flat',
 	'proc:34:percent' = 'proc:34:percent',
+
+	'proc:36' = 'proc:36',
 }

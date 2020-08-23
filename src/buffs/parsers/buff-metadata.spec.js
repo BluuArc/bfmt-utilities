@@ -1122,4 +1122,8 @@ describe('BUFF_METADATA entries', () => {
 			testDefaultIconResult(BuffId['proc:34:percent'], [IconId.BUFF_BBFILLDOWN]);
 		});
 	});
+
+	describe('proc:36', () => {
+		testDefaultIconResult(BuffId['proc:36'], [IconId.BUFF_DISABLELS]);
+	});
 });

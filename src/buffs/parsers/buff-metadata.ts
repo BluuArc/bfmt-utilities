@@ -1382,4 +1382,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_BBFILLDOWN],
 	},
+	'proc:36': {
+		id: BuffId['proc:36'],
+		name: 'Active Leader Skill Lock',
+		stat: UnitStat.buffStabilityModification,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_DISABLELS],
+	},
 });
