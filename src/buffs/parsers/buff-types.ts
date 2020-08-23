@@ -238,6 +238,8 @@ export enum UnitStat {
 	elementModification = 'elementModification',
 
 	buffStabilityModification = 'buffStabilityModification',
+
+	extraAction = 'extraAction',
 }
 
 /**
@@ -310,6 +312,8 @@ export interface IUnitState {
 	elementModification: IBuff[];
 
 	buffStabilityModification: IBuff[];
+
+	extraAction: IBuff[];
 }
 
 /**
@@ -633,6 +637,8 @@ export enum IconId {
 	BUFF_REMOVEBUFF = 'BUFF_REMOVEBUFF',
 	BUFF_DISABLELS = 'BUFF_DISABLELS',
 
+	BUFF_DBLSTRIKE = 'BUFF_DBLSTRIKE',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -758,6 +764,7 @@ export enum BuffId {
 	'passive:33' = 'passive:33',
 	'passive:34' = 'passive:34',
 	'passive:35' = 'passive:35',
+	'passive:36' = 'passive:36',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

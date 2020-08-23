@@ -1481,4 +1481,48 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffId: 'passive:35',
 		});
 	});
+
+	map.set('36', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '36';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let additionalActions = 0, damageModifier = 0, chance = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawAdditionalActions, rawDamageModifier, rawChance, ...extraParams] = splitEffectParams(typedEffect);
+			additionalActions = parseNumberOrDefault(rawAdditionalActions);
+			damageModifier = parseNumberOrDefault(rawDamageModifier);
+			chance = parseNumberOrDefault(rawChance);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			additionalActions = parseNumberOrDefault(typedEffect['additional actions'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (additionalActions !== 0 || damageModifier !== 0 || chance !== 0) {
+			results.push({
+				id: 'passive:36',
+				originalId,
+				sources,
+				value: {
+					additionalActions,
+					damageModifier,
+					chance,
+				},
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }
