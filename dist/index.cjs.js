@@ -1634,6 +1634,7 @@ var UnitStat;
     UnitStat["itemDropRate"] = "itemDropRate";
     UnitStat["zelDropRate"] = "zelDropRate";
     UnitStat["karmaDropRate"] = "karmaDropRate";
+    UnitStat["bcEfficacy"] = "bcEfficacy";
     UnitStat["hcEfficacy"] = "hcEfficacy";
     UnitStat["poisonResist"] = "poisonResist";
     UnitStat["weakResist"] = "weakResist";
@@ -1664,11 +1665,13 @@ var UnitStat;
     UnitStat["koResistance"] = "koResistance";
     UnitStat["revive"] = "revive";
     UnitStat["defenseIgnore"] = "defenseIgnore";
+    UnitStat["criticalDamage"] = "criticalDamage";
     UnitStat["sparkDamage"] = "sparkDamage";
     UnitStat["hitCountModification"] = "hitCountModification";
     UnitStat["damageReflect"] = "damageReflect";
     UnitStat["targetingModification"] = "targetingModification";
     UnitStat["elementModification"] = "elementModification";
+    UnitStat["buffStabilityModification"] = "buffStabilityModification";
 })(UnitStat || (UnitStat = {}));
 var IconId;
 (function (IconId) {
@@ -1906,11 +1909,20 @@ var IconId;
     IconId["BUFF_HPTHRESHZELDOWN"] = "BUFF_HPTHRESHZELDOWN";
     IconId["BUFF_HPTHRESHKARMADROP"] = "BUFF_HPTHRESHKARMADROP";
     IconId["BUFF_HPTHRESHKARMADOWN"] = "BUFF_HPTHRESHKARMADOWN";
+    IconId["BUFF_BBFILL"] = "BUFF_BBFILL";
+    IconId["BUFF_BBFILLDOWN"] = "BUFF_BBFILLDOWN";
     IconId["BUFF_HCREC"] = "BUFF_HCREC";
     IconId["BUFF_KOBLK"] = "BUFF_KOBLK";
     IconId["BUFF_HPABS"] = "BUFF_HPABS";
     IconId["BUFF_IGNOREDEF"] = "BUFF_IGNOREDEF";
+    IconId["BUFF_CRTUP"] = "BUFF_CRTUP";
     IconId["BUFF_SPARKUP"] = "BUFF_SPARKUP";
+    IconId["BUFF_SPARKDOWN"] = "BUFF_SPARKDOWN";
+    IconId["BUFF_SPARKHC"] = "BUFF_SPARKHC";
+    IconId["BUFF_SPARKBC"] = "BUFF_SPARKBC";
+    IconId["BUFF_SPARKITEM"] = "BUFF_SPARKITEM";
+    IconId["BUFF_SPARKZEL"] = "BUFF_SPARKZEL";
+    IconId["BUFF_SPARKKARMA"] = "BUFF_SPARKKARMA";
     IconId["BUFF_HITUP"] = "BUFF_HITUP";
     IconId["BUFF_COUNTERDAMAGE"] = "BUFF_COUNTERDAMAGE";
     IconId["BUFF_GETENEATT"] = "BUFF_GETENEATT";
@@ -1924,6 +1936,14 @@ var IconId;
     IconId["BUFF_ADDLIGHT"] = "BUFF_ADDLIGHT";
     IconId["BUFF_ADDDARK"] = "BUFF_ADDDARK";
     IconId["BUFF_ADDELEMENT"] = "BUFF_ADDELEMENT";
+    IconId["BUFF_SHIFTFIRE"] = "BUFF_SHIFTFIRE";
+    IconId["BUFF_SHIFTWATER"] = "BUFF_SHIFTWATER";
+    IconId["BUFF_SHIFTEARTH"] = "BUFF_SHIFTEARTH";
+    IconId["BUFF_SHIFTTHUNDER"] = "BUFF_SHIFTTHUNDER";
+    IconId["BUFF_SHIFTLIGHT"] = "BUFF_SHIFTLIGHT";
+    IconId["BUFF_SHIFTDARK"] = "BUFF_SHIFTDARK";
+    IconId["BUFF_SHIFTELEMENT"] = "BUFF_SHIFTELEMENT";
+    IconId["BUFF_REMOVEBUFF"] = "BUFF_REMOVEBUFF";
     IconId["ATK_ST"] = "ATK_ST";
     IconId["ATK_AOE"] = "ATK_AOE";
     IconId["ATK_RT"] = "ATK_RT";
@@ -1943,9 +1963,10 @@ var IconId;
  */
 var BuffId;
 (function (BuffId) {
+    BuffId["TURN_DURATION_MODIFICATION"] = "TURN_DURATION_MODIFICATION";
+    BuffId["NO_PARAMS_SPECIFIED"] = "NO_PARAMS_SPECIFIED";
     BuffId["UNKNOWN_PASSIVE_EFFECT_ID"] = "UNKNOWN_PASSIVE_EFFECT_ID";
     BuffId["UNKNOWN_PASSIVE_BUFF_PARAMS"] = "UNKNOWN_PASSIVE_BUFF_PARAMS";
-    BuffId["TURN_DURATION_MODIFICATION"] = "TURN_DURATION_MODIFICATION";
     BuffId["passive:1:hp"] = "passive:1:hp";
     BuffId["passive:1:atk"] = "passive:1:atk";
     BuffId["passive:1:def"] = "passive:1:def";
@@ -2021,6 +2042,15 @@ var BuffId;
     BuffId["passive:30:def"] = "passive:30:def";
     BuffId["passive:30:rec"] = "passive:30:rec";
     BuffId["passive:30:crit"] = "passive:30:crit";
+    BuffId["passive:31:damage"] = "passive:31:damage";
+    BuffId["passive:31:bc"] = "passive:31:bc";
+    BuffId["passive:31:hc"] = "passive:31:hc";
+    BuffId["passive:31:item"] = "passive:31:item";
+    BuffId["passive:31:zel"] = "passive:31:zel";
+    BuffId["passive:31:karma"] = "passive:31:karma";
+    BuffId["passive:32"] = "passive:32";
+    BuffId["passive:33"] = "passive:33";
+    BuffId["passive:34"] = "passive:34";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1"] = "proc:1";
@@ -2098,6 +2128,18 @@ var BuffId;
     BuffId["proc:30:light"] = "proc:30:light";
     BuffId["proc:30:dark"] = "proc:30:dark";
     BuffId["proc:30:unknown"] = "proc:30:unknown";
+    BuffId["proc:31:flat"] = "proc:31:flat";
+    BuffId["proc:31:percent"] = "proc:31:percent";
+    BuffId["proc:32:fire"] = "proc:32:fire";
+    BuffId["proc:32:water"] = "proc:32:water";
+    BuffId["proc:32:earth"] = "proc:32:earth";
+    BuffId["proc:32:thunder"] = "proc:32:thunder";
+    BuffId["proc:32:light"] = "proc:32:light";
+    BuffId["proc:32:dark"] = "proc:32:dark";
+    BuffId["proc:32:unknown"] = "proc:32:unknown";
+    BuffId["proc:33"] = "proc:33";
+    BuffId["proc:34:flat"] = "proc:34:flat";
+    BuffId["proc:34:percent"] = "proc:34:percent";
 })(BuffId || (BuffId = {}));
 
 /**
@@ -2291,6 +2333,32 @@ function setMapping(map) {
             buffs,
             duration: duration,
         } }, targetData));
+    const createNoParamsEntry = ({ originalId, sources, }) => ({
+        id: BuffId.NO_PARAMS_SPECIFIED,
+        originalId,
+        sources,
+    });
+    /**
+     * @description Common checks that are run for most effects after the params have been parsed
+     * into an array of {@link IBuff} but before said array is returned.
+     * @param results List of buffs from the given effect.
+     * @param unknownParams Any unknown parameters from the given effect.
+     * @param parsingContext Extra metadata extracted from the given effect.
+     * @returns {undefined} No value is returned, but it does update the `results` array.
+     */
+    const handlePostParse = (results, unknownParams, { originalId, sources, targetData, effectDelay, }) => {
+        if (results.length === 0) {
+            results.push(createNoParamsEntry({ originalId, sources }));
+        }
+        if (unknownParams) {
+            results.push(createUnknownParamsEntry(unknownParams, {
+                originalId,
+                sources,
+                targetData,
+                effectDelay,
+            }));
+        }
+    };
     const createUnknownParamsEntryFromExtraParams = (extraParams, startIndex, injectionContext) => {
         let unknownParams;
         if (extraParams && extraParams.length > 0) {
@@ -2355,17 +2423,16 @@ function setMapping(map) {
                 targetData,
             }));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId,
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     };
     map.set('1', (effect, context, injectionContext) => {
+        const originalId = '1';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const { hits, distribution } = getAttackInformationFromContext(context);
         const params = {
@@ -2396,20 +2463,23 @@ function setMapping(map) {
             acc[key] = parseNumberOrDefault(value);
             return acc;
         }, {});
-        const results = [Object.assign({ id: 'proc:1', originalId: '1', sources,
-                effectDelay, value: Object.assign(Object.assign({}, filteredValue), { hits,
-                    distribution }) }, targetData)];
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '1',
+        const results = [];
+        if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+            results.push(Object.assign({ id: 'proc:1', originalId,
                 sources,
-                targetData,
-                effectDelay,
-            }));
+                effectDelay, value: Object.assign(Object.assign({}, filteredValue), { hits,
+                    distribution }) }, targetData));
         }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('2', (effect, context, injectionContext) => {
+        const originalId = '2';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const params = {
             healLow: '0',
@@ -2433,19 +2503,22 @@ function setMapping(map) {
         Object.keys(params).forEach((key) => {
             params[key] = parseNumberOrDefault(params[key]);
         });
-        const results = [Object.assign({ id: 'proc:2', originalId: '2', sources,
-                effectDelay, value: params }, targetData)];
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '2',
+        const results = [];
+        if (params.healHigh !== 0 || params.healLow !== 0) {
+            results.push(Object.assign({ id: 'proc:2', originalId,
                 sources,
-                targetData,
-                effectDelay,
-            }));
+                effectDelay, value: params }, targetData));
         }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('3', (effect, context, injectionContext) => {
+        const originalId = '3';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const params = {
             healLow: '0',
@@ -2474,7 +2547,8 @@ function setMapping(map) {
         const hasAnyHealValues = params.healLow !== 0 || params.healHigh !== 0;
         const results = [];
         if (hasAnyHealValues) {
-            results.push(Object.assign({ id: 'proc:3', originalId: '3', sources,
+            results.push(Object.assign({ id: 'proc:3', originalId,
+                sources,
                 effectDelay, duration: params.turnDuration, value: {
                     healLow: params.healLow,
                     healHigh: params.healHigh,
@@ -2483,31 +2557,30 @@ function setMapping(map) {
         }
         else if (isTurnDurationBuff(context, params.turnDuration, injectionContext)) {
             results.push(createTurnDurationEntry({
-                originalId: '3',
+                originalId,
                 sources,
                 buffs: ['proc:3'],
                 duration: params.turnDuration,
                 targetData,
             }));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '3',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('4', (effect, context, injectionContext) => {
+        const originalId = '4';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         let flatFill = 0;
         let percentFill = 0;
         let unknownParams;
         if (effect.params) {
             const [rawFlatFill, rawPercentFill, ...extraParams] = splitEffectParams(effect);
-            flatFill = parseNumberOrDefault(rawFlatFill);
+            flatFill = parseNumberOrDefault(rawFlatFill) / 100;
             percentFill = parseNumberOrDefault(rawPercentFill);
             unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
         }
@@ -2521,24 +2594,25 @@ function setMapping(map) {
         }
         const results = [];
         if (flatFill !== 0) {
-            results.push(Object.assign({ id: 'proc:4:flat', originalId: '4', sources,
+            results.push(Object.assign({ id: 'proc:4:flat', originalId,
+                sources,
                 effectDelay, value: flatFill }, targetData));
         }
         if (percentFill !== 0) {
-            results.push(Object.assign({ id: 'proc:4:percent', originalId: '4', sources,
+            results.push(Object.assign({ id: 'proc:4:percent', originalId,
+                sources,
                 effectDelay, value: percentFill }, targetData));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '4',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('5', (effect, context, injectionContext) => {
+        const originalId = '5';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const params = {
             element: BuffConditionElement.All,
@@ -2587,7 +2661,8 @@ function setMapping(map) {
             coreStatProperties.forEach((statKey) => {
                 const value = params[statKey];
                 if (value !== 0) {
-                    const buffEntry = Object.assign({ id: `proc:5:${statKey}`, originalId: '5', sources,
+                    const buffEntry = Object.assign({ id: `proc:5:${statKey}`, originalId,
+                        sources,
                         effectDelay, duration: params.turnDuration, value }, targetData);
                     if (params.element !== BuffConditionElement.All) {
                         buffEntry.conditions = {
@@ -2600,24 +2675,23 @@ function setMapping(map) {
         }
         else if (isTurnDurationBuff(context, params.turnDuration, injectionContext)) {
             results.push(createTurnDurationEntry({
-                originalId: '5',
+                originalId,
                 sources,
                 buffs: coreStatProperties.map((statKey) => `proc:5:${statKey}`),
                 duration: params.turnDuration,
                 targetData,
             }));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '5',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('6', (effect, context, injectionContext) => {
+        const originalId = '6';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const params = {
             bc: '0',
@@ -2647,31 +2721,31 @@ function setMapping(map) {
             dropRateProperties.forEach((key) => {
                 const value = params[key];
                 if (value !== 0) {
-                    results.push(Object.assign({ id: `proc:6:${key}`, originalId: '6', sources,
+                    results.push(Object.assign({ id: `proc:6:${key}`, originalId,
+                        sources,
                         effectDelay, duration: params.turnDuration, value }, targetData));
                 }
             });
         }
         else if (isTurnDurationBuff(context, params.turnDuration, injectionContext)) {
             results.push(createTurnDurationEntry({
-                originalId: '6',
+                originalId,
                 sources,
                 buffs: dropRateProperties.map((key) => `proc:6:${key}`),
                 duration: params.turnDuration,
                 targetData,
             }));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '6',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('7', (effect, context, injectionContext) => {
+        const originalId = '7';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         let recoveredHpPercent = 0;
         let unknownParams;
@@ -2683,19 +2757,19 @@ function setMapping(map) {
         else {
             recoveredHpPercent = parseNumberOrDefault(effect['angel idol recover hp%']);
         }
-        const results = [Object.assign({ id: 'proc:7', originalId: '7', sources,
-                effectDelay, value: recoveredHpPercent }, targetData)];
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '7',
+        const results = [Object.assign({ id: 'proc:7', originalId,
                 sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+                effectDelay, value: recoveredHpPercent }, targetData)];
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('8', (effect, context, injectionContext) => {
+        const originalId = '8';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         let flatHpBoost = 0;
         let percentHpBoost = 0;
@@ -2716,24 +2790,25 @@ function setMapping(map) {
         }
         const results = [];
         if (flatHpBoost !== 0) {
-            results.push(Object.assign({ id: 'proc:8:flat', originalId: '8', sources,
+            results.push(Object.assign({ id: 'proc:8:flat', originalId,
+                sources,
                 effectDelay, value: flatHpBoost }, targetData));
         }
         if (percentHpBoost !== 0) {
-            results.push(Object.assign({ id: 'proc:8:percent', originalId: '8', sources,
+            results.push(Object.assign({ id: 'proc:8:percent', originalId,
+                sources,
                 effectDelay, value: percentHpBoost }, targetData));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '8',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('9', (effect, context, injectionContext) => {
+        const originalId = '9';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const STAT_TYPE_MAPPING = {
             0: 'atk',
@@ -2810,7 +2885,8 @@ function setMapping(map) {
         params.statReductionEntries.forEach(({ stat, value, chance }) => {
             if (value !== 0 || chance !== 0) {
                 hasAnyValues = true;
-                const buffEntry = Object.assign({ id: `proc:9:${stat}`, originalId: '9', sources,
+                const buffEntry = Object.assign({ id: `proc:9:${stat}`, originalId,
+                    sources,
                     effectDelay, duration: params.turnDuration, value: { value, chance } }, targetData);
                 if (params.element !== BuffConditionElement.All) {
                     buffEntry.conditions = {
@@ -2822,24 +2898,23 @@ function setMapping(map) {
         });
         if (!hasAnyValues && isTurnDurationBuff(context, params.turnDuration, injectionContext)) {
             results.push(createTurnDurationEntry({
-                originalId: '9',
+                originalId,
                 sources,
                 buffs: coreStatProperties.map((statKey) => `proc:9:${statKey}`),
                 duration: params.turnDuration,
                 targetData,
             }));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '9',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('10', (effect, context, injectionContext) => {
+        const originalId = '10';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const curedAilments = [];
         let unknownParams;
@@ -2864,19 +2939,19 @@ function setMapping(map) {
                 curedAilments.push(Ailment.Unknown); // generic value for skills; unknown at a glance which ailments are cured
             }
         }
-        const results = curedAilments.map((ailment) => (Object.assign({ id: `proc:10:${ailment}`, originalId: '10', sources,
+        const results = curedAilments.map((ailment) => (Object.assign({ id: `proc:10:${ailment}`, originalId,
+            sources,
             effectDelay, value: true }, targetData)));
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '10',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('11', (effect, context, injectionContext) => {
+        const originalId = '11';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const inflictedAilments = [];
         let unknownParams;
@@ -2919,19 +2994,19 @@ function setMapping(map) {
                 }
             });
         }
-        const results = inflictedAilments.map(({ ailment, chance }) => (Object.assign({ id: `proc:11:${ailment}`, originalId: '11', sources,
+        const results = inflictedAilments.map(({ ailment, chance }) => (Object.assign({ id: `proc:11:${ailment}`, originalId,
+            sources,
             effectDelay, value: chance }, targetData)));
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '11',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('12', (effect, context, injectionContext) => {
+        const originalId = '12';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         let reviveToHp = 0;
         let unknownParams;
@@ -2943,19 +3018,19 @@ function setMapping(map) {
         else {
             reviveToHp = parseNumberOrDefault(effect['revive to hp%']);
         }
-        const results = [Object.assign({ id: 'proc:12', originalId: '12', sources,
-                effectDelay, value: reviveToHp }, targetData)];
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '12',
+        const results = [Object.assign({ id: 'proc:12', originalId,
                 sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+                effectDelay, value: reviveToHp }, targetData)];
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('13', (effect, context, injectionContext) => {
+        const originalId = '13';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         let hits = 0;
         const { distribution } = getAttackInformationFromContext(context);
@@ -2988,27 +3063,29 @@ function setMapping(map) {
             acc[key] = parseNumberOrDefault(value);
             return acc;
         }, {});
-        const results = [{
+        const results = [];
+        if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+            results.push({
                 id: 'proc:13',
-                originalId: '13',
+                originalId,
                 sources,
                 effectDelay,
                 value: Object.assign(Object.assign({}, filteredValue), { hits,
                     distribution }),
                 targetType: targetData.targetType,
                 targetArea: TargetArea.Random,
-            }];
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '13',
-                sources,
-                targetData,
-                effectDelay,
-            }));
+            });
         }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('14', (effect, context, injectionContext) => {
+        const originalId = '14';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const { hits, distribution } = getAttackInformationFromContext(context);
         const params = {
@@ -3043,20 +3120,23 @@ function setMapping(map) {
             acc[key] = parseNumberOrDefault(value);
             return acc;
         }, {});
-        const results = [Object.assign({ id: 'proc:14', originalId: '14', sources,
-                effectDelay, value: Object.assign(Object.assign({}, filteredValue), { hits,
-                    distribution }) }, targetData)];
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '14',
+        const results = [];
+        if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+            results.push(Object.assign({ id: 'proc:14', originalId,
                 sources,
-                targetData,
-                effectDelay,
-            }));
+                effectDelay, value: Object.assign(Object.assign({}, filteredValue), { hits,
+                    distribution }) }, targetData));
         }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('16', (effect, context, injectionContext) => {
+        const originalId = '16';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         let mitigation = 0;
         let element;
@@ -3079,29 +3159,29 @@ function setMapping(map) {
         }
         const results = [];
         if (mitigation !== 0) {
-            results.push(Object.assign({ id: `proc:16:${element}`, originalId: '16', sources,
+            results.push(Object.assign({ id: `proc:16:${element}`, originalId,
+                sources,
                 effectDelay, duration: turnDuration, value: mitigation }, targetData));
         }
         else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
             results.push(createTurnDurationEntry({
-                originalId: '16',
+                originalId,
                 sources,
                 buffs: Object.values(ELEMENT_MAPPING).concat([BuffConditionElement.Unknown]).map((e) => `proc:16:${e}`),
                 duration: turnDuration,
                 targetData,
             }));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '16',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('17', (effect, context, injectionContext) => {
+        const originalId = '17';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const AILMENTS_ORDER = [Ailment.Poison, Ailment.Weak, Ailment.Sick, Ailment.Injury, Ailment.Curse, Ailment.Paralysis];
         const resistances = {
@@ -3134,28 +3214,27 @@ function setMapping(map) {
         AILMENTS_ORDER.forEach((ailment) => {
             const value = parseNumberOrDefault(resistances[ailment]);
             if (value !== 0) {
-                results.push(Object.assign({ id: `proc:17:${ailment}`, originalId: '17', sources,
+                results.push(Object.assign({ id: `proc:17:${ailment}`, originalId,
+                    sources,
                     effectDelay,
                     value, duration: turnDuration }, targetData));
             }
         });
         if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
             results.push(createTurnDurationEntry({
-                originalId: '17',
+                originalId,
                 sources,
                 buffs: AILMENTS_ORDER.map((a) => `proc:17:${a}`),
                 duration: turnDuration,
                 targetData,
             }));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '17',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('18', (effect, context, injectionContext) => {
@@ -3182,6 +3261,7 @@ function setMapping(map) {
         });
     });
     map.set('20', (effect, context, injectionContext) => {
+        const originalId = '20';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         let fillLow = 0;
         let fillHigh = 0;
@@ -3205,7 +3285,8 @@ function setMapping(map) {
         const hasAnyFillValues = fillLow !== 0 || fillHigh !== 0;
         const results = [];
         if (hasAnyFillValues) {
-            results.push(Object.assign({ id: 'proc:20', originalId: '20', sources,
+            results.push(Object.assign({ id: 'proc:20', originalId,
+                sources,
                 effectDelay, duration: turnDuration, conditions: {
                     whenAttacked: true,
                 }, value: {
@@ -3216,21 +3297,19 @@ function setMapping(map) {
         }
         else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
             results.push(createTurnDurationEntry({
-                originalId: '20',
+                originalId,
                 sources,
                 buffs: ['proc:20'],
                 duration: turnDuration,
                 targetData,
             }));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '20',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('22', (effect, context, injectionContext) => {
@@ -3245,6 +3324,7 @@ function setMapping(map) {
         });
     });
     map.set('23', (effect, context, injectionContext) => {
+        const originalId = '23';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         let value = 0, turnDuration = 0;
         let unknownParams;
@@ -3261,29 +3341,29 @@ function setMapping(map) {
         }
         const results = [];
         if (value !== 0) {
-            results.push(Object.assign({ id: 'proc:23', originalId: '23', sources,
+            results.push(Object.assign({ id: 'proc:23', originalId,
+                sources,
                 effectDelay, duration: turnDuration, value }, targetData));
         }
         else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
             results.push(createTurnDurationEntry({
-                originalId: '23',
+                originalId,
                 sources,
                 buffs: ['proc:23'],
                 duration: turnDuration,
                 targetData,
             }));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '23',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('24', (effect, context, injectionContext) => {
+        const originalId = '24';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const coreStatProperties = ['atk', 'def', 'rec'];
         const coreStatPropertyMapping = {
@@ -3335,7 +3415,8 @@ function setMapping(map) {
         coreStatProperties.forEach((stat) => {
             const value = parseNumberOrDefault(stats[stat]);
             if (value !== 0) {
-                results.push(Object.assign({ id: `proc:24:${stat}`, originalId: '24', sources,
+                results.push(Object.assign({ id: `proc:24:${stat}`, originalId,
+                    sources,
                     effectDelay, duration: turnDuration, value: {
                         convertedStat,
                         value,
@@ -3344,24 +3425,23 @@ function setMapping(map) {
         });
         if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
             results.push(createTurnDurationEntry({
-                originalId: '24',
+                originalId,
                 sources,
                 buffs: coreStatProperties.map((statKey) => `proc:24:${statKey}`),
                 duration: turnDuration,
                 targetData,
             }));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '24',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('26', (effect, context, injectionContext) => {
+        const originalId = '26';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         let hitIncreasePerHit = 0, extraHitDamage = 0, turnDuration = 0;
         let unknownParams;
@@ -3380,7 +3460,8 @@ function setMapping(map) {
         }
         const results = [];
         if (hitIncreasePerHit !== 0 || extraHitDamage !== 0) {
-            results.push(Object.assign({ id: 'proc:26', originalId: '26', sources,
+            results.push(Object.assign({ id: 'proc:26', originalId,
+                sources,
                 effectDelay, duration: turnDuration, value: {
                     hitIncreasePerHit,
                     extraHitDamage,
@@ -3388,24 +3469,23 @@ function setMapping(map) {
         }
         else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
             results.push(createTurnDurationEntry({
-                originalId: '26',
+                originalId,
                 sources,
                 buffs: ['proc:26'],
                 duration: turnDuration,
                 targetData,
             }));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '26',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('27', (effect, context, injectionContext) => {
+        const originalId = '27';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const { hits, distribution } = getAttackInformationFromContext(context);
         const params = {
@@ -3442,20 +3522,23 @@ function setMapping(map) {
             acc[key] = parseNumberOrDefault(value);
             return acc;
         }, {});
-        const results = [Object.assign({ id: 'proc:27', originalId: '27', sources,
-                effectDelay, value: Object.assign(Object.assign({}, filteredValue), { hits,
-                    distribution }) }, targetData)];
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '27',
+        const results = [];
+        if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+            results.push(Object.assign({ id: 'proc:27', originalId,
                 sources,
-                targetData,
-                effectDelay,
-            }));
+                effectDelay, value: Object.assign(Object.assign({}, filteredValue), { hits,
+                    distribution }) }, targetData));
         }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('28', (effect, context, injectionContext) => {
+        const originalId = '28';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const { hits, distribution } = getAttackInformationFromContext(context);
         let value = 0;
@@ -3468,25 +3551,29 @@ function setMapping(map) {
         else {
             value = parseNumberOrDefault(effect['fixed damage']);
         }
-        const results = [Object.assign({ id: 'proc:28', originalId: '28', sources,
+        const results = [];
+        if (hits !== 0 || distribution !== 0 || value !== 0) {
+            const entry = Object.assign({ id: 'proc:28', originalId,
+                sources,
                 effectDelay, value: {
                     hits,
                     distribution,
-                } }, targetData)];
-        if (value !== 0) {
-            results[0].value.value = value;
+                } }, targetData);
+            if (value !== 0) {
+                entry.value.value = value;
+            }
+            results.push(entry);
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '28',
-                sources,
-                targetData,
-                effectDelay,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('29', (effect, context, injectionContext) => {
+        const originalId = '29';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const { hits, distribution } = getAttackInformationFromContext(context);
         const params = {
@@ -3527,23 +3614,27 @@ function setMapping(map) {
             acc[key] = parseNumberOrDefault(value);
             return acc;
         }, {});
-        const results = [Object.assign({ id: 'proc:29', originalId: '29', sources,
-                effectDelay, value: Object.assign(Object.assign({}, filteredValue), { hits,
-                    distribution }) }, targetData)];
-        if (attackElements.length > 0) {
-            results[0].value.elements = attackElements;
-        }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '29',
+        const results = [];
+        if (hits !== 0 || distribution !== 0 || attackElements.length > 0 || Object.keys(filteredValue).length > 0) {
+            const entry = Object.assign({ id: 'proc:29', originalId,
                 sources,
-                targetData,
-                effectDelay,
-            }));
+                effectDelay, value: Object.assign(Object.assign({}, filteredValue), { hits,
+                    distribution }) }, targetData);
+            if (attackElements.length > 0) {
+                entry.value.elements = attackElements;
+            }
+            results.push(entry);
         }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
     map.set('30', (effect, context, injectionContext) => {
+        const originalId = '30';
         const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         let elements = [];
         let turnDuration = 0;
@@ -3573,27 +3664,179 @@ function setMapping(map) {
         if (elements.length > 0) {
             elements.forEach((inputElement) => {
                 const sanitizedElement = validElements.includes(inputElement) ? inputElement : BuffConditionElement.Unknown;
-                results.push(Object.assign({ id: `proc:30:${sanitizedElement}`, originalId: '30', sources,
+                results.push(Object.assign({ id: `proc:30:${sanitizedElement}`, originalId,
+                    sources,
                     effectDelay, duration: turnDuration }, targetData));
             });
         }
         else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
             results.push(createTurnDurationEntry({
-                originalId: '30',
+                originalId,
                 sources,
                 buffs: validElements.concat([BuffConditionElement.Unknown]).map((e) => `proc:30:${e}`),
                 duration: turnDuration,
                 targetData,
             }));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '30',
-                sources,
-                targetData,
-                effectDelay,
-            }));
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
+        return results;
+    });
+    map.set('31', (effect, context, injectionContext) => {
+        const originalId = '31';
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        let flatFill = 0;
+        let percentFill = 0;
+        let unknownParams;
+        if (effect.params) {
+            const [rawFlatFill, rawPercentFill, ...extraParams] = splitEffectParams(effect);
+            flatFill = parseNumberOrDefault(rawFlatFill) / 100;
+            percentFill = parseNumberOrDefault(rawPercentFill);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
         }
+        else {
+            if ('increase bb gauge' in effect) {
+                flatFill = parseNumberOrDefault(effect['increase bb gauge']);
+            }
+            // NOTE: Deathmax's datamine only recognizes one value. We think the second parameter is percent fill
+            // due to it being tied to a Tilith skill (a unit who's known for BC filling skillsets)
+        }
+        const results = [];
+        if (flatFill !== 0) {
+            results.push(Object.assign({ id: 'proc:31:flat', originalId,
+                sources,
+                effectDelay, value: flatFill }, targetData));
+        }
+        if (percentFill !== 0) {
+            results.push(Object.assign({ id: 'proc:31:percent', originalId,
+                sources,
+                effectDelay, value: percentFill }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
+        return results;
+    });
+    map.set('32', (effect, context, injectionContext) => {
+        const originalId = '32';
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        let element;
+        let unknownParams;
+        if (effect.params) {
+            const [rawElement, ...extraParams] = splitEffectParams(effect);
+            if (rawElement && rawElement !== '0') {
+                element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+            }
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+        }
+        else {
+            const effectElement = effect['set attack element attribute'];
+            if (effectElement) {
+                const sanitizedElement = Object.values(ELEMENT_MAPPING).find((e) => effectElement === e);
+                if (sanitizedElement && sanitizedElement !== BuffConditionElement.All) {
+                    element = sanitizedElement;
+                }
+                else {
+                    element = BuffConditionElement.Unknown;
+                }
+            }
+        }
+        const results = [];
+        if (element) {
+            results.push(Object.assign({ id: `proc:32:${element}`, originalId,
+                sources,
+                effectDelay, value: true }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
+        return results;
+    });
+    map.set('33', (effect, context, injectionContext) => {
+        const originalId = '33';
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        let chance = 0;
+        let unknownParams;
+        if (effect.params) {
+            const [rawValue, ...extraParams] = splitEffectParams(effect);
+            chance = parseNumberOrDefault(rawValue);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+        }
+        else {
+            chance = parseNumberOrDefault(effect['clear buff chance%']);
+        }
+        const results = [];
+        if (chance !== 0) {
+            results.push(Object.assign({ id: 'proc:33', originalId,
+                sources,
+                effectDelay, value: chance }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
+        return results;
+    });
+    map.set('34', (effect, context, injectionContext) => {
+        const originalId = '34';
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        let flatDrainLow = 0, flatDrainHigh = 0;
+        let percentDrainLow = 0, percentDrainHigh = 0;
+        let chance = 0;
+        let unknownParams;
+        if (effect.params) {
+            const [rawFlatLow, rawFlatHigh, rawPercentLow, rawPercentHigh, rawChance, ...extraParams] = splitEffectParams(effect);
+            flatDrainLow = parseNumberOrDefault(rawFlatLow) / 100;
+            flatDrainHigh = parseNumberOrDefault(rawFlatHigh) / 100;
+            percentDrainLow = parseNumberOrDefault(rawPercentLow);
+            percentDrainHigh = parseNumberOrDefault(rawPercentHigh);
+            chance = parseNumberOrDefault(rawChance);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+        }
+        else {
+            flatDrainLow = parseNumberOrDefault(effect['base bb gauge reduction low']);
+            flatDrainHigh = parseNumberOrDefault(effect['base bb gauge reduction high']);
+            percentDrainLow = parseNumberOrDefault(effect['bb gauge% reduction low']);
+            percentDrainHigh = parseNumberOrDefault(effect['bb gauge% reduction high']);
+            chance = parseNumberOrDefault(effect['bb gauge reduction chance%']);
+        }
+        const results = [];
+        if (flatDrainLow !== 0 || flatDrainHigh !== 0) {
+            results.push(Object.assign({ id: 'proc:34:flat', originalId,
+                sources,
+                effectDelay, value: {
+                    drainLow: flatDrainLow,
+                    drainHigh: flatDrainHigh,
+                    chance,
+                } }, targetData));
+        }
+        if (percentDrainLow !== 0 || percentDrainHigh !== 0) {
+            results.push(Object.assign({ id: 'proc:34:percent', originalId,
+                sources,
+                effectDelay, value: {
+                    drainLow: percentDrainLow,
+                    drainHigh: percentDrainHigh,
+                    chance,
+                } }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
         return results;
     });
 }
@@ -3688,6 +3931,7 @@ function setMapping$1(map) {
     };
     const STATS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
     const AILMENTS_ORDER = ['poison', 'weak', 'sick', 'injury', 'curse', 'paralysis'];
+    const DROP_TYPES_ORDER = ['bc', 'hc', 'item', 'zel', 'karma'];
     const retrieveCommonInfoForEffects = (effect, context, injectionContext) => {
         const conditionInfo = ((injectionContext && injectionContext.processExtraSkillConditions) || processExtraSkillConditions)(effect);
         const targetData = ((injectionContext && injectionContext.getPassiveTargetData) || getPassiveTargetData)(effect, context);
@@ -3699,6 +3943,32 @@ function setMapping$1(map) {
     const splitEffectParams = (effect) => effect.params.split(',');
     const createUnknownParamsEntry = (unknownParams, { originalId, sources, targetData, conditionInfo, }) => (Object.assign({ id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS, originalId,
         sources, value: unknownParams, conditions: Object.assign({}, conditionInfo) }, targetData));
+    const createNoParamsEntry = ({ originalId, sources, }) => ({
+        id: BuffId.NO_PARAMS_SPECIFIED,
+        originalId,
+        sources,
+    });
+    /**
+     * @description Common checks that are run for most effects after the params have been parsed
+     * into an array of {@link IBuff} but before said array is returned.
+     * @param results List of buffs from the given effect.
+     * @param unknownParams Any unknown parameters from the given effect.
+     * @param parsingContext Extra metadata extracted from the given effect.
+     * @returns {undefined} No value is returned, but it does update the `results` array.
+     */
+    const handlePostParse = (results, unknownParams, { originalId, sources, targetData, conditionInfo, }) => {
+        if (results.length === 0) {
+            results.push(createNoParamsEntry({ originalId, sources }));
+        }
+        if (unknownParams) {
+            results.push(createUnknownParamsEntry(unknownParams, {
+                originalId,
+                sources,
+                targetData,
+                conditionInfo,
+            }));
+        }
+    };
     const createUnknownParamsEntryFromExtraParams = (extraParams, startIndex, injectionContext) => {
         let unknownParams;
         if (extraParams && extraParams.length > 0) {
@@ -3750,7 +4020,7 @@ function setMapping$1(map) {
         }
         return conditions;
     };
-    const parsePassiveWithSingleNumericalParameter = ({ effect, context, injectionContext, originalId, effectKey, buffId, }) => {
+    const parsePassiveWithSingleNumericalParameter = ({ effect, context, injectionContext, originalId, effectKey, buffId, parseParamValue = (rawValue) => parseNumberOrDefault(rawValue), }) => {
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         const results = [];
@@ -3758,7 +4028,7 @@ function setMapping$1(map) {
         let unknownParams;
         if (typedEffect.params) {
             const [rawValue, ...extraParams] = splitEffectParams(typedEffect);
-            value = parseNumberOrDefault(rawValue);
+            value = parseParamValue(rawValue);
             unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
         }
         else {
@@ -3769,14 +4039,12 @@ function setMapping$1(map) {
                 sources,
                 value, conditions: Object.assign({}, conditionInfo) }, targetData));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId,
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     };
     const parsePassiveWithNumericalValueRangeAndChance = ({ effect, context, injectionContext, originalId, effectKeyLow, effectKeyHigh, effectKeyChance, buffKeyLow, buffKeyHigh, defaultEffectChance = 0, parseParamValue = (rawValue) => parseNumberOrDefault(rawValue), generateBaseConditions = () => ({}), buffId, }) => {
@@ -3796,23 +4064,25 @@ function setMapping$1(map) {
             valueHigh = parseNumberOrDefault(typedEffect[effectKeyHigh]);
             chance = parseNumberOrDefault(typedEffect[effectKeyChance], defaultEffectChance);
         }
-        const results = [Object.assign({ id: buffId, originalId,
+        const results = [];
+        if (valueLow !== 0 || valueHigh !== 0 || chance !== 0) {
+            results.push(Object.assign({ id: buffId, originalId,
                 sources, value: {
                     [buffKeyLow]: valueLow,
                     [buffKeyHigh]: valueHigh,
                     chance,
-                }, conditions: Object.assign(Object.assign({}, conditionInfo), generateBaseConditions()) }, targetData)];
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId,
-                sources,
-                targetData,
-                conditionInfo,
-            }));
+                }, conditions: Object.assign(Object.assign({}, conditionInfo), generateBaseConditions()) }, targetData));
         }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     };
     map.set('1', (effect, context, injectionContext) => {
+        const originalId = '1';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         const results = [];
@@ -3839,21 +4109,21 @@ function setMapping$1(map) {
         STATS_ORDER.forEach((stat) => {
             const value = parseNumberOrDefault(stats[stat]);
             if (value !== 0) {
-                results.push(Object.assign({ id: `passive:1:${stat}`, originalId: '1', sources,
+                results.push(Object.assign({ id: `passive:1:${stat}`, originalId,
+                    sources,
                     value, conditions: Object.assign({}, conditionInfo) }, targetData));
             }
         });
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '1',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('2', (effect, context, injectionContext) => {
+        const originalId = '2';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         const results = [];
@@ -3878,14 +4148,17 @@ function setMapping$1(map) {
             unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
         }
         else {
-            stats.elements = typedEffect['elements buffed'];
+            if (Array.isArray(typedEffect['elements buffed'])) {
+                stats.elements = typedEffect['elements buffed'];
+            }
             stats.hp = typedEffect['hp% buff'];
             stats.atk = typedEffect['atk% buff'];
             stats.def = typedEffect['def% buff'];
             stats.rec = typedEffect['rec% buff'];
             stats.crit = typedEffect['crit% buff'];
         }
-        const createBaseStatObject = (stat) => (Object.assign({ id: `passive:2:${stat}`, originalId: '2', sources, value: parseNumberOrDefault(stats[stat]) }, targetData));
+        const createBaseStatObject = (stat) => (Object.assign({ id: `passive:2:${stat}`, originalId,
+            sources, value: parseNumberOrDefault(stats[stat]) }, targetData));
         if (stats.elements.length > 0) {
             stats.elements.forEach((element) => {
                 STATS_ORDER.forEach((stat) => {
@@ -3904,17 +4177,16 @@ function setMapping$1(map) {
                 }
             });
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '2',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('3', (effect, context, injectionContext) => {
+        const originalId = '3';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         const results = [];
@@ -3948,20 +4220,20 @@ function setMapping$1(map) {
         STATS_ORDER.forEach((stat) => {
             const value = parseNumberOrDefault(stats[stat]);
             if (value !== 0) {
-                results.push(Object.assign({ id: `passive:3:${stat}`, originalId: '3', sources, value: +value, conditions: Object.assign(Object.assign({}, conditionInfo), { targetUnitType }) }, targetData));
+                results.push(Object.assign({ id: `passive:3:${stat}`, originalId,
+                    sources, value: +value, conditions: Object.assign(Object.assign({}, conditionInfo), { targetUnitType }) }, targetData));
             }
         });
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '3',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('4', (effect, context, injectionContext) => {
+        const originalId = '4';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         const results = [];
@@ -3988,21 +4260,21 @@ function setMapping$1(map) {
         AILMENTS_ORDER.forEach((ailment) => {
             const value = parseNumberOrDefault(resistances[ailment]);
             if (value !== 0) {
-                results.push(Object.assign({ id: `passive:4:${ailment}`, originalId: '4', sources,
+                results.push(Object.assign({ id: `passive:4:${ailment}`, originalId,
+                    sources,
                     value, conditions: Object.assign({}, conditionInfo) }, targetData));
             }
         });
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '4',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('5', (effect, context, injectionContext) => {
+        const originalId = '5';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         const results = [];
@@ -4024,17 +4296,16 @@ function setMapping$1(map) {
         }
         const value = parseNumberOrDefault(mitigation);
         if (value !== 0) {
-            results.push(Object.assign({ id: `passive:5:${element}`, originalId: '5', sources,
+            results.push(Object.assign({ id: `passive:5:${element}`, originalId,
+                sources,
                 value, conditions: Object.assign({}, conditionInfo) }, targetData));
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '5',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('8', (effect, context, injectionContext) => {
@@ -4068,6 +4339,7 @@ function setMapping$1(map) {
         });
     });
     map.set('11', (effect, context, injectionContext) => {
+        const originalId = '11';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         const results = [];
@@ -4098,24 +4370,23 @@ function setMapping$1(map) {
         STATS_ORDER.forEach((stat) => {
             const value = parseNumberOrDefault(stats[stat]);
             if (stat !== 'hp' && value !== 0) {
-                const entry = Object.assign({ id: `passive:11:${stat}`, originalId: '11', sources,
+                const entry = Object.assign({ id: `passive:11:${stat}`, originalId,
+                    sources,
                     value, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData);
                 results.push(entry);
             }
         });
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '11',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('12', (effect, context, injectionContext) => {
+        const originalId = '12';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-        const DROP_TYPES_ORDER = ['bc', 'hc', 'item', 'zel', 'karma'];
         const typedEffect = effect;
         const results = [];
         const dropRates = {
@@ -4145,19 +4416,18 @@ function setMapping$1(map) {
         DROP_TYPES_ORDER.forEach((dropType) => {
             const value = parseNumberOrDefault(dropRates[dropType]);
             if (value !== 0) {
-                const entry = Object.assign({ id: `passive:12:${dropType}`, originalId: '12', sources,
+                const entry = Object.assign({ id: `passive:12:${dropType}`, originalId,
+                    sources,
                     value, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData);
                 results.push(entry);
             }
         });
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '12',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('13', (effect, context, injectionContext) => {
@@ -4177,6 +4447,7 @@ function setMapping$1(map) {
         });
     });
     map.set('14', (effect, context, injectionContext) => {
+        const originalId = '14';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         let damageReduction, chance;
@@ -4191,18 +4462,20 @@ function setMapping$1(map) {
             damageReduction = parseNumberOrDefault(typedEffect['dmg reduction%']);
             chance = parseNumberOrDefault(typedEffect['dmg reduction chance%']);
         }
-        const results = [Object.assign({ id: 'passive:14', originalId: '14', sources, value: {
+        const results = [];
+        if (damageReduction !== 0 || chance !== 0) {
+            results.push(Object.assign({ id: 'passive:14', originalId,
+                sources, value: {
                     value: damageReduction,
                     chance,
-                }, conditions: Object.assign({}, conditionInfo) }, targetData)];
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '14',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
+                }, conditions: Object.assign({}, conditionInfo) }, targetData));
         }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('15', (effect, context, injectionContext) => {
@@ -4222,6 +4495,7 @@ function setMapping$1(map) {
         });
     });
     map.set('16', (effect, context, injectionContext) => {
+        const originalId = '16';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         let healLow, healHigh;
@@ -4236,18 +4510,20 @@ function setMapping$1(map) {
             healLow = parseNumberOrDefault(typedEffect['hp% recover on battle win low']);
             healHigh = parseNumberOrDefault(typedEffect['hp% recover on battle win high']);
         }
-        const results = [Object.assign({ id: 'passive:16', originalId: '16', sources, value: {
+        const results = [];
+        if (healLow !== 0 || healHigh !== 0) {
+            results.push(Object.assign({ id: 'passive:16', originalId,
+                sources, value: {
                     healLow,
                     healHigh,
-                }, conditions: Object.assign(Object.assign({}, conditionInfo), { onBattleWin: true }) }, targetData)];
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '16',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
+                }, conditions: Object.assign(Object.assign({}, conditionInfo), { onBattleWin: true }) }, targetData));
         }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('17', (effect, context, injectionContext) => {
@@ -4265,8 +4541,8 @@ function setMapping$1(map) {
         });
     });
     map.set('19', (effect, context, injectionContext) => {
+        const originalId = '19';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-        const DROP_TYPES_ORDER = ['bc', 'hc', 'item', 'zel', 'karma'];
         const typedEffect = effect;
         const results = [];
         const dropRates = {
@@ -4290,21 +4566,21 @@ function setMapping$1(map) {
         DROP_TYPES_ORDER.forEach((dropType) => {
             const value = parseNumberOrDefault(dropRates[dropType]);
             if (value !== 0) {
-                results.push(Object.assign({ id: `passive:19:${dropType}`, originalId: '19', sources,
+                results.push(Object.assign({ id: `passive:19:${dropType}`, originalId,
+                    sources,
                     value, conditions: Object.assign({}, conditionInfo) }, targetData));
             }
         });
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '19',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('20', (effect, context, injectionContext) => {
+        const originalId = '20';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const inflictedAilments = [];
         const typedEffect = effect;
@@ -4348,18 +4624,23 @@ function setMapping$1(map) {
                 }
             });
         }
-        const results = inflictedAilments.map(({ ailment, chance }) => (Object.assign({ id: `passive:20:${ailment}`, originalId: '20', sources, value: chance, conditions: Object.assign({}, conditionInfo) }, targetData)));
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '20',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        const results = [];
+        inflictedAilments.forEach(({ ailment, chance }) => {
+            if (chance !== 0) {
+                results.push(Object.assign({ id: `passive:20:${ailment}`, originalId,
+                    sources, value: chance, conditions: Object.assign({}, conditionInfo) }, targetData));
+            }
+        });
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('21', (effect, context, injectionContext) => {
+        const originalId = '21';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         const results = [];
@@ -4387,22 +4668,22 @@ function setMapping$1(map) {
         STATS_ORDER.forEach((stat) => {
             const value = parseNumberOrDefault(stats[stat]);
             if (stat !== 'hp' && value !== 0) {
-                const entry = Object.assign({ id: `passive:21:${stat}`, originalId: '21', sources,
+                const entry = Object.assign({ id: `passive:21:${stat}`, originalId,
+                    sources,
                     value, duration: turnDuration, conditions: Object.assign({}, conditionInfo) }, targetData);
                 results.push(entry);
             }
         });
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '21',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('23', (effect, context, injectionContext) => {
+        const originalId = '23';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         let fillLow, fillHigh;
@@ -4417,18 +4698,20 @@ function setMapping$1(map) {
             fillLow = parseNumberOrDefault(typedEffect['battle end bc fill low']);
             fillHigh = parseNumberOrDefault(typedEffect['battle end bc fill high']);
         }
-        const results = [Object.assign({ id: 'passive:23', originalId: '23', sources, value: {
+        const results = [];
+        if (fillLow !== 0 || fillHigh !== 0) {
+            results.push(Object.assign({ id: 'passive:23', originalId,
+                sources, value: {
                     fillLow,
                     fillHigh,
-                }, conditions: Object.assign(Object.assign({}, conditionInfo), { onBattleWin: true }) }, targetData)];
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '23',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
+                }, conditions: Object.assign(Object.assign({}, conditionInfo), { onBattleWin: true }) }, targetData));
         }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('24', (effect, context, injectionContext) => {
@@ -4488,6 +4771,7 @@ function setMapping$1(map) {
         });
     });
     map.set('28', (effect, context, injectionContext) => {
+        const originalId = '28';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         let value = 0;
@@ -4501,24 +4785,22 @@ function setMapping$1(map) {
         }
         else {
             value = parseNumberOrDefault(typedEffect['target% chance']);
-            // TODO: change to be "passive requirement"
             thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.Hp, 'passive requirement');
         }
         const results = [];
         if (value !== 0) {
             const thresholdConditions = getThresholdConditions(thresholdInfo);
-            const entry = Object.assign({ id: 'passive:28', originalId: '28', sources,
+            const entry = Object.assign({ id: 'passive:28', originalId,
+                sources,
                 value, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData);
             results.push(entry);
         }
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '28',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
     });
     map.set('29', (effect, context, injectionContext) => {
@@ -4532,6 +4814,7 @@ function setMapping$1(map) {
         });
     });
     map.set('30', (effect, context, injectionContext) => {
+        const originalId = '30';
         const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
         const typedEffect = effect;
         const results = [];
@@ -4562,20 +4845,122 @@ function setMapping$1(map) {
         STATS_ORDER.forEach((stat) => {
             const value = parseNumberOrDefault(stats[stat]);
             if (stat !== 'hp' && value !== 0) {
-                const entry = Object.assign({ id: `passive:30:${stat}`, originalId: '30', sources,
+                const entry = Object.assign({ id: `passive:30:${stat}`, originalId,
+                    sources,
                     value, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData);
                 results.push(entry);
             }
         });
-        if (unknownParams) {
-            results.push(createUnknownParamsEntry(unknownParams, {
-                originalId: '30',
-                sources,
-                targetData,
-                conditionInfo,
-            }));
-        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
         return results;
+    });
+    map.set('31', (effect, context, injectionContext) => {
+        const originalId = '31';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const dropRates = {
+            bc: '0',
+            hc: '0',
+            item: '0',
+            zel: '0',
+            karma: '0',
+        };
+        let sparkDamageBoost = 0;
+        let unknownParams;
+        if (typedEffect.params) {
+            let extraParams;
+            let rawSparkDamageBoost;
+            [rawSparkDamageBoost, dropRates.bc, dropRates.hc, dropRates.item, dropRates.zel, dropRates.karma, ...extraParams] = splitEffectParams(typedEffect);
+            sparkDamageBoost = parseNumberOrDefault(rawSparkDamageBoost);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+        }
+        else {
+            sparkDamageBoost = parseNumberOrDefault(typedEffect['damage% for spark']);
+            DROP_TYPES_ORDER.forEach((dropType) => {
+                dropRates[dropType] = typedEffect[`${dropType} drop% for spark`];
+            });
+        }
+        const results = [];
+        if (sparkDamageBoost !== 0) {
+            results.push(Object.assign({ id: 'passive:31:damage', originalId,
+                sources, value: sparkDamageBoost, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        DROP_TYPES_ORDER.forEach((dropType) => {
+            const value = parseNumberOrDefault(dropRates[dropType]);
+            if (value !== 0) {
+                results.push(Object.assign({ id: `passive:31:${dropType}`, originalId,
+                    sources,
+                    value, conditions: Object.assign({}, conditionInfo) }, targetData));
+            }
+        });
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('32', (effect, context, injectionContext) => {
+        return parsePassiveWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            effectKey: 'bb gauge fill rate%',
+            buffId: 'passive:32',
+            originalId: '32',
+        });
+    });
+    map.set('33', (effect, context, injectionContext) => {
+        const originalId = '33';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        let healLow, healHigh, addedRec;
+        let unknownParams;
+        if (typedEffect.params) {
+            const [rawHealLow, rawHealHigh, rawAddedRec, ...extraParams] = splitEffectParams(typedEffect);
+            healLow = parseNumberOrDefault(rawHealLow);
+            healHigh = parseNumberOrDefault(rawHealHigh);
+            addedRec = (1 + parseNumberOrDefault(rawAddedRec) / 100) * 10;
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+        }
+        else {
+            healLow = parseNumberOrDefault(typedEffect['turn heal low']);
+            healHigh = parseNumberOrDefault(typedEffect['turn heal high']);
+            addedRec = parseNumberOrDefault(typedEffect['rec% added (turn heal)']);
+        }
+        const results = [];
+        if (healLow !== 0 || healHigh !== 0) {
+            results.push(Object.assign({ id: 'passive:33', originalId,
+                sources, value: {
+                    healLow,
+                    healHigh,
+                    'addedRec%': addedRec,
+                }, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('34', (effect, context, injectionContext) => {
+        return parsePassiveWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            effectKey: 'crit multiplier%',
+            buffId: 'passive:34',
+            originalId: '34',
+            parseParamValue: (rawValue) => parseNumberOrDefault(rawValue) * 100,
+        });
     });
 }
 
@@ -4615,17 +5000,7 @@ function convertPassiveEffectToBuffs(effect, context) {
         : defaultConversionFunction$1(effect, context);
 }
 
-const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ 'UNKNOWN_PASSIVE_EFFECT_ID': {
-        id: BuffId.UNKNOWN_PASSIVE_EFFECT_ID,
-        name: 'Unknown Passive Effect',
-        stackType: BuffStackType.Unknown,
-        icons: () => [IconId.UNKNOWN],
-    }, 'UNKNOWN_PASSIVE_BUFF_PARAMS': {
-        id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
-        name: 'Unknown Passive Buff Parameters',
-        stackType: BuffStackType.Unknown,
-        icons: () => [IconId.UNKNOWN],
-    }, 'TURN_DURATION_MODIFICATION': {
+const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ 'TURN_DURATION_MODIFICATION': {
         id: BuffId.TURN_DURATION_MODIFICATION,
         name: 'Passive Turn Duration Modification',
         stat: UnitStat.turnDurationModification,
@@ -4636,6 +5011,21 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
                 buff.value.duration < 0) ?
                 IconId.TURN_DURATION_DOWN : IconId.TURN_DURATION_UP
         ],
+    }, 'NO_PARAMS_SPECIFIED': {
+        id: BuffId.NO_PARAMS_SPECIFIED,
+        name: 'No Parameters Specified',
+        stackType: BuffStackType.Unknown,
+        icons: () => [IconId.UNKNOWN],
+    }, 'UNKNOWN_PASSIVE_EFFECT_ID': {
+        id: BuffId.UNKNOWN_PASSIVE_EFFECT_ID,
+        name: 'Unknown Passive Effect',
+        stackType: BuffStackType.Unknown,
+        icons: () => [IconId.UNKNOWN],
+    }, 'UNKNOWN_PASSIVE_BUFF_PARAMS': {
+        id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+        name: 'Unknown Passive Buff Parameters',
+        stackType: BuffStackType.Unknown,
+        icons: () => [IconId.UNKNOWN],
     }, 'passive:1:hp': {
         id: BuffId['passive:1:hp'],
         name: 'Passive HP Boost',
@@ -5145,6 +5535,60 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.crit,
         stackType: BuffStackType.Passive,
         icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_BBGAUGETHRESHCRTRATEDOWN : IconId.BUFF_BBGAUGETHRESHCRTRATEUP],
+    }, 'passive:31:damage': {
+        id: BuffId['passive:31:damage'],
+        name: 'Passive Spark Damage Boost',
+        stat: UnitStat.sparkDamage,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_SPARKDOWN : IconId.BUFF_SPARKUP],
+    }, 'passive:31:bc': {
+        id: BuffId['passive:31:bc'],
+        name: 'Passive Battle Crystal Drop Rate Boost during Spark',
+        stat: UnitStat.bcDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_BCDOWN : IconId.BUFF_SPARKBC],
+    }, 'passive:31:hc': {
+        id: BuffId['passive:31:hc'],
+        name: 'Passive Heart Crystal Drop Rate Boost during Spark',
+        stat: UnitStat.hcDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HCDOWN : IconId.BUFF_SPARKHC],
+    }, 'passive:31:item': {
+        id: BuffId['passive:31:item'],
+        name: 'Passive Item Drop Rate Boost during Spark',
+        stat: UnitStat.itemDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ITEMDOWN : IconId.BUFF_SPARKITEM],
+    }, 'passive:31:zel': {
+        id: BuffId['passive:31:zel'],
+        name: 'Passive Zel Drop Rate Boost during Spark',
+        stat: UnitStat.zelDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ZELDOWN : IconId.BUFF_SPARKZEL],
+    }, 'passive:31:karma': {
+        id: BuffId['passive:31:karma'],
+        name: 'Passive Karma Drop Rate Boost during Spark',
+        stat: UnitStat.karmaDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_KARMADOWN : IconId.BUFF_SPARKKARMA],
+    }, 'passive:32': {
+        id: BuffId['passive:32'],
+        name: 'Passive BC Efficacy',
+        stat: UnitStat.bcEfficacy,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_BBFILL],
+    }, 'passive:33': {
+        id: BuffId['passive:33'],
+        name: 'Passive Gradual Heal',
+        stat: UnitStat.hpRecovery,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_HPREC],
+    }, 'passive:34': {
+        id: BuffId['passive:34'],
+        name: 'Passive Critical Damage Boost',
+        stat: UnitStat.criticalDamage,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_CRTUP],
     }, 'UNKNOWN_PROC_EFFECT_ID': {
         id: BuffId.UNKNOWN_PROC_EFFECT_ID,
         name: 'Unknown Proc Effect',
@@ -5575,7 +6019,7 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         name: 'Active Spark Damage Boost',
         stat: UnitStat.sparkDamage,
         stackType: BuffStackType.Active,
-        icons: () => [IconId.BUFF_SPARKUP],
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_SPARKDOWN : IconId.BUFF_SPARKUP],
     }, 'proc:24:atk': {
         id: BuffId['proc:24:atk'],
         name: 'Active Converted Attack Boost',
@@ -5657,6 +6101,78 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.elementModification,
         stackType: BuffStackType.Active,
         icons: () => [IconId.BUFF_ADDELEMENT],
+    }, 'proc:31:flat': {
+        id: BuffId['proc:31:flat'],
+        name: 'Burst BB Gauge Fill (Flat Amount)',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Burst,
+        icons: () => [IconId.BUFF_BBREC],
+    }, 'proc:31:percent': {
+        id: BuffId['proc:31:percent'],
+        name: 'Burst BB Gauge Fill (Percentage)',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Burst,
+        icons: () => [IconId.BUFF_BBREC],
+    }, 'proc:32:fire': {
+        id: BuffId['proc:32:fire'],
+        name: 'Element Shift (Fire)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_SHIFTFIRE],
+    }, 'proc:32:water': {
+        id: BuffId['proc:32:water'],
+        name: 'Element Shift (Water)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_SHIFTWATER],
+    }, 'proc:32:earth': {
+        id: BuffId['proc:32:earth'],
+        name: 'Element Shift (Earth)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_SHIFTEARTH],
+    }, 'proc:32:thunder': {
+        id: BuffId['proc:32:thunder'],
+        name: 'Element Shift (Thunder)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_SHIFTTHUNDER],
+    }, 'proc:32:light': {
+        id: BuffId['proc:32:light'],
+        name: 'Element Shift (Light)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_SHIFTLIGHT],
+    }, 'proc:32:dark': {
+        id: BuffId['proc:32:dark'],
+        name: 'Element Shift (Dark)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_SHIFTDARK],
+    }, 'proc:32:unknown': {
+        id: BuffId['proc:32:unknown'],
+        name: 'Element Shift (Unspecified Element)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_SHIFTELEMENT],
+    }, 'proc:33': {
+        id: BuffId['proc:33'],
+        name: 'Buff Removal',
+        stat: UnitStat.buffStabilityModification,
+        stackType: BuffStackType.Burst,
+        icons: () => [IconId.BUFF_REMOVEBUFF],
+    }, 'proc:34:flat': {
+        id: BuffId['proc:34:flat'],
+        name: 'Burst BB Gauge Drain (Flat Amount)',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Burst,
+        icons: () => [IconId.BUFF_BBFILLDOWN],
+    }, 'proc:34:percent': {
+        id: BuffId['proc:34:percent'],
+        name: 'Burst BB Gauge Drain (Percentage)',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Burst,
+        icons: () => [IconId.BUFF_BBFILLDOWN],
     } }));
 
 /**

@@ -167,6 +167,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			expectedOriginalId,
 			expectedBuffId,
 			effectKey,
+			getExpectedValueFromParam = (param) => +param,
 		}) => {
 			beforeEach(() => {
 				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
@@ -180,7 +181,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const effect = { params: '123' };
 				const expectedResult = [baseBuffFactory({
 					id: expectedBuffId,
-					value: 123,
+					value: getExpectedValueFromParam(123),
 				})];
 
 				const result = mappingFunction(effect, createArbitraryContext());
@@ -192,7 +193,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const expectedResult = [
 					baseBuffFactory({
 						id: expectedBuffId,
-						value: 123,
+						value: getExpectedValueFromParam(123),
 					}),
 					baseBuffFactory({
 						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
@@ -230,13 +231,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = {
-					params: '2,789',
+					params: '200,789',
 				};
 				const expectedResult = [
 					baseBuffFactory({
 						id: expectedBuffId,
 						sources: arbitrarySourceValue,
-						value: 2,
+						value: getExpectedValueFromParam(200),
 						conditions: arbitraryConditionValue,
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
@@ -3462,6 +3463,15 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 3] });
+			});
+		});
+
+		describe('passive 34', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '34',
+				expectedBuffId: 'passive:34',
+				effectKey: 'crit multiplier%',
+				getExpectedValueFromParam: (param) => (+param) * 100,
 			});
 		});
 	});

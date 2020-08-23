@@ -224,6 +224,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	interface IPassiveWithSingleNumericalParameterContext extends ITemplatedParsingFunctionContext {
 		effectKey: string;
 		buffId: string;
+		parseParamValue?: (rawValue: string) => number;
 	}
 	const parsePassiveWithSingleNumericalParameter = ({
 		effect,
@@ -232,6 +233,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		originalId,
 		effectKey,
 		buffId,
+		parseParamValue = (rawValue: string) => parseNumberOrDefault(rawValue),
 	}: IPassiveWithSingleNumericalParameterContext): IBuff[] => {
 		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
@@ -241,7 +243,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
 			const [rawValue, ...extraParams] = splitEffectParams(typedEffect);
-			value = parseNumberOrDefault(rawValue);
+			value = parseParamValue(rawValue);
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
 		} else {
 			value = parseNumberOrDefault(typedEffect[effectKey] as number);
@@ -1449,5 +1451,17 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		});
 
 		return results;
+	});
+
+	map.set('34', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parsePassiveWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			effectKey: 'crit multiplier%',
+			buffId: 'passive:34',
+			originalId: '34',
+			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) * 100,
+		});
 	});
 }

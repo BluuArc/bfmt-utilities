@@ -225,6 +225,7 @@ export enum UnitStat {
 	revive = 'revive',
 
 	defenseIgnore = 'defenseIgnore',
+	criticalDamage = 'criticalDamage',
 	sparkDamage = 'sparkDamage',
 
 	hitCountModification = 'hitCountModification',
@@ -296,6 +297,7 @@ export interface IUnitState {
 	revive: IBuff[];
 
 	defenseIgnore: IBuff[];
+	criticalDamage: IBuff[];
 	sparkDamage: IBuff[];
 
 	hitCountModification: IBuff[];
@@ -591,6 +593,8 @@ export enum IconId {
 
 	BUFF_IGNOREDEF = 'BUFF_IGNOREDEF',
 
+	BUFF_CRTUP = 'BUFF_CRTUP',
+
 	BUFF_SPARKUP = 'BUFF_SPARKUP',
 	BUFF_SPARKDOWN = 'BUFF_SPARKDOWN',
 
@@ -750,6 +754,7 @@ export enum BuffId {
 
 	'passive:32' = 'passive:32',
 	'passive:33' = 'passive:33',
+	'passive:34' = 'passive:34',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
