@@ -3785,5 +3785,222 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['0','2','0','789']), 0] });
 			});
 		});
+
+		describe('passive 40', () => {
+			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec'];
+			const CONVERTED_STAT_KEY = 'converted attribute';
+			const paramToResultStatMapping = {
+				1: 'atk',
+				2: 'def',
+				3: 'rec',
+				4: 'hp',
+			};
+			const effectStatToResultStatMapping = {
+				attack: 'atk',
+				defense: 'def',
+				recovery: 'rec',
+				hp: 'hp',
+			};
+			const expectedOriginalId = '40';
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:40:${stat}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:40:${stat}`,
+						value: {
+							convertedStat: 'atk',
+							value: +(splitParams[index + 1]),
+						},
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '2,2,3,4,5,6,7';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:40:${stat}`,
+						value: {
+							convertedStat: 'def',
+							value: +(splitParams[index + 1]),
+						},
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_4: '5',
+						param_5: '6',
+						param_6: '7',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to stat-specific properties when the params property does not exist', () => {
+				const mockValues = [5, 6, 7];
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat, index) => {
+					acc[`${stat}% buff`] = mockValues[index];
+					return acc;
+				}, {});
+				effect[CONVERTED_STAT_KEY] = 'recovery';
+
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:40:${stat}`,
+						value: {
+							convertedStat: 'rec',
+							value: mockValues[index],
+						},
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			STAT_PARAMS_ORDER.forEach((statCase) => {
+				Object.entries(paramToResultStatMapping).forEach(([convertedStatKey, convertedStatValue]) => {
+					it(`returns only value for ${statCase} converted from ${convertedStatValue} if it is non-zero and other stats are zero and converted stat is ${convertedStatValue}`, () => {
+						const params = [convertedStatKey, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
+						const effect = { params };
+						const expectedResult = [baseBuffFactory({
+							id: `passive:40:${statCase}`,
+							value: {
+								convertedStat: convertedStatValue,
+								value: 123,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				Object.entries(effectStatToResultStatMapping).forEach(([convertedStatKey, convertedStatValue]) => {
+					it(`returns only value for ${statCase} converted from ${convertedStatValue} if it is non-zero and other stats are zero and converted stat is ${convertedStatValue} and params property does not exist`, () => {
+						const effect = {
+							[CONVERTED_STAT_KEY]: convertedStatKey,
+							[`${statCase}% buff`]: 456,
+						};
+						const expectedResult = [baseBuffFactory({
+							id: `passive:40:${statCase}`,
+							value: {
+								convertedStat: convertedStatValue,
+								value: 456,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it(`converts converted stat values with no mapping to "unknown" and the only non-zero stat is ${statCase}`, () => {
+					const params = ['123', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
+					const effect = { params };
+					const expectedResult = [baseBuffFactory({
+						id: `passive:40:${statCase}`,
+						value: {
+							convertedStat: 'unknown',
+							value: 123,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`converts converted stat values with no mapping to "unknown" and the only non-zero stat is ${statCase} and params property does not exist`, () => {
+					const effect = {
+						[CONVERTED_STAT_KEY]: 'arbitrary stat',
+						[`${statCase}% buff`]: 456,
+					};
+					const expectedResult = [baseBuffFactory({
+						id: `passive:40:${statCase}`,
+						value: {
+							convertedStat: 'unknown',
+							value: 456,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('parses lack of converted stat property to "unknown" in effect properties when params property does not exist', () => {
+				const effect = { 'def% buff': 1 };
+				const expectedResult = [baseBuffFactory({
+					id: 'passive:40:def',
+					value: {
+						convertedStat: 'unknown',
+						value: 1,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat) => {
+					acc[`${stat}% buff`] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '4,0,0,1,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:40:rec',
+						sources: arbitrarySourceValue,
+						value: {
+							convertedStat: 'hp',
+							value: 1,
+						},
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 4] });
+			});
+		});
 	});
 });

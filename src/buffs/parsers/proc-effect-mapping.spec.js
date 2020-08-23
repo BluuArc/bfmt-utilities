@@ -3724,7 +3724,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 			STAT_PARAMS_ORDER.forEach((statCase) => {
 				Object.entries(paramToResultStatMapping).forEach(([convertedStatKey, convertedStatValue]) => {
-					it(`returns only value for ${statCase} and ${convertedStatValue} if it is non-zero and other stats are zero and converted stat is ${convertedStatValue}`, () => {
+					it(`returns only value for ${statCase} converted from ${convertedStatValue} if it is non-zero and other stats are zero and converted stat is ${convertedStatValue}`, () => {
 						const params = [convertedStatKey, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0'), arbitraryTurnDuration].join(',');
 						const effect = createArbitraryBaseEffect({ params });
 						const expectedResult = [baseBuffFactory({
@@ -3741,10 +3741,10 @@ describe('getProcEffectToBuffMapping method', () => {
 					});
 				});
 
-				Object.entries(effectStatToResultStatMapping).forEach(([convertedStatKEy, convertedStatValue]) => {
-					it(`returns only value for ${statCase} and ${convertedStatValue} if it is non-zero and other stats are zero and converted stat is ${convertedStatValue} and params property does not exist`, () => {
+				Object.entries(effectStatToResultStatMapping).forEach(([convertedStatKey, convertedStatValue]) => {
+					it(`returns only value for ${statCase} converted from ${convertedStatValue} if it is non-zero and other stats are zero and converted stat is ${convertedStatValue} and params property does not exist`, () => {
 						const effect = createArbitraryBaseEffect({
-							[CONVERTED_STAT_KEY]: convertedStatKEy,
+							[CONVERTED_STAT_KEY]: convertedStatKey,
 							[`${statCase}% buff (${Math.floor(Math.random() * 100)})`]: 456,
 							[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 						});

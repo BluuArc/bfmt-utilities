@@ -1485,7 +1485,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			coreStatProperties.forEach((statType) => {
 				const effectKey = keys.find((k) => k.startsWith(`${statType}% buff`));
 				if (effectKey) {
-					stats[statType as 'atk' | 'def' | 'rec'] = parseNumberOrDefault(effect[effectKey] as number);
+					stats[statType as 'atk' | 'def' | 'rec'] = (effect[effectKey] as number);
 				}
 			});
 

@@ -1569,4 +1569,82 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('40', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '40';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		type CoreStatProperty = 'atk' | 'def' | 'rec' | 'hp' | 'unknown';
+		const coreStatProperties: CoreStatProperty[] = ['atk', 'def', 'rec'];
+		const coreStatPropertyMapping: { [key: string]: CoreStatProperty } = {
+			1: 'atk',
+			2: 'def',
+			3: 'rec',
+			4: 'hp',
+		};
+		const effectToCoreStatMapping = {
+			attack: 'atk',
+			defense: 'def',
+			recovery: 'rec',
+			hp: 'hp',
+		};
+		const stats = {
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+		};
+		let convertedStat: CoreStatProperty = 'unknown';
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			let rawConvertedStat: string;
+			[rawConvertedStat, stats.atk, stats.def, stats.rec, ...extraParams] = splitEffectParams(typedEffect);
+			convertedStat = coreStatPropertyMapping[rawConvertedStat] || 'unknown';
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+		} else {
+			const rawConvertedStat = typedEffect['converted attribute'] as string;
+			if (rawConvertedStat in effectToCoreStatMapping) {
+				convertedStat = effectToCoreStatMapping[rawConvertedStat as 'attack' | 'defense' | 'recovery' | 'hp'] as CoreStatProperty;
+			} else {
+				convertedStat = 'unknown';
+			}
+
+			coreStatProperties.forEach((statType) => {
+				const effectKey = `${statType}% buff`;
+				if (effectKey in typedEffect) {
+					stats[statType as 'atk' | 'def' | 'rec'] = (typedEffect[effectKey] as number);
+				}
+			});
+		}
+
+		const results: IBuff[] = [];
+		coreStatProperties.forEach((stat) => {
+			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec']);
+			if (value !== 0) {
+				results.push({
+					id: `passive:40:${stat}`,
+					originalId,
+					sources,
+					value: {
+						convertedStat,
+						value,
+					},
+					conditions: { ...conditionInfo },
+					...targetData,
+				});
+			}
+		});
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

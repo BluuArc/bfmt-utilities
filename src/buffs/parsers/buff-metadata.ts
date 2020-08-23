@@ -725,6 +725,27 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_HITUP],
 	},
+	'passive:40:atk': {
+		id: BuffId['passive:40:atk'],
+		name: 'Passive Converted Attack Boost',
+		stat: UnitStat.atk,
+		stackType: BuffStackType.Passive,
+		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_CONVERTATKDOWN : IconId.BUFF_CONVERTATKUP],
+	},
+	'passive:40:def': {
+		id: BuffId['passive:40:def'],
+		name: 'Passive Converted Defense Boost',
+		stat: UnitStat.def,
+		stackType: BuffStackType.Passive,
+		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_CONVERTDEFDOWN : IconId.BUFF_CONVERTDEFUP],
+	},
+	'passive:40:rec': {
+		id: BuffId['passive:40:rec'],
+		name: 'Passive Converted Recovery Boost',
+		stat: UnitStat.rec,
+		stackType: BuffStackType.Passive,
+		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_CONVERTRECDOWN : IconId.BUFF_CONVERTRECUP],
+	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
