@@ -2220,4 +2220,84 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('40', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '40';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		interface IAilmentInflictionPair {
+			ailment: Ailment;
+			chance: number;
+		}
+		const inflictedAilments: IAilmentInflictionPair[] = [];
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const params = splitEffectParams(effect);
+			for (let index = 0; index < 8; index += 2) {
+				const ailmentValue = params[index];
+				const chance = parseNumberOrDefault(params[index + 1]);
+				if (ailmentValue !== '0' || chance !== 0) {
+					const ailmentType = AILMENT_MAPPING[ailmentValue] || Ailment.Unknown;
+					inflictedAilments.push({
+						ailment: ailmentType,
+						chance,
+					});
+				}
+			}
+
+			turnDuration = parseNumberOrDefault(params[8]);
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(9), 9, injectionContext);
+		} else {
+			Object.values(AILMENT_MAPPING).forEach((ailment) => {
+				let effectKey: string;
+				if (ailment === Ailment.Weak) {
+					effectKey = 'weaken% buff';
+				} else if (ailment === Ailment.AttackReduction || ailment === Ailment.DefenseReduction || ailment === Ailment.RecoveryReduction) {
+					effectKey = `${ailment} buff`;
+				} else {
+					effectKey = `${ailment}% buff`;
+				}
+
+				if (effectKey in effect) {
+					inflictedAilments.push({
+						ailment,
+						chance: parseNumberOrDefault(effect[effectKey] as number),
+					});
+				}
+
+			});
+			turnDuration = parseNumberOrDefault(effect['buff turns'] as number);
+		}
+
+		const results: IBuff[] = inflictedAilments.map(({ ailment, chance }) => ({
+			id: `proc:40:${ailment}`,
+			originalId,
+			sources,
+			effectDelay,
+			duration: turnDuration,
+			value: chance,
+			...targetData,
+		}));
+
+		if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				duration: turnDuration,
+				buffs: Object.values(AILMENT_MAPPING).concat([Ailment.Unknown]).map((a) => `proc:40:${a}`),
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

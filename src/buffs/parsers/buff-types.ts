@@ -904,4 +904,15 @@ export enum BuffId {
 	'proc:39:light' = 'proc:39:light',
 	'proc:39:dark' = 'proc:39:dark',
 	'proc:39:unknown' = 'proc:39:unknown',
+
+	'proc:40:poison' = 'proc:40:poison',
+	'proc:40:weak' = 'proc:40:weak',
+	'proc:40:sick' = 'proc:40:sick',
+	'proc:40:injury' = 'proc:40:injury',
+	'proc:40:curse' = 'proc:40:curse',
+	'proc:40:paralysis' = 'proc:40:paralysis',
+	'proc:40:atk down' = 'proc:40:atk down',
+	'proc:40:def down' = 'proc:40:def down',
+	'proc:40:rec down' = 'proc:40:rec down',
+	'proc:40:unknown' = 'proc:40:unknown',
 }
