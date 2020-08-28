@@ -1272,4 +1272,9 @@ describe('BUFF_METADATA entries', () => {
 			testDefaultIconResult(BuffId['proc:40:unknown'], [IconId.BUFF_ADDAILMENT]);
 		});
 	});
+
+	describe('proc:42', () => {
+		testDefaultIconResult(BuffId['proc:42'], [IconId.ATK_AOE_SACRIFICIAL]);
+		testIconResultWithBuff(BuffId['proc:42'], [IconId.ATK_ST_SACRIFICIAL], { targetArea: TargetArea.Single }, 'target area is single');
+	});
 });

@@ -652,6 +652,8 @@ export enum IconId {
 	ATK_AOE_FIXED = 'ATK_AOE_FIXED',
 	ATK_ST_MULTIELEMENT = 'ATK_ST_MULTIELEMENT',
 	ATK_AOE_MULTIELEMENT = 'ATK_AOE_MULTIELEMENT',
+	ATK_ST_SACRIFICIAL = 'ATK_ST_SACRIFICIAL',
+	ATK_AOE_SACRIFICIAL = 'ATK_AOE_SACRIFICIAL',
 }
 
 /**
@@ -915,4 +917,6 @@ export enum BuffId {
 	'proc:40:def down' = 'proc:40:def down',
 	'proc:40:rec down' = 'proc:40:rec down',
 	'proc:40:unknown' = 'proc:40:unknown',
+
+	'proc:42' = 'proc:42',
 }

@@ -1617,4 +1617,10 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.BUFF_ADDAILMENT],
 	},
+	'proc:42': {
+		id: BuffId['proc:42'],
+		name: 'Sacrificial Damage',
+		stackType: BuffStackType.Attack,
+		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_SACRIFICIAL : IconId.ATK_AOE_SACRIFICIAL],
+	},
 });

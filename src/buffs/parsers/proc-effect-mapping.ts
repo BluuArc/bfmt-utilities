@@ -2300,4 +2300,51 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('42', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '42';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const { hits, distribution } = getAttackInformationFromContext(context);
+
+		const rawParams: string = effect.params || (effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] as string) || '';
+		const [rawModLow, rawModHigh, rawFlatAtk, ...extraParams] = splitEffectParams({ params: rawParams } as ProcEffect);
+		const params: { [param: string]: AlphaNumeric } = {
+			'atkLow%': rawModLow,
+			'atkHigh%': rawModHigh,
+			flatAtk: rawFlatAtk,
+		};
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+
+		const filteredValue = Object.entries(params)
+			.filter(([, value]) => value && +value)
+			.reduce((acc: { [param: string]: number }, [key, value]) => {
+				acc[key] = parseNumberOrDefault(value);
+				return acc;
+			}, {});
+
+		const results: IBuff[] = [];
+		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+			results.push({
+				id: 'proc:42',
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					...filteredValue,
+					hits,
+					distribution,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }
