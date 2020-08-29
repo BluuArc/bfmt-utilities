@@ -237,6 +237,8 @@ export enum UnitStat {
 
 	sparkDamage = 'sparkDamage',
 
+	bbAtk = 'bbAtk',
+
 	hitCountModification = 'hitCountModification',
 
 	damageReflect = 'damageReflect',
@@ -317,6 +319,8 @@ export interface IUnitState {
 	criticalDamageMitigation: IBuff[];
 
 	sparkDamage: IBuff[];
+
+	bbAtk: IBuff[];
 
 	hitCountModification: IBuff[];
 
@@ -716,6 +720,10 @@ export enum IconId {
 
 	BUFF_TURNDMG = 'BUFF_TURNDMG',
 
+	BUFF_BBATKUP = 'BUFF_BBATKUP',
+	BUFF_SBBATKUP = 'BUFF_SBBATKUP',
+	BUFF_UBBATKUP = 'BUFF_UBBATKUP',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -1019,4 +1027,8 @@ export enum BuffId {
 	'proc:42' = 'proc:42',
 	'proc:43' = 'proc:43',
 	'proc:44' = 'proc:44',
+
+	'proc:45:bb' = 'proc:45:bb',
+	'proc:45:sbb' = 'proc:45:sbb',
+	'proc:45:ubb' = 'proc:45:ubb',
 }

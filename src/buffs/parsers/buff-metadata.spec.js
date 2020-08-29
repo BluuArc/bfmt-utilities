@@ -1446,4 +1446,18 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:44', () => {
 		testDefaultIconResult(BuffId['proc:44'], [IconId.BUFF_TURNDMG]);
 	});
+
+	describe('proc 45', () => {
+		describe('proc:45:bb', () => {
+			testDefaultIconResult(BuffId['proc:45:bb'], [IconId.BUFF_BBATKUP]);
+		});
+
+		describe('proc:45:sbb', () => {
+			testDefaultIconResult(BuffId['proc:45:sbb'], [IconId.BUFF_SBBATKUP]);
+		});
+
+		describe('proc:45:ubb', () => {
+			testDefaultIconResult(BuffId['proc:45:ubb'], [IconId.BUFF_UBBATKUP]);
+		});
+	});
 });

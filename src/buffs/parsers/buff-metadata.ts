@@ -1791,4 +1791,25 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_TURNDMG],
 	},
+	'proc:45:bb': {
+		id: BuffId['proc:45:bb'],
+		name: 'Active BB ATK Boost',
+		stat: UnitStat.bbAtk,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_BBATKUP],
+	},
+	'proc:45:sbb': {
+		id: BuffId['proc:45:sbb'],
+		name: 'Active SBB ATK Boost',
+		stat: UnitStat.bbAtk,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_SBBATKUP],
+	},
+	'proc:45:ubb': {
+		id: BuffId['proc:45:ubb'],
+		name: 'Active UBB ATK Boost',
+		stat: UnitStat.bbAtk,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_UBBATKUP],
+	},
 });

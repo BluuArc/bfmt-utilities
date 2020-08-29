@@ -2456,4 +2456,84 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('45', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '45';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let bb = 0, sbb = 0, ubb = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawBb, rawSbb, rawUbb, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			bb = parseNumberOrDefault(rawBb);
+			sbb = parseNumberOrDefault(rawSbb);
+			ubb = parseNumberOrDefault(rawUbb);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+		} else {
+			bb = parseNumberOrDefault(effect['bb atk% buff'] as number);
+			sbb = parseNumberOrDefault(effect['sbb atk% buff'] as number);
+			ubb = parseNumberOrDefault(effect['ubb atk% buff'] as number);
+			turnDuration = parseNumberOrDefault(effect['buff turns (72)'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (bb !== 0) {
+			results.push({
+				id: 'proc:45:bb',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: bb,
+				...targetData,
+			});
+		}
+
+		if (sbb !== 0) {
+			results.push({
+				id: 'proc:45:sbb',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: sbb,
+				...targetData,
+			});
+		}
+
+		if (ubb !== 0) {
+			results.push({
+				id: 'proc:45:ubb',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: ubb,
+				...targetData,
+			});
+		}
+
+		if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['bb', 'sbb', 'ubb'].map((type) => `proc:45:${type}`),
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }
