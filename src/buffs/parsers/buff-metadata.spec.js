@@ -772,6 +772,16 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 45 buffs', () => {
+		describe('passive:45:base', () => {
+			testDefaultIconResult(BuffId['passive:45:base'], [IconId.BUFF_CRTDOWN]);
+		});
+
+		describe('passive:45:buff', () => {
+			testDefaultIconResult(BuffId['passive:45:buff'], [IconId.BUFF_CRTDOWN]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

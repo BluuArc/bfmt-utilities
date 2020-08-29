@@ -1834,4 +1834,56 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('45', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '45';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let baseResist = 0, buffResist = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawBaseResist, rawBuffResist, ...extraParams] = splitEffectParams(typedEffect);
+			baseResist = parseNumberOrDefault(rawBaseResist);
+			buffResist = parseNumberOrDefault(rawBuffResist);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		} else {
+			baseResist = parseNumberOrDefault(typedEffect['base crit% resist'] as number);
+			buffResist = parseNumberOrDefault(typedEffect['buff crit% resist'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (baseResist !== 0) {
+			results.push({
+				id: 'passive:45:base',
+				originalId,
+				sources,
+				value: baseResist,
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		if (buffResist !== 0) {
+			results.push({
+				id: 'passive:45:buff',
+				originalId,
+				sources,
+				value: buffResist,
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

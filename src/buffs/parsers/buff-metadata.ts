@@ -886,6 +886,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_CRTRATEDOWN : IconId.BUFF_CRTRATEUP],
 	},
+	'passive:45:base': {
+		id: BuffId['passive:45:base'],
+		name: 'Passive Base Critical Damage Reduction',
+		stat: UnitStat.criticalDamageMitigation,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_CRTDOWN],
+	},
+	'passive:45:buff': {
+		id: BuffId['passive:45:buff'],
+		name: 'Passive Buffed Critical Damage Reduction',
+		stat: UnitStat.criticalDamageMitigation,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_CRTDOWN],
+	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
