@@ -245,6 +245,8 @@ export enum UnitStat {
 	buffStabilityModification = 'buffStabilityModification',
 
 	extraAction = 'extraAction',
+
+	damageOverTime = 'damageOverTime',
 }
 
 /**
@@ -321,6 +323,8 @@ export interface IUnitState {
 	buffStabilityModification: IBuff[];
 
 	extraAction: IBuff[];
+
+	damageOverTime: IBuff[];
 }
 
 /**
@@ -703,6 +707,8 @@ export enum IconId {
 
 	BUFF_OVERDRIVEUP = 'BUFF_OVERDRIVEUP',
 
+	BUFF_TURNDMG = 'BUFF_TURNDMG',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -996,4 +1002,5 @@ export enum BuffId {
 
 	'proc:42' = 'proc:42',
 	'proc:43' = 'proc:43',
+	'proc:44' = 'proc:44',
 }

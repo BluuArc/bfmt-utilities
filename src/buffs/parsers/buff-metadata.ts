@@ -1735,4 +1735,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_OVERDRIVEUP],
 	},
+	'proc:44': {
+		id: BuffId['proc:44'],
+		name: 'Active Damage over Time',
+		stat: UnitStat.damageOverTime,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_TURNDMG],
+	},
 });

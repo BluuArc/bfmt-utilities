@@ -301,7 +301,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		}
 
 		const filteredValue = Object.entries(params)
-			.filter(([,value]) => value && +value)
+			.filter(([, value]) => value && +value)
 			.reduce((acc: { [param: string]: number }, [key, value]) => {
 				acc[key] = parseNumberOrDefault(value);
 				return acc;
@@ -2373,6 +2373,78 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				value: overdriveFill,
 				...targetData,
 			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
+
+	map.set('44', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '44';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const damageParams: { [param: string]: AlphaNumeric } = {
+			'atk%': '0',
+			flatAtk: '0',
+			'dmg%': '0',
+		};
+		let affectsElement = false, unitIndex = 0, turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			let rawAffectsElement: string, rawUnitIndex: string, rawTurnDuration: string;
+			[damageParams['atk%'], damageParams.flatAtk, damageParams['dmg%'], rawAffectsElement, rawUnitIndex, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			affectsElement = rawAffectsElement !== '1'; // NOTE: not sure about this value
+			unitIndex = parseNumberOrDefault(rawUnitIndex);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+		} else {
+			damageParams['atk%'] = (effect['dot atk%'] as number);
+			damageParams.flatAtk = (effect['dot flat atk'] as number);
+			damageParams['dmg%'] = (effect['dot dmg%'] as number);
+			affectsElement = !!(effect['dot element affected']);
+			unitIndex = parseNumberOrDefault(effect['dot unit index'] as number);
+			turnDuration = parseNumberOrDefault(effect['dot turns (71)'] as number);
+		}
+
+		const filteredDamageParams = Object.entries(damageParams)
+			.filter(([, value]) => value && +value)
+			.reduce((acc: { [param: string]: number }, [key, value]) => {
+				acc[key] = parseNumberOrDefault(value);
+				return acc;
+			}, {});
+
+		const results: IBuff[] = [];
+		if (Object.keys(filteredDamageParams).length > 0) {
+			results.push({
+				id: 'proc:44',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: {
+					...filteredDamageParams,
+					affectsElement,
+					unitIndex,
+				},
+				...targetData,
+			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['proc:44'],
+				duration: turnDuration,
+				targetData,
+			}));
 		}
 
 		handlePostParse(results, unknownParams, {

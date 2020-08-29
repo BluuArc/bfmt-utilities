@@ -6406,5 +6406,265 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 1] });
 			});
 		});
+
+		describe('proc 44', () => {
+			const PARAMS_ORDER = ['atk%', 'flatAtk', 'dmg%', 'affectsElement', 'unitIndex'];
+			const effectPropToResultPropMapping = {
+				'dot atk%': 'atk%',
+				'dot flat atk': 'flatAtk',
+				'dot dmg%': 'dmg%',
+				'dot element affected': 'affectsElement',
+				'dot unit index': 'unitIndex',
+			};
+			const EFFECT_TURN_DURATION_KEY = 'dot turns (71)';
+			const expectedBuffId = 'proc:44';
+			const expectedOriginalId = '44';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,3,4,5,${arbitraryTurnDuration}`;
+				const splitParams = params.split(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedValuesForParams = PARAMS_ORDER.reduce((acc, key, index) => {
+					acc[key] = key !== 'affectsElement' ? +splitParams[index] : true;
+					return acc;
+				}, {});
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: arbitraryTurnDuration,
+					value: expectedValuesForParams,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `1,2,3,1,5,${arbitraryTurnDuration},7,8,9`;
+				const splitParams = params.split(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedValuesForParams = PARAMS_ORDER.reduce((acc, key, index) => {
+					acc[key] = key !== 'affectsElement' ? +splitParams[index] : false;
+					return acc;
+				}, {});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						duration: arbitraryTurnDuration,
+						value: expectedValuesForParams,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_6: '7',
+							param_7: '8',
+							param_8: '9',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const pairs = Object.entries(effectPropToResultPropMapping);
+				const valuesInEffect = pairs.reduce((acc, [effectKey, propKey], index) => {
+					acc[effectKey] = propKey !== 'affectsElement' ? (index + 1) : true;
+					return acc;
+				}, {});
+				valuesInEffect[EFFECT_TURN_DURATION_KEY] = arbitraryTurnDuration;
+				const effect = createArbitraryBaseEffect(valuesInEffect);
+				const expectedValues = pairs.reduce((acc, [, propKey], index) => {
+					acc[propKey] = propKey !== 'affectsElement' ? (index + 1) : true;
+					return acc;
+				}, {});
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: arbitraryTurnDuration,
+					value: expectedValues,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const pairs = Object.entries(effectPropToResultPropMapping);
+				const valuesInEffect = pairs.reduce((acc, [effectKey, propKey], index) => {
+					acc[effectKey] = propKey !== 'affectsElement' ? `${(index + 2)}` : false;
+					return acc;
+				}, {});
+				valuesInEffect[EFFECT_TURN_DURATION_KEY] = arbitraryTurnDuration;
+				const effect = createArbitraryBaseEffect(valuesInEffect);
+				const expectedValues = pairs.reduce((acc, [, propKey], index) => {
+					acc[propKey] = propKey !== 'affectsElement' ? (index + 2) : false;
+					return acc;
+				}, {});
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: arbitraryTurnDuration,
+					value: expectedValues,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when some values are missing or 0', () => {
+				const effectBuffKeyPairs = Object.entries(effectPropToResultPropMapping);
+				['dot atk%', 'dot flat atk', 'dot dmg%'].forEach((effectProp) => {
+					const buffProp = effectPropToResultPropMapping[effectProp];
+					const filteredPairs = effectBuffKeyPairs
+						.filter(([prop]) => prop !== effectProp);
+					it(`filters out value of [buffProp:${buffProp}] if it is 0 in params`, () => {
+						const params = [...PARAMS_ORDER.map((key) => key !== buffProp ? '123' : '0'), arbitraryTurnDuration].join(',');
+						const effect = createArbitraryBaseEffect({ params });
+						const expectedValues = filteredPairs.reduce((acc, [, buffProp]) => {
+							acc[buffProp] = buffProp !== 'affectsElement' ? 123 : true;
+							return acc;
+						}, {});
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							duration: arbitraryTurnDuration,
+							value: expectedValues,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`filters out value of [effectProp:${effectProp}] if it is missing from effect and params property does not exist`, () => {
+						const valuesInEffect = filteredPairs.reduce((acc, [localEffectProp, buffProp]) => {
+							acc[localEffectProp] = buffProp !== 'affectsElement' ? 123 : true;
+							return acc;
+						}, {});
+						valuesInEffect[EFFECT_TURN_DURATION_KEY] = arbitraryTurnDuration;
+						const effect = createArbitraryBaseEffect(valuesInEffect);
+						const expectedValues = filteredPairs.reduce((acc, [, buffProp]) => {
+							acc[buffProp] = buffProp !== 'affectsElement' ? 123 : true;
+							return acc;
+						}, {});
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							duration: arbitraryTurnDuration,
+							value: expectedValues,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('defaults [effectProp:dot unit index] to 0 if it is missing from effect and params property does not exist', () => {
+					const filteredPairs = effectBuffKeyPairs
+						.filter(([prop]) => prop !== 'dot unit index');
+					const valuesInEffect = filteredPairs.reduce((acc, [localEffectProp, buffProp]) => {
+						acc[localEffectProp] = buffProp !== 'affectsElement' ? 123 : true;
+						return acc;
+					}, {});
+					valuesInEffect[EFFECT_TURN_DURATION_KEY] = arbitraryTurnDuration;
+					const effect = createArbitraryBaseEffect(valuesInEffect);
+					const expectedValues = effectBuffKeyPairs.reduce((acc, [, buffProp]) => {
+						if (buffProp === 'unitIndex') {
+							acc[buffProp] = 0;
+						} else {
+							acc[buffProp] = buffProp !== 'affectsElement' ? 123 : true;
+						}
+						return acc;
+					}, {});
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: arbitraryTurnDuration,
+						value: expectedValues,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults [effectProp:dot element affected] to false if it is missing from effect and params property does not exist', () => {
+					const filteredPairs = effectBuffKeyPairs
+						.filter(([prop]) => prop !== 'dot element affected');
+					const valuesInEffect = filteredPairs.reduce((acc, [localEffectProp]) => {
+						acc[localEffectProp] = 123;
+						return acc;
+					}, {});
+					valuesInEffect[EFFECT_TURN_DURATION_KEY] = arbitraryTurnDuration;
+					const effect = createArbitraryBaseEffect(valuesInEffect);
+					const expectedValues = effectBuffKeyPairs.reduce((acc, [, buffProp]) => {
+						acc[buffProp] = buffProp !== 'affectsElement' ? 123 : false;
+						return acc;
+					}, {});
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: arbitraryTurnDuration,
+						value: expectedValues,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a no params buff when all effect properties are non-number values', () => {
+					const valuesInEffect = Object.keys(effectPropToResultPropMapping)
+						.reduce((acc, prop) => {
+							acc[prop] = 'not a number';
+							return acc;
+						}, {});
+					const effect = createArbitraryBaseEffect({
+						...valuesInEffect,
+						[EFFECT_TURN_DURATION_KEY]: 'not a number',
+					});
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('returns a no params buff when the effect params are non-number or missing', () => {
+					const effect = createArbitraryBaseEffect({ params: 'non-number' });
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			describe('when all non-turn values are 0', () => {
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,${duration}`,
+					buffIdsInTurnDurationBuff: [expectedBuffId],
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: `0,1,0,0,0,${arbitraryTurnDuration},123`,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: { flatAtk: 1, affectsElement: true, unitIndex: 0 },
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 6] });
+			});
+		});
 	});
 });

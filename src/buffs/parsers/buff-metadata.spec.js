@@ -1405,4 +1405,8 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:43', () => {
 		testDefaultIconResult(BuffId['proc:43'], [IconId.BUFF_OVERDRIVEUP]);
 	});
+
+	describe('proc:44', () => {
+		testDefaultIconResult(BuffId['proc:44'], [IconId.BUFF_TURNDMG]);
+	});
 });
