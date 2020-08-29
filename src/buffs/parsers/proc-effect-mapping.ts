@@ -2536,4 +2536,50 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('46', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '46';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const { hits, distribution } = getAttackInformationFromContext(context);
+
+		const rawParams: string = effect.params || (effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] as string) || '';
+		const [rawHpLow, rawHpHigh, ...extraParams] = splitEffectParams({ params: rawParams } as ProcEffect);
+		const hpLow = parseNumberOrDefault(rawHpLow);
+		const hpHigh = parseNumberOrDefault(rawHpHigh);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+
+		const results: IBuff[] = [];
+		if (hpLow !== 0 || hpHigh !== 0 || hits !== 0 || distribution !== 0) {
+			const entry: IBuff = {
+				id: 'proc:46',
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					hits,
+					distribution,
+				},
+				...targetData,
+			};
+
+			if (hpLow !== 0 || hpHigh !== 0) {
+				entry.value = {
+					'hpDamageLow%': hpLow,
+					'hpDamageHigh%': hpHigh,
+					hits,
+					distribution,
+				};
+			}
+			results.push(entry);
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

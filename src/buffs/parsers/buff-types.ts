@@ -1031,4 +1031,6 @@ export enum BuffId {
 	'proc:45:bb' = 'proc:45:bb',
 	'proc:45:sbb' = 'proc:45:sbb',
 	'proc:45:ubb' = 'proc:45:ubb',
+
+	'proc:46' = 'proc:46',
 }

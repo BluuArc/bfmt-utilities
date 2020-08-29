@@ -1812,4 +1812,10 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_UBBATKUP],
 	},
+	'proc:46': {
+		id: BuffId['proc:46'],
+		name: 'Non-Lethal Proportional Damage',
+		stackType: BuffStackType.Attack,
+		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_PROPORTIONAL : IconId.ATK_AOE_PROPORTIONAL],
+	},
 });
