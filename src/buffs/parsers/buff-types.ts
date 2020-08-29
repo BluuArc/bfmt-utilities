@@ -183,6 +183,7 @@ export enum UnitStat {
 
 	hpRecovery = 'hpRecovery',
 	bbGauge = 'bbGauge',
+	odGauge = 'odGauge',
 
 	bcDropRate = 'bcDropRate',
 	hcDropRate = 'hcDropRate',
@@ -258,6 +259,7 @@ export interface IUnitState {
 
 	hpRecovery: IBuff[];
 	bbGauge: IBuff[];
+	odGauge: IBuff[];
 
 	bcDropRate: IBuff[];
 	hcDropRate: IBuff[];
@@ -699,6 +701,8 @@ export enum IconId {
 
 	BUFF_DBLSTRIKE = 'BUFF_DBLSTRIKE',
 
+	BUFF_OVERDRIVEUP = 'BUFF_OVERDRIVEUP',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -991,4 +995,5 @@ export enum BuffId {
 	'proc:40:unknown' = 'proc:40:unknown',
 
 	'proc:42' = 'proc:42',
+	'proc:43' = 'proc:43',
 }

@@ -1401,4 +1401,8 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:42'], [IconId.ATK_AOE_SACRIFICIAL]);
 		testIconResultWithBuff(BuffId['proc:42'], [IconId.ATK_ST_SACRIFICIAL], { targetArea: TargetArea.Single }, 'target area is single');
 	});
+
+	describe('proc:43', () => {
+		testDefaultIconResult(BuffId['proc:43'], [IconId.BUFF_OVERDRIVEUP]);
+	});
 });

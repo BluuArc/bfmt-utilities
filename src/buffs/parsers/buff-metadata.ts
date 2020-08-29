@@ -1728,4 +1728,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_SACRIFICIAL : IconId.ATK_AOE_SACRIFICIAL],
 	},
+	'proc:43': {
+		id: BuffId['proc:43'],
+		name: 'Burst OD Gauge Fill (Percentage)',
+		stat: UnitStat.odGauge,
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_OVERDRIVEUP],
+	},
 });

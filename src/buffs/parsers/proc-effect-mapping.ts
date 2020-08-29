@@ -2347,4 +2347,41 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('43', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '43';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let overdriveFill = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawOverdriveFill, ...extraParams] = splitEffectParams(effect);
+			overdriveFill = parseNumberOrDefault(rawOverdriveFill);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+		} else {
+			overdriveFill = parseNumberOrDefault(effect['increase od gauge%'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (overdriveFill !== 0) {
+			results.push({
+				id: 'proc:43',
+				originalId,
+				sources,
+				effectDelay,
+				value: overdriveFill,
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }
