@@ -4672,5 +4672,217 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
 			});
 		});
+
+		describe('passive 46', () => {
+			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec'];
+			const PROPORTIONAL_TO_HP_EFFECT_KEY = 'buff proportional to hp';
+			const expectedOriginalId = '46';
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:46:${stat}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6,7';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:46:${stat}`,
+						value: {
+							baseValue: +(splitParams[index * 2]),
+							addedValue: +(splitParams[(index * 2) + 1]),
+							proportionalMode: 'remaining',
+						},
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,1,8,9,10';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:46:${stat}`,
+						value: {
+							baseValue: +(splitParams[index * 2]),
+							addedValue: +(splitParams[(index * 2) + 1]),
+							proportionalMode: 'lost',
+						},
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_7: '8',
+						param_8: '9',
+						param_9: '10',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to stat-specific properties when the params property does not exist', () => {
+				const mockValues = [8, 9, 10, 11, 12, 13];
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat, index) => {
+					acc[`${stat}% base buff`] = mockValues[index * 2];
+					acc[`${stat}% extra buff based on hp`] = mockValues[(index * 2) + 1];
+					return acc;
+				}, {});
+				effect[PROPORTIONAL_TO_HP_EFFECT_KEY] = 'arbitrary proportional value'; // taken at face value
+
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:46:${stat}`,
+						value: {
+							baseValue: +(mockValues[index * 2]),
+							addedValue: +(mockValues[(index * 2) + 1]),
+							proportionalMode: 'arbitrary proportional value',
+						},
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls parses stat-specific properties to numbers when the params property does not exist', () => {
+				const mockValues = [15, 16, 17, 18, 19, 20];
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat, index) => {
+					acc[`${stat}% base buff`] = `${mockValues[index * 2]}`;
+					acc[`${stat}% extra buff based on hp`] =`${ mockValues[(index * 2) + 1]}`;
+					return acc;
+				}, {});
+				effect[PROPORTIONAL_TO_HP_EFFECT_KEY] = 'arbitrary proportional value'; // taken at face value
+
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:46:${stat}`,
+						value: {
+							baseValue: +(mockValues[index * 2]),
+							addedValue: +(mockValues[(index * 2) + 1]),
+							proportionalMode: 'arbitrary proportional value',
+						},
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			STAT_PARAMS_ORDER.forEach((statCase) => {
+				[true, false].forEach((testCaseIsForBaseValue) => {
+					it(`returns only value for ${statCase} if it's ${testCaseIsForBaseValue ? 'base' : 'added'} value non-zero and other stats are zero`, () => {
+						const nonZeroParams = testCaseIsForBaseValue ? '123,0' : '0,123';
+						const params = [...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? nonZeroParams : '0,0'), '0'].join(',');
+						const expectedResult = [baseBuffFactory({
+							id: `passive:46:${statCase}`,
+							value: {
+								baseValue: testCaseIsForBaseValue ? 123 : 0,
+								addedValue: testCaseIsForBaseValue ? 0 : 123,
+								proportionalMode: 'remaining',
+							},
+						})];
+
+						const effect = { params };
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns only value for ${statCase} if it's ${testCaseIsForBaseValue ? 'base' : 'added'} value non-zero and other stats are zero when params property does not exist`, () => {
+						const effectKey = testCaseIsForBaseValue ? `${statCase}% base buff` : `${statCase}% extra buff based on hp`;
+						const effect = { [effectKey]: 123 };
+						effect[PROPORTIONAL_TO_HP_EFFECT_KEY] = 'arbitrary proportional value';
+						const expectedResult = [baseBuffFactory({
+							id: `passive:46:${statCase}`,
+							value: {
+								baseValue: testCaseIsForBaseValue ? 123 : 0,
+								addedValue: testCaseIsForBaseValue ? 0 : 123,
+								proportionalMode: 'arbitrary proportional value',
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+			});
+
+			it('returns buffs with proportional mode set to unknown when proportional hp property is missing from effect and params property does not exist', () => {
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat) => {
+					acc[`${stat}% base buff`] = 1;
+					acc[`${stat}% extra buff based on hp`] = 2;
+					return acc;
+				}, {});
+
+				const expectedResult = STAT_PARAMS_ORDER.map((stat) => {
+					return baseBuffFactory({
+						id: `passive:46:${stat}`,
+						value: {
+							baseValue: 1,
+							addedValue: 2,
+							proportionalMode: 'unknown',
+						},
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat) => {
+					acc[`${stat}% base buff`] = 'not a number';
+					acc[`${stat}% extra buff based on hp`] = 'not a number';
+					return acc;
+				}, {});
+				effect[PROPORTIONAL_TO_HP_EFFECT_KEY] = 'arbitrary value';
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,0,0,1,0,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:46:rec',
+						sources: arbitrarySourceValue,
+						value: {
+							baseValue: 0,
+							addedValue: 1,
+							proportionalMode: 'remaining',
+						},
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 7] });
+			});
+		});
 	});
 });

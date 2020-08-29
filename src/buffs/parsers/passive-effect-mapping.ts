@@ -1886,4 +1886,74 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('46', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '46';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		interface IStatInfo {
+			stat: CoreStat;
+			baseValue: number;
+			addedValue: number;
+		}
+		type ProportionalMode = 'lost' | 'remaining' | 'unknown';
+		const availableStats: CoreStat[] = ['atk', 'def', 'rec'];
+		const stats: IStatInfo[] = [];
+		let proportionalMode: ProportionalMode = 'unknown';
+		const typedEffect = (effect as IPassiveEffect);
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			availableStats.forEach((stat, index) => {
+				const baseValue = parseNumberOrDefault(params[index * 2]);
+				const addedValue = parseNumberOrDefault(params[(index * 2) + 1]);
+				if (baseValue !== 0 || addedValue !== 0) {
+					stats.push({
+						stat,
+						baseValue,
+						addedValue,
+					});
+				}
+			});
+			proportionalMode = params[6] === '1' ? 'lost' : 'remaining';
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(7), 7, injectionContext);
+		} else {
+			availableStats.forEach((stat) => {
+				const baseValue = parseNumberOrDefault(typedEffect[`${stat}% base buff`] as number);
+				const addedValue = parseNumberOrDefault(typedEffect[`${stat}% extra buff based on hp`] as number);
+				if (baseValue !== 0 || addedValue !== 0) {
+					stats.push({
+						stat,
+						baseValue,
+						addedValue,
+					});
+				}
+			});
+			proportionalMode = (typedEffect['buff proportional to hp'] as ProportionalMode) || 'unknown';
+		}
+
+		const results: IBuff[] = stats.map(({ stat, baseValue, addedValue }) => ({
+			id: `passive:46:${stat}`,
+			originalId,
+			sources,
+			value: {
+				baseValue,
+				addedValue,
+				proportionalMode,
+			},
+			conditions: { ...conditionInfo },
+			...targetData,
+		}));
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

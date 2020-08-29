@@ -900,6 +900,27 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_CRTDOWN],
 	},
+	'passive:46:atk': {
+		id: BuffId['passive:46:atk'],
+		name: 'Passive Attack Boost Relative to HP',
+		stat: UnitStat.atk,
+		stackType: BuffStackType.Passive,
+		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { addedValue: number }).addedValue && (buff.value as { addedValue: number }).addedValue < 0) ? IconId.BUFF_HPSCALEDATKDOWN : IconId.BUFF_HPSCALEDATKUP],
+	},
+	'passive:46:def': {
+		id: BuffId['passive:46:def'],
+		name: 'Passive Defense Boost Relative to HP',
+		stat: UnitStat.def,
+		stackType: BuffStackType.Passive,
+		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { addedValue: number }).addedValue && (buff.value as { addedValue: number }).addedValue < 0) ? IconId.BUFF_HPSCALEDDEFDOWN : IconId.BUFF_HPSCALEDDEFUP],
+	},
+	'passive:46:rec': {
+		id: BuffId['passive:46:rec'],
+		name: 'Passive Recovery Boost Relative to HP',
+		stat: UnitStat.rec,
+		stackType: BuffStackType.Passive,
+		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { addedValue: number }).addedValue && (buff.value as { addedValue: number }).addedValue < 0) ? IconId.BUFF_HPSCALEDRECDOWN : IconId.BUFF_HPSCALEDRECUP],
+	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
