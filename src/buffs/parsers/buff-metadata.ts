@@ -6,7 +6,7 @@ import {
 	IBuff,
 	BuffConditionElement,
 } from './buff-types';
-import { TargetArea, UnitElement, UnitType } from '../../datamine-types';
+import { TargetArea, UnitElement, UnitType, UnitGender } from '../../datamine-types';
 
 export interface IBuffMetadata {
 	id: BuffId;
@@ -781,6 +781,69 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_UNIQUEELEMENTCRTRATEDOWN : IconId.BUFF_UNIQUEELEMENTCRTRATEUP],
 	},
+	...(() => {
+		const createIconGetterForStat = (stat: string) => {
+			return (buff: IBuff) => {
+				let gender: UnitGender | 'unknown' | string = '';
+				let polarity = 'UP';
+				if (buff) {
+					if (buff.value && buff.value < 0) {
+						polarity = 'DOWN';
+					}
+
+					if (buff.conditions) {
+						gender = buff.conditions.targetGender || '';
+					}
+				}
+				if (typeof gender !== 'string' || !gender) {
+					gender = 'unknown';
+				}
+				let iconKey = `BUFF_${gender.toUpperCase()}${stat}${polarity}`;
+				if (!gender || !(iconKey in IconId)) {
+					iconKey = `BUFF_GENDER${stat}${polarity}`;
+				}
+				return [IconId[iconKey as IconId]];
+			};
+		};
+
+		return {
+			'passive:42:hp': {
+				id: BuffId['passive:42:hp'],
+				name: 'Passive Gender-Based HP Boost',
+				stat: UnitStat.hp,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('HP'),
+			},
+			'passive:42:atk': {
+				id: BuffId['passive:42:atk'],
+				name: 'Passive Gender-Based Attack Boost',
+				stat: UnitStat.atk,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('ATK'),
+			},
+			'passive:42:def': {
+				id: BuffId['passive:42:def'],
+				name: 'Passive Gender-Based Defense Boost',
+				stat: UnitStat.def,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('DEF'),
+			},
+			'passive:42:rec': {
+				id: BuffId['passive:42:rec'],
+				name: 'Passive Gender-Based Recovery Boost',
+				stat: UnitStat.rec,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('REC'),
+			},
+			'passive:42:crit': {
+				id: BuffId['passive:42:crit'],
+				name: 'Passive Gender-Based Critical Hit Rate Boost',
+				stat: UnitStat.crit,
+				stackType: BuffStackType.Passive,
+				icons: createIconGetterForStat('CRTRATE'),
+			},
+		};
+	})(),
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

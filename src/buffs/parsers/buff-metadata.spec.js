@@ -1,7 +1,7 @@
 const { BUFF_METADATA } = require('./buff-metadata');
 const { BuffId, IconId } = require('./buff-types');
 const { getStringValueForLog } = require('../../_test-helpers/utils');
-const { TargetArea, UnitElement, UnitType } = require('../../datamine-types');
+const { TargetArea, UnitElement, UnitType, UnitGender } = require('../../datamine-types');
 
 describe('BUFF_METADATA entries', () => {
 	const expectIconsToBeValid = (icons = []) => {
@@ -19,6 +19,12 @@ describe('BUFF_METADATA entries', () => {
 		});
 	};
 
+	/**
+	 * @param {string} buffId
+	 * @param {string[]} expectedIcons
+	 * @param {import('./buff-types').IBuff} buff
+	 * @param {string} caseName
+	 */
 	const testIconResultWithBuff = (buffId, expectedIcons, buff, caseName) => {
 		it(`returns ${getStringValueForLog(expectedIcons)} for icons when ${caseName}`, () => {
 			expect(BUFF_METADATA[buffId].icons(buff)).toEqual(expectedIcons);
@@ -645,6 +651,93 @@ describe('BUFF_METADATA entries', () => {
 		describe('passive:41:crit', () => {
 			testDefaultIconResult(BuffId['passive:41:crit'], [IconId.BUFF_UNIQUEELEMENTCRTRATEUP]);
 			testIconResultWithBuff(BuffId['passive:41:crit'], [IconId.BUFF_UNIQUEELEMENTCRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+	});
+
+	describe('passive 42 buffs', () => {
+		const POSSIBLE_KNOWN_GENDERS = [
+			UnitGender.Male,
+			UnitGender.Female,
+			UnitGender.Other,
+		];
+
+		/**
+		 * @param {string} stat
+		 */
+		const testGenderVariantsAndPolarities = (stat) => {
+			[-1, 1].forEach((polarityValue) => {
+				const polarityKey = polarityValue < 0 ? 'DOWN' : 'UP';
+				const polarityCase = polarityValue < 0 ? 'negative' : 'positive';
+				const iconStatKey = stat !== 'crit' ? stat.toUpperCase() : 'CRTRATE';
+				POSSIBLE_KNOWN_GENDERS.forEach((gender) => {
+					testIconResultWithBuff(
+						BuffId[`passive:42:${stat}`],
+						[IconId[`BUFF_${gender.toUpperCase()}${iconStatKey}${polarityKey}`]],
+						{ value: polarityValue, conditions: { targetGender: gender } },
+						`buff value is ${polarityCase} and target gender is ${gender}`,
+					);
+				});
+
+				testIconResultWithBuff(
+					BuffId[`passive:42:${stat}`],
+					[IconId[`BUFF_GENDER${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue },
+					`buff value is ${polarityCase} and no conditions are given`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`passive:42:${stat}`],
+					[IconId[`BUFF_GENDER${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: {} },
+					`buff value is ${polarityCase} and no gender conditions are given`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`passive:42:${stat}`],
+					[IconId[`BUFF_GENDER${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetGender: '' } },
+					`buff value is ${polarityCase} and gender condition is empty`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`passive:42:${stat}`],
+					[IconId[`BUFF_GENDER${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetGender: { arbitrary: 'value' } } },
+					`buff value is ${polarityCase} and a non-string gender is given`,
+				);
+
+				testIconResultWithBuff(
+					BuffId[`passive:42:${stat}`],
+					[IconId[`BUFF_GENDER${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetGender: 'a fake value' } },
+					`buff value is ${polarityCase} and an invalid target gender is given`,
+				);
+			});
+		};
+
+		describe('passive:42:hp', () => {
+			testDefaultIconResult(BuffId['passive:42:hp'], [IconId.BUFF_GENDERHPUP]);
+			testGenderVariantsAndPolarities('hp');
+		});
+
+		describe('passive:42:atk', () => {
+			testDefaultIconResult(BuffId['passive:42:atk'], [IconId.BUFF_GENDERATKUP]);
+			testGenderVariantsAndPolarities('atk');
+		});
+
+		describe('passive:42:def', () => {
+			testDefaultIconResult(BuffId['passive:42:def'], [IconId.BUFF_GENDERDEFUP]);
+			testGenderVariantsAndPolarities('def');
+		});
+
+		describe('passive:42:rec', () => {
+			testDefaultIconResult(BuffId['passive:42:rec'], [IconId.BUFF_GENDERRECUP]);
+			testGenderVariantsAndPolarities('rec');
+		});
+
+		describe('passive:42:crit', () => {
+			testDefaultIconResult(BuffId['passive:42:crit'], [IconId.BUFF_GENDERCRTRATEUP]);
+			testGenderVariantsAndPolarities('crit');
 		});
 	});
 

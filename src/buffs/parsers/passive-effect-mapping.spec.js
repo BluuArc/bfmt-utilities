@@ -1,5 +1,5 @@
 const { getPassiveEffectToBuffMapping } = require('./passive-effect-mapping');
-const { TargetType, TargetArea, UnitElement, UnitType } = require('../../datamine-types');
+const { TargetType, TargetArea, UnitElement, UnitType, UnitGender } = require('../../datamine-types');
 const { BuffId } = require('./buff-types');
 
 describe('getPassiveEffectToBuffMapping method', () => {
@@ -4121,6 +4121,198 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						conditions: {
 							...arbitraryConditionValue,
 							minumumUniqueElements: 0,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
+			});
+		});
+
+		describe('passive 42', () => {
+			const expectedOriginalId = '42';
+			const GENDER_MAPPING = {
+				0: UnitGender.Other,
+				1: UnitGender.Male,
+				2: UnitGender.Female,
+			};
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:42:${stat}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:42:${stat}`,
+						value: +(splitParams[index + 1]),
+						conditions: {
+							targetGender: UnitGender.Male,
+						},
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '2,2,3,4,5,6,7,8,9';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:42:${stat}`,
+						value: +(splitParams[index + 1]),
+						conditions: {
+							targetGender: UnitGender.Female,
+						},
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_6: '7',
+						param_7: '8',
+						param_8: '9',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when the params property does not exist', () => {
+				const mockValues = [8, 9, 10, 11, 12];
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat, index) => {
+					acc[`${stat}% buff`] = mockValues[index];
+					return acc;
+				}, {});
+				effect['gender required'] = 'arbitrary gender'; // taken at face value
+
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:42:${stat}`,
+						value: mockValues[index],
+						conditions: {
+							targetGender: 'arbitrary gender',
+						},
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			STAT_PARAMS_ORDER.forEach((statCase) => {
+				Object.entries(GENDER_MAPPING).forEach(([genderKey, genderValue]) => {
+					it(`returns only value for ${statCase} and ${genderValue} if it is non-zero and other stats are zero`, () => {
+						const params = [genderKey, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
+						const expectedResult = [baseBuffFactory({
+							id: `passive:42:${statCase}`,
+							value: 123,
+							conditions: {
+								targetGender: genderValue,
+							},
+						})];
+
+						const effect = { params };
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it(`converts gender values with no mapping to "unknown" and the only non-zero stat is ${statCase}`, () => {
+					const params = ['123', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
+					const expectedResult = [baseBuffFactory({
+						id: `passive:42:${statCase}`,
+						value: 123,
+						conditions: {
+							targetGender: 'unknown',
+						},
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`outputs stat buffs when no genders are specified and the only non-zero stat is ${statCase}`, () => {
+					const params = ['', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
+					const expectedResult = [baseBuffFactory({
+						id: `passive:42:${statCase}`,
+						value: 123,
+						conditions: {
+							targetGender: 'unknown',
+						},
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('outputs stat buffs when no genders are given', () => {
+				const params = ['', ...STAT_PARAMS_ORDER.map((stat, index) => index + 1)].join(',');
+
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:42:${stat}`,
+						value: index + 1,
+						conditions: {
+							targetGender: 'unknown',
+						},
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat) => {
+					acc[`${stat}% buff`] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,0,0,456,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:42:hp',
+						sources: arbitrarySourceValue,
+						value: 456,
+						conditions: {
+							...arbitraryConditionValue,
+							targetGender: UnitGender.Other,
 						},
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
