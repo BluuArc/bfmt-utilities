@@ -1782,4 +1782,56 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			originalId: '43',
 		});
 	});
+
+	map.set('44', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '44';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+		const stats = {
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+			crit: '0' as AlphaNumeric,
+			hp: '0' as AlphaNumeric,
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			[stats.atk, stats.def, stats.rec, stats.crit, stats.hp, ...extraParams] = splitEffectParams(typedEffect);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+		} else {
+			stats.hp = (typedEffect['hp buff'] as string);
+			stats.atk = (typedEffect['atk buff'] as string);
+			stats.def = (typedEffect['def buff'] as string);
+			stats.rec = (typedEffect['rec buff'] as string);
+			stats.crit = (typedEffect['crit buff'] as string);
+		}
+
+		STATS_ORDER.forEach((stat) => {
+			const value = parseNumberOrDefault(stats[stat as CoreStat]);
+			if (value !== 0) {
+				results.push({
+					id: `passive:44:${stat}`,
+					originalId,
+					sources,
+					value,
+					conditions: { ...conditionInfo },
+					...targetData,
+				});
+			}
+		});
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }
