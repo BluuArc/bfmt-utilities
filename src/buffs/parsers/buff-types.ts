@@ -222,6 +222,7 @@ export enum UnitStat {
 	thunderMitigation = 'thunderMitigation',
 	lightMitigation = 'lightMitigation',
 	darkMitigation = 'darkMitigation',
+	reduceDamageToOne = 'reduceDamageToOne',
 
 	turnDurationModification = 'turnDurationModification',
 
@@ -289,13 +290,14 @@ export interface IUnitState {
 	defDownInflict: IBuff[];
 	recDownInflict: IBuff[];
 
-	mitigation: IBuff[],
-	fireMitigation: IBuff[],
-	waterMitigation: IBuff[],
-	earthMitigation: IBuff[],
-	thunderMitigation: IBuff[],
-	lightMitigation: IBuff[],
-	darkMitigation: IBuff[],
+	mitigation: IBuff[];
+	fireMitigation: IBuff[];
+	waterMitigation: IBuff[];
+	earthMitigation: IBuff[];
+	thunderMitigation: IBuff[];
+	lightMitigation: IBuff[];
+	darkMitigation: IBuff[];
+	reduceDamageToOne: IBuff[];
 
 	turnDurationModification: IBuff[];
 
@@ -612,6 +614,7 @@ export enum IconId {
   BUFF_ADDRECDOWN = 'BUFF_ADDRECDOWN',
 
 	BUFF_DAMAGECUT = 'BUFF_DAMAGECUT',
+	BUFF_DAMAGECUTTOONE = 'BUFF_DAMAGECUTTOONE',
 
 	BUFF_FIREDMGDOWN = 'BUFF_FIREDMGDOWN',
 	BUFF_WATERDMGDOWN = 'BUFF_WATERDMGDOWN',
@@ -841,6 +844,8 @@ export enum BuffId {
 	'passive:42:def' = 'passive:42:def',
 	'passive:42:rec' = 'passive:42:rec',
 	'passive:42:crit' = 'passive:42:crit',
+
+	'passive:43' = 'passive:43',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

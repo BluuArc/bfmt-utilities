@@ -4332,5 +4332,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
 			});
 		});
+
+		describe('passive 43', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '43',
+				expectedBuffId: 'passive:43',
+				effectKey: 'take 1 dmg%',
+			});
+		});
 	});
 });
