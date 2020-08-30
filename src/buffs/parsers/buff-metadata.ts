@@ -322,7 +322,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'passive:9': {
 		id: BuffId['passive:9'],
-		name: 'Passive Gradual BB Gauge Fill',
+		name: 'Passive Gradual BC Fill',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
@@ -399,7 +399,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'passive:13': {
 		id: BuffId['passive:13'],
-		name: 'Passive BB Gauge Fill on Enemy Defeat',
+		name: 'Passive BC Fill on Enemy Defeat',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
@@ -706,7 +706,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'passive:35': {
 		id: BuffId['passive:35'],
-		name: 'Passive BB Gauge Fill when Normal Attacking',
+		name: 'Passive BC Fill when Normal Attacking',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
@@ -921,6 +921,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { addedValue: number }).addedValue && (buff.value as { addedValue: number }).addedValue < 0) ? IconId.BUFF_HPSCALEDRECDOWN : IconId.BUFF_HPSCALEDRECUP],
 	},
+	'passive:47': {
+		id: BuffId['passive:47'],
+		name: 'Passive BC Fill on Spark',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_SPARKBBUP],
+	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
@@ -955,14 +962,14 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'proc:4:flat': {
 		id: BuffId['proc:4:flat'],
-		name: 'Burst BB Gauge Fill (Flat Amount)',
+		name: 'Burst BC Fill (Flat Amount)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_BBREC],
 	},
 	'proc:4:percent': {
 		id: BuffId['proc:4:percent'],
-		name: 'Burst BB Gauge Fill (Percentage)',
+		name: 'Burst BC Fill (Percentage)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_BBREC],
@@ -1387,7 +1394,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'proc:19': {
 		id: BuffId['proc:19'],
-		name: 'Active Gradual BB Gauge Fill',
+		name: 'Active Gradual BC Fill',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_BBREC],
@@ -1510,14 +1517,14 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'proc:31:flat': {
 		id: BuffId['proc:31:flat'],
-		name: 'Burst BB Gauge Fill (Flat Amount)',
+		name: 'Burst BC Fill (Flat Amount)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_BBREC],
 	},
 	'proc:31:percent': {
 		id: BuffId['proc:31:percent'],
-		name: 'Burst BB Gauge Fill (Percentage)',
+		name: 'Burst BC Fill (Percentage)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_BBREC],

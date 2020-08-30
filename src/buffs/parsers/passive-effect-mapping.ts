@@ -1956,4 +1956,20 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('47', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parsePassiveWithNumericalValueRangeAndChance({
+			effect,
+			context,
+			injectionContext,
+			originalId: '47',
+			effectKeyLow: 'bc fill on spark low',
+			effectKeyHigh: 'bc fill on spark high',
+			effectKeyChance: 'bc fill on spark%',
+			buffKeyLow: 'fillLow',
+			buffKeyHigh: 'fillHigh',
+			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
+			buffId: 'passive:47',
+		});
+	});
 }

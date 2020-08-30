@@ -802,6 +802,11 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive:47', () => {
+		testDefaultIconResult(BuffId['passive:47'], [IconId.BUFF_SPARKBBUP]);
+	});
+
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
