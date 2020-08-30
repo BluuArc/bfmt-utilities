@@ -67,6 +67,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	};
 
 	type AlphaNumeric = string | number;
+	type ProportionalMode = 'lost' | 'remaining' | 'unknown';
 
 	// Disable rule as this function is only called once it's confirmed that `effect.params` exists
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -2571,6 +2572,76 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				};
 			}
 			results.push(entry);
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
+
+	map.set('47', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '47';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const { hits, distribution } = getAttackInformationFromContext(context);
+		const params: { [param: string]: AlphaNumeric } = {
+			'baseAtk%': '0',
+			'addedAtk%': '0',
+			flatAtk: '0',
+			'crit%': '0',
+			'bc%': '0',
+			'hc%': '0',
+			'dmg%': '0',
+		};
+		let proportionalMode: ProportionalMode = 'unknown';
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			let rawMaxAttackValue: string, rawProportionalMode: string;
+			[params['baseAtk%'], rawMaxAttackValue, rawProportionalMode, params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], ...extraParams] = splitEffectParams(effect);
+
+			params['addedAtk%'] = parseNumberOrDefault(rawMaxAttackValue) - parseNumberOrDefault(params['baseAtk%']);
+			proportionalMode = rawProportionalMode === '1' ? 'lost' : 'remaining';
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
+		} else {
+			params['baseAtk%'] = (effect['bb base atk%'] as number);
+			params['addedAtk%'] = (effect['bb added atk% based on hp'] as number);
+			proportionalMode = (effect['bb added atk% proportional to hp'] as ProportionalMode) || 'unknown';
+			params.flatAtk = (effect['bb flat atk'] as number);
+			params['crit%'] = (effect['bb crit%'] as number);
+			params['bc%'] = (effect['bb bc%'] as number);
+			params['hc%'] = (effect['bb hc%'] as number);
+			params['dmg%'] = (effect['bb dmg%'] as number);
+		}
+
+		const filteredValue = Object.entries(params)
+			.filter(([, value]) => value && +value)
+			.reduce((acc: { [param: string]: number }, [key, value]) => {
+				acc[key] = parseNumberOrDefault(value);
+				return acc;
+			}, {});
+
+		const results: IBuff[] = [];
+		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+			results.push({
+				id: 'proc:47',
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					...filteredValue,
+					proportionalMode,
+					hits,
+					distribution,
+				},
+				...targetData,
+			});
 		}
 
 		handlePostParse(results, unknownParams, {

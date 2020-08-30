@@ -1846,4 +1846,10 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_PROPORTIONAL : IconId.ATK_AOE_PROPORTIONAL],
 	},
+	'proc:47': {
+		id: BuffId['proc:47'],
+		name: 'HP Scaled Damage',
+		stackType: BuffStackType.Attack,
+		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_HPSCALED : IconId.ATK_AOE_HPSCALED],
+	},
 });

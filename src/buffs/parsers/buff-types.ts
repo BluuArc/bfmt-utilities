@@ -746,6 +746,8 @@ export enum IconId {
 	ATK_AOE_MULTIELEMENT = 'ATK_AOE_MULTIELEMENT',
 	ATK_ST_SACRIFICIAL = 'ATK_ST_SACRIFICIAL',
 	ATK_AOE_SACRIFICIAL = 'ATK_AOE_SACRIFICIAL',
+	ATK_ST_HPSCALED = 'ATK_ST_HPSCALED',
+	ATK_AOE_HPSCALED = 'ATK_AOE_HPSCALED',
 }
 
 /**
@@ -1048,4 +1050,5 @@ export enum BuffId {
 	'proc:45:ubb' = 'proc:45:ubb',
 
 	'proc:46' = 'proc:46',
+	'proc:47' = 'proc:47',
 }
