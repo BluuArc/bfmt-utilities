@@ -1983,4 +1983,19 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			originalId: '48',
 		});
 	});
+
+	map.set('49', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parsePassiveWithNumericalValueRangeAndChance({
+			effect,
+			context,
+			injectionContext,
+			originalId: '49',
+			effectKeyLow: 'reduced bb bc use% low',
+			effectKeyHigh: 'reduced bb bc use% high',
+			effectKeyChance: 'reduced bb bc use chance%',
+			buffKeyLow: 'reducedUseLow%',
+			buffKeyHigh: 'reducedUseHigh%',
+			buffId: 'passive:49',
+		});
+	});
 }

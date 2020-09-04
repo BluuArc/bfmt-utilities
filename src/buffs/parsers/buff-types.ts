@@ -195,6 +195,7 @@ export enum UnitStat {
 	hcEfficacy = 'hcEfficacy',
 
 	bcCostReduction = 'bcCostReduction',
+	bbGaugeConsumptionReduction = 'bbGaugeConsumptionReduction',
 
 	poisonResist = 'poisonResist',
 	weakResist = 'weakResist',
@@ -280,6 +281,7 @@ export interface IUnitState {
 	hcEfficacy: IBuff[];
 
 	bcCostReduction: IBuff[];
+	bbGaugeConsumptionReduction: IBuff[];
 
 	poisonResist: IBuff[];
 	weakResist: IBuff[];
@@ -908,6 +910,7 @@ export enum BuffId {
 
 	'passive:47' = 'passive:47',
 	'passive:48' = 'passive:48',
+	'passive:49' = 'passive:49',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

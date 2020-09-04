@@ -1777,6 +1777,8 @@ var bfmtUtilities = function (exports) {
     UnitStat["karmaDropRate"] = "karmaDropRate";
     UnitStat["bcEfficacy"] = "bcEfficacy";
     UnitStat["hcEfficacy"] = "hcEfficacy";
+    UnitStat["bcCostModification"] = "bcCostModification";
+    UnitStat["bbGaugeConsumptionReduction"] = "bbGaugeConsumptionReduction";
     UnitStat["poisonResist"] = "poisonResist";
     UnitStat["weakResist"] = "weakResist";
     UnitStat["sickResist"] = "sickResist";
@@ -2159,6 +2161,7 @@ var bfmtUtilities = function (exports) {
     IconId["BUFF_BBATKUP"] = "BUFF_BBATKUP";
     IconId["BUFF_SBBATKUP"] = "BUFF_SBBATKUP";
     IconId["BUFF_UBBATKUP"] = "BUFF_UBBATKUP";
+    IconId["BUFF_BBCOST_REDUCTION"] = "BUFF_BBCOST_REDUCTION";
     IconId["ATK_ST"] = "ATK_ST";
     IconId["ATK_AOE"] = "ATK_AOE";
     IconId["ATK_RT"] = "ATK_RT";
@@ -2166,12 +2169,18 @@ var bfmtUtilities = function (exports) {
     IconId["ATK_AOE_HPREC"] = "ATK_AOE_HPREC";
     IconId["ATK_ST_PROPORTIONAL"] = "ATK_ST_PROPORTIONAL";
     IconId["ATK_AOE_PROPORTIONAL"] = "ATK_AOE_PROPORTIONAL";
+    IconId["ATK_ST_PIERCING_PROPORTIONAL"] = "ATK_ST_PIERCING_PROPORTIONAL";
+    IconId["ATK_AOE_PIERCING_PROPORTIONAL"] = "ATK_AOE_PIERCING_PROPORTIONAL";
     IconId["ATK_ST_FIXED"] = "ATK_ST_FIXED";
     IconId["ATK_AOE_FIXED"] = "ATK_AOE_FIXED";
+    IconId["ATK_ST_PIERCING_FIXED"] = "ATK_ST_PIERCING_FIXED";
+    IconId["ATK_AOE_PIERCING_FIXED"] = "ATK_AOE_PIERCING_FIXED";
     IconId["ATK_ST_MULTIELEMENT"] = "ATK_ST_MULTIELEMENT";
     IconId["ATK_AOE_MULTIELEMENT"] = "ATK_AOE_MULTIELEMENT";
     IconId["ATK_ST_SACRIFICIAL"] = "ATK_ST_SACRIFICIAL";
     IconId["ATK_AOE_SACRIFICIAL"] = "ATK_AOE_SACRIFICIAL";
+    IconId["ATK_ST_HPSCALED"] = "ATK_ST_HPSCALED";
+    IconId["ATK_AOE_HPSCALED"] = "ATK_AOE_HPSCALED";
   })(IconId || (IconId = {}));
   /**
    * @description Format of these IDs are `<passive|proc>:<original effect ID>:<stat>`.
@@ -2299,6 +2308,8 @@ var bfmtUtilities = function (exports) {
     BuffId["passive:46:def"] = "passive:46:def";
     BuffId["passive:46:rec"] = "passive:46:rec";
     BuffId["passive:47"] = "passive:47";
+    BuffId["passive:48"] = "passive:48";
+    BuffId["passive:49"] = "passive:49";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1"] = "proc:1";
@@ -2424,6 +2435,11 @@ var bfmtUtilities = function (exports) {
     BuffId["proc:45:sbb"] = "proc:45:sbb";
     BuffId["proc:45:ubb"] = "proc:45:ubb";
     BuffId["proc:46"] = "proc:46";
+    BuffId["proc:47"] = "proc:47";
+    BuffId["proc:48:base"] = "proc:48:base";
+    BuffId["proc:48:current"] = "proc:48:current";
+    BuffId["proc:48:fixed"] = "proc:48:fixed";
+    BuffId["proc:48:unknown"] = "proc:48:unknown";
   })(BuffId || (BuffId = {}));
   /**
    * @description Helper function for creating an entry to be used in the `sources`
@@ -5135,6 +5151,150 @@ var bfmtUtilities = function (exports) {
       });
       return results;
     });
+    map.set('47', (effect, context, injectionContext) => {
+      const originalId = '47';
+      const {
+        targetData,
+        sources,
+        effectDelay
+      } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+      const {
+        hits,
+        distribution
+      } = getAttackInformationFromContext(context);
+      const params = {
+        'baseAtk%': '0',
+        'addedAtk%': '0',
+        flatAtk: '0',
+        'crit%': '0',
+        'bc%': '0',
+        'hc%': '0',
+        'dmg%': '0'
+      };
+      let proportionalMode = 'unknown';
+      let unknownParams;
+
+      if (effect.params) {
+        let extraParams;
+        let rawMaxAttackValue, rawProportionalMode;
+        [params['baseAtk%'], rawMaxAttackValue, rawProportionalMode, params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], ...extraParams] = splitEffectParams(effect);
+        params['addedAtk%'] = parseNumberOrDefault(rawMaxAttackValue) - parseNumberOrDefault(params['baseAtk%']);
+        proportionalMode = rawProportionalMode === '1' ? 'lost' : 'remaining';
+        unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
+      } else {
+        params['baseAtk%'] = effect['bb base atk%'];
+        params['addedAtk%'] = effect['bb added atk% based on hp'];
+        proportionalMode = effect['bb added atk% proportional to hp'] || 'unknown';
+        params.flatAtk = effect['bb flat atk'];
+        params['crit%'] = effect['bb crit%'];
+        params['bc%'] = effect['bb bc%'];
+        params['hc%'] = effect['bb hc%'];
+        params['dmg%'] = effect['bb dmg%'];
+      }
+
+      const filteredValue = Object.entries(params).filter(([, value]) => value && +value).reduce((acc, [key, value]) => {
+        acc[key] = parseNumberOrDefault(value);
+        return acc;
+      }, {});
+      const results = [];
+
+      if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+        results.push(Object.assign({
+          id: 'proc:47',
+          originalId,
+          sources,
+          effectDelay,
+          value: Object.assign(Object.assign({}, filteredValue), {
+            proportionalMode,
+            hits,
+            distribution
+          })
+        }, targetData));
+      }
+
+      handlePostParse(results, unknownParams, {
+        originalId,
+        sources,
+        targetData,
+        effectDelay
+      });
+      return results;
+    });
+    map.set('48', (effect, context, injectionContext) => {
+      const originalId = '48';
+      const {
+        targetData,
+        sources,
+        effectDelay
+      } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+      const {
+        hits,
+        distribution
+      } = getAttackInformationFromContext(context);
+      const rawParams = effect.params || effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] || '';
+      const [rawBasePercentHpLow, rawBasePercentHpHigh, rawCurrentPercentHpLow, rawCurrentPercentHpHigh, rawFixedDamage, rawChance, rawIsLethal, ...extraParams] = splitEffectParams({
+        params: rawParams
+      });
+      const basePercentHpLow = parseNumberOrDefault(rawBasePercentHpLow);
+      const basePercentHpHigh = parseNumberOrDefault(rawBasePercentHpHigh);
+      const currentPercentHpLow = parseNumberOrDefault(rawCurrentPercentHpLow);
+      const currentPercentHpHigh = parseNumberOrDefault(rawCurrentPercentHpHigh);
+      const fixedDamage = parseNumberOrDefault(rawFixedDamage);
+      const chance = parseNumberOrDefault(rawChance);
+      const isLethal = rawIsLethal === '1';
+      const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
+      /**
+       * Current assumption is that each set of parameters results in a separate attack
+       * due to no known skills having more than one of each variant.
+       */
+
+      const results = [];
+
+      const createAttackOfType = (type, valueProperties) => Object.assign({
+        id: `proc:48:${type}`,
+        originalId,
+        sources,
+        effectDelay,
+        value: Object.assign(Object.assign({}, valueProperties), {
+          isLethal,
+          chance,
+          hits,
+          distribution
+        })
+      }, targetData);
+
+      if (basePercentHpLow !== 0 || basePercentHpHigh !== 0) {
+        results.push(createAttackOfType('base', {
+          'hpDamageLow%': basePercentHpLow,
+          'hpDamageHigh%': basePercentHpHigh
+        }));
+      }
+
+      if (currentPercentHpLow !== 0 || currentPercentHpHigh !== 0) {
+        results.push(createAttackOfType('current', {
+          'hpDamageLow%': currentPercentHpLow,
+          'hpDamageHigh%': currentPercentHpHigh
+        }));
+      }
+
+      if (fixedDamage !== 0) {
+        results.push(createAttackOfType('fixed', {
+          value: fixedDamage
+        }));
+      }
+
+      if (results.length === 0 && (hits !== 0 || distribution !== 0)) {
+        results.push(createAttackOfType('unknown', {}));
+      }
+
+      handlePostParse(results, unknownParams, {
+        originalId,
+        sources,
+        targetData,
+        effectDelay
+      });
+      return results;
+    });
   }
   /**
    * @description Default function for all effects that cannot be processed.
@@ -7099,6 +7259,30 @@ var bfmtUtilities = function (exports) {
         buffId: 'passive:47'
       });
     });
+    map.set('48', (effect, context, injectionContext) => {
+      return parsePassiveWithSingleNumericalParameter({
+        effect,
+        context,
+        injectionContext,
+        effectKey: 'reduced bb bc cost%',
+        buffId: 'passive:48',
+        originalId: '48'
+      });
+    });
+    map.set('49', (effect, context, injectionContext) => {
+      return parsePassiveWithNumericalValueRangeAndChance({
+        effect,
+        context,
+        injectionContext,
+        originalId: '49',
+        effectKeyLow: 'reduced bb bc use% low',
+        effectKeyHigh: 'reduced bb bc use% high',
+        effectKeyChance: 'reduced bb bc use chance%',
+        buffKeyLow: 'reducedUseLow%',
+        buffKeyHigh: 'reducedUseHigh%',
+        buffId: 'passive:49'
+      });
+    });
   }
   /**
    * @description Default function for all effects that cannot be processed.
@@ -7436,7 +7620,7 @@ var bfmtUtilities = function (exports) {
     },
     'passive:9': {
       id: BuffId['passive:9'],
-      name: 'Passive Gradual BB Gauge Fill',
+      name: 'Passive Gradual BC Fill',
       stat: UnitStat.bbGauge,
       stackType: BuffStackType.Passive,
       icons: () => [IconId.BUFF_BBREC]
@@ -7513,7 +7697,7 @@ var bfmtUtilities = function (exports) {
     },
     'passive:13': {
       id: BuffId['passive:13'],
-      name: 'Passive BB Gauge Fill on Enemy Defeat',
+      name: 'Passive BC Fill on Enemy Defeat',
       stat: UnitStat.bbGauge,
       stackType: BuffStackType.Passive,
       icons: () => [IconId.BUFF_BBREC]
@@ -7820,7 +8004,7 @@ var bfmtUtilities = function (exports) {
     },
     'passive:35': {
       id: BuffId['passive:35'],
-      name: 'Passive BB Gauge Fill when Normal Attacking',
+      name: 'Passive BC Fill when Normal Attacking',
       stat: UnitStat.bbGauge,
       stackType: BuffStackType.Passive,
       icons: () => [IconId.BUFF_BBREC]
@@ -8042,10 +8226,24 @@ var bfmtUtilities = function (exports) {
     },
     'passive:47': {
       id: BuffId['passive:47'],
-      name: 'Passive BB Gauge Fill on Spark',
+      name: 'Passive BC Fill on Spark',
       stat: UnitStat.bbGauge,
       stackType: BuffStackType.Passive,
       icons: () => [IconId.BUFF_SPARKBBUP]
+    },
+    'passive:48': {
+      id: BuffId['passive:48'],
+      name: 'Passive BC Cost Reduction',
+      stat: UnitStat.bcCostModification,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_BBCOST_REDUCTION]
+    },
+    'passive:49': {
+      id: BuffId['passive:49'],
+      name: 'Passive BB Gauge Consumption Reduction',
+      stat: UnitStat.bbGaugeConsumptionReduction,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_BBREC]
     },
     'UNKNOWN_PROC_EFFECT_ID': {
       id: BuffId.UNKNOWN_PROC_EFFECT_ID,
@@ -8081,14 +8279,14 @@ var bfmtUtilities = function (exports) {
     },
     'proc:4:flat': {
       id: BuffId['proc:4:flat'],
-      name: 'Burst BB Gauge Fill (Flat Amount)',
+      name: 'Burst BC Fill (Flat Amount)',
       stat: UnitStat.bbGauge,
       stackType: BuffStackType.Burst,
       icons: () => [IconId.BUFF_BBREC]
     },
     'proc:4:percent': {
       id: BuffId['proc:4:percent'],
-      name: 'Burst BB Gauge Fill (Percentage)',
+      name: 'Burst BC Fill (Percentage)',
       stat: UnitStat.bbGauge,
       stackType: BuffStackType.Burst,
       icons: () => [IconId.BUFF_BBREC]
@@ -8523,7 +8721,7 @@ var bfmtUtilities = function (exports) {
     },
     'proc:19': {
       id: BuffId['proc:19'],
-      name: 'Active Gradual BB Gauge Fill',
+      name: 'Active Gradual BC Fill',
       stat: UnitStat.bbGauge,
       stackType: BuffStackType.Active,
       icons: () => [IconId.BUFF_BBREC]
@@ -8646,14 +8844,14 @@ var bfmtUtilities = function (exports) {
     },
     'proc:31:flat': {
       id: BuffId['proc:31:flat'],
-      name: 'Burst BB Gauge Fill (Flat Amount)',
+      name: 'Burst BC Fill (Flat Amount)',
       stat: UnitStat.bbGauge,
       stackType: BuffStackType.Burst,
       icons: () => [IconId.BUFF_BBREC]
     },
     'proc:31:percent': {
       id: BuffId['proc:31:percent'],
-      name: 'Burst BB Gauge Fill (Percentage)',
+      name: 'Burst BC Fill (Percentage)',
       stat: UnitStat.bbGauge,
       stackType: BuffStackType.Burst,
       icons: () => [IconId.BUFF_BBREC]
@@ -8974,6 +9172,36 @@ var bfmtUtilities = function (exports) {
       name: 'Non-Lethal Proportional Damage',
       stackType: BuffStackType.Attack,
       icons: buff => [buff && buff.targetArea === TargetArea.Single ? IconId.ATK_ST_PROPORTIONAL : IconId.ATK_AOE_PROPORTIONAL]
+    },
+    'proc:47': {
+      id: BuffId['proc:47'],
+      name: 'HP Scaled Damage',
+      stackType: BuffStackType.Attack,
+      icons: buff => [buff && buff.targetArea === TargetArea.Single ? IconId.ATK_ST_HPSCALED : IconId.ATK_AOE_HPSCALED]
+    },
+    'proc:48:base': {
+      id: BuffId['proc:48:base'],
+      name: 'Piercing Proportional Damage (Base HP)',
+      stackType: BuffStackType.Attack,
+      icons: buff => [buff && buff.targetArea === TargetArea.Single ? IconId.ATK_ST_PIERCING_PROPORTIONAL : IconId.ATK_AOE_PIERCING_PROPORTIONAL]
+    },
+    'proc:48:current': {
+      id: BuffId['proc:48:current'],
+      name: 'Piercing Proportional Damage (Current HP)',
+      stackType: BuffStackType.Attack,
+      icons: buff => [buff && buff.targetArea === TargetArea.Single ? IconId.ATK_ST_PIERCING_PROPORTIONAL : IconId.ATK_AOE_PIERCING_PROPORTIONAL]
+    },
+    'proc:48:fixed': {
+      id: BuffId['proc:48:fixed'],
+      name: 'Piercing Fixed Damage',
+      stackType: BuffStackType.Attack,
+      icons: buff => [buff && buff.targetArea === TargetArea.Single ? IconId.ATK_ST_PIERCING_FIXED : IconId.ATK_AOE_PIERCING_FIXED]
+    },
+    'proc:48:unknown': {
+      id: BuffId['proc:48:unknown'],
+      name: 'Unknown Damage',
+      stackType: BuffStackType.Attack,
+      icons: buff => [buff && buff.targetArea === TargetArea.Single ? IconId.ATK_ST : IconId.ATK_AOE]
     }
   }));
   /**

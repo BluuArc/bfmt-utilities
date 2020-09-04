@@ -4905,5 +4905,17 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				effectKey: 'reduced bb bc cost%',
 			});
 		});
+
+		describe('passive 49', () => {
+			testPassiveWithNumericalValueRangeAndChance({
+				expectedOriginalId: '49',
+				expectedBuffId: 'passive:49',
+				effectKeyLow: 'reduced bb bc use% low',
+				effectKeyHigh: 'reduced bb bc use% high',
+				effectKeyChance: 'reduced bb bc use chance%',
+				buffKeyLow: 'reducedUseLow%',
+				buffKeyHigh: 'reducedUseHigh%',
+			});
+		});
 	});
 });
