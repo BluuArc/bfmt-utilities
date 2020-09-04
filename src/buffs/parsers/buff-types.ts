@@ -194,6 +194,8 @@ export enum UnitStat {
 	bcEfficacy = 'bcEfficacy',
 	hcEfficacy = 'hcEfficacy',
 
+	bcCostReduction = 'bcCostReduction',
+
 	poisonResist = 'poisonResist',
 	weakResist = 'weakResist',
 	sickResist = 'sickResist',
@@ -276,6 +278,8 @@ export interface IUnitState {
 
 	bcEfficacy: IBuff[];
 	hcEfficacy: IBuff[];
+
+	bcCostReduction: IBuff[];
 
 	poisonResist: IBuff[];
 	weakResist: IBuff[];
@@ -733,6 +737,8 @@ export enum IconId {
 	BUFF_SBBATKUP = 'BUFF_SBBATKUP',
 	BUFF_UBBATKUP = 'BUFF_UBBATKUP',
 
+	BUFF_BBCOST_REDUCTION = 'BUFF_BBCOST_REDUCTION',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -901,6 +907,7 @@ export enum BuffId {
 	'passive:46:rec' = 'passive:46:rec',
 
 	'passive:47' = 'passive:47',
+	'passive:48' = 'passive:48',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

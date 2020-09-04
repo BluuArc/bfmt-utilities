@@ -4897,5 +4897,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				getExpectedValueFromParam: (param) => +param / 100,
 			});
 		});
+
+		describe('passive 48', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '48',
+				expectedBuffId: 'passive:48',
+				effectKey: 'reduced bb bc cost%',
+			});
+		});
 	});
 });

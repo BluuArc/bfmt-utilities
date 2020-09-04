@@ -1972,4 +1972,15 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffId: 'passive:47',
 		});
 	});
+
+	map.set('48', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parsePassiveWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			effectKey: 'reduced bb bc cost%',
+			buffId: 'passive:48',
+			originalId: '48',
+		});
+	});
 }
