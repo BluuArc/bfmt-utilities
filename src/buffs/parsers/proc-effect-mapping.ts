@@ -2653,4 +2653,70 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('48', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '48';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const { hits, distribution } = getAttackInformationFromContext(context);
+
+		const rawParams: string = effect.params || (effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] as string) || '';
+		const [rawBasePercentHpLow, rawBasePercentHpHigh, rawCurrentPercentHpLow, rawCurrentPercentHpHigh, rawFixedDamage, rawChance, rawIsLethal, ...extraParams] = splitEffectParams({ params: rawParams } as ProcEffect);
+		const basePercentHpLow = parseNumberOrDefault(rawBasePercentHpLow);
+		const basePercentHpHigh = parseNumberOrDefault(rawBasePercentHpHigh);
+		const currentPercentHpLow = parseNumberOrDefault(rawCurrentPercentHpLow);
+		const currentPercentHpHigh = parseNumberOrDefault(rawCurrentPercentHpHigh);
+		const fixedDamage = parseNumberOrDefault(rawFixedDamage);
+		const chance = parseNumberOrDefault(rawChance);
+		const isLethal = rawIsLethal === '1';
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
+
+		/**
+		 * Current assumption is that each set of parameters results in a separate attack
+		 * due to no known skills having more than one of each variant.
+		 */
+		const results: IBuff[] = [];
+		const createAttackOfType = (type: string, valueProperties: { [key: string]: number }): IBuff => ({
+			id: `proc:48:${type}`,
+			originalId,
+			sources,
+			effectDelay,
+			value: {
+				...valueProperties,
+				isLethal,
+				chance,
+				hits,
+				distribution,
+			},
+			...targetData,
+		});
+		if (basePercentHpLow !== 0 || basePercentHpHigh !== 0) {
+			results.push(createAttackOfType('base', {
+				'hpDamageLow%': basePercentHpLow,
+				'hpDamageHigh%': basePercentHpHigh,
+			}));
+		}
+		if (currentPercentHpLow !== 0 || currentPercentHpHigh !== 0) {
+			results.push(createAttackOfType('current', {
+				'hpDamageLow%': currentPercentHpLow,
+				'hpDamageHigh%': currentPercentHpHigh,
+			}));
+		}
+		if (fixedDamage !== 0) {
+			results.push(createAttackOfType('fixed', {
+				value: fixedDamage,
+			}));
+		}
+		if (results.length === 0 && (hits !== 0 || distribution !== 0)) {
+			results.push(createAttackOfType('unknown', {}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

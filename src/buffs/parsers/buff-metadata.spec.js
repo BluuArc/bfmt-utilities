@@ -1495,4 +1495,26 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:47'], [IconId.ATK_AOE_HPSCALED]);
 		testIconResultWithBuff(BuffId['proc:47'], [IconId.ATK_ST_HPSCALED], { targetArea: TargetArea.Single }, 'target area is single');
 	});
+
+	describe('proc 48 buffs', () => {
+		describe('proc:48:base', () => {
+			testDefaultIconResult(BuffId['proc:48:base'], [IconId.ATK_AOE_PIERCING_PROPORTIONAL]);
+			testIconResultWithBuff(BuffId['proc:48:base'], [IconId.ATK_ST_PIERCING_PROPORTIONAL], { targetArea: TargetArea.Single }, 'target area is single');
+		});
+
+		describe('proc:48:current', () => {
+			testDefaultIconResult(BuffId['proc:48:current'], [IconId.ATK_AOE_PIERCING_PROPORTIONAL]);
+			testIconResultWithBuff(BuffId['proc:48:current'], [IconId.ATK_ST_PIERCING_PROPORTIONAL], { targetArea: TargetArea.Single }, 'target area is single');
+		});
+
+		describe('proc:48:fixed', () => {
+			testDefaultIconResult(BuffId['proc:48:fixed'], [IconId.ATK_AOE_PIERCING_FIXED]);
+			testIconResultWithBuff(BuffId['proc:48:fixed'], [IconId.ATK_ST_PIERCING_FIXED], { targetArea: TargetArea.Single }, 'target area is single');
+		});
+
+		describe('proc:48:unknown', () => {
+			testDefaultIconResult(BuffId['proc:48:unknown'], [IconId.ATK_AOE]);
+			testIconResultWithBuff(BuffId['proc:48:unknown'], [IconId.ATK_ST], { targetArea: TargetArea.Single }, 'target area is single');
+		});
+	});
 });
