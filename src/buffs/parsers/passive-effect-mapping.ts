@@ -2050,4 +2050,84 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('53', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '53';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		enum ResistType {
+			CriticalDamage = 'critical-damage',
+			ElementDamage = 'element-damage',
+			CriticalHitRate = 'critical-rate',
+		}
+		interface IResistanceInfo {
+			resistType: ResistType;
+			base: number;
+			buff: number;
+		}
+		const resistances: IResistanceInfo[] = [];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawBaseCritDamageResist, rawBuffCritDamageResist, rawBaseElementDamageResist, rawBuffElementDamageResist, rawBaseCritChanceResist, rawBuffCritChanceResist, ...extraParams] = splitEffectParams(typedEffect);
+			[
+				{ resistType: ResistType.CriticalDamage, base: parseNumberOrDefault(rawBaseCritDamageResist), buff: parseNumberOrDefault(rawBuffCritDamageResist) },
+				{ resistType: ResistType.ElementDamage, base: parseNumberOrDefault(rawBaseElementDamageResist), buff: parseNumberOrDefault(rawBuffElementDamageResist) },
+				{ resistType: ResistType.CriticalHitRate, base: parseNumberOrDefault(rawBaseCritChanceResist), buff: parseNumberOrDefault(rawBuffCritChanceResist) },
+			].forEach(({ resistType, base, buff }) => {
+				if (base !== 0 || buff !== 0) {
+					resistances.push({ resistType, base, buff });
+				}
+			});
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+		} else {
+			[
+				{ resistType: ResistType.CriticalDamage, baseKey: 'crit dmg base damage resist%', buffKey: 'crit dmg buffed damage resist%' },
+				{ resistType: ResistType.ElementDamage, baseKey: 'strong base element damage resist%', buffKey: 'strong buffed element damage resist%' },
+				{ resistType: ResistType.CriticalHitRate, baseKey: 'crit chance base resist%', buffKey: 'crit chance buffed resist%' },
+			].forEach(({ resistType, baseKey, buffKey }) => {
+				const base = parseNumberOrDefault(typedEffect[baseKey] as number);
+				const buff = parseNumberOrDefault(typedEffect[buffKey] as number);
+				if (base !== 0 || buff !== 0) {
+					resistances.push({ resistType, base, buff });
+				}
+			});
+		}
+
+		const results: IBuff[] = [];
+		resistances.forEach(({ resistType, base, buff }) => {
+			if (base !== 0) {
+				results.push({
+					id: `passive:53:${resistType}-base`,
+					originalId,
+					sources,
+					value: base,
+					conditions: { ...conditionInfo },
+					...targetData,
+				});
+			}
+
+			if (buff !== 0) {
+				results.push({
+					id: `passive:53:${resistType}-buff`,
+					originalId,
+					sources,
+					value: buff,
+					conditions: { ...conditionInfo },
+					...targetData,
+				});
+			}
+		});
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

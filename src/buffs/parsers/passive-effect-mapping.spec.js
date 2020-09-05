@@ -5080,5 +5080,266 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 7] });
 			});
 		});
+
+		describe('passive 53', () => {
+			const BUFF_ID_MAPPING = {
+				criticalDamageBase: 'passive:53:critical-damage-base',
+				criticalDamageBuff: 'passive:53:critical-damage-buff',
+				elementDamageBase: 'passive:53:element-damage-base',
+				elementDamageBuff: 'passive:53:element-damage-buff',
+				criticalRateBase: 'passive:53:critical-rate-base',
+				criticalRateBuff: 'passive:53:critical-rate-buff',
+			};
+			const EFFECT_KEY_MAPPING = {
+				criticalDamageBase: 'crit dmg base damage resist%',
+				criticalDamageBuff: 'crit dmg buffed damage resist%',
+				elementDamageBase: 'strong base element damage resist%',
+				elementDamageBuff: 'strong buffed element damage resist%',
+				criticalRateBase: 'crit chance base resist%',
+				criticalRateBuff: 'crit chance buffed resist%',
+			};
+			const PARAMS_ORDER = ['criticalDamageBase', 'criticalDamageBuff', 'elementDamageBase', 'elementDamageBuff', 'criticalRateBase', 'criticalRateBuff'];
+			const expectedOriginalId = '53';
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(PARAMS_ORDER.map((k) => BUFF_ID_MAPPING[k]));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6';
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBase,
+						value: 1,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBuff,
+						value: 2,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBase,
+						value: 3,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBuff,
+						value: 4,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalRateBase,
+						value: 5,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalRateBuff,
+						value: 6,
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,8,9';
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBase,
+						value: 1,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBuff,
+						value: 2,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBase,
+						value: 3,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBuff,
+						value: 4,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalRateBase,
+						value: 5,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalRateBuff,
+						value: 6,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_6: '7',
+							param_7: '8',
+							param_8: '9',
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses the params property when it exists', () => {
+				const effect = {
+					[EFFECT_KEY_MAPPING.criticalDamageBase]: 7,
+					[EFFECT_KEY_MAPPING.criticalDamageBuff]: 8,
+					[EFFECT_KEY_MAPPING.elementDamageBase]: 9,
+					[EFFECT_KEY_MAPPING.elementDamageBuff]: 10,
+					[EFFECT_KEY_MAPPING.criticalRateBase]: 11,
+					[EFFECT_KEY_MAPPING.criticalRateBuff]: 12,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBase,
+						value: 7,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBuff,
+						value: 8,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBase,
+						value: 9,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBuff,
+						value: 10,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalRateBase,
+						value: 11,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalRateBuff,
+						value: 12,
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('parses effect properties to number when the params property does not exist', () => {
+				const effect = {
+					[EFFECT_KEY_MAPPING.criticalDamageBase]: '7',
+					[EFFECT_KEY_MAPPING.criticalDamageBuff]: '8',
+					[EFFECT_KEY_MAPPING.elementDamageBase]: '9',
+					[EFFECT_KEY_MAPPING.elementDamageBuff]: '10',
+					[EFFECT_KEY_MAPPING.criticalRateBase]: '11',
+					[EFFECT_KEY_MAPPING.criticalRateBuff]: '12',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBase,
+						value: 7,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBuff,
+						value: 8,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBase,
+						value: 9,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBuff,
+						value: 10,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalRateBase,
+						value: 11,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalRateBuff,
+						value: 12,
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('for missing or 0 values', () => {
+				PARAMS_ORDER.forEach((key, index) => {
+					it(`returns a single buff for ${BUFF_ID_MAPPING[key]} if its the only parameter that is non-zero`, () => {
+						const params = Array.from({ length: PARAMS_ORDER.length }).fill(0).map((_, i) => i !== index ? '0' : '123').join(',');
+						const expectedResult = [baseBuffFactory({
+							id: BUFF_ID_MAPPING[key],
+							value: 123,
+						})];
+
+						const effect = { params };
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns a single buff for ${BUFF_ID_MAPPING[key]} if its the only parameter that is non-zero and the params property does not exist`, () => {
+						const effect = { [EFFECT_KEY_MAPPING[key]]: 456 };
+						const expectedResult = [baseBuffFactory({
+							id: BUFF_ID_MAPPING[key],
+							value: 456,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
+				it('defaults all params properties to 0 for non-number values', () => {
+					const effect = { params: 'not a number' };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('defaults all effect properties to 0 for non-number values and params property does not exist', () => {
+					const effect = {
+						[EFFECT_KEY_MAPPING.criticalDamageBase]: 'not a number',
+						[EFFECT_KEY_MAPPING.criticalDamageBuff]: 'not a number',
+						[EFFECT_KEY_MAPPING.elementDamageBase]: 'not a number',
+						[EFFECT_KEY_MAPPING.elementDamageBuff]: 'not a number',
+						[EFFECT_KEY_MAPPING.criticalRateBase]: 'not a number',
+						[EFFECT_KEY_MAPPING.criticalRateBuff]: 'not a number',
+					};
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '1,0,0,0,0,0,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBase,
+						sources: arbitrarySourceValue,
+						value: 1,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
+			});
+		});
 	});
 });

@@ -234,6 +234,7 @@ export enum UnitStat {
 	thunderElementalDamage = 'thunderElementalDamage',
 	lightElementalDamage = 'lightElementalDamage',
 	darkElementalDamage = 'darkElementalDamage',
+	elementalWeaknessDamageMitigation = 'elementalWeaknessDamageMitigation',
 
 	turnDurationModification = 'turnDurationModification',
 
@@ -327,6 +328,7 @@ export interface IUnitState {
 	thunderElementalDamage: IBuff[];
 	lightElementalDamage: IBuff[];
 	darkElementalDamage: IBuff[];
+	elementalWeaknessDamageMitigation: IBuff[];
 
 	turnDurationModification: IBuff[];
 
@@ -714,6 +716,8 @@ export enum IconId {
 	BUFF_CRTUP = 'BUFF_CRTUP', // critical damage boost
 	BUFF_CRTDOWN = 'BUFF_CRTDOWN', // critical damage reduction
 
+	BUFF_ELEMENTDOWN = 'BUFF_ELEMENTDOWN', // EWD reduction (not to be confused with elemental mitigation)
+
 	BUFF_SPARKUP = 'BUFF_SPARKUP',
 	BUFF_SPARKDOWN = 'BUFF_SPARKDOWN',
 
@@ -945,6 +949,13 @@ export enum BuffId {
 	'passive:50:light' = 'passive:50:light',
 	'passive:50:dark' = 'passive:50:dark',
 	'passive:50:unknown' = 'passive:50:unknown',
+
+	'passive:53:critical-damage-base' = 'passive:53:critical-damage-base',
+	'passive:53:critical-damage-buff' = 'passive:53:critical-damage-buff',
+	'passive:53:element-damage-base' = 'passive:53:element-damage-base',
+	'passive:53:element-damage-buff' = 'passive:53:element-damage-buff',
+	'passive:53:critical-rate-base' = 'passive:53:critical-rate-base',
+	'passive:53:critical-rate-buff' = 'passive:53:critical-rate-buff',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
