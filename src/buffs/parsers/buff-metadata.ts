@@ -587,7 +587,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'passive:26': {
 		id: BuffId['passive:26'],
-		name: 'Passive Damage Counter',
+		name: 'Passive Damage Counter (Chance)',
 		stat: UnitStat.damageReflect,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_COUNTERDAMAGE],
@@ -1895,5 +1895,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		name: 'Instant Death (Chance)',
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_KO],
+	},
+	'proc:50': {
+		id: BuffId['proc:50'],
+		name: 'Active Damage Reflect (Chance)',
+		stat: UnitStat.damageReflect,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_COUNTERDAMAGE],
 	},
 });

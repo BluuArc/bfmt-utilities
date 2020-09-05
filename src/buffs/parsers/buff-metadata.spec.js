@@ -1528,4 +1528,8 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:49', () => {
 		testDefaultIconResult(BuffId['proc:49'], [IconId.BUFF_KO]);
 	});
+
+	describe('proc:50', () => {
+		testDefaultIconResult(BuffId['proc:50'], [IconId.BUFF_COUNTERDAMAGE]);
+	});
 });

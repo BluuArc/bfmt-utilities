@@ -73,6 +73,11 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const splitEffectParams = (effect: ProcEffect): string[] => effect.params!.split(',');
 
+	const splitEffectWithUnknownProcParamsProperty = (effect: ProcEffect): string[] => {
+		const rawParams: string = effect.params || (effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] as string) || '';
+		return splitEffectParams({ params: rawParams } as ProcEffect);
+	}
+
 	interface IBaseLocalParamsContext {
 		originalId: string;
 		sources: string[];
@@ -2053,8 +2058,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	map.set('37', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '37';
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-		const rawParams: string = effect.params || (effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] as string) || '';
-		const [summonGroup, summonId = '', rawPositionX, rawPositionY, ...extraParams] = splitEffectParams({ params: rawParams } as ProcEffect);
+		const [summonGroup, summonId = '', rawPositionX, rawPositionY, ...extraParams] = splitEffectWithUnknownProcParamsProperty(effect);
 		const positionX = parseNumberOrDefault(rawPositionX);
 		const positionY = parseNumberOrDefault(rawPositionY);
 		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
@@ -2307,8 +2311,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 		const { hits, distribution } = getAttackInformationFromContext(context);
 
-		const rawParams: string = effect.params || (effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] as string) || '';
-		const [rawModLow, rawModHigh, rawFlatAtk, ...extraParams] = splitEffectParams({ params: rawParams } as ProcEffect);
+		const [rawModLow, rawModHigh, rawFlatAtk, ...extraParams] = splitEffectWithUnknownProcParamsProperty(effect);
 		const params: { [param: string]: AlphaNumeric } = {
 			'atkLow%': rawModLow,
 			'atkHigh%': rawModHigh,
@@ -2543,8 +2546,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 		const { hits, distribution } = getAttackInformationFromContext(context);
 
-		const rawParams: string = effect.params || (effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] as string) || '';
-		const [rawHpLow, rawHpHigh, ...extraParams] = splitEffectParams({ params: rawParams } as ProcEffect);
+		const [rawHpLow, rawHpHigh, ...extraParams] = splitEffectWithUnknownProcParamsProperty(effect);
 		const hpLow = parseNumberOrDefault(rawHpLow);
 		const hpHigh = parseNumberOrDefault(rawHpHigh);
 		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
@@ -2659,8 +2661,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 		const { hits, distribution } = getAttackInformationFromContext(context);
 
-		const rawParams: string = effect.params || (effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] as string) || '';
-		const [rawBasePercentHpLow, rawBasePercentHpHigh, rawCurrentPercentHpLow, rawCurrentPercentHpHigh, rawFixedDamage, rawChance, rawIsLethal, ...extraParams] = splitEffectParams({ params: rawParams } as ProcEffect);
+		const [rawBasePercentHpLow, rawBasePercentHpHigh, rawCurrentPercentHpLow, rawCurrentPercentHpHigh, rawFixedDamage, rawChance, rawIsLethal, ...extraParams] = splitEffectWithUnknownProcParamsProperty(effect);
 		const basePercentHpLow = parseNumberOrDefault(rawBasePercentHpLow);
 		const basePercentHpHigh = parseNumberOrDefault(rawBasePercentHpHigh);
 		const currentPercentHpLow = parseNumberOrDefault(rawCurrentPercentHpLow);
@@ -2723,8 +2724,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	map.set('49', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '49';
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-		const rawParams: string = effect.params || (effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] as string) || '';
-		const [rawChance, ...extraParams] = splitEffectParams({ params: rawParams } as ProcEffect);
+		const [rawChance, ...extraParams] = splitEffectWithUnknownProcParamsProperty(effect);
 		const chance = parseNumberOrDefault(rawChance);
 		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
 
@@ -2738,6 +2738,53 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				value: chance,
 				...targetData,
 			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
+
+	map.set('50', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '50';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const [rawDamageLow, rawDamageHigh, rawChance, rawTurnDuration, ...extraParams] = splitEffectWithUnknownProcParamsProperty(effect);
+		const reflectedDamageLow = parseNumberOrDefault(rawDamageLow);
+		const reflectedDamageHigh = parseNumberOrDefault(rawDamageHigh);
+		const chance = parseNumberOrDefault(rawChance);
+		const turnDuration = parseNumberOrDefault(rawTurnDuration);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+
+		const hasAnyRangeValues = reflectedDamageLow !== 0 || reflectedDamageHigh !== 0;
+		const results: IBuff[] = [];
+		if (hasAnyRangeValues) {
+			results.push({
+				id: 'proc:50',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: {
+					'reflectedDamageLow%': reflectedDamageLow,
+					'reflectedDamageHigh%': reflectedDamageHigh,
+					chance,
+				},
+				...targetData,
+			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['proc:50'],
+				duration: turnDuration,
+				targetData,
+			}));
 		}
 
 		handlePostParse(results, unknownParams, {
