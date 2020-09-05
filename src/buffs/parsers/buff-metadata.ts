@@ -1993,4 +1993,25 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_COUNTERDAMAGE],
 	},
+	'proc:51:atk down': {
+		id: BuffId['proc:51:atk down'],
+		name: 'Active Attack Reduction Infliction Added to Attack',
+		stat: UnitStat.atkDownInflict,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ADDATKDOWN],
+	},
+	'proc:51:def down': {
+		id: BuffId['proc:51:def down'],
+		name: 'Active Defense Reduction Infliction Added to Attack',
+		stat: UnitStat.defDownInflict,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ADDDEFDOWN],
+	},
+	'proc:51:rec down': {
+		id: BuffId['proc:51:rec down'],
+		name: 'Active Recovery Reduction Infliction Added to Attack',
+		stat: UnitStat.recDownInflict,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ADDRECDOWN],
+	},
 });

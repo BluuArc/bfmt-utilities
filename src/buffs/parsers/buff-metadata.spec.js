@@ -1588,4 +1588,18 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:50', () => {
 		testDefaultIconResult(BuffId['proc:50'], [IconId.BUFF_COUNTERDAMAGE]);
 	});
+
+	describe('proc 51 buffs', () => {
+		describe('proc:51:atk down', () => {
+			testDefaultIconResult(BuffId['proc:51:atk down'], [IconId.BUFF_ADDATKDOWN]);
+		});
+
+		describe('proc:51:def down', () => {
+			testDefaultIconResult(BuffId['proc:51:def down'], [IconId.BUFF_ADDDEFDOWN]);
+		});
+
+		describe('proc:51:rec down', () => {
+			testDefaultIconResult(BuffId['proc:51:rec down'], [IconId.BUFF_ADDRECDOWN]);
+		});
+	});
 });
