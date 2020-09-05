@@ -814,6 +814,36 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:49'], [IconId.BUFF_BBREC]);
 	});
 
+	describe('passive 50 buffs', () => {
+		describe('passive:50:fire', () => {
+			testDefaultIconResult(BuffId['passive:50:fire'], [IconId.BUFF_FIREDMGUP]);
+		});
+
+		describe('passive:50:water', () => {
+			testDefaultIconResult(BuffId['passive:50:water'], [IconId.BUFF_WATERDMGUP]);
+		});
+
+		describe('passive:50:earth', () => {
+			testDefaultIconResult(BuffId['passive:50:earth'], [IconId.BUFF_EARTHDMGUP]);
+		});
+
+		describe('passive:50:thunder', () => {
+			testDefaultIconResult(BuffId['passive:50:thunder'], [IconId.BUFF_THUNDERDMGUP]);
+		});
+
+		describe('passive:50:light', () => {
+			testDefaultIconResult(BuffId['passive:50:light'], [IconId.BUFF_LIGHTDMGUP]);
+		});
+
+		describe('passive:50:dark', () => {
+			testDefaultIconResult(BuffId['passive:50:dark'], [IconId.BUFF_DARKDMGUP]);
+		});
+
+		describe('passive:50:unknown', () => {
+			testDefaultIconResult(BuffId['passive:50:unknown'], [IconId.BUFF_ELEMENTDMGUP]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

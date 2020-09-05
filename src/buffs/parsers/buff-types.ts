@@ -228,6 +228,13 @@ export enum UnitStat {
 	darkMitigation = 'darkMitigation',
 	reduceDamageToOne = 'reduceDamageToOne',
 
+	fireElementalDamage = 'fireElementalDamage',
+	waterElementalDamage = 'waterElementalDamage',
+	earthElementalDamage = 'earthElementalDamage',
+	thunderElementalDamage = 'thunderElementalDamage',
+	lightElementalDamage = 'lightElementalDamage',
+	darkElementalDamage = 'darkElementalDamage',
+
 	turnDurationModification = 'turnDurationModification',
 
 	koResistance = 'koResistance',
@@ -313,6 +320,13 @@ export interface IUnitState {
 	lightMitigation: IBuff[];
 	darkMitigation: IBuff[];
 	reduceDamageToOne: IBuff[];
+
+	fireElementalDamage: IBuff[];
+	waterElementalDamage: IBuff[];
+	earthElementalDamage: IBuff[];
+	thunderElementalDamage: IBuff[];
+	lightElementalDamage: IBuff[];
+	darkElementalDamage: IBuff[];
 
 	turnDurationModification: IBuff[];
 
@@ -645,6 +659,7 @@ export enum IconId {
 	BUFF_DAMAGECUT = 'BUFF_DAMAGECUT',
 	BUFF_DAMAGECUTTOONE = 'BUFF_DAMAGECUTTOONE',
 
+	// elemental damage reduction buffs
 	BUFF_FIREDMGDOWN = 'BUFF_FIREDMGDOWN',
 	BUFF_WATERDMGDOWN = 'BUFF_WATERDMGDOWN',
 	BUFF_EARTHDMGDOWN = 'BUFF_EARTHDMGDOWN',
@@ -652,6 +667,16 @@ export enum IconId {
 	BUFF_LIGHTDMGDOWN = 'BUFF_LIGHTDMGDOWN',
 	BUFF_DARKDMGDOWN = 'BUFF_DARKDMGDOWN',
 	BUFF_ELEMENTDMGDOWN = 'BUFF_ELEMENTDMGDOWN',
+
+	// elemental weakness buffs
+	BUFF_FIREDMGUP = 'BUFF_FIREDMGUP',
+	BUFF_WATERDMGUP = 'BUFF_WATERDMGUP',
+	BUFF_WATERMDGUP = 'BUFF_WATERDMGUP', // in-game it's a typo, so this corrects it
+	BUFF_EARTHDMGUP = 'BUFF_EARTHDMGUP',
+	BUFF_THUNDERDMGUP = 'BUFF_THUNDERDMGUP',
+	BUFF_LIGHTDMGUP = 'BUFF_LIGHTDMGUP',
+	BUFF_DARKDMGUP = 'BUFF_DARKDMGUP',
+	BUFF_ELEMENTDMGUP = 'BUFF_ELEMENTDMGUP',
 
 	BUFF_HCDROP = 'BUFF_HCDROP',
 	BUFF_HCDOWN = 'BUFF_HCDOWN',
@@ -912,6 +937,14 @@ export enum BuffId {
 	'passive:47' = 'passive:47',
 	'passive:48' = 'passive:48',
 	'passive:49' = 'passive:49',
+
+	'passive:50:fire' = 'passive:50:fire',
+	'passive:50:water' = 'passive:50:water',
+	'passive:50:earth' = 'passive:50:earth',
+	'passive:50:thunder' = 'passive:50:thunder',
+	'passive:50:light' = 'passive:50:light',
+	'passive:50:dark' = 'passive:50:dark',
+	'passive:50:unknown' = 'passive:50:unknown',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

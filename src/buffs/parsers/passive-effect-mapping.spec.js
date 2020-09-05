@@ -224,7 +224,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
 			});
 
-			it('returns a no parmas buff if parsed value from params is zero', () => {
+			it('returns a no params buff if parsed value from params is zero', () => {
 				const effect = { params: '0' };
 				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 			});
@@ -4915,6 +4915,169 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				effectKeyChance: 'reduced bb bc use chance%',
 				buffKeyLow: 'reducedUseLow%',
 				buffKeyHigh: 'reducedUseHigh%',
+			});
+		});
+
+		describe('passive 50', () => {
+			const expectedOriginalId = '50';
+			const ELEMENT_MAPPING = {
+				1: UnitElement.Fire,
+				2: UnitElement.Water,
+				3: UnitElement.Earth,
+				4: UnitElement.Thunder,
+				5: UnitElement.Light,
+				6: UnitElement.Dark,
+			};
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((elem) => `passive:50:${elem}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6,7';
+				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
+					return baseBuffFactory({
+						id: `passive:50:${element}`,
+						value: 7,
+					});
+				});
+
+				const effect = { params };
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,8,9,10';
+				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
+					return baseBuffFactory({
+						id: `passive:50:${element}`,
+						value: 7,
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_7: '8',
+						param_8: '9',
+						param_9: '10',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to stat-specific properties when the params property does not exist', () => {
+				const elements = Object.values(ELEMENT_MAPPING);
+				const effect = elements.reduce((acc, element) => {
+					acc[`${element} units do extra elemental weakness dmg`] = true;
+					return acc;
+				}, {});
+				effect['elemental weakness multiplier%'] = 14;
+				const expectedResult = elements.map((element) => {
+					return baseBuffFactory({
+						id: `passive:50:${element}`,
+						value: 14,
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			Object.entries(ELEMENT_MAPPING).forEach(([knownElementKey, knownElementValue]) => {
+				it(`parses raw value for ${knownElementValue} in params property`, () => {
+					const params = `${knownElementKey},0,0,0,0,0,123`;
+					const expectedResult = [baseBuffFactory({
+						id: `passive:50:${knownElementValue}`,
+						value: 123,
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`parses value for ${knownElementValue} when its effect property is true and not given params property`, () => {
+					const effect = {
+						[`${knownElementValue} units do extra elemental weakness dmg`]: true,
+						'elemental weakness multiplier%': 456,
+					};
+					const expectedResult = [baseBuffFactory({
+						id: `passive:50:${knownElementValue}`,
+						value: 456,
+					})];
+
+					const context = createArbitraryContext();
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`returns an unknown element buff for ${knownElementValue} when its effect property is false and not given params property`, () => {
+					const effect = {
+						[`${knownElementValue} units do extra elemental weakness dmg`]: false,
+						'elemental weakness multiplier%': 456,
+					};
+					const expectedResult = [baseBuffFactory({
+						id: 'passive:50:unknown',
+						value: 456,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('defaults to unknown element if corresponding element value cannot be found from parsed params', () => {
+				const params = 'not-an-element,0,0,0,0,0,789';
+				const expectedResult = [baseBuffFactory({
+					id: 'passive:50:unknown',
+					value: 789,
+				})];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff if parsed damage value from params is zero', () => {
+				const params = '1,2,3,4,5,6,0';
+				const effect = { params };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '5,0,0,0,0,0,6,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:50:light',
+						sources: arbitrarySourceValue,
+						value: 6,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 7] });
 			});
 		});
 	});
