@@ -260,7 +260,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	'passive:4:paralysis': {
 		id: BuffId['passive:4:paralysis'],
 		name: 'Passive Paralysis Resist',
-		stat: UnitStat.poisonResist,
+		stat: UnitStat.paralysisResist,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_PARALYSISBLK],
 	},
@@ -505,7 +505,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	'passive:20:paralysis': {
 		id: BuffId['passive:20:paralysis'],
 		name: 'Passive Paralysis Infliction',
-		stat: UnitStat.poisonInflict,
+		stat: UnitStat.paralysisInflict,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ADDPARA],
 	},
@@ -1273,7 +1273,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	'proc:10:paralysis': {
 		id: BuffId['proc:10:paralysis'],
 		name: 'Paralysis Cleanse',
-		stat: UnitStat.poisonResist,
+		stat: UnitStat.paralysisResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_PARALYSISBLK],
 	},
@@ -1342,7 +1342,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	'proc:11:paralysis': {
 		id: BuffId['proc:11:paralysis'],
 		name: 'Paralysis Infliction',
-		stat: UnitStat.poisonInflict,
+		stat: UnitStat.paralysisInflict,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.DEBUFF_PARALYSIS],
 	},
@@ -1485,7 +1485,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	'proc:17:paralysis': {
 		id: BuffId['proc:17:paralysis'],
 		name: 'Active Paralysis Resist',
-		stat: UnitStat.poisonResist,
+		stat: UnitStat.paralysisResist,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_PARALYSISBLK],
 	},
@@ -1754,7 +1754,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	'proc:38:paralysis': {
 		id: BuffId['proc:38:paralysis'],
 		name: 'Paralysis Cleanse',
-		stat: UnitStat.poisonResist,
+		stat: UnitStat.paralysisResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_PARALYSISBLK],
 	},
@@ -1872,7 +1872,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	'proc:40:paralysis': {
 		id: BuffId['proc:40:paralysis'],
 		name: 'Active Paralysis Infliction Added to Attack',
-		stat: UnitStat.poisonInflict,
+		stat: UnitStat.paralysisInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDPARA],
 	},
@@ -2020,5 +2020,47 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stat: UnitStat.bcEfficacy,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_BBFILL],
+	},
+	'proc:53:poison': {
+		id: BuffId['proc:53:poison'],
+		name: 'Active Poison Counter',
+		stat: UnitStat.poisonCounter,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_POISONCOUNTER],
+	},
+	'proc:53:weak': {
+		id: BuffId['proc:53:weak'],
+		name: 'Active Weak Counter',
+		stat: UnitStat.weakCounter,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_WEAKCOUNTER],
+	},
+	'proc:53:sick': {
+		id: BuffId['proc:53:sick'],
+		name: 'Active Sick Counter',
+		stat: UnitStat.sickCounter,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_SICKCOUNTER],
+	},
+	'proc:53:injury': {
+		id: BuffId['proc:53:injury'],
+		name: 'Active Injury Counter',
+		stat: UnitStat.injuryCounter,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_INJCONTER],
+	},
+	'proc:53:curse': {
+		id: BuffId['proc:53:curse'],
+		name: 'Active Curse Counter',
+		stat: UnitStat.curseCounter,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_CURSECOUNTER],
+	},
+	'proc:53:paralysis': {
+		id: BuffId['proc:53:paralysis'],
+		name: 'Active Paralysis Counter',
+		stat: UnitStat.paralysisCounter,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_PARALYCOUNTER],
 	},
 });

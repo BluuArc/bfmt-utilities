@@ -3130,6 +3130,9 @@ describe('getProcEffectToBuffMapping method', () => {
 				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
 			});
 
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(AILMENTS_ORDER.map((ailment) => `proc:17:${ailment}`));
+
 			it('uses the params property when it exists', () => {
 				const params = `1,2,3,4,5,6,${arbitraryTurnDuration}`;
 				const splitParams = params.split(',');
@@ -8119,6 +8122,147 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectedBuffId: 'proc:52',
 				effectValueKey: 'bb gauge fill rate% buff',
 				effectTurnDurationKey: 'buff turns (77)',
+			});
+		});
+
+		describe('proc 53', () => {
+			const AILMENTS_ORDER = [Ailment.Poison, Ailment.Weak, Ailment.Sick, Ailment.Injury, Ailment.Curse, Ailment.Paralysis];
+			const EFFECT_TURN_DURATION_KEY = 'counter inflict ailment turns';
+			const expectedOriginalId = '53';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(AILMENTS_ORDER.map((ailment) => `proc:53:${ailment}`));
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,3,4,5,6,${arbitraryTurnDuration}`;
+				const splitParams = params.split(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
+					return baseBuffFactory({
+						id: `proc:53:${ailment}`,
+						duration: arbitraryTurnDuration,
+						value: +splitParams[index],
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `1,2,3,4,5,6,${arbitraryTurnDuration},8,9,10`;
+				const splitParams = params.split(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
+					return baseBuffFactory({
+						id: `proc:53:${ailment}`,
+						duration: arbitraryTurnDuration,
+						value: +splitParams[index],
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_7: '8',
+						param_8: '9',
+						param_9: '10',
+					},
+				})]);
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					'counter inflict poison% (78)': 7, // the numbers here are from actual data; separate unit tests handle more arbitrary cases
+					'counter inflict weaken% (79)': 8,
+					'counter inflict sick% (80)': 9,
+					'counter inflict injury% (81)': 10,
+					'counter inflict curse% (82)': 11,
+					'counter inflict paralysis% (83)': 12,
+					[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+				});
+				const expectedParamValues = [7, 8, 9, 10, 11, 12];
+				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
+					return baseBuffFactory({
+						id: `proc:53:${ailment}`,
+						duration: arbitraryTurnDuration,
+						value: expectedParamValues[index],
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			AILMENTS_ORDER.forEach((ailmentCase) => {
+				it(`returns only value for ${ailmentCase} if it is non-zero and other stats are zero`, () => {
+					const params = AILMENTS_ORDER.map((ailment) => ailment === ailmentCase ? '123' : '0').concat([arbitraryTurnDuration]).join(',');
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: `proc:53:${ailmentCase}`,
+						duration: arbitraryTurnDuration,
+						value: 123,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`returns only value for ${ailmentCase} if it is non-zero and other stats are zero and params property does not exist`, () => {
+					const ailmentKey = ailmentCase !== Ailment.Weak ? ailmentCase : 'weaken';
+					const effect = createArbitraryBaseEffect({
+						[`counter inflict ${ailmentKey}% (${Math.floor(Math.random() * 100)})`]: 123,
+						[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: `proc:53:${ailmentCase}`,
+						duration: arbitraryTurnDuration,
+						value: 123,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			describe('when all resistances are 0', () => {
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,${duration}`,
+					buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((ailment) => `proc:53:${ailment}`),
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: `0,0,0,0,0,1,${arbitraryTurnDuration},123`,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:53:paralysis',
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: 1,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 7] });
 			});
 		});
 	});

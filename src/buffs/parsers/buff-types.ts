@@ -211,6 +211,13 @@ export enum UnitStat {
 	curseInflict = 'curseInflict',
 	paralysisInflict = 'paralysisInflict',
 
+	poisonCounter = 'poisonCounter',
+	weakCounter = 'weakCounter',
+	sickCounter = 'sickCounter',
+	injuryCounter = 'injuryCounter',
+	curseCounter = 'curseCounter',
+	paralysisCounter = 'paralysisCounter',
+
 	atkDownResist = 'atkDownResist',
 	defDownResist = 'defDownResist',
 	recDownResist = 'recDownResist',
@@ -305,6 +312,13 @@ export interface IUnitState {
 	curseInflict: IBuff[];
 	paralysisInflict: IBuff[];
 
+	poisonCounter: IBuff[];
+	weakCounter: IBuff[];
+	sickCounter: IBuff[];
+	injuryCounter: IBuff[];
+	curseCounter: IBuff[];
+	paralysisCounter: IBuff[];
+
 	atkDownResist: IBuff[];
 	defDownResist: IBuff[];
 	recDownResist: IBuff[];
@@ -386,11 +400,11 @@ export enum IconId {
 	BUFF_HPUP = 'BUFF_HPUP',
 	BUFF_HPDOWN = 'BUFF_HPDOWN',
 	BUFF_ATKUP = 'BUFF_ATKUP',
-  BUFF_ATKDOWN = 'BUFF_ATKDOWN',
-  BUFF_DEFUP = 'BUFF_DEFUP',
-  BUFF_DEFDOWN = 'BUFF_DEFDOWN',
-  BUFF_RECUP = 'BUFF_RECUP',
-  BUFF_RECDOWN = 'BUFF_RECDOWN',
+	BUFF_ATKDOWN = 'BUFF_ATKDOWN',
+	BUFF_DEFUP = 'BUFF_DEFUP',
+	BUFF_DEFDOWN = 'BUFF_DEFDOWN',
+	BUFF_RECUP = 'BUFF_RECUP',
+	BUFF_RECDOWN = 'BUFF_RECDOWN',
 	BUFF_CRTRATEUP = 'BUFF_CRTRATEUP',
 	BUFF_CRTRATEDOWN = 'BUFF_CRTRATEDOWN',
 
@@ -647,16 +661,24 @@ export enum IconId {
 	DEBUFF_AILMENT = 'DEBUFF_AILMENT',
 
 	BUFF_ADDPOISON = 'BUFF_ADDPOISON',
-  BUFF_ADDWEAK = 'BUFF_ADDWEAK',
-  BUFF_ADDSICK = 'BUFF_ADDSICK',
-  BUFF_ADDINJURY = 'BUFF_ADDINJURY',
-  BUFF_ADDCURSE = 'BUFF_ADDCURSE',
+	BUFF_ADDWEAK = 'BUFF_ADDWEAK',
+	BUFF_ADDSICK = 'BUFF_ADDSICK',
+	BUFF_ADDINJURY = 'BUFF_ADDINJURY',
+	BUFF_ADDCURSE = 'BUFF_ADDCURSE',
 	BUFF_ADDPARA = 'BUFF_ADDPARA',
 	BUFF_ADDAILMENT = 'BUFF_ADDAILMENT',
 
 	BUFF_ADDATKDOWN = 'BUFF_ADDATKDOWN',
-  BUFF_ADDDEFDOWN = 'BUFF_ADDDEFDOWN',
-  BUFF_ADDRECDOWN = 'BUFF_ADDRECDOWN',
+	BUFF_ADDDEFDOWN = 'BUFF_ADDDEFDOWN',
+	BUFF_ADDRECDOWN = 'BUFF_ADDRECDOWN',
+
+	BUFF_POISONCOUNTER = 'BUFF_POISONCOUNTER',
+	BUFF_POISIONCOUNTER = 'BUFF_POISONCOUNTER',  // in-game it's a typo, so this corrects it
+	BUFF_WEAKCOUNTER = 'BUFF_WEAKCOUNTER',
+	BUFF_SICKCOUNTER = 'BUFF_SICKCOUNTER',
+	BUFF_INJCONTER = 'BUFF_INJCONTER',
+	BUFF_CURSECOUNTER = 'BUFF_CURSECOUNTER',
+	BUFF_PARALYCOUNTER = 'BUFF_PARALYCOUNTER',
 
 	BUFF_DAMAGECUT = 'BUFF_DAMAGECUT',
 	BUFF_DAMAGECUTTOONE = 'BUFF_DAMAGECUTTOONE',
@@ -1124,4 +1146,11 @@ export enum BuffId {
 	'proc:51:rec down' = 'proc:51:rec down',
 
 	'proc:52' = 'proc:52',
+
+	'proc:53:poison' = 'proc:53:poison',
+	'proc:53:weak' = 'proc:53:weak',
+	'proc:53:sick' = 'proc:53:sick',
+	'proc:53:injury' = 'proc:53:injury',
+	'proc:53:curse' = 'proc:53:curse',
+	'proc:53:paralysis' = 'proc:53:paralysis',
 }

@@ -1606,4 +1606,30 @@ describe('BUFF_METADATA entries', () => {
 	describe('proc:52', () => {
 		testDefaultIconResult(BuffId['proc:52'], [IconId.BUFF_BBFILL]);
 	});
+
+	describe('proc 53 buffs', () => {
+		describe('proc:53:poison', () => {
+			testDefaultIconResult(BuffId['proc:53:poison'], [IconId.BUFF_POISONCOUNTER]);
+		});
+
+		describe('proc:53:weak', () => {
+			testDefaultIconResult(BuffId['proc:53:weak'], [IconId.BUFF_WEAKCOUNTER]);
+		});
+
+		describe('proc:53:sick', () => {
+			testDefaultIconResult(BuffId['proc:53:sick'], [IconId.BUFF_SICKCOUNTER]);
+		});
+
+		describe('proc:53:injury', () => {
+			testDefaultIconResult(BuffId['proc:53:injury'], [IconId.BUFF_INJCONTER]);
+		});
+
+		describe('proc:53:curse', () => {
+			testDefaultIconResult(BuffId['proc:53:curse'], [IconId.BUFF_CURSECOUNTER]);
+		});
+
+		describe('proc:53:paralysis', () => {
+			testDefaultIconResult(BuffId['proc:53:paralysis'], [IconId.BUFF_PARALYCOUNTER]);
+		});
+	});
 });

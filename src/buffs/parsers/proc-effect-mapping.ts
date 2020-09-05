@@ -76,7 +76,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	const splitEffectWithUnknownProcParamsProperty = (effect: ProcEffect): string[] => {
 		const rawParams: string = effect.params || (effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] as string) || '';
 		return splitEffectParams({ params: rawParams } as ProcEffect);
-	}
+	};
 
 	interface IBaseLocalParamsContext {
 		originalId: string;
@@ -2891,5 +2891,73 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			buffId: 'proc:52',
 			originalId: '52',
 		});
+	});
+
+	map.set('53', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '53';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const AILMENTS_ORDER = [Ailment.Poison, Ailment.Weak, Ailment.Sick, Ailment.Injury, Ailment.Curse, Ailment.Paralysis];
+		const inflictionChances: { [ailment: string]: AlphaNumeric } = {
+			poison: '0',
+			weak: '0',
+			sick: '0',
+			injury: '0',
+			curse: '0',
+			paralysis: '0',
+		};
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let rawDuration: string, extraParams: string[];
+			[inflictionChances.poison, inflictionChances.weak, inflictionChances.sick, inflictionChances.injury, inflictionChances.curse, inflictionChances.paralysis, rawDuration, ...extraParams] = splitEffectParams(effect);
+			turnDuration = parseNumberOrDefault(rawDuration);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
+		} else {
+			const ailmentKeysInEffect = Object.keys(effect).filter((k) => k.startsWith('counter inflict'));
+			AILMENTS_ORDER.forEach((ailment) => {
+				const correspondingKey = ailmentKeysInEffect.find((k) => k.includes(ailment));
+				if (correspondingKey) {
+					inflictionChances[ailment] = effect[correspondingKey] as number;
+				}
+			});
+			turnDuration = parseNumberOrDefault(effect['counter inflict ailment turns'] as number);
+		}
+
+		const results: IBuff[] = [];
+		AILMENTS_ORDER.forEach((ailment) => {
+			const value = parseNumberOrDefault(inflictionChances[ailment]);
+			if (value !== 0) {
+				results.push({
+					id: `proc:53:${ailment}`,
+					originalId,
+					sources,
+					effectDelay,
+					value,
+					duration: turnDuration,
+					...targetData,
+				});
+			}
+		});
+
+		if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: AILMENTS_ORDER.map((a) => `proc:53:${a}`),
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
 	});
 }
