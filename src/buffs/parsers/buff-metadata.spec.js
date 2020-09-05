@@ -1524,4 +1524,8 @@ describe('BUFF_METADATA entries', () => {
 			testIconResultWithBuff(BuffId['proc:48:unknown'], [IconId.ATK_ST], { targetArea: TargetArea.Single }, 'target area is single');
 		});
 	});
+
+	describe('proc:49', () => {
+		testDefaultIconResult(BuffId['proc:49'], [IconId.BUFF_KO]);
+	});
 });

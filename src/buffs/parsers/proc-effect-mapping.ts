@@ -2719,4 +2719,34 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('49', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '49';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const rawParams: string = effect.params || (effect[UNKNOWN_PROC_PARAM_EFFECT_KEY] as string) || '';
+		const [rawChance, ...extraParams] = splitEffectParams({ params: rawParams } as ProcEffect);
+		const chance = parseNumberOrDefault(rawChance);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+
+		const results: IBuff[] = [];
+		if (chance !== 0) {
+			results.push({
+				id: 'proc:49',
+				originalId,
+				sources,
+				effectDelay,
+				value: chance,
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

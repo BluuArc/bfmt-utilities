@@ -1890,4 +1890,10 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST : IconId.ATK_AOE],
 	},
+	'proc:49': {
+		id: BuffId['proc:49'],
+		name: 'Instant Death (Chance)',
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_KO],
+	},
 });

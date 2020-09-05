@@ -680,6 +680,7 @@ export enum IconId {
 	BUFF_HCREC = 'BUFF_HCREC',
 
 	BUFF_KOBLK = 'BUFF_KOBLK', // guaranteed AI
+	BUFF_KO = 'BUFF_KO', // instant death
 
 	BUFF_HPABS = 'BUFF_HPABS',
 
@@ -1070,4 +1071,6 @@ export enum BuffId {
 	'proc:48:current' = 'proc:48:current',
 	'proc:48:fixed' = 'proc:48:fixed',
 	'proc:48:unknown' = 'proc:48:unknown',
+
+	'proc:49' = 'proc:49',
 }
