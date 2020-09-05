@@ -2960,4 +2960,17 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('54', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithSingleNumericalParameterAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			effectValueKey: 'crit multiplier%',
+			effectTurnDurationKey: 'buff turns (84)',
+			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) * 100,
+			buffId: 'proc:54',
+			originalId: '54',
+		});
+	});
 }

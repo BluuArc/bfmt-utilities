@@ -1632,4 +1632,8 @@ describe('BUFF_METADATA entries', () => {
 			testDefaultIconResult(BuffId['proc:53:paralysis'], [IconId.BUFF_PARALYCOUNTER]);
 		});
 	});
+
+	describe('proc:54', () => {
+		testDefaultIconResult(BuffId['proc:54'], [IconId.BUFF_CRTUP]);
+	});
 });

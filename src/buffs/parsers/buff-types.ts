@@ -1153,4 +1153,6 @@ export enum BuffId {
 	'proc:53:injury' = 'proc:53:injury',
 	'proc:53:curse' = 'proc:53:curse',
 	'proc:53:paralysis' = 'proc:53:paralysis',
+
+	'proc:54' = 'proc:54',
 }

@@ -8265,5 +8265,15 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 7] });
 			});
 		});
+
+		describe('proc 54', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '54',
+				expectedBuffId: 'proc:54',
+				effectValueKey: 'crit multiplier%',
+				effectTurnDurationKey: 'buff turns (84)',
+				getExpectedValueFromParam: (param) => +param * 100,
+			});
+		});
 	});
 });
