@@ -1602,4 +1602,8 @@ describe('BUFF_METADATA entries', () => {
 			testDefaultIconResult(BuffId['proc:51:rec down'], [IconId.BUFF_ADDRECDOWN]);
 		});
 	});
+
+	describe('proc:52', () => {
+		testDefaultIconResult(BuffId['proc:52'], [IconId.BUFF_BBFILL]);
+	});
 });

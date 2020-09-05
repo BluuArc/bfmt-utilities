@@ -1122,4 +1122,6 @@ export enum BuffId {
 	'proc:51:atk down' = 'proc:51:atk down',
 	'proc:51:def down' = 'proc:51:def down',
 	'proc:51:rec down' = 'proc:51:rec down',
+
+	'proc:52' = 'proc:52',
 }

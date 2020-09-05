@@ -8112,5 +8112,14 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 8] });
 			});
 		});
+
+		describe('proc 52', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '52',
+				expectedBuffId: 'proc:52',
+				effectValueKey: 'bb gauge fill rate% buff',
+				effectTurnDurationKey: 'buff turns (77)',
+			});
+		});
 	});
 });

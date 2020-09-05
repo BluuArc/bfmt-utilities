@@ -2014,4 +2014,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDRECDOWN],
 	},
+	'proc:52': {
+		id: BuffId['proc:52'],
+		name: 'Active BC Efficacy',
+		stat: UnitStat.bcEfficacy,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_BBFILL],
+	},
 });

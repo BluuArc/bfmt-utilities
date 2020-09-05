@@ -2880,4 +2880,16 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('52', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithSingleNumericalParameterAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			effectValueKey: 'bb gauge fill rate% buff',
+			effectTurnDurationKey: 'buff turns (77)',
+			buffId: 'proc:52',
+			originalId: '52',
+		});
+	});
 }
