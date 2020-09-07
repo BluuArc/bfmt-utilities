@@ -3,8 +3,8 @@ import { IBuff, IEffectToBuffConversionContext, IGenericBuffValue, BuffId, BuffC
 import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault, createUnknownParamsValue, ITargetData, buffSourceIsBurstType } from './_helpers';
 
 /**
- * @description Default function for all buffs that cannot be processed.
- * @param effect Effect to convert to `IBuff` format.
+ * @description Type representing a function that can parse a proc effect into an array of buffs.
+ * @param effect Effect to convert to {@link IBuff} format.
  * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
  * @param injectionContext Object whose main use is for injecting methods in testing.
  * @returns Converted buff(s) from the given proc effect.

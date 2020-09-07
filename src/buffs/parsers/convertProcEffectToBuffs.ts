@@ -8,7 +8,7 @@ import { createSourcesFromContext } from './_helpers';
 
 /**
  * @description Default function for all effects that cannot be processed.
- * @param effect Effect to convert to `IBuff` format.
+ * @param effect Effect to convert to {@link IBuff} format.
  * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
  * @returns Converted buff(s) from the given proc effect.
  */

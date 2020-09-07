@@ -3,6 +3,9 @@ import {
 	IBuffConditions,
 	BuffSource,
 	IGenericBuffValue,
+	BuffId,
+	IBuff,
+	IConditionalEffect,
 } from './buff-types';
 import {
 	ExtraSkillPassiveEffect,
@@ -19,7 +22,7 @@ import {
  * @description Object whose main use is for injecting methods in testing.
  * @internal
  */
-interface IBaseBuffProcessingInjectionContext {
+export interface IBaseBuffProcessingInjectionContext {
 	createSourcesFromContext?: (context: IEffectToBuffConversionContext) => string[];
 	createUnknownParamsValue?: (params: string[], startIndex?: number) => IGenericBuffValue;
 }
@@ -31,6 +34,7 @@ interface IBaseBuffProcessingInjectionContext {
 export interface IPassiveBuffProcessingInjectionContext extends IBaseBuffProcessingInjectionContext {
 	processExtraSkillConditions?: (effect: ExtraSkillPassiveEffect) => IBuffConditions;
 	getPassiveTargetData?: (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect) => ITargetData;
+	convertConditionalEffectToBuffs?: (effect: IConditionalEffect, context: IEffectToBuffConversionContext) => IBuff[];
 }
 
 /**
@@ -188,4 +192,32 @@ export function buffSourceIsBurstType (source: BuffSource): boolean {
 		BuffSource.BraveBurst, BuffSource.SuperBraveBurst, BuffSource.UltimateBraveBurst,
 		BuffSource.BondedBraveBurst, BuffSource.BondedSuperBraveBurst, BuffSource.DualBraveBurst,
 	].includes(source);
+}
+
+/**
+ * @description Given an array of parameters, conditionally creata an unknown params value entry.
+ * @param extraParams Array of string parameters from an effect.
+ * @param startIndex Index to use when generating entries for the unknown params value entry.
+ * @param injectionContext Object whose main use is for injecting methods in testing.
+ * @returns An unknown params entry if there are extra parameters, undefined otherwise.
+ */
+export function createUnknownParamsEntryFromExtraParams (extraParams: string[], startIndex: number, injectionContext?: { createUnknownParamsValue?: (params: string[], startIndex?: number) => IGenericBuffValue }): IGenericBuffValue | undefined {
+	let unknownParams: IGenericBuffValue | undefined;
+	if (extraParams && extraParams.length > 0) {
+		unknownParams = ((injectionContext && injectionContext.createUnknownParamsValue) || createUnknownParamsValue)(extraParams, startIndex);
+	}
+	return unknownParams;
+}
+
+/**
+ * @description Helper function for creating a `NO_PARAMS_SPECIFIED` entry from a given context.
+ * @param context An effect processing context containing information created while parsing an effect.
+ * @returns A single buff denoting a `NO_PARAMS_SPECIFIED` entry.
+ */
+export function createNoParamsEntry ({ originalId, sources }: { originalId: string, sources: string[] }): IBuff {
+	return {
+		id: BuffId.NO_PARAMS_SPECIFIED,
+		originalId,
+		sources,
+	};
 }

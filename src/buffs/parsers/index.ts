@@ -1,5 +1,6 @@
 export { default as convertProcEffectToBuffs } from './convertProcEffectToBuffs';
 export { default as convertPassiveEffectToBuffs } from './convertPassiveEffectToBuffs';
+export { default as convertConditionalEffectToBuffs } from './convertConditionalEffectToBuffs';
 
 // TODO: verify exports
 export { BuffSource, BuffStackType } from './buff-types';

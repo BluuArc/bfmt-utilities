@@ -6,6 +6,7 @@ describe('buffs index', () => {
 		assertObjectHasOnlyKeys(index, [
 			'convertProcEffectToBuffs',
 			'convertPassiveEffectToBuffs',
+			'convertConditionalEffectToBuffs',
 			'BuffSource',
 			'BuffStackType',
 			'BUFF_METADATA',

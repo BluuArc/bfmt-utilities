@@ -363,4 +363,52 @@ describe('buff helper functions', () => {
 			expect(helpers.buffSourceIsBurstType()).toBeFalse();
 		});
 	});
+
+	describe('createUnknownParamsEntryFromExtraParams method', () => {
+		it('returns undefined if no params are given', () => {
+			expect(helpers.createUnknownParamsEntryFromExtraParams()).toBeUndefined();
+		});
+
+		it('returns undefined if the extraParams array is empty', () => {
+			expect(helpers.createUnknownParamsEntryFromExtraParams([], 1)).toBeUndefined();
+		});
+
+		describe('when there are values in the extraParams parameter', () => {
+			it('calls createUnknownParamsValue with extraParams and startIndex parameters', () => {
+				const mockCreateUnknownParamsValue = jasmine.createSpy('mockCreateUnknownParamsValue');
+				const extraParams = ['1', '2', '3'];
+				const startIndex = 5;
+				helpers.createUnknownParamsEntryFromExtraParams(extraParams, startIndex, { createUnknownParamsValue: mockCreateUnknownParamsValue });
+				expect(mockCreateUnknownParamsValue).toHaveBeenCalledWith(extraParams, startIndex);
+			});
+
+			it('returns the result of createUnknownParamsValue', () => {
+				const mockResult = { some: 'result' };
+				const mockCreateUnknownParamsValue = jasmine.createSpy('mockCreateUnknownParamsValue');
+				mockCreateUnknownParamsValue.and.returnValue(mockResult);
+				const result = helpers.createUnknownParamsEntryFromExtraParams(['4'], 6, { createUnknownParamsValue: mockCreateUnknownParamsValue });
+				expect(result).toBe(mockResult);
+			});
+
+			it('calls the createUnknownParamsValue method when it is not defiend in the injection context', () => {
+				const extraParams = ['7', '8', '9'];
+				const startIndex = 123;
+				const expectedResult = helpers.createUnknownParamsValue(extraParams, startIndex);
+				const result = helpers.createUnknownParamsEntryFromExtraParams(extraParams, startIndex);
+				expect(result).toEqual(expectedResult);
+			});
+		});
+	});
+
+	describe('createNoParamsEntry method', () => {
+		it('returns an array containing a single buff entry with the given originalId and sources values', () => {
+			const sourcesValue = ['arbitrary source value'];
+			const originalIdValue = 'arbitrary original id';
+			expect(helpers.createNoParamsEntry({ originalId: originalIdValue, sources: sourcesValue })).toEqual({
+				id: 'NO_PARAMS_SPECIFIED',
+				originalId: originalIdValue,
+				sources: sourcesValue,
+			});
+		});
+	});
 });

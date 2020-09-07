@@ -89,6 +89,15 @@ export enum BuffConditionElement {
 	All = 'all',
 }
 
+/**
+ * @description Object representing the ID and parameters of a conditional effect triggered by a passive condition.
+ */
+export interface IConditionalEffect {
+	id: string;
+	params: string;
+	turnDuration: number;
+}
+
 export interface IBuffConditions {
 	/**
 	 * @description Array of unit IDs
@@ -979,6 +988,8 @@ export enum BuffId {
 	'passive:53:critical-rate-base' = 'passive:53:critical-rate-base',
 	'passive:53:critical-rate-buff' = 'passive:53:critical-rate-buff',
 
+	'passive:55:hp condition' = 'passive:55:hp condition',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 
@@ -1155,4 +1166,9 @@ export enum BuffId {
 	'proc:53:paralysis' = 'proc:53:paralysis',
 
 	'proc:54' = 'proc:54',
+
+	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
+	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
+
+	'buff:12:ko resistance' = 'buff:12:ko resistance',
 }

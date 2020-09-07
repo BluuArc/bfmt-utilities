@@ -1,10 +1,11 @@
 import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect, UnitElement, UnitType, Ailment, UnitGender } from '../../datamine-types';
-import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement, IBuffConditions } from './buff-types';
+import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement, IBuffConditions, IConditionalEffect } from './buff-types';
 import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext, createUnknownParamsValue, ITargetData, parseNumberOrDefault } from './_helpers';
+import convertConditionalEffectToBuffs from './convertConditionalEffectToBuffs';
 
 /**
- * @description Default function for all buffs that cannot be processed.
- * @param effect Effect to convert to `IBuff` format.
+ * @description Type representing a function that can parse a passive effect into an array of buffs.
+ * @param effect Effect to convert to {@link IBuff} format.
  * @param context Aggregate object to encapsulate information not in the effect used in the conversion process.
  * @param injectionContext Object whose main use is for injecting methods in testing.
  * @returns Converted buff(s) from the given passive effect.
@@ -80,6 +81,11 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const sources = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
 
 		return { conditionInfo, targetData, sources };
+	};
+
+	const convertConditionalEffectToBuffsWithInjectionContext = (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const conversionFunction = (injectionContext && injectionContext.convertConditionalEffectToBuffs) || convertConditionalEffectToBuffs;
+		return conversionFunction(effect, context);
 	};
 
 	// Disable rule as this function is only called once it's confirmed that `effect.params` exists
@@ -2120,6 +2126,47 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 				});
 			}
 		});
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
+
+	map.set('55', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '55';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const params = splitEffectParams(typedEffect);
+		const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
+			id: params[0],
+			params: params[1],
+			turnDuration: parseNumberOrDefault(params[5]),
+		}, context, injectionContext);
+		const maxTriggerCount = parseNumberOrDefault(params[2]);
+		const thresholdInfo = parseThresholdValuesFromParamsProperty(params[3], params[4], ThresholdType.Hp);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(5), 5, injectionContext);
+
+		const thresholdConditions = getThresholdConditions(thresholdInfo);
+		const results: IBuff[] = [];
+		if (triggeredBuffs.length > 0) {
+			results.push({
+				id: 'passive:55:hp condition',
+				originalId,
+				sources,
+				value: {
+					triggeredBuffs,
+					maxTriggerCount,
+				},
+				conditions: { ...conditionInfo, ...thresholdConditions },
+				...targetData,
+			});
+		}
 
 		handlePostParse(results, unknownParams, {
 			originalId,
