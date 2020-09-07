@@ -882,26 +882,26 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_BUFF_PARAMS, [IconId.UNKNOWN]);
 	});
 
-	describe('proc:1', () => {
-		testDefaultIconResult(BuffId['proc:1'], [IconId.ATK_AOE]);
-		testIconResultWithBuff(BuffId['proc:1'], [IconId.ATK_ST], { targetArea: TargetArea.Single }, 'target area is single');
+	describe('proc:1:attack', () => {
+		testDefaultIconResult(BuffId['proc:1:attack'], [IconId.ATK_AOE]);
+		testIconResultWithBuff(BuffId['proc:1:attack'], [IconId.ATK_ST], { targetArea: TargetArea.Single }, 'target area is single');
 	});
 
-	describe('proc:2', () => {
-		testDefaultIconResult(BuffId['proc:2'], [IconId.BUFF_HPREC]);
+	describe('proc:2:burst heal', () => {
+		testDefaultIconResult(BuffId['proc:2:burst heal'], [IconId.BUFF_HPREC]);
 	});
 
-	describe('proc:3', () => {
-		testDefaultIconResult(BuffId['proc:3'], [IconId.BUFF_HPREC]);
+	describe('proc:3:gradual heal', () => {
+		testDefaultIconResult(BuffId['proc:3:gradual heal'], [IconId.BUFF_HPREC]);
 	});
 
 	describe('proc 4 buffs', () => {
-		describe('proc:4:flat', () => {
-			testDefaultIconResult(BuffId['proc:4:flat'], [IconId.BUFF_BBREC]);
+		describe('proc:4:bc fill-flat', () => {
+			testDefaultIconResult(BuffId['proc:4:bc fill-flat'], [IconId.BUFF_BBREC]);
 		});
 
-		describe('proc:4:percent', () => {
-			testDefaultIconResult(BuffId['proc:4:percent'], [IconId.BUFF_BBREC]);
+		describe('proc:4:bc fill-percent', () => {
+			testDefaultIconResult(BuffId['proc:4:bc fill-percent'], [IconId.BUFF_BBREC]);
 		});
 	});
 
@@ -924,7 +924,7 @@ describe('BUFF_METADATA entries', () => {
 				const iconStatKey = stat !== 'crit' ? stat.toUpperCase() : 'CRTRATE';
 				POSSIBLE_KNOWN_ELEMENTS.forEach((element) => {
 					testIconResultWithBuff(
-						BuffId[`proc:5:${stat}`],
+						BuffId[`proc:5:regular or elemental-${stat}`],
 						[IconId[`BUFF_${element.toUpperCase()}${iconStatKey}${polarityKey}`]],
 						{ value: polarityValue, conditions: { targetElements: [element] } },
 						`buff value is ${polarityCase} and first target element condition is ${element}`,
@@ -932,35 +932,35 @@ describe('BUFF_METADATA entries', () => {
 				});
 
 				testIconResultWithBuff(
-					BuffId[`proc:5:${stat}`],
+					BuffId[`proc:5:regular or elemental-${stat}`],
 					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue },
 					`buff value is ${polarityCase} and no conditions are given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`proc:5:${stat}`],
+					BuffId[`proc:5:regular or elemental-${stat}`],
 					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: {} },
 					`buff value is ${polarityCase} and no target element conditions are given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`proc:5:${stat}`],
+					BuffId[`proc:5:regular or elemental-${stat}`],
 					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetConditions: [] } },
 					`buff value is ${polarityCase} and target element conditions array is empty`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`proc:5:${stat}`],
+					BuffId[`proc:5:regular or elemental-${stat}`],
 					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetElements: [{ arbitrary: 'value' }] } },
 					`buff value is ${polarityCase} and a non-string element is given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`proc:5:${stat}`],
+					BuffId[`proc:5:regular or elemental-${stat}`],
 					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetElements: ['a fake element'] } },
 					`buff value is ${polarityCase} and an invalid target condition element is given`,
@@ -968,55 +968,55 @@ describe('BUFF_METADATA entries', () => {
 			});
 		};
 
-		describe('proc:5:atk', () => {
-			testDefaultIconResult(BuffId['proc:5:atk'], [IconId.BUFF_ATKUP]);
+		describe('proc:5:regular or elemental-atk', () => {
+			testDefaultIconResult(BuffId['proc:5:regular or elemental-atk'], [IconId.BUFF_ATKUP]);
 			testElementalVariantsAndPolarities('atk');
 		});
 
-		describe('proc:5:def', () => {
-			testDefaultIconResult(BuffId['proc:5:def'], [IconId.BUFF_DEFUP]);
+		describe('proc:5:regular or elemental-def', () => {
+			testDefaultIconResult(BuffId['proc:5:regular or elemental-def'], [IconId.BUFF_DEFUP]);
 			testElementalVariantsAndPolarities('def');
 		});
 
-		describe('proc:5:rec', () => {
-			testDefaultIconResult(BuffId['proc:5:rec'], [IconId.BUFF_RECUP]);
+		describe('proc:5:regular or elemental-rec', () => {
+			testDefaultIconResult(BuffId['proc:5:regular or elemental-rec'], [IconId.BUFF_RECUP]);
 			testElementalVariantsAndPolarities('rec');
 		});
 
-		describe('proc:5:crit', () => {
-			testDefaultIconResult(BuffId['proc:5:crit'], [IconId.BUFF_CRTRATEUP]);
+		describe('proc:5:regular or elemental-crit', () => {
+			testDefaultIconResult(BuffId['proc:5:regular or elemental-crit'], [IconId.BUFF_CRTRATEUP]);
 			testElementalVariantsAndPolarities('crit');
 		});
 	});
 
 	describe('proc 6 buffs', () => {
-		describe('proc:6:bc', () => {
-			testDefaultIconResult(BuffId['proc:6:bc'], [IconId.BUFF_BCDROP]);
-			testIconResultWithBuff(BuffId['proc:6:bc'], [IconId.BUFF_BCDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('proc:6:drop boost-bc', () => {
+			testDefaultIconResult(BuffId['proc:6:drop boost-bc'], [IconId.BUFF_BCDROP]);
+			testIconResultWithBuff(BuffId['proc:6:drop boost-bc'], [IconId.BUFF_BCDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('proc:6:hc', () => {
-			testDefaultIconResult(BuffId['proc:6:hc'], [IconId.BUFF_HCDROP]);
-			testIconResultWithBuff(BuffId['proc:6:hc'], [IconId.BUFF_HCDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('proc:6:drop boost-hc', () => {
+			testDefaultIconResult(BuffId['proc:6:drop boost-hc'], [IconId.BUFF_HCDROP]);
+			testIconResultWithBuff(BuffId['proc:6:drop boost-hc'], [IconId.BUFF_HCDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('proc:6:item', () => {
-			testDefaultIconResult(BuffId['proc:6:item'], [IconId.BUFF_ITEMDROP]);
-			testIconResultWithBuff(BuffId['proc:6:item'], [IconId.BUFF_ITEMDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('proc:6:drop boost-item', () => {
+			testDefaultIconResult(BuffId['proc:6:drop boost-item'], [IconId.BUFF_ITEMDROP]);
+			testIconResultWithBuff(BuffId['proc:6:drop boost-item'], [IconId.BUFF_ITEMDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 	});
 
-	describe('proc:7', () => {
-		testDefaultIconResult(BuffId['proc:7'], [IconId.BUFF_KOBLK]);
+	describe('proc:7:guaranteed ko resistance', () => {
+		testDefaultIconResult(BuffId['proc:7:guaranteed ko resistance'], [IconId.BUFF_KOBLK]);
 	});
 
 	describe('proc 8 buffs', () => {
-		describe('proc:8:flat', () => {
-			testDefaultIconResult(BuffId['proc:8:flat'], [IconId.BUFF_HPUP]);
+		describe('proc:8:max hp boost-flat', () => {
+			testDefaultIconResult(BuffId['proc:8:max hp boost-flat'], [IconId.BUFF_HPUP]);
 		});
 
-		describe('proc:8:percent', () => {
-			testDefaultIconResult(BuffId['proc:8:percent'], [IconId.BUFF_HPUP]);
+		describe('proc:8:max hp boost-percent', () => {
+			testDefaultIconResult(BuffId['proc:8:max hp boost-percent'], [IconId.BUFF_HPUP]);
 		});
 	});
 
@@ -1039,7 +1039,7 @@ describe('BUFF_METADATA entries', () => {
 				const iconStatKey = stat !== 'crit' ? stat.toUpperCase() : 'CRTRATE';
 				POSSIBLE_KNOWN_ELEMENTS.forEach((element) => {
 					testIconResultWithBuff(
-						BuffId[`proc:9:${stat}`],
+						BuffId[`proc:9:regular or elemental reduction-${stat}`],
 						[IconId[`BUFF_${element.toUpperCase()}${iconStatKey}${polarityKey}`]],
 						{ value: polarityValue, conditions: { targetElements: [element] } },
 						`buff value is ${polarityCase} and first target element condition is ${element}`,
@@ -1047,35 +1047,35 @@ describe('BUFF_METADATA entries', () => {
 				});
 
 				testIconResultWithBuff(
-					BuffId[`proc:9:${stat}`],
+					BuffId[`proc:9:regular or elemental reduction-${stat}`],
 					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue },
 					`buff value is ${polarityCase} and no conditions are given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`proc:9:${stat}`],
+					BuffId[`proc:9:regular or elemental reduction-${stat}`],
 					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: {} },
 					`buff value is ${polarityCase} and no target element conditions are given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`proc:9:${stat}`],
+					BuffId[`proc:9:regular or elemental reduction-${stat}`],
 					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetConditions: [] } },
 					`buff value is ${polarityCase} and target element conditions array is empty`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`proc:9:${stat}`],
+					BuffId[`proc:9:regular or elemental reduction-${stat}`],
 					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetElements: [{ arbitrary: 'value' }] } },
 					`buff value is ${polarityCase} and a non-string element is given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`proc:9:${stat}`],
+					BuffId[`proc:9:regular or elemental reduction-${stat}`],
 					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetElements: ['a fake element'] } },
 					`buff value is ${polarityCase} and an invalid target condition element is given`,
@@ -1083,562 +1083,562 @@ describe('BUFF_METADATA entries', () => {
 			});
 		};
 
-		describe('proc:9:atk', () => {
-			testDefaultIconResult(BuffId['proc:9:atk'], [IconId.BUFF_ATKDOWN]);
+		describe('proc:9:regular or elemental reduction-atk', () => {
+			testDefaultIconResult(BuffId['proc:9:regular or elemental reduction-atk'], [IconId.BUFF_ATKDOWN]);
 			testElementalVariantsAndPolarities('atk');
 		});
 
-		describe('proc:9:def', () => {
-			testDefaultIconResult(BuffId['proc:9:def'], [IconId.BUFF_DEFDOWN]);
+		describe('proc:9:regular or elemental reduction-def', () => {
+			testDefaultIconResult(BuffId['proc:9:regular or elemental reduction-def'], [IconId.BUFF_DEFDOWN]);
 			testElementalVariantsAndPolarities('def');
 		});
 
-		describe('proc:9:rec', () => {
-			testDefaultIconResult(BuffId['proc:9:rec'], [IconId.BUFF_RECDOWN]);
+		describe('proc:9:regular or elemental reduction-rec', () => {
+			testDefaultIconResult(BuffId['proc:9:regular or elemental reduction-rec'], [IconId.BUFF_RECDOWN]);
 			testElementalVariantsAndPolarities('rec');
 		});
 
-		describe('proc:9:unknown', () => {
-			testDefaultIconResult(BuffId['proc:9:unknown'], [IconId.UNKNOWN]);
+		describe('proc:9:regular or elemental reduction-unknown', () => {
+			testDefaultIconResult(BuffId['proc:9:regular or elemental reduction-unknown'], [IconId.UNKNOWN]);
 		});
 	});
 
 	describe('proc 10 buffs', () => {
-		describe('proc:10:poison', () => {
-			testDefaultIconResult(BuffId['proc:10:poison'], [IconId.BUFF_POISONBLK]);
+		describe('proc:10:cleanse-poison', () => {
+			testDefaultIconResult(BuffId['proc:10:cleanse-poison'], [IconId.BUFF_POISONBLK]);
 		});
 
-		describe('proc:10:weak', () => {
-			testDefaultIconResult(BuffId['proc:10:weak'], [IconId.BUFF_WEAKBLK]);
+		describe('proc:10:cleanse-weak', () => {
+			testDefaultIconResult(BuffId['proc:10:cleanse-weak'], [IconId.BUFF_WEAKBLK]);
 		});
 
-		describe('proc:10:sick', () => {
-			testDefaultIconResult(BuffId['proc:10:sick'], [IconId.BUFF_SICKBLK]);
+		describe('proc:10:cleanse-sick', () => {
+			testDefaultIconResult(BuffId['proc:10:cleanse-sick'], [IconId.BUFF_SICKBLK]);
 		});
 
-		describe('proc:10:injury', () => {
-			testDefaultIconResult(BuffId['proc:10:injury'], [IconId.BUFF_INJURYBLK]);
+		describe('proc:10:cleanse-injury', () => {
+			testDefaultIconResult(BuffId['proc:10:cleanse-injury'], [IconId.BUFF_INJURYBLK]);
 		});
 
-		describe('proc:10:curse', () => {
-			testDefaultIconResult(BuffId['proc:10:curse'], [IconId.BUFF_CURSEBLK]);
+		describe('proc:10:cleanse-curse', () => {
+			testDefaultIconResult(BuffId['proc:10:cleanse-curse'], [IconId.BUFF_CURSEBLK]);
 		});
 
-		describe('proc:10:paralysis', () => {
-			testDefaultIconResult(BuffId['proc:10:paralysis'], [IconId.BUFF_PARALYSISBLK]);
+		describe('proc:10:cleanse-paralysis', () => {
+			testDefaultIconResult(BuffId['proc:10:cleanse-paralysis'], [IconId.BUFF_PARALYSISBLK]);
 		});
 
-		describe('proc:10:atk down', () => {
-			testDefaultIconResult(BuffId['proc:10:atk down'], [IconId.BUFF_ATKDOWNBLK]);
+		describe('proc:10:cleanse-atk down', () => {
+			testDefaultIconResult(BuffId['proc:10:cleanse-atk down'], [IconId.BUFF_ATKDOWNBLK]);
 		});
 
-		describe('proc:10:def down', () => {
-			testDefaultIconResult(BuffId['proc:10:def down'], [IconId.BUFF_DEFDOWNBLK]);
+		describe('proc:10:cleanse-def down', () => {
+			testDefaultIconResult(BuffId['proc:10:cleanse-def down'], [IconId.BUFF_DEFDOWNBLK]);
 		});
 
-		describe('proc:10:rec down', () => {
-			testDefaultIconResult(BuffId['proc:10:rec down'], [IconId.BUFF_RECDOWNBLK]);
+		describe('proc:10:cleanse-rec down', () => {
+			testDefaultIconResult(BuffId['proc:10:cleanse-rec down'], [IconId.BUFF_RECDOWNBLK]);
 		});
 
-		describe('proc:10:unknown', () => {
-			testDefaultIconResult(BuffId['proc:10:unknown'], [IconId.BUFF_AILMENTBLK]);
+		describe('proc:10:cleanse-unknown', () => {
+			testDefaultIconResult(BuffId['proc:10:cleanse-unknown'], [IconId.BUFF_AILMENTBLK]);
 		});
 	});
 
 	describe('proc 11 buffs', () => {
-		describe('proc:11:poison', () => {
-			testDefaultIconResult(BuffId['proc:11:poison'], [IconId.DEBUFF_POISON]);
+		describe('proc:11:chance inflict-poison', () => {
+			testDefaultIconResult(BuffId['proc:11:chance inflict-poison'], [IconId.DEBUFF_POISON]);
 		});
 
-		describe('proc:11:weak', () => {
-			testDefaultIconResult(BuffId['proc:11:weak'], [IconId.DEBUFF_WEAK]);
+		describe('proc:11:chance inflict-weak', () => {
+			testDefaultIconResult(BuffId['proc:11:chance inflict-weak'], [IconId.DEBUFF_WEAK]);
 		});
 
-		describe('proc:11:sick', () => {
-			testDefaultIconResult(BuffId['proc:11:sick'], [IconId.DEBUFF_SICK]);
+		describe('proc:11:chance inflict-sick', () => {
+			testDefaultIconResult(BuffId['proc:11:chance inflict-sick'], [IconId.DEBUFF_SICK]);
 		});
 
-		describe('proc:11:injury', () => {
-			testDefaultIconResult(BuffId['proc:11:injury'], [IconId.DEBUFF_INJURY]);
+		describe('proc:11:chance inflict-injury', () => {
+			testDefaultIconResult(BuffId['proc:11:chance inflict-injury'], [IconId.DEBUFF_INJURY]);
 		});
 
-		describe('proc:11:curse', () => {
-			testDefaultIconResult(BuffId['proc:11:curse'], [IconId.DEBUFF_CURSE]);
+		describe('proc:11:chance inflict-curse', () => {
+			testDefaultIconResult(BuffId['proc:11:chance inflict-curse'], [IconId.DEBUFF_CURSE]);
 		});
 
-		describe('proc:11:paralysis', () => {
-			testDefaultIconResult(BuffId['proc:11:paralysis'], [IconId.DEBUFF_PARALYSIS]);
+		describe('proc:11:chance inflict-paralysis', () => {
+			testDefaultIconResult(BuffId['proc:11:chance inflict-paralysis'], [IconId.DEBUFF_PARALYSIS]);
 		});
 
-		describe('proc:11:atk down', () => {
-			testDefaultIconResult(BuffId['proc:11:atk down'], [IconId.BUFF_ATKDOWN]);
+		describe('proc:11:chance inflict-atk down', () => {
+			testDefaultIconResult(BuffId['proc:11:chance inflict-atk down'], [IconId.BUFF_ATKDOWN]);
 		});
 
-		describe('proc:11:def down', () => {
-			testDefaultIconResult(BuffId['proc:11:def down'], [IconId.BUFF_DEFDOWN]);
+		describe('proc:11:chance inflict-def down', () => {
+			testDefaultIconResult(BuffId['proc:11:chance inflict-def down'], [IconId.BUFF_DEFDOWN]);
 		});
 
-		describe('proc:11:rec down', () => {
-			testDefaultIconResult(BuffId['proc:11:rec down'], [IconId.BUFF_RECDOWN]);
+		describe('proc:11:chance inflict-rec down', () => {
+			testDefaultIconResult(BuffId['proc:11:chance inflict-rec down'], [IconId.BUFF_RECDOWN]);
 		});
 
-		describe('proc:11:unknown', () => {
-			testDefaultIconResult(BuffId['proc:11:unknown'], [IconId.DEBUFF_AILMENT]);
+		describe('proc:11:chance inflict-unknown', () => {
+			testDefaultIconResult(BuffId['proc:11:chance inflict-unknown'], [IconId.DEBUFF_AILMENT]);
 		});
 	});
 
-	describe('proc:12', () => {
-		testDefaultIconResult(BuffId['proc:12'], [IconId.BUFF_KOBLK]);
+	describe('proc:12:guaranteed revive', () => {
+		testDefaultIconResult(BuffId['proc:12:guaranteed revive'], [IconId.BUFF_KOBLK]);
 	});
 
-	describe('proc:13', () => {
-		testDefaultIconResult(BuffId['proc:13'], [IconId.ATK_RT]);
+	describe('proc:13:random attack', () => {
+		testDefaultIconResult(BuffId['proc:13:random attack'], [IconId.ATK_RT]);
 	});
 
-	describe('proc:14', () => {
-		testDefaultIconResult(BuffId['proc:14'], [IconId.ATK_AOE_HPREC]);
-		testIconResultWithBuff(BuffId['proc:14'], [IconId.ATK_ST_HPREC], { targetArea: TargetArea.Single }, 'target area is single');
+	describe('proc:14:hp absorb attack', () => {
+		testDefaultIconResult(BuffId['proc:14:hp absorb attack'], [IconId.ATK_AOE_HPREC]);
+		testIconResultWithBuff(BuffId['proc:14:hp absorb attack'], [IconId.ATK_ST_HPREC], { targetArea: TargetArea.Single }, 'target area is single');
 	});
 
 	describe('proc 16 buffs', () => {
-		describe('proc:16:fire', () => {
-			testDefaultIconResult(BuffId['proc:16:fire'], [IconId.BUFF_FIREDMGDOWN]);
+		describe('proc:16:mitigate-fire', () => {
+			testDefaultIconResult(BuffId['proc:16:mitigate-fire'], [IconId.BUFF_FIREDMGDOWN]);
 		});
 
-		describe('proc:16:water', () => {
-			testDefaultIconResult(BuffId['proc:16:water'], [IconId.BUFF_WATERDMGDOWN]);
+		describe('proc:16:mitigate-water', () => {
+			testDefaultIconResult(BuffId['proc:16:mitigate-water'], [IconId.BUFF_WATERDMGDOWN]);
 		});
 
-		describe('proc:16:earth', () => {
-			testDefaultIconResult(BuffId['proc:16:earth'], [IconId.BUFF_EARTHDMGDOWN]);
+		describe('proc:16:mitigate-earth', () => {
+			testDefaultIconResult(BuffId['proc:16:mitigate-earth'], [IconId.BUFF_EARTHDMGDOWN]);
 		});
 
-		describe('proc:16:thunder', () => {
-			testDefaultIconResult(BuffId['proc:16:thunder'], [IconId.BUFF_THUNDERDMGDOWN]);
+		describe('proc:16:mitigate-thunder', () => {
+			testDefaultIconResult(BuffId['proc:16:mitigate-thunder'], [IconId.BUFF_THUNDERDMGDOWN]);
 		});
 
-		describe('proc:16:light', () => {
-			testDefaultIconResult(BuffId['proc:16:light'], [IconId.BUFF_LIGHTDMGDOWN]);
+		describe('proc:16:mitigate-light', () => {
+			testDefaultIconResult(BuffId['proc:16:mitigate-light'], [IconId.BUFF_LIGHTDMGDOWN]);
 		});
 
-		describe('proc:16:dark', () => {
-			testDefaultIconResult(BuffId['proc:16:dark'], [IconId.BUFF_DARKDMGDOWN]);
+		describe('proc:16:mitigate-dark', () => {
+			testDefaultIconResult(BuffId['proc:16:mitigate-dark'], [IconId.BUFF_DARKDMGDOWN]);
 		});
 
-		describe('proc:16:all', () => {
-			testDefaultIconResult(BuffId['proc:16:all'], [IconId.BUFF_ELEMENTDMGDOWN]);
+		describe('proc:16:mitigate-all', () => {
+			testDefaultIconResult(BuffId['proc:16:mitigate-all'], [IconId.BUFF_ELEMENTDMGDOWN]);
 		});
 
-		describe('proc:16:unknown', () => {
-			testDefaultIconResult(BuffId['proc:16:unknown'], [IconId.BUFF_ELEMENTDMGDOWN]);
+		describe('proc:16:mitigate-unknown', () => {
+			testDefaultIconResult(BuffId['proc:16:mitigate-unknown'], [IconId.BUFF_ELEMENTDMGDOWN]);
 		});
 	});
 
 	describe('proc 17 buffs', () => {
-		describe('proc:17:poison', () => {
-			testDefaultIconResult(BuffId['proc:17:poison'], [IconId.BUFF_POISONBLK]);
+		describe('proc:17:resist-poison', () => {
+			testDefaultIconResult(BuffId['proc:17:resist-poison'], [IconId.BUFF_POISONBLK]);
 		});
 
-		describe('proc:17:weak', () => {
-			testDefaultIconResult(BuffId['proc:17:weak'], [IconId.BUFF_WEAKBLK]);
+		describe('proc:17:resist-weak', () => {
+			testDefaultIconResult(BuffId['proc:17:resist-weak'], [IconId.BUFF_WEAKBLK]);
 		});
 
-		describe('proc:17:sick', () => {
-			testDefaultIconResult(BuffId['proc:17:sick'], [IconId.BUFF_SICKBLK]);
+		describe('proc:17:resist-sick', () => {
+			testDefaultIconResult(BuffId['proc:17:resist-sick'], [IconId.BUFF_SICKBLK]);
 		});
 
-		describe('proc:17:injury', () => {
-			testDefaultIconResult(BuffId['proc:17:injury'], [IconId.BUFF_INJURYBLK]);
+		describe('proc:17:resist-injury', () => {
+			testDefaultIconResult(BuffId['proc:17:resist-injury'], [IconId.BUFF_INJURYBLK]);
 		});
 
-		describe('proc:17:curse', () => {
-			testDefaultIconResult(BuffId['proc:17:curse'], [IconId.BUFF_CURSEBLK]);
+		describe('proc:17:resist-curse', () => {
+			testDefaultIconResult(BuffId['proc:17:resist-curse'], [IconId.BUFF_CURSEBLK]);
 		});
 
-		describe('proc:17:paralysis', () => {
-			testDefaultIconResult(BuffId['proc:17:paralysis'], [IconId.BUFF_PARALYSISBLK]);
+		describe('proc:17:resist-paralysis', () => {
+			testDefaultIconResult(BuffId['proc:17:resist-paralysis'], [IconId.BUFF_PARALYSISBLK]);
 		});
 	});
 
-	describe('proc:18', () => {
-		testDefaultIconResult(BuffId['proc:18'], [IconId.BUFF_DAMAGECUT]);
+	describe('proc:18:mitigation', () => {
+		testDefaultIconResult(BuffId['proc:18:mitigation'], [IconId.BUFF_DAMAGECUT]);
 	});
 
-	describe('proc:19', () => {
-		testDefaultIconResult(BuffId['proc:19'], [IconId.BUFF_BBREC]);
+	describe('proc:19:gradual bc fill', () => {
+		testDefaultIconResult(BuffId['proc:19:gradual bc fill'], [IconId.BUFF_BBREC]);
 	});
 
-	describe('proc:20', () => {
-		testDefaultIconResult(BuffId['proc:20'], [IconId.BUFF_DAMAGEBB]);
+	describe('proc:20:bc fill on hit', () => {
+		testDefaultIconResult(BuffId['proc:20:bc fill on hit'], [IconId.BUFF_DAMAGEBB]);
 	});
 
-	describe('proc:22', () => {
-		testDefaultIconResult(BuffId['proc:22'], [IconId.BUFF_IGNOREDEF]);
+	describe('proc:22:defense ignore', () => {
+		testDefaultIconResult(BuffId['proc:22:defense ignore'], [IconId.BUFF_IGNOREDEF]);
 	});
 
-	describe('proc:23', () => {
-		testDefaultIconResult(BuffId['proc:23'], [IconId.BUFF_SPARKUP]);
-		testIconResultWithBuff(BuffId['proc:23'], [IconId.BUFF_SPARKDOWN], { value: -1 }, 'buff value is less than 0');
+	describe('proc:23:spark damage', () => {
+		testDefaultIconResult(BuffId['proc:23:spark damage'], [IconId.BUFF_SPARKUP]);
+		testIconResultWithBuff(BuffId['proc:23:spark damage'], [IconId.BUFF_SPARKDOWN], { value: -1 }, 'buff value is less than 0');
 	});
 
 	describe('proc 24 buffs', () => {
-		describe('proc:24:atk', () => {
-			testDefaultIconResult(BuffId['proc:24:atk'], [IconId.BUFF_CONVERTATKUP]);
-			testIconResultWithBuff(BuffId['proc:24:atk'], [IconId.BUFF_CONVERTATKUP], { value: {} }, 'buff value is not present');
-			testIconResultWithBuff(BuffId['proc:24:atk'], [IconId.BUFF_CONVERTATKDOWN], { value: { value: -1 } }, 'buff value is less than 0');
+		describe('proc:24:converted-atk', () => {
+			testDefaultIconResult(BuffId['proc:24:converted-atk'], [IconId.BUFF_CONVERTATKUP]);
+			testIconResultWithBuff(BuffId['proc:24:converted-atk'], [IconId.BUFF_CONVERTATKUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['proc:24:converted-atk'], [IconId.BUFF_CONVERTATKDOWN], { value: { value: -1 } }, 'buff value is less than 0');
 		});
 
-		describe('proc:24:def', () => {
-			testDefaultIconResult(BuffId['proc:24:def'], [IconId.BUFF_CONVERTDEFUP]);
-			testIconResultWithBuff(BuffId['proc:24:def'], [IconId.BUFF_CONVERTDEFUP], { value: {} }, 'buff value is not present');
-			testIconResultWithBuff(BuffId['proc:24:def'], [IconId.BUFF_CONVERTDEFDOWN], { value: { value: -1 } }, 'buff value is less than 0');
+		describe('proc:24:converted-def', () => {
+			testDefaultIconResult(BuffId['proc:24:converted-def'], [IconId.BUFF_CONVERTDEFUP]);
+			testIconResultWithBuff(BuffId['proc:24:converted-def'], [IconId.BUFF_CONVERTDEFUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['proc:24:converted-def'], [IconId.BUFF_CONVERTDEFDOWN], { value: { value: -1 } }, 'buff value is less than 0');
 		});
 
-		describe('proc:24:rec', () => {
-			testDefaultIconResult(BuffId['proc:24:rec'], [IconId.BUFF_CONVERTRECUP]);
-			testIconResultWithBuff(BuffId['proc:24:rec'], [IconId.BUFF_CONVERTRECUP], { value: {} }, 'buff value is not present');
-			testIconResultWithBuff(BuffId['proc:24:rec'], [IconId.BUFF_CONVERTRECDOWN], { value: { value: -1 } }, 'buff value is less than 0');
+		describe('proc:24:converted-rec', () => {
+			testDefaultIconResult(BuffId['proc:24:converted-rec'], [IconId.BUFF_CONVERTRECUP]);
+			testIconResultWithBuff(BuffId['proc:24:converted-rec'], [IconId.BUFF_CONVERTRECUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['proc:24:converted-rec'], [IconId.BUFF_CONVERTRECDOWN], { value: { value: -1 } }, 'buff value is less than 0');
 		});
 	});
 
-	describe('proc:26', () => {
-		testDefaultIconResult(BuffId['proc:26'], [IconId.BUFF_HITUP]);
+	describe('proc:26:hit count boost', () => {
+		testDefaultIconResult(BuffId['proc:26:hit count boost'], [IconId.BUFF_HITUP]);
 	});
 
-	describe('proc:27', () => {
-		testDefaultIconResult(BuffId['proc:27'], [IconId.ATK_AOE_PROPORTIONAL]);
-		testIconResultWithBuff(BuffId['proc:27'], [IconId.ATK_ST_PROPORTIONAL], { targetArea: TargetArea.Single }, 'target area is single');
+	describe('proc:27:proportional attack', () => {
+		testDefaultIconResult(BuffId['proc:27:proportional attack'], [IconId.ATK_AOE_PROPORTIONAL]);
+		testIconResultWithBuff(BuffId['proc:27:proportional attack'], [IconId.ATK_ST_PROPORTIONAL], { targetArea: TargetArea.Single }, 'target area is single');
 	});
 
-	describe('proc:28', () => {
-		testDefaultIconResult(BuffId['proc:28'], [IconId.ATK_AOE_FIXED]);
-		testIconResultWithBuff(BuffId['proc:28'], [IconId.ATK_ST_FIXED], { targetArea: TargetArea.Single }, 'target area is single');
+	describe('proc:28:fixed attack', () => {
+		testDefaultIconResult(BuffId['proc:28:fixed attack'], [IconId.ATK_AOE_FIXED]);
+		testIconResultWithBuff(BuffId['proc:28:fixed attack'], [IconId.ATK_ST_FIXED], { targetArea: TargetArea.Single }, 'target area is single');
 	});
 
-	describe('proc:29', () => {
-		testDefaultIconResult(BuffId['proc:29'], [IconId.ATK_AOE_MULTIELEMENT]);
-		testIconResultWithBuff(BuffId['proc:29'], [IconId.ATK_ST_MULTIELEMENT], { targetArea: TargetArea.Single }, 'target area is single');
+	describe('proc:29:multi-element attack', () => {
+		testDefaultIconResult(BuffId['proc:29:multi-element attack'], [IconId.ATK_AOE_MULTIELEMENT]);
+		testIconResultWithBuff(BuffId['proc:29:multi-element attack'], [IconId.ATK_ST_MULTIELEMENT], { targetArea: TargetArea.Single }, 'target area is single');
 	});
 
 	describe('proc 30 buffs', () => {
-		describe('proc:30:fire', () => {
-			testDefaultIconResult(BuffId['proc:30:fire'], [IconId.BUFF_ADDFIRE]);
+		describe('proc:30:add element-fire', () => {
+			testDefaultIconResult(BuffId['proc:30:add element-fire'], [IconId.BUFF_ADDFIRE]);
 		});
 
-		describe('proc:30:water', () => {
-			testDefaultIconResult(BuffId['proc:30:water'], [IconId.BUFF_ADDWATER]);
+		describe('proc:30:add element-water', () => {
+			testDefaultIconResult(BuffId['proc:30:add element-water'], [IconId.BUFF_ADDWATER]);
 		});
 
-		describe('proc:30:earth', () => {
-			testDefaultIconResult(BuffId['proc:30:earth'], [IconId.BUFF_ADDEARTH]);
+		describe('proc:30:add element-earth', () => {
+			testDefaultIconResult(BuffId['proc:30:add element-earth'], [IconId.BUFF_ADDEARTH]);
 		});
 
-		describe('proc:30:thunder', () => {
-			testDefaultIconResult(BuffId['proc:30:thunder'], [IconId.BUFF_ADDTHUNDER]);
+		describe('proc:30:add element-thunder', () => {
+			testDefaultIconResult(BuffId['proc:30:add element-thunder'], [IconId.BUFF_ADDTHUNDER]);
 		});
 
-		describe('proc:30:light', () => {
-			testDefaultIconResult(BuffId['proc:30:light'], [IconId.BUFF_ADDLIGHT]);
+		describe('proc:30:add element-light', () => {
+			testDefaultIconResult(BuffId['proc:30:add element-light'], [IconId.BUFF_ADDLIGHT]);
 		});
 
-		describe('proc:30:dark', () => {
-			testDefaultIconResult(BuffId['proc:30:dark'], [IconId.BUFF_ADDDARK]);
+		describe('proc:30:add element-dark', () => {
+			testDefaultIconResult(BuffId['proc:30:add element-dark'], [IconId.BUFF_ADDDARK]);
 		});
 
-		describe('proc:30:unknown', () => {
-			testDefaultIconResult(BuffId['proc:30:unknown'], [IconId.BUFF_ADDELEMENT]);
+		describe('proc:30:add element-unknown', () => {
+			testDefaultIconResult(BuffId['proc:30:add element-unknown'], [IconId.BUFF_ADDELEMENT]);
 		});
 	});
 
 	describe('proc 31 buffs', () => {
-		describe('proc:31:flat', () => {
-			testDefaultIconResult(BuffId['proc:31:flat'], [IconId.BUFF_BBREC]);
+		describe('proc:31:bc fill-flat', () => {
+			testDefaultIconResult(BuffId['proc:31:bc fill-flat'], [IconId.BUFF_BBREC]);
 		});
 
-		describe('proc:31:percent', () => {
-			testDefaultIconResult(BuffId['proc:31:percent'], [IconId.BUFF_BBREC]);
+		describe('proc:31:bc fill-percent', () => {
+			testDefaultIconResult(BuffId['proc:31:bc fill-percent'], [IconId.BUFF_BBREC]);
 		});
 	});
 
 	describe('proc 32 buffs', () => {
-		describe('proc:32:fire', () => {
-			testDefaultIconResult(BuffId['proc:32:fire'], [IconId.BUFF_SHIFTFIRE]);
+		describe('proc:32:element shift-fire', () => {
+			testDefaultIconResult(BuffId['proc:32:element shift-fire'], [IconId.BUFF_SHIFTFIRE]);
 		});
 
-		describe('proc:32:water', () => {
-			testDefaultIconResult(BuffId['proc:32:water'], [IconId.BUFF_SHIFTWATER]);
+		describe('proc:32:element shift-water', () => {
+			testDefaultIconResult(BuffId['proc:32:element shift-water'], [IconId.BUFF_SHIFTWATER]);
 		});
 
-		describe('proc:32:earth', () => {
-			testDefaultIconResult(BuffId['proc:32:earth'], [IconId.BUFF_SHIFTEARTH]);
+		describe('proc:32:element shift-earth', () => {
+			testDefaultIconResult(BuffId['proc:32:element shift-earth'], [IconId.BUFF_SHIFTEARTH]);
 		});
 
-		describe('proc:32:thunder', () => {
-			testDefaultIconResult(BuffId['proc:32:thunder'], [IconId.BUFF_SHIFTTHUNDER]);
+		describe('proc:32:element shift-thunder', () => {
+			testDefaultIconResult(BuffId['proc:32:element shift-thunder'], [IconId.BUFF_SHIFTTHUNDER]);
 		});
 
-		describe('proc:32:light', () => {
-			testDefaultIconResult(BuffId['proc:32:light'], [IconId.BUFF_SHIFTLIGHT]);
+		describe('proc:32:element shift-light', () => {
+			testDefaultIconResult(BuffId['proc:32:element shift-light'], [IconId.BUFF_SHIFTLIGHT]);
 		});
 
-		describe('proc:32:dark', () => {
-			testDefaultIconResult(BuffId['proc:32:dark'], [IconId.BUFF_SHIFTDARK]);
+		describe('proc:32:element shift-dark', () => {
+			testDefaultIconResult(BuffId['proc:32:element shift-dark'], [IconId.BUFF_SHIFTDARK]);
 		});
 
-		describe('proc:32:unknown', () => {
-			testDefaultIconResult(BuffId['proc:32:unknown'], [IconId.BUFF_SHIFTELEMENT]);
+		describe('proc:32:element shift-unknown', () => {
+			testDefaultIconResult(BuffId['proc:32:element shift-unknown'], [IconId.BUFF_SHIFTELEMENT]);
 		});
 	});
 
-	describe('proc:33', () => {
-		testDefaultIconResult(BuffId['proc:33'], [IconId.BUFF_REMOVEBUFF]);
+	describe('proc:33:buff wipe', () => {
+		testDefaultIconResult(BuffId['proc:33:buff wipe'], [IconId.BUFF_REMOVEBUFF]);
 	});
 
 	describe('proc 34 buffs', () => {
-		describe('proc:34:flat', () => {
-			testDefaultIconResult(BuffId['proc:34:flat'], [IconId.BUFF_BBFILLDOWN]);
+		describe('proc:34:bc drain-flat', () => {
+			testDefaultIconResult(BuffId['proc:34:bc drain-flat'], [IconId.BUFF_BBFILLDOWN]);
 		});
 
-		describe('proc:34:percent', () => {
-			testDefaultIconResult(BuffId['proc:34:percent'], [IconId.BUFF_BBFILLDOWN]);
+		describe('proc:34:bc drain-percent', () => {
+			testDefaultIconResult(BuffId['proc:34:bc drain-percent'], [IconId.BUFF_BBFILLDOWN]);
 		});
 	});
 
-	describe('proc:36', () => {
-		testDefaultIconResult(BuffId['proc:36'], [IconId.BUFF_DISABLELS]);
+	describe('proc:36:ls lock', () => {
+		testDefaultIconResult(BuffId['proc:36:ls lock'], [IconId.BUFF_DISABLELS]);
 	});
 
-	describe('proc:37', () => {
-		testDefaultIconResult(BuffId['proc:37'], [IconId.BUFF_SUMMONUNIT]);
+	describe('proc:37:summon', () => {
+		testDefaultIconResult(BuffId['proc:37:summon'], [IconId.BUFF_SUMMONUNIT]);
 	});
 
 	describe('proc 38 buffs', () => {
-		describe('proc:38:poison', () => {
-			testDefaultIconResult(BuffId['proc:38:poison'], [IconId.BUFF_POISONBLK]);
+		describe('proc:38:cleanse-poison', () => {
+			testDefaultIconResult(BuffId['proc:38:cleanse-poison'], [IconId.BUFF_POISONBLK]);
 		});
 
-		describe('proc:38:weak', () => {
-			testDefaultIconResult(BuffId['proc:38:weak'], [IconId.BUFF_WEAKBLK]);
+		describe('proc:38:cleanse-weak', () => {
+			testDefaultIconResult(BuffId['proc:38:cleanse-weak'], [IconId.BUFF_WEAKBLK]);
 		});
 
-		describe('proc:38:sick', () => {
-			testDefaultIconResult(BuffId['proc:38:sick'], [IconId.BUFF_SICKBLK]);
+		describe('proc:38:cleanse-sick', () => {
+			testDefaultIconResult(BuffId['proc:38:cleanse-sick'], [IconId.BUFF_SICKBLK]);
 		});
 
-		describe('proc:38:injury', () => {
-			testDefaultIconResult(BuffId['proc:38:injury'], [IconId.BUFF_INJURYBLK]);
+		describe('proc:38:cleanse-injury', () => {
+			testDefaultIconResult(BuffId['proc:38:cleanse-injury'], [IconId.BUFF_INJURYBLK]);
 		});
 
-		describe('proc:38:curse', () => {
-			testDefaultIconResult(BuffId['proc:38:curse'], [IconId.BUFF_CURSEBLK]);
+		describe('proc:38:cleanse-curse', () => {
+			testDefaultIconResult(BuffId['proc:38:cleanse-curse'], [IconId.BUFF_CURSEBLK]);
 		});
 
-		describe('proc:38:paralysis', () => {
-			testDefaultIconResult(BuffId['proc:38:paralysis'], [IconId.BUFF_PARALYSISBLK]);
+		describe('proc:38:cleanse-paralysis', () => {
+			testDefaultIconResult(BuffId['proc:38:cleanse-paralysis'], [IconId.BUFF_PARALYSISBLK]);
 		});
 
-		describe('proc:38:atk down', () => {
-			testDefaultIconResult(BuffId['proc:38:atk down'], [IconId.BUFF_ATKDOWNBLK]);
+		describe('proc:38:cleanse-atk down', () => {
+			testDefaultIconResult(BuffId['proc:38:cleanse-atk down'], [IconId.BUFF_ATKDOWNBLK]);
 		});
 
-		describe('proc:38:def down', () => {
-			testDefaultIconResult(BuffId['proc:38:def down'], [IconId.BUFF_DEFDOWNBLK]);
+		describe('proc:38:cleanse-def down', () => {
+			testDefaultIconResult(BuffId['proc:38:cleanse-def down'], [IconId.BUFF_DEFDOWNBLK]);
 		});
 
-		describe('proc:38:rec down', () => {
-			testDefaultIconResult(BuffId['proc:38:rec down'], [IconId.BUFF_RECDOWNBLK]);
+		describe('proc:38:cleanse-rec down', () => {
+			testDefaultIconResult(BuffId['proc:38:cleanse-rec down'], [IconId.BUFF_RECDOWNBLK]);
 		});
 
-		describe('proc:38:unknown', () => {
-			testDefaultIconResult(BuffId['proc:38:unknown'], [IconId.BUFF_AILMENTBLK]);
+		describe('proc:38:cleanse-unknown', () => {
+			testDefaultIconResult(BuffId['proc:38:cleanse-unknown'], [IconId.BUFF_AILMENTBLK]);
 		});
 	});
 
 	describe('proc 39 buffs', () => {
-		describe('proc:39:fire', () => {
-			testDefaultIconResult(BuffId['proc:39:fire'], [IconId.BUFF_FIREDMGDOWN]);
+		describe('proc:39:mitigate-fire', () => {
+			testDefaultIconResult(BuffId['proc:39:mitigate-fire'], [IconId.BUFF_FIREDMGDOWN]);
 		});
 
-		describe('proc:39:water', () => {
-			testDefaultIconResult(BuffId['proc:39:water'], [IconId.BUFF_WATERDMGDOWN]);
+		describe('proc:39:mitigate-water', () => {
+			testDefaultIconResult(BuffId['proc:39:mitigate-water'], [IconId.BUFF_WATERDMGDOWN]);
 		});
 
-		describe('proc:39:earth', () => {
-			testDefaultIconResult(BuffId['proc:39:earth'], [IconId.BUFF_EARTHDMGDOWN]);
+		describe('proc:39:mitigate-earth', () => {
+			testDefaultIconResult(BuffId['proc:39:mitigate-earth'], [IconId.BUFF_EARTHDMGDOWN]);
 		});
 
-		describe('proc:39:thunder', () => {
-			testDefaultIconResult(BuffId['proc:39:thunder'], [IconId.BUFF_THUNDERDMGDOWN]);
+		describe('proc:39:mitigate-thunder', () => {
+			testDefaultIconResult(BuffId['proc:39:mitigate-thunder'], [IconId.BUFF_THUNDERDMGDOWN]);
 		});
 
-		describe('proc:39:light', () => {
-			testDefaultIconResult(BuffId['proc:39:light'], [IconId.BUFF_LIGHTDMGDOWN]);
+		describe('proc:39:mitigate-light', () => {
+			testDefaultIconResult(BuffId['proc:39:mitigate-light'], [IconId.BUFF_LIGHTDMGDOWN]);
 		});
 
-		describe('proc:39:dark', () => {
-			testDefaultIconResult(BuffId['proc:39:dark'], [IconId.BUFF_DARKDMGDOWN]);
+		describe('proc:39:mitigate-dark', () => {
+			testDefaultIconResult(BuffId['proc:39:mitigate-dark'], [IconId.BUFF_DARKDMGDOWN]);
 		});
 
-		describe('proc:39:unknown', () => {
-			testDefaultIconResult(BuffId['proc:39:unknown'], [IconId.BUFF_ELEMENTDMGDOWN]);
+		describe('proc:39:mitigate-unknown', () => {
+			testDefaultIconResult(BuffId['proc:39:mitigate-unknown'], [IconId.BUFF_ELEMENTDMGDOWN]);
 		});
 	});
 
 	describe('proc 40 buffs', () => {
-		describe('proc:40:poison', () => {
-			testDefaultIconResult(BuffId['proc:40:poison'], [IconId.BUFF_ADDPOISON]);
+		describe('proc:40:add ailment-poison', () => {
+			testDefaultIconResult(BuffId['proc:40:add ailment-poison'], [IconId.BUFF_ADDPOISON]);
 		});
 
-		describe('proc:40:weak', () => {
-			testDefaultIconResult(BuffId['proc:40:weak'], [IconId.BUFF_ADDWEAK]);
+		describe('proc:40:add ailment-weak', () => {
+			testDefaultIconResult(BuffId['proc:40:add ailment-weak'], [IconId.BUFF_ADDWEAK]);
 		});
 
-		describe('proc:40:sick', () => {
-			testDefaultIconResult(BuffId['proc:40:sick'], [IconId.BUFF_ADDSICK]);
+		describe('proc:40:add ailment-sick', () => {
+			testDefaultIconResult(BuffId['proc:40:add ailment-sick'], [IconId.BUFF_ADDSICK]);
 		});
 
-		describe('proc:40:injury', () => {
-			testDefaultIconResult(BuffId['proc:40:injury'], [IconId.BUFF_ADDINJURY]);
+		describe('proc:40:add ailment-injury', () => {
+			testDefaultIconResult(BuffId['proc:40:add ailment-injury'], [IconId.BUFF_ADDINJURY]);
 		});
 
-		describe('proc:40:curse', () => {
-			testDefaultIconResult(BuffId['proc:40:curse'], [IconId.BUFF_ADDCURSE]);
+		describe('proc:40:add ailment-curse', () => {
+			testDefaultIconResult(BuffId['proc:40:add ailment-curse'], [IconId.BUFF_ADDCURSE]);
 		});
 
-		describe('proc:40:paralysis', () => {
-			testDefaultIconResult(BuffId['proc:40:paralysis'], [IconId.BUFF_ADDPARA]);
+		describe('proc:40:add ailment-paralysis', () => {
+			testDefaultIconResult(BuffId['proc:40:add ailment-paralysis'], [IconId.BUFF_ADDPARA]);
 		});
 
-		describe('proc:40:atk down', () => {
-			testDefaultIconResult(BuffId['proc:40:atk down'], [IconId.BUFF_ADDATKDOWN]);
+		describe('proc:40:add ailment-atk down', () => {
+			testDefaultIconResult(BuffId['proc:40:add ailment-atk down'], [IconId.BUFF_ADDATKDOWN]);
 		});
 
-		describe('proc:40:def down', () => {
-			testDefaultIconResult(BuffId['proc:40:def down'], [IconId.BUFF_ADDDEFDOWN]);
+		describe('proc:40:add ailment-def down', () => {
+			testDefaultIconResult(BuffId['proc:40:add ailment-def down'], [IconId.BUFF_ADDDEFDOWN]);
 		});
 
-		describe('proc:40:rec down', () => {
-			testDefaultIconResult(BuffId['proc:40:rec down'], [IconId.BUFF_ADDRECDOWN]);
+		describe('proc:40:add ailment-rec down', () => {
+			testDefaultIconResult(BuffId['proc:40:add ailment-rec down'], [IconId.BUFF_ADDRECDOWN]);
 		});
 
-		describe('proc:40:unknown', () => {
-			testDefaultIconResult(BuffId['proc:40:unknown'], [IconId.BUFF_ADDAILMENT]);
+		describe('proc:40:add ailment-unknown', () => {
+			testDefaultIconResult(BuffId['proc:40:add ailment-unknown'], [IconId.BUFF_ADDAILMENT]);
 		});
 	});
 
-	describe('proc:42', () => {
-		testDefaultIconResult(BuffId['proc:42'], [IconId.ATK_AOE_SACRIFICIAL]);
-		testIconResultWithBuff(BuffId['proc:42'], [IconId.ATK_ST_SACRIFICIAL], { targetArea: TargetArea.Single }, 'target area is single');
+	describe('proc:42:sacrificial attack', () => {
+		testDefaultIconResult(BuffId['proc:42:sacrificial attack'], [IconId.ATK_AOE_SACRIFICIAL]);
+		testIconResultWithBuff(BuffId['proc:42:sacrificial attack'], [IconId.ATK_ST_SACRIFICIAL], { targetArea: TargetArea.Single }, 'target area is single');
 	});
 
-	describe('proc:43', () => {
-		testDefaultIconResult(BuffId['proc:43'], [IconId.BUFF_OVERDRIVEUP]);
+	describe('proc:43:burst od fill', () => {
+		testDefaultIconResult(BuffId['proc:43:burst od fill'], [IconId.BUFF_OVERDRIVEUP]);
 	});
 
-	describe('proc:44', () => {
-		testDefaultIconResult(BuffId['proc:44'], [IconId.BUFF_TURNDMG]);
+	describe('proc:44:damage over time', () => {
+		testDefaultIconResult(BuffId['proc:44:damage over time'], [IconId.BUFF_TURNDMG]);
 	});
 
 	describe('proc 45', () => {
-		describe('proc:45:bb', () => {
-			testDefaultIconResult(BuffId['proc:45:bb'], [IconId.BUFF_BBATKUP]);
+		describe('proc:45:attack boost-bb', () => {
+			testDefaultIconResult(BuffId['proc:45:attack boost-bb'], [IconId.BUFF_BBATKUP]);
 		});
 
-		describe('proc:45:sbb', () => {
-			testDefaultIconResult(BuffId['proc:45:sbb'], [IconId.BUFF_SBBATKUP]);
+		describe('proc:45:attack boost-sbb', () => {
+			testDefaultIconResult(BuffId['proc:45:attack boost-sbb'], [IconId.BUFF_SBBATKUP]);
 		});
 
-		describe('proc:45:ubb', () => {
-			testDefaultIconResult(BuffId['proc:45:ubb'], [IconId.BUFF_UBBATKUP]);
+		describe('proc:45:attack boost-ubb', () => {
+			testDefaultIconResult(BuffId['proc:45:attack boost-ubb'], [IconId.BUFF_UBBATKUP]);
 		});
 	});
 
-	describe('proc:46', () => {
-		testDefaultIconResult(BuffId['proc:46'], [IconId.ATK_AOE_PROPORTIONAL]);
-		testIconResultWithBuff(BuffId['proc:46'], [IconId.ATK_ST_PROPORTIONAL], { targetArea: TargetArea.Single }, 'target area is single');
+	describe('proc:46:non-lethal proportional attack', () => {
+		testDefaultIconResult(BuffId['proc:46:non-lethal proportional attack'], [IconId.ATK_AOE_PROPORTIONAL]);
+		testIconResultWithBuff(BuffId['proc:46:non-lethal proportional attack'], [IconId.ATK_ST_PROPORTIONAL], { targetArea: TargetArea.Single }, 'target area is single');
 	});
 
-	describe('proc:47', () => {
-		testDefaultIconResult(BuffId['proc:47'], [IconId.ATK_AOE_HPSCALED]);
-		testIconResultWithBuff(BuffId['proc:47'], [IconId.ATK_ST_HPSCALED], { targetArea: TargetArea.Single }, 'target area is single');
+	describe('proc:47:hp scaled attack', () => {
+		testDefaultIconResult(BuffId['proc:47:hp scaled attack'], [IconId.ATK_AOE_HPSCALED]);
+		testIconResultWithBuff(BuffId['proc:47:hp scaled attack'], [IconId.ATK_ST_HPSCALED], { targetArea: TargetArea.Single }, 'target area is single');
 	});
 
 	describe('proc 48 buffs', () => {
-		describe('proc:48:base', () => {
-			testDefaultIconResult(BuffId['proc:48:base'], [IconId.ATK_AOE_PIERCING_PROPORTIONAL]);
-			testIconResultWithBuff(BuffId['proc:48:base'], [IconId.ATK_ST_PIERCING_PROPORTIONAL], { targetArea: TargetArea.Single }, 'target area is single');
+		describe('proc:48:piercing attack-base', () => {
+			testDefaultIconResult(BuffId['proc:48:piercing attack-base'], [IconId.ATK_AOE_PIERCING_PROPORTIONAL]);
+			testIconResultWithBuff(BuffId['proc:48:piercing attack-base'], [IconId.ATK_ST_PIERCING_PROPORTIONAL], { targetArea: TargetArea.Single }, 'target area is single');
 		});
 
-		describe('proc:48:current', () => {
-			testDefaultIconResult(BuffId['proc:48:current'], [IconId.ATK_AOE_PIERCING_PROPORTIONAL]);
-			testIconResultWithBuff(BuffId['proc:48:current'], [IconId.ATK_ST_PIERCING_PROPORTIONAL], { targetArea: TargetArea.Single }, 'target area is single');
+		describe('proc:48:piercing attack-current', () => {
+			testDefaultIconResult(BuffId['proc:48:piercing attack-current'], [IconId.ATK_AOE_PIERCING_PROPORTIONAL]);
+			testIconResultWithBuff(BuffId['proc:48:piercing attack-current'], [IconId.ATK_ST_PIERCING_PROPORTIONAL], { targetArea: TargetArea.Single }, 'target area is single');
 		});
 
-		describe('proc:48:fixed', () => {
-			testDefaultIconResult(BuffId['proc:48:fixed'], [IconId.ATK_AOE_PIERCING_FIXED]);
-			testIconResultWithBuff(BuffId['proc:48:fixed'], [IconId.ATK_ST_PIERCING_FIXED], { targetArea: TargetArea.Single }, 'target area is single');
+		describe('proc:48:piercing attack-fixed', () => {
+			testDefaultIconResult(BuffId['proc:48:piercing attack-fixed'], [IconId.ATK_AOE_PIERCING_FIXED]);
+			testIconResultWithBuff(BuffId['proc:48:piercing attack-fixed'], [IconId.ATK_ST_PIERCING_FIXED], { targetArea: TargetArea.Single }, 'target area is single');
 		});
 
-		describe('proc:48:unknown', () => {
-			testDefaultIconResult(BuffId['proc:48:unknown'], [IconId.ATK_AOE]);
-			testIconResultWithBuff(BuffId['proc:48:unknown'], [IconId.ATK_ST], { targetArea: TargetArea.Single }, 'target area is single');
+		describe('proc:48:piercing attack-unknown', () => {
+			testDefaultIconResult(BuffId['proc:48:piercing attack-unknown'], [IconId.ATK_AOE]);
+			testIconResultWithBuff(BuffId['proc:48:piercing attack-unknown'], [IconId.ATK_ST], { targetArea: TargetArea.Single }, 'target area is single');
 		});
 	});
 
-	describe('proc:49', () => {
-		testDefaultIconResult(BuffId['proc:49'], [IconId.BUFF_KO]);
+	describe('proc:49:chance instant death', () => {
+		testDefaultIconResult(BuffId['proc:49:chance instant death'], [IconId.BUFF_KO]);
 	});
 
-	describe('proc:50', () => {
-		testDefaultIconResult(BuffId['proc:50'], [IconId.BUFF_COUNTERDAMAGE]);
+	describe('proc:50:chance damage reflect', () => {
+		testDefaultIconResult(BuffId['proc:50:chance damage reflect'], [IconId.BUFF_COUNTERDAMAGE]);
 	});
 
 	describe('proc 51 buffs', () => {
-		describe('proc:51:atk down', () => {
-			testDefaultIconResult(BuffId['proc:51:atk down'], [IconId.BUFF_ADDATKDOWN]);
+		describe('proc:51:add to attack-atk down', () => {
+			testDefaultIconResult(BuffId['proc:51:add to attack-atk down'], [IconId.BUFF_ADDATKDOWN]);
 		});
 
-		describe('proc:51:def down', () => {
-			testDefaultIconResult(BuffId['proc:51:def down'], [IconId.BUFF_ADDDEFDOWN]);
+		describe('proc:51:add to attack-def down', () => {
+			testDefaultIconResult(BuffId['proc:51:add to attack-def down'], [IconId.BUFF_ADDDEFDOWN]);
 		});
 
-		describe('proc:51:rec down', () => {
-			testDefaultIconResult(BuffId['proc:51:rec down'], [IconId.BUFF_ADDRECDOWN]);
+		describe('proc:51:add to attack-rec down', () => {
+			testDefaultIconResult(BuffId['proc:51:add to attack-rec down'], [IconId.BUFF_ADDRECDOWN]);
 		});
 	});
 
-	describe('proc:52', () => {
-		testDefaultIconResult(BuffId['proc:52'], [IconId.BUFF_BBFILL]);
+	describe('proc:52:bc efficacy', () => {
+		testDefaultIconResult(BuffId['proc:52:bc efficacy'], [IconId.BUFF_BBFILL]);
 	});
 
 	describe('proc 53 buffs', () => {
-		describe('proc:53:poison', () => {
-			testDefaultIconResult(BuffId['proc:53:poison'], [IconId.BUFF_POISONCOUNTER]);
+		describe('proc:53:inflict on hit-poison', () => {
+			testDefaultIconResult(BuffId['proc:53:inflict on hit-poison'], [IconId.BUFF_POISONCOUNTER]);
 		});
 
-		describe('proc:53:weak', () => {
-			testDefaultIconResult(BuffId['proc:53:weak'], [IconId.BUFF_WEAKCOUNTER]);
+		describe('proc:53:inflict on hit-weak', () => {
+			testDefaultIconResult(BuffId['proc:53:inflict on hit-weak'], [IconId.BUFF_WEAKCOUNTER]);
 		});
 
-		describe('proc:53:sick', () => {
-			testDefaultIconResult(BuffId['proc:53:sick'], [IconId.BUFF_SICKCOUNTER]);
+		describe('proc:53:inflict on hit-sick', () => {
+			testDefaultIconResult(BuffId['proc:53:inflict on hit-sick'], [IconId.BUFF_SICKCOUNTER]);
 		});
 
-		describe('proc:53:injury', () => {
-			testDefaultIconResult(BuffId['proc:53:injury'], [IconId.BUFF_INJCONTER]);
+		describe('proc:53:inflict on hit-injury', () => {
+			testDefaultIconResult(BuffId['proc:53:inflict on hit-injury'], [IconId.BUFF_INJCONTER]);
 		});
 
-		describe('proc:53:curse', () => {
-			testDefaultIconResult(BuffId['proc:53:curse'], [IconId.BUFF_CURSECOUNTER]);
+		describe('proc:53:inflict on hit-curse', () => {
+			testDefaultIconResult(BuffId['proc:53:inflict on hit-curse'], [IconId.BUFF_CURSECOUNTER]);
 		});
 
-		describe('proc:53:paralysis', () => {
-			testDefaultIconResult(BuffId['proc:53:paralysis'], [IconId.BUFF_PARALYCOUNTER]);
+		describe('proc:53:inflict on hit-paralysis', () => {
+			testDefaultIconResult(BuffId['proc:53:inflict on hit-paralysis'], [IconId.BUFF_PARALYCOUNTER]);
 		});
 	});
 
-	describe('proc:54', () => {
-		testDefaultIconResult(BuffId['proc:54'], [IconId.BUFF_CRTUP]);
+	describe('proc:54:critical damage boost', () => {
+		testDefaultIconResult(BuffId['proc:54:critical damage boost'], [IconId.BUFF_CRTUP]);
 	});
 
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
@@ -1649,7 +1649,7 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS, [IconId.UNKNOWN]);
 	});
 
-	describe('conditional:12:ko resistance', () => {
-		testDefaultIconResult(BuffId['conditional:12:ko resistance'], [IconId.BUFF_KOBLK]);
+	describe('conditional:12:guaranteed ko resistance', () => {
+		testDefaultIconResult(BuffId['conditional:12:guaranteed ko resistance'], [IconId.BUFF_KOBLK]);
 	});
 });

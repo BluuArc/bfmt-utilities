@@ -1050,35 +1050,35 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
 	},
-	'proc:1': {
-		id: BuffId['proc:1'],
+	'proc:1:attack': {
+		id: BuffId['proc:1:attack'],
 		name: 'Regular Damage',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST : IconId.ATK_AOE],
 	},
-	'proc:2': {
-		id: BuffId['proc:2'],
+	'proc:2:burst heal': {
+		id: BuffId['proc:2:burst heal'],
 		name: 'Burst Heal',
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_HPREC],
 	},
-	'proc:3': {
-		id: BuffId['proc:3'],
+	'proc:3:gradual heal': {
+		id: BuffId['proc:3:gradual heal'],
 		name: 'Active Gradual Heal',
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_HPREC],
 	},
-	'proc:4:flat': {
-		id: BuffId['proc:4:flat'],
+	'proc:4:bc fill-flat': {
+		id: BuffId['proc:4:bc fill-flat'],
 		name: 'Burst BC Fill (Flat Amount)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_BBREC],
 	},
-	'proc:4:percent': {
-		id: BuffId['proc:4:percent'],
+	'proc:4:bc fill-percent': {
+		id: BuffId['proc:4:bc fill-percent'],
 		name: 'Burst BC Fill (Percentage)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Burst,
@@ -1112,29 +1112,29 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		};
 
 		return {
-			'proc:5:atk': {
-				id: BuffId['proc:5:atk'],
+			'proc:5:regular or elemental-atk': {
+				id: BuffId['proc:5:regular or elemental-atk'],
 				name: 'Active Regular/Elemental Attack Boost',
 				stat: UnitStat.atk,
 				stackType: BuffStackType.Active,
 				icons: createIconGetterForStat('ATK'),
 			},
-			'proc:5:def': {
-				id: BuffId['proc:5:def'],
+			'proc:5:regular or elemental-def': {
+				id: BuffId['proc:5:regular or elemental-def'],
 				name: 'Active Regular/Elemental Defense Boost',
 				stat: UnitStat.def,
 				stackType: BuffStackType.Active,
 				icons: createIconGetterForStat('DEF'),
 			},
-			'proc:5:rec': {
-				id: BuffId['proc:5:rec'],
+			'proc:5:regular or elemental-rec': {
+				id: BuffId['proc:5:regular or elemental-rec'],
 				name: 'Active Regular/Elemental Recovery Boost',
 				stat: UnitStat.rec,
 				stackType: BuffStackType.Active,
 				icons: createIconGetterForStat('REC'),
 			},
-			'proc:5:crit': {
-				id: BuffId['proc:5:crit'],
+			'proc:5:regular or elemental-crit': {
+				id: BuffId['proc:5:regular or elemental-crit'],
 				name: 'Active Regular/Elemental Critical Hit Rate Boost',
 				stat: UnitStat.crit,
 				stackType: BuffStackType.Active,
@@ -1142,43 +1142,43 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 			},
 		};
 	})(),
-	'proc:6:bc': {
-		id: BuffId['proc:6:bc'],
+	'proc:6:drop boost-bc': {
+		id: BuffId['proc:6:drop boost-bc'],
 		name: 'Active Battle Crystal Drop Rate Boost',
 		stat: UnitStat.bcDropRate,
 		stackType: BuffStackType.Active,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_BCDOWN : IconId.BUFF_BCDROP],
 	},
-	'proc:6:hc': {
-		id: BuffId['proc:6:hc'],
+	'proc:6:drop boost-hc': {
+		id: BuffId['proc:6:drop boost-hc'],
 		name: 'Active Heart Crystal Drop Rate Boost',
 		stat: UnitStat.hcDropRate,
 		stackType: BuffStackType.Active,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HCDOWN : IconId.BUFF_HCDROP],
 	},
-	'proc:6:item': {
-		id: BuffId['proc:6:item'],
+	'proc:6:drop boost-item': {
+		id: BuffId['proc:6:drop boost-item'],
 		name: 'Active Item Drop Rate Boost',
 		stat: UnitStat.itemDropRate,
 		stackType: BuffStackType.Active,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ITEMDOWN : IconId.BUFF_ITEMDROP],
 	},
-	'proc:7': {
-		id: BuffId['proc:7'],
+	'proc:7:guaranteed ko resistance': {
+		id: BuffId['proc:7:guaranteed ko resistance'],
 		name: 'Guaranteed KO Resistance',
 		stat: UnitStat.koResistance,
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_KOBLK],
 	},
-	'proc:8:flat': {
-		id: BuffId['proc:8:flat'],
+	'proc:8:max hp boost-flat': {
+		id: BuffId['proc:8:max hp boost-flat'],
 		name: 'Max HP Boost (Flat Amount)',
 		stat: UnitStat.hp,
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_HPUP],
 	},
-	'proc:8:percent': {
-		id: BuffId['proc:8:percent'],
+	'proc:8:max hp boost-percent': {
+		id: BuffId['proc:8:max hp boost-percent'],
 		name: 'Max HP Boost (Percentage)',
 		stat: UnitStat.hp,
 		stackType: BuffStackType.Singleton,
@@ -1212,865 +1212,865 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		};
 
 		return {
-			'proc:9:atk': {
-				id: BuffId['proc:9:atk'],
+			'proc:9:regular or elemental reduction-atk': {
+				id: BuffId['proc:9:regular or elemental reduction-atk'],
 				name: 'Active Regular/Elemental Attack Reduction',
 				stat: UnitStat.atk,
 				stackType: BuffStackType.Active,
 				icons: createIconGetterForStat('ATK'),
 			},
-			'proc:9:def': {
-				id: BuffId['proc:9:def'],
+			'proc:9:regular or elemental reduction-def': {
+				id: BuffId['proc:9:regular or elemental reduction-def'],
 				name: 'Active Regular/Elemental Defense Reduction',
 				stat: UnitStat.def,
 				stackType: BuffStackType.Active,
 				icons: createIconGetterForStat('DEF'),
 			},
-			'proc:9:rec': {
-				id: BuffId['proc:9:rec'],
+			'proc:9:regular or elemental reduction-rec': {
+				id: BuffId['proc:9:regular or elemental reduction-rec'],
 				name: 'Active Regular/Elemental Recovery Reduction',
 				stat: UnitStat.rec,
 				stackType: BuffStackType.Active,
 				icons: createIconGetterForStat('REC'),
 			},
-			'proc:9:unknown': {
-				id: BuffId['proc:9:unknown'],
+			'proc:9:regular or elemental reduction-unknown': {
+				id: BuffId['proc:9:regular or elemental reduction-unknown'],
 				name: 'Active Regular/Elemental Unknown Stat Reduction',
 				stackType: BuffStackType.Active,
 				icons: () => [IconId.UNKNOWN],
 			},
 		};
 	})(),
-	'proc:10:poison': {
-		id: BuffId['proc:10:poison'],
+	'proc:10:cleanse-poison': {
+		id: BuffId['proc:10:cleanse-poison'],
 		name: 'Poison Cleanse',
 		stat: UnitStat.poisonResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_POISONBLK],
 	},
-	'proc:10:weak': {
-		id: BuffId['proc:10:weak'],
+	'proc:10:cleanse-weak': {
+		id: BuffId['proc:10:cleanse-weak'],
 		name: 'Weak Cleanse',
 		stat: UnitStat.weakResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_WEAKBLK],
 	},
-	'proc:10:sick': {
-		id: BuffId['proc:10:sick'],
+	'proc:10:cleanse-sick': {
+		id: BuffId['proc:10:cleanse-sick'],
 		name: 'Sick Cleanse',
 		stat: UnitStat.sickResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_SICKBLK],
 	},
-	'proc:10:injury': {
-		id: BuffId['proc:10:injury'],
+	'proc:10:cleanse-injury': {
+		id: BuffId['proc:10:cleanse-injury'],
 		name: 'Injury Cleanse',
 		stat: UnitStat.injuryResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_INJURYBLK],
 	},
-	'proc:10:curse': {
-		id: BuffId['proc:10:curse'],
+	'proc:10:cleanse-curse': {
+		id: BuffId['proc:10:cleanse-curse'],
 		name: 'Curse Cleanse',
 		stat: UnitStat.curseResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_CURSEBLK],
 	},
-	'proc:10:paralysis': {
-		id: BuffId['proc:10:paralysis'],
+	'proc:10:cleanse-paralysis': {
+		id: BuffId['proc:10:cleanse-paralysis'],
 		name: 'Paralysis Cleanse',
 		stat: UnitStat.paralysisResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_PARALYSISBLK],
 	},
-	'proc:10:atk down': {
-		id: BuffId['proc:10:atk down'],
+	'proc:10:cleanse-atk down': {
+		id: BuffId['proc:10:cleanse-atk down'],
 		name: 'Attack Reduction Cleanse',
 		stat: UnitStat.atkDownResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_ATKDOWNBLK],
 	},
-	'proc:10:def down': {
-		id: BuffId['proc:10:def down'],
+	'proc:10:cleanse-def down': {
+		id: BuffId['proc:10:cleanse-def down'],
 		name: 'Defense Reduction Cleanse',
 		stat: UnitStat.defDownResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_DEFDOWNBLK],
 	},
-	'proc:10:rec down': {
-		id: BuffId['proc:10:rec down'],
+	'proc:10:cleanse-rec down': {
+		id: BuffId['proc:10:cleanse-rec down'],
 		name: 'Recovery Reduction Cleanse',
 		stat: UnitStat.recDownResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_RECDOWNBLK],
 	},
-	'proc:10:unknown': {
-		id: BuffId['proc:10:unknown'],
+	'proc:10:cleanse-unknown': {
+		id: BuffId['proc:10:cleanse-unknown'],
 		name: 'Unknown Ailment Cleanse',
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.BUFF_AILMENTBLK],
 	},
-	'proc:11:poison': {
-		id: BuffId['proc:11:poison'],
+	'proc:11:chance inflict-poison': {
+		id: BuffId['proc:11:chance inflict-poison'],
 		name: 'Poison Infliction',
 		stat: UnitStat.poisonInflict,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.DEBUFF_POISON],
 	},
-	'proc:11:weak': {
-		id: BuffId['proc:11:weak'],
+	'proc:11:chance inflict-weak': {
+		id: BuffId['proc:11:chance inflict-weak'],
 		name: 'Weak Infliction',
 		stat: UnitStat.weakInflict,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.DEBUFF_WEAK],
 	},
-	'proc:11:sick': {
-		id: BuffId['proc:11:sick'],
+	'proc:11:chance inflict-sick': {
+		id: BuffId['proc:11:chance inflict-sick'],
 		name: 'Sick Infliction',
 		stat: UnitStat.sickInflict,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.DEBUFF_SICK],
 	},
-	'proc:11:injury': {
-		id: BuffId['proc:11:injury'],
+	'proc:11:chance inflict-injury': {
+		id: BuffId['proc:11:chance inflict-injury'],
 		name: 'Injury Infliction',
 		stat: UnitStat.injuryInflict,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.DEBUFF_INJURY],
 	},
-	'proc:11:curse': {
-		id: BuffId['proc:11:curse'],
+	'proc:11:chance inflict-curse': {
+		id: BuffId['proc:11:chance inflict-curse'],
 		name: 'Curse Infliction',
 		stat: UnitStat.curseInflict,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.DEBUFF_CURSE],
 	},
-	'proc:11:paralysis': {
-		id: BuffId['proc:11:paralysis'],
+	'proc:11:chance inflict-paralysis': {
+		id: BuffId['proc:11:chance inflict-paralysis'],
 		name: 'Paralysis Infliction',
 		stat: UnitStat.paralysisInflict,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.DEBUFF_PARALYSIS],
 	},
-	'proc:11:atk down': {
-		id: BuffId['proc:11:atk down'],
+	'proc:11:chance inflict-atk down': {
+		id: BuffId['proc:11:chance inflict-atk down'],
 		name: 'Attack Reduction Infliction',
 		stat: UnitStat.atkDownInflict,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_ATKDOWN],
 	},
-	'proc:11:def down': {
-		id: BuffId['proc:11:def down'],
+	'proc:11:chance inflict-def down': {
+		id: BuffId['proc:11:chance inflict-def down'],
 		name: 'Defense Reduction Infliction',
 		stat: UnitStat.defDownInflict,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_DEFDOWN],
 	},
-	'proc:11:rec down': {
-		id: BuffId['proc:11:rec down'],
+	'proc:11:chance inflict-rec down': {
+		id: BuffId['proc:11:chance inflict-rec down'],
 		name: 'Recovery Reduction Infliction',
 		stat: UnitStat.recDownInflict,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_RECDOWN],
 	},
-	'proc:11:unknown': {
-		id: BuffId['proc:11:unknown'],
+	'proc:11:chance inflict-unknown': {
+		id: BuffId['proc:11:chance inflict-unknown'],
 		name: 'Unknown Ailment Infliction',
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.DEBUFF_AILMENT],
 	},
-	'proc:12': {
-		id: BuffId['proc:12'],
+	'proc:12:guaranteed revive': {
+		id: BuffId['proc:12:guaranteed revive'],
 		name: 'Instant Revive (Guaranteed)',
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_KOBLK],
 	},
-	'proc:13': {
-		id: BuffId['proc:13'],
+	'proc:13:random attack': {
+		id: BuffId['proc:13:random attack'],
 		name: 'Random Target Damage',
 		stackType: BuffStackType.Attack,
 		icons: () => [IconId.ATK_RT],
 	},
-	'proc:14': {
-		id: BuffId['proc:14'],
+	'proc:14:hp absorb attack': {
+		id: BuffId['proc:14:hp absorb attack'],
 		name: 'Lifesteal Damage',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_HPREC : IconId.ATK_AOE_HPREC],
 	},
-	'proc:16:fire': {
-		id: BuffId['proc:16:fire'],
+	'proc:16:mitigate-fire': {
+		id: BuffId['proc:16:mitigate-fire'],
 		name: 'Active Fire Damage Reduction',
 		stat: UnitStat.fireMitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_FIREDMGDOWN],
 	},
-	'proc:16:water': {
-		id: BuffId['proc:16:water'],
+	'proc:16:mitigate-water': {
+		id: BuffId['proc:16:mitigate-water'],
 		name: 'Active Water Damage Reduction',
 		stat: UnitStat.waterMitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_WATERDMGDOWN],
 	},
-	'proc:16:earth': {
-		id: BuffId['proc:16:earth'],
+	'proc:16:mitigate-earth': {
+		id: BuffId['proc:16:mitigate-earth'],
 		name: 'Active Earth Damage Reduction',
 		stat: UnitStat.earthMitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_EARTHDMGDOWN],
 	},
-	'proc:16:thunder': {
-		id: BuffId['proc:16:thunder'],
+	'proc:16:mitigate-thunder': {
+		id: BuffId['proc:16:mitigate-thunder'],
 		name: 'Active Thunder Damage Reduction',
 		stat: UnitStat.thunderMitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_THUNDERDMGDOWN],
 	},
-	'proc:16:light': {
-		id: BuffId['proc:16:light'],
+	'proc:16:mitigate-light': {
+		id: BuffId['proc:16:mitigate-light'],
 		name: 'Active Light Damage Reduction',
 		stat: UnitStat.lightMitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_LIGHTDMGDOWN],
 	},
-	'proc:16:dark': {
-		id: BuffId['proc:16:dark'],
+	'proc:16:mitigate-dark': {
+		id: BuffId['proc:16:mitigate-dark'],
 		name: 'Active Dark Damage Reduction',
 		stat: UnitStat.darkMitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_DARKDMGDOWN],
 	},
-	'proc:16:all': {
-		id: BuffId['proc:16:all'],
+	'proc:16:mitigate-all': {
+		id: BuffId['proc:16:mitigate-all'],
 		name: 'Active Elemental Damage Reduction (All Elements)',
 		stat: UnitStat.mitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ELEMENTDMGDOWN],
 	},
-	'proc:16:unknown': {
-		id: BuffId['proc:16:unknown'],
+	'proc:16:mitigate-unknown': {
+		id: BuffId['proc:16:mitigate-unknown'],
 		name: 'Active Elemental Damage Reduction (Unspecified Element)',
 		stat: UnitStat.mitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ELEMENTDMGDOWN],
 	},
-	'proc:17:poison': {
-		id: BuffId['proc:17:poison'],
+	'proc:17:resist-poison': {
+		id: BuffId['proc:17:resist-poison'],
 		name: 'Active Poison Resist',
 		stat: UnitStat.poisonResist,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_POISONBLK],
 	},
-	'proc:17:weak': {
-		id: BuffId['proc:17:weak'],
+	'proc:17:resist-weak': {
+		id: BuffId['proc:17:resist-weak'],
 		name: 'Active Weak Resist',
 		stat: UnitStat.weakResist,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_WEAKBLK],
 	},
-	'proc:17:sick': {
-		id: BuffId['proc:17:sick'],
+	'proc:17:resist-sick': {
+		id: BuffId['proc:17:resist-sick'],
 		name: 'Active Sick Resist',
 		stat: UnitStat.sickResist,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_SICKBLK],
 	},
-	'proc:17:injury': {
-		id: BuffId['proc:17:injury'],
+	'proc:17:resist-injury': {
+		id: BuffId['proc:17:resist-injury'],
 		name: 'Active Injury Resist',
 		stat: UnitStat.injuryResist,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_INJURYBLK],
 	},
-	'proc:17:curse': {
-		id: BuffId['proc:17:curse'],
+	'proc:17:resist-curse': {
+		id: BuffId['proc:17:resist-curse'],
 		name: 'Active Curse Resist',
 		stat: UnitStat.curseResist,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_CURSEBLK],
 	},
-	'proc:17:paralysis': {
-		id: BuffId['proc:17:paralysis'],
+	'proc:17:resist-paralysis': {
+		id: BuffId['proc:17:resist-paralysis'],
 		name: 'Active Paralysis Resist',
 		stat: UnitStat.paralysisResist,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_PARALYSISBLK],
 	},
-	'proc:18': {
-		id: BuffId['proc:18'],
+	'proc:18:mitigation': {
+		id: BuffId['proc:18:mitigation'],
 		name: 'Active Damage Reduction',
 		stat: UnitStat.mitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_DAMAGECUT],
 	},
-	'proc:19': {
-		id: BuffId['proc:19'],
+	'proc:19:gradual bc fill': {
+		id: BuffId['proc:19:gradual bc fill'],
 		name: 'Active Gradual BC Fill',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_BBREC],
 	},
-	'proc:20': {
-		id: BuffId['proc:20'],
+	'proc:20:bc fill on hit': {
+		id: BuffId['proc:20:bc fill on hit'],
 		name: 'Active BC Fill when attacked',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_DAMAGEBB],
 	},
-	'proc:22': {
-		id: BuffId['proc:22'],
+	'proc:22:defense ignore': {
+		id: BuffId['proc:22:defense ignore'],
 		name: 'Active Defense Ignore',
 		stat: UnitStat.defenseIgnore,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_IGNOREDEF],
 	},
-	'proc:23': {
-		id: BuffId['proc:23'],
+	'proc:23:spark damage': {
+		id: BuffId['proc:23:spark damage'],
 		name: 'Active Spark Damage Boost',
 		stat: UnitStat.sparkDamage,
 		stackType: BuffStackType.Active,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_SPARKDOWN : IconId.BUFF_SPARKUP],
 	},
-	'proc:24:atk': {
-		id: BuffId['proc:24:atk'],
+	'proc:24:converted-atk': {
+		id: BuffId['proc:24:converted-atk'],
 		name: 'Active Converted Attack Boost',
 		stat: UnitStat.atk,
 		stackType: BuffStackType.Active,
 		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_CONVERTATKDOWN : IconId.BUFF_CONVERTATKUP],
 	},
-	'proc:24:def': {
-		id: BuffId['proc:24:def'],
+	'proc:24:converted-def': {
+		id: BuffId['proc:24:converted-def'],
 		name: 'Active Converted Defense Boost',
 		stat: UnitStat.def,
 		stackType: BuffStackType.Active,
 		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_CONVERTDEFDOWN : IconId.BUFF_CONVERTDEFUP],
 	},
-	'proc:24:rec': {
-		id: BuffId['proc:24:rec'],
+	'proc:24:converted-rec': {
+		id: BuffId['proc:24:converted-rec'],
 		name: 'Active Converted Recovery Boost',
 		stat: UnitStat.rec,
 		stackType: BuffStackType.Active,
 		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_CONVERTRECDOWN : IconId.BUFF_CONVERTRECUP],
 	},
-	'proc:26': {
-		id: BuffId['proc:26'],
+	'proc:26:hit count boost': {
+		id: BuffId['proc:26:hit count boost'],
 		name: 'Active Hit Count Boost',
 		stat: UnitStat.hitCountModification,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_HITUP],
 	},
-	'proc:27': {
-		id: BuffId['proc:27'],
+	'proc:27:proportional attack': {
+		id: BuffId['proc:27:proportional attack'],
 		name: 'Proportional Damage',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_PROPORTIONAL : IconId.ATK_AOE_PROPORTIONAL],
 	},
-	'proc:28': {
-		id: BuffId['proc:28'],
+	'proc:28:fixed attack': {
+		id: BuffId['proc:28:fixed attack'],
 		name: 'Fixed Damage',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_FIXED : IconId.ATK_AOE_FIXED],
 	},
-	'proc:29': {
-		id: BuffId['proc:29'],
+	'proc:29:multi-element attack': {
+		id: BuffId['proc:29:multi-element attack'],
 		name: 'Multi-Element Damage',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_MULTIELEMENT : IconId.ATK_AOE_MULTIELEMENT],
 	},
-	'proc:30:fire': {
-		id: BuffId['proc:30:fire'],
+	'proc:30:add element-fire': {
+		id: BuffId['proc:30:add element-fire'],
 		name: 'Active Added Element to Attack (Fire)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDFIRE],
 	},
-	'proc:30:water': {
-		id: BuffId['proc:30:water'],
+	'proc:30:add element-water': {
+		id: BuffId['proc:30:add element-water'],
 		name: 'Active Added Element to Attack (Water)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDWATER],
 	},
-	'proc:30:earth': {
-		id: BuffId['proc:30:earth'],
+	'proc:30:add element-earth': {
+		id: BuffId['proc:30:add element-earth'],
 		name: 'Active Added Element to Attack (Earth)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDEARTH],
 	},
-	'proc:30:thunder': {
-		id: BuffId['proc:30:thunder'],
+	'proc:30:add element-thunder': {
+		id: BuffId['proc:30:add element-thunder'],
 		name: 'Active Added Element to Attack (Thunder)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDTHUNDER],
 	},
-	'proc:30:light': {
-		id: BuffId['proc:30:light'],
+	'proc:30:add element-light': {
+		id: BuffId['proc:30:add element-light'],
 		name: 'Active Added Element to Attack (Light)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDLIGHT],
 	},
-	'proc:30:dark': {
-		id: BuffId['proc:30:dark'],
+	'proc:30:add element-dark': {
+		id: BuffId['proc:30:add element-dark'],
 		name: 'Active Added Element to Attack (Dark)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDDARK],
 	},
-	'proc:30:unknown': {
-		id: BuffId['proc:30:unknown'],
+	'proc:30:add element-unknown': {
+		id: BuffId['proc:30:add element-unknown'],
 		name: 'Active Added Element to Attack (Unspecified Element)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDELEMENT],
 	},
-	'proc:31:flat': {
-		id: BuffId['proc:31:flat'],
+	'proc:31:bc fill-flat': {
+		id: BuffId['proc:31:bc fill-flat'],
 		name: 'Burst BC Fill (Flat Amount)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_BBREC],
 	},
-	'proc:31:percent': {
-		id: BuffId['proc:31:percent'],
+	'proc:31:bc fill-percent': {
+		id: BuffId['proc:31:bc fill-percent'],
 		name: 'Burst BC Fill (Percentage)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_BBREC],
 	},
-	'proc:32:fire': {
-		id: BuffId['proc:32:fire'],
+	'proc:32:element shift-fire': {
+		id: BuffId['proc:32:element shift-fire'],
 		name: 'Element Shift (Fire)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_SHIFTFIRE],
 	},
-	'proc:32:water': {
-		id: BuffId['proc:32:water'],
+	'proc:32:element shift-water': {
+		id: BuffId['proc:32:element shift-water'],
 		name: 'Element Shift (Water)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_SHIFTWATER],
 	},
-	'proc:32:earth': {
-		id: BuffId['proc:32:earth'],
+	'proc:32:element shift-earth': {
+		id: BuffId['proc:32:element shift-earth'],
 		name: 'Element Shift (Earth)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_SHIFTEARTH],
 	},
-	'proc:32:thunder': {
-		id: BuffId['proc:32:thunder'],
+	'proc:32:element shift-thunder': {
+		id: BuffId['proc:32:element shift-thunder'],
 		name: 'Element Shift (Thunder)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_SHIFTTHUNDER],
 	},
-	'proc:32:light': {
-		id: BuffId['proc:32:light'],
+	'proc:32:element shift-light': {
+		id: BuffId['proc:32:element shift-light'],
 		name: 'Element Shift (Light)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_SHIFTLIGHT],
 	},
-	'proc:32:dark': {
-		id: BuffId['proc:32:dark'],
+	'proc:32:element shift-dark': {
+		id: BuffId['proc:32:element shift-dark'],
 		name: 'Element Shift (Dark)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_SHIFTDARK],
 	},
-	'proc:32:unknown': {
-		id: BuffId['proc:32:unknown'],
+	'proc:32:element shift-unknown': {
+		id: BuffId['proc:32:element shift-unknown'],
 		name: 'Element Shift (Unspecified Element)',
 		stat: UnitStat.elementModification,
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_SHIFTELEMENT],
 	},
-	'proc:33': {
-		id: BuffId['proc:33'],
+	'proc:33:buff wipe': {
+		id: BuffId['proc:33:buff wipe'],
 		name: 'Buff Removal',
 		stat: UnitStat.buffStabilityModification,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_REMOVEBUFF],
 	},
-	'proc:34:flat': {
-		id: BuffId['proc:34:flat'],
+	'proc:34:bc drain-flat': {
+		id: BuffId['proc:34:bc drain-flat'],
 		name: 'Burst BB Gauge Drain (Flat Amount)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_BBFILLDOWN],
 	},
-	'proc:34:percent': {
-		id: BuffId['proc:34:percent'],
+	'proc:34:bc drain-percent': {
+		id: BuffId['proc:34:bc drain-percent'],
 		name: 'Burst BB Gauge Drain (Percentage)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_BBFILLDOWN],
 	},
-	'proc:36': {
-		id: BuffId['proc:36'],
+	'proc:36:ls lock': {
+		id: BuffId['proc:36:ls lock'],
 		name: 'Active Leader Skill Lock',
 		stat: UnitStat.buffStabilityModification,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_DISABLELS],
 	},
-	'proc:37': {
-		id: BuffId['proc:37'],
+	'proc:37:summon': {
+		id: BuffId['proc:37:summon'],
 		name: 'Summon Unit',
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_SUMMONUNIT],
 	},
-	'proc:38:poison': {
-		id: BuffId['proc:38:poison'],
+	'proc:38:cleanse-poison': {
+		id: BuffId['proc:38:cleanse-poison'],
 		name: 'Poison Cleanse',
 		stat: UnitStat.poisonResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_POISONBLK],
 	},
-	'proc:38:weak': {
-		id: BuffId['proc:38:weak'],
+	'proc:38:cleanse-weak': {
+		id: BuffId['proc:38:cleanse-weak'],
 		name: 'Weak Cleanse',
 		stat: UnitStat.weakResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_WEAKBLK],
 	},
-	'proc:38:sick': {
-		id: BuffId['proc:38:sick'],
+	'proc:38:cleanse-sick': {
+		id: BuffId['proc:38:cleanse-sick'],
 		name: 'Sick Cleanse',
 		stat: UnitStat.sickResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_SICKBLK],
 	},
-	'proc:38:injury': {
-		id: BuffId['proc:38:injury'],
+	'proc:38:cleanse-injury': {
+		id: BuffId['proc:38:cleanse-injury'],
 		name: 'Injury Cleanse',
 		stat: UnitStat.injuryResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_INJURYBLK],
 	},
-	'proc:38:curse': {
-		id: BuffId['proc:38:curse'],
+	'proc:38:cleanse-curse': {
+		id: BuffId['proc:38:cleanse-curse'],
 		name: 'Curse Cleanse',
 		stat: UnitStat.curseResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_CURSEBLK],
 	},
-	'proc:38:paralysis': {
-		id: BuffId['proc:38:paralysis'],
+	'proc:38:cleanse-paralysis': {
+		id: BuffId['proc:38:cleanse-paralysis'],
 		name: 'Paralysis Cleanse',
 		stat: UnitStat.paralysisResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_PARALYSISBLK],
 	},
-	'proc:38:atk down': {
-		id: BuffId['proc:38:atk down'],
+	'proc:38:cleanse-atk down': {
+		id: BuffId['proc:38:cleanse-atk down'],
 		name: 'Attack Reduction Cleanse',
 		stat: UnitStat.atkDownResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_ATKDOWNBLK],
 	},
-	'proc:38:def down': {
-		id: BuffId['proc:38:def down'],
+	'proc:38:cleanse-def down': {
+		id: BuffId['proc:38:cleanse-def down'],
 		name: 'Defense Reduction Cleanse',
 		stat: UnitStat.defDownResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_DEFDOWNBLK],
 	},
-	'proc:38:rec down': {
-		id: BuffId['proc:38:rec down'],
+	'proc:38:cleanse-rec down': {
+		id: BuffId['proc:38:cleanse-rec down'],
 		name: 'Recovery Reduction Cleanse',
 		stat: UnitStat.recDownResist,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_RECDOWNBLK],
 	},
-	'proc:38:unknown': {
-		id: BuffId['proc:38:unknown'],
+	'proc:38:cleanse-unknown': {
+		id: BuffId['proc:38:cleanse-unknown'],
 		name: 'Unknown Ailment Cleanse',
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.BUFF_AILMENTBLK],
 	},
-	'proc:39:fire': {
-		id: BuffId['proc:39:fire'],
+	'proc:39:mitigate-fire': {
+		id: BuffId['proc:39:mitigate-fire'],
 		name: 'Active Fire Damage Reduction',
 		stat: UnitStat.fireMitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_FIREDMGDOWN],
 	},
-	'proc:39:water': {
-		id: BuffId['proc:39:water'],
+	'proc:39:mitigate-water': {
+		id: BuffId['proc:39:mitigate-water'],
 		name: 'Active Water Damage Reduction',
 		stat: UnitStat.waterMitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_WATERDMGDOWN],
 	},
-	'proc:39:earth': {
-		id: BuffId['proc:39:earth'],
+	'proc:39:mitigate-earth': {
+		id: BuffId['proc:39:mitigate-earth'],
 		name: 'Active Earth Damage Reduction',
 		stat: UnitStat.earthMitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_EARTHDMGDOWN],
 	},
-	'proc:39:thunder': {
-		id: BuffId['proc:39:thunder'],
+	'proc:39:mitigate-thunder': {
+		id: BuffId['proc:39:mitigate-thunder'],
 		name: 'Active Thunder Damage Reduction',
 		stat: UnitStat.thunderMitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_THUNDERDMGDOWN],
 	},
-	'proc:39:light': {
-		id: BuffId['proc:39:light'],
+	'proc:39:mitigate-light': {
+		id: BuffId['proc:39:mitigate-light'],
 		name: 'Active Light Damage Reduction',
 		stat: UnitStat.lightMitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_LIGHTDMGDOWN],
 	},
-	'proc:39:dark': {
-		id: BuffId['proc:39:dark'],
+	'proc:39:mitigate-dark': {
+		id: BuffId['proc:39:mitigate-dark'],
 		name: 'Active Dark Damage Reduction',
 		stat: UnitStat.darkMitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_DARKDMGDOWN],
 	},
-	'proc:39:unknown': {
-		id: BuffId['proc:39:unknown'],
+	'proc:39:mitigate-unknown': {
+		id: BuffId['proc:39:mitigate-unknown'],
 		name: 'Active Elemental Damage Reduction (Unspecified Element)',
 		stat: UnitStat.mitigation,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ELEMENTDMGDOWN],
 	},
-	'proc:40:poison': {
-		id: BuffId['proc:40:poison'],
+	'proc:40:add ailment-poison': {
+		id: BuffId['proc:40:add ailment-poison'],
 		name: 'Active Poison Infliction Added to Attack',
 		stat: UnitStat.poisonInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDPOISON],
 	},
-	'proc:40:weak': {
-		id: BuffId['proc:40:weak'],
+	'proc:40:add ailment-weak': {
+		id: BuffId['proc:40:add ailment-weak'],
 		name: 'Active Weak Infliction Added to Attack',
 		stat: UnitStat.weakInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDWEAK],
 	},
-	'proc:40:sick': {
-		id: BuffId['proc:40:sick'],
+	'proc:40:add ailment-sick': {
+		id: BuffId['proc:40:add ailment-sick'],
 		name: 'Active Sick Infliction Added to Attack',
 		stat: UnitStat.sickInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDSICK],
 	},
-	'proc:40:injury': {
-		id: BuffId['proc:40:injury'],
+	'proc:40:add ailment-injury': {
+		id: BuffId['proc:40:add ailment-injury'],
 		name: 'Active Injury Infliction Added to Attack',
 		stat: UnitStat.injuryInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDINJURY],
 	},
-	'proc:40:curse': {
-		id: BuffId['proc:40:curse'],
+	'proc:40:add ailment-curse': {
+		id: BuffId['proc:40:add ailment-curse'],
 		name: 'Active Curse Infliction Added to Attack',
 		stat: UnitStat.curseInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDCURSE],
 	},
-	'proc:40:paralysis': {
-		id: BuffId['proc:40:paralysis'],
+	'proc:40:add ailment-paralysis': {
+		id: BuffId['proc:40:add ailment-paralysis'],
 		name: 'Active Paralysis Infliction Added to Attack',
 		stat: UnitStat.paralysisInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDPARA],
 	},
-	'proc:40:atk down': {
-		id: BuffId['proc:40:atk down'],
+	'proc:40:add ailment-atk down': {
+		id: BuffId['proc:40:add ailment-atk down'],
 		name: 'Active Attack Reduction Infliction Added to Attack',
 		stat: UnitStat.atkDownInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDATKDOWN],
 	},
-	'proc:40:def down': {
-		id: BuffId['proc:40:def down'],
+	'proc:40:add ailment-def down': {
+		id: BuffId['proc:40:add ailment-def down'],
 		name: 'Active Defense Reduction Infliction Added to Attack',
 		stat: UnitStat.defDownInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDDEFDOWN],
 	},
-	'proc:40:rec down': {
-		id: BuffId['proc:40:rec down'],
+	'proc:40:add ailment-rec down': {
+		id: BuffId['proc:40:add ailment-rec down'],
 		name: 'Active Recovery Reduction Infliction Added to Attack',
 		stat: UnitStat.recDownInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDRECDOWN],
 	},
-	'proc:40:unknown': {
-		id: BuffId['proc:40:unknown'],
+	'proc:40:add ailment-unknown': {
+		id: BuffId['proc:40:add ailment-unknown'],
 		name: 'Active Unknown Ailment Infliction Added to Attack',
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.BUFF_ADDAILMENT],
 	},
-	'proc:42': {
-		id: BuffId['proc:42'],
+	'proc:42:sacrificial attack': {
+		id: BuffId['proc:42:sacrificial attack'],
 		name: 'Sacrificial Damage',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_SACRIFICIAL : IconId.ATK_AOE_SACRIFICIAL],
 	},
-	'proc:43': {
-		id: BuffId['proc:43'],
+	'proc:43:burst od fill': {
+		id: BuffId['proc:43:burst od fill'],
 		name: 'Burst OD Gauge Fill (Percentage)',
 		stat: UnitStat.odGauge,
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_OVERDRIVEUP],
 	},
-	'proc:44': {
-		id: BuffId['proc:44'],
+	'proc:44:damage over time': {
+		id: BuffId['proc:44:damage over time'],
 		name: 'Active Damage over Time',
 		stat: UnitStat.damageOverTime,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_TURNDMG],
 	},
-	'proc:45:bb': {
-		id: BuffId['proc:45:bb'],
+	'proc:45:attack boost-bb': {
+		id: BuffId['proc:45:attack boost-bb'],
 		name: 'Active BB ATK Boost',
 		stat: UnitStat.bbAtk,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_BBATKUP],
 	},
-	'proc:45:sbb': {
-		id: BuffId['proc:45:sbb'],
+	'proc:45:attack boost-sbb': {
+		id: BuffId['proc:45:attack boost-sbb'],
 		name: 'Active SBB ATK Boost',
 		stat: UnitStat.bbAtk,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_SBBATKUP],
 	},
-	'proc:45:ubb': {
-		id: BuffId['proc:45:ubb'],
+	'proc:45:attack boost-ubb': {
+		id: BuffId['proc:45:attack boost-ubb'],
 		name: 'Active UBB ATK Boost',
 		stat: UnitStat.bbAtk,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_UBBATKUP],
 	},
-	'proc:46': {
-		id: BuffId['proc:46'],
+	'proc:46:non-lethal proportional attack': {
+		id: BuffId['proc:46:non-lethal proportional attack'],
 		name: 'Non-Lethal Proportional Damage',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_PROPORTIONAL : IconId.ATK_AOE_PROPORTIONAL],
 	},
-	'proc:47': {
-		id: BuffId['proc:47'],
+	'proc:47:hp scaled attack': {
+		id: BuffId['proc:47:hp scaled attack'],
 		name: 'HP Scaled Damage',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_HPSCALED : IconId.ATK_AOE_HPSCALED],
 	},
-	'proc:48:base': {
-		id: BuffId['proc:48:base'],
+	'proc:48:piercing attack-base': {
+		id: BuffId['proc:48:piercing attack-base'],
 		name: 'Piercing Proportional Damage (Base HP)',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_PIERCING_PROPORTIONAL : IconId.ATK_AOE_PIERCING_PROPORTIONAL],
 	},
-	'proc:48:current': {
-		id: BuffId['proc:48:current'],
+	'proc:48:piercing attack-current': {
+		id: BuffId['proc:48:piercing attack-current'],
 		name: 'Piercing Proportional Damage (Current HP)',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_PIERCING_PROPORTIONAL : IconId.ATK_AOE_PIERCING_PROPORTIONAL],
 	},
-	'proc:48:fixed': {
-		id: BuffId['proc:48:fixed'],
+	'proc:48:piercing attack-fixed': {
+		id: BuffId['proc:48:piercing attack-fixed'],
 		name: 'Piercing Fixed Damage',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_PIERCING_FIXED : IconId.ATK_AOE_PIERCING_FIXED],
 	},
-	'proc:48:unknown': {
-		id: BuffId['proc:48:unknown'],
+	'proc:48:piercing attack-unknown': {
+		id: BuffId['proc:48:piercing attack-unknown'],
 		name: 'Unknown Damage',
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST : IconId.ATK_AOE],
 	},
-	'proc:49': {
-		id: BuffId['proc:49'],
+	'proc:49:chance instant death': {
+		id: BuffId['proc:49:chance instant death'],
 		name: 'Instant Death (Chance)',
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_KO],
 	},
-	'proc:50': {
-		id: BuffId['proc:50'],
+	'proc:50:chance damage reflect': {
+		id: BuffId['proc:50:chance damage reflect'],
 		name: 'Active Damage Reflect (Chance)',
 		stat: UnitStat.damageReflect,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_COUNTERDAMAGE],
 	},
-	'proc:51:atk down': {
-		id: BuffId['proc:51:atk down'],
+	'proc:51:add to attack-atk down': {
+		id: BuffId['proc:51:add to attack-atk down'],
 		name: 'Active Attack Reduction Infliction Added to Attack',
 		stat: UnitStat.atkDownInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDATKDOWN],
 	},
-	'proc:51:def down': {
-		id: BuffId['proc:51:def down'],
+	'proc:51:add to attack-def down': {
+		id: BuffId['proc:51:add to attack-def down'],
 		name: 'Active Defense Reduction Infliction Added to Attack',
 		stat: UnitStat.defDownInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDDEFDOWN],
 	},
-	'proc:51:rec down': {
-		id: BuffId['proc:51:rec down'],
+	'proc:51:add to attack-rec down': {
+		id: BuffId['proc:51:add to attack-rec down'],
 		name: 'Active Recovery Reduction Infliction Added to Attack',
 		stat: UnitStat.recDownInflict,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ADDRECDOWN],
 	},
-	'proc:52': {
-		id: BuffId['proc:52'],
+	'proc:52:bc efficacy': {
+		id: BuffId['proc:52:bc efficacy'],
 		name: 'Active BC Efficacy',
 		stat: UnitStat.bcEfficacy,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_BBFILL],
 	},
-	'proc:53:poison': {
-		id: BuffId['proc:53:poison'],
+	'proc:53:inflict on hit-poison': {
+		id: BuffId['proc:53:inflict on hit-poison'],
 		name: 'Active Poison Counter',
 		stat: UnitStat.poisonCounter,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_POISONCOUNTER],
 	},
-	'proc:53:weak': {
-		id: BuffId['proc:53:weak'],
+	'proc:53:inflict on hit-weak': {
+		id: BuffId['proc:53:inflict on hit-weak'],
 		name: 'Active Weak Counter',
 		stat: UnitStat.weakCounter,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_WEAKCOUNTER],
 	},
-	'proc:53:sick': {
-		id: BuffId['proc:53:sick'],
+	'proc:53:inflict on hit-sick': {
+		id: BuffId['proc:53:inflict on hit-sick'],
 		name: 'Active Sick Counter',
 		stat: UnitStat.sickCounter,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_SICKCOUNTER],
 	},
-	'proc:53:injury': {
-		id: BuffId['proc:53:injury'],
+	'proc:53:inflict on hit-injury': {
+		id: BuffId['proc:53:inflict on hit-injury'],
 		name: 'Active Injury Counter',
 		stat: UnitStat.injuryCounter,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_INJCONTER],
 	},
-	'proc:53:curse': {
-		id: BuffId['proc:53:curse'],
+	'proc:53:inflict on hit-curse': {
+		id: BuffId['proc:53:inflict on hit-curse'],
 		name: 'Active Curse Counter',
 		stat: UnitStat.curseCounter,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_CURSECOUNTER],
 	},
-	'proc:53:paralysis': {
-		id: BuffId['proc:53:paralysis'],
+	'proc:53:inflict on hit-paralysis': {
+		id: BuffId['proc:53:inflict on hit-paralysis'],
 		name: 'Active Paralysis Counter',
 		stat: UnitStat.paralysisCounter,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_PARALYCOUNTER],
 	},
-	'proc:54': {
-		id: BuffId['proc:54'],
+	'proc:54:critical damage boost': {
+		id: BuffId['proc:54:critical damage boost'],
 		name: 'Active Critical Damage Boost',
 		stat: UnitStat.criticalDamage,
 		stackType: BuffStackType.Active,
@@ -2088,8 +2088,8 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
 	},
-	'conditional:12:ko resistance': {
-		id: BuffId['conditional:12:ko resistance'],
+	'conditional:12:guaranteed ko resistance': {
+		id: BuffId['conditional:12:guaranteed ko resistance'],
 		name: 'Guaranteed KO Resistance',
 		stat: UnitStat.koResistance,
 		stackType: BuffStackType.Singleton,

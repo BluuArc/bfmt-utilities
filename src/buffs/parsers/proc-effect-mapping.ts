@@ -297,7 +297,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
 			results.push({
-				id: 'proc:1',
+				id: 'proc:1:attack',
 				originalId,
 				sources,
 				effectDelay,
@@ -352,7 +352,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (params.healHigh !== 0 || params.healLow !== 0) {
 			results.push({
-				id: 'proc:2',
+				id: 'proc:2:burst heal',
 				originalId,
 				sources,
 				effectDelay,
@@ -406,7 +406,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hasAnyHealValues) {
 			results.push({
-				id: 'proc:3',
+				id: 'proc:3:gradual heal',
 				originalId,
 				sources,
 				effectDelay,
@@ -422,7 +422,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: ['proc:3'],
+				buffs: ['proc:3:gradual heal'],
 				duration: params.turnDuration as number,
 				targetData,
 			}));
@@ -464,7 +464,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (flatFill !== 0) {
 			results.push({
-				id: 'proc:4:flat',
+				id: 'proc:4:bc fill-flat',
 				originalId,
 				sources,
 				effectDelay,
@@ -475,7 +475,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		if (percentFill !== 0) {
 			results.push({
-				id: 'proc:4:percent',
+				id: 'proc:4:bc fill-percent',
 				originalId,
 				sources,
 				effectDelay,
@@ -550,7 +550,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				const value = params[statKey];
 				if (value !== 0) {
 					const buffEntry: IBuff = {
-						id: `proc:5:${statKey}`,
+						id: `proc:5:regular or elemental-${statKey}`,
 						originalId,
 						sources,
 						effectDelay,
@@ -570,7 +570,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: coreStatProperties.map((statKey) => `proc:5:${statKey}`),
+				buffs: coreStatProperties.map((statKey) => `proc:5:regular or elemental-${statKey}`),
 				duration: params.turnDuration as number,
 				targetData,
 			}));
@@ -622,7 +622,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				const value = params[key];
 				if (value !== 0) {
 					results.push({
-						id: `proc:6:${key}`,
+						id: `proc:6:drop boost-${key}`,
 						originalId,
 						sources,
 						effectDelay,
@@ -636,7 +636,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: dropRateProperties.map((key) => `proc:6:${key}`),
+				buffs: dropRateProperties.map((key) => `proc:6:drop boost-${key}`),
 				duration: params.turnDuration as number,
 				targetData,
 			}));
@@ -667,7 +667,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		}
 
 		const results: IBuff[] = [{
-			id: 'proc:7',
+			id: 'proc:7:guaranteed ko resistance',
 			originalId,
 			sources,
 			effectDelay,
@@ -711,7 +711,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (flatHpBoost !== 0) {
 			results.push({
-				id: 'proc:8:flat',
+				id: 'proc:8:max hp boost-flat',
 				originalId,
 				sources,
 				effectDelay,
@@ -722,7 +722,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		if (percentHpBoost !== 0) {
 			results.push({
-				id: 'proc:8:percent',
+				id: 'proc:8:max hp boost-percent',
 				originalId,
 				sources,
 				effectDelay,
@@ -832,7 +832,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				hasAnyValues = true;
 
 				const buffEntry: IBuff = {
-					id: `proc:9:${stat}`,
+					id: `proc:9:regular or elemental reduction-${stat}`,
 					originalId,
 					sources,
 					effectDelay,
@@ -854,7 +854,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: coreStatProperties.map((statKey) => `proc:9:${statKey}`),
+				buffs: coreStatProperties.map((statKey) => `proc:9:regular or elemental reduction-${statKey}`),
 				duration: params.turnDuration,
 				targetData,
 			}));
@@ -901,7 +901,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		}
 
 		const results: IBuff[] = curedAilments.map((ailment) => ({
-			id: `proc:10:${ailment}`,
+			id: `proc:10:cleanse-${ailment}`,
 			originalId,
 			sources,
 			effectDelay,
@@ -970,7 +970,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		}
 
 		const results: IBuff[] = inflictedAilments.map(({ ailment, chance }) => ({
-			id: `proc:11:${ailment}`,
+			id: `proc:11:chance inflict-${ailment}`,
 			originalId,
 			sources,
 			effectDelay,
@@ -1003,7 +1003,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		}
 
 		const results: IBuff[] = [{
-			id: 'proc:12',
+			id: 'proc:12:guaranteed revive',
 			originalId,
 			sources,
 			effectDelay,
@@ -1062,7 +1062,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
 			results.push({
-				id: 'proc:13',
+				id: 'proc:13:random attack',
 				originalId,
 				sources,
 				effectDelay,
@@ -1129,7 +1129,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
 			results.push({
-				id: 'proc:14',
+				id: 'proc:14:hp absorb attack',
 				originalId,
 				sources,
 				effectDelay,
@@ -1180,7 +1180,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (mitigation !== 0) {
 			results.push({
-				id: `proc:16:${element}`,
+				id: `proc:16:mitigate-${element}`,
 				originalId,
 				sources,
 				effectDelay,
@@ -1192,7 +1192,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: Object.values(ELEMENT_MAPPING).concat([BuffConditionElement.Unknown]).map((e) => `proc:16:${e}`),
+				buffs: Object.values(ELEMENT_MAPPING).concat([BuffConditionElement.Unknown]).map((e) => `proc:16:mitigate-${e}`),
 				duration: turnDuration,
 				targetData,
 			}));
@@ -1245,7 +1245,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(resistances[ailment]);
 			if (value !== 0) {
 				results.push({
-					id: `proc:17:${ailment}`,
+					id: `proc:17:resist-${ailment}`,
 					originalId,
 					sources,
 					effectDelay,
@@ -1260,7 +1260,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: AILMENTS_ORDER.map((a) => `proc:17:${a}`),
+				buffs: AILMENTS_ORDER.map((a) => `proc:17:resist-${a}`),
 				duration: turnDuration,
 				targetData,
 			}));
@@ -1283,7 +1283,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			injectionContext,
 			effectValueKey: 'dmg% reduction',
 			effectTurnDurationKey: 'dmg% reduction turns (36)',
-			buffId: 'proc:18',
+			buffId: 'proc:18:mitigation',
 			originalId: '18',
 		});
 	});
@@ -1296,7 +1296,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			effectValueKey: 'increase bb gauge gradual',
 			effectTurnDurationKey: 'increase bb gauge gradual turns (37)',
 			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
-			buffId: 'proc:19',
+			buffId: 'proc:19:gradual bc fill',
 			originalId: '19',
 		});
 	});
@@ -1330,7 +1330,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hasAnyFillValues) {
 			results.push({
-				id: 'proc:20',
+				id: 'proc:20:bc fill on hit',
 				originalId,
 				sources,
 				effectDelay,
@@ -1349,7 +1349,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: ['proc:20'],
+				buffs: ['proc:20:bc fill on hit'],
 				duration: turnDuration,
 				targetData,
 			}));
@@ -1372,7 +1372,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			injectionContext,
 			effectValueKey: 'defense% ignore',
 			effectTurnDurationKey: 'defense% ignore turns (39)',
-			buffId: 'proc:22',
+			buffId: 'proc:22:defense ignore',
 			originalId: '22',
 		});
 	});
@@ -1397,7 +1397,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (value !== 0) {
 			results.push({
-				id: 'proc:23',
+				id: 'proc:23:spark damage',
 				originalId,
 				sources,
 				effectDelay,
@@ -1409,7 +1409,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: ['proc:23'],
+				buffs: ['proc:23:spark damage'],
 				duration: turnDuration,
 				targetData,
 			}));
@@ -1484,7 +1484,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec']);
 			if (value !== 0) {
 				results.push({
-					id: `proc:24:${stat}`,
+					id: `proc:24:converted-${stat}`,
 					originalId,
 					sources,
 					effectDelay,
@@ -1502,7 +1502,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: coreStatProperties.map((statKey) => `proc:24:${statKey}`),
+				buffs: coreStatProperties.map((statKey) => `proc:24:converted-${statKey}`),
 				duration: turnDuration,
 				targetData,
 			}));
@@ -1540,7 +1540,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hitIncreasePerHit !== 0 || extraHitDamage !== 0) {
 			results.push({
-				id: 'proc:26',
+				id: 'proc:26:hit count boost',
 				originalId,
 				sources,
 				effectDelay,
@@ -1555,7 +1555,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: ['proc:26'],
+				buffs: ['proc:26:hit count boost'],
 				duration: turnDuration,
 				targetData,
 			}));
@@ -1616,7 +1616,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
 			results.push({
-				id: 'proc:27',
+				id: 'proc:27:proportional attack',
 				originalId,
 				sources,
 				effectDelay,
@@ -1656,7 +1656,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hits !== 0 || distribution !== 0 || value !== 0) {
 			const entry: IBuff = {
-				id: 'proc:28',
+				id: 'proc:28:fixed attack',
 				originalId,
 				sources,
 				effectDelay,
@@ -1733,7 +1733,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hits !== 0 || distribution !== 0 || attackElements.length > 0 || Object.keys(filteredValue).length > 0) {
 			const entry: IBuff = {
-				id: 'proc:29',
+				id: 'proc:29:multi-element attack',
 				originalId,
 				sources,
 				effectDelay,
@@ -1791,7 +1791,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			elements.forEach((inputElement) => {
 				const sanitizedElement = validElements.includes(inputElement) ? inputElement : BuffConditionElement.Unknown;
 				results.push({
-					id: `proc:30:${sanitizedElement}`,
+					id: `proc:30:add element-${sanitizedElement}`,
 					originalId,
 					sources,
 					effectDelay,
@@ -1803,7 +1803,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: validElements.concat([BuffConditionElement.Unknown]).map((e) => `proc:30:${e}`),
+				buffs: validElements.concat([BuffConditionElement.Unknown]).map((e) => `proc:30:add element-${e}`),
 				duration: turnDuration,
 				targetData,
 			}));
@@ -1844,7 +1844,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (flatFill !== 0) {
 			results.push({
-				id: 'proc:31:flat',
+				id: 'proc:31:bc fill-flat',
 				originalId,
 				sources,
 				effectDelay,
@@ -1855,7 +1855,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		if (percentFill !== 0) {
 			results.push({
-				id: 'proc:31:percent',
+				id: 'proc:31:bc fill-percent',
 				originalId,
 				sources,
 				effectDelay,
@@ -1902,7 +1902,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (element) {
 			results.push({
-				id: `proc:32:${element}`,
+				id: `proc:32:element shift-${element}`,
 				originalId,
 				sources,
 				effectDelay,
@@ -1938,7 +1938,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (chance !== 0) {
 			results.push({
-				id: 'proc:33',
+				id: 'proc:33:buff wipe',
 				originalId,
 				sources,
 				effectDelay,
@@ -1986,7 +1986,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (flatDrainLow !== 0 || flatDrainHigh !== 0) {
 			results.push({
-				id: 'proc:34:flat',
+				id: 'proc:34:bc drain-flat',
 				originalId,
 				sources,
 				effectDelay,
@@ -2001,7 +2001,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		if (percentDrainLow !== 0 || percentDrainHigh !== 0) {
 			results.push({
-				id: 'proc:34:percent',
+				id: 'proc:34:bc drain-percent',
 				originalId,
 				sources,
 				effectDelay,
@@ -2031,7 +2031,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			injectionContext,
 			effectValueKey: 'invalidate LS chance%',
 			effectTurnDurationKey: 'invalidate LS turns (60)',
-			buffId: 'proc:36',
+			buffId: 'proc:36:ls lock',
 			originalId: '36',
 		});
 	});
@@ -2047,7 +2047,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (summonGroup || summonId) {
 			results.push({
-				id: 'proc:37',
+				id: 'proc:37:summon',
 				originalId,
 				sources,
 				effectDelay,
@@ -2106,7 +2106,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		}
 
 		const results: IBuff[] = curedAilments.map((ailment) => ({
-			id: `proc:38:${ailment}`,
+			id: `proc:38:cleanse-${ailment}`,
 			originalId,
 			sources,
 			effectDelay,
@@ -2168,7 +2168,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		if (elements.length > 0) {
 			elements.forEach((element) => {
 				results.push({
-					id: `proc:39:${element}`,
+					id: `proc:39:mitigate-${element}`,
 					originalId,
 					sources,
 					effectDelay,
@@ -2179,7 +2179,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			});
 		} else if (mitigation !== 0) {
 			results.push({
-				id: 'proc:39:unknown',
+				id: 'proc:39:mitigate-unknown',
 				originalId,
 				sources,
 				effectDelay,
@@ -2191,7 +2191,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: Object.values(ELEMENT_MAPPING).concat([BuffConditionElement.Unknown]).map((e) => `proc:39:${e}`),
+				buffs: Object.values(ELEMENT_MAPPING).concat([BuffConditionElement.Unknown]).map((e) => `proc:39:mitigate-${e}`),
 				duration: turnDuration,
 				targetData,
 			}));
@@ -2258,7 +2258,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		}
 
 		const results: IBuff[] = inflictedAilments.map(({ ailment, chance }) => ({
-			id: `proc:40:${ailment}`,
+			id: `proc:40:add ailment-${ailment}`,
 			originalId,
 			sources,
 			effectDelay,
@@ -2272,7 +2272,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				originalId,
 				sources,
 				duration: turnDuration,
-				buffs: Object.values(AILMENT_MAPPING).concat([Ailment.Unknown]).map((a) => `proc:40:${a}`),
+				buffs: Object.values(AILMENT_MAPPING).concat([Ailment.Unknown]).map((a) => `proc:40:add ailment-${a}`),
 				targetData,
 			}));
 		}
@@ -2310,7 +2310,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
 			results.push({
-				id: 'proc:42',
+				id: 'proc:42:sacrificial attack',
 				originalId,
 				sources,
 				effectDelay,
@@ -2351,7 +2351,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (overdriveFill !== 0) {
 			results.push({
-				id: 'proc:43',
+				id: 'proc:43:burst od fill',
 				originalId,
 				sources,
 				effectDelay,
@@ -2410,7 +2410,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (Object.keys(filteredDamageParams).length > 0) {
 			results.push({
-				id: 'proc:44',
+				id: 'proc:44:damage over time',
 				originalId,
 				sources,
 				effectDelay,
@@ -2426,7 +2426,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: ['proc:44'],
+				buffs: ['proc:44:damage over time'],
 				duration: turnDuration,
 				targetData,
 			}));
@@ -2468,7 +2468,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (bb !== 0) {
 			results.push({
-				id: 'proc:45:bb',
+				id: 'proc:45:attack boost-bb',
 				originalId,
 				sources,
 				effectDelay,
@@ -2480,7 +2480,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		if (sbb !== 0) {
 			results.push({
-				id: 'proc:45:sbb',
+				id: 'proc:45:attack boost-sbb',
 				originalId,
 				sources,
 				effectDelay,
@@ -2492,7 +2492,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		if (ubb !== 0) {
 			results.push({
-				id: 'proc:45:ubb',
+				id: 'proc:45:attack boost-ubb',
 				originalId,
 				sources,
 				effectDelay,
@@ -2506,7 +2506,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: ['bb', 'sbb', 'ubb'].map((type) => `proc:45:${type}`),
+				buffs: ['bb', 'sbb', 'ubb'].map((type) => `proc:45:attack boost-${type}`),
 				duration: turnDuration,
 				targetData,
 			}));
@@ -2535,7 +2535,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hpLow !== 0 || hpHigh !== 0 || hits !== 0 || distribution !== 0) {
 			const entry: IBuff = {
-				id: 'proc:46',
+				id: 'proc:46:non-lethal proportional attack',
 				originalId,
 				sources,
 				effectDelay,
@@ -2613,7 +2613,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
 			results.push({
-				id: 'proc:47',
+				id: 'proc:47:hp scaled attack',
 				originalId,
 				sources,
 				effectDelay,
@@ -2658,7 +2658,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		 */
 		const results: IBuff[] = [];
 		const createAttackOfType = (type: string, valueProperties: { [key: string]: number }): IBuff => ({
-			id: `proc:48:${type}`,
+			id: `proc:48:piercing attack-${type}`,
 			originalId,
 			sources,
 			effectDelay,
@@ -2712,7 +2712,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (chance !== 0) {
 			results.push({
-				id: 'proc:49',
+				id: 'proc:49:chance instant death',
 				originalId,
 				sources,
 				effectDelay,
@@ -2746,7 +2746,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hasAnyRangeValues) {
 			results.push({
-				id: 'proc:50',
+				id: 'proc:50:chance damage reflect',
 				originalId,
 				sources,
 				effectDelay,
@@ -2762,7 +2762,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: ['proc:50'],
+				buffs: ['proc:50:chance damage reflect'],
 				duration: turnDuration,
 				targetData,
 			}));
@@ -2824,7 +2824,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		}
 
 		const results: IBuff[] = inflictedReductions.map(({ type, reductionValue, chance }) => ({
-			id: `proc:51:${type}`,
+			id: `proc:51:add to attack-${type}`,
 			originalId,
 			sources,
 			effectDelay,
@@ -2844,7 +2844,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				originalId,
 				sources,
 				value: {
-					buffs: [Ailment.AttackReduction, Ailment.DefenseReduction, Ailment.RecoveryReduction].map((a) => `proc:51:${a}`),
+					buffs: [Ailment.AttackReduction, Ailment.DefenseReduction, Ailment.RecoveryReduction].map((a) => `proc:51:add to attack-${a}`),
 					duration: turnDuration,
 					debuffTurnDuration: debuffTurnDuration,
 				},
@@ -2869,7 +2869,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			injectionContext,
 			effectValueKey: 'bb gauge fill rate% buff',
 			effectTurnDurationKey: 'buff turns (77)',
-			buffId: 'proc:52',
+			buffId: 'proc:52:bc efficacy',
 			originalId: '52',
 		});
 	});
@@ -2911,7 +2911,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(inflictionChances[ailment]);
 			if (value !== 0) {
 				results.push({
-					id: `proc:53:${ailment}`,
+					id: `proc:53:inflict on hit-${ailment}`,
 					originalId,
 					sources,
 					effectDelay,
@@ -2926,7 +2926,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: AILMENTS_ORDER.map((a) => `proc:53:${a}`),
+				buffs: AILMENTS_ORDER.map((a) => `proc:53:inflict on hit-${a}`),
 				duration: turnDuration,
 				targetData,
 			}));
@@ -2950,7 +2950,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			effectValueKey: 'crit multiplier%',
 			effectTurnDurationKey: 'buff turns (84)',
 			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) * 100,
-			buffId: 'proc:54',
+			buffId: 'proc:54:critical damage boost',
 			originalId: '54',
 		});
 	});

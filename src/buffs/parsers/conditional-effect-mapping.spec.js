@@ -130,7 +130,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 
 		describe('buff 12', () => {
 			const expectedOriginalId = '12';
-			const expectedBuffId = 'conditional:12:ko resistance';
+			const expectedBuffId = 'conditional:12:guaranteed ko resistance';
 
 			beforeEach(() => {
 				mappingFunction = getConditionalEffectToBuffMapping().get(expectedOriginalId);

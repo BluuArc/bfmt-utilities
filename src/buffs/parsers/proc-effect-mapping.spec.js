@@ -466,7 +466,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 1', () => {
 			const PARAMS_ORDER = ['atk%', 'flatAtk', 'crit%', 'bc%', 'hc%', 'dmg%'];
-			const expectedBuffId = 'proc:1';
+			const expectedBuffId = 'proc:1:attack';
 			const expectedOriginalId = '1';
 
 			beforeEach(() => {
@@ -620,7 +620,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 2', () => {
-			const expectedBuffId = 'proc:2';
+			const expectedBuffId = 'proc:2:burst heal';
 			const expectedOriginalId = '2';
 
 			const arbitraryRecX = 120;
@@ -794,7 +794,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 3', () => {
-			const expectedBuffId = 'proc:3';
+			const expectedBuffId = 'proc:3:gradual heal';
 			const expectedOriginalId = '3';
 
 			const arbitraryRecParam = 80;
@@ -985,8 +985,8 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 4', () => {
-			const expectedFlatFillId = 'proc:4:flat';
-			const expectedPercentFillId = 'proc:4:percent';
+			const expectedFlatFillId = 'proc:4:bc fill-flat';
+			const expectedPercentFillId = 'proc:4:bc fill-percent';
 			const FLAT_FILL_KEY = 'bb bc fill';
 			const PERCENT_FILL_KEY = 'bb bc fill%';
 			const expectedOriginalId = '4';
@@ -1170,7 +1170,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `proc:5:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `proc:5:regular or elemental-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = `0,1,2,3,4,${arbitraryTurnDuration}`;
@@ -1178,7 +1178,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `proc:5:${stat}`,
+						id: `proc:5:regular or elemental-${stat}`,
 						duration: arbitraryTurnDuration,
 						value: +splitParams[index + 1],
 					});
@@ -1194,7 +1194,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `proc:5:${stat}`,
+						id: `proc:5:regular or elemental-${stat}`,
 						duration: arbitraryTurnDuration,
 						value: +splitParams[index + 1],
 						conditions: {
@@ -1226,7 +1226,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const expectedParamValues = [6, 7, 8, 9];
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `proc:5:${stat}`,
+						id: `proc:5:regular or elemental-${stat}`,
 						duration: arbitraryTurnDuration,
 						value: expectedParamValues[index],
 						conditions: {
@@ -1245,7 +1245,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						const params = [elementKey, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0'), arbitraryTurnDuration].join(',');
 						const effect = createArbitraryBaseEffect({ params });
 						const expectedResult = [baseBuffFactory({
-							id: `proc:5:${statCase}`,
+							id: `proc:5:regular or elemental-${statCase}`,
 							duration: arbitraryTurnDuration,
 							value: 123,
 						})];
@@ -1264,7 +1264,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const params = ['123', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0'), arbitraryTurnDuration].join(',');
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:5:${statCase}`,
+						id: `proc:5:regular or elemental-${statCase}`,
 						duration: arbitraryTurnDuration,
 						value: 123,
 						conditions: {
@@ -1283,7 +1283,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 					});
 					const expectedResult = [baseBuffFactory({
-						id: `proc:5:${statCase}`,
+						id: `proc:5:regular or elemental-${statCase}`,
 						duration: arbitraryTurnDuration,
 						value: 456,
 					})];
@@ -1300,7 +1300,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:5:atk',
+					id: 'proc:5:regular or elemental-atk',
 					duration: arbitraryTurnDuration,
 					value: 1,
 				})];
@@ -1315,7 +1315,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:5:def',
+					id: 'proc:5:regular or elemental-def',
 					duration: arbitraryTurnDuration,
 					value: 1,
 					conditions: {
@@ -1330,7 +1330,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			describe('when all stats are 0', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,${duration}`,
-					buffIdsInTurnDurationBuff: STAT_PARAMS_ORDER.map((stat) => `proc:5:${stat}`),
+					buffIdsInTurnDurationBuff: STAT_PARAMS_ORDER.map((stat) => `proc:5:regular or elemental-${stat}`),
 				});
 			});
 
@@ -1340,7 +1340,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:5:crit',
+						id: 'proc:5:regular or elemental-crit',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: 1,
@@ -1378,24 +1378,24 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(DROP_PARAMS_ORDER.map((p) => `proc:6:${p}`));
+			testValidBuffIds(DROP_PARAMS_ORDER.map((p) => `proc:6:drop boost-${p}`));
 
 			it('uses the params property when it exists', () => {
 				const params = `1,2,3,${arbitraryTurnDuration}`;
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:6:bc',
+						id: 'proc:6:drop boost-bc',
 						duration: arbitraryTurnDuration,
 						value: 1,
 					}),
 					baseBuffFactory({
-						id: 'proc:6:hc',
+						id: 'proc:6:drop boost-hc',
 						duration: arbitraryTurnDuration,
 						value: 2,
 					}),
 					baseBuffFactory({
-						id: 'proc:6:item',
+						id: 'proc:6:drop boost-item',
 						duration: arbitraryTurnDuration,
 						value: 3,
 					}),
@@ -1410,17 +1410,17 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:6:bc',
+						id: 'proc:6:drop boost-bc',
 						duration: arbitraryTurnDuration,
 						value: 1,
 					}),
 					baseBuffFactory({
-						id: 'proc:6:hc',
+						id: 'proc:6:drop boost-hc',
 						duration: arbitraryTurnDuration,
 						value: 2,
 					}),
 					baseBuffFactory({
-						id: 'proc:6:item',
+						id: 'proc:6:drop boost-item',
 						duration: arbitraryTurnDuration,
 						value: 3,
 					}),
@@ -1447,17 +1447,17 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:6:bc',
+						id: 'proc:6:drop boost-bc',
 						duration: arbitraryTurnDuration,
 						value: 4,
 					}),
 					baseBuffFactory({
-						id: 'proc:6:hc',
+						id: 'proc:6:drop boost-hc',
 						duration: arbitraryTurnDuration,
 						value: 5,
 					}),
 					baseBuffFactory({
-						id: 'proc:6:item',
+						id: 'proc:6:drop boost-item',
 						duration: arbitraryTurnDuration,
 						value: 6,
 					}),
@@ -1476,17 +1476,17 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:6:bc',
+						id: 'proc:6:drop boost-bc',
 						duration: arbitraryTurnDuration,
 						value: 7,
 					}),
 					baseBuffFactory({
-						id: 'proc:6:hc',
+						id: 'proc:6:drop boost-hc',
 						duration: arbitraryTurnDuration,
 						value: 8,
 					}),
 					baseBuffFactory({
-						id: 'proc:6:item',
+						id: 'proc:6:drop boost-item',
 						duration: arbitraryTurnDuration,
 						value: 9,
 					}),
@@ -1504,7 +1504,7 @@ describe('getProcEffectToBuffMapping method', () => {
 							const params = [...DROP_PARAMS_ORDER.map((param) => param === resultKey ? '123' : '0'), arbitraryTurnDuration].join(',');
 							const effect = createArbitraryBaseEffect({ params });
 							const expectedResult = [baseBuffFactory({
-								id: `proc:6:${resultKey}`,
+								id: `proc:6:drop boost-${resultKey}`,
 								duration: arbitraryTurnDuration,
 								value: 123,
 							})];
@@ -1519,7 +1519,7 @@ describe('getProcEffectToBuffMapping method', () => {
 								[effectKeyMapping.turnDuration]: arbitraryTurnDuration,
 							});
 							const expectedResult = [baseBuffFactory({
-								id: `proc:6:${resultKey}`,
+								id: `proc:6:drop boost-${resultKey}`,
 								duration: arbitraryTurnDuration,
 								value: 123,
 							})];
@@ -1538,7 +1538,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			describe('when all rates are 0', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,${duration}`,
-					buffIdsInTurnDurationBuff: DROP_PARAMS_ORDER.map((p) => `proc:6:${p}`),
+					buffIdsInTurnDurationBuff: DROP_PARAMS_ORDER.map((p) => `proc:6:drop boost-${p}`),
 				});
 			});
 
@@ -1548,7 +1548,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:6:item',
+						id: 'proc:6:drop boost-item',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: 1,
@@ -1572,7 +1572,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 7', () => {
 			const AI_EFFECT_KEY = 'angel idol recover hp%';
-			const expectedBuffId = 'proc:7';
+			const expectedBuffId = 'proc:7:guaranteed ko resistance';
 			const expectedOriginalId = '7';
 
 			beforeEach(() => {
@@ -1685,8 +1685,8 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 8', () => {
-			const expectedFlatFillId = 'proc:8:flat';
-			const expectedPercentFillId = 'proc:8:percent';
+			const expectedFlatFillId = 'proc:8:max hp boost-flat';
+			const expectedPercentFillId = 'proc:8:max hp boost-percent';
 			const FLAT_FILL_KEY = 'max hp increase';
 			const PERCENT_FILL_KEY = 'max hp% increase';
 			const expectedOriginalId = '8';
@@ -1877,14 +1877,14 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `proc:9:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `proc:9:regular or elemental reduction-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = `0,1,2,3,2,4,5,${arbitraryTurnDuration}`;
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:9:atk',
+						id: 'proc:9:regular or elemental reduction-atk',
 						duration: arbitraryTurnDuration,
 						value: {
 							value: 2,
@@ -1892,7 +1892,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						},
 					}),
 					baseBuffFactory({
-						id: 'proc:9:def',
+						id: 'proc:9:regular or elemental reduction-def',
 						duration: arbitraryTurnDuration,
 						value: {
 							value: 4,
@@ -1910,7 +1910,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:9:def',
+						id: 'proc:9:regular or elemental reduction-def',
 						duration: arbitraryTurnDuration,
 						value: {
 							value: 3,
@@ -1921,7 +1921,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						},
 					}),
 					baseBuffFactory({
-						id: 'proc:9:rec',
+						id: 'proc:9:regular or elemental reduction-rec',
 						duration: arbitraryTurnDuration,
 						value: {
 							value: 5,
@@ -1966,7 +1966,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const expectedParamValues2 = [10, 11, 12];
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `proc:9:${stat}`,
+						id: `proc:9:regular or elemental reduction-${stat}`,
 						duration: arbitraryTurnDuration,
 						value: {
 							value: expectedParamValues1[index],
@@ -1978,7 +1978,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					});
 				}).concat(STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `proc:9:${stat}`,
+						id: `proc:9:regular or elemental reduction-${stat}`,
 						duration: arbitraryTurnDuration,
 						value: {
 							value: expectedParamValues2[index],
@@ -2000,7 +2000,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						const params = [elementKey, STAT_PARAM_MAPPING[statCase], 123, 456, 0, 0, 0, arbitraryTurnDuration].join(',');
 						const effect = createArbitraryBaseEffect({ params });
 						const expectedResult = [baseBuffFactory({
-							id: `proc:9:${statCase}`,
+							id: `proc:9:regular or elemental reduction-${statCase}`,
 							duration: arbitraryTurnDuration,
 							value: {
 								value: 123,
@@ -2022,7 +2022,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const params = ['123', STAT_PARAM_MAPPING[statCase], 123, 456, 0, 0, 0, arbitraryTurnDuration].join(',');
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:9:${statCase}`,
+						id: `proc:9:regular or elemental reduction-${statCase}`,
 						duration: arbitraryTurnDuration,
 						value: {
 							value: 123,
@@ -2048,7 +2048,7 @@ describe('getProcEffectToBuffMapping method', () => {
 							[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 						});
 						const expectedResult = [baseBuffFactory({
-							id: `proc:9:${statCase}`,
+							id: `proc:9:regular or elemental reduction-${statCase}`,
 							duration: arbitraryTurnDuration,
 							value: {
 								value: 456,
@@ -2072,7 +2072,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:9:atk',
+					id: 'proc:9:regular or elemental reduction-atk',
 					duration: arbitraryTurnDuration,
 					value: {
 						value: 1,
@@ -2093,7 +2093,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:9:def',
+					id: 'proc:9:regular or elemental reduction-def',
 					duration: arbitraryTurnDuration,
 					value: {
 						value: 1,
@@ -2113,7 +2113,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = STAT_PARAMS_ORDER.map((stat) => {
 					return baseBuffFactory({
-						id: `proc:9:${stat}`,
+						id: `proc:9:regular or elemental reduction-${stat}`,
 						duration: arbitraryTurnDuration,
 						value: {
 							value: 456,
@@ -2130,7 +2130,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const params = [0, 123, 456, 789, 0, 0, 0, arbitraryTurnDuration].join(',');
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:9:unknown',
+					id: 'proc:9:regular or elemental reduction-unknown',
 					duration: arbitraryTurnDuration,
 					value: {
 						value: 456,
@@ -2145,7 +2145,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			describe('when all stats are 0', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,0,${duration}`,
-					buffIdsInTurnDurationBuff: STAT_PARAMS_ORDER.map((stat) => `proc:9:${stat}`),
+					buffIdsInTurnDurationBuff: STAT_PARAMS_ORDER.map((stat) => `proc:9:regular or elemental reduction-${stat}`),
 				});
 			});
 
@@ -2155,7 +2155,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:9:atk',
+						id: 'proc:9:regular or elemental reduction-atk',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: {
@@ -2189,7 +2189,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(Object.values(AILMENT_MAPPING).concat(['unknown']).map((a) => `proc:10:${a}`));
+			testValidBuffIds(Object.values(AILMENT_MAPPING).concat(['unknown']).map((a) => `proc:10:cleanse-${a}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6,7,8';
@@ -2197,7 +2197,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const expectedResult = Object.values(AILMENT_MAPPING)
 					.slice(0, 8)
 					.map((ailment) => baseBuffFactory({
-						id: `proc:10:${ailment}`,
+						id: `proc:10:cleanse-${ailment}`,
 						value: true,
 					}));
 
@@ -2211,7 +2211,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const expectedResult = Object.values(AILMENT_MAPPING)
 					.slice(0, 8)
 					.map((ailment) => baseBuffFactory({
-						id: `proc:10:${ailment}`,
+						id: `proc:10:cleanse-${ailment}`,
 						value: true,
 					})).concat([baseBuffFactory({
 						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
@@ -2231,7 +2231,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					'remove rec down': true,
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:10:rec down',
+					id: 'proc:10:cleanse-rec down',
 					value: true,
 				})];
 
@@ -2244,7 +2244,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const params = [ailmentKey, '0,0,0,0,0,0,0'].join(',');
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:10:${ailmentName}`,
+						id: `proc:10:cleanse-${ailmentName}`,
 						value: true,
 					})];
 
@@ -2255,7 +2255,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				it(`returns an entry for ${ailmentName} when it is present in the effect and no params property does not exist`, () => {
 					const effect = createArbitraryBaseEffect({ [`remove ${ailmentName}`]: true });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:10:${ailmentName}`,
+						id: `proc:10:cleanse-${ailmentName}`,
 						value: true,
 					})];
 
@@ -2272,7 +2272,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect(valuesInEffect);
 				const expectedResult = Object.values(AILMENT_MAPPING)
 					.map((ailment) => baseBuffFactory({
-						id: `proc:10:${ailment}`,
+						id: `proc:10:cleanse-${ailment}`,
 						value: true,
 					}));
 
@@ -2284,7 +2284,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const params = '123,0,0,0,0,0,0,0';
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:10:unknown',
+					id: 'proc:10:cleanse-unknown',
 					value: true,
 				})];
 
@@ -2295,7 +2295,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			it('parses "remove all status ailments" property in effect as unknown when params property does not exist', () => {
 				const effect = createArbitraryBaseEffect({ 'remove all status ailments': true });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:10:unknown',
+					id: 'proc:10:cleanse-unknown',
 					value: true,
 				})];
 
@@ -2320,7 +2320,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:10:poison',
+						id: 'proc:10:cleanse-poison',
 						sources: arbitrarySourceValue,
 						value: true,
 						...arbitraryTargetData,
@@ -2361,13 +2361,13 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(Object.values(AILMENT_MAPPING).concat(['unknown']).map((a) => `proc:11:${a}`));
+			testValidBuffIds(Object.values(AILMENT_MAPPING).concat(['unknown']).map((a) => `proc:11:chance inflict-${a}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2';
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:11:poison',
+					id: 'proc:11:chance inflict-poison',
 					value: 2,
 				})];
 
@@ -2380,11 +2380,11 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:11:sick',
+						id: 'proc:11:chance inflict-sick',
 						value: 4,
 					}),
 					baseBuffFactory({
-						id: 'proc:11:curse',
+						id: 'proc:11:chance inflict-curse',
 						value: 6,
 					}),
 					baseBuffFactory({
@@ -2404,11 +2404,11 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:11:injury',
+						id: 'proc:11:chance inflict-injury',
 						value: 5,
 					}),
 					baseBuffFactory({
-						id: 'proc:11:paralysis',
+						id: 'proc:11:chance inflict-paralysis',
 						value: 7,
 					}),
 				];
@@ -2422,7 +2422,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					'paralysis%': 123,
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:11:paralysis',
+					id: 'proc:11:chance inflict-paralysis',
 					value: 123,
 				})];
 
@@ -2435,7 +2435,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const params = `${ailmentKey},123`;
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:11:${ailmentName}`,
+						id: `proc:11:chance inflict-${ailmentName}`,
 						value: 123,
 					})];
 
@@ -2446,7 +2446,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				it(`returns an entry for ${ailmentName} when it is present in the effect and no params property does not exist`, () => {
 					const effect = createArbitraryBaseEffect({ [AILMENT_EFFECT_KEY_MAPPING[ailmentName]]: 456 });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:11:${ailmentName}`,
+						id: `proc:11:chance inflict-${ailmentName}`,
 						value: 456,
 					})];
 
@@ -2463,7 +2463,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect(valuesInEffect);
 				const expectedResult = Object.values(AILMENT_MAPPING)
 					.map((ailment, index) => baseBuffFactory({
-						id: `proc:11:${ailment}`,
+						id: `proc:11:chance inflict-${ailment}`,
 						value: index + 1,
 					}));
 
@@ -2475,7 +2475,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const params = '123,456';
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:11:unknown',
+					id: 'proc:11:chance inflict-unknown',
 					value: 456,
 				})];
 
@@ -2487,7 +2487,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const params = '0,123';
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:11:unknown',
+					id: 'proc:11:chance inflict-unknown',
 					value: 123,
 				})];
 
@@ -2507,7 +2507,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:11:poison',
+						id: 'proc:11:chance inflict-poison',
 						sources: arbitrarySourceValue,
 						value: 2,
 						...arbitraryTargetData,
@@ -2529,7 +2529,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 12', () => {
-			const expectedBuffId = 'proc:12';
+			const expectedBuffId = 'proc:12:guaranteed revive';
 			const expectedOriginalId = '12';
 
 			beforeEach(() => {
@@ -2623,7 +2623,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 13', () => {
 			const PARAMS_ORDER = ['atk%', 'flatAtk', 'crit%', 'bc%', 'hc%', 'hits'];
-			const expectedBuffId = 'proc:13';
+			const expectedBuffId = 'proc:13:random attack';
 			const expectedOriginalId = '13';
 			const expectedTargetArea = 'random';
 
@@ -2788,7 +2788,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 14', () => {
 			const PARAMS_ORDER = ['atk%', 'flatAtk', 'crit%', 'bc%', 'hc%', 'dmg%', 'drainLow%', 'drainHigh%'];
-			const expectedBuffId = 'proc:14';
+			const expectedBuffId = 'proc:14:hp absorb attack';
 			const expectedOriginalId = '14';
 
 			beforeEach(() => {
@@ -2957,13 +2957,13 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:16:${element}`));
+			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:16:mitigate-${element}`));
 
 			it('uses the params property when it exists', () => {
 				const params = `0,1,${arbitraryTurnDuration}`;
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:16:all',
+					id: 'proc:16:mitigate-all',
 					duration: arbitraryTurnDuration,
 					value: 1,
 				})];
@@ -2977,7 +2977,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:16:fire',
+						id: 'proc:16:mitigate-fire',
 						duration: arbitraryTurnDuration,
 						value: 2,
 					}),
@@ -3001,7 +3001,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:16:fire',
+					id: 'proc:16:mitigate-fire',
 					duration: arbitraryTurnDuration,
 					value: 3,
 				})];
@@ -3015,7 +3015,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const params = `${elementKey},123,${arbitraryTurnDuration}`;
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:16:${elementValue}`,
+						id: `proc:16:mitigate-${elementValue}`,
 						duration: arbitraryTurnDuration,
 						value: 123,
 					})];
@@ -3030,7 +3030,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 					});
 					const expectedResult = [baseBuffFactory({
-						id: `proc:16:${elementValue}`,
+						id: `proc:16:mitigate-${elementValue}`,
 						duration: arbitraryTurnDuration,
 						value: 456,
 					})];
@@ -3044,7 +3044,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const params = `1234,123,${arbitraryTurnDuration}`;
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:16:unknown',
+					id: 'proc:16:mitigate-unknown',
 					duration: arbitraryTurnDuration,
 					value: 123,
 				})];
@@ -3059,7 +3059,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:16:unknown',
+					id: 'proc:16:mitigate-unknown',
 					duration: arbitraryTurnDuration,
 					value: 456,
 				})];
@@ -3071,7 +3071,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			describe('when no mitigation value is given', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,${duration}`,
-					buffIdsInTurnDurationBuff: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:16:${stat}`),
+					buffIdsInTurnDurationBuff: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:16:mitigate-${stat}`),
 				});
 
 				it('returns a turn modification buff when turn duration is non-zero and params property does not exist', () => {
@@ -3082,7 +3082,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const expectedResult = [baseBuffFactory({
 						id: BuffId.TURN_DURATION_MODIFICATION,
 						value: {
-							buffs: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:16:${stat}`),
+							buffs: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:16:mitigate-${stat}`),
 							duration: arbitraryTurnDuration,
 						},
 					}, [EFFECT_DELAY_BUFF_PROP])];
@@ -3098,7 +3098,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:16:all',
+						id: 'proc:16:mitigate-all',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: 1,
@@ -3131,7 +3131,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(AILMENTS_ORDER.map((ailment) => `proc:17:${ailment}`));
+			testValidBuffIds(AILMENTS_ORDER.map((ailment) => `proc:17:resist-${ailment}`));
 
 			it('uses the params property when it exists', () => {
 				const params = `1,2,3,4,5,6,${arbitraryTurnDuration}`;
@@ -3139,7 +3139,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
 					return baseBuffFactory({
-						id: `proc:17:${ailment}`,
+						id: `proc:17:resist-${ailment}`,
 						duration: arbitraryTurnDuration,
 						value: +splitParams[index],
 					});
@@ -3155,7 +3155,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
 					return baseBuffFactory({
-						id: `proc:17:${ailment}`,
+						id: `proc:17:resist-${ailment}`,
 						duration: arbitraryTurnDuration,
 						value: +splitParams[index],
 					});
@@ -3185,7 +3185,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const expectedParamValues = [7, 8, 9, 10, 11, 12];
 				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
 					return baseBuffFactory({
-						id: `proc:17:${ailment}`,
+						id: `proc:17:resist-${ailment}`,
 						duration: arbitraryTurnDuration,
 						value: expectedParamValues[index],
 					});
@@ -3200,7 +3200,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const params = AILMENTS_ORDER.map((ailment) => ailment === ailmentCase ? '123' : '0').concat([arbitraryTurnDuration]).join(',');
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:17:${ailmentCase}`,
+						id: `proc:17:resist-${ailmentCase}`,
 						duration: arbitraryTurnDuration,
 						value: 123,
 					})];
@@ -3216,7 +3216,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 					});
 					const expectedResult = [baseBuffFactory({
-						id: `proc:17:${ailmentCase}`,
+						id: `proc:17:resist-${ailmentCase}`,
 						duration: arbitraryTurnDuration,
 						value: 123,
 					})];
@@ -3229,7 +3229,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			describe('when all resistances are 0', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,${duration}`,
-					buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((ailment) => `proc:17:${ailment}`),
+					buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((ailment) => `proc:17:resist-${ailment}`),
 				});
 			});
 
@@ -3239,7 +3239,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:17:paralysis',
+						id: 'proc:17:resist-paralysis',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: 1,
@@ -3264,7 +3264,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		describe('proc 18', () => {
 			testProcWithSingleNumericalParameterAndTurnDuration({
 				expectedOriginalId: '18',
-				expectedBuffId: 'proc:18',
+				expectedBuffId: 'proc:18:mitigation',
 				effectValueKey: 'dmg% reduction',
 				effectTurnDurationKey: 'dmg% reduction turns (36)',
 			});
@@ -3273,7 +3273,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		describe('proc 19', () => {
 			testProcWithSingleNumericalParameterAndTurnDuration({
 				expectedOriginalId: '19',
-				expectedBuffId: 'proc:19',
+				expectedBuffId: 'proc:19:gradual bc fill',
 				effectValueKey: 'increase bb gauge gradual',
 				effectTurnDurationKey: 'increase bb gauge gradual turns (37)',
 				getExpectedValueFromParam: (param) => +param / 100,
@@ -3283,7 +3283,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		describe('proc 20', () => {
 			const EFFECT_TURN_DURATION_KEY = 'bc fill when attacked turns (38)';
 
-			const expectedBuffId = 'proc:20';
+			const expectedBuffId = 'proc:20:bc fill on hit';
 			const expectedOriginalId = '20';
 
 			beforeEach(() => {
@@ -3491,7 +3491,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		describe('proc 22', () => {
 			testProcWithSingleNumericalParameterAndTurnDuration({
 				expectedOriginalId: '22',
-				expectedBuffId: 'proc:22',
+				expectedBuffId: 'proc:22:defense ignore',
 				effectValueKey: 'defense% ignore',
 				effectTurnDurationKey: 'defense% ignore turns (39)',
 			});
@@ -3500,7 +3500,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		describe('proc 23', () => {
 			const effectValueKey = 'spark dmg% buff (40)';
 			const effectTurnDurationKey = DEFAULT_TURN_DURATION_KEY;
-			const expectedBuffId = 'proc:23';
+			const expectedBuffId = 'proc:23:spark damage';
 			const expectedOriginalId = '23';
 
 			beforeEach(() => {
@@ -3666,7 +3666,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `proc:24:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `proc:24:converted-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = `1,2,3,4,${arbitraryTurnDuration}`;
@@ -3674,7 +3674,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `proc:24:${stat}`,
+						id: `proc:24:converted-${stat}`,
 						duration: arbitraryTurnDuration,
 						value: {
 							convertedStat: 'atk',
@@ -3693,7 +3693,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `proc:24:${stat}`,
+						id: `proc:24:converted-${stat}`,
 						duration: arbitraryTurnDuration,
 						value: {
 							convertedStat: 'def',
@@ -3724,7 +3724,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const expectedParamValues = [4, 5, 6];
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `proc:24:${stat}`,
+						id: `proc:24:converted-${stat}`,
 						duration: arbitraryTurnDuration,
 						value: {
 							value: expectedParamValues[index],
@@ -3743,7 +3743,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						const params = [convertedStatKey, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0'), arbitraryTurnDuration].join(',');
 						const effect = createArbitraryBaseEffect({ params });
 						const expectedResult = [baseBuffFactory({
-							id: `proc:24:${statCase}`,
+							id: `proc:24:converted-${statCase}`,
 							duration: arbitraryTurnDuration,
 							value: {
 								convertedStat: convertedStatValue,
@@ -3764,7 +3764,7 @@ describe('getProcEffectToBuffMapping method', () => {
 							[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 						});
 						const expectedResult = [baseBuffFactory({
-							id: `proc:24:${statCase}`,
+							id: `proc:24:converted-${statCase}`,
 							duration: arbitraryTurnDuration,
 							value: {
 								convertedStat: convertedStatValue,
@@ -3781,7 +3781,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const params = ['123', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0'), arbitraryTurnDuration].join(',');
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:24:${statCase}`,
+						id: `proc:24:converted-${statCase}`,
 						duration: arbitraryTurnDuration,
 						value: {
 							convertedStat: 'unknown',
@@ -3800,7 +3800,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 					});
 					const expectedResult = [baseBuffFactory({
-						id: `proc:24:${statCase}`,
+						id: `proc:24:converted-${statCase}`,
 						duration: arbitraryTurnDuration,
 						value: {
 							convertedStat: 'unknown',
@@ -3819,7 +3819,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:24:def',
+					id: 'proc:24:converted-def',
 					duration: arbitraryTurnDuration,
 					value: {
 						convertedStat: 'unknown',
@@ -3834,7 +3834,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			describe('when all stats are 0', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,${duration}`,
-					buffIdsInTurnDurationBuff: STAT_PARAMS_ORDER.map((stat) => `proc:24:${stat}`),
+					buffIdsInTurnDurationBuff: STAT_PARAMS_ORDER.map((stat) => `proc:24:converted-${stat}`),
 				});
 			});
 
@@ -3844,7 +3844,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:24:rec',
+						id: 'proc:24:converted-rec',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: {
@@ -3870,7 +3870,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 26', () => {
-			const expectedBuffId = 'proc:26';
+			const expectedBuffId = 'proc:26:hit count boost';
 			const expectedOriginalId = '26';
 			const hitIncreaseEffectKey = 'hit increase/hit';
 			const extraHitDamageEffectKey = 'extra hits dmg%';
@@ -4086,7 +4086,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 27', () => {
 			const PARAMS_ORDER = ['hpDamageLow%', 'hpDamageHigh%', 'hpDamageChance%', 'atk%', 'flatAtk', 'crit%', 'bc%', 'hc%', 'dmg%'];
-			const expectedBuffId = 'proc:27';
+			const expectedBuffId = 'proc:27:proportional attack';
 			const expectedOriginalId = '27';
 
 			beforeEach(() => {
@@ -4244,7 +4244,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 28', () => {
-			const expectedBuffId = 'proc:28';
+			const expectedBuffId = 'proc:28:fixed attack';
 			const expectedOriginalId = '28';
 
 			beforeEach(() => {
@@ -4357,7 +4357,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 29', () => {
 			const PARAMS_ORDER = ['atk%', 'flatAtk', 'crit%', 'bc%', 'hc%', 'dmg%'];
-			const expectedBuffId = 'proc:29';
+			const expectedBuffId = 'proc:29:multi-element attack';
 			const expectedOriginalId = '29';
 
 			beforeEach(() => {
@@ -4576,14 +4576,14 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(validElements.concat(['unknown']).map((element) => `proc:30:${element}`));
+			testValidBuffIds(validElements.concat(['unknown']).map((element) => `proc:30:add element-${element}`));
 
 			it('uses the params property when it exists', () => {
 				const params = `1,2,3,4,5,6,${arbitraryTurnDuration}`;
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = validElements.map((element) => {
 					return baseBuffFactory({
-						id: `proc:30:${element}`,
+						id: `proc:30:add element-${element}`,
 						duration: arbitraryTurnDuration,
 					});
 				});
@@ -4597,7 +4597,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = validElements.map((element) => {
 					return baseBuffFactory({
-						id: `proc:30:${element}`,
+						id: `proc:30:add element-${element}`,
 						duration: arbitraryTurnDuration,
 					});
 				}).concat([baseBuffFactory({
@@ -4621,7 +4621,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 				const expectedResult = validElements.map((element) => {
 					return baseBuffFactory({
-						id: `proc:30:${element}`,
+						id: `proc:30:add element-${element}`,
 						duration: arbitraryTurnDuration,
 					});
 				});
@@ -4637,7 +4637,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						const params = `${elementKey},0,0,0,0,0,${arbitraryTurnDuration}`;
 						const effect = createArbitraryBaseEffect({ params });
 						const expectedResult = [baseBuffFactory({
-							id: `proc:30:${elementValue}`,
+							id: `proc:30:add element-${elementValue}`,
 							duration: arbitraryTurnDuration,
 						})];
 
@@ -4652,7 +4652,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						});
 
 						const expectedResult = [baseBuffFactory({
-							id: `proc:30:${elementValue}`,
+							id: `proc:30:add element-${elementValue}`,
 							duration: arbitraryTurnDuration,
 						})];
 
@@ -4667,11 +4667,11 @@ describe('getProcEffectToBuffMapping method', () => {
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [
 						baseBuffFactory({
-							id: 'proc:30:unknown',
+							id: 'proc:30:add element-unknown',
 							duration: arbitraryTurnDuration,
 						}),
 						baseBuffFactory({
-							id: 'proc:30:unknown',
+							id: 'proc:30:add element-unknown',
 							duration: arbitraryTurnDuration,
 						}),
 					];
@@ -4687,11 +4687,11 @@ describe('getProcEffectToBuffMapping method', () => {
 					});
 					const expectedResult = [
 						baseBuffFactory({
-							id: 'proc:30:unknown',
+							id: 'proc:30:add element-unknown',
 							duration: arbitraryTurnDuration,
 						}),
 						baseBuffFactory({
-							id: 'proc:30:unknown',
+							id: 'proc:30:add element-unknown',
 							duration: arbitraryTurnDuration,
 						}),
 					];
@@ -4707,7 +4707,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					});
 					const expectedResult = [
 						baseBuffFactory({
-							id: 'proc:30:unknown',
+							id: 'proc:30:add element-unknown',
 							duration: arbitraryTurnDuration,
 						}),
 					];
@@ -4727,7 +4727,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			describe('when no elements are given', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,${duration}`,
-					buffIdsInTurnDurationBuff: validElements.concat(['unknown']).map((e) => `proc:30:${e}`),
+					buffIdsInTurnDurationBuff: validElements.concat(['unknown']).map((e) => `proc:30:add element-${e}`),
 				});
 			});
 
@@ -4737,7 +4737,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:30:fire',
+						id: 'proc:30:add element-fire',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						...arbitraryTargetData,
@@ -4759,8 +4759,8 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 31', () => {
-			const expectedFlatFillId = 'proc:31:flat';
-			const expectedPercentFillId = 'proc:31:percent';
+			const expectedFlatFillId = 'proc:31:bc fill-flat';
+			const expectedPercentFillId = 'proc:31:bc fill-percent';
 			const FLAT_FILL_KEY = 'increase bb gauge';
 			const expectedOriginalId = '31';
 
@@ -4909,12 +4909,12 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:32:${element}`));
+			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:32:element shift-${element}`));
 
 			it('uses the params property when it exists', () => {
 				const effect = createArbitraryBaseEffect({ params: '1' });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:32:fire',
+					id: 'proc:32:element shift-fire',
 					value: true,
 				})];
 
@@ -4926,7 +4926,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params: '2,2,3,4' });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:32:water',
+						id: 'proc:32:element shift-water',
 						value: true,
 					}),
 					baseBuffFactory({
@@ -4946,7 +4946,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			it('falls back to effect properties when params property does not exist', () => {
 				const effect = createArbitraryBaseEffect({ [EFFECT_KEY]: 'earth' });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:32:earth',
+					id: 'proc:32:element shift-earth',
 					value: true,
 				})];
 
@@ -4958,7 +4958,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				it(`parses value for ${elementValue}`, () => {
 					const effect = createArbitraryBaseEffect({ params: `${elementKey}` });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:32:${elementValue}`,
+						id: `proc:32:element shift-${elementValue}`,
 						value: true,
 					})];
 
@@ -4971,7 +4971,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						[EFFECT_KEY]: elementValue,
 					});
 					const expectedResult = [baseBuffFactory({
-						id: `proc:32:${elementValue}`,
+						id: `proc:32:element shift-${elementValue}`,
 						value: true,
 					})];
 
@@ -4983,7 +4983,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			it('parses unknown elements to "unknown"', () => {
 				const effect = createArbitraryBaseEffect({ params: '1234' });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:32:unknown',
+					id: 'proc:32:element shift-unknown',
 					value: true,
 				})];
 
@@ -4996,7 +4996,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					[EFFECT_KEY]: 'arbitrary unknown element',
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:32:unknown',
+					id: 'proc:32:element shift-unknown',
 					value: true,
 				})];
 
@@ -5009,7 +5009,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					[EFFECT_KEY]: 'all',
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:32:unknown',
+					id: 'proc:32:element shift-unknown',
 					value: true,
 				})];
 
@@ -5030,7 +5030,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params: '5,123' });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:32:light',
+						id: 'proc:32:element shift-light',
 						sources: arbitrarySourceValue,
 						value: true,
 						...arbitraryTargetData,
@@ -5052,7 +5052,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 33', () => {
-			const expectedBuffId = 'proc:33';
+			const expectedBuffId = 'proc:33:buff wipe';
 			const expectedOriginalId = '33';
 
 			beforeEach(() => {
@@ -5154,8 +5154,8 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 34', () => {
-			const expectedFlatDrainId = 'proc:34:flat';
-			const expectedPercentDrainId = 'proc:34:percent';
+			const expectedFlatDrainId = 'proc:34:bc drain-flat';
+			const expectedPercentDrainId = 'proc:34:bc drain-percent';
 			const FLAT_DRAIN_LOW_KEY = 'base bb gauge reduction low';
 			const FLAT_DRAIN_HIGH_KEY = 'base bb gauge reduction high';
 			const PERCENT_DRAIN_LOW_KEY = 'bb gauge% reduction low';
@@ -5418,14 +5418,14 @@ describe('getProcEffectToBuffMapping method', () => {
 		describe('proc 36', () => {
 			testProcWithSingleNumericalParameterAndTurnDuration({
 				expectedOriginalId: '36',
-				expectedBuffId: 'proc:36',
+				expectedBuffId: 'proc:36:ls lock',
 				effectValueKey: 'invalidate LS chance%',
 				effectTurnDurationKey: 'invalidate LS turns (60)',
 			});
 		});
 
 		describe('proc 37', () => {
-			const expectedBuffId = 'proc:37';
+			const expectedBuffId = 'proc:37:summon';
 			const expectedOriginalId = '37';
 
 			beforeEach(() => {
@@ -5587,14 +5587,14 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(Object.values(AILMENT_MAPPING).concat(['unknown']).map((a) => `proc:38:${a}`));
+			testValidBuffIds(Object.values(AILMENT_MAPPING).concat(['unknown']).map((a) => `proc:38:cleanse-${a}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6,7,8,9';
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = Object.values(AILMENT_MAPPING)
 					.map((ailment) => baseBuffFactory({
-						id: `proc:38:${ailment}`,
+						id: `proc:38:cleanse-${ailment}`,
 						value: true,
 					}));
 
@@ -5607,7 +5607,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = Object.values(AILMENT_MAPPING)
 					.map((ailment) => baseBuffFactory({
-						id: `proc:38:${ailment}`,
+						id: `proc:38:cleanse-${ailment}`,
 						value: true,
 					})).concat([baseBuffFactory({
 						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
@@ -5627,7 +5627,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					'ailments cured': ['rec down'],
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:38:rec down',
+					id: 'proc:38:cleanse-rec down',
 					value: true,
 				})];
 
@@ -5640,7 +5640,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const params = [ailmentKey, '0,0,0,0,0,0,0,0'].join(',');
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:38:${ailmentName}`,
+						id: `proc:38:cleanse-${ailmentName}`,
 						value: true,
 					})];
 
@@ -5652,7 +5652,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const effectKey = ailmentName !== 'weak' ? ailmentName : 'weaken';
 					const effect = createArbitraryBaseEffect({ 'ailments cured': [effectKey] });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:38:${ailmentName}`,
+						id: `proc:38:cleanse-${ailmentName}`,
 						value: true,
 					})];
 
@@ -5667,7 +5667,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ 'ailments cured': curedAilments });
 				const expectedResult = Object.values(AILMENT_MAPPING)
 					.map((ailment) => baseBuffFactory({
-						id: `proc:38:${ailment}`,
+						id: `proc:38:cleanse-${ailment}`,
 						value: true,
 					}));
 
@@ -5679,7 +5679,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const params = '123,0,0,0,0,0,0';
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:38:unknown',
+					id: 'proc:38:cleanse-unknown',
 					value: true,
 				})];
 
@@ -5691,15 +5691,15 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ 'ailments cured': ['fake', 'not an ailment', 'poison'] });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:38:poison',
+						id: 'proc:38:cleanse-poison',
 						value: true,
 					}),
 					baseBuffFactory({
-						id: 'proc:38:unknown',
+						id: 'proc:38:cleanse-unknown',
 						value: true,
 					}),
 					baseBuffFactory({
-						id: 'proc:38:unknown',
+						id: 'proc:38:cleanse-unknown',
 						value: true,
 					}),
 				];
@@ -5725,7 +5725,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:38:poison',
+						id: 'proc:38:cleanse-poison',
 						sources: arbitrarySourceValue,
 						value: true,
 						...arbitraryTargetData,
@@ -5765,14 +5765,14 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:39:${element}`));
+			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:39:mitigate-${element}`));
 
 			it('uses the params property when it exists', () => {
 				const params = `1,2,3,4,5,6,7,${arbitraryTurnDuration}`;
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
 					return baseBuffFactory({
-						id: `proc:39:${element}`,
+						id: `proc:39:mitigate-${element}`,
 						duration: arbitraryTurnDuration,
 						value: 7,
 					});
@@ -5787,7 +5787,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
 					return baseBuffFactory({
-						id: `proc:39:${element}`,
+						id: `proc:39:mitigate-${element}`,
 						duration: arbitraryTurnDuration,
 						value: 7,
 					});
@@ -5814,7 +5814,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect(valuesInEffect);
 				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
 					return baseBuffFactory({
-						id: `proc:39:${element}`,
+						id: `proc:39:mitigate-${element}`,
 						duration: arbitraryTurnDuration,
 						value: 9,
 					});
@@ -5828,7 +5828,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const params = `${elementKey},0,0,0,0,0,123,${arbitraryTurnDuration}`;
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:39:${elementValue}`,
+						id: `proc:39:mitigate-${elementValue}`,
 						duration: arbitraryTurnDuration,
 						value: 123,
 					})];
@@ -5844,7 +5844,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 					});
 					const expectedResult = [baseBuffFactory({
-						id: `proc:39:${elementValue}`,
+						id: `proc:39:mitigate-${elementValue}`,
 						duration: arbitraryTurnDuration,
 						value: 456,
 					})];
@@ -5858,7 +5858,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const params = `1234,0,0,0,0,0,123,${arbitraryTurnDuration}`;
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:39:unknown',
+					id: 'proc:39:mitigate-unknown',
 					duration: arbitraryTurnDuration,
 					value: 123,
 				})];
@@ -5873,7 +5873,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:39:unknown',
+					id: 'proc:39:mitigate-unknown',
 					duration: arbitraryTurnDuration,
 					value: 456,
 				})];
@@ -5885,7 +5885,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			describe('when no mitigation value is given', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,0,${duration}`,
-					buffIdsInTurnDurationBuff: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:39:${stat}`),
+					buffIdsInTurnDurationBuff: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:39:mitigate-${stat}`),
 				});
 
 				it('returns a turn modification buff turn duration is non-zero and params property does not exist', () => {
@@ -5895,7 +5895,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const expectedResult = [baseBuffFactory({
 						id: BuffId.TURN_DURATION_MODIFICATION,
 						value: {
-							buffs: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:39:${stat}`),
+							buffs: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:39:mitigate-${stat}`),
 							duration: arbitraryTurnDuration,
 						},
 					}, [EFFECT_DELAY_BUFF_PROP])];
@@ -5911,7 +5911,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:39:light',
+						id: 'proc:39:mitigate-light',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: 1,
@@ -5953,29 +5953,29 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(Object.values(AILMENT_MAPPING).concat(['unknown']).map((a) => `proc:40:${a}`));
+			testValidBuffIds(Object.values(AILMENT_MAPPING).concat(['unknown']).map((a) => `proc:40:add ailment-${a}`));
 
 			it('uses the params property when it exists', () => {
 				const params = `1,1,2,2,3,3,4,4,${arbitraryTurnDuration}`;
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:40:poison',
+						id: 'proc:40:add ailment-poison',
 						duration: arbitraryTurnDuration,
 						value: 1,
 					}),
 					baseBuffFactory({
-						id: 'proc:40:weak',
+						id: 'proc:40:add ailment-weak',
 						duration: arbitraryTurnDuration,
 						value: 2,
 					}),
 					baseBuffFactory({
-						id: 'proc:40:sick',
+						id: 'proc:40:add ailment-sick',
 						duration: arbitraryTurnDuration,
 						value: 3,
 					}),
 					baseBuffFactory({
-						id: 'proc:40:injury',
+						id: 'proc:40:add ailment-injury',
 						duration: arbitraryTurnDuration,
 						value: 4,
 					}),
@@ -5990,22 +5990,22 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:40:curse',
+						id: 'proc:40:add ailment-curse',
 						duration: arbitraryTurnDuration,
 						value: 5,
 					}),
 					baseBuffFactory({
-						id: 'proc:40:paralysis',
+						id: 'proc:40:add ailment-paralysis',
 						duration: arbitraryTurnDuration,
 						value: 6,
 					}),
 					baseBuffFactory({
-						id: 'proc:40:atk down',
+						id: 'proc:40:add ailment-atk down',
 						duration: arbitraryTurnDuration,
 						value: 7,
 					}),
 					baseBuffFactory({
-						id: 'proc:40:def down',
+						id: 'proc:40:add ailment-def down',
 						duration: arbitraryTurnDuration,
 						value: 8,
 					}),
@@ -6029,7 +6029,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 				});
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:40:rec down',
+					id: 'proc:40:add ailment-rec down',
 					duration: arbitraryTurnDuration,
 					value: 10,
 				})];
@@ -6043,7 +6043,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const params = `${ailmentKey},123,0,0,0,0,0,0,${arbitraryTurnDuration}`;
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:40:${ailmentName}`,
+						id: `proc:40:add ailment-${ailmentName}`,
 						duration: arbitraryTurnDuration,
 						value: 123,
 					})];
@@ -6058,7 +6058,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 					});
 					const expectedResult = [baseBuffFactory({
-						id: `proc:40:${ailmentName}`,
+						id: `proc:40:add ailment-${ailmentName}`,
 						duration: arbitraryTurnDuration,
 						value: 456,
 					})];
@@ -6077,7 +6077,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect(valuesInEffect);
 				const expectedResult = Object.values(AILMENT_MAPPING)
 					.map((ailment, index) => baseBuffFactory({
-						id: `proc:40:${ailment}`,
+						id: `proc:40:add ailment-${ailment}`,
 						duration: arbitraryTurnDuration,
 						value: index + 1,
 					}));
@@ -6090,7 +6090,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const params = `123,456,0,0,0,0,0,0,${arbitraryTurnDuration}`;
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [baseBuffFactory({
-					id: 'proc:40:unknown',
+					id: 'proc:40:add ailment-unknown',
 					duration: arbitraryTurnDuration,
 					value: 456,
 				})];
@@ -6102,7 +6102,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			describe('when no ailment values are given', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,0,0,${duration}`,
-					buffIdsInTurnDurationBuff: Object.values(AILMENT_MAPPING).concat(['unknown']).map((ailment) => `proc:40:${ailment}`),
+					buffIdsInTurnDurationBuff: Object.values(AILMENT_MAPPING).concat(['unknown']).map((ailment) => `proc:40:add ailment-${ailment}`),
 				});
 
 				it('returns a turn modification buff when turn duration is non-zero and params property does not exist', () => {
@@ -6112,7 +6112,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const expectedResult = [baseBuffFactory({
 						id: BuffId.TURN_DURATION_MODIFICATION,
 						value: {
-							buffs: Object.values(AILMENT_MAPPING).concat(['unknown']).map((ailment) => `proc:40:${ailment}`),
+							buffs: Object.values(AILMENT_MAPPING).concat(['unknown']).map((ailment) => `proc:40:add ailment-${ailment}`),
 							duration: arbitraryTurnDuration,
 						},
 					}, [EFFECT_DELAY_BUFF_PROP])];
@@ -6128,7 +6128,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:40:poison',
+						id: 'proc:40:add ailment-poison',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: 1,
@@ -6152,7 +6152,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 42', () => {
 			const PARAMS_ORDER = ['atkLow%', 'atkHigh%', 'flatAtk'];
-			const expectedBuffId = 'proc:42';
+			const expectedBuffId = 'proc:42:sacrificial attack';
 			const expectedOriginalId = '42';
 
 			beforeEach(() => {
@@ -6302,7 +6302,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 43', () => {
-			const expectedBuffId = 'proc:43';
+			const expectedBuffId = 'proc:43:burst od fill';
 			const expectedOriginalId = '43';
 			const EFFECT_KEY = 'increase od gauge%';
 
@@ -6433,7 +6433,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				'dot unit index': 'unitIndex',
 			};
 			const EFFECT_TURN_DURATION_KEY = 'dot turns (71)';
-			const expectedBuffId = 'proc:44';
+			const expectedBuffId = 'proc:44:damage over time';
 			const expectedOriginalId = '44';
 
 			beforeEach(() => {
@@ -6694,7 +6694,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(BURST_TYPES.map((type) => `proc:45:${type}`));
+			testValidBuffIds(BURST_TYPES.map((type) => `proc:45:attack boost-${type}`));
 
 			it('uses the params property when it exists', () => {
 				const params = `1,2,3,${arbitraryTurnDuration}`;
@@ -6702,7 +6702,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = BURST_TYPES.map((type, index) => {
 					return baseBuffFactory({
-						id: `proc:45:${type}`,
+						id: `proc:45:attack boost-${type}`,
 						duration: arbitraryTurnDuration,
 						value: +splitParams[index],
 					});
@@ -6718,7 +6718,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = BURST_TYPES.map((type, index) => {
 					return baseBuffFactory({
-						id: `proc:45:${type}`,
+						id: `proc:45:attack boost-${type}`,
 						duration: arbitraryTurnDuration,
 						value: +splitParams[index],
 					});
@@ -6745,7 +6745,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect(valuesInEffect);
 				const expectedResult = BURST_TYPES.map((type, index) => {
 					return baseBuffFactory({
-						id: `proc:45:${type}`,
+						id: `proc:45:attack boost-${type}`,
 						duration: arbitraryTurnDuration,
 						value: mockValues[index],
 					});
@@ -6765,7 +6765,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect(valuesInEffect);
 				const expectedResult = BURST_TYPES.map((type, index) => {
 					return baseBuffFactory({
-						id: `proc:45:${type}`,
+						id: `proc:45:attack boost-${type}`,
 						duration: arbitraryTurnDuration,
 						value: mockValues[index],
 					});
@@ -6780,7 +6780,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const params = [...BURST_TYPES.map((type) => type === burstCase ? '123' : '0'), arbitraryTurnDuration].join(',');
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:45:${burstCase}`,
+						id: `proc:45:attack boost-${burstCase}`,
 						duration: arbitraryTurnDuration,
 						value: 123,
 					})];
@@ -6795,7 +6795,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 					});
 					const expectedResult = [baseBuffFactory({
-						id: `proc:45:${burstCase}`,
+						id: `proc:45:attack boost-${burstCase}`,
 						duration: arbitraryTurnDuration,
 						value: 456,
 					})];
@@ -6808,7 +6808,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			describe('when all stats are 0', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,${duration}`,
-					buffIdsInTurnDurationBuff: BURST_TYPES.map((type) => `proc:45:${type}`),
+					buffIdsInTurnDurationBuff: BURST_TYPES.map((type) => `proc:45:attack boost-${type}`),
 				});
 			});
 
@@ -6818,7 +6818,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:45:ubb',
+						id: 'proc:45:attack boost-ubb',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: 1,
@@ -6841,7 +6841,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 46', () => {
-			const expectedBuffId = 'proc:46';
+			const expectedBuffId = 'proc:46:non-lethal proportional attack';
 			const expectedOriginalId = '46';
 
 			beforeEach(() => {
@@ -7010,7 +7010,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			const PROPORTIONAL_MODE_BUFF_KEY = 'proportionalMode';
 			const ADDED_ATK_BUFF_KEY = 'addedAtk%';
 			const PARAMS_ORDER = ['baseAtk%', ADDED_ATK_BUFF_KEY, PROPORTIONAL_MODE_BUFF_KEY, 'flatAtk', 'crit%', 'bc%', 'hc%', 'dmg%'];
-			const expectedBuffId = 'proc:47';
+			const expectedBuffId = 'proc:47:hp scaled attack';
 			const expectedOriginalId = '47';
 
 			beforeEach(() => {
@@ -7295,7 +7295,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			 */
 			const generateExpectedBuffForAttackTypeAndValues = (type, damageValue, attackParams) => {
 				const valuesInBuff = {
-					id: `proc:48:${type}`,
+					id: `proc:48:piercing attack-${type}`,
 					value: {
 						hits: arbitraryHitCount,
 						distribution: arbitraryDamageDistribution,
@@ -7321,7 +7321,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds([ATTACK_TYPES.BASE, ATTACK_TYPES.CURRENT, ATTACK_TYPES.FIXED, ATTACK_TYPES.UNKNOWN].map((type) => `proc:48:${type}`));
+			testValidBuffIds([ATTACK_TYPES.BASE, ATTACK_TYPES.CURRENT, ATTACK_TYPES.FIXED, ATTACK_TYPES.UNKNOWN].map((type) => `proc:48:piercing attack-${type}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6,7';
@@ -7555,7 +7555,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params: '0,0,0,0,1,0,0,123' });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:48:fixed',
+						id: 'proc:48:piercing attack-fixed',
 						sources: arbitrarySourceValue,
 						value: { value: 1, chance: 0, isLethal: false, hits: 0, distribution: 0 },
 						...arbitraryTargetData,
@@ -7577,7 +7577,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 49', () => {
-			const expectedBuffId = 'proc:49';
+			const expectedBuffId = 'proc:49:chance instant death';
 			const expectedOriginalId = '49';
 
 			beforeEach(() => {
@@ -7674,7 +7674,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		describe('proc 50', () => {
 			const DAMAGE_REFLECT_LOW_BUFF_KEY = 'reflectedDamageLow%';
 			const DAMAGE_REFLECT_HIGH_BUFF_KEY = 'reflectedDamageHigh%';
-			const expectedBuffId = 'proc:50';
+			const expectedBuffId = 'proc:50:chance damage reflect';
 			const expectedOriginalId = '50';
 
 			beforeEach(() => {
@@ -7848,14 +7848,14 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(AILMENTS_ORDER.map((a) => `proc:51:${a} down`));
+			testValidBuffIds(AILMENTS_ORDER.map((a) => `proc:51:add to attack-${a} down`));
 
 			it('uses the params property when it exists', () => {
 				const params = `1,2,3,4,5,6,7,${arbitraryTurnDuration}`;
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:51:atk down',
+						id: 'proc:51:add to attack-atk down',
 						duration: arbitraryTurnDuration,
 						value: {
 							reductionValue: 1,
@@ -7864,7 +7864,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						},
 					}),
 					baseBuffFactory({
-						id: 'proc:51:def down',
+						id: 'proc:51:add to attack-def down',
 						duration: arbitraryTurnDuration,
 						value: {
 							reductionValue: 2,
@@ -7873,7 +7873,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						},
 					}),
 					baseBuffFactory({
-						id: 'proc:51:rec down',
+						id: 'proc:51:add to attack-rec down',
 						duration: arbitraryTurnDuration,
 						value: {
 							reductionValue: 3,
@@ -7892,7 +7892,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:51:atk down',
+						id: 'proc:51:add to attack-atk down',
 						duration: arbitraryTurnDuration,
 						value: {
 							reductionValue: 1,
@@ -7901,7 +7901,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						},
 					}),
 					baseBuffFactory({
-						id: 'proc:51:def down',
+						id: 'proc:51:add to attack-def down',
 						duration: arbitraryTurnDuration,
 						value: {
 							reductionValue: 2,
@@ -7910,7 +7910,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						},
 					}),
 					baseBuffFactory({
-						id: 'proc:51:rec down',
+						id: 'proc:51:add to attack-rec down',
 						duration: arbitraryTurnDuration,
 						value: {
 							reductionValue: 3,
@@ -7945,7 +7945,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:51:atk down',
+						id: 'proc:51:add to attack-atk down',
 						duration: arbitraryTurnDuration,
 						value: {
 							reductionValue: 1,
@@ -7954,7 +7954,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						},
 					}),
 					baseBuffFactory({
-						id: 'proc:51:def down',
+						id: 'proc:51:add to attack-def down',
 						duration: arbitraryTurnDuration,
 						value: {
 							reductionValue: 3,
@@ -7963,7 +7963,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						},
 					}),
 					baseBuffFactory({
-						id: 'proc:51:rec down',
+						id: 'proc:51:add to attack-rec down',
 						duration: arbitraryTurnDuration,
 						value: {
 							reductionValue: 5,
@@ -7990,7 +7990,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						].join(',');
 						const effect = createArbitraryBaseEffect({ params });
 						const expectedResult = [baseBuffFactory({
-							id: `proc:51:${type} down`,
+							id: `proc:51:add to attack-${type} down`,
 							duration: arbitraryTurnDuration,
 							value: {
 								reductionValue: 123,
@@ -8014,7 +8014,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						].join(',');
 						const effect = createArbitraryBaseEffect({ params });
 						const expectedResult = [baseBuffFactory({
-							id: `proc:51:${type} down`,
+							id: `proc:51:add to attack-${type} down`,
 							duration: arbitraryTurnDuration,
 							value: {
 								reductionValue: 0,
@@ -8033,7 +8033,7 @@ describe('getProcEffectToBuffMapping method', () => {
 							[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 						});
 						const expectedResult = [baseBuffFactory({
-							id: `proc:51:${type} down`,
+							id: `proc:51:add to attack-${type} down`,
 							duration: arbitraryTurnDuration,
 							value: {
 								reductionValue: 456,
@@ -8052,7 +8052,7 @@ describe('getProcEffectToBuffMapping method', () => {
 							[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 						});
 						const expectedResult = [baseBuffFactory({
-							id: `proc:51:${type} down`,
+							id: `proc:51:add to attack-${type} down`,
 							duration: arbitraryTurnDuration,
 							value: {
 								reductionValue: 0,
@@ -8069,7 +8069,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				describe('for buff duration', () => {
 					testTurnDurationScenarios({
 						createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,0,${duration}`,
-						buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((a) => `proc:51:${a} down`),
+						buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((a) => `proc:51:add to attack-${a} down`),
 						modifyTurnDurationBuff: (buff) => {
 							buff.value.debuffTurnDuration = 0;
 						},
@@ -8079,7 +8079,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				describe('for debuff duration', () => {
 					testTurnDurationScenarios({
 						createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,${duration},0`,
-						buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((a) => `proc:51:${a} down`),
+						buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((a) => `proc:51:add to attack-${a} down`),
 						modifyTurnDurationBuff: (buff) => {
 							buff.value.debuffTurnDuration = buff.value.duration;
 							buff.value.duration = 0;
@@ -8094,7 +8094,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:51:atk down',
+						id: 'proc:51:add to attack-atk down',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: { reductionValue: 1, chance: 0, debuffTurnDuration: 0 },
@@ -8119,7 +8119,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		describe('proc 52', () => {
 			testProcWithSingleNumericalParameterAndTurnDuration({
 				expectedOriginalId: '52',
-				expectedBuffId: 'proc:52',
+				expectedBuffId: 'proc:52:bc efficacy',
 				effectValueKey: 'bb gauge fill rate% buff',
 				effectTurnDurationKey: 'buff turns (77)',
 			});
@@ -8136,7 +8136,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(AILMENTS_ORDER.map((ailment) => `proc:53:${ailment}`));
+			testValidBuffIds(AILMENTS_ORDER.map((ailment) => `proc:53:inflict on hit-${ailment}`));
 
 			it('uses the params property when it exists', () => {
 				const params = `1,2,3,4,5,6,${arbitraryTurnDuration}`;
@@ -8144,7 +8144,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
 					return baseBuffFactory({
-						id: `proc:53:${ailment}`,
+						id: `proc:53:inflict on hit-${ailment}`,
 						duration: arbitraryTurnDuration,
 						value: +splitParams[index],
 					});
@@ -8160,7 +8160,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params });
 				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
 					return baseBuffFactory({
-						id: `proc:53:${ailment}`,
+						id: `proc:53:inflict on hit-${ailment}`,
 						duration: arbitraryTurnDuration,
 						value: +splitParams[index],
 					});
@@ -8190,7 +8190,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				const expectedParamValues = [7, 8, 9, 10, 11, 12];
 				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
 					return baseBuffFactory({
-						id: `proc:53:${ailment}`,
+						id: `proc:53:inflict on hit-${ailment}`,
 						duration: arbitraryTurnDuration,
 						value: expectedParamValues[index],
 					});
@@ -8205,7 +8205,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const params = AILMENTS_ORDER.map((ailment) => ailment === ailmentCase ? '123' : '0').concat([arbitraryTurnDuration]).join(',');
 					const effect = createArbitraryBaseEffect({ params });
 					const expectedResult = [baseBuffFactory({
-						id: `proc:53:${ailmentCase}`,
+						id: `proc:53:inflict on hit-${ailmentCase}`,
 						duration: arbitraryTurnDuration,
 						value: 123,
 					})];
@@ -8221,7 +8221,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
 					});
 					const expectedResult = [baseBuffFactory({
-						id: `proc:53:${ailmentCase}`,
+						id: `proc:53:inflict on hit-${ailmentCase}`,
 						duration: arbitraryTurnDuration,
 						value: 123,
 					})];
@@ -8234,7 +8234,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			describe('when all resistances are 0', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,${duration}`,
-					buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((ailment) => `proc:53:${ailment}`),
+					buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((ailment) => `proc:53:inflict on hit-${ailment}`),
 				});
 			});
 
@@ -8244,7 +8244,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				});
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'proc:53:paralysis',
+						id: 'proc:53:inflict on hit-paralysis',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: 1,
@@ -8269,7 +8269,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		describe('proc 54', () => {
 			testProcWithSingleNumericalParameterAndTurnDuration({
 				expectedOriginalId: '54',
-				expectedBuffId: 'proc:54',
+				expectedBuffId: 'proc:54:critical damage boost',
 				effectValueKey: 'crit multiplier%',
 				effectTurnDurationKey: 'buff turns (84)',
 				getExpectedValueFromParam: (param) => +param * 100,
