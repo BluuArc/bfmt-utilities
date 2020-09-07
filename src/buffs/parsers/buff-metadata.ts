@@ -2092,7 +2092,14 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		id: BuffId['conditional:12:guaranteed ko resistance'],
 		name: 'Guaranteed KO Resistance',
 		stat: UnitStat.koResistance,
-		stackType: BuffStackType.Singleton,
+		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_KOBLK],
+	},
+	'conditional:36:mitigation': {
+		id: BuffId['conditional:36:mitigation'],
+		name: 'Timed Damage Reduction',
+		stat: UnitStat.mitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_DAMAGECUT],
 	},
 });

@@ -92,13 +92,14 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		const sources = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
 		const splitParams = typeof effect.params === 'string' ? effect.params.split('&') : [];
 		const targetData = getDefaultTargetData();
+		const turnDuration = parseNumberOrDefault(effect.turnDuration);
 
-		return { targetData, sources, splitParams };
+		return { targetData, sources, splitParams, turnDuration };
 	};
 
 	map.set('12', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '12';
-		const { targetData, sources, splitParams } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 		const [rawRecoverValue, ...extraParams] = splitParams;
 		const recoverValue = parseNumberOrDefault(rawRecoverValue);
 		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
@@ -107,10 +108,38 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 			id: 'conditional:12:guaranteed ko resistance',
 			originalId,
 			sources,
-			duration: parseNumberOrDefault(effect.turnDuration),
+			duration: turnDuration,
 			value: recoverValue,
 			...targetData,
 		}];
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
+
+	map.set('36', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '36';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawMitigationValue, ...extraParams] = splitParams;
+		const mitigationValue = parseNumberOrDefault(rawMitigationValue);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+
+		const results: IBuff[] = [];
+		if (mitigationValue !== 0) {
+			results.push({
+				id: 'conditional:36:mitigation',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: mitigationValue,
+				...targetData,
+			});
+		}
 
 		handlePostParse(results, unknownParams, {
 			originalId,
