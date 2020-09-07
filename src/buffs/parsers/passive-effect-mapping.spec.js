@@ -643,7 +643,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:2:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:2:elemental-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6,7';
@@ -651,7 +651,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const expectedResult = [UnitElement.Fire, UnitElement.Water].map((element) => {
 					return STAT_PARAMS_ORDER.map((stat, index) => {
 						return baseBuffFactory({
-							id: `passive:2:${stat}`,
+							id: `passive:2:elemental-${stat}`,
 							value: +(splitParams[index + 2]),
 							conditions: {
 								targetElements: [element],
@@ -671,7 +671,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const expectedResult = [UnitElement.Light, UnitElement.Dark].map((element) => {
 					return STAT_PARAMS_ORDER.map((stat, index) => {
 						return baseBuffFactory({
-							id: `passive:2:${stat}`,
+							id: `passive:2:elemental-${stat}`,
 							value: +(splitParams[index + 2]),
 							conditions: {
 								targetElements: [element],
@@ -704,7 +704,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const expectedResult = ['element1', 'element2', 'element3'].map((element) => {
 					return STAT_PARAMS_ORDER.map((stat, index) => {
 						return baseBuffFactory({
-							id: `passive:2:${stat}`,
+							id: `passive:2:elemental-${stat}`,
 							value: mockValues[index],
 							conditions: {
 								targetElements: [element],
@@ -722,7 +722,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					it(`returns only value for ${statCase} and ${elementValue} if it is non-zero and other stats are zero and only one element is specified`, () => {
 						const params = [elementKey, '0', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
 						const expectedResult = [baseBuffFactory({
-							id: `passive:2:${statCase}`,
+							id: `passive:2:elemental-${statCase}`,
 							value: 123,
 							conditions: {
 								targetElements: [elementValue],
@@ -739,14 +739,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					const params = ['123', '456', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
 					const expectedResult = [
 						baseBuffFactory({
-							id: `passive:2:${statCase}`,
+							id: `passive:2:elemental-${statCase}`,
 							value: 123,
 							conditions: {
 								targetElements: ['unknown'],
 							},
 						}),
 						baseBuffFactory({
-							id: `passive:2:${statCase}`,
+							id: `passive:2:elemental-${statCase}`,
 							value: 123,
 							conditions: {
 								targetElements: ['unknown'],
@@ -762,7 +762,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`outputs stat buffs when no elements are given and the only non-zero stat is ${statCase}`, () => {
 					const params = ['0', '0', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
 					const expectedResult = [baseBuffFactory({
-						id: `passive:2:${statCase}`,
+						id: `passive:2:elemental-${statCase}`,
 						value: 123,
 						conditions: {
 							targetElements: ['unknown'],
@@ -779,7 +779,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const params = ['0', '0', ...STAT_PARAMS_ORDER.map((stat, index) => index + 1)].join(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:2:${stat}`,
+						id: `passive:2:elemental-${stat}`,
 						value: index + 1,
 						conditions: {
 							targetElements: ['unknown'],
@@ -799,7 +799,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				}, {});
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:2:${stat}`,
+						id: `passive:2:elemental-${stat}`,
 						value: index + 1,
 						conditions: {
 							targetElements: ['unknown'],
@@ -829,7 +829,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:2:hp',
+						id: 'passive:2:elemental-hp',
 						sources: arbitrarySourceValue,
 						value: 456,
 						conditions: {
@@ -872,14 +872,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:3:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:3:type based-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6';
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:3:${stat}`,
+						id: `passive:3:type based-${stat}`,
 						value: +(splitParams[index + 1]),
 						conditions: {
 							targetUnitType: UnitType.Lord,
@@ -897,7 +897,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:3:${stat}`,
+						id: `passive:3:type based-${stat}`,
 						value: +(splitParams[index + 1]),
 						conditions: {
 							targetUnitType: UnitType.Oracle,
@@ -927,7 +927,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:3:${stat}`,
+						id: `passive:3:type based-${stat}`,
 						value: mockValues[index],
 						conditions: {
 							targetUnitType: 'arbitrary type',
@@ -944,7 +944,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					it(`returns only value for ${statCase} and ${typeValue} if it is non-zero and other stats are zero`, () => {
 						const params = [typeKey, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
 						const expectedResult = [baseBuffFactory({
-							id: `passive:3:${statCase}`,
+							id: `passive:3:type based-${statCase}`,
 							value: 123,
 							conditions: {
 								targetUnitType: typeValue,
@@ -960,7 +960,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`converts unit type values with no mapping to "unknown" and the only non-zero stat is ${statCase}`, () => {
 					const params = ['123', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
 					const expectedResult = [baseBuffFactory({
-						id: `passive:3:${statCase}`,
+						id: `passive:3:type based-${statCase}`,
 						value: 123,
 						conditions: {
 							targetUnitType: 'unknown',
@@ -975,7 +975,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`outputs stat buffs when no unit types are specified and the only non-zero stat is ${statCase}`, () => {
 					const params = ['0', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
 					const expectedResult = [baseBuffFactory({
-						id: `passive:3:${statCase}`,
+						id: `passive:3:type based-${statCase}`,
 						value: 123,
 						conditions: {
 							targetUnitType: 'unknown',
@@ -993,7 +993,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:3:${stat}`,
+						id: `passive:3:type based-${stat}`,
 						value: index + 1,
 						conditions: {
 							targetUnitType: 'unknown',
@@ -1024,7 +1024,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:3:hp',
+						id: 'passive:3:type based-hp',
 						sources: arbitrarySourceValue,
 						value: 456,
 						conditions: {
@@ -1059,14 +1059,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(AILMENTS_ORDER.map((ailment) => `passive:4:${ailment}`));
+			testValidBuffIds(AILMENTS_ORDER.map((ailment) => `passive:4:resist-${ailment}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6';
 				const splitParams = params.split(',');
 				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
 					return baseBuffFactory({
-						id: `passive:4:${ailment}`,
+						id: `passive:4:resist-${ailment}`,
 						value: +(splitParams[index]),
 					});
 				});
@@ -1081,7 +1081,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
 					return baseBuffFactory({
-						id: `passive:4:${ailment}`,
+						id: `passive:4:resist-${ailment}`,
 						value: +(splitParams[index]),
 					});
 				}).concat([baseBuffFactory({
@@ -1107,7 +1107,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
 					return baseBuffFactory({
-						id: `passive:4:${ailment}`,
+						id: `passive:4:resist-${ailment}`,
 						value: mockValues[index],
 					});
 				});
@@ -1120,7 +1120,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`returns only value for ${ailmentCase} if it is non-zero and other stats are zero`, () => {
 					const params = AILMENTS_ORDER.map((ailment) => ailment === ailmentCase ? '123' : '0').join(',');
 					const expectedResult = [baseBuffFactory({
-						id: `passive:4:${ailmentCase}`,
+						id: `passive:4:resist-${ailmentCase}`,
 						value: 123,
 					})];
 
@@ -1153,7 +1153,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:4:paralysis',
+						id: 'passive:4:resist-paralysis',
 						sources: arbitrarySourceValue,
 						value: 456,
 						conditions: arbitraryConditionValue,
@@ -1193,12 +1193,12 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((elem) => `passive:5:${elem}`));
+			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((elem) => `passive:5:mitigate-${elem}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2';
 				const expectedResult = [baseBuffFactory({
-					id: 'passive:5:fire',
+					id: 'passive:5:mitigate-fire',
 					value: 2,
 				})];
 
@@ -1212,7 +1212,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const params = '6,1,3,4,5';
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:5:dark',
+						id: 'passive:5:mitigate-dark',
 						value: 1,
 					}),
 					baseBuffFactory({
@@ -1234,7 +1234,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const effect = { 'water resist%': 5 };
 
 				const expectedResult = [baseBuffFactory({
-					id: 'passive:5:water',
+					id: 'passive:5:mitigate-water',
 					value: 5,
 				})];
 
@@ -1246,7 +1246,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`parses raw value for ${knownElementValue} in params property`, () => {
 					const params = `${knownElementKey},123`;
 					const expectedResult = [baseBuffFactory({
-						id: `passive:5:${knownElementValue}`,
+						id: `passive:5:mitigate-${knownElementValue}`,
 						value: 123,
 					})];
 
@@ -1258,7 +1258,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`parses value for ${knownElementValue} when not given params property and value is non-zero`, () => {
 					const effect = { [`${knownElementValue} resist%`]: 456 };
 					const expectedResult = [baseBuffFactory({
-						id: `passive:5:${knownElementValue}`,
+						id: `passive:5:mitigate-${knownElementValue}`,
 						value: 456,
 					})];
 
@@ -1276,7 +1276,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('defaults to unknown element if corresponding element value cannot be found from parsed params', () => {
 				const params = 'not-an-element,789';
 				const expectedResult = [baseBuffFactory({
-					id: 'passive:5:unknown',
+					id: 'passive:5:mitigate-unknown',
 					value: 789,
 				})];
 
@@ -1302,7 +1302,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:5:light',
+						id: 'passive:5:mitigate-light',
 						sources: arbitrarySourceValue,
 						value: 6,
 						conditions: arbitraryConditionValue,
@@ -1328,7 +1328,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 8', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '8',
-				expectedBuffId: 'passive:8',
+				expectedBuffId: 'passive:8:mitigation',
 				effectKey: 'dmg% mitigation',
 			});
 		});
@@ -1336,7 +1336,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 9', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '9',
-				expectedBuffId: 'passive:9',
+				expectedBuffId: 'passive:9:gradual bc fill',
 				effectKey: 'bc fill per turn',
 			});
 		});
@@ -1344,7 +1344,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 10', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '10',
-				expectedBuffId: 'passive:10',
+				expectedBuffId: 'passive:10:hc efficacy',
 				effectKey: 'hc effectiveness%',
 			});
 		});
@@ -1358,14 +1358,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:11:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:11:hp conditional-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,1';
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:11:${stat}`,
+						id: `passive:11:hp conditional-${stat}`,
 						value: +(splitParams[index]),
 						conditions: {
 							hpGreaterThanOrEqualTo: 5,
@@ -1383,7 +1383,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:11:${stat}`,
+						id: `passive:11:hp conditional-${stat}`,
 						value: +(splitParams[index]),
 						conditions: {
 							hpLessThanOrEqualTo: 5,
@@ -1413,7 +1413,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:11:${stat}`,
+						id: `passive:11:hp conditional-${stat}`,
 						value: mockValues[index],
 						conditions: {
 							hpGreaterThanOrEqualTo: 9,
@@ -1436,7 +1436,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 							expectedConditions.hpLessThanOrEqualTo = 456;
 						}
 						const expectedResult = [baseBuffFactory({
-							id: `passive:11:${statCase}`,
+							id: `passive:11:hp conditional-${statCase}`,
 							value: 123,
 							conditions: expectedConditions,
 						})];
@@ -1458,7 +1458,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 							expectedConditions.hpLessThanOrEqualTo = 456;
 						}
 						const expectedResult = [baseBuffFactory({
-							id: `passive:11:${statCase}`,
+							id: `passive:11:hp conditional-${statCase}`,
 							value: 123,
 							conditions: expectedConditions,
 						})];
@@ -1485,7 +1485,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:11:crit',
+						id: 'passive:11:hp conditional-crit',
 						sources: arbitrarySourceValue,
 						value: 1,
 						conditions: {
@@ -1520,14 +1520,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(DROP_TYPE_ORDER.map((dropType) => `passive:12:${dropType}`));
+			testValidBuffIds(DROP_TYPE_ORDER.map((dropType) => `passive:12:hp conditional drop boost-${dropType}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6,1';
 				const splitParams = params.split(',');
 				const expectedResult = DROP_TYPE_ORDER.map((dropType, index) => {
 					return baseBuffFactory({
-						id: `passive:12:${dropType}`,
+						id: `passive:12:hp conditional drop boost-${dropType}`,
 						value: +(splitParams[index]),
 						conditions: {
 							hpGreaterThanOrEqualTo: 6,
@@ -1545,7 +1545,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = DROP_TYPE_ORDER.map((dropType, index) => {
 					return baseBuffFactory({
-						id: `passive:12:${dropType}`,
+						id: `passive:12:hp conditional drop boost-${dropType}`,
 						value: +(splitParams[index]),
 						conditions: {
 							hpLessThanOrEqualTo: 6,
@@ -1575,7 +1575,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = DROP_TYPE_ORDER.map((dropType, index) => {
 					return baseBuffFactory({
-						id: `passive:12:${dropType}`,
+						id: `passive:12:hp conditional drop boost-${dropType}`,
 						value: mockValues[index],
 						conditions: {
 							hpGreaterThanOrEqualTo: 11,
@@ -1598,7 +1598,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 							expectedConditions.hpLessThanOrEqualTo = 456;
 						}
 						const expectedResult = [baseBuffFactory({
-							id: `passive:12:${dropTypeCase}`,
+							id: `passive:12:hp conditional drop boost-${dropTypeCase}`,
 							value: 123,
 							conditions: expectedConditions,
 						})];
@@ -1620,7 +1620,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 							expectedConditions.hpLessThanOrEqualTo = 456;
 						}
 						const expectedResult = [baseBuffFactory({
-							id: `passive:12:${dropTypeCase}`,
+							id: `passive:12:hp conditional drop boost-${dropTypeCase}`,
 							value: 123,
 							conditions: expectedConditions,
 						})];
@@ -1647,7 +1647,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:12:karma',
+						id: 'passive:12:hp conditional drop boost-karma',
 						sources: arbitrarySourceValue,
 						value: 1,
 						conditions: {
@@ -1676,7 +1676,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 13', () => {
 			testPassiveWithNumericalValueRangeAndChance({
 				expectedOriginalId: '13',
-				expectedBuffId: 'passive:13',
+				expectedBuffId: 'passive:13:bc fill on enemy defeat',
 				effectKeyLow: 'bc fill on enemy defeat low',
 				effectKeyHigh: 'bc fill on enemy defeat high',
 				effectKeyChance: 'bc fill on enemy defeat%',
@@ -1688,7 +1688,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 14', () => {
-			const expectedBuffId = 'passive:14';
+			const expectedBuffId = 'passive:14:chance mitigation';
 			const expectedOriginalId = '14';
 
 			beforeEach(() => {
@@ -1856,7 +1856,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 15', () => {
 			testPassiveWithNumericalValueRangeAndChance({
 				expectedOriginalId: '15',
-				expectedBuffId: 'passive:15',
+				expectedBuffId: 'passive:15:heal on enemy defeat',
 				effectKeyLow: 'hp% recover on enemy defeat low',
 				effectKeyHigh: 'hp% recover on enemy defeat high',
 				effectKeyChance: 'hp% recover on enemy defeat chance%',
@@ -1868,7 +1868,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 16', () => {
-			const expectedBuffId = 'passive:16';
+			const expectedBuffId = 'passive:16:heal on win';
 			const expectedOriginalId = '16';
 
 			beforeEach(() => {
@@ -2054,7 +2054,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 17', () => {
 			testPassiveWithNumericalValueRangeAndChance({
 				expectedOriginalId: '17',
-				expectedBuffId: 'passive:17',
+				expectedBuffId: 'passive:17:hp absorb',
 				effectKeyLow: 'hp drain% low',
 				effectKeyHigh: 'hp drain% high',
 				effectKeyChance: 'hp drain chance%',
@@ -2072,14 +2072,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(DROP_TYPE_ORDER.map((dropType) => `passive:19:${dropType}`));
+			testValidBuffIds(DROP_TYPE_ORDER.map((dropType) => `passive:19:drop boost-${dropType}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5';
 				const splitParams = params.split(',');
 				const expectedResult = DROP_TYPE_ORDER.map((dropType, index) => {
 					return baseBuffFactory({
-						id: `passive:19:${dropType}`,
+						id: `passive:19:drop boost-${dropType}`,
 						value: +(splitParams[index]),
 					});
 				});
@@ -2094,7 +2094,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = DROP_TYPE_ORDER.map((dropType, index) => {
 					return baseBuffFactory({
-						id: `passive:19:${dropType}`,
+						id: `passive:19:drop boost-${dropType}`,
 						value: +(splitParams[index]),
 					});
 				}).concat([baseBuffFactory({
@@ -2120,7 +2120,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = DROP_TYPE_ORDER.map((dropType, index) => {
 					return baseBuffFactory({
-						id: `passive:19:${dropType}`,
+						id: `passive:19:drop boost-${dropType}`,
 						value: mockValues[index],
 					});
 				});
@@ -2133,7 +2133,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`returns only value for ${dropTypeCase} if it is non-zero and other rates are zero`, () => {
 					const params = DROP_TYPE_ORDER.map((dropType) => dropType === dropTypeCase ? '123' : '0').join(',');
 					const expectedResult = [baseBuffFactory({
-						id: `passive:19:${dropTypeCase}`,
+						id: `passive:19:drop boost-${dropTypeCase}`,
 						value: 123,
 					})];
 
@@ -2147,7 +2147,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						[`${dropTypeCase} drop rate% buff`]: 123,
 					};
 					const expectedResult = [baseBuffFactory({
-						id: `passive:19:${dropTypeCase}`,
+						id: `passive:19:drop boost-${dropTypeCase}`,
 						value: 123,
 					})];
 
@@ -2174,7 +2174,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:19:karma',
+						id: 'passive:19:drop boost-karma',
 						sources: arbitrarySourceValue,
 						value: 1,
 						conditions: arbitraryConditionValue,
@@ -2217,12 +2217,12 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(Object.values(AILMENT_MAPPING).concat(['unknown']).map((a) => `passive:20:${a}`));
+			testValidBuffIds(Object.values(AILMENT_MAPPING).concat(['unknown']).map((a) => `passive:20:chance inflict-${a}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2';
 				const expectedResult = [baseBuffFactory({
-					id: 'passive:20:poison',
+					id: 'passive:20:chance inflict-poison',
 					value: 2,
 				})];
 
@@ -2235,11 +2235,11 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const params = '3,4,5,6,7';
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:20:sick',
+						id: 'passive:20:chance inflict-sick',
 						value: 4,
 					}),
 					baseBuffFactory({
-						id: 'passive:20:curse',
+						id: 'passive:20:chance inflict-curse',
 						value: 6,
 					}),
 					baseBuffFactory({
@@ -2259,11 +2259,11 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const params = '4,5,6,7,0';
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:20:injury',
+						id: 'passive:20:chance inflict-injury',
 						value: 5,
 					}),
 					baseBuffFactory({
-						id: 'passive:20:paralysis',
+						id: 'passive:20:chance inflict-paralysis',
 						value: 7,
 					}),
 				];
@@ -2276,7 +2276,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('falls back to effect properties when params property does not exist', () => {
 				const effect = { 'paralysis%': 123 };
 				const expectedResult = [baseBuffFactory({
-					id: 'passive:20:paralysis',
+					id: 'passive:20:chance inflict-paralysis',
 					value: 123,
 				})];
 
@@ -2288,7 +2288,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`returns an entry for ${ailmentName} when it is present in the params property`, () => {
 					const params = `${ailmentKey},123`;
 					const expectedResult = [baseBuffFactory({
-						id: `passive:20:${ailmentName}`,
+						id: `passive:20:chance inflict-${ailmentName}`,
 						value: 123,
 					})];
 
@@ -2300,7 +2300,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`returns an entry for ${ailmentName} when it is present in the effect and no params property does not exist`, () => {
 					const effect = { [AILMENT_EFFECT_KEY_MAPPING[ailmentName]]: 456 };
 					const expectedResult = [baseBuffFactory({
-						id: `passive:20:${ailmentName}`,
+						id: `passive:20:chance inflict-${ailmentName}`,
 						value: 456,
 					})];
 
@@ -2316,7 +2316,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				}, {});
 				const expectedResult = Object.values(AILMENT_MAPPING)
 					.map((ailment, index) => baseBuffFactory({
-						id: `passive:20:${ailment}`,
+						id: `passive:20:chance inflict-${ailment}`,
 						value: index + 1,
 					}));
 
@@ -2327,7 +2327,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('parses params outside of the known ailments as unknown', () => {
 				const params = '123,456';
 				const expectedResult = [baseBuffFactory({
-					id: 'passive:20:unknown',
+					id: 'passive:20:chance inflict-unknown',
 					value: 456,
 				})];
 
@@ -2339,7 +2339,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('returns values when no ailment is specified but chance is non-zero', () => {
 				const params = '0,123';
 				const expectedResult = [baseBuffFactory({
-					id: 'passive:20:unknown',
+					id: 'passive:20:chance inflict-unknown',
 					value: 123,
 				})];
 
@@ -2372,7 +2372,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:20:poison',
+						id: 'passive:20:chance inflict-poison',
 						sources: arbitrarySourceValue,
 						value: 2,
 						conditions: arbitraryConditionValue,
@@ -2411,14 +2411,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:21:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:21:first turn-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5';
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:21:${stat}`,
+						id: `passive:21:first turn-${stat}`,
 						duration: 5,
 						value: +(splitParams[index]),
 					});
@@ -2434,7 +2434,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:21:${stat}`,
+						id: `passive:21:first turn-${stat}`,
 						duration: 5,
 						value: +(splitParams[index]),
 					});
@@ -2462,7 +2462,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:21:${stat}`,
+						id: `passive:21:first turn-${stat}`,
 						duration: 9,
 						value: mockValues[index],
 					});
@@ -2476,7 +2476,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`returns only value for ${statCase} if it is non-zero and other stats are zero`, () => {
 					const params = STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0').concat(['456']).join(',');
 					const expectedResult = [baseBuffFactory({
-						id: `passive:21:${statCase}`,
+						id: `passive:21:first turn-${statCase}`,
 						value: 123,
 						duration: 456,
 					})];
@@ -2492,7 +2492,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						[EFFECT_KEY_MAPPING.turnDuration]: 456,
 					};
 					const expectedResult = [baseBuffFactory({
-						id: `passive:21:${statCase}`,
+						id: `passive:21:first turn-${statCase}`,
 						value: 123,
 						duration: 456,
 					})];
@@ -2531,7 +2531,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:21:crit',
+						id: 'passive:21:first turn-crit',
 						sources: arbitrarySourceValue,
 						value: 1,
 						duration: 2,
@@ -2556,7 +2556,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 23', () => {
-			const expectedBuffId = 'passive:23';
+			const expectedBuffId = 'passive:23:bc fill on win';
 			const expectedOriginalId = '23';
 
 			beforeEach(() => {
@@ -2742,7 +2742,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 24', () => {
 			testPassiveWithNumericalValueRangeAndChance({
 				expectedOriginalId: '24',
-				expectedBuffId: 'passive:24',
+				expectedBuffId: 'passive:24:heal on hit',
 				effectKeyLow: 'dmg% to hp when attacked low',
 				effectKeyHigh: 'dmg% to hp when attacked high',
 				effectKeyChance: 'dmg% to hp when attacked chance%',
@@ -2755,7 +2755,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 25', () => {
 			testPassiveWithNumericalValueRangeAndChance({
 				expectedOriginalId: '25',
-				expectedBuffId: 'passive:25',
+				expectedBuffId: 'passive:25:bc fill on hit',
 				effectKeyLow: 'bc fill when attacked low',
 				effectKeyHigh: 'bc fill when attacked high',
 				effectKeyChance: 'bc fill when attacked%',
@@ -2769,7 +2769,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 26', () => {
 			testPassiveWithNumericalValueRangeAndChance({
 				expectedOriginalId: '26',
-				expectedBuffId: 'passive:26',
+				expectedBuffId: 'passive:26:chance damage reflect',
 				effectKeyLow: 'dmg% reflect low',
 				effectKeyHigh: 'dmg% reflect high',
 				effectKeyChance: 'dmg% reflect chance%',
@@ -2782,14 +2782,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 27', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '27',
-				expectedBuffId: 'passive:27',
+				expectedBuffId: 'passive:27:target chance change',
 				effectKey: 'target% chance',
 			});
 		});
 
 		describe('passive 28', () => {
 			const expectedOriginalId = '28';
-			const expectedBuffId = 'passive:28';
+			const expectedBuffId = 'passive:28:hp conditional target chance change';
 			const hpAboveEffectKey = 'hp above % passive requirement';
 			const hpBelowEffectKey = 'hp below % passive requirement';
 			beforeEach(() => {
@@ -2868,7 +2868,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						expectedConditions.hpLessThanOrEqualTo = 456;
 					}
 					const expectedResult = [baseBuffFactory({
-						id: 'passive:28',
+						id: 'passive:28:hp conditional target chance change',
 						value: 123,
 						conditions: expectedConditions,
 					})];
@@ -2890,7 +2890,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						expectedConditions.hpLessThanOrEqualTo = 456;
 					}
 					const expectedResult = [baseBuffFactory({
-						id: 'passive:28',
+						id: 'passive:28:hp conditional target chance change',
 						value: 123,
 						conditions: expectedConditions,
 					})];
@@ -2930,7 +2930,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:28',
+						id: 'passive:28:hp conditional target chance change',
 						sources: arbitrarySourceValue,
 						value: 1,
 						conditions: {
@@ -2959,7 +2959,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 29', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '29',
-				expectedBuffId: 'passive:29',
+				expectedBuffId: 'passive:29:chance def ignore',
 				effectKey: 'ignore def%',
 			});
 		});
@@ -2973,14 +2973,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:30:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:30:bb gauge conditional-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,1';
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:30:${stat}`,
+						id: `passive:30:bb gauge conditional-${stat}`,
 						value: +(splitParams[index]),
 						conditions: {
 							bbGaugeGreaterThanOrEqualTo: 5,
@@ -2998,7 +2998,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:30:${stat}`,
+						id: `passive:30:bb gauge conditional-${stat}`,
 						value: +(splitParams[index]),
 						conditions: {
 							bbGaugeLessThanOrEqualTo: 5,
@@ -3028,7 +3028,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:30:${stat}`,
+						id: `passive:30:bb gauge conditional-${stat}`,
 						value: mockValues[index],
 						conditions: {
 							bbGaugeGreaterThanOrEqualTo: 9,
@@ -3051,7 +3051,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 							expectedConditions.bbGaugeLessThanOrEqualTo = 456;
 						}
 						const expectedResult = [baseBuffFactory({
-							id: `passive:30:${statCase}`,
+							id: `passive:30:bb gauge conditional-${statCase}`,
 							value: 123,
 							conditions: expectedConditions,
 						})];
@@ -3073,7 +3073,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 							expectedConditions.bbGaugeLessThanOrEqualTo = 456;
 						}
 						const expectedResult = [baseBuffFactory({
-							id: `passive:30:${statCase}`,
+							id: `passive:30:bb gauge conditional-${statCase}`,
 							value: 123,
 							conditions: expectedConditions,
 						})];
@@ -3114,7 +3114,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:30:crit',
+						id: 'passive:30:bb gauge conditional-crit',
 						sources: arbitrarySourceValue,
 						value: 1,
 						conditions: {
@@ -3158,14 +3158,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(allParamTypes.map((paramType) => `passive:31:${paramType}`));
+			testValidBuffIds(allParamTypes.map((paramType) => `passive:31:spark-${paramType}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6';
 				const splitParams = params.split(',');
 				const expectedResult = allParamTypes.map((paramType, index) => {
 					return baseBuffFactory({
-						id: `passive:31:${paramType}`,
+						id: `passive:31:spark-${paramType}`,
 						value: +(splitParams[index]),
 					});
 				});
@@ -3180,7 +3180,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = allParamTypes.map((paramType, index) => {
 					return baseBuffFactory({
-						id: `passive:31:${paramType}`,
+						id: `passive:31:spark-${paramType}`,
 						value: +(splitParams[index]),
 					});
 				}).concat([baseBuffFactory({
@@ -3206,7 +3206,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = allParamTypes.map((paramType, index) => {
 					return baseBuffFactory({
-						id: `passive:31:${paramType}`,
+						id: `passive:31:spark-${paramType}`,
 						value: mockValues[index],
 					});
 				});
@@ -3219,7 +3219,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`returns only value for ${paramTypeCase} if it is non-zero and other values are zero`, () => {
 					const params = allParamTypes.map((paramType) => paramType === paramTypeCase ? '123' : '0').join(',');
 					const expectedResult = [baseBuffFactory({
-						id: `passive:31:${paramTypeCase}`,
+						id: `passive:31:spark-${paramTypeCase}`,
 						value: 123,
 					})];
 
@@ -3233,7 +3233,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						[effectKeyMapping[paramTypeCase]]: 123,
 					};
 					const expectedResult = [baseBuffFactory({
-						id: `passive:31:${paramTypeCase}`,
+						id: `passive:31:spark-${paramTypeCase}`,
 						value: 123,
 					})];
 
@@ -3260,7 +3260,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:31:karma',
+						id: 'passive:31:spark-karma',
 						sources: arbitrarySourceValue,
 						value: 1,
 						conditions: arbitraryConditionValue,
@@ -3286,13 +3286,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 32', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '32',
-				expectedBuffId: 'passive:32',
+				expectedBuffId: 'passive:32:bc efficacy',
 				effectKey: 'bb gauge fill rate%',
 			});
 		});
 
 		describe('passive 33', () => {
-			const expectedBuffId = 'passive:33';
+			const expectedBuffId = 'passive:33:gradual heal';
 			const expectedOriginalId = '33';
 
 			const HEAL_LOW_EFFECT_KEY = 'turn heal low';
@@ -3475,7 +3475,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 34', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '34',
-				expectedBuffId: 'passive:34',
+				expectedBuffId: 'passive:34:critical damage',
 				effectKey: 'crit multiplier%',
 				getExpectedValueFromParam: (param) => (+param) * 100,
 			});
@@ -3484,7 +3484,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 35', () => {
 			testPassiveWithNumericalValueRangeAndChance({
 				expectedOriginalId: '35',
-				expectedBuffId: 'passive:35',
+				expectedBuffId: 'passive:35:bc fill on normal attack',
 				effectKeyLow: 'bc fill when attacking low',
 				effectKeyHigh: 'bc fill when attacking high',
 				effectKeyChance: 'bc fill when attacking%',
@@ -3496,7 +3496,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 36', () => {
-			const expectedBuffId = 'passive:36';
+			const expectedBuffId = 'passive:36:extra action';
 			const expectedOriginalId = '36';
 
 			beforeEach(() => {
@@ -3629,7 +3629,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 37', () => {
-			const expectedBuffId = 'passive:37';
+			const expectedBuffId = 'passive:37:hit count boost';
 			const expectedOriginalId = '37';
 			const hitIncreaseEffectKey = 'hit increase/hit';
 			const extraHitDamageEffectKey = 'extra hits dmg%';
@@ -3814,14 +3814,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:40:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:40:converted-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4';
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:40:${stat}`,
+						id: `passive:40:converted-${stat}`,
 						value: {
 							convertedStat: 'atk',
 							value: +(splitParams[index + 1]),
@@ -3839,7 +3839,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:40:${stat}`,
+						id: `passive:40:converted-${stat}`,
 						value: {
 							convertedStat: 'def',
 							value: +(splitParams[index + 1]),
@@ -3869,7 +3869,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:40:${stat}`,
+						id: `passive:40:converted-${stat}`,
 						value: {
 							convertedStat: 'rec',
 							value: mockValues[index],
@@ -3887,7 +3887,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						const params = [convertedStatKey, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
 						const effect = { params };
 						const expectedResult = [baseBuffFactory({
-							id: `passive:40:${statCase}`,
+							id: `passive:40:converted-${statCase}`,
 							value: {
 								convertedStat: convertedStatValue,
 								value: 123,
@@ -3906,7 +3906,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 							[`${statCase}% buff`]: 456,
 						};
 						const expectedResult = [baseBuffFactory({
-							id: `passive:40:${statCase}`,
+							id: `passive:40:converted-${statCase}`,
 							value: {
 								convertedStat: convertedStatValue,
 								value: 456,
@@ -3922,7 +3922,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					const params = ['123', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
 					const effect = { params };
 					const expectedResult = [baseBuffFactory({
-						id: `passive:40:${statCase}`,
+						id: `passive:40:converted-${statCase}`,
 						value: {
 							convertedStat: 'unknown',
 							value: 123,
@@ -3939,7 +3939,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						[`${statCase}% buff`]: 456,
 					};
 					const expectedResult = [baseBuffFactory({
-						id: `passive:40:${statCase}`,
+						id: `passive:40:converted-${statCase}`,
 						value: {
 							convertedStat: 'unknown',
 							value: 456,
@@ -3954,7 +3954,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('parses lack of converted stat property to "unknown" in effect properties when params property does not exist', () => {
 				const effect = { 'def% buff': 1 };
 				const expectedResult = [baseBuffFactory({
-					id: 'passive:40:def',
+					id: 'passive:40:converted-def',
 					value: {
 						convertedStat: 'unknown',
 						value: 1,
@@ -3983,7 +3983,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:40:rec',
+						id: 'passive:40:converted-rec',
 						sources: arbitrarySourceValue,
 						value: {
 							convertedStat: 'hp',
@@ -4018,14 +4018,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:41:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:41:unique element count-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6';
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:41:${stat}`,
+						id: `passive:41:unique element count-${stat}`,
 						value: +(splitParams[index + 1]),
 						conditions: {
 							minumumUniqueElements: 1,
@@ -4043,7 +4043,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:41:${stat}`,
+						id: `passive:41:unique element count-${stat}`,
 						value: +(splitParams[index + 1]),
 						conditions: {
 							minumumUniqueElements: 5,
@@ -4073,7 +4073,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:41:${stat}`,
+						id: `passive:41:unique element count-${stat}`,
 						value: mockValues[index],
 						conditions: {
 							minumumUniqueElements: 3,
@@ -4089,7 +4089,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`returns only value for ${statCase} if it is non-zero and other stats are zero`, () => {
 					const params = [456, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
 					const expectedResult = [baseBuffFactory({
-						id: `passive:41:${statCase}`,
+						id: `passive:41:unique element count-${statCase}`,
 						value: 123,
 						conditions: {
 							minumumUniqueElements: 456,
@@ -4121,7 +4121,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:41:hp',
+						id: 'passive:41:unique element count-hp',
 						sources: arbitrarySourceValue,
 						value: 456,
 						conditions: {
@@ -4161,14 +4161,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:42:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:42:gender-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6';
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:42:${stat}`,
+						id: `passive:42:gender-${stat}`,
 						value: +(splitParams[index + 1]),
 						conditions: {
 							targetGender: UnitGender.Male,
@@ -4186,7 +4186,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:42:${stat}`,
+						id: `passive:42:gender-${stat}`,
 						value: +(splitParams[index + 1]),
 						conditions: {
 							targetGender: UnitGender.Female,
@@ -4216,7 +4216,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:42:${stat}`,
+						id: `passive:42:gender-${stat}`,
 						value: mockValues[index],
 						conditions: {
 							targetGender: 'arbitrary gender',
@@ -4233,7 +4233,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					it(`returns only value for ${statCase} and ${genderValue} if it is non-zero and other stats are zero`, () => {
 						const params = [genderKey, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
 						const expectedResult = [baseBuffFactory({
-							id: `passive:42:${statCase}`,
+							id: `passive:42:gender-${statCase}`,
 							value: 123,
 							conditions: {
 								targetGender: genderValue,
@@ -4249,7 +4249,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`converts gender values with no mapping to "unknown" and the only non-zero stat is ${statCase}`, () => {
 					const params = ['123', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
 					const expectedResult = [baseBuffFactory({
-						id: `passive:42:${statCase}`,
+						id: `passive:42:gender-${statCase}`,
 						value: 123,
 						conditions: {
 							targetGender: 'unknown',
@@ -4264,7 +4264,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`outputs stat buffs when no genders are specified and the only non-zero stat is ${statCase}`, () => {
 					const params = ['', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0')].join(',');
 					const expectedResult = [baseBuffFactory({
-						id: `passive:42:${statCase}`,
+						id: `passive:42:gender-${statCase}`,
 						value: 123,
 						conditions: {
 							targetGender: 'unknown',
@@ -4282,7 +4282,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:42:${stat}`,
+						id: `passive:42:gender-${stat}`,
 						value: index + 1,
 						conditions: {
 							targetGender: 'unknown',
@@ -4313,7 +4313,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:42:hp',
+						id: 'passive:42:gender-hp',
 						sources: arbitrarySourceValue,
 						value: 456,
 						conditions: {
@@ -4342,7 +4342,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 43', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '43',
-				expectedBuffId: 'passive:43',
+				expectedBuffId: 'passive:43:chance damage to one',
 				effectKey: 'take 1 dmg%',
 			});
 		});
@@ -4355,14 +4355,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:44:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:44:flat-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5';
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:44:${stat}`,
+						id: `passive:44:flat-${stat}`,
 						value: +(splitParams[index]),
 					});
 				});
@@ -4377,7 +4377,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:44:${stat}`,
+						id: `passive:44:flat-${stat}`,
 						value: +(splitParams[index]),
 					});
 				}).concat([baseBuffFactory({
@@ -4403,7 +4403,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:44:${stat}`,
+						id: `passive:44:flat-${stat}`,
 						value: mockValues[index],
 					});
 				});
@@ -4416,7 +4416,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`returns only value for ${statCase} if it is non-zero and other stats are zero`, () => {
 					const params = STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0').join(',');
 					const expectedResult = [baseBuffFactory({
-						id: `passive:44:${statCase}`,
+						id: `passive:44:flat-${statCase}`,
 						value: 123,
 					})];
 
@@ -4428,7 +4428,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`returns only value for ${statCase} if it is non-zero and other stats are zero and params property does not exist`, () => {
 					const effect = { [`${statCase} buff`]: 123 };
 					const expectedResult = [baseBuffFactory({
-						id: `passive:44:${statCase}`,
+						id: `passive:44:flat-${statCase}`,
 						value: 123,
 					})];
 
@@ -4455,7 +4455,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:44:hp',
+						id: 'passive:44:flat-hp',
 						sources: arbitrarySourceValue,
 						value: 456,
 						conditions: arbitraryConditionValue,
@@ -4479,8 +4479,8 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 45', () => {
-			const expectedBuffIdForBase = 'passive:45:base';
-			const expectedBuffIdForBuff = 'passive:45:buff';
+			const expectedBuffIdForBase = 'passive:45:critical damage reduction-base';
+			const expectedBuffIdForBuff = 'passive:45:critical damage reduction-buff';
 			const BASE_EFFECT_KEY = 'base crit% resist';
 			const BUFF_EFFECT_KEY = 'buff crit% resist';
 			const expectedOriginalId = '45';
@@ -4684,14 +4684,14 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:46:${stat}`));
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:46:hp scaled-${stat}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6,7';
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:46:${stat}`,
+						id: `passive:46:hp scaled-${stat}`,
 						value: {
 							baseValue: +(splitParams[index * 2]),
 							addedValue: +(splitParams[(index * 2) + 1]),
@@ -4710,7 +4710,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const splitParams = params.split(',');
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:46:${stat}`,
+						id: `passive:46:hp scaled-${stat}`,
 						value: {
 							baseValue: +(splitParams[index * 2]),
 							addedValue: +(splitParams[(index * 2) + 1]),
@@ -4742,7 +4742,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:46:${stat}`,
+						id: `passive:46:hp scaled-${stat}`,
 						value: {
 							baseValue: +(mockValues[index * 2]),
 							addedValue: +(mockValues[(index * 2) + 1]),
@@ -4766,7 +4766,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
 					return baseBuffFactory({
-						id: `passive:46:${stat}`,
+						id: `passive:46:hp scaled-${stat}`,
 						value: {
 							baseValue: +(mockValues[index * 2]),
 							addedValue: +(mockValues[(index * 2) + 1]),
@@ -4785,7 +4785,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						const nonZeroParams = testCaseIsForBaseValue ? '123,0' : '0,123';
 						const params = [...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? nonZeroParams : '0,0'), '0'].join(',');
 						const expectedResult = [baseBuffFactory({
-							id: `passive:46:${statCase}`,
+							id: `passive:46:hp scaled-${statCase}`,
 							value: {
 								baseValue: testCaseIsForBaseValue ? 123 : 0,
 								addedValue: testCaseIsForBaseValue ? 0 : 123,
@@ -4803,7 +4803,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						const effect = { [effectKey]: 123 };
 						effect[PROPORTIONAL_TO_HP_EFFECT_KEY] = 'arbitrary proportional value';
 						const expectedResult = [baseBuffFactory({
-							id: `passive:46:${statCase}`,
+							id: `passive:46:hp scaled-${statCase}`,
 							value: {
 								baseValue: testCaseIsForBaseValue ? 123 : 0,
 								addedValue: testCaseIsForBaseValue ? 0 : 123,
@@ -4826,7 +4826,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 				const expectedResult = STAT_PARAMS_ORDER.map((stat) => {
 					return baseBuffFactory({
-						id: `passive:46:${stat}`,
+						id: `passive:46:hp scaled-${stat}`,
 						value: {
 							baseValue: 1,
 							addedValue: 2,
@@ -4859,7 +4859,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:46:rec',
+						id: 'passive:46:hp scaled-rec',
 						sources: arbitrarySourceValue,
 						value: {
 							baseValue: 0,
@@ -4889,7 +4889,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 47', () => {
 			testPassiveWithNumericalValueRangeAndChance({
 				expectedOriginalId: '47',
-				expectedBuffId: 'passive:47',
+				expectedBuffId: 'passive:47:bc fill on spark',
 				effectKeyLow: 'bc fill on spark low',
 				effectKeyHigh: 'bc fill on spark high',
 				effectKeyChance: 'bc fill on spark%',
@@ -4902,7 +4902,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 48', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '48',
-				expectedBuffId: 'passive:48',
+				expectedBuffId: 'passive:48:bc cost reduction',
 				effectKey: 'reduced bb bc cost%',
 			});
 		});
@@ -4910,7 +4910,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		describe('passive 49', () => {
 			testPassiveWithNumericalValueRangeAndChance({
 				expectedOriginalId: '49',
-				expectedBuffId: 'passive:49',
+				expectedBuffId: 'passive:49:bb gauge consumption reduction',
 				effectKeyLow: 'reduced bb bc use% low',
 				effectKeyHigh: 'reduced bb bc use% high',
 				effectKeyChance: 'reduced bb bc use chance%',
@@ -4936,13 +4936,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((elem) => `passive:50:${elem}`));
+			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((elem) => `passive:50:elemental weakness damage-${elem}`));
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3,4,5,6,7';
 				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
 					return baseBuffFactory({
-						id: `passive:50:${element}`,
+						id: `passive:50:elemental weakness damage-${element}`,
 						value: 7,
 					});
 				});
@@ -4957,7 +4957,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const params = '1,2,3,4,5,6,7,8,9,10';
 				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
 					return baseBuffFactory({
-						id: `passive:50:${element}`,
+						id: `passive:50:elemental weakness damage-${element}`,
 						value: 7,
 					});
 				}).concat([baseBuffFactory({
@@ -4983,7 +4983,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				effect['elemental weakness multiplier%'] = 14;
 				const expectedResult = elements.map((element) => {
 					return baseBuffFactory({
-						id: `passive:50:${element}`,
+						id: `passive:50:elemental weakness damage-${element}`,
 						value: 14,
 					});
 				});
@@ -4996,7 +4996,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				it(`parses raw value for ${knownElementValue} in params property`, () => {
 					const params = `${knownElementKey},0,0,0,0,0,123`;
 					const expectedResult = [baseBuffFactory({
-						id: `passive:50:${knownElementValue}`,
+						id: `passive:50:elemental weakness damage-${knownElementValue}`,
 						value: 123,
 					})];
 
@@ -5011,7 +5011,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						'elemental weakness multiplier%': 456,
 					};
 					const expectedResult = [baseBuffFactory({
-						id: `passive:50:${knownElementValue}`,
+						id: `passive:50:elemental weakness damage-${knownElementValue}`,
 						value: 456,
 					})];
 
@@ -5026,7 +5026,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						'elemental weakness multiplier%': 456,
 					};
 					const expectedResult = [baseBuffFactory({
-						id: 'passive:50:unknown',
+						id: 'passive:50:elemental weakness damage-unknown',
 						value: 456,
 					})];
 
@@ -5038,7 +5038,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			it('defaults to unknown element if corresponding element value cannot be found from parsed params', () => {
 				const params = 'not-an-element,0,0,0,0,0,789';
 				const expectedResult = [baseBuffFactory({
-					id: 'passive:50:unknown',
+					id: 'passive:50:elemental weakness damage-unknown',
 					value: 789,
 				})];
 
@@ -5059,7 +5059,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:50:light',
+						id: 'passive:50:elemental weakness damage-light',
 						sources: arbitrarySourceValue,
 						value: 6,
 						conditions: arbitraryConditionValue,
@@ -5084,12 +5084,12 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 		describe('passive 53', () => {
 			const BUFF_ID_MAPPING = {
-				criticalDamageBase: 'passive:53:critical-damage-base',
-				criticalDamageBuff: 'passive:53:critical-damage-buff',
-				elementDamageBase: 'passive:53:element-damage-base',
-				elementDamageBuff: 'passive:53:element-damage-buff',
-				criticalRateBase: 'passive:53:critical-rate-base',
-				criticalRateBuff: 'passive:53:critical-rate-buff',
+				criticalDamageBase: 'passive:53:critical damage-base',
+				criticalDamageBuff: 'passive:53:critical damage-buff',
+				elementDamageBase: 'passive:53:element damage-base',
+				elementDamageBuff: 'passive:53:element damage-buff',
+				criticalRateBase: 'passive:53:critical rate-base',
+				criticalRateBuff: 'passive:53:critical rate-buff',
 			};
 			const EFFECT_KEY_MAPPING = {
 				criticalDamageBase: 'crit dmg base damage resist%',

@@ -111,7 +111,7 @@ describe('BUFF_METADATA entries', () => {
 				const iconStatKey = stat !== 'crit' ? stat.toUpperCase() : 'CRTRATE';
 				POSSIBLE_KNOWN_ELEMENTS.forEach((element) => {
 					testIconResultWithBuff(
-						BuffId[`passive:2:${stat}`],
+						BuffId[`passive:2:elemental-${stat}`],
 						[IconId[`BUFF_${element.toUpperCase()}${iconStatKey}${polarityKey}`]],
 						{ value: polarityValue, conditions: { targetElements: [element] }},
 						`buff value is ${polarityCase} and first target element condition is ${element}`,
@@ -119,35 +119,35 @@ describe('BUFF_METADATA entries', () => {
 				});
 
 				testIconResultWithBuff(
-					BuffId[`passive:2:${stat}`],
+					BuffId[`passive:2:elemental-${stat}`],
 					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue },
 					`buff value is ${polarityCase} and no conditions are given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`passive:2:${stat}`],
+					BuffId[`passive:2:elemental-${stat}`],
 					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: {} },
 					`buff value is ${polarityCase} and no target element conditions are given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`passive:2:${stat}`],
+					BuffId[`passive:2:elemental-${stat}`],
 					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetConditions: [] } },
 					`buff value is ${polarityCase} and target element conditions array is empty`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`passive:2:${stat}`],
+					BuffId[`passive:2:elemental-${stat}`],
 					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetElements: [{ arbitrary: 'value' }] } },
 					`buff value is ${polarityCase} and a non-string element is given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`passive:2:${stat}`],
+					BuffId[`passive:2:elemental-${stat}`],
 					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetElements: ['a fake element']} },
 					`buff value is ${polarityCase} and an invalid target condition element is given`,
@@ -155,28 +155,28 @@ describe('BUFF_METADATA entries', () => {
 			});
 		};
 
-		describe('passive:2:hp', () => {
-			testDefaultIconResult(BuffId['passive:2:hp'], [IconId.BUFF_ELEMENTHPUP]);
+		describe('passive:2:elemental-hp', () => {
+			testDefaultIconResult(BuffId['passive:2:elemental-hp'], [IconId.BUFF_ELEMENTHPUP]);
 			testElementalVariantsAndPolarities('hp');
 		});
 
-		describe('passive:2:atk', () => {
-			testDefaultIconResult(BuffId['passive:2:atk'], [IconId.BUFF_ELEMENTATKUP]);
+		describe('passive:2:elemental-atk', () => {
+			testDefaultIconResult(BuffId['passive:2:elemental-atk'], [IconId.BUFF_ELEMENTATKUP]);
 			testElementalVariantsAndPolarities('atk');
 		});
 
-		describe('passive:2:def', () => {
-			testDefaultIconResult(BuffId['passive:2:def'], [IconId.BUFF_ELEMENTDEFUP]);
+		describe('passive:2:elemental-def', () => {
+			testDefaultIconResult(BuffId['passive:2:elemental-def'], [IconId.BUFF_ELEMENTDEFUP]);
 			testElementalVariantsAndPolarities('def');
 		});
 
-		describe('passive:2:rec', () => {
-			testDefaultIconResult(BuffId['passive:2:rec'], [IconId.BUFF_ELEMENTRECUP]);
+		describe('passive:2:elemental-rec', () => {
+			testDefaultIconResult(BuffId['passive:2:elemental-rec'], [IconId.BUFF_ELEMENTRECUP]);
 			testElementalVariantsAndPolarities('rec');
 		});
 
-		describe('passive:2:crit', () => {
-			testDefaultIconResult(BuffId['passive:2:crit'], [IconId.BUFF_ELEMENTCRTRATEUP]);
+		describe('passive:2:elemental-crit', () => {
+			testDefaultIconResult(BuffId['passive:2:elemental-crit'], [IconId.BUFF_ELEMENTCRTRATEUP]);
 			testElementalVariantsAndPolarities('crit');
 		});
 	});
@@ -201,7 +201,7 @@ describe('BUFF_METADATA entries', () => {
 				const iconStatKey = stat !== 'crit' ? stat.toUpperCase() : 'CRTRATE';
 				POSSIBLE_KNOWN_UNIT_TYPES.forEach((unitType) => {
 					testIconResultWithBuff(
-						BuffId[`passive:3:${stat}`],
+						BuffId[`passive:3:type based-${stat}`],
 						[IconId[`BUFF_${unitType.toUpperCase()}${iconStatKey}${polarityKey}`]],
 						{ value: polarityValue, conditions: { targetUnitType: unitType } },
 						`buff value is ${polarityCase} and target unit type is ${unitType}`,
@@ -209,35 +209,35 @@ describe('BUFF_METADATA entries', () => {
 				});
 
 				testIconResultWithBuff(
-					BuffId[`passive:3:${stat}`],
+					BuffId[`passive:3:type based-${stat}`],
 					[IconId[`BUFF_UNITTYPE${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue },
 					`buff value is ${polarityCase} and no conditions are given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`passive:3:${stat}`],
+					BuffId[`passive:3:type based-${stat}`],
 					[IconId[`BUFF_UNITTYPE${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: {} },
 					`buff value is ${polarityCase} and no unit type conditions are given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`passive:3:${stat}`],
+					BuffId[`passive:3:type based-${stat}`],
 					[IconId[`BUFF_UNITTYPE${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetUnitType: '' } },
 					`buff value is ${polarityCase} and unit type condition is empty`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`passive:3:${stat}`],
+					BuffId[`passive:3:type based-${stat}`],
 					[IconId[`BUFF_UNITTYPE${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetUnitType: { arbitrary: 'value' } } },
 					`buff value is ${polarityCase} and a non-string unit type is given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`passive:3:${stat}`],
+					BuffId[`passive:3:type based-${stat}`],
 					[IconId[`BUFF_UNITTYPE${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetUnitType: 'a fake type' } },
 					`buff value is ${polarityCase} and an invalid target unit type is given`,
@@ -245,412 +245,412 @@ describe('BUFF_METADATA entries', () => {
 			});
 		};
 
-		describe('passive:3:hp', () => {
-			testDefaultIconResult(BuffId['passive:3:hp'], [IconId.BUFF_UNITTYPEHPUP]);
+		describe('passive:3:type based-hp', () => {
+			testDefaultIconResult(BuffId['passive:3:type based-hp'], [IconId.BUFF_UNITTYPEHPUP]);
 			testUnitTypeVariantsAndPolarities('hp');
 		});
 
-		describe('passive:3:atk', () => {
-			testDefaultIconResult(BuffId['passive:3:atk'], [IconId.BUFF_UNITTYPEATKUP]);
+		describe('passive:3:type based-atk', () => {
+			testDefaultIconResult(BuffId['passive:3:type based-atk'], [IconId.BUFF_UNITTYPEATKUP]);
 			testUnitTypeVariantsAndPolarities('atk');
 		});
 
-		describe('passive:3:def', () => {
-			testDefaultIconResult(BuffId['passive:3:def'], [IconId.BUFF_UNITTYPEDEFUP]);
+		describe('passive:3:type based-def', () => {
+			testDefaultIconResult(BuffId['passive:3:type based-def'], [IconId.BUFF_UNITTYPEDEFUP]);
 			testUnitTypeVariantsAndPolarities('def');
 		});
 
-		describe('passive:3:rec', () => {
-			testDefaultIconResult(BuffId['passive:3:rec'], [IconId.BUFF_UNITTYPERECUP]);
+		describe('passive:3:type based-rec', () => {
+			testDefaultIconResult(BuffId['passive:3:type based-rec'], [IconId.BUFF_UNITTYPERECUP]);
 			testUnitTypeVariantsAndPolarities('rec');
 		});
 
-		describe('passive:3:crit', () => {
-			testDefaultIconResult(BuffId['passive:3:crit'], [IconId.BUFF_UNITTYPECRTRATEUP]);
+		describe('passive:3:type based-crit', () => {
+			testDefaultIconResult(BuffId['passive:3:type based-crit'], [IconId.BUFF_UNITTYPECRTRATEUP]);
 			testUnitTypeVariantsAndPolarities('crit');
 		});
 	});
 
 	describe('passive 4 buffs', () => {
-		describe('passive:4:poison', () => {
-			testDefaultIconResult(BuffId['passive:4:poison'], [IconId.BUFF_POISONBLK]);
+		describe('passive:4:resist-poison', () => {
+			testDefaultIconResult(BuffId['passive:4:resist-poison'], [IconId.BUFF_POISONBLK]);
 		});
 
-		describe('passive:4:weak', () => {
-			testDefaultIconResult(BuffId['passive:4:weak'], [IconId.BUFF_WEAKBLK]);
+		describe('passive:4:resist-weak', () => {
+			testDefaultIconResult(BuffId['passive:4:resist-weak'], [IconId.BUFF_WEAKBLK]);
 		});
 
-		describe('passive:4:sick', () => {
-			testDefaultIconResult(BuffId['passive:4:sick'], [IconId.BUFF_SICKBLK]);
+		describe('passive:4:resist-sick', () => {
+			testDefaultIconResult(BuffId['passive:4:resist-sick'], [IconId.BUFF_SICKBLK]);
 		});
 
-		describe('passive:4:injury', () => {
-			testDefaultIconResult(BuffId['passive:4:injury'], [IconId.BUFF_INJURYBLK]);
+		describe('passive:4:resist-injury', () => {
+			testDefaultIconResult(BuffId['passive:4:resist-injury'], [IconId.BUFF_INJURYBLK]);
 		});
 
-		describe('passive:4:curse', () => {
-			testDefaultIconResult(BuffId['passive:4:curse'], [IconId.BUFF_CURSEBLK]);
+		describe('passive:4:resist-curse', () => {
+			testDefaultIconResult(BuffId['passive:4:resist-curse'], [IconId.BUFF_CURSEBLK]);
 		});
 
-		describe('passive:4:paralysis', () => {
-			testDefaultIconResult(BuffId['passive:4:paralysis'], [IconId.BUFF_PARALYSISBLK]);
+		describe('passive:4:resist-paralysis', () => {
+			testDefaultIconResult(BuffId['passive:4:resist-paralysis'], [IconId.BUFF_PARALYSISBLK]);
 		});
 	});
 
 	describe('passive 5 buffs', () => {
-		describe('passive:5:fire', () => {
-			testDefaultIconResult(BuffId['passive:5:fire'], [IconId.BUFF_FIREDMGDOWN]);
+		describe('passive:5:mitigate-fire', () => {
+			testDefaultIconResult(BuffId['passive:5:mitigate-fire'], [IconId.BUFF_FIREDMGDOWN]);
 		});
 
-		describe('passive:5:water', () => {
-			testDefaultIconResult(BuffId['passive:5:water'], [IconId.BUFF_WATERDMGDOWN]);
+		describe('passive:5:mitigate-water', () => {
+			testDefaultIconResult(BuffId['passive:5:mitigate-water'], [IconId.BUFF_WATERDMGDOWN]);
 		});
 
-		describe('passive:5:earth', () => {
-			testDefaultIconResult(BuffId['passive:5:earth'], [IconId.BUFF_EARTHDMGDOWN]);
+		describe('passive:5:mitigate-earth', () => {
+			testDefaultIconResult(BuffId['passive:5:mitigate-earth'], [IconId.BUFF_EARTHDMGDOWN]);
 		});
 
-		describe('passive:5:thunder', () => {
-			testDefaultIconResult(BuffId['passive:5:thunder'], [IconId.BUFF_THUNDERDMGDOWN]);
+		describe('passive:5:mitigate-thunder', () => {
+			testDefaultIconResult(BuffId['passive:5:mitigate-thunder'], [IconId.BUFF_THUNDERDMGDOWN]);
 		});
 
-		describe('passive:5:light', () => {
-			testDefaultIconResult(BuffId['passive:5:light'], [IconId.BUFF_LIGHTDMGDOWN]);
+		describe('passive:5:mitigate-light', () => {
+			testDefaultIconResult(BuffId['passive:5:mitigate-light'], [IconId.BUFF_LIGHTDMGDOWN]);
 		});
 
-		describe('passive:5:dark', () => {
-			testDefaultIconResult(BuffId['passive:5:dark'], [IconId.BUFF_DARKDMGDOWN]);
+		describe('passive:5:mitigate-dark', () => {
+			testDefaultIconResult(BuffId['passive:5:mitigate-dark'], [IconId.BUFF_DARKDMGDOWN]);
 		});
 
-		describe('passive:5:unknown', () => {
-			testDefaultIconResult(BuffId['passive:5:unknown'], [IconId.BUFF_ELEMENTDMGDOWN]);
+		describe('passive:5:mitigate-unknown', () => {
+			testDefaultIconResult(BuffId['passive:5:mitigate-unknown'], [IconId.BUFF_ELEMENTDMGDOWN]);
 		});
 	});
 
-	describe('passive:8', () => {
-		testDefaultIconResult(BuffId['passive:8'], [IconId.BUFF_DAMAGECUT]);
+	describe('passive:8:mitigation', () => {
+		testDefaultIconResult(BuffId['passive:8:mitigation'], [IconId.BUFF_DAMAGECUT]);
 	});
 
-	describe('passive:9', () => {
-		testDefaultIconResult(BuffId['passive:9'], [IconId.BUFF_BBREC]);
+	describe('passive:9:gradual bc fill', () => {
+		testDefaultIconResult(BuffId['passive:9:gradual bc fill'], [IconId.BUFF_BBREC]);
 	});
 
-	describe('passive:10', () => {
-		testDefaultIconResult(BuffId['passive:10'], [IconId.BUFF_HCREC]);
+	describe('passive:10:hc efficacy', () => {
+		testDefaultIconResult(BuffId['passive:10:hc efficacy'], [IconId.BUFF_HCREC]);
 	});
 
 	describe('passive 11 buffs', () => {
-		describe('passive:11:atk', () => {
-			testDefaultIconResult(BuffId['passive:11:atk'], [IconId.BUFF_HPTHRESHATKUP]);
-			testIconResultWithBuff(BuffId['passive:11:atk'], [IconId.BUFF_HPTHRESHATKDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:11:hp conditional-atk', () => {
+			testDefaultIconResult(BuffId['passive:11:hp conditional-atk'], [IconId.BUFF_HPTHRESHATKUP]);
+			testIconResultWithBuff(BuffId['passive:11:hp conditional-atk'], [IconId.BUFF_HPTHRESHATKDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:11:def', () => {
-			testDefaultIconResult(BuffId['passive:11:def'], [IconId.BUFF_HPTHRESHDEFUP]);
-			testIconResultWithBuff(BuffId['passive:11:def'], [IconId.BUFF_HPTHRESHDEFDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:11:hp conditional-def', () => {
+			testDefaultIconResult(BuffId['passive:11:hp conditional-def'], [IconId.BUFF_HPTHRESHDEFUP]);
+			testIconResultWithBuff(BuffId['passive:11:hp conditional-def'], [IconId.BUFF_HPTHRESHDEFDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:11:rec', () => {
-			testDefaultIconResult(BuffId['passive:11:rec'], [IconId.BUFF_HPTHRESHRECUP]);
-			testIconResultWithBuff(BuffId['passive:11:rec'], [IconId.BUFF_HPTHRESHRECDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:11:hp conditional-rec', () => {
+			testDefaultIconResult(BuffId['passive:11:hp conditional-rec'], [IconId.BUFF_HPTHRESHRECUP]);
+			testIconResultWithBuff(BuffId['passive:11:hp conditional-rec'], [IconId.BUFF_HPTHRESHRECDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:11:crit', () => {
-			testDefaultIconResult(BuffId['passive:11:crit'], [IconId.BUFF_HPTHRESHCRTRATEUP]);
-			testIconResultWithBuff(BuffId['passive:11:crit'], [IconId.BUFF_HPTHRESHCRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:11:hp conditional-crit', () => {
+			testDefaultIconResult(BuffId['passive:11:hp conditional-crit'], [IconId.BUFF_HPTHRESHCRTRATEUP]);
+			testIconResultWithBuff(BuffId['passive:11:hp conditional-crit'], [IconId.BUFF_HPTHRESHCRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 	});
 
 	describe('passive 12 buffs', () => {
-		describe('passive:12:bc', () => {
-			testDefaultIconResult(BuffId['passive:12:bc'], [IconId.BUFF_HPTHRESHBCDROP]);
-			testIconResultWithBuff(BuffId['passive:12:bc'], [IconId.BUFF_HPTHRESHBCDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:12:hp conditional drop boost-bc', () => {
+			testDefaultIconResult(BuffId['passive:12:hp conditional drop boost-bc'], [IconId.BUFF_HPTHRESHBCDROP]);
+			testIconResultWithBuff(BuffId['passive:12:hp conditional drop boost-bc'], [IconId.BUFF_HPTHRESHBCDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:12:hc', () => {
-			testDefaultIconResult(BuffId['passive:12:hc'], [IconId.BUFF_HPTHRESHHCDROP]);
-			testIconResultWithBuff(BuffId['passive:12:hc'], [IconId.BUFF_HPTHRESHHCDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:12:hp conditional drop boost-hc', () => {
+			testDefaultIconResult(BuffId['passive:12:hp conditional drop boost-hc'], [IconId.BUFF_HPTHRESHHCDROP]);
+			testIconResultWithBuff(BuffId['passive:12:hp conditional drop boost-hc'], [IconId.BUFF_HPTHRESHHCDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:12:item', () => {
-			testDefaultIconResult(BuffId['passive:12:item'], [IconId.BUFF_HPTHRESHITEMDROP]);
-			testIconResultWithBuff(BuffId['passive:12:item'], [IconId.BUFF_HPTHRESHITEMDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:12:hp conditional drop boost-item', () => {
+			testDefaultIconResult(BuffId['passive:12:hp conditional drop boost-item'], [IconId.BUFF_HPTHRESHITEMDROP]);
+			testIconResultWithBuff(BuffId['passive:12:hp conditional drop boost-item'], [IconId.BUFF_HPTHRESHITEMDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:12:zel', () => {
-			testDefaultIconResult(BuffId['passive:12:zel'], [IconId.BUFF_HPTHRESHZELDROP]);
-			testIconResultWithBuff(BuffId['passive:12:zel'], [IconId.BUFF_HPTHRESHZELDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:12:hp conditional drop boost-zel', () => {
+			testDefaultIconResult(BuffId['passive:12:hp conditional drop boost-zel'], [IconId.BUFF_HPTHRESHZELDROP]);
+			testIconResultWithBuff(BuffId['passive:12:hp conditional drop boost-zel'], [IconId.BUFF_HPTHRESHZELDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:12:karma', () => {
-			testDefaultIconResult(BuffId['passive:12:karma'], [IconId.BUFF_HPTHRESHKARMADROP]);
-			testIconResultWithBuff(BuffId['passive:12:karma'], [IconId.BUFF_HPTHRESHKARMADOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:12:hp conditional drop boost-karma', () => {
+			testDefaultIconResult(BuffId['passive:12:hp conditional drop boost-karma'], [IconId.BUFF_HPTHRESHKARMADROP]);
+			testIconResultWithBuff(BuffId['passive:12:hp conditional drop boost-karma'], [IconId.BUFF_HPTHRESHKARMADOWN], { value: -1 }, 'buff value is less than 0');
 		});
 	});
 
-	describe('passive:13', () => {
-		testDefaultIconResult(BuffId['passive:13'], [IconId.BUFF_BBREC]);
+	describe('passive:13:bc fill on enemy defeat', () => {
+		testDefaultIconResult(BuffId['passive:13:bc fill on enemy defeat'], [IconId.BUFF_BBREC]);
 	});
 
-	describe('passive:14', () => {
-		testDefaultIconResult(BuffId['passive:14'], [IconId.BUFF_DAMAGECUT]);
+	describe('passive:14:chance mitigation', () => {
+		testDefaultIconResult(BuffId['passive:14:chance mitigation'], [IconId.BUFF_DAMAGECUT]);
 	});
 
-	describe('passive:15', () => {
-		testDefaultIconResult(BuffId['passive:15'], [IconId.BUFF_HPREC]);
+	describe('passive:15:heal on enemy defeat', () => {
+		testDefaultIconResult(BuffId['passive:15:heal on enemy defeat'], [IconId.BUFF_HPREC]);
 	});
 
-	describe('passive:16', () => {
-		testDefaultIconResult(BuffId['passive:16'], [IconId.BUFF_HPREC]);
+	describe('passive:16:heal on win', () => {
+		testDefaultIconResult(BuffId['passive:16:heal on win'], [IconId.BUFF_HPREC]);
 	});
 
-	describe('passive:17', () => {
-		testDefaultIconResult(BuffId['passive:17'], [IconId.BUFF_HPABS]);
+	describe('passive:17:hp absorb', () => {
+		testDefaultIconResult(BuffId['passive:17:hp absorb'], [IconId.BUFF_HPABS]);
 	});
 
 	describe('passive 19 buffs', () => {
-		describe('passive:19:bc', () => {
-			testDefaultIconResult(BuffId['passive:19:bc'], [IconId.BUFF_BCDROP]);
-			testIconResultWithBuff(BuffId['passive:19:bc'], [IconId.BUFF_BCDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:19:drop boost-bc', () => {
+			testDefaultIconResult(BuffId['passive:19:drop boost-bc'], [IconId.BUFF_BCDROP]);
+			testIconResultWithBuff(BuffId['passive:19:drop boost-bc'], [IconId.BUFF_BCDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:19:hc', () => {
-			testDefaultIconResult(BuffId['passive:19:hc'], [IconId.BUFF_HCDROP]);
-			testIconResultWithBuff(BuffId['passive:19:hc'], [IconId.BUFF_HCDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:19:drop boost-hc', () => {
+			testDefaultIconResult(BuffId['passive:19:drop boost-hc'], [IconId.BUFF_HCDROP]);
+			testIconResultWithBuff(BuffId['passive:19:drop boost-hc'], [IconId.BUFF_HCDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:19:item', () => {
-			testDefaultIconResult(BuffId['passive:19:item'], [IconId.BUFF_ITEMDROP]);
-			testIconResultWithBuff(BuffId['passive:19:item'], [IconId.BUFF_ITEMDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:19:drop boost-item', () => {
+			testDefaultIconResult(BuffId['passive:19:drop boost-item'], [IconId.BUFF_ITEMDROP]);
+			testIconResultWithBuff(BuffId['passive:19:drop boost-item'], [IconId.BUFF_ITEMDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:19:zel', () => {
-			testDefaultIconResult(BuffId['passive:19:zel'], [IconId.BUFF_ZELDROP]);
-			testIconResultWithBuff(BuffId['passive:19:zel'], [IconId.BUFF_ZELDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:19:drop boost-zel', () => {
+			testDefaultIconResult(BuffId['passive:19:drop boost-zel'], [IconId.BUFF_ZELDROP]);
+			testIconResultWithBuff(BuffId['passive:19:drop boost-zel'], [IconId.BUFF_ZELDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:19:karma', () => {
-			testDefaultIconResult(BuffId['passive:19:karma'], [IconId.BUFF_KARMADROP]);
-			testIconResultWithBuff(BuffId['passive:19:karma'], [IconId.BUFF_KARMADOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:19:drop boost-karma', () => {
+			testDefaultIconResult(BuffId['passive:19:drop boost-karma'], [IconId.BUFF_KARMADROP]);
+			testIconResultWithBuff(BuffId['passive:19:drop boost-karma'], [IconId.BUFF_KARMADOWN], { value: -1 }, 'buff value is less than 0');
 		});
 	});
 
 	describe('passive 20 buffs', () => {
-		describe('passive:20:poison', () => {
-			testDefaultIconResult(BuffId['passive:20:poison'], [IconId.BUFF_ADDPOISON]);
+		describe('passive:20:chance inflict-poison', () => {
+			testDefaultIconResult(BuffId['passive:20:chance inflict-poison'], [IconId.BUFF_ADDPOISON]);
 		});
 
-		describe('passive:20:weak', () => {
-			testDefaultIconResult(BuffId['passive:20:weak'], [IconId.BUFF_ADDWEAK]);
+		describe('passive:20:chance inflict-weak', () => {
+			testDefaultIconResult(BuffId['passive:20:chance inflict-weak'], [IconId.BUFF_ADDWEAK]);
 		});
 
-		describe('passive:20:sick', () => {
-			testDefaultIconResult(BuffId['passive:20:sick'], [IconId.BUFF_ADDSICK]);
+		describe('passive:20:chance inflict-sick', () => {
+			testDefaultIconResult(BuffId['passive:20:chance inflict-sick'], [IconId.BUFF_ADDSICK]);
 		});
 
-		describe('passive:20:injury', () => {
-			testDefaultIconResult(BuffId['passive:20:injury'], [IconId.BUFF_ADDINJURY]);
+		describe('passive:20:chance inflict-injury', () => {
+			testDefaultIconResult(BuffId['passive:20:chance inflict-injury'], [IconId.BUFF_ADDINJURY]);
 		});
 
-		describe('passive:20:curse', () => {
-			testDefaultIconResult(BuffId['passive:20:curse'], [IconId.BUFF_ADDCURSE]);
+		describe('passive:20:chance inflict-curse', () => {
+			testDefaultIconResult(BuffId['passive:20:chance inflict-curse'], [IconId.BUFF_ADDCURSE]);
 		});
 
-		describe('passive:20:paralysis', () => {
-			testDefaultIconResult(BuffId['passive:20:paralysis'], [IconId.BUFF_ADDPARA]);
+		describe('passive:20:chance inflict-paralysis', () => {
+			testDefaultIconResult(BuffId['passive:20:chance inflict-paralysis'], [IconId.BUFF_ADDPARA]);
 		});
 
-		describe('passive:20:atk down', () => {
-			testDefaultIconResult(BuffId['passive:20:atk down'], [IconId.BUFF_ADDATKDOWN]);
+		describe('passive:20:chance inflict-atk down', () => {
+			testDefaultIconResult(BuffId['passive:20:chance inflict-atk down'], [IconId.BUFF_ADDATKDOWN]);
 		});
 
-		describe('passive:20:def down', () => {
-			testDefaultIconResult(BuffId['passive:20:def down'], [IconId.BUFF_ADDDEFDOWN]);
+		describe('passive:20:chance inflict-def down', () => {
+			testDefaultIconResult(BuffId['passive:20:chance inflict-def down'], [IconId.BUFF_ADDDEFDOWN]);
 		});
 
-		describe('passive:20:rec down', () => {
-			testDefaultIconResult(BuffId['passive:20:rec down'], [IconId.BUFF_ADDRECDOWN]);
+		describe('passive:20:chance inflict-rec down', () => {
+			testDefaultIconResult(BuffId['passive:20:chance inflict-rec down'], [IconId.BUFF_ADDRECDOWN]);
 		});
 
-		describe('passive:20:unknown', () => {
-			testDefaultIconResult(BuffId['passive:20:unknown'], [IconId.BUFF_ADDAILMENT]);
+		describe('passive:20:chance inflict-unknown', () => {
+			testDefaultIconResult(BuffId['passive:20:chance inflict-unknown'], [IconId.BUFF_ADDAILMENT]);
 		});
 	});
 
 	describe('passive 21 buffs', () => {
-		describe('passive:21:atk', () => {
-			testDefaultIconResult(BuffId['passive:21:atk'], [IconId.BUFF_ATKUP]);
-			testIconResultWithBuff(BuffId['passive:21:atk'], [IconId.BUFF_ATKDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:21:first turn-atk', () => {
+			testDefaultIconResult(BuffId['passive:21:first turn-atk'], [IconId.BUFF_ATKUP]);
+			testIconResultWithBuff(BuffId['passive:21:first turn-atk'], [IconId.BUFF_ATKDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:21:def', () => {
-			testDefaultIconResult(BuffId['passive:21:def'], [IconId.BUFF_DEFUP]);
-			testIconResultWithBuff(BuffId['passive:21:def'], [IconId.BUFF_DEFDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:21:first turn-def', () => {
+			testDefaultIconResult(BuffId['passive:21:first turn-def'], [IconId.BUFF_DEFUP]);
+			testIconResultWithBuff(BuffId['passive:21:first turn-def'], [IconId.BUFF_DEFDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:21:rec', () => {
-			testDefaultIconResult(BuffId['passive:21:rec'], [IconId.BUFF_RECUP]);
-			testIconResultWithBuff(BuffId['passive:21:rec'], [IconId.BUFF_RECDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:21:first turn-rec', () => {
+			testDefaultIconResult(BuffId['passive:21:first turn-rec'], [IconId.BUFF_RECUP]);
+			testIconResultWithBuff(BuffId['passive:21:first turn-rec'], [IconId.BUFF_RECDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:21:crit', () => {
-			testDefaultIconResult(BuffId['passive:21:crit'], [IconId.BUFF_CRTRATEUP]);
-			testIconResultWithBuff(BuffId['passive:21:crit'], [IconId.BUFF_CRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:21:first turn-crit', () => {
+			testDefaultIconResult(BuffId['passive:21:first turn-crit'], [IconId.BUFF_CRTRATEUP]);
+			testIconResultWithBuff(BuffId['passive:21:first turn-crit'], [IconId.BUFF_CRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 	});
 
-	describe('passive:23', () => {
-		testDefaultIconResult(BuffId['passive:23'], [IconId.BUFF_BBREC]);
+	describe('passive:23:bc fill on win', () => {
+		testDefaultIconResult(BuffId['passive:23:bc fill on win'], [IconId.BUFF_BBREC]);
 	});
 
-	describe('passive:24', () => {
-		testDefaultIconResult(BuffId['passive:24'], [IconId.BUFF_BEENATK_HPREC]);
+	describe('passive:24:heal on hit', () => {
+		testDefaultIconResult(BuffId['passive:24:heal on hit'], [IconId.BUFF_BEENATK_HPREC]);
 	});
 
-	describe('passive:25', () => {
-		testDefaultIconResult(BuffId['passive:25'], [IconId.BUFF_DAMAGEBB]);
+	describe('passive:25:bc fill on hit', () => {
+		testDefaultIconResult(BuffId['passive:25:bc fill on hit'], [IconId.BUFF_DAMAGEBB]);
 	});
 
-	describe('passive:26', () => {
-		testDefaultIconResult(BuffId['passive:26'], [IconId.BUFF_COUNTERDAMAGE]);
+	describe('passive:26:chance damage reflect', () => {
+		testDefaultIconResult(BuffId['passive:26:chance damage reflect'], [IconId.BUFF_COUNTERDAMAGE]);
 	});
 
-	describe('passive:27', () => {
-		testDefaultIconResult(BuffId['passive:27'], [IconId.BUFF_GETENEATT]);
-		testIconResultWithBuff(BuffId['passive:27'], [IconId.BUFF_REPENEATT], { value: -1 }, 'buff value is less than 0');
+	describe('passive:27:target chance change', () => {
+		testDefaultIconResult(BuffId['passive:27:target chance change'], [IconId.BUFF_GETENEATT]);
+		testIconResultWithBuff(BuffId['passive:27:target chance change'], [IconId.BUFF_REPENEATT], { value: -1 }, 'buff value is less than 0');
 	});
 
-	describe('passive:28', () => {
-		testDefaultIconResult(BuffId['passive:28'], [IconId.BUFF_HPTHRESHGETENEATT]);
-		testIconResultWithBuff(BuffId['passive:28'], [IconId.BUFF_HPTHRESHREPENEATT], { value: -1 }, 'buff value is less than 0');
+	describe('passive:28:hp conditional target chance change', () => {
+		testDefaultIconResult(BuffId['passive:28:hp conditional target chance change'], [IconId.BUFF_HPTHRESHGETENEATT]);
+		testIconResultWithBuff(BuffId['passive:28:hp conditional target chance change'], [IconId.BUFF_HPTHRESHREPENEATT], { value: -1 }, 'buff value is less than 0');
 	});
 
-	describe('passive:29', () => {
-		testDefaultIconResult(BuffId['passive:29'], [IconId.BUFF_IGNOREDEF]);
+	describe('passive:29:chance def ignore', () => {
+		testDefaultIconResult(BuffId['passive:29:chance def ignore'], [IconId.BUFF_IGNOREDEF]);
 	});
 
 	describe('passive 30 buffs', () => {
-		describe('passive:30:atk', () => {
-			testDefaultIconResult(BuffId['passive:30:atk'], [IconId.BUFF_BBGAUGETHRESHATKUP]);
-			testIconResultWithBuff(BuffId['passive:30:atk'], [IconId.BUFF_BBGAUGETHRESHATKDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:30:bb gauge conditional-atk', () => {
+			testDefaultIconResult(BuffId['passive:30:bb gauge conditional-atk'], [IconId.BUFF_BBGAUGETHRESHATKUP]);
+			testIconResultWithBuff(BuffId['passive:30:bb gauge conditional-atk'], [IconId.BUFF_BBGAUGETHRESHATKDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:30:def', () => {
-			testDefaultIconResult(BuffId['passive:30:def'], [IconId.BUFF_BBGAUGETHRESHDEFUP]);
-			testIconResultWithBuff(BuffId['passive:30:def'], [IconId.BUFF_BBGAUGETHRESHDEFDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:30:bb gauge conditional-def', () => {
+			testDefaultIconResult(BuffId['passive:30:bb gauge conditional-def'], [IconId.BUFF_BBGAUGETHRESHDEFUP]);
+			testIconResultWithBuff(BuffId['passive:30:bb gauge conditional-def'], [IconId.BUFF_BBGAUGETHRESHDEFDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:30:rec', () => {
-			testDefaultIconResult(BuffId['passive:30:rec'], [IconId.BUFF_BBGAUGETHRESHRECUP]);
-			testIconResultWithBuff(BuffId['passive:30:rec'], [IconId.BUFF_BBGAUGETHRESHRECDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:30:bb gauge conditional-rec', () => {
+			testDefaultIconResult(BuffId['passive:30:bb gauge conditional-rec'], [IconId.BUFF_BBGAUGETHRESHRECUP]);
+			testIconResultWithBuff(BuffId['passive:30:bb gauge conditional-rec'], [IconId.BUFF_BBGAUGETHRESHRECDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:30:crit', () => {
-			testDefaultIconResult(BuffId['passive:30:crit'], [IconId.BUFF_BBGAUGETHRESHCRTRATEUP]);
-			testIconResultWithBuff(BuffId['passive:30:crit'], [IconId.BUFF_BBGAUGETHRESHCRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:30:bb gauge conditional-crit', () => {
+			testDefaultIconResult(BuffId['passive:30:bb gauge conditional-crit'], [IconId.BUFF_BBGAUGETHRESHCRTRATEUP]);
+			testIconResultWithBuff(BuffId['passive:30:bb gauge conditional-crit'], [IconId.BUFF_BBGAUGETHRESHCRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 	});
 
 	describe('passive 31 buffs', () => {
-		describe('passive:31:damage', () => {
-			testDefaultIconResult(BuffId['passive:31:damage'], [IconId.BUFF_SPARKUP]);
-			testIconResultWithBuff(BuffId['passive:31:damage'], [IconId.BUFF_SPARKDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:31:spark-damage', () => {
+			testDefaultIconResult(BuffId['passive:31:spark-damage'], [IconId.BUFF_SPARKUP]);
+			testIconResultWithBuff(BuffId['passive:31:spark-damage'], [IconId.BUFF_SPARKDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:31:bc', () => {
-			testDefaultIconResult(BuffId['passive:31:bc'], [IconId.BUFF_SPARKBC]);
-			testIconResultWithBuff(BuffId['passive:31:bc'], [IconId.BUFF_BCDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:31:spark-bc', () => {
+			testDefaultIconResult(BuffId['passive:31:spark-bc'], [IconId.BUFF_SPARKBC]);
+			testIconResultWithBuff(BuffId['passive:31:spark-bc'], [IconId.BUFF_BCDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:31:hc', () => {
-			testDefaultIconResult(BuffId['passive:31:hc'], [IconId.BUFF_SPARKHC]);
-			testIconResultWithBuff(BuffId['passive:31:hc'], [IconId.BUFF_HCDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:31:spark-hc', () => {
+			testDefaultIconResult(BuffId['passive:31:spark-hc'], [IconId.BUFF_SPARKHC]);
+			testIconResultWithBuff(BuffId['passive:31:spark-hc'], [IconId.BUFF_HCDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:31:item', () => {
-			testDefaultIconResult(BuffId['passive:31:item'], [IconId.BUFF_SPARKITEM]);
-			testIconResultWithBuff(BuffId['passive:31:item'], [IconId.BUFF_ITEMDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:31:spark-item', () => {
+			testDefaultIconResult(BuffId['passive:31:spark-item'], [IconId.BUFF_SPARKITEM]);
+			testIconResultWithBuff(BuffId['passive:31:spark-item'], [IconId.BUFF_ITEMDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:31:zel', () => {
-			testDefaultIconResult(BuffId['passive:31:zel'], [IconId.BUFF_SPARKZEL]);
-			testIconResultWithBuff(BuffId['passive:31:zel'], [IconId.BUFF_ZELDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:31:spark-zel', () => {
+			testDefaultIconResult(BuffId['passive:31:spark-zel'], [IconId.BUFF_SPARKZEL]);
+			testIconResultWithBuff(BuffId['passive:31:spark-zel'], [IconId.BUFF_ZELDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:31:karma', () => {
-			testDefaultIconResult(BuffId['passive:31:karma'], [IconId.BUFF_SPARKKARMA]);
-			testIconResultWithBuff(BuffId['passive:31:karma'], [IconId.BUFF_KARMADOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:31:spark-karma', () => {
+			testDefaultIconResult(BuffId['passive:31:spark-karma'], [IconId.BUFF_SPARKKARMA]);
+			testIconResultWithBuff(BuffId['passive:31:spark-karma'], [IconId.BUFF_KARMADOWN], { value: -1 }, 'buff value is less than 0');
 		});
 	});
 
-	describe('passive:32', () => {
-		testDefaultIconResult(BuffId['passive:32'], [IconId.BUFF_BBFILL]);
+	describe('passive:32:bc efficacy', () => {
+		testDefaultIconResult(BuffId['passive:32:bc efficacy'], [IconId.BUFF_BBFILL]);
 	});
 
-	describe('passive:33', () => {
-		testDefaultIconResult(BuffId['passive:33'], [IconId.BUFF_HPREC]);
+	describe('passive:33:gradual heal', () => {
+		testDefaultIconResult(BuffId['passive:33:gradual heal'], [IconId.BUFF_HPREC]);
 	});
 
-	describe('passive:34', () => {
-		testDefaultIconResult(BuffId['passive:34'], [IconId.BUFF_CRTUP]);
+	describe('passive:34:critical damage', () => {
+		testDefaultIconResult(BuffId['passive:34:critical damage'], [IconId.BUFF_CRTUP]);
 	});
 
-	describe('passive:35', () => {
-		testDefaultIconResult(BuffId['passive:35'], [IconId.BUFF_BBREC]);
+	describe('passive:35:bc fill on normal attack', () => {
+		testDefaultIconResult(BuffId['passive:35:bc fill on normal attack'], [IconId.BUFF_BBREC]);
 	});
 
-	describe('passive:36', () => {
-		testDefaultIconResult(BuffId['passive:36'], [IconId.BUFF_DBLSTRIKE]);
+	describe('passive:36:extra action', () => {
+		testDefaultIconResult(BuffId['passive:36:extra action'], [IconId.BUFF_DBLSTRIKE]);
 	});
 
-	describe('passive:37', () => {
-		testDefaultIconResult(BuffId['passive:37'], [IconId.BUFF_HITUP]);
+	describe('passive:37:hit count boost', () => {
+		testDefaultIconResult(BuffId['passive:37:hit count boost'], [IconId.BUFF_HITUP]);
 	});
 
 	describe('passive 40 buffs', () => {
-		describe('passive:40:atk', () => {
-			testDefaultIconResult(BuffId['passive:40:atk'], [IconId.BUFF_CONVERTATKUP]);
-			testIconResultWithBuff(BuffId['passive:40:atk'], [IconId.BUFF_CONVERTATKUP], { value: {} }, 'buff value is not present');
-			testIconResultWithBuff(BuffId['passive:40:atk'], [IconId.BUFF_CONVERTATKDOWN], { value: { value: -1 } }, 'buff value is less than 0');
+		describe('passive:40:converted-atk', () => {
+			testDefaultIconResult(BuffId['passive:40:converted-atk'], [IconId.BUFF_CONVERTATKUP]);
+			testIconResultWithBuff(BuffId['passive:40:converted-atk'], [IconId.BUFF_CONVERTATKUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['passive:40:converted-atk'], [IconId.BUFF_CONVERTATKDOWN], { value: { value: -1 } }, 'buff value is less than 0');
 		});
 
-		describe('passive:40:def', () => {
-			testDefaultIconResult(BuffId['passive:40:def'], [IconId.BUFF_CONVERTDEFUP]);
-			testIconResultWithBuff(BuffId['passive:40:def'], [IconId.BUFF_CONVERTDEFUP], { value: {} }, 'buff value is not present');
-			testIconResultWithBuff(BuffId['passive:40:def'], [IconId.BUFF_CONVERTDEFDOWN], { value: { value: -1 } }, 'buff value is less than 0');
+		describe('passive:40:converted-def', () => {
+			testDefaultIconResult(BuffId['passive:40:converted-def'], [IconId.BUFF_CONVERTDEFUP]);
+			testIconResultWithBuff(BuffId['passive:40:converted-def'], [IconId.BUFF_CONVERTDEFUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['passive:40:converted-def'], [IconId.BUFF_CONVERTDEFDOWN], { value: { value: -1 } }, 'buff value is less than 0');
 		});
 
-		describe('passive:40:rec', () => {
-			testDefaultIconResult(BuffId['passive:40:rec'], [IconId.BUFF_CONVERTRECUP]);
-			testIconResultWithBuff(BuffId['passive:40:rec'], [IconId.BUFF_CONVERTRECUP], { value: {} }, 'buff value is not present');
-			testIconResultWithBuff(BuffId['passive:40:rec'], [IconId.BUFF_CONVERTRECDOWN], { value: { value: -1 } }, 'buff value is less than 0');
+		describe('passive:40:converted-rec', () => {
+			testDefaultIconResult(BuffId['passive:40:converted-rec'], [IconId.BUFF_CONVERTRECUP]);
+			testIconResultWithBuff(BuffId['passive:40:converted-rec'], [IconId.BUFF_CONVERTRECUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['passive:40:converted-rec'], [IconId.BUFF_CONVERTRECDOWN], { value: { value: -1 } }, 'buff value is less than 0');
 		});
 	});
 
 	describe('passive 41 buffs', () => {
-		describe('passive:41:hp', () => {
-			testDefaultIconResult(BuffId['passive:41:hp'], [IconId.BUFF_UNIQUEELEMENTHPUP]);
-			testIconResultWithBuff(BuffId['passive:41:hp'], [IconId.BUFF_UNIQUEELEMENTHPDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:41:unique element count-hp', () => {
+			testDefaultIconResult(BuffId['passive:41:unique element count-hp'], [IconId.BUFF_UNIQUEELEMENTHPUP]);
+			testIconResultWithBuff(BuffId['passive:41:unique element count-hp'], [IconId.BUFF_UNIQUEELEMENTHPDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:41:atk', () => {
-			testDefaultIconResult(BuffId['passive:41:atk'], [IconId.BUFF_UNIQUEELEMENTATKUP]);
-			testIconResultWithBuff(BuffId['passive:41:atk'], [IconId.BUFF_UNIQUEELEMENTATKDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:41:unique element count-atk', () => {
+			testDefaultIconResult(BuffId['passive:41:unique element count-atk'], [IconId.BUFF_UNIQUEELEMENTATKUP]);
+			testIconResultWithBuff(BuffId['passive:41:unique element count-atk'], [IconId.BUFF_UNIQUEELEMENTATKDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:41:def', () => {
-			testDefaultIconResult(BuffId['passive:41:def'], [IconId.BUFF_UNIQUEELEMENTDEFUP]);
-			testIconResultWithBuff(BuffId['passive:41:def'], [IconId.BUFF_UNIQUEELEMENTDEFDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:41:unique element count-def', () => {
+			testDefaultIconResult(BuffId['passive:41:unique element count-def'], [IconId.BUFF_UNIQUEELEMENTDEFUP]);
+			testIconResultWithBuff(BuffId['passive:41:unique element count-def'], [IconId.BUFF_UNIQUEELEMENTDEFDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:41:rec', () => {
-			testDefaultIconResult(BuffId['passive:41:rec'], [IconId.BUFF_UNIQUEELEMENTRECUP]);
-			testIconResultWithBuff(BuffId['passive:41:rec'], [IconId.BUFF_UNIQUEELEMENTRECDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:41:unique element count-rec', () => {
+			testDefaultIconResult(BuffId['passive:41:unique element count-rec'], [IconId.BUFF_UNIQUEELEMENTRECUP]);
+			testIconResultWithBuff(BuffId['passive:41:unique element count-rec'], [IconId.BUFF_UNIQUEELEMENTRECDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:41:crit', () => {
-			testDefaultIconResult(BuffId['passive:41:crit'], [IconId.BUFF_UNIQUEELEMENTCRTRATEUP]);
-			testIconResultWithBuff(BuffId['passive:41:crit'], [IconId.BUFF_UNIQUEELEMENTCRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:41:unique element count-crit', () => {
+			testDefaultIconResult(BuffId['passive:41:unique element count-crit'], [IconId.BUFF_UNIQUEELEMENTCRTRATEUP]);
+			testIconResultWithBuff(BuffId['passive:41:unique element count-crit'], [IconId.BUFF_UNIQUEELEMENTCRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 	});
 
@@ -671,7 +671,7 @@ describe('BUFF_METADATA entries', () => {
 				const iconStatKey = stat !== 'crit' ? stat.toUpperCase() : 'CRTRATE';
 				POSSIBLE_KNOWN_GENDERS.forEach((gender) => {
 					testIconResultWithBuff(
-						BuffId[`passive:42:${stat}`],
+						BuffId[`passive:42:gender-${stat}`],
 						[IconId[`BUFF_${gender.toUpperCase()}${iconStatKey}${polarityKey}`]],
 						{ value: polarityValue, conditions: { targetGender: gender } },
 						`buff value is ${polarityCase} and target gender is ${gender}`,
@@ -679,35 +679,35 @@ describe('BUFF_METADATA entries', () => {
 				});
 
 				testIconResultWithBuff(
-					BuffId[`passive:42:${stat}`],
+					BuffId[`passive:42:gender-${stat}`],
 					[IconId[`BUFF_GENDER${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue },
 					`buff value is ${polarityCase} and no conditions are given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`passive:42:${stat}`],
+					BuffId[`passive:42:gender-${stat}`],
 					[IconId[`BUFF_GENDER${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: {} },
 					`buff value is ${polarityCase} and no gender conditions are given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`passive:42:${stat}`],
+					BuffId[`passive:42:gender-${stat}`],
 					[IconId[`BUFF_GENDER${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetGender: '' } },
 					`buff value is ${polarityCase} and gender condition is empty`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`passive:42:${stat}`],
+					BuffId[`passive:42:gender-${stat}`],
 					[IconId[`BUFF_GENDER${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetGender: { arbitrary: 'value' } } },
 					`buff value is ${polarityCase} and a non-string gender is given`,
 				);
 
 				testIconResultWithBuff(
-					BuffId[`passive:42:${stat}`],
+					BuffId[`passive:42:gender-${stat}`],
 					[IconId[`BUFF_GENDER${iconStatKey}${polarityKey}`]],
 					{ value: polarityValue, conditions: { targetGender: 'a fake value' } },
 					`buff value is ${polarityCase} and an invalid target gender is given`,
@@ -715,158 +715,158 @@ describe('BUFF_METADATA entries', () => {
 			});
 		};
 
-		describe('passive:42:hp', () => {
-			testDefaultIconResult(BuffId['passive:42:hp'], [IconId.BUFF_GENDERHPUP]);
+		describe('passive:42:gender-hp', () => {
+			testDefaultIconResult(BuffId['passive:42:gender-hp'], [IconId.BUFF_GENDERHPUP]);
 			testGenderVariantsAndPolarities('hp');
 		});
 
-		describe('passive:42:atk', () => {
-			testDefaultIconResult(BuffId['passive:42:atk'], [IconId.BUFF_GENDERATKUP]);
+		describe('passive:42:gender-atk', () => {
+			testDefaultIconResult(BuffId['passive:42:gender-atk'], [IconId.BUFF_GENDERATKUP]);
 			testGenderVariantsAndPolarities('atk');
 		});
 
-		describe('passive:42:def', () => {
-			testDefaultIconResult(BuffId['passive:42:def'], [IconId.BUFF_GENDERDEFUP]);
+		describe('passive:42:gender-def', () => {
+			testDefaultIconResult(BuffId['passive:42:gender-def'], [IconId.BUFF_GENDERDEFUP]);
 			testGenderVariantsAndPolarities('def');
 		});
 
-		describe('passive:42:rec', () => {
-			testDefaultIconResult(BuffId['passive:42:rec'], [IconId.BUFF_GENDERRECUP]);
+		describe('passive:42:gender-rec', () => {
+			testDefaultIconResult(BuffId['passive:42:gender-rec'], [IconId.BUFF_GENDERRECUP]);
 			testGenderVariantsAndPolarities('rec');
 		});
 
-		describe('passive:42:crit', () => {
-			testDefaultIconResult(BuffId['passive:42:crit'], [IconId.BUFF_GENDERCRTRATEUP]);
+		describe('passive:42:gender-crit', () => {
+			testDefaultIconResult(BuffId['passive:42:gender-crit'], [IconId.BUFF_GENDERCRTRATEUP]);
 			testGenderVariantsAndPolarities('crit');
 		});
 	});
 
-	describe('passive:43', () => {
-		testDefaultIconResult(BuffId['passive:43'], [IconId.BUFF_DAMAGECUTTOONE]);
+	describe('passive:43:chance damage to one', () => {
+		testDefaultIconResult(BuffId['passive:43:chance damage to one'], [IconId.BUFF_DAMAGECUTTOONE]);
 	});
 
 	describe('passive 44 buffs', () => {
-		describe('passive:44:hp', () => {
-			testDefaultIconResult(BuffId['passive:44:hp'], [IconId.BUFF_HPUP]);
-			testIconResultWithBuff(BuffId['passive:44:hp'], [IconId.BUFF_HPDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:44:flat-hp', () => {
+			testDefaultIconResult(BuffId['passive:44:flat-hp'], [IconId.BUFF_HPUP]);
+			testIconResultWithBuff(BuffId['passive:44:flat-hp'], [IconId.BUFF_HPDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:44:atk', () => {
-			testDefaultIconResult(BuffId['passive:44:atk'], [IconId.BUFF_ATKUP]);
-			testIconResultWithBuff(BuffId['passive:44:atk'], [IconId.BUFF_ATKDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:44:flat-atk', () => {
+			testDefaultIconResult(BuffId['passive:44:flat-atk'], [IconId.BUFF_ATKUP]);
+			testIconResultWithBuff(BuffId['passive:44:flat-atk'], [IconId.BUFF_ATKDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:44:def', () => {
-			testDefaultIconResult(BuffId['passive:44:def'], [IconId.BUFF_DEFUP]);
-			testIconResultWithBuff(BuffId['passive:44:def'], [IconId.BUFF_DEFDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:44:flat-def', () => {
+			testDefaultIconResult(BuffId['passive:44:flat-def'], [IconId.BUFF_DEFUP]);
+			testIconResultWithBuff(BuffId['passive:44:flat-def'], [IconId.BUFF_DEFDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:44:rec', () => {
-			testDefaultIconResult(BuffId['passive:44:rec'], [IconId.BUFF_RECUP]);
-			testIconResultWithBuff(BuffId['passive:44:rec'], [IconId.BUFF_RECDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:44:flat-rec', () => {
+			testDefaultIconResult(BuffId['passive:44:flat-rec'], [IconId.BUFF_RECUP]);
+			testIconResultWithBuff(BuffId['passive:44:flat-rec'], [IconId.BUFF_RECDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 
-		describe('passive:44:crit', () => {
-			testDefaultIconResult(BuffId['passive:44:crit'], [IconId.BUFF_CRTRATEUP]);
-			testIconResultWithBuff(BuffId['passive:44:crit'], [IconId.BUFF_CRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
+		describe('passive:44:flat-crit', () => {
+			testDefaultIconResult(BuffId['passive:44:flat-crit'], [IconId.BUFF_CRTRATEUP]);
+			testIconResultWithBuff(BuffId['passive:44:flat-crit'], [IconId.BUFF_CRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
 		});
 	});
 
 	describe('passive 45 buffs', () => {
-		describe('passive:45:base', () => {
-			testDefaultIconResult(BuffId['passive:45:base'], [IconId.BUFF_CRTDOWN]);
+		describe('passive:45:critical damage reduction-base', () => {
+			testDefaultIconResult(BuffId['passive:45:critical damage reduction-base'], [IconId.BUFF_CRTDOWN]);
 		});
 
-		describe('passive:45:buff', () => {
-			testDefaultIconResult(BuffId['passive:45:buff'], [IconId.BUFF_CRTDOWN]);
+		describe('passive:45:critical damage reduction-buff', () => {
+			testDefaultIconResult(BuffId['passive:45:critical damage reduction-buff'], [IconId.BUFF_CRTDOWN]);
 		});
 	});
 
 	describe('passive 46 buffs', () => {
-		describe('passive:46:atk', () => {
-			testDefaultIconResult(BuffId['passive:46:atk'], [IconId.BUFF_HPSCALEDATKUP]);
-			testIconResultWithBuff(BuffId['passive:46:atk'], [IconId.BUFF_HPSCALEDATKUP], { value: {} }, 'buff value is not present');
-			testIconResultWithBuff(BuffId['passive:46:atk'], [IconId.BUFF_HPSCALEDATKDOWN], { value: { addedValue: -1 } }, 'buff value is less than 0');
+		describe('passive:46:hp scaled-atk', () => {
+			testDefaultIconResult(BuffId['passive:46:hp scaled-atk'], [IconId.BUFF_HPSCALEDATKUP]);
+			testIconResultWithBuff(BuffId['passive:46:hp scaled-atk'], [IconId.BUFF_HPSCALEDATKUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['passive:46:hp scaled-atk'], [IconId.BUFF_HPSCALEDATKDOWN], { value: { addedValue: -1 } }, 'buff value is less than 0');
 		});
 
-		describe('passive:46:def', () => {
-			testDefaultIconResult(BuffId['passive:46:def'], [IconId.BUFF_HPSCALEDDEFUP]);
-			testIconResultWithBuff(BuffId['passive:46:def'], [IconId.BUFF_HPSCALEDDEFUP], { value: {} }, 'buff value is not present');
-			testIconResultWithBuff(BuffId['passive:46:def'], [IconId.BUFF_HPSCALEDDEFDOWN], { value: { addedValue: -1 } }, 'buff value is less than 0');
+		describe('passive:46:hp scaled-def', () => {
+			testDefaultIconResult(BuffId['passive:46:hp scaled-def'], [IconId.BUFF_HPSCALEDDEFUP]);
+			testIconResultWithBuff(BuffId['passive:46:hp scaled-def'], [IconId.BUFF_HPSCALEDDEFUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['passive:46:hp scaled-def'], [IconId.BUFF_HPSCALEDDEFDOWN], { value: { addedValue: -1 } }, 'buff value is less than 0');
 		});
 
-		describe('passive:46:rec', () => {
-			testDefaultIconResult(BuffId['passive:46:rec'], [IconId.BUFF_HPSCALEDRECUP]);
-			testIconResultWithBuff(BuffId['passive:46:rec'], [IconId.BUFF_HPSCALEDRECUP], { value: {} }, 'buff value is not present');
-			testIconResultWithBuff(BuffId['passive:46:rec'], [IconId.BUFF_HPSCALEDRECDOWN], { value: { addedValue: -1 } }, 'buff value is less than 0');
+		describe('passive:46:hp scaled-rec', () => {
+			testDefaultIconResult(BuffId['passive:46:hp scaled-rec'], [IconId.BUFF_HPSCALEDRECUP]);
+			testIconResultWithBuff(BuffId['passive:46:hp scaled-rec'], [IconId.BUFF_HPSCALEDRECUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['passive:46:hp scaled-rec'], [IconId.BUFF_HPSCALEDRECDOWN], { value: { addedValue: -1 } }, 'buff value is less than 0');
 		});
 	});
 
-	describe('passive:47', () => {
-		testDefaultIconResult(BuffId['passive:47'], [IconId.BUFF_SPARKBBUP]);
+	describe('passive:47:bc fill on spark', () => {
+		testDefaultIconResult(BuffId['passive:47:bc fill on spark'], [IconId.BUFF_SPARKBBUP]);
 	});
 
-	describe('passive:48', () => {
-		testDefaultIconResult(BuffId['passive:48'], [IconId.BUFF_BBCOST_REDUCTION]);
+	describe('passive:48:bc cost reduction', () => {
+		testDefaultIconResult(BuffId['passive:48:bc cost reduction'], [IconId.BUFF_BBCOST_REDUCTION]);
 	});
 
-	describe('passive:49', () => {
-		testDefaultIconResult(BuffId['passive:49'], [IconId.BUFF_BBREC]);
+	describe('passive:49:bb gauge consumption reduction', () => {
+		testDefaultIconResult(BuffId['passive:49:bb gauge consumption reduction'], [IconId.BUFF_BBREC]);
 	});
 
 	describe('passive 50 buffs', () => {
-		describe('passive:50:fire', () => {
-			testDefaultIconResult(BuffId['passive:50:fire'], [IconId.BUFF_FIREDMGUP]);
+		describe('passive:50:elemental weakness damage-fire', () => {
+			testDefaultIconResult(BuffId['passive:50:elemental weakness damage-fire'], [IconId.BUFF_FIREDMGUP]);
 		});
 
-		describe('passive:50:water', () => {
-			testDefaultIconResult(BuffId['passive:50:water'], [IconId.BUFF_WATERDMGUP]);
+		describe('passive:50:elemental weakness damage-water', () => {
+			testDefaultIconResult(BuffId['passive:50:elemental weakness damage-water'], [IconId.BUFF_WATERDMGUP]);
 		});
 
-		describe('passive:50:earth', () => {
-			testDefaultIconResult(BuffId['passive:50:earth'], [IconId.BUFF_EARTHDMGUP]);
+		describe('passive:50:elemental weakness damage-earth', () => {
+			testDefaultIconResult(BuffId['passive:50:elemental weakness damage-earth'], [IconId.BUFF_EARTHDMGUP]);
 		});
 
-		describe('passive:50:thunder', () => {
-			testDefaultIconResult(BuffId['passive:50:thunder'], [IconId.BUFF_THUNDERDMGUP]);
+		describe('passive:50:elemental weakness damage-thunder', () => {
+			testDefaultIconResult(BuffId['passive:50:elemental weakness damage-thunder'], [IconId.BUFF_THUNDERDMGUP]);
 		});
 
-		describe('passive:50:light', () => {
-			testDefaultIconResult(BuffId['passive:50:light'], [IconId.BUFF_LIGHTDMGUP]);
+		describe('passive:50:elemental weakness damage-light', () => {
+			testDefaultIconResult(BuffId['passive:50:elemental weakness damage-light'], [IconId.BUFF_LIGHTDMGUP]);
 		});
 
-		describe('passive:50:dark', () => {
-			testDefaultIconResult(BuffId['passive:50:dark'], [IconId.BUFF_DARKDMGUP]);
+		describe('passive:50:elemental weakness damage-dark', () => {
+			testDefaultIconResult(BuffId['passive:50:elemental weakness damage-dark'], [IconId.BUFF_DARKDMGUP]);
 		});
 
-		describe('passive:50:unknown', () => {
-			testDefaultIconResult(BuffId['passive:50:unknown'], [IconId.BUFF_ELEMENTDMGUP]);
+		describe('passive:50:elemental weakness damage-unknown', () => {
+			testDefaultIconResult(BuffId['passive:50:elemental weakness damage-unknown'], [IconId.BUFF_ELEMENTDMGUP]);
 		});
 	});
 
 	describe('passive 53 buffs', () => {
-		describe('passive:53:critical-damage-base', () => {
-			testDefaultIconResult(BuffId['passive:53:critical-damage-base'], [IconId.BUFF_CRTDOWN]);
+		describe('passive:53:critical damage-base', () => {
+			testDefaultIconResult(BuffId['passive:53:critical damage-base'], [IconId.BUFF_CRTDOWN]);
 		});
 
-		describe('passive:53:critical-damage-buff', () => {
-			testDefaultIconResult(BuffId['passive:53:critical-damage-buff'], [IconId.BUFF_CRTDOWN]);
+		describe('passive:53:critical damage-buff', () => {
+			testDefaultIconResult(BuffId['passive:53:critical damage-buff'], [IconId.BUFF_CRTDOWN]);
 		});
 
-		describe('passive:53:element-damage-base', () => {
-			testDefaultIconResult(BuffId['passive:53:element-damage-base'], [IconId.BUFF_ELEMENTDOWN]);
+		describe('passive:53:element damage-base', () => {
+			testDefaultIconResult(BuffId['passive:53:element damage-base'], [IconId.BUFF_ELEMENTDOWN]);
 		});
 
-		describe('passive:53:element-damage-buff', () => {
-			testDefaultIconResult(BuffId['passive:53:element-damage-buff'], [IconId.BUFF_ELEMENTDOWN]);
+		describe('passive:53:element damage-buff', () => {
+			testDefaultIconResult(BuffId['passive:53:element damage-buff'], [IconId.BUFF_ELEMENTDOWN]);
 		});
 
-		describe('passive:53:critical-rate-base', () => {
-			testDefaultIconResult(BuffId['passive:53:critical-rate-base'], [IconId.BUFF_CRTDOWN]);
+		describe('passive:53:critical rate-base', () => {
+			testDefaultIconResult(BuffId['passive:53:critical rate-base'], [IconId.BUFF_CRTDOWN]);
 		});
 
-		describe('passive:53:critical-rate-buff', () => {
-			testDefaultIconResult(BuffId['passive:53:critical-rate-buff'], [IconId.BUFF_CRTDOWN]);
+		describe('passive:53:critical rate-buff', () => {
+			testDefaultIconResult(BuffId['passive:53:critical rate-buff'], [IconId.BUFF_CRTDOWN]);
 		});
 	});
 

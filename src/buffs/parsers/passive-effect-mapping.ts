@@ -428,7 +428,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}
 
 		const createBaseStatObject = (stat: CoreStat) => ({
-			id: `passive:2:${stat}`,
+			id: `passive:2:elemental-${stat}`,
 			originalId,
 			sources,
 			value: parseNumberOrDefault(stats[stat]),
@@ -514,7 +514,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(stats[stat as CoreStat]);
 			if (value !== 0) {
 				results.push({
-					id: `passive:3:${stat}`,
+					id: `passive:3:type based-${stat}`,
 					originalId,
 					sources,
 					value: +value,
@@ -568,7 +568,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(resistances[ailment]);
 			if (value !== 0) {
 				results.push({
-					id: `passive:4:${ailment}`,
+					id: `passive:4:resist-${ailment}`,
 					originalId,
 					sources,
 					value,
@@ -614,7 +614,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const value = parseNumberOrDefault(mitigation);
 		if (value !== 0) {
 			results.push({
-				id: `passive:5:${element}`,
+				id: `passive:5:mitigate-${element}`,
 				originalId,
 				sources,
 				value,
@@ -639,7 +639,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			context,
 			injectionContext,
 			effectKey: 'dmg% mitigation',
-			buffId: 'passive:8',
+			buffId: 'passive:8:mitigation',
 			originalId: '8',
 		});
 	});
@@ -650,7 +650,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			context,
 			injectionContext,
 			effectKey: 'bc fill per turn',
-			buffId: 'passive:9',
+			buffId: 'passive:9:gradual bc fill',
 			originalId: '9',
 		});
 	});
@@ -661,7 +661,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			context,
 			injectionContext,
 			effectKey: 'hc effectiveness%',
-			buffId: 'passive:10',
+			buffId: 'passive:10:hc efficacy',
 			originalId: '10',
 		});
 	});
@@ -702,7 +702,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec' | 'crit']);
 			if (stat !== 'hp' && value !== 0) {
 				const entry: IBuff = {
-					id: `passive:11:${stat}`,
+					id: `passive:11:hp conditional-${stat}`,
 					originalId,
 					sources,
 					value,
@@ -760,7 +760,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(dropRates[dropType]);
 			if (value !== 0) {
 				const entry: IBuff = {
-					id: `passive:12:${dropType}`,
+					id: `passive:12:hp conditional drop boost-${dropType}`,
 					originalId,
 					sources,
 					value,
@@ -795,7 +795,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffKeyHigh: 'fillHigh',
 			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
 			generateBaseConditions: () => ({ onEnemyDefeat: true }),
-			buffId: 'passive:13',
+			buffId: 'passive:13:bc fill on enemy defeat',
 		});
 	});
 
@@ -820,7 +820,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (damageReduction !== 0 || chance !== 0) {
 			results.push({
-				id: 'passive:14',
+				id: 'passive:14:chance mitigation',
 				originalId,
 				sources,
 				value: {
@@ -855,7 +855,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffKeyHigh: 'healHigh',
 			generateBaseConditions: () => ({ onEnemyDefeat: true }),
 			defaultEffectChance: 100, // currently deathmax's datamine misses this value, but all known entries have 100% chance
-			buffId: 'passive:15',
+			buffId: 'passive:15:heal on enemy defeat',
 		});
 	});
 
@@ -880,7 +880,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (healLow !== 0 || healHigh !== 0) {
 			results.push({
-				id: 'passive:16',
+				id: 'passive:16:heal on win',
 				originalId,
 				sources,
 				value: {
@@ -916,7 +916,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			effectKeyChance: 'hp drain chance%',
 			buffKeyLow: 'drainHealLow',
 			buffKeyHigh: 'drainHealHigh',
-			buffId: 'passive:17',
+			buffId: 'passive:17:hp absorb',
 		});
 	});
 
@@ -950,7 +950,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(dropRates[dropType]);
 			if (value !== 0) {
 				results.push({
-					id: `passive:19:${dropType}`,
+					id: `passive:19:drop boost-${dropType}`,
 					originalId,
 					sources,
 					value,
@@ -1023,7 +1023,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		inflictedAilments.forEach(({ ailment, chance }) => {
 			if (chance !== 0) {
 				results.push({
-					id: `passive:20:${ailment}`,
+					id: `passive:20:chance inflict-${ailment}`,
 					originalId,
 					sources,
 					value: chance,
@@ -1076,7 +1076,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec' | 'crit']);
 			if (stat !== 'hp' && value !== 0) {
 				const entry: IBuff = {
-					id: `passive:21:${stat}`,
+					id: `passive:21:first turn-${stat}`,
 					originalId,
 					sources,
 					value,
@@ -1120,7 +1120,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (fillLow !== 0 || fillHigh !== 0) {
 			results.push({
-				id: 'passive:23',
+				id: 'passive:23:bc fill on win',
 				originalId,
 				sources,
 				value: {
@@ -1157,7 +1157,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffKeyLow: 'healLow',
 			buffKeyHigh: 'healHigh',
 			generateBaseConditions: () => ({ whenAttacked: true }),
-			buffId: 'passive:24',
+			buffId: 'passive:24:heal on hit',
 		});
 	});
 
@@ -1174,7 +1174,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffKeyHigh: 'fillHigh',
 			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
 			generateBaseConditions: () => ({ whenAttacked: true }),
-			buffId: 'passive:25',
+			buffId: 'passive:25:bc fill on hit',
 		});
 	});
 
@@ -1190,7 +1190,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffKeyLow: 'damageReflectLow',
 			buffKeyHigh: 'damageReflectHigh',
 			generateBaseConditions: () => ({ whenAttacked: true }),
-			buffId: 'passive:26',
+			buffId: 'passive:26:chance damage reflect',
 		});
 	});
 
@@ -1200,7 +1200,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			context,
 			injectionContext,
 			effectKey: 'target% chance',
-			buffId: 'passive:27',
+			buffId: 'passive:27:target chance change',
 			originalId: '27',
 		});
 	});
@@ -1228,7 +1228,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		if (value !== 0) {
 			const thresholdConditions = getThresholdConditions(thresholdInfo);
 			const entry: IBuff = {
-				id: 'passive:28',
+				id: 'passive:28:hp conditional target chance change',
 				originalId,
 				sources,
 				value,
@@ -1255,7 +1255,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			context,
 			injectionContext,
 			effectKey: 'ignore def%',
-			buffId: 'passive:29',
+			buffId: 'passive:29:chance def ignore',
 			originalId: '29',
 		});
 	});
@@ -1296,7 +1296,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec' | 'crit']);
 			if (stat !== 'hp' && value !== 0) {
 				const entry: IBuff = {
-					id: `passive:30:${stat}`,
+					id: `passive:30:bb gauge conditional-${stat}`,
 					originalId,
 					sources,
 					value,
@@ -1350,7 +1350,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (sparkDamageBoost !== 0) {
 			results.push({
-				id: 'passive:31:damage',
+				id: 'passive:31:spark-damage',
 				originalId,
 				sources,
 				value: sparkDamageBoost,
@@ -1363,7 +1363,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(dropRates[dropType]);
 			if (value !== 0) {
 				results.push({
-					id: `passive:31:${dropType}`,
+					id: `passive:31:spark-${dropType}`,
 					originalId,
 					sources,
 					value,
@@ -1389,7 +1389,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			context,
 			injectionContext,
 			effectKey: 'bb gauge fill rate%',
-			buffId: 'passive:32',
+			buffId: 'passive:32:bc efficacy',
 			originalId: '32',
 		});
 	});
@@ -1417,7 +1417,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (healLow !== 0 || healHigh !== 0) {
 			results.push({
-				id: 'passive:33',
+				id: 'passive:33:gradual heal',
 				originalId,
 				sources,
 				value: {
@@ -1446,7 +1446,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			context,
 			injectionContext,
 			effectKey: 'crit multiplier%',
-			buffId: 'passive:34',
+			buffId: 'passive:34:critical damage',
 			originalId: '34',
 			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) * 100,
 		});
@@ -1465,7 +1465,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffKeyHigh: 'fillHigh',
 			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
 			generateBaseConditions: () => ({ onNormalAttack: true }),
-			buffId: 'passive:35',
+			buffId: 'passive:35:bc fill on normal attack',
 		});
 	});
 
@@ -1490,7 +1490,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (additionalActions !== 0 || damageModifier !== 0 || chance !== 0) {
 			results.push({
-				id: 'passive:36',
+				id: 'passive:36:extra action',
 				originalId,
 				sources,
 				value: {
@@ -1535,7 +1535,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (hitIncreasePerHit !==0 || extraHitDamage !== 0) {
 			results.push({
-				id: 'passive:37',
+				id: 'passive:37:hit count boost',
 				originalId,
 				sources,
 				value: {
@@ -1612,7 +1612,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec']);
 			if (value !== 0) {
 				results.push({
-					id: `passive:40:${stat}`,
+					id: `passive:40:converted-${stat}`,
 					originalId,
 					sources,
 					value: {
@@ -1670,7 +1670,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(stats[stat as CoreStat]);
 			if (value !== 0) {
 				results.push({
-					id: `passive:41:${stat}`,
+					id: `passive:41:unique element count-${stat}`,
 					originalId,
 					sources,
 					value: +value,
@@ -1736,7 +1736,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(stats[stat as CoreStat]);
 			if (value !== 0) {
 				results.push({
-					id: `passive:42:${stat}`,
+					id: `passive:42:gender-${stat}`,
 					originalId,
 					sources,
 					value: +value,
@@ -1765,7 +1765,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			context,
 			injectionContext,
 			effectKey: 'take 1 dmg%',
-			buffId: 'passive:43',
+			buffId: 'passive:43:chance damage to one',
 			originalId: '43',
 		});
 	});
@@ -1802,7 +1802,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const value = parseNumberOrDefault(stats[stat as CoreStat]);
 			if (value !== 0) {
 				results.push({
-					id: `passive:44:${stat}`,
+					id: `passive:44:flat-${stat}`,
 					originalId,
 					sources,
 					value,
@@ -1844,7 +1844,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const results: IBuff[] = [];
 		if (baseResist !== 0) {
 			results.push({
-				id: 'passive:45:base',
+				id: 'passive:45:critical damage reduction-base',
 				originalId,
 				sources,
 				value: baseResist,
@@ -1855,7 +1855,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		if (buffResist !== 0) {
 			results.push({
-				id: 'passive:45:buff',
+				id: 'passive:45:critical damage reduction-buff',
 				originalId,
 				sources,
 				value: buffResist,
@@ -1922,7 +1922,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		}
 
 		const results: IBuff[] = stats.map(({ stat, baseValue, addedValue }) => ({
-			id: `passive:46:${stat}`,
+			id: `passive:46:hp scaled-${stat}`,
 			originalId,
 			sources,
 			value: {
@@ -1956,7 +1956,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffKeyLow: 'fillLow',
 			buffKeyHigh: 'fillHigh',
 			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
-			buffId: 'passive:47',
+			buffId: 'passive:47:bc fill on spark',
 		});
 	});
 
@@ -1966,7 +1966,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			context,
 			injectionContext,
 			effectKey: 'reduced bb bc cost%',
-			buffId: 'passive:48',
+			buffId: 'passive:48:bc cost reduction',
 			originalId: '48',
 		});
 	});
@@ -1982,7 +1982,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			effectKeyChance: 'reduced bb bc use chance%',
 			buffKeyLow: 'reducedUseLow%',
 			buffKeyHigh: 'reducedUseHigh%',
-			buffId: 'passive:49',
+			buffId: 'passive:49:bb gauge consumption reduction',
 		});
 	});
 
@@ -2008,7 +2008,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		let results: IBuff[] = [];
 		if (damageBoost !== 0) {
 			results = elements.map((element) => ({
-				id: `passive:50:${element}`,
+				id: `passive:50:elemental weakness damage-${element}`,
 				originalId,
 				sources,
 				value: damageBoost,
@@ -2018,7 +2018,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 			if (results.length === 0) {
 				results.push({
-					id: 'passive:50:unknown',
+					id: 'passive:50:elemental weakness damage-unknown',
 					originalId,
 					sources,
 					value: damageBoost,
@@ -2044,9 +2044,9 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		const typedEffect = (effect as IPassiveEffect);
 		enum ResistType {
-			CriticalDamage = 'critical-damage',
-			ElementDamage = 'element-damage',
-			CriticalHitRate = 'critical-rate',
+			CriticalDamage = 'critical damage',
+			ElementDamage = 'element damage',
+			CriticalHitRate = 'critical rate',
 		}
 		interface IResistanceInfo {
 			resistType: ResistType;

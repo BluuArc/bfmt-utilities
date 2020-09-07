@@ -122,36 +122,36 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		};
 
 		return {
-			'passive:2:hp': {
-				id: BuffId['passive:2:hp'],
+			'passive:2:elemental-hp': {
+				id: BuffId['passive:2:elemental-hp'],
 				name: 'Passive Elemental HP Boost',
 				stat: UnitStat.hp,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('HP'),
 			},
-			'passive:2:atk': {
-				id: BuffId['passive:2:atk'],
+			'passive:2:elemental-atk': {
+				id: BuffId['passive:2:elemental-atk'],
 				name: 'Passive Elemental Attack Boost',
 				stat: UnitStat.atk,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('ATK'),
 			},
-			'passive:2:def': {
-				id: BuffId['passive:2:def'],
+			'passive:2:elemental-def': {
+				id: BuffId['passive:2:elemental-def'],
 				name: 'Passive Elemental Defense Boost',
 				stat: UnitStat.def,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('DEF'),
 			},
-			'passive:2:rec': {
-				id: BuffId['passive:2:rec'],
+			'passive:2:elemental-rec': {
+				id: BuffId['passive:2:elemental-rec'],
 				name: 'Passive Elemental Recovery Boost',
 				stat: UnitStat.rec,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('REC'),
 			},
-			'passive:2:crit': {
-				id: BuffId['passive:2:crit'],
+			'passive:2:elemental-crit': {
+				id: BuffId['passive:2:elemental-crit'],
 				name: 'Passive Elemental Critical Hit Rate Boost',
 				stat: UnitStat.crit,
 				stackType: BuffStackType.Passive,
@@ -185,36 +185,36 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		};
 
 		return {
-			'passive:3:hp': {
-				id: BuffId['passive:3:hp'],
+			'passive:3:type based-hp': {
+				id: BuffId['passive:3:type based-hp'],
 				name: 'Passive Type-Based HP Boost',
 				stat: UnitStat.hp,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('HP'),
 			},
-			'passive:3:atk': {
-				id: BuffId['passive:3:atk'],
+			'passive:3:type based-atk': {
+				id: BuffId['passive:3:type based-atk'],
 				name: 'Passive Type-Based Attack Boost',
 				stat: UnitStat.atk,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('ATK'),
 			},
-			'passive:3:def': {
-				id: BuffId['passive:3:def'],
+			'passive:3:type based-def': {
+				id: BuffId['passive:3:type based-def'],
 				name: 'Passive Type-Based Defense Boost',
 				stat: UnitStat.def,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('DEF'),
 			},
-			'passive:3:rec': {
-				id: BuffId['passive:3:rec'],
+			'passive:3:type based-rec': {
+				id: BuffId['passive:3:type based-rec'],
 				name: 'Passive Type-Based Recovery Boost',
 				stat: UnitStat.rec,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('REC'),
 			},
-			'passive:3:crit': {
-				id: BuffId['passive:3:crit'],
+			'passive:3:type based-crit': {
+				id: BuffId['passive:3:type based-crit'],
 				name: 'Passive Type-Based Critical Hit Rate Boost',
 				stat: UnitStat.crit,
 				stackType: BuffStackType.Passive,
@@ -222,560 +222,560 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 			},
 		};
 	})(),
-	'passive:4:poison': {
-		id: BuffId['passive:4:poison'],
+	'passive:4:resist-poison': {
+		id: BuffId['passive:4:resist-poison'],
 		name: 'Passive Poison Resist',
 		stat: UnitStat.poisonResist,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_POISONBLK],
 	},
-	'passive:4:weak': {
-		id: BuffId['passive:4:weak'],
+	'passive:4:resist-weak': {
+		id: BuffId['passive:4:resist-weak'],
 		name: 'Passive Weak Resist',
 		stat: UnitStat.weakResist,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_WEAKBLK],
 	},
-	'passive:4:sick': {
-		id: BuffId['passive:4:sick'],
+	'passive:4:resist-sick': {
+		id: BuffId['passive:4:resist-sick'],
 		name: 'Passive Sick Resist',
 		stat: UnitStat.sickResist,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_SICKBLK],
 	},
-	'passive:4:injury': {
-		id: BuffId['passive:4:injury'],
+	'passive:4:resist-injury': {
+		id: BuffId['passive:4:resist-injury'],
 		name: 'Passive Injury Resist',
 		stat: UnitStat.injuryResist,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_INJURYBLK],
 	},
-	'passive:4:curse': {
-		id: BuffId['passive:4:curse'],
+	'passive:4:resist-curse': {
+		id: BuffId['passive:4:resist-curse'],
 		name: 'Passive Curse Resist',
 		stat: UnitStat.curseResist,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_CURSEBLK],
 	},
-	'passive:4:paralysis': {
-		id: BuffId['passive:4:paralysis'],
+	'passive:4:resist-paralysis': {
+		id: BuffId['passive:4:resist-paralysis'],
 		name: 'Passive Paralysis Resist',
 		stat: UnitStat.paralysisResist,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_PARALYSISBLK],
 	},
-	'passive:5:fire': {
-		id: BuffId['passive:5:fire'],
+	'passive:5:mitigate-fire': {
+		id: BuffId['passive:5:mitigate-fire'],
 		name: 'Passive Fire Damage Reduction',
 		stat: UnitStat.fireMitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_FIREDMGDOWN],
 	},
-	'passive:5:water': {
-		id: BuffId['passive:5:water'],
+	'passive:5:mitigate-water': {
+		id: BuffId['passive:5:mitigate-water'],
 		name: 'Passive Water Damage Reduction',
 		stat: UnitStat.waterMitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_WATERDMGDOWN],
 	},
-	'passive:5:earth': {
-		id: BuffId['passive:5:earth'],
+	'passive:5:mitigate-earth': {
+		id: BuffId['passive:5:mitigate-earth'],
 		name: 'Passive Earth Damage Reduction',
 		stat: UnitStat.earthMitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_EARTHDMGDOWN],
 	},
-	'passive:5:thunder': {
-		id: BuffId['passive:5:thunder'],
+	'passive:5:mitigate-thunder': {
+		id: BuffId['passive:5:mitigate-thunder'],
 		name: 'Passive Thunder Damage Reduction',
 		stat: UnitStat.thunderMitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_THUNDERDMGDOWN],
 	},
-	'passive:5:light': {
-		id: BuffId['passive:5:light'],
+	'passive:5:mitigate-light': {
+		id: BuffId['passive:5:mitigate-light'],
 		name: 'Passive Light Damage Reduction',
 		stat: UnitStat.lightMitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_LIGHTDMGDOWN],
 	},
-	'passive:5:dark': {
-		id: BuffId['passive:5:dark'],
+	'passive:5:mitigate-dark': {
+		id: BuffId['passive:5:mitigate-dark'],
 		name: 'Passive Dark Damage Reduction',
 		stat: UnitStat.darkMitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_DARKDMGDOWN],
 	},
-	'passive:5:unknown': {
-		id: BuffId['passive:5:unknown'],
+	'passive:5:mitigate-unknown': {
+		id: BuffId['passive:5:mitigate-unknown'],
 		name: 'Passive Elemental Damage Reduction (Unspecified Element)',
 		stat: UnitStat.mitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ELEMENTDMGDOWN],
 	},
-	'passive:8': {
-		id: BuffId['passive:8'],
+	'passive:8:mitigation': {
+		id: BuffId['passive:8:mitigation'],
 		name: 'Passive Damage Reduction',
 		stat: UnitStat.mitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_DAMAGECUT],
 	},
-	'passive:9': {
-		id: BuffId['passive:9'],
+	'passive:9:gradual bc fill': {
+		id: BuffId['passive:9:gradual bc fill'],
 		name: 'Passive Gradual BC Fill',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
 	},
-	'passive:10': {
-		id: BuffId['passive:10'],
+	'passive:10:hc efficacy': {
+		id: BuffId['passive:10:hc efficacy'],
 		name: 'Passive HC Efficacy',
 		stat: UnitStat.hcEfficacy,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_HCREC],
 	},
-	'passive:11:atk': {
-		id: BuffId['passive:11:atk'],
+	'passive:11:hp conditional-atk': {
+		id: BuffId['passive:11:hp conditional-atk'],
 		name: 'Passive HP-Conditional Attack Boost',
 		stat: UnitStat.atk,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_HPTHRESHATKDOWN : IconId.BUFF_HPTHRESHATKUP],
 	},
-	'passive:11:def': {
-		id: BuffId['passive:11:def'],
+	'passive:11:hp conditional-def': {
+		id: BuffId['passive:11:hp conditional-def'],
 		name: 'Passive HP-Conditional Defense Boost',
 		stat: UnitStat.def,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_HPTHRESHDEFDOWN : IconId.BUFF_HPTHRESHDEFUP],
 	},
-	'passive:11:rec': {
-		id: BuffId['passive:11:rec'],
+	'passive:11:hp conditional-rec': {
+		id: BuffId['passive:11:hp conditional-rec'],
 		name: 'Passive HP-Conditional Recovery Boost',
 		stat: UnitStat.rec,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_HPTHRESHRECDOWN : IconId.BUFF_HPTHRESHRECUP],
 	},
-	'passive:11:crit': {
-		id: BuffId['passive:11:crit'],
+	'passive:11:hp conditional-crit': {
+		id: BuffId['passive:11:hp conditional-crit'],
 		name: 'Passive HP-Conditional Critical Hit Rate Boost',
 		stat: UnitStat.crit,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_HPTHRESHCRTRATEDOWN : IconId.BUFF_HPTHRESHCRTRATEUP],
 	},
-	'passive:12:bc': {
-		id: BuffId['passive:12:bc'],
+	'passive:12:hp conditional drop boost-bc': {
+		id: BuffId['passive:12:hp conditional drop boost-bc'],
 		name: 'Passive HP-Conditional Battle Crystal Drop Rate Boost',
 		stat: UnitStat.bcDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HPTHRESHBCDOWN : IconId.BUFF_HPTHRESHBCDROP],
 	},
-	'passive:12:hc': {
-		id: BuffId['passive:12:hc'],
+	'passive:12:hp conditional drop boost-hc': {
+		id: BuffId['passive:12:hp conditional drop boost-hc'],
 		name: 'Passive HP-Conditional Heart Crystal Drop Rate Boost',
 		stat: UnitStat.hcDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HPTHRESHHCDOWN : IconId.BUFF_HPTHRESHHCDROP],
 	},
-	'passive:12:item': {
-		id: BuffId['passive:12:item'],
+	'passive:12:hp conditional drop boost-item': {
+		id: BuffId['passive:12:hp conditional drop boost-item'],
 		name: 'Passive HP-Conditional Item Drop Rate Boost',
 		stat: UnitStat.itemDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HPTHRESHITEMDOWN : IconId.BUFF_HPTHRESHITEMDROP],
 	},
-	'passive:12:zel': {
-		id: BuffId['passive:12:zel'],
+	'passive:12:hp conditional drop boost-zel': {
+		id: BuffId['passive:12:hp conditional drop boost-zel'],
 		name: 'Passive HP-Conditional Zel Drop Rate Boost',
 		stat: UnitStat.zelDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HPTHRESHZELDOWN : IconId.BUFF_HPTHRESHZELDROP],
 	},
-	'passive:12:karma': {
-		id: BuffId['passive:12:karma'],
+	'passive:12:hp conditional drop boost-karma': {
+		id: BuffId['passive:12:hp conditional drop boost-karma'],
 		name: 'Passive HP-Conditional Karma Drop Rate Boost',
 		stat: UnitStat.karmaDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HPTHRESHKARMADOWN : IconId.BUFF_HPTHRESHKARMADROP],
 	},
-	'passive:13': {
-		id: BuffId['passive:13'],
+	'passive:13:bc fill on enemy defeat': {
+		id: BuffId['passive:13:bc fill on enemy defeat'],
 		name: 'Passive BC Fill on Enemy Defeat',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
 	},
-	'passive:14': {
-		id: BuffId['passive:14'],
+	'passive:14:chance mitigation': {
+		id: BuffId['passive:14:chance mitigation'],
 		name: 'Passive Damage Reduction (Chance)',
 		stat: UnitStat.mitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_DAMAGECUT],
 	},
-	'passive:15': {
-		id: BuffId['passive:15'],
+	'passive:15:heal on enemy defeat': {
+		id: BuffId['passive:15:heal on enemy defeat'],
 		name: 'Passive Heal on Enemy Defeat',
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_HPREC],
 	},
-	'passive:16': {
-		id: BuffId['passive:16'],
+	'passive:16:heal on win': {
+		id: BuffId['passive:16:heal on win'],
 		name: 'Passive Heal on Battle Win',
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_HPREC],
 	},
-	'passive:17': {
-		id: BuffId['passive:17'],
+	'passive:17:hp absorb': {
+		id: BuffId['passive:17:hp absorb'],
 		name: 'HP Absorption',
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_HPABS],
 	},
-	'passive:19:bc': {
-		id: BuffId['passive:19:bc'],
+	'passive:19:drop boost-bc': {
+		id: BuffId['passive:19:drop boost-bc'],
 		name: 'Passive Battle Crystal Drop Rate Boost',
 		stat: UnitStat.bcDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_BCDOWN : IconId.BUFF_BCDROP],
 	},
-	'passive:19:hc': {
-		id: BuffId['passive:19:hc'],
+	'passive:19:drop boost-hc': {
+		id: BuffId['passive:19:drop boost-hc'],
 		name: 'Passive Heart Crystal Drop Rate Boost',
 		stat: UnitStat.hcDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HCDOWN : IconId.BUFF_HCDROP],
 	},
-	'passive:19:item': {
-		id: BuffId['passive:19:item'],
+	'passive:19:drop boost-item': {
+		id: BuffId['passive:19:drop boost-item'],
 		name: 'Passive Item Drop Rate Boost',
 		stat: UnitStat.itemDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ITEMDOWN : IconId.BUFF_ITEMDROP],
 	},
-	'passive:19:zel': {
-		id: BuffId['passive:19:zel'],
+	'passive:19:drop boost-zel': {
+		id: BuffId['passive:19:drop boost-zel'],
 		name: 'Passive Zel Drop Rate Boost',
 		stat: UnitStat.zelDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ZELDOWN : IconId.BUFF_ZELDROP],
 	},
-	'passive:19:karma': {
-		id: BuffId['passive:19:karma'],
+	'passive:19:drop boost-karma': {
+		id: BuffId['passive:19:drop boost-karma'],
 		name: 'Passive Karma Drop Rate Boost',
 		stat: UnitStat.karmaDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_KARMADOWN : IconId.BUFF_KARMADROP],
 	},
-	'passive:20:poison': {
-		id: BuffId['passive:20:poison'],
+	'passive:20:chance inflict-poison': {
+		id: BuffId['passive:20:chance inflict-poison'],
 		name: 'Passive Poison Infliction',
 		stat: UnitStat.poisonInflict,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ADDPOISON],
 	},
-	'passive:20:weak': {
-		id: BuffId['passive:20:weak'],
+	'passive:20:chance inflict-weak': {
+		id: BuffId['passive:20:chance inflict-weak'],
 		name: 'Passive Weak Infliction',
 		stat: UnitStat.weakInflict,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ADDWEAK],
 	},
-	'passive:20:sick': {
-		id: BuffId['passive:20:sick'],
+	'passive:20:chance inflict-sick': {
+		id: BuffId['passive:20:chance inflict-sick'],
 		name: 'Passive Sick Infliction',
 		stat: UnitStat.sickInflict,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ADDSICK],
 	},
-	'passive:20:injury': {
-		id: BuffId['passive:20:injury'],
+	'passive:20:chance inflict-injury': {
+		id: BuffId['passive:20:chance inflict-injury'],
 		name: 'Passive Injury Infliction',
 		stat: UnitStat.injuryInflict,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ADDINJURY],
 	},
-	'passive:20:curse': {
-		id: BuffId['passive:20:curse'],
+	'passive:20:chance inflict-curse': {
+		id: BuffId['passive:20:chance inflict-curse'],
 		name: 'Passive Curse Infliction',
 		stat: UnitStat.curseInflict,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ADDCURSE],
 	},
-	'passive:20:paralysis': {
-		id: BuffId['passive:20:paralysis'],
+	'passive:20:chance inflict-paralysis': {
+		id: BuffId['passive:20:chance inflict-paralysis'],
 		name: 'Passive Paralysis Infliction',
 		stat: UnitStat.paralysisInflict,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ADDPARA],
 	},
-	'passive:20:atk down': {
-		id: BuffId['passive:20:atk down'],
+	'passive:20:chance inflict-atk down': {
+		id: BuffId['passive:20:chance inflict-atk down'],
 		name: 'Passive Attack Reduction Infliction',
 		stat: UnitStat.atkDownInflict,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ADDATKDOWN],
 	},
-	'passive:20:def down': {
-		id: BuffId['passive:20:def down'],
+	'passive:20:chance inflict-def down': {
+		id: BuffId['passive:20:chance inflict-def down'],
 		name: 'Passive Defense Reduction Infliction',
 		stat: UnitStat.defDownInflict,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ADDDEFDOWN],
 	},
-	'passive:20:rec down': {
-		id: BuffId['passive:20:rec down'],
+	'passive:20:chance inflict-rec down': {
+		id: BuffId['passive:20:chance inflict-rec down'],
 		name: 'Passive Recovery Reduction Infliction',
 		stat: UnitStat.recDownInflict,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ADDRECDOWN],
 	},
-	'passive:20:unknown': {
-		id: BuffId['passive:20:unknown'],
+	'passive:20:chance inflict-unknown': {
+		id: BuffId['passive:20:chance inflict-unknown'],
 		name: 'Passive Unknown Ailment Infliction',
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.BUFF_ADDAILMENT],
 	},
-	'passive:21:atk': {
-		id: BuffId['passive:21:atk'],
+	'passive:21:first turn-atk': {
+		id: BuffId['passive:21:first turn-atk'],
 		name: 'Attack Boost for X Turns',
 		stat: UnitStat.atk,
 		stackType: BuffStackType.ConditionalTimed,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_ATKDOWN : IconId.BUFF_ATKUP],
 	},
-	'passive:21:def': {
-		id: BuffId['passive:21:def'],
+	'passive:21:first turn-def': {
+		id: BuffId['passive:21:first turn-def'],
 		name: 'Defense Boost for X Turns',
 		stat: UnitStat.def,
 		stackType: BuffStackType.ConditionalTimed,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_DEFDOWN : IconId.BUFF_DEFUP],
 	},
-	'passive:21:rec': {
-		id: BuffId['passive:21:rec'],
+	'passive:21:first turn-rec': {
+		id: BuffId['passive:21:first turn-rec'],
 		name: 'Recovery Boost for X Turns',
 		stat: UnitStat.rec,
 		stackType: BuffStackType.ConditionalTimed,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_RECDOWN : IconId.BUFF_RECUP],
 	},
-	'passive:21:crit': {
-		id: BuffId['passive:21:crit'],
+	'passive:21:first turn-crit': {
+		id: BuffId['passive:21:first turn-crit'],
 		name: 'Critical Hit Rate Boost for X Turns',
 		stat: UnitStat.crit,
 		stackType: BuffStackType.ConditionalTimed,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_CRTRATEDOWN : IconId.BUFF_CRTRATEUP],
 	},
-	'passive:23': {
-		id: BuffId['passive:23'],
+	'passive:23:bc fill on win': {
+		id: BuffId['passive:23:bc fill on win'],
 		name: 'Passive BC Fill on Battle Win',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
 	},
-	'passive:24': {
-		id: BuffId['passive:24'],
+	'passive:24:heal on hit': {
+		id: BuffId['passive:24:heal on hit'],
 		name: 'Passive Heal when Attacked',
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BEENATK_HPREC],
 	},
-	'passive:25': {
-		id: BuffId['passive:25'],
+	'passive:25:bc fill on hit': {
+		id: BuffId['passive:25:bc fill on hit'],
 		name: 'Passive BC Fill when Attacked',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_DAMAGEBB],
 	},
-	'passive:26': {
-		id: BuffId['passive:26'],
+	'passive:26:chance damage reflect': {
+		id: BuffId['passive:26:chance damage reflect'],
 		name: 'Passive Damage Counter (Chance)',
 		stat: UnitStat.damageReflect,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_COUNTERDAMAGE],
 	},
-	'passive:27': {
-		id: BuffId['passive:27'],
+	'passive:27:target chance change': {
+		id: BuffId['passive:27:target chance change'],
 		name: 'Passive Target Chance Modification',
 		stat: UnitStat.targetingModification,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_REPENEATT : IconId.BUFF_GETENEATT],
 	},
-	'passive:28': {
-		id: BuffId['passive:28'],
+	'passive:28:hp conditional target chance change': {
+		id: BuffId['passive:28:hp conditional target chance change'],
 		name: 'Passive HP-Conditional Target Chance Modification',
 		stat: UnitStat.targetingModification,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_HPTHRESHREPENEATT : IconId.BUFF_HPTHRESHGETENEATT],
 	},
-	'passive:29': {
-		id: BuffId['passive:29'],
+	'passive:29:chance def ignore': {
+		id: BuffId['passive:29:chance def ignore'],
 		name: 'Passive Defense Ignore (Chance)',
 		stat: UnitStat.defenseIgnore,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_IGNOREDEF],
 	},
-	'passive:30:atk': {
-		id: BuffId['passive:30:atk'],
+	'passive:30:bb gauge conditional-atk': {
+		id: BuffId['passive:30:bb gauge conditional-atk'],
 		name: 'Passive BB Gauge Conditional Attack Boost',
 		stat: UnitStat.atk,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_BBGAUGETHRESHATKDOWN : IconId.BUFF_BBGAUGETHRESHATKUP],
 	},
-	'passive:30:def': {
-		id: BuffId['passive:30:def'],
+	'passive:30:bb gauge conditional-def': {
+		id: BuffId['passive:30:bb gauge conditional-def'],
 		name: 'Passive BB Gauge Conditional Defense Boost',
 		stat: UnitStat.def,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_BBGAUGETHRESHDEFDOWN : IconId.BUFF_BBGAUGETHRESHDEFUP],
 	},
-	'passive:30:rec': {
-		id: BuffId['passive:30:rec'],
+	'passive:30:bb gauge conditional-rec': {
+		id: BuffId['passive:30:bb gauge conditional-rec'],
 		name: 'Passive BB Gauge Conditional Recovery Boost',
 		stat: UnitStat.rec,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_BBGAUGETHRESHRECDOWN : IconId.BUFF_BBGAUGETHRESHRECUP],
 	},
-	'passive:30:crit': {
-		id: BuffId['passive:30:crit'],
+	'passive:30:bb gauge conditional-crit': {
+		id: BuffId['passive:30:bb gauge conditional-crit'],
 		name: 'Passive BB Gauge Conditional Critical Hit Rate Boost',
 		stat: UnitStat.crit,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_BBGAUGETHRESHCRTRATEDOWN : IconId.BUFF_BBGAUGETHRESHCRTRATEUP],
 	},
-	'passive:31:damage': {
-		id: BuffId['passive:31:damage'],
+	'passive:31:spark-damage': {
+		id: BuffId['passive:31:spark-damage'],
 		name: 'Passive Spark Damage Boost',
 		stat: UnitStat.sparkDamage,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_SPARKDOWN : IconId.BUFF_SPARKUP],
 	},
-	'passive:31:bc': {
-		id: BuffId['passive:31:bc'],
+	'passive:31:spark-bc': {
+		id: BuffId['passive:31:spark-bc'],
 		name: 'Passive Battle Crystal Drop Rate Boost during Spark',
 		stat: UnitStat.bcDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_BCDOWN : IconId.BUFF_SPARKBC],
 	},
-	'passive:31:hc': {
-		id: BuffId['passive:31:hc'],
+	'passive:31:spark-hc': {
+		id: BuffId['passive:31:spark-hc'],
 		name: 'Passive Heart Crystal Drop Rate Boost during Spark',
 		stat: UnitStat.hcDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HCDOWN : IconId.BUFF_SPARKHC],
 	},
-	'passive:31:item': {
-		id: BuffId['passive:31:item'],
+	'passive:31:spark-item': {
+		id: BuffId['passive:31:spark-item'],
 		name: 'Passive Item Drop Rate Boost during Spark',
 		stat: UnitStat.itemDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ITEMDOWN : IconId.BUFF_SPARKITEM],
 	},
-	'passive:31:zel': {
-		id: BuffId['passive:31:zel'],
+	'passive:31:spark-zel': {
+		id: BuffId['passive:31:spark-zel'],
 		name: 'Passive Zel Drop Rate Boost during Spark',
 		stat: UnitStat.zelDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ZELDOWN : IconId.BUFF_SPARKZEL],
 	},
-	'passive:31:karma': {
-		id: BuffId['passive:31:karma'],
+	'passive:31:spark-karma': {
+		id: BuffId['passive:31:spark-karma'],
 		name: 'Passive Karma Drop Rate Boost during Spark',
 		stat: UnitStat.karmaDropRate,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_KARMADOWN : IconId.BUFF_SPARKKARMA],
 	},
-	'passive:32': {
-		id: BuffId['passive:32'],
+	'passive:32:bc efficacy': {
+		id: BuffId['passive:32:bc efficacy'],
 		name: 'Passive BC Efficacy',
 		stat: UnitStat.bcEfficacy,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBFILL],
 	},
-	'passive:33': {
-		id: BuffId['passive:33'],
+	'passive:33:gradual heal': {
+		id: BuffId['passive:33:gradual heal'],
 		name: 'Passive Gradual Heal',
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_HPREC],
 	},
-	'passive:34': {
-		id: BuffId['passive:34'],
+	'passive:34:critical damage': {
+		id: BuffId['passive:34:critical damage'],
 		name: 'Passive Critical Damage Boost',
 		stat: UnitStat.criticalDamage,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_CRTUP],
 	},
-	'passive:35': {
-		id: BuffId['passive:35'],
+	'passive:35:bc fill on normal attack': {
+		id: BuffId['passive:35:bc fill on normal attack'],
 		name: 'Passive BC Fill when Normal Attacking',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
 	},
-	'passive:36': {
-		id: BuffId['passive:36'],
+	'passive:36:extra action': {
+		id: BuffId['passive:36:extra action'],
 		name: 'Passive Extra Action',
 		stat: UnitStat.extraAction,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_DBLSTRIKE],
 	},
-	'passive:37': {
-		id: BuffId['passive:37'],
+	'passive:37:hit count boost': {
+		id: BuffId['passive:37:hit count boost'],
 		name: 'Passive Hit Count Boost',
 		stat: UnitStat.hitCountModification,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_HITUP],
 	},
-	'passive:40:atk': {
-		id: BuffId['passive:40:atk'],
+	'passive:40:converted-atk': {
+		id: BuffId['passive:40:converted-atk'],
 		name: 'Passive Converted Attack Boost',
 		stat: UnitStat.atk,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_CONVERTATKDOWN : IconId.BUFF_CONVERTATKUP],
 	},
-	'passive:40:def': {
-		id: BuffId['passive:40:def'],
+	'passive:40:converted-def': {
+		id: BuffId['passive:40:converted-def'],
 		name: 'Passive Converted Defense Boost',
 		stat: UnitStat.def,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_CONVERTDEFDOWN : IconId.BUFF_CONVERTDEFUP],
 	},
-	'passive:40:rec': {
-		id: BuffId['passive:40:rec'],
+	'passive:40:converted-rec': {
+		id: BuffId['passive:40:converted-rec'],
 		name: 'Passive Converted Recovery Boost',
 		stat: UnitStat.rec,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_CONVERTRECDOWN : IconId.BUFF_CONVERTRECUP],
 	},
-	'passive:41:hp': {
-		id: BuffId['passive:41:hp'],
+	'passive:41:unique element count-hp': {
+		id: BuffId['passive:41:unique element count-hp'],
 		name: 'Passive Element Squad-based HP Boost',
 		stat: UnitStat.hp,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_UNIQUEELEMENTHPDOWN : IconId.BUFF_UNIQUEELEMENTHPUP],
 	},
-	'passive:41:atk': {
-		id: BuffId['passive:41:atk'],
+	'passive:41:unique element count-atk': {
+		id: BuffId['passive:41:unique element count-atk'],
 		name: 'Passive Element Squad-based Attack Boost',
 		stat: UnitStat.atk,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_UNIQUEELEMENTATKDOWN : IconId.BUFF_UNIQUEELEMENTATKUP],
 	},
-	'passive:41:def': {
-		id: BuffId['passive:41:def'],
+	'passive:41:unique element count-def': {
+		id: BuffId['passive:41:unique element count-def'],
 		name: 'Passive Element Squad-based Defense Boost',
 		stat: UnitStat.def,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_UNIQUEELEMENTDEFDOWN : IconId.BUFF_UNIQUEELEMENTDEFUP],
 	},
-	'passive:41:rec': {
-		id: BuffId['passive:41:rec'],
+	'passive:41:unique element count-rec': {
+		id: BuffId['passive:41:unique element count-rec'],
 		name: 'Passive Element Squad-based Recovery Boost',
 		stat: UnitStat.rec,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_UNIQUEELEMENTRECDOWN : IconId.BUFF_UNIQUEELEMENTRECUP],
 	},
-	'passive:41:crit': {
-		id: BuffId['passive:41:crit'],
+	'passive:41:unique element count-crit': {
+		id: BuffId['passive:41:unique element count-crit'],
 		name: 'Passive Element Squad-based Critical Hit Rate Boost',
 		stat: UnitStat.crit,
 		stackType: BuffStackType.Passive,
@@ -807,36 +807,36 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		};
 
 		return {
-			'passive:42:hp': {
-				id: BuffId['passive:42:hp'],
+			'passive:42:gender-hp': {
+				id: BuffId['passive:42:gender-hp'],
 				name: 'Passive Gender-Based HP Boost',
 				stat: UnitStat.hp,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('HP'),
 			},
-			'passive:42:atk': {
-				id: BuffId['passive:42:atk'],
+			'passive:42:gender-atk': {
+				id: BuffId['passive:42:gender-atk'],
 				name: 'Passive Gender-Based Attack Boost',
 				stat: UnitStat.atk,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('ATK'),
 			},
-			'passive:42:def': {
-				id: BuffId['passive:42:def'],
+			'passive:42:gender-def': {
+				id: BuffId['passive:42:gender-def'],
 				name: 'Passive Gender-Based Defense Boost',
 				stat: UnitStat.def,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('DEF'),
 			},
-			'passive:42:rec': {
-				id: BuffId['passive:42:rec'],
+			'passive:42:gender-rec': {
+				id: BuffId['passive:42:gender-rec'],
 				name: 'Passive Gender-Based Recovery Boost',
 				stat: UnitStat.rec,
 				stackType: BuffStackType.Passive,
 				icons: createIconGetterForStat('REC'),
 			},
-			'passive:42:crit': {
-				id: BuffId['passive:42:crit'],
+			'passive:42:gender-crit': {
+				id: BuffId['passive:42:gender-crit'],
 				name: 'Passive Gender-Based Critical Hit Rate Boost',
 				stat: UnitStat.crit,
 				stackType: BuffStackType.Passive,
@@ -844,189 +844,189 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 			},
 		};
 	})(),
-	'passive:43': {
-		id: BuffId['passive:43'],
+	'passive:43:chance damage to one': {
+		id: BuffId['passive:43:chance damage to one'],
 		name: 'Passive Damage Reduction To One (Chance)',
 		stat: UnitStat.reduceDamageToOne,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_DAMAGECUTTOONE],
 	},
-	'passive:44:hp': {
-		id: BuffId['passive:44:hp'],
+	'passive:44:flat-hp': {
+		id: BuffId['passive:44:flat-hp'],
 		name: 'Passive Flat HP Boost',
 		stat: UnitStat.hp,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_HPDOWN : IconId.BUFF_HPUP],
 	},
-	'passive:44:atk': {
-		id: BuffId['passive:44:atk'],
+	'passive:44:flat-atk': {
+		id: BuffId['passive:44:flat-atk'],
 		name: 'Passive Flat Attack Boost',
 		stat: UnitStat.atk,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_ATKDOWN : IconId.BUFF_ATKUP],
 	},
-	'passive:44:def': {
-		id: BuffId['passive:44:def'],
+	'passive:44:flat-def': {
+		id: BuffId['passive:44:flat-def'],
 		name: 'Passive Flat Defense Boost',
 		stat: UnitStat.def,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_DEFDOWN : IconId.BUFF_DEFUP],
 	},
-	'passive:44:rec': {
-		id: BuffId['passive:44:rec'],
+	'passive:44:flat-rec': {
+		id: BuffId['passive:44:flat-rec'],
 		name: 'Passive Flat Recovery Boost',
 		stat: UnitStat.rec,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_RECDOWN : IconId.BUFF_RECUP],
 	},
-	'passive:44:crit': {
-		id: BuffId['passive:44:crit'],
+	'passive:44:flat-crit': {
+		id: BuffId['passive:44:flat-crit'],
 		name: 'Passive Flat Critical Hit Rate Boost',
 		stat: UnitStat.crit,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_CRTRATEDOWN : IconId.BUFF_CRTRATEUP],
 	},
-	'passive:45:base': {
-		id: BuffId['passive:45:base'],
+	'passive:45:critical damage reduction-base': {
+		id: BuffId['passive:45:critical damage reduction-base'],
 		name: 'Passive Base Critical Damage Reduction',
 		stat: UnitStat.criticalDamageMitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_CRTDOWN],
 	},
-	'passive:45:buff': {
-		id: BuffId['passive:45:buff'],
+	'passive:45:critical damage reduction-buff': {
+		id: BuffId['passive:45:critical damage reduction-buff'],
 		name: 'Passive Buffed Critical Damage Reduction',
 		stat: UnitStat.criticalDamageMitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_CRTDOWN],
 	},
-	'passive:46:atk': {
-		id: BuffId['passive:46:atk'],
+	'passive:46:hp scaled-atk': {
+		id: BuffId['passive:46:hp scaled-atk'],
 		name: 'Passive Attack Boost Relative to HP',
 		stat: UnitStat.atk,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { addedValue: number }).addedValue && (buff.value as { addedValue: number }).addedValue < 0) ? IconId.BUFF_HPSCALEDATKDOWN : IconId.BUFF_HPSCALEDATKUP],
 	},
-	'passive:46:def': {
-		id: BuffId['passive:46:def'],
+	'passive:46:hp scaled-def': {
+		id: BuffId['passive:46:hp scaled-def'],
 		name: 'Passive Defense Boost Relative to HP',
 		stat: UnitStat.def,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { addedValue: number }).addedValue && (buff.value as { addedValue: number }).addedValue < 0) ? IconId.BUFF_HPSCALEDDEFDOWN : IconId.BUFF_HPSCALEDDEFUP],
 	},
-	'passive:46:rec': {
-		id: BuffId['passive:46:rec'],
+	'passive:46:hp scaled-rec': {
+		id: BuffId['passive:46:hp scaled-rec'],
 		name: 'Passive Recovery Boost Relative to HP',
 		stat: UnitStat.rec,
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { addedValue: number }).addedValue && (buff.value as { addedValue: number }).addedValue < 0) ? IconId.BUFF_HPSCALEDRECDOWN : IconId.BUFF_HPSCALEDRECUP],
 	},
-	'passive:47': {
-		id: BuffId['passive:47'],
+	'passive:47:bc fill on spark': {
+		id: BuffId['passive:47:bc fill on spark'],
 		name: 'Passive BC Fill on Spark',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_SPARKBBUP],
 	},
-	'passive:48': {
-		id: BuffId['passive:48'],
+	'passive:48:bc cost reduction': {
+		id: BuffId['passive:48:bc cost reduction'],
 		name: 'Passive BC Cost Reduction',
 		stat: UnitStat.bcCostReduction,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBCOST_REDUCTION],
 	},
-	'passive:49': {
-		id: BuffId['passive:49'],
+	'passive:49:bb gauge consumption reduction': {
+		id: BuffId['passive:49:bb gauge consumption reduction'],
 		name: 'Passive BB Gauge Consumption Reduction',
 		stat: UnitStat.bbGaugeConsumptionReduction,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
 	},
-	'passive:50:fire': {
-		id: BuffId['passive:50:fire'],
+	'passive:50:elemental weakness damage-fire': {
+		id: BuffId['passive:50:elemental weakness damage-fire'],
 		name: 'Passive Fire Elemental Damage Boost',
 		stat: UnitStat.fireElementalDamage,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_FIREDMGUP],
 	},
-	'passive:50:water': {
-		id: BuffId['passive:50:water'],
+	'passive:50:elemental weakness damage-water': {
+		id: BuffId['passive:50:elemental weakness damage-water'],
 		name: 'Passive Water Elemental Damage Boost',
 		stat: UnitStat.waterElementalDamage,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_WATERDMGUP],
 	},
-	'passive:50:earth': {
-		id: BuffId['passive:50:earth'],
+	'passive:50:elemental weakness damage-earth': {
+		id: BuffId['passive:50:elemental weakness damage-earth'],
 		name: 'Passive Earth Elemental Damage Boost',
 		stat: UnitStat.earthElementalDamage,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_EARTHDMGUP],
 	},
-	'passive:50:thunder': {
-		id: BuffId['passive:50:thunder'],
+	'passive:50:elemental weakness damage-thunder': {
+		id: BuffId['passive:50:elemental weakness damage-thunder'],
 		name: 'Passive Thunder Elemental Damage Boost',
 		stat: UnitStat.thunderElementalDamage,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_THUNDERDMGUP],
 	},
-	'passive:50:light': {
-		id: BuffId['passive:50:light'],
+	'passive:50:elemental weakness damage-light': {
+		id: BuffId['passive:50:elemental weakness damage-light'],
 		name: 'Passive Light Elemental Damage Boost',
 		stat: UnitStat.lightElementalDamage,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_LIGHTDMGUP],
 	},
-	'passive:50:dark': {
-		id: BuffId['passive:50:dark'],
+	'passive:50:elemental weakness damage-dark': {
+		id: BuffId['passive:50:elemental weakness damage-dark'],
 		name: 'Passive Dark Elemental Damage Boost',
 		stat: UnitStat.darkElementalDamage,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_DARKDMGUP],
 	},
-	'passive:50:unknown': {
-		id: BuffId['passive:50:unknown'],
+	'passive:50:elemental weakness damage-unknown': {
+		id: BuffId['passive:50:elemental weakness damage-unknown'],
 		name: 'Passive Elemental Damage Boost (Unspecified Element)',
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ELEMENTDMGUP],
 	},
-	'passive:53:critical-damage-base': {
-		id: BuffId['passive:53:critical-damage-base'],
+	'passive:53:critical damage-base': {
+		id: BuffId['passive:53:critical damage-base'],
 		name: 'Passive Base Critical Damage Reduction',
 		stat: UnitStat.criticalDamageMitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_CRTDOWN],
 	},
-	'passive:53:critical-damage-buff': {
-		id: BuffId['passive:53:critical-damage-buff'],
+	'passive:53:critical damage-buff': {
+		id: BuffId['passive:53:critical damage-buff'],
 		name: 'Passive Buffed Critical Damage Reduction',
 		stat: UnitStat.criticalDamageMitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_CRTDOWN],
 	},
-	'passive:53:element-damage-base': {
-		id: BuffId['passive:53:element-damage-base'],
+	'passive:53:element damage-base': {
+		id: BuffId['passive:53:element damage-base'],
 		name: 'Passive Base Elemental Weakness Damage Reduction',
 		stat: UnitStat.elementalWeaknessDamageMitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ELEMENTDOWN],
 	},
-	'passive:53:element-damage-buff': {
-		id: BuffId['passive:53:element-damage-buff'],
+	'passive:53:element damage-buff': {
+		id: BuffId['passive:53:element damage-buff'],
 		name: 'Passive Buffed Elemental Weakness Damage Reduction',
 		stat: UnitStat.elementalWeaknessDamageMitigation,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ELEMENTDOWN],
 	},
-	'passive:53:critical-rate-base': {
-		id: BuffId['passive:53:critical-rate-base'],
+	'passive:53:critical rate-base': {
+		id: BuffId['passive:53:critical rate-base'],
 		name: 'Passive Base Critical Hit Rate Reduction',
 		stat: UnitStat.crit,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_CRTDOWN],
 	},
-	'passive:53:critical-rate-buff': {
-		id: BuffId['passive:53:critical-rate-buff'],
+	'passive:53:critical rate-buff': {
+		id: BuffId['passive:53:critical rate-buff'],
 		name: 'Passive Buffed Critical Hit Rate Reduction',
 		stat: UnitStat.crit,
 		stackType: BuffStackType.Passive,
