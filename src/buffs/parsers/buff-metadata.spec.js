@@ -1660,4 +1660,8 @@ describe('BUFF_METADATA entries', () => {
 	describe('conditional:36:mitigation', () => {
 		testDefaultIconResult(BuffId['conditional:36:mitigation'], [IconId.BUFF_DAMAGECUT]);
 	});
+
+	describe('conditional:91:chance ko resistance', () => {
+		testDefaultIconResult(BuffId['conditional:91:chance ko resistance'], [IconId.BUFF_KOBLOCK]);
+	});
 });

@@ -740,6 +740,7 @@ export enum IconId {
 
 	BUFF_KOBLK = 'BUFF_KOBLK', // guaranteed AI
 	BUFF_KO = 'BUFF_KO', // instant death
+	BUFF_KOBLOCK = 'BUFF_KOBLOCK', // chance AI
 
 	BUFF_HPABS = 'BUFF_HPABS',
 
@@ -1174,4 +1175,5 @@ export enum BuffId {
 	'conditional:8:gradual heal' = 'conditional:8:gradual heal',
 	'conditional:12:guaranteed ko resistance' = 'conditional:12:guaranteed ko resistance',
 	'conditional:36:mitigation' = 'conditional:36:mitigation',
+	'conditional:91:chance ko resistance' = 'conditional:91:chance ko resistance',
 }

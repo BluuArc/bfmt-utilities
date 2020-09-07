@@ -184,4 +184,36 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('91', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '91';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawChance, rawHpRecover, ...extraParams] = splitParams;
+		const chance = parseNumberOrDefault(rawChance);
+		const hpRecover = parseNumberOrDefault(rawHpRecover);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+
+		const results: IBuff[] = [];
+		if (chance !== 0) {
+			results.push({
+				id: 'conditional:91:chance ko resistance',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: {
+					'hpRecover%': hpRecover,
+					chance,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
 }

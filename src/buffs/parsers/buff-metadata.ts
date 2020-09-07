@@ -2109,4 +2109,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_DAMAGECUT],
 	},
+	'conditional:91:chance ko resistance': {
+		id: BuffId['conditional:91:chance ko resistance'],
+		name: 'KO Resistance (Chance)',
+		stat: UnitStat.koResistance,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_KOBLOCK],
+	},
 });
