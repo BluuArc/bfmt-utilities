@@ -573,7 +573,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'passive:24:heal on hit': {
 		id: BuffId['passive:24:heal on hit'],
-		name: 'Passive Heal when Attacked',
+		name: 'Passive Heal when Attacked (Chance)',
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BEENATK_HPREC],
@@ -2111,9 +2111,16 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'conditional:91:chance ko resistance': {
 		id: BuffId['conditional:91:chance ko resistance'],
-		name: 'KO Resistance (Chance)',
+		name: 'Conditional KO Resistance (Chance)',
 		stat: UnitStat.koResistance,
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_KOBLOCK],
+	},
+	'conditional:133:heal on hit': {
+		id: BuffId['conditional:133:heal on hit'],
+		name: 'Conditional Heal when Attacked (Chance)',
+		stat: UnitStat.hpRecovery,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_BEENATK_HPREC],
 	},
 });

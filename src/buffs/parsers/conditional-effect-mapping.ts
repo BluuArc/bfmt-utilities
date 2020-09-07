@@ -216,4 +216,39 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('133', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '133';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawHealLow, rawHealHigh, rawChance, ...extraParams] = splitParams;
+		const healLow = parseNumberOrDefault(rawHealLow);
+		const healHigh = parseNumberOrDefault(rawHealHigh);
+		const chance = parseNumberOrDefault(rawChance);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+
+		const results: IBuff[] = [];
+		if (healLow !== 0 || healHigh !== 0 || chance !== 0) {
+			results.push({
+				id: 'conditional:133:heal on hit',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: {
+					healLow,
+					healHigh,
+					chance,
+				},
+				conditions: { whenAttacked: true },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
 }

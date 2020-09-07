@@ -176,6 +176,7 @@ export interface IBuff {
 	 */
 	sources: string[];
 
+	// TODO: specific type for triggered buffs?
 	value?: string | number | IGenericBuffValue | any;
 	conditions?: IBuffConditions;
 }
@@ -1176,4 +1177,5 @@ export enum BuffId {
 	'conditional:12:guaranteed ko resistance' = 'conditional:12:guaranteed ko resistance',
 	'conditional:36:mitigation' = 'conditional:36:mitigation',
 	'conditional:91:chance ko resistance' = 'conditional:91:chance ko resistance',
+	'conditional:133:heal on hit' = 'conditional:133:heal on hit',
 }
