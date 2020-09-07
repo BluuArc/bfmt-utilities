@@ -1649,6 +1649,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS, [IconId.UNKNOWN]);
 	});
 
+	describe('conditional:8:gradual heal', () => {
+		testDefaultIconResult(BuffId['conditional:8:gradual heal'], [IconId.BUFF_HPREC]);
+	});
+
 	describe('conditional:12:guaranteed ko resistance', () => {
 		testDefaultIconResult(BuffId['conditional:12:guaranteed ko resistance'], [IconId.BUFF_KOBLK]);
 	});

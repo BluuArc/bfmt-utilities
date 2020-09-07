@@ -1171,6 +1171,7 @@ export enum BuffId {
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
 
+	'conditional:8:gradual heal' = 'conditional:8:gradual heal',
 	'conditional:12:guaranteed ko resistance' = 'conditional:12:guaranteed ko resistance',
 	'conditional:36:mitigation' = 'conditional:36:mitigation',
 }

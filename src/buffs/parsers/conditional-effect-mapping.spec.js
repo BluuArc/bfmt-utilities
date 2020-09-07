@@ -128,6 +128,146 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		};
 
+		describe('conditional 8', () => {
+			const expectedOriginalId = '8';
+			const expectedBuffId = 'conditional:8:gradual heal';
+
+			const ADDED_REC_BUFF_KEY = 'addedRec%';
+			const arbitraryRecParam = 80;
+			const expectedRecAddedForArbitraryValue = 18;
+
+			beforeEach(() => {
+				mappingFunction = getConditionalEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params and turn duration properties', () => {
+				const effect = {
+					params: `1&2&${arbitraryRecParam}`,
+					turnDuration: 2,
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 2,
+					value: {
+						healLow: 1,
+						healHigh: 2,
+						[ADDED_REC_BUFF_KEY]: expectedRecAddedForArbitraryValue,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const effect = {
+					params: `1&2&${arbitraryRecParam}&4&5&6`,
+					turnDuration: 2,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						duration: 2,
+						value: {
+							healLow: 1,
+							healHigh: 2,
+							[ADDED_REC_BUFF_KEY]: expectedRecAddedForArbitraryValue,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+						value: {
+							param_3: '4',
+							param_4: '5',
+							param_5: '6',
+						},
+					}),
+				];
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			['healLow', 'healHigh', ADDED_REC_BUFF_KEY].forEach((paramCase) => {
+				it(`defaults to 0 for missing ${paramCase} value`, () => {
+					const params = ['healLow', 'healHigh', ADDED_REC_BUFF_KEY].map((prop) => prop !== paramCase ? '123' : '').join('&');
+					const effect = {
+						params,
+						turnDuration: 456,
+					};
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: 456,
+						value: {
+							healLow: paramCase === 'healLow' ? 0 : 123,
+							healHigh: paramCase === 'healHigh' ? 0 : 123,
+							[ADDED_REC_BUFF_KEY]: paramCase === ADDED_REC_BUFF_KEY ? 10 : ((1 + 123 / 100) * 10),
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff if heal high and heal low values from params are zero', () => {
+				const effect = { params: '0,0,1', turnDuration: 123 };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('defaults the turn duration to 0 if it is missing', () => {
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 0,
+					value: {
+						healLow: 1,
+						healHigh: 2,
+						[ADDED_REC_BUFF_KEY]: expectedRecAddedForArbitraryValue,
+					},
+				})];
+
+				const result = mappingFunction({ params: `1&2&${arbitraryRecParam}` }, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses createSourcesfromContext and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: `1&2&${arbitraryRecParam}&456`,
+					turnDuration: 789,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						duration: 789,
+						value: {
+							healLow: 1,
+							healHigh: 2,
+							[ADDED_REC_BUFF_KEY]: expectedRecAddedForArbitraryValue,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+					}),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456']), 3] });
+			});
+		});
+
 		describe('conditional 12', () => {
 			const expectedOriginalId = '12';
 			const expectedBuffId = 'conditional:12:guaranteed ko resistance';

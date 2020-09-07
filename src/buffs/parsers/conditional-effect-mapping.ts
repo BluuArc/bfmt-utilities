@@ -97,6 +97,41 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return { targetData, sources, splitParams, turnDuration };
 	};
 
+	map.set('8', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '8';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawHealLow, rawHealHigh, rawAddedRec, ...extraParams] = splitParams;
+		const healLow = parseNumberOrDefault(rawHealLow);
+		const healHigh = parseNumberOrDefault(rawHealHigh);
+		const addedRec = (1 + parseNumberOrDefault(rawAddedRec) / 100) * 10;
+
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+
+		const results: IBuff[] = [];
+		if (healLow !== 0 || healHigh !== 0) {
+			results.push({
+				id: 'conditional:8:gradual heal',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: {
+					healLow,
+					healHigh,
+					'addedRec%': addedRec,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
+
 	map.set('12', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '12';
 		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
