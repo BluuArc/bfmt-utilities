@@ -1032,12 +1032,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_CRTDOWN],
 	},
-	'passive:55:hp condition': {
-		id: BuffId['passive:55:hp condition'],
+	'passive:55:hp conditional': {
+		id: BuffId['passive:55:hp conditional'],
 		name: 'Passive Conditional Effect based on HP Threshold',
-		stat: UnitStat.crit,
 		stackType: BuffStackType.Passive,
-		icons: () => [IconId.BUFF_CRTDOWN],
+		icons: () => [IconId.CONDITIONALBUFF_HPTHRESH],
 	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
@@ -2089,8 +2088,8 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
 	},
-	'buff:12:ko resistance': {
-		id: BuffId['buff:12:ko resistance'],
+	'conditional:12:ko resistance': {
+		id: BuffId['conditional:12:ko resistance'],
 		name: 'Guaranteed KO Resistance',
 		stat: UnitStat.koResistance,
 		stackType: BuffStackType.Singleton,

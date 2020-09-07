@@ -405,6 +405,7 @@ export enum IconId {
 	UNKNOWN = 'UNKNOWN',
 	TURN_DURATION_UP = 'TURN_DURATION_UP',
 	TURN_DURATION_DOWN = 'TURN_DURATION_DOWN',
+	CONDITIONALBUFF_HPTHRESH = 'CONDITIONALBUFF_HPTHRESH',
 
 	BUFF_HPUP = 'BUFF_HPUP',
 	BUFF_HPDOWN = 'BUFF_HPDOWN',
@@ -988,7 +989,7 @@ export enum BuffId {
 	'passive:53:critical-rate-base' = 'passive:53:critical-rate-base',
 	'passive:53:critical-rate-buff' = 'passive:53:critical-rate-buff',
 
-	'passive:55:hp condition' = 'passive:55:hp condition',
+	'passive:55:hp conditional' = 'passive:55:hp conditional',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
@@ -1170,5 +1171,5 @@ export enum BuffId {
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
 
-	'buff:12:ko resistance' = 'buff:12:ko resistance',
+	'conditional:12:ko resistance' = 'conditional:12:ko resistance',
 }

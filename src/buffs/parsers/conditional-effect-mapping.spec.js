@@ -130,7 +130,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 
 		describe('buff 12', () => {
 			const expectedOriginalId = '12';
-			const expectedBuffId = 'buff:12:ko resistance';
+			const expectedBuffId = 'conditional:12:ko resistance';
 
 			beforeEach(() => {
 				mappingFunction = getConditionalEffectToBuffMapping().get(expectedOriginalId);
@@ -196,7 +196,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'buff:12:ko resistance',
+						id: expectedBuffId,
 						sources: arbitrarySourceValue,
 						duration: 0,
 						value: 123,

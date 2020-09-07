@@ -2142,30 +2142,34 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
 		const typedEffect = (effect as IPassiveEffect);
-		const params = splitEffectParams(typedEffect);
-		const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
-			id: params[0],
-			params: params[1],
-			turnDuration: parseNumberOrDefault(params[5]),
-		}, context, injectionContext);
-		const maxTriggerCount = parseNumberOrDefault(params[2]);
-		const thresholdInfo = parseThresholdValuesFromParamsProperty(params[3], params[4], ThresholdType.Hp);
-		const unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(5), 5, injectionContext);
-
-		const thresholdConditions = getThresholdConditions(thresholdInfo);
 		const results: IBuff[] = [];
-		if (triggeredBuffs.length > 0) {
-			results.push({
-				id: 'passive:55:hp condition',
-				originalId,
-				sources,
-				value: {
-					triggeredBuffs,
-					maxTriggerCount,
-				},
-				conditions: { ...conditionInfo, ...thresholdConditions },
-				...targetData,
-			});
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
+				id: params[0],
+				params: params[1],
+				turnDuration: parseNumberOrDefault(params[5]),
+			}, context, injectionContext);
+			const maxTriggerCount = parseNumberOrDefault(params[2]);
+			const thresholdInfo = parseThresholdValuesFromParamsProperty(params[3], params[4], ThresholdType.Hp);
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(6), 6, injectionContext);
+
+			if (triggeredBuffs.length > 0) {
+				const thresholdConditions = getThresholdConditions(thresholdInfo);
+				results.push({
+					id: 'passive:55:hp conditional',
+					originalId,
+					sources,
+					value: {
+						triggeredBuffs,
+						maxTriggerCount,
+					},
+					conditions: { ...conditionInfo, ...thresholdConditions },
+					...targetData,
+				});
+			}
 		}
 
 		handlePostParse(results, unknownParams, {

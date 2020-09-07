@@ -104,7 +104,7 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
 
 		const results: IBuff[] = [{
-			id: 'buff:12:ko resistance',
+			id: 'conditional:12:ko resistance',
 			originalId,
 			sources,
 			duration: parseNumberOrDefault(effect.turnDuration),

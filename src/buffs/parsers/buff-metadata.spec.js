@@ -814,32 +814,6 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:49'], [IconId.BUFF_BBREC]);
 	});
 
-	describe('passive 53 buffs', () => {
-		describe('passive:53:critical-damage-base', () => {
-			testDefaultIconResult(BuffId['passive:53:critical-damage-base'], [IconId.BUFF_CRTDOWN]);
-		});
-
-		describe('passive:53:critical-damage-buff', () => {
-			testDefaultIconResult(BuffId['passive:53:critical-damage-buff'], [IconId.BUFF_CRTDOWN]);
-		});
-
-		describe('passive:53:element-damage-base', () => {
-			testDefaultIconResult(BuffId['passive:53:element-damage-base'], [IconId.BUFF_ELEMENTDOWN]);
-		});
-
-		describe('passive:53:element-damage-buff', () => {
-			testDefaultIconResult(BuffId['passive:53:element-damage-buff'], [IconId.BUFF_ELEMENTDOWN]);
-		});
-
-		describe('passive:53:critical-rate-base', () => {
-			testDefaultIconResult(BuffId['passive:53:critical-rate-base'], [IconId.BUFF_CRTDOWN]);
-		});
-
-		describe('passive:53:critical-rate-buff', () => {
-			testDefaultIconResult(BuffId['passive:53:critical-rate-buff'], [IconId.BUFF_CRTDOWN]);
-		});
-	});
-
 	describe('passive 50 buffs', () => {
 		describe('passive:50:fire', () => {
 			testDefaultIconResult(BuffId['passive:50:fire'], [IconId.BUFF_FIREDMGUP]);
@@ -868,6 +842,36 @@ describe('BUFF_METADATA entries', () => {
 		describe('passive:50:unknown', () => {
 			testDefaultIconResult(BuffId['passive:50:unknown'], [IconId.BUFF_ELEMENTDMGUP]);
 		});
+	});
+
+	describe('passive 53 buffs', () => {
+		describe('passive:53:critical-damage-base', () => {
+			testDefaultIconResult(BuffId['passive:53:critical-damage-base'], [IconId.BUFF_CRTDOWN]);
+		});
+
+		describe('passive:53:critical-damage-buff', () => {
+			testDefaultIconResult(BuffId['passive:53:critical-damage-buff'], [IconId.BUFF_CRTDOWN]);
+		});
+
+		describe('passive:53:element-damage-base', () => {
+			testDefaultIconResult(BuffId['passive:53:element-damage-base'], [IconId.BUFF_ELEMENTDOWN]);
+		});
+
+		describe('passive:53:element-damage-buff', () => {
+			testDefaultIconResult(BuffId['passive:53:element-damage-buff'], [IconId.BUFF_ELEMENTDOWN]);
+		});
+
+		describe('passive:53:critical-rate-base', () => {
+			testDefaultIconResult(BuffId['passive:53:critical-rate-base'], [IconId.BUFF_CRTDOWN]);
+		});
+
+		describe('passive:53:critical-rate-buff', () => {
+			testDefaultIconResult(BuffId['passive:53:critical-rate-buff'], [IconId.BUFF_CRTDOWN]);
+		});
+	});
+
+	describe('passive:55:hp conditional', () => {
+		testDefaultIconResult(BuffId['passive:55:hp conditional'], [IconId.CONDITIONALBUFF_HPTHRESH]);
 	});
 
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
@@ -1635,5 +1639,17 @@ describe('BUFF_METADATA entries', () => {
 
 	describe('proc:54', () => {
 		testDefaultIconResult(BuffId['proc:54'], [IconId.BUFF_CRTUP]);
+	});
+
+	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
+		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
+	});
+
+	describe('UNKNOWN_CONDITIONAL_BUFF_PARAMS', () => {
+		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS, [IconId.UNKNOWN]);
+	});
+
+	describe('conditional:12:ko resistance', () => {
+		testDefaultIconResult(BuffId['conditional:12:ko resistance'], [IconId.BUFF_KOBLK]);
 	});
 });
