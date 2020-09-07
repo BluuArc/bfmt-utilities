@@ -1,6 +1,6 @@
 import { ProcEffect, UnitElement, Ailment, TargetArea } from '../../datamine-types';
 import { IBuff, IEffectToBuffConversionContext, IGenericBuffValue, BuffId, BuffConditionElement } from './buff-types';
-import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault, createUnknownParamsValue, ITargetData, buffSourceIsBurstType } from './_helpers';
+import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault, ITargetData, buffSourceIsBurstType, createUnknownParamsEntryFromExtraParams, createNoParamsEntry } from './_helpers';
 
 /**
  * @description Type representing a function that can parse a proc effect into an array of buffs.
@@ -130,17 +130,6 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		...targetData,
 	});
 
-	const createNoParamsEntry = (
-		{
-			originalId,
-			sources,
-		}: IBaseLocalParamsContext,
-	): IBuff => ({
-		id: BuffId.NO_PARAMS_SPECIFIED,
-		originalId,
-		sources,
-	});
-
 	/**
 	 * @description Common checks that are run for most effects after the params have been parsed
 	 * into an array of {@link IBuff} but before said array is returned.
@@ -171,14 +160,6 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				effectDelay,
 			}));
 		}
-	};
-
-	const createUnknownParamsEntryFromExtraParams = (extraParams: string[], startIndex: number, injectionContext?: IProcBuffProcessingInjectionContext): IGenericBuffValue | undefined => {
-		let unknownParams: IGenericBuffValue | undefined;
-		if (extraParams && extraParams.length > 0) {
-			unknownParams = ((injectionContext && injectionContext.createUnknownParamsValue) || createUnknownParamsValue)(extraParams, startIndex);
-		}
-		return unknownParams;
 	};
 
 	/**

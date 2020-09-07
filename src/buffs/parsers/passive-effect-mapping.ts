@@ -1,6 +1,6 @@
 import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect, UnitElement, UnitType, Ailment, UnitGender } from '../../datamine-types';
 import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement, IBuffConditions, IConditionalEffect } from './buff-types';
-import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext, createUnknownParamsValue, ITargetData, parseNumberOrDefault } from './_helpers';
+import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext, ITargetData, parseNumberOrDefault, createUnknownParamsEntryFromExtraParams, createNoParamsEntry } from './_helpers';
 import convertConditionalEffectToBuffs from './convertConditionalEffectToBuffs';
 
 /**
@@ -119,17 +119,6 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		...targetData,
 	});
 
-	const createNoParamsEntry = (
-		{
-			originalId,
-			sources,
-		}: IBaseLocalParamsContext,
-	): IBuff => ({
-		id: BuffId.NO_PARAMS_SPECIFIED,
-		originalId,
-		sources,
-	});
-
 	/**
 	 * @description Common checks that are run for most effects after the params have been parsed
 	 * into an array of {@link IBuff} but before said array is returned.
@@ -160,14 +149,6 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 				conditionInfo,
 			}));
 		}
-	};
-
-	const createUnknownParamsEntryFromExtraParams = (extraParams: string[], startIndex: number, injectionContext?: IPassiveBuffProcessingInjectionContext): IGenericBuffValue | undefined => {
-		let unknownParams: IGenericBuffValue | undefined;
-		if (extraParams && extraParams.length > 0) {
-			unknownParams = ((injectionContext && injectionContext.createUnknownParamsValue) || createUnknownParamsValue)(extraParams, startIndex);
-		}
-		return unknownParams;
 	};
 
 	enum ThresholdType {

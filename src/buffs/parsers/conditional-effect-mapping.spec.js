@@ -44,7 +44,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		const arbitrarySourceValue = ['some source value'];
 		const arbitraryUnknownValue = { unknownValue: 'some unknown value' };
 
-		const BUFF_TARGET_PROPS = ['targetType', 'targetArea'];
+		// const BUFF_TARGET_PROPS = ['targetType', 'targetArea'];
 
 		const createDefaultInjectionContext = () => {
 			/**
@@ -67,17 +67,17 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			expect(injectionContext.createUnknownParamsValue).toHaveBeenCalledWith(...unknownParamsArgs);
 		};
 
-		const expectNoParamsBuffWithEffectAndContext = ({ effect, context, injectionContext, expectedSources }) => {
-			const expectedResult = [baseBuffFactory({
-				id: BuffId.NO_PARAMS_SPECIFIED,
-			}, ['conditions', ...BUFF_TARGET_PROPS])];
-			if (expectedSources) {
-				expectedResult[0].sources = expectedSources;
-			}
+		// const expectNoParamsBuffWithEffectAndContext = ({ effect, context, injectionContext, expectedSources }) => {
+		// 	const expectedResult = [baseBuffFactory({
+		// 		id: BuffId.NO_PARAMS_SPECIFIED,
+		// 	}, ['conditions', ...BUFF_TARGET_PROPS])];
+		// 	if (expectedSources) {
+		// 		expectedResult[0].sources = expectedSources;
+		// 	}
 
-			const result = mappingFunction(effect, context, injectionContext);
-			expect(result).toEqual(expectedResult);
-		};
+		// 	const result = mappingFunction(effect, context, injectionContext);
+		// 	expect(result).toEqual(expectedResult);
+		// };
 
 		const createArbitraryContext = () => ({
 			source: 'arbitrary source',
