@@ -236,6 +236,10 @@ export enum UnitStat {
 	defDownInflict = 'defDownInflict',
 	recDownInflict = 'recDownInflict',
 
+	atkDownCounter = 'atkDownCounter',
+	defDownCounter = 'defDownCounter',
+	recDownCounter = 'recDownCounter',
+
 	mitigation = 'mitigation',
 	fireMitigation = 'fireMitigation',
 	waterMitigation = 'waterMitigation',
@@ -336,6 +340,10 @@ export interface IUnitState {
 	atkDownInflict: IBuff[];
 	defDownInflict: IBuff[];
 	recDownInflict: IBuff[];
+
+	atkDownCounter: IBuff[];
+	defDownCounter: IBuff[];
+	recDownCounter: IBuff[];
 
 	mitigation: IBuff[];
 	fireMitigation: IBuff[];
@@ -690,6 +698,10 @@ export enum IconId {
 	BUFF_INJCONTER = 'BUFF_INJCONTER',
 	BUFF_CURSECOUNTER = 'BUFF_CURSECOUNTER',
 	BUFF_PARALYCOUNTER = 'BUFF_PARALYCOUNTER',
+
+	BUFF_PROB_ATKREDUC = 'BUFF_PROB_ATKREDUC',
+	BUFF_PROB_DEFREDUC = 'BUFF_PROB_DEFREDUC',
+	BUFF_PROB_RECREDUC = 'BUFF_PROB_RECREDUC',
 
 	BUFF_DAMAGECUT = 'BUFF_DAMAGECUT',
 	BUFF_DAMAGECUTTOONE = 'BUFF_DAMAGECUTTOONE',
@@ -1178,4 +1190,5 @@ export enum BuffId {
 	'conditional:36:mitigation' = 'conditional:36:mitigation',
 	'conditional:91:chance ko resistance' = 'conditional:91:chance ko resistance',
 	'conditional:133:heal on hit' = 'conditional:133:heal on hit',
+	'conditional:153:chance inflict atk down on hit' = 'conditional:153:chance inflict atk down on hit',
 }

@@ -2123,4 +2123,11 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_BEENATK_HPREC],
 	},
+	'conditional:153:chance inflict atk down on hit': {
+		id: BuffId['conditional:153:chance inflict atk down on hit'],
+		name: 'Conditional Attack Reduction Counter (Chance)',
+		stat: UnitStat.atkDownCounter,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_PROB_ATKREDUC],
+	},
 });

@@ -1668,4 +1668,8 @@ describe('BUFF_METADATA entries', () => {
 	describe('conditional:133:heal on hit', () => {
 		testDefaultIconResult(BuffId['conditional:133:heal on hit'], [IconId.BUFF_BEENATK_HPREC]);
 	});
+
+	describe('conditional:153:chance inflict atk down on hit', () => {
+		testDefaultIconResult(BuffId['conditional:153:chance inflict atk down on hit'], [IconId.BUFF_PROB_ATKREDUC]);
+	});
 });

@@ -8147,6 +8147,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: `proc:53:inflict on hit-${ailment}`,
 						duration: arbitraryTurnDuration,
 						value: +splitParams[index],
+						conditions: { whenAttacked: true },
 					});
 				});
 
@@ -8163,6 +8164,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: `proc:53:inflict on hit-${ailment}`,
 						duration: arbitraryTurnDuration,
 						value: +splitParams[index],
+						conditions: { whenAttacked: true },
 					});
 				}).concat([baseBuffFactory({
 					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
@@ -8193,6 +8195,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: `proc:53:inflict on hit-${ailment}`,
 						duration: arbitraryTurnDuration,
 						value: expectedParamValues[index],
+						conditions: { whenAttacked: true },
 					});
 				});
 
@@ -8208,6 +8211,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: `proc:53:inflict on hit-${ailmentCase}`,
 						duration: arbitraryTurnDuration,
 						value: 123,
+						conditions: { whenAttacked: true },
 					})];
 
 					const result = mappingFunction(effect, createArbitraryContext());
@@ -8224,6 +8228,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: `proc:53:inflict on hit-${ailmentCase}`,
 						duration: arbitraryTurnDuration,
 						value: 123,
+						conditions: { whenAttacked: true },
 					})];
 
 					const result = mappingFunction(effect, createArbitraryContext());
@@ -8248,6 +8253,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
 						value: 1,
+						conditions: { whenAttacked: true },
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 					baseBuffFactory({

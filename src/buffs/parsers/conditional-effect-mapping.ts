@@ -251,4 +251,39 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('153', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '153';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawReductionValue, rawChance, rawDebuffTurnDuration, ...extraParams] = splitParams;
+		const reductionValue = parseNumberOrDefault(rawReductionValue);
+		const chance = parseNumberOrDefault(rawChance);
+		const debuffTurnDuration = parseNumberOrDefault(rawDebuffTurnDuration);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+
+		const results: IBuff[] = [];
+		if (reductionValue !== 0 || chance !== 0) {
+			results.push({
+				id: 'conditional:153:chance inflict atk down on hit',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: {
+					reductionValue,
+					chance,
+					debuffTurnDuration,
+				},
+				conditions: { whenAttacked: true },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
 }

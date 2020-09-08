@@ -2917,6 +2917,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 					effectDelay,
 					value,
 					duration: turnDuration,
+					conditions: { whenAttacked: true },
 					...targetData,
 				});
 			}
