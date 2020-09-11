@@ -1998,7 +1998,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			const params = splitEffectParams(typedEffect);
 			elements = params.filter((value, index) => value !== '0' && index < 6)
 				.map((e) => ELEMENT_MAPPING[e] || BuffConditionElement.Unknown);
-			damageBoost = parseNumberOrDefault(params[6]);
+			damageBoost = parseNumberOrDefault(params[6]) * 100;
 			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(7), 7, injectionContext);
 		} else {
 			elements = Object.values(ELEMENT_MAPPING).filter((element) => !!typedEffect[`${element} units do extra elemental weakness dmg`]);

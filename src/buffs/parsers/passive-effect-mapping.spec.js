@@ -4943,7 +4943,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
 					return baseBuffFactory({
 						id: `passive:50:elemental weakness damage-${element}`,
-						value: 7,
+						value: 700,
 					});
 				});
 
@@ -4958,7 +4958,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
 					return baseBuffFactory({
 						id: `passive:50:elemental weakness damage-${element}`,
-						value: 7,
+						value: 700,
 					});
 				}).concat([baseBuffFactory({
 					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
@@ -4997,7 +4997,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					const params = `${knownElementKey},0,0,0,0,0,123`;
 					const expectedResult = [baseBuffFactory({
 						id: `passive:50:elemental weakness damage-${knownElementValue}`,
-						value: 123,
+						value: 12300,
 					})];
 
 					const effect = { params };
@@ -5039,7 +5039,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const params = 'not-an-element,0,0,0,0,0,789';
 				const expectedResult = [baseBuffFactory({
 					id: 'passive:50:elemental weakness damage-unknown',
-					value: 789,
+					value: 78900,
 				})];
 
 				const effect = { params };
@@ -5061,7 +5061,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					baseBuffFactory({
 						id: 'passive:50:elemental weakness damage-light',
 						sources: arbitrarySourceValue,
-						value: 6,
+						value: 600,
 						conditions: arbitraryConditionValue,
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),

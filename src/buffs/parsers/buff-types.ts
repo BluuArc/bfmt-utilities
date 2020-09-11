@@ -1182,6 +1182,14 @@ export enum BuffId {
 
 	'proc:54:critical damage boost' = 'proc:54:critical damage boost',
 
+	'proc:55:elemental weakness damage-fire' = 'proc:55:elemental weakness damage-fire',
+	'proc:55:elemental weakness damage-water' = 'proc:55:elemental weakness damage-water',
+	'proc:55:elemental weakness damage-earth' = 'proc:55:elemental weakness damage-earth',
+	'proc:55:elemental weakness damage-thunder' = 'proc:55:elemental weakness damage-thunder',
+	'proc:55:elemental weakness damage-light' = 'proc:55:elemental weakness damage-light',
+	'proc:55:elemental weakness damage-dark' = 'proc:55:elemental weakness damage-dark',
+	'proc:55:elemental weakness damage-unknown' = 'proc:55:elemental weakness damage-unknown',
+
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
 

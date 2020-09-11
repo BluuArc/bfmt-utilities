@@ -1641,6 +1641,36 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:54:critical damage boost'], [IconId.BUFF_CRTUP]);
 	});
 
+	describe('proc 55 buffs', () => {
+		describe('proc:55:elemental weakness damage-fire', () => {
+			testDefaultIconResult(BuffId['proc:55:elemental weakness damage-fire'], [IconId.BUFF_FIREDMGUP]);
+		});
+
+		describe('proc:55:elemental weakness damage-water', () => {
+			testDefaultIconResult(BuffId['proc:55:elemental weakness damage-water'], [IconId.BUFF_WATERDMGUP]);
+		});
+
+		describe('proc:55:elemental weakness damage-earth', () => {
+			testDefaultIconResult(BuffId['proc:55:elemental weakness damage-earth'], [IconId.BUFF_EARTHDMGUP]);
+		});
+
+		describe('proc:55:elemental weakness damage-thunder', () => {
+			testDefaultIconResult(BuffId['proc:55:elemental weakness damage-thunder'], [IconId.BUFF_THUNDERDMGUP]);
+		});
+
+		describe('proc:55:elemental weakness damage-light', () => {
+			testDefaultIconResult(BuffId['proc:55:elemental weakness damage-light'], [IconId.BUFF_LIGHTDMGUP]);
+		});
+
+		describe('proc:55:elemental weakness damage-dark', () => {
+			testDefaultIconResult(BuffId['proc:55:elemental weakness damage-dark'], [IconId.BUFF_DARKDMGUP]);
+		});
+
+		describe('proc:55:elemental weakness damage-unknown', () => {
+			testDefaultIconResult(BuffId['proc:55:elemental weakness damage-unknown'], [IconId.BUFF_ELEMENTDMGUP]);
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

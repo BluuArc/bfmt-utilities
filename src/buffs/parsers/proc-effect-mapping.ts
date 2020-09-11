@@ -46,6 +46,15 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		6: UnitElement.Dark,
 	};
 
+	const NON_ZERO_ELEMENT_MAPPING: { [key: string]: UnitElement | BuffConditionElement } = {
+		1: UnitElement.Fire,
+		2: UnitElement.Water,
+		3: UnitElement.Earth,
+		4: UnitElement.Thunder,
+		5: UnitElement.Light,
+		6: UnitElement.Dark,
+	};
+
 	const AILMENT_MAPPING: { [param: string]: Ailment } = {
 		1: Ailment.Poison,
 		2: Ailment.Weak,
@@ -2126,14 +2135,6 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 	map.set('39', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '39';
-		const ELEMENT_MAPPING: { [key: string]: UnitElement | BuffConditionElement } = {
-			1: UnitElement.Fire,
-			2: UnitElement.Water,
-			3: UnitElement.Earth,
-			4: UnitElement.Thunder,
-			5: UnitElement.Light,
-			6: UnitElement.Dark,
-		};
 		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 		const elements: (UnitElement | BuffConditionElement)[] = [];
 		let mitigation = 0;
@@ -2148,13 +2149,13 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 			rawElementsMitigated.forEach((rawElement) => {
 				if (rawElement !== '0') {
-					elements.push(ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown);
+					elements.push(NON_ZERO_ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown);
 				}
 			});
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(8), 8, injectionContext);
 		} else {
-			Object.values(ELEMENT_MAPPING).forEach((element) => {
+			Object.values(NON_ZERO_ELEMENT_MAPPING).forEach((element) => {
 				if (effect[`mitigate ${element} attacks`]) {
 					elements.push(element);
 				}
@@ -2191,7 +2192,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			results.push(createTurnDurationEntry({
 				originalId,
 				sources,
-				buffs: Object.values(ELEMENT_MAPPING).concat([BuffConditionElement.Unknown]).map((e) => `proc:39:mitigate-${e}`),
+				buffs: Object.values(NON_ZERO_ELEMENT_MAPPING).concat([BuffConditionElement.Unknown]).map((e) => `proc:39:mitigate-${e}`),
 				duration: turnDuration,
 				targetData,
 			}));
@@ -2954,5 +2955,70 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			buffId: 'proc:54:critical damage boost',
 			originalId: '54',
 		});
+	});
+
+	map.set('55', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '55';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let elements: (UnitElement | BuffConditionElement)[];
+		let damageBoost = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const params = splitEffectParams(effect);
+			elements = params.filter((value, index) => value !== '0' && index < 6)
+				.map((e) => NON_ZERO_ELEMENT_MAPPING[e] || BuffConditionElement.Unknown);
+			damageBoost = parseNumberOrDefault(params[6]) * 100;
+			turnDuration = parseNumberOrDefault(params[7]);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(8), 8, injectionContext);
+		} else {
+			elements = Object.values(NON_ZERO_ELEMENT_MAPPING).filter((element) => !!effect[`${element} units do extra elemental weakness dmg`]);
+			damageBoost = parseNumberOrDefault(effect['elemental weakness multiplier%'] as number);
+			turnDuration = parseNumberOrDefault(effect['elemental weakness buff turns'] as number);
+		}
+
+		let results: IBuff[] = [];
+		if (damageBoost !== 0) {
+			results = elements.map((element) => ({
+				id: `proc:55:elemental weakness damage-${element}`,
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: damageBoost,
+				...targetData,
+			}));
+
+			if (results.length === 0) {
+				results.push({
+					id: 'proc:55:elemental weakness damage-unknown',
+					originalId,
+					sources,
+					effectDelay,
+					duration: turnDuration,
+					value: damageBoost,
+					...targetData,
+				});
+			}
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: Object.values(NON_ZERO_ELEMENT_MAPPING).concat([BuffConditionElement.Unknown]).map((e) => `proc:55:elemental weakness damage-${e}`),
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
 	});
 }

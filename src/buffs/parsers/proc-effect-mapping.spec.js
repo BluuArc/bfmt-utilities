@@ -65,6 +65,15 @@ describe('getProcEffectToBuffMapping method', () => {
 			6: UnitElement.Dark,
 		};
 
+		const NON_ZERO_ELEMENT_MAPPING = {
+			1: UnitElement.Fire,
+			2: UnitElement.Water,
+			3: UnitElement.Earth,
+			4: UnitElement.Thunder,
+			5: UnitElement.Light,
+			6: UnitElement.Dark,
+		};
+
 		const AILMENT_MAPPING = {
 			1: 'poison',
 			2: 'weak',
@@ -5747,14 +5756,6 @@ describe('getProcEffectToBuffMapping method', () => {
 		});
 
 		describe('proc 39', () => {
-			const ELEMENT_MAPPING = {
-				1: UnitElement.Fire,
-				2: UnitElement.Water,
-				3: UnitElement.Earth,
-				4: UnitElement.Thunder,
-				5: UnitElement.Light,
-				6: UnitElement.Dark,
-			};
 			const EFFECT_MITIGATION_KEY = 'dmg% mitigation for elemental attacks';
 			const EFFECT_TURN_DURATION_KEY = 'dmg% mitigation for elemental attacks buff turns';
 			const expectedOriginalId = '39';
@@ -5765,12 +5766,12 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:39:mitigate-${element}`));
+			testValidBuffIds(Object.values(NON_ZERO_ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:39:mitigate-${element}`));
 
 			it('uses the params property when it exists', () => {
 				const params = `1,2,3,4,5,6,7,${arbitraryTurnDuration}`;
 				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
+				const expectedResult = Object.values(NON_ZERO_ELEMENT_MAPPING).map((element) => {
 					return baseBuffFactory({
 						id: `proc:39:mitigate-${element}`,
 						duration: arbitraryTurnDuration,
@@ -5785,7 +5786,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			it('returns a buff entry for extra parameters', () => {
 				const params = `1,2,3,4,5,6,7,${arbitraryTurnDuration},9,10,11`;
 				const effect = createArbitraryBaseEffect({ params });
-				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
+				const expectedResult = Object.values(NON_ZERO_ELEMENT_MAPPING).map((element) => {
 					return baseBuffFactory({
 						id: `proc:39:mitigate-${element}`,
 						duration: arbitraryTurnDuration,
@@ -5805,14 +5806,14 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			it('falls back to effect properties when params property does not exist', () => {
-				const valuesInEffect = Object.values(ELEMENT_MAPPING).reduce((acc, element) => {
+				const valuesInEffect = Object.values(NON_ZERO_ELEMENT_MAPPING).reduce((acc, element) => {
 					acc[`mitigate ${element} attacks`] = true;
 					return acc;
 				}, {});
 				valuesInEffect[EFFECT_MITIGATION_KEY] = 9;
 				valuesInEffect[EFFECT_TURN_DURATION_KEY] = arbitraryTurnDuration;
 				const effect = createArbitraryBaseEffect(valuesInEffect);
-				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
+				const expectedResult = Object.values(NON_ZERO_ELEMENT_MAPPING).map((element) => {
 					return baseBuffFactory({
 						id: `proc:39:mitigate-${element}`,
 						duration: arbitraryTurnDuration,
@@ -5823,7 +5824,7 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			Object.entries(ELEMENT_MAPPING).forEach(([elementKey, elementValue]) => {
+			Object.entries(NON_ZERO_ELEMENT_MAPPING).forEach(([elementKey, elementValue]) => {
 				it(`parses value for ${elementValue}`, () => {
 					const params = `${elementKey},0,0,0,0,0,123,${arbitraryTurnDuration}`;
 					const effect = createArbitraryBaseEffect({ params });
@@ -5885,7 +5886,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			describe('when no mitigation value is given', () => {
 				testTurnDurationScenarios({
 					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,0,${duration}`,
-					buffIdsInTurnDurationBuff: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:39:mitigate-${stat}`),
+					buffIdsInTurnDurationBuff: Object.values(NON_ZERO_ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:39:mitigate-${stat}`),
 				});
 
 				it('returns a turn modification buff turn duration is non-zero and params property does not exist', () => {
@@ -5895,7 +5896,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					const expectedResult = [baseBuffFactory({
 						id: BuffId.TURN_DURATION_MODIFICATION,
 						value: {
-							buffs: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:39:mitigate-${stat}`),
+							buffs: Object.values(NON_ZERO_ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:39:mitigate-${stat}`),
 							duration: arbitraryTurnDuration,
 						},
 					}, [EFFECT_DELAY_BUFF_PROP])];
@@ -8279,6 +8280,185 @@ describe('getProcEffectToBuffMapping method', () => {
 				effectValueKey: 'crit multiplier%',
 				effectTurnDurationKey: 'buff turns (84)',
 				getExpectedValueFromParam: (param) => +param * 100,
+			});
+		});
+
+		describe('proc 55', () => {
+			const EFFECT_MULTIPLIER_KEY = 'elemental weakness multiplier%';
+			const EFFECT_TURN_DURATION_KEY = 'elemental weakness buff turns';
+			const expectedOriginalId = '55';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(Object.values(NON_ZERO_ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:55:elemental weakness damage-${element}`));
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,3,4,5,6,7,${arbitraryTurnDuration}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = Object.values(NON_ZERO_ELEMENT_MAPPING).map((element) => {
+					return baseBuffFactory({
+						id: `proc:55:elemental weakness damage-${element}`,
+						duration: arbitraryTurnDuration,
+						value: 700,
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `1,2,3,4,5,6,7,${arbitraryTurnDuration},9,10,11`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = Object.values(NON_ZERO_ELEMENT_MAPPING).map((element) => {
+					return baseBuffFactory({
+						id: `proc:55:elemental weakness damage-${element}`,
+						duration: arbitraryTurnDuration,
+						value: 700,
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_8: '9',
+						param_9: '10',
+						param_10: '11',
+					},
+				})]);
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const valuesInEffect = Object.values(NON_ZERO_ELEMENT_MAPPING).reduce((acc, element) => {
+					acc[`${element} units do extra elemental weakness dmg`] = true;
+					return acc;
+				}, {});
+				valuesInEffect[EFFECT_MULTIPLIER_KEY] = 9;
+				valuesInEffect[EFFECT_TURN_DURATION_KEY] = arbitraryTurnDuration;
+				const effect = createArbitraryBaseEffect(valuesInEffect);
+				const expectedResult = Object.values(NON_ZERO_ELEMENT_MAPPING).map((element) => {
+					return baseBuffFactory({
+						id: `proc:55:elemental weakness damage-${element}`,
+						duration: arbitraryTurnDuration,
+						value: 9,
+					});
+				});
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			Object.entries(NON_ZERO_ELEMENT_MAPPING).forEach(([elementKey, elementValue]) => {
+				it(`parses value for ${elementValue}`, () => {
+					const params = `${elementKey},0,0,0,0,0,123,${arbitraryTurnDuration}`;
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: `proc:55:elemental weakness damage-${elementValue}`,
+						duration: arbitraryTurnDuration,
+						value: 12300,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`parses value for ${elementValue} when params property does not exist`, () => {
+					const effect = createArbitraryBaseEffect({
+						[`${elementValue} units do extra elemental weakness dmg`]: true,
+						[EFFECT_MULTIPLIER_KEY]: 456,
+						[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: `proc:55:elemental weakness damage-${elementValue}`,
+						duration: arbitraryTurnDuration,
+						value: 456,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('parses unknown elements to "unknown"', () => {
+				const params = `1234,0,0,0,0,0,123,${arbitraryTurnDuration}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:55:elemental weakness damage-unknown',
+					duration: arbitraryTurnDuration,
+					value: 12300,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('parses lack of elements to "unknown" when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[EFFECT_MULTIPLIER_KEY]: 456,
+					[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+				});
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:55:elemental weakness damage-unknown',
+					duration: arbitraryTurnDuration,
+					value: 456,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when no damage boost value is given', () => {
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,0,${duration}`,
+					buffIdsInTurnDurationBuff: Object.values(NON_ZERO_ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:55:elemental weakness damage-${stat}`),
+				});
+
+				it('returns a turn modification buff turn duration is non-zero and params property does not exist', () => {
+					const effect = createArbitraryBaseEffect({
+						[EFFECT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: BuffId.TURN_DURATION_MODIFICATION,
+						value: {
+							buffs: Object.values(NON_ZERO_ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:55:elemental weakness damage-${stat}`),
+							duration: arbitraryTurnDuration,
+						},
+					}, [EFFECT_DELAY_BUFF_PROP])];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: `5,0,0,0,0,0,1,${arbitraryTurnDuration},123`,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:55:elemental weakness damage-light',
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: 100,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 8] });
 			});
 		});
 	});
