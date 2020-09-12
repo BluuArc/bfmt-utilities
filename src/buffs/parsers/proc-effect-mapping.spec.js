@@ -8612,5 +8612,190 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 3] });
 			});
 		});
+
+		describe('proc 57', () => {
+			const BUFF_ID_MAPPING = {
+				bcDropResistanceBase: 'proc:57:bc drop resistance-base',
+				bcDropResistanceBuff: 'proc:57:bc drop resistance-buff',
+				hcDropResistanceBase: 'proc:57:hc drop resistance-base',
+				hcDropResistanceBuff: 'proc:57:hc drop resistance-buff',
+			};
+			const EFFECT_KEY_MAPPING = {
+				bcDropResistanceBase: 'base bc drop% resist buff',
+				bcDropResistanceBuff: 'buffed bc drop% resist buff',
+				turnDuration: 'bc drop% resist buff turns (92)',
+				// Deathmax's datamine doesn't parse HC resistance buffs
+			};
+			const PARAMS_ORDER = ['bcDropResistanceBase', 'bcDropResistanceBuff', 'hcDropResistanceBase', 'hcDropResistanceBuff'];
+			const expectedOriginalId = '57';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(PARAMS_ORDER.map((k) => BUFF_ID_MAPPING[k]));
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,3,4,${arbitraryTurnDuration}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.bcDropResistanceBase,
+						duration: arbitraryTurnDuration,
+						value: 1,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.bcDropResistanceBuff,
+						duration: arbitraryTurnDuration,
+						value: 2,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.hcDropResistanceBase,
+						duration: arbitraryTurnDuration,
+						value: 3,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.hcDropResistanceBuff,
+						duration: arbitraryTurnDuration,
+						value: 4,
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `1,2,3,4,${arbitraryTurnDuration},6,7,8`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.bcDropResistanceBase,
+						duration: arbitraryTurnDuration,
+						value: 1,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.bcDropResistanceBuff,
+						duration: arbitraryTurnDuration,
+						value: 2,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.hcDropResistanceBase,
+						duration: arbitraryTurnDuration,
+						value: 3,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.hcDropResistanceBuff,
+						duration: arbitraryTurnDuration,
+						value: 4,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_5: '6',
+							param_6: '7',
+							param_7: '8',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[EFFECT_KEY_MAPPING.bcDropResistanceBase]: 6,
+					[EFFECT_KEY_MAPPING.bcDropResistanceBuff]: 7,
+					[EFFECT_KEY_MAPPING.turnDuration]: arbitraryTurnDuration,
+				});
+
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.bcDropResistanceBase,
+						duration: arbitraryTurnDuration,
+						value: 6,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.bcDropResistanceBuff,
+						duration: arbitraryTurnDuration,
+						value: 7,
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('for missing or 0 values', () => {
+				PARAMS_ORDER.forEach((key, index) => {
+					it(`returns a single buff for ${BUFF_ID_MAPPING[key]} if it's the only drop resistance parameter that is non-zero`, () => {
+						const params = Array.from({ length: PARAMS_ORDER.length }).fill(0).map((_, i) => i !== index ? '0' : '123').concat([arbitraryTurnDuration]).join(',');
+						const effect = createArbitraryBaseEffect({ params });
+						const expectedResult = [baseBuffFactory({
+							id: BUFF_ID_MAPPING[key],
+							duration: arbitraryTurnDuration,
+							value: 123,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					if (key in EFFECT_KEY_MAPPING) {
+						it(`returns a single buff for ${BUFF_ID_MAPPING[key]} if it's the only drop resistance parameter that is non-zero and the params property does not exist`, () => {
+							const effect = createArbitraryBaseEffect({
+								[EFFECT_KEY_MAPPING[key]]: 456,
+								[EFFECT_KEY_MAPPING.turnDuration]: arbitraryTurnDuration,
+							});
+							const expectedResult = [baseBuffFactory({
+								id: BUFF_ID_MAPPING[key],
+								duration: arbitraryTurnDuration,
+								value: 456,
+							})];
+
+							const result = mappingFunction(effect, createArbitraryContext());
+							expect(result).toEqual(expectedResult);
+						});
+					}
+				});
+
+				describe('when drop resistance parameters are 0', () => {
+					testTurnDurationScenarios({
+						createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,${duration}`,
+						buffIdsInTurnDurationBuff: PARAMS_ORDER.map((k) => BUFF_ID_MAPPING[k]),
+					});
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: `1,0,0,0,${arbitraryTurnDuration},123`,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.bcDropResistanceBase,
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: 1,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 5] });
+			});
+		});
 	});
 });

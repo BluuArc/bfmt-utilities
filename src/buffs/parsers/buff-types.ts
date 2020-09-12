@@ -1198,6 +1198,11 @@ export enum BuffId {
 
 	'proc:56:chance ko resistance' = 'proc:56:chance ko resistance',
 
+	'proc:57:bc drop resistance-base' = 'proc:57:bc drop resistance-base',
+	'proc:57:bc drop resistance-buff' = 'proc:57:bc drop resistance-buff',
+	'proc:57:hc drop resistance-base' = 'proc:57:hc drop resistance-base',
+	'proc:57:hc drop resistance-buff' = 'proc:57:hc drop resistance-buff',
+
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
 

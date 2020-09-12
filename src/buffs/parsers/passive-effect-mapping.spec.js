@@ -5186,7 +5186,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('uses the params property when it exists', () => {
+			it('falls back to effect properties when the params property does not exist', () => {
 				const effect = {
 					[EFFECT_KEY_MAPPING.criticalDamageBase]: 7,
 					[EFFECT_KEY_MAPPING.criticalDamageBuff]: 8,
@@ -5268,7 +5268,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 			describe('for missing or 0 values', () => {
 				PARAMS_ORDER.forEach((key, index) => {
-					it(`returns a single buff for ${BUFF_ID_MAPPING[key]} if its the only parameter that is non-zero`, () => {
+					it(`returns a single buff for ${BUFF_ID_MAPPING[key]} if it's the only parameter that is non-zero`, () => {
 						const params = Array.from({ length: PARAMS_ORDER.length }).fill(0).map((_, i) => i !== index ? '0' : '123').join(',');
 						const expectedResult = [baseBuffFactory({
 							id: BUFF_ID_MAPPING[key],
@@ -5280,7 +5280,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						expect(result).toEqual(expectedResult);
 					});
 
-					it(`returns a single buff for ${BUFF_ID_MAPPING[key]} if its the only parameter that is non-zero and the params property does not exist`, () => {
+					it(`returns a single buff for ${BUFF_ID_MAPPING[key]} if it's the only parameter that is non-zero and the params property does not exist`, () => {
 						const effect = { [EFFECT_KEY_MAPPING[key]]: 456 };
 						const expectedResult = [baseBuffFactory({
 							id: BUFF_ID_MAPPING[key],

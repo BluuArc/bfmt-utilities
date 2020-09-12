@@ -3073,4 +3073,103 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('57', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '57';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let bcBaseResist = 0, bcBuffResist = 0;
+		let hcBaseResist = 0, hcBuffResist = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawBcBaseResist, rawBcBuffResist, rawHcBaseResist, rawHcBuffResist, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			bcBaseResist = parseNumberOrDefault(rawBcBaseResist);
+			bcBuffResist = parseNumberOrDefault(rawBcBuffResist);
+			hcBaseResist = parseNumberOrDefault(rawHcBaseResist);
+			hcBuffResist = parseNumberOrDefault(rawHcBuffResist);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+		} else {
+			// Deathmax's datamine doesn't parse HC drop resistance
+			bcBaseResist = parseNumberOrDefault(effect['base bc drop% resist buff'] as number);
+			bcBuffResist = parseNumberOrDefault(effect['buffed bc drop% resist buff'] as number);
+			turnDuration = parseNumberOrDefault(effect['bc drop% resist buff turns (92)'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (bcBaseResist !== 0) {
+			results.push({
+				id: 'proc:57:bc drop resistance-base',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: bcBaseResist,
+				...targetData,
+			});
+		}
+
+		if (bcBuffResist !== 0) {
+			results.push({
+				id: 'proc:57:bc drop resistance-buff',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: bcBuffResist,
+				...targetData,
+			});
+		}
+
+		if (hcBaseResist !== 0) {
+			results.push({
+				id: 'proc:57:hc drop resistance-base',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: hcBaseResist,
+				...targetData,
+			});
+		}
+
+		if (hcBuffResist !== 0) {
+			results.push({
+				id: 'proc:57:hc drop resistance-buff',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: hcBuffResist,
+				...targetData,
+			});
+		}
+
+		if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: [
+					'proc:57:bc drop resistance-base',
+					'proc:57:bc drop resistance-buff',
+					'proc:57:hc drop resistance-base',
+					'proc:57:hc drop resistance-buff',
+				],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

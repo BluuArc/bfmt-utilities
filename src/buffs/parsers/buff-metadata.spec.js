@@ -1679,6 +1679,23 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:56:chance ko resistance'], [IconId.BUFF_KOBLOCK]);
 	});
 
+	describe('proc 57 buffs', () => {
+		describe('proc:57:bc drop resistance-base', () => {
+			testDefaultIconResult(BuffId['proc:57:bc drop resistance-base'], [IconId.BUFF_BCDOWN]);
+		});
+
+		describe('proc:57:bc drop resistance-buff', () => {
+			testDefaultIconResult(BuffId['proc:57:bc drop resistance-buff'], [IconId.BUFF_BCDOWN]);
+		});
+		describe('proc:57:hc drop resistance-base', () => {
+			testDefaultIconResult(BuffId['proc:57:hc drop resistance-base'], [IconId.BUFF_HCDOWN]);
+		});
+
+		describe('proc:57:hc drop resistance-buff', () => {
+			testDefaultIconResult(BuffId['proc:57:hc drop resistance-buff'], [IconId.BUFF_HCDOWN]);
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});
