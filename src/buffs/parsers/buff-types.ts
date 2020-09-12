@@ -1190,6 +1190,8 @@ export enum BuffId {
 	'proc:55:elemental weakness damage-dark' = 'proc:55:elemental weakness damage-dark',
 	'proc:55:elemental weakness damage-unknown' = 'proc:55:elemental weakness damage-unknown',
 
+	'proc:56:chance ko resistance' = 'proc:56:chance ko resistance',
+
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
 

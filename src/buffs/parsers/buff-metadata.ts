@@ -2124,6 +2124,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ELEMENTDMGUP],
 	},
+	'proc:56:chance ko resistance': {
+		id: BuffId['proc:56:chance ko resistance'],
+		name: 'KO Resistance (Chance)',
+		stat: UnitStat.koResistance,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_KOBLOCK],
+	},
 	'UNKNOWN_CONDITIONAL_EFFECT_ID': {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

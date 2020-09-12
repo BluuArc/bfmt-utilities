@@ -1671,6 +1671,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc:56:chance ko resistance', () => {
+		testDefaultIconResult(BuffId['proc:56:chance ko resistance'], [IconId.BUFF_KOBLOCK]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

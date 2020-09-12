@@ -3021,4 +3021,56 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('56', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '56';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let chance = 0, recoveredHpPercent = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawChance, rawRecoverHp, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			chance = parseNumberOrDefault(rawChance);
+			recoveredHpPercent = parseNumberOrDefault(rawRecoverHp);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			chance = parseNumberOrDefault(effect['angel idol recover chance%'] as number);
+			recoveredHpPercent= parseNumberOrDefault(effect['angel idol recover hp%'] as number);
+			turnDuration = parseNumberOrDefault(effect['angel idol buff turns (91)'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (chance !== 0) {
+			results.push({
+				id: 'proc:56:chance ko resistance',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: { 'recoveredHp%': recoveredHpPercent, chance },
+				...targetData,
+			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['proc:56:chance ko resistance'],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }
