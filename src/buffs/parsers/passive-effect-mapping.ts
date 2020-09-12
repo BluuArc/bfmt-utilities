@@ -2162,4 +2162,15 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('58', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parsePassiveWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			effectKey: 'guard increase mitigation%',
+			buffId: 'passive:58:guard mitigation',
+			originalId: '58',
+		});
+	});
 }

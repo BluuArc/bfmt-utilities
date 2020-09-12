@@ -248,6 +248,7 @@ export enum UnitStat {
 	lightMitigation = 'lightMitigation',
 	darkMitigation = 'darkMitigation',
 	reduceDamageToOne = 'reduceDamageToOne',
+	guardMitigation = 'guardMitigation',
 
 	fireElementalDamage = 'fireElementalDamage',
 	waterElementalDamage = 'waterElementalDamage',
@@ -353,6 +354,7 @@ export interface IUnitState {
 	lightMitigation: IBuff[];
 	darkMitigation: IBuff[];
 	reduceDamageToOne: IBuff[];
+	guardMitigation: IBuff[];
 
 	fireElementalDamage: IBuff[];
 	waterElementalDamage: IBuff[];
@@ -817,6 +819,8 @@ export enum IconId {
 
 	BUFF_BBCOST_REDUCTION = 'BUFF_BBCOST_REDUCTION',
 
+	BUFF_GUARDCUT = 'BUFF_GUARDCUT',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -1004,6 +1008,8 @@ export enum BuffId {
 	'passive:53:critical rate-buff' = 'passive:53:critical rate-buff',
 
 	'passive:55:hp conditional' = 'passive:55:hp conditional',
+
+	'passive:58:guard mitigation' = 'passive:58:guard mitigation',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

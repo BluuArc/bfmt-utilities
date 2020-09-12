@@ -874,6 +874,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:55:hp conditional'], [IconId.CONDITIONALBUFF_HPTHRESH]);
 	});
 
+	describe('passive:58:guard mitigation', () => {
+		testDefaultIconResult(BuffId['passive:58:guard mitigation'], [IconId.BUFF_GUARDCUT]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

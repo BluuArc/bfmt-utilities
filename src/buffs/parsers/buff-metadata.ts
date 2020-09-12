@@ -1038,6 +1038,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.CONDITIONALBUFF_HPTHRESH],
 	},
+	'passive:58:guard mitigation': {
+		id: BuffId['passive:58:guard mitigation'],
+		name: 'Passive Guard Damage Reduction',
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_GUARDCUT],
+	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

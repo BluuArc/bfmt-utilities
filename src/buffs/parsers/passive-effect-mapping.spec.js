@@ -5554,5 +5554,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
 			});
 		});
+
+		describe('passive 58', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '58',
+				expectedBuffId: 'passive:58:guard mitigation',
+				effectKey: 'guard increase mitigation%',
+			});
+		});
 	});
 });
