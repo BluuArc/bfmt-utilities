@@ -209,6 +209,8 @@ export enum UnitStat {
 	bcCostReduction = 'bcCostReduction',
 	bbGaugeConsumptionReduction = 'bbGaugeConsumptionReduction',
 
+	ailmentAttackBoost = 'ailmentAttackBoost',
+
 	poisonResist = 'poisonResist',
 	weakResist = 'weakResist',
 	sickResist = 'sickResist',
@@ -316,6 +318,8 @@ export interface IUnitState {
 
 	bcCostReduction: IBuff[];
 	bbGaugeConsumptionReduction: IBuff[];
+
+	ailmentAttackBoost: IBuff[];
 
 	poisonResist: IBuff[];
 	weakResist: IBuff[];
@@ -842,6 +846,8 @@ export enum IconId {
 	BUFF_DARKSHIELD = 'BUFF_DARKSHIELD',
 	BUFF_ELEMENTSHIELD = 'BUFF_ELEMENTSHIELD',
 
+	BUFF_AILDMGUP = 'BUFF_AILDMGUP',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -1277,6 +1283,7 @@ export enum BuffId {
 	'proc:62:barrier-unknown' = 'proc:62:barrier-unknown',
 
 	'proc:64:consecutive usage attack' = 'proc:64:consecutive usage attack',
+	'proc:65:ailment attack boost' = 'proc:65:ailment attack boost',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

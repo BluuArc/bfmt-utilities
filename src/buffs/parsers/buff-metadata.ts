@@ -2428,6 +2428,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_USAGESCALED : IconId.ATK_AOE_USAGESCALED],
 	},
+	'proc:65:ailment attack boost': {
+		id: BuffId['proc:65:ailment attack boost'],
+		name: 'Active Attack Boost on Status Afflicted Foes',
+		stat: UnitStat.ailmentAttackBoost,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_AILDMGUP],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

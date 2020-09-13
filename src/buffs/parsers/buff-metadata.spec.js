@@ -1870,6 +1870,10 @@ describe('BUFF_METADATA entries', () => {
 		testIconResultWithBuff(BuffId['proc:64:consecutive usage attack'], [IconId.ATK_ST_USAGESCALED], { targetArea: TargetArea.Single }, 'target area is single');
 	});
 
+	describe('proc:65:ailment attack boost', () => {
+		testDefaultIconResult(BuffId['proc:65:ailment attack boost'], [IconId.BUFF_AILDMGUP]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

@@ -9768,5 +9768,14 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 8] });
 			});
 		});
+
+		describe('proc 65', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '65',
+				expectedBuffId: 'proc:65:ailment attack boost',
+				effectValueKey: 'atk% buff when enemy has ailment',
+				effectTurnDurationKey: 'atk% buff turns (110)',
+			});
+		});
 	});
 });

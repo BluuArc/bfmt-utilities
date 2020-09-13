@@ -3500,4 +3500,16 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('65', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithSingleNumericalParameterAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			effectValueKey: 'atk% buff when enemy has ailment',
+			effectTurnDurationKey: 'atk% buff turns (110)',
+			buffId: 'proc:65:ailment attack boost',
+			originalId: '65',
+		});
+	});
 }
