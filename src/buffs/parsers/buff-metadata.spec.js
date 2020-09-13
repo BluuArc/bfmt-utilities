@@ -958,6 +958,20 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 64', () => {
+		describe('passive:64:attack boost-bb', () => {
+			testDefaultIconResult(BuffId['passive:64:attack boost-bb'], [IconId.BUFF_BBATKUP]);
+		});
+
+		describe('passive:64:attack boost-sbb', () => {
+			testDefaultIconResult(BuffId['passive:64:attack boost-sbb'], [IconId.BUFF_SBBATKUP]);
+		});
+
+		describe('passive:64:attack boost-ubb', () => {
+			testDefaultIconResult(BuffId['passive:64:attack boost-ubb'], [IconId.BUFF_UBBATKUP]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

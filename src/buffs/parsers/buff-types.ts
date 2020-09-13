@@ -1057,6 +1057,10 @@ export enum BuffId {
 	'passive:63:first turn mitigate-dark' = 'passive:63:first turn mitigate-dark',
 	'passive:63:first turn mitigate-unknown' = 'passive:63:first turn mitigate-unknown',
 
+	'passive:64:attack boost-bb' = 'passive:64:attack boost-bb',
+	'passive:64:attack boost-sbb' = 'passive:64:attack boost-sbb',
+	'passive:64:attack boost-ubb' = 'passive:64:attack boost-ubb',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

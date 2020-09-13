@@ -2397,4 +2397,69 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('64', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '64';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let bb = 0, sbb = 0, ubb = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawBb, rawSbb, rawUbb, ...extraParams] = splitEffectParams(typedEffect);
+			bb = parseNumberOrDefault(rawBb);
+			sbb = parseNumberOrDefault(rawSbb);
+			ubb = parseNumberOrDefault(rawUbb);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			bb = parseNumberOrDefault(typedEffect['bb atk% buff'] as number);
+			sbb = parseNumberOrDefault(typedEffect['sbb atk% buff'] as number);
+			ubb = parseNumberOrDefault(typedEffect['ubb atk% buff'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (bb !== 0) {
+			results.push({
+				id: 'passive:64:attack boost-bb',
+				originalId,
+				sources,
+				conditions: { ...conditionInfo },
+				value: bb,
+				...targetData,
+			});
+		}
+
+		if (sbb !== 0) {
+			results.push({
+				id: 'passive:64:attack boost-sbb',
+				originalId,
+				sources,
+				conditions: { ...conditionInfo },
+				value: sbb,
+				...targetData,
+			});
+		}
+
+		if (ubb !== 0) {
+			results.push({
+				id: 'passive:64:attack boost-ubb',
+				originalId,
+				sources,
+				conditions: { ...conditionInfo },
+				value: ubb,
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

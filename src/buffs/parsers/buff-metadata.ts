@@ -1170,6 +1170,27 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_ELEMENTDMGDOWN],
 	},
+	'passive:64:attack boost-bb': {
+		id: BuffId['passive:64:attack boost-bb'],
+		name: 'Passive BB ATK Boost',
+		stat: UnitStat.bbAtk,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_BBATKUP],
+	},
+	'passive:64:attack boost-sbb': {
+		id: BuffId['passive:64:attack boost-sbb'],
+		name: 'Passive SBB ATK Boost',
+		stat: UnitStat.bbAtk,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_SBBATKUP],
+	},
+	'passive:64:attack boost-ubb': {
+		id: BuffId['passive:64:attack boost-ubb'],
+		name: 'Passive UBB ATK Boost',
+		stat: UnitStat.bbAtk,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_UBBATKUP],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
