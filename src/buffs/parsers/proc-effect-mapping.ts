@@ -3172,4 +3172,56 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('58', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '58';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let damageIncrease = 0, chance = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawDamageIncrease, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			damageIncrease = parseNumberOrDefault(rawDamageIncrease);
+			chance = parseNumberOrDefault(rawChance);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			damageIncrease = parseNumberOrDefault(effect['spark dmg% received'] as number);
+			chance = parseNumberOrDefault(effect['spark dmg received apply%'] as number);
+			turnDuration = parseNumberOrDefault(effect['spark dmg received debuff turns (94)'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (chance !== 0) {
+			results.push({
+				id: 'proc:58:spark vulnerability',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: { 'sparkDamage%': damageIncrease, chance },
+				...targetData,
+			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['proc:58:spark vulnerability'],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

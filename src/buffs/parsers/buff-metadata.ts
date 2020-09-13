@@ -2165,6 +2165,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_HCDOWN],
 	},
+	'proc:58:spark vulnerability': {
+		id: BuffId['proc:58:spark vulnerability'],
+		name: 'Active Spark Vulnerability',
+		stat: UnitStat.sparkDamage,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_SPARKDMGUP],
+	},
 	'UNKNOWN_CONDITIONAL_EFFECT_ID': {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

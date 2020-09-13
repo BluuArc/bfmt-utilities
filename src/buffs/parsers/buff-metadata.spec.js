@@ -1696,6 +1696,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc:58:spark vulnerability', () => {
+		testDefaultIconResult(BuffId['proc:58:spark vulnerability'], [IconId.BUFF_SPARKDMGUP]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

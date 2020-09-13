@@ -8797,5 +8797,156 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 5] });
 			});
 		});
+
+		describe('proc 58', () => {
+			const expectedBuffId = 'proc:58:spark vulnerability';
+			const expectedOriginalId = '58';
+
+			const DAMAGE_BUFF_KEY = 'sparkDamage%';
+			const EFFECT_KEY_MAPPING = {
+				'sparkDamage%': 'spark dmg% received',
+				chance: 'spark dmg received apply%',
+				turnDuration: 'spark dmg received debuff turns (94)',
+			};
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,${arbitraryTurnDuration}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: arbitraryTurnDuration,
+					value: { [DAMAGE_BUFF_KEY]: 1, chance: 2 },
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `1,2,${arbitraryTurnDuration},4,5,6`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						duration: arbitraryTurnDuration,
+						value: { [DAMAGE_BUFF_KEY]: 1, chance: 2 },
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_3: '4',
+							param_4: '5',
+							param_5: '6',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[EFFECT_KEY_MAPPING.chance]: 4,
+					[EFFECT_KEY_MAPPING['sparkDamage%']]: 5,
+					[EFFECT_KEY_MAPPING.turnDuration]: arbitraryTurnDuration,
+				});
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: arbitraryTurnDuration,
+					value: { chance: 4, [DAMAGE_BUFF_KEY]: 5 },
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are 0 or missing', () => {
+				it('defaults to 0 for missing recovered HP parameter', () => {
+					const params = `,1,${arbitraryTurnDuration}`;
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: arbitraryTurnDuration,
+						value: { chance: 1, [DAMAGE_BUFF_KEY]: 0 },
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults to 0 for missing recovered HP parameter when params property does not exist', () => {
+					const effect = createArbitraryBaseEffect({
+						[EFFECT_KEY_MAPPING.chance]: 4,
+						[EFFECT_KEY_MAPPING.turnDuration]: arbitraryTurnDuration,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: arbitraryTurnDuration,
+						value: { chance: 4, [DAMAGE_BUFF_KEY]: 0 },
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a no params buff if chance is 0 and turn duration is 0', () => {
+					const params = '1,0,0';
+					const effect = createArbitraryBaseEffect({ params });
+
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('returns a no params buff if chance is 0 and turn duration is 0 and params property does not exist', () => {
+					const effect = createArbitraryBaseEffect({
+						[EFFECT_KEY_MAPPING.chance]: 0,
+						[EFFECT_KEY_MAPPING['sparkDamage%']]: 5,
+						[EFFECT_KEY_MAPPING.turnDuration]: 0,
+					});
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,${duration}`,
+					buffIdsInTurnDurationBuff: [expectedBuffId],
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: `1,2,${arbitraryTurnDuration},123`,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: { [DAMAGE_BUFF_KEY]: 1, chance: 2 },
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 3] });
+			});
+		});
 	});
 });

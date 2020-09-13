@@ -768,6 +768,7 @@ export enum IconId {
 
 	BUFF_SPARKUP = 'BUFF_SPARKUP',
 	BUFF_SPARKDOWN = 'BUFF_SPARKDOWN',
+	BUFF_SPARKDMGUP = 'BUFF_SPARKDMGUP', // spark vulnerability
 
 	BUFF_SPARKHC = 'BUFF_SPARKHC',
 	BUFF_SPARKBC = 'BUFF_SPARKBC',
@@ -1202,6 +1203,8 @@ export enum BuffId {
 	'proc:57:bc drop resistance-buff' = 'proc:57:bc drop resistance-buff',
 	'proc:57:hc drop resistance-base' = 'proc:57:hc drop resistance-base',
 	'proc:57:hc drop resistance-buff' = 'proc:57:hc drop resistance-buff',
+
+	'proc:58:spark vulnerability' = 'proc:58:spark vulnerability',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
