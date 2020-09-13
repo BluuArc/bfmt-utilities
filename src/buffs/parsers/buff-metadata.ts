@@ -1949,6 +1949,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_SACRIFICIAL : IconId.ATK_AOE_SACRIFICIAL],
 	},
+	'proc:42:instant death': {
+		id: BuffId['proc:42:instant death'],
+		name: 'Instant Death to Self (Post-Attack)',
+		stackType: BuffStackType.Burst,
+		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_SACRIFICIAL : IconId.ATK_AOE_SACRIFICIAL, IconId.BUFF_KO],
+	},
 	'proc:43:burst od fill': {
 		id: BuffId['proc:43:burst od fill'],
 		name: 'Burst OD Gauge Fill (Percentage)',
@@ -2229,10 +2235,10 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'proc:61:party bc drain': {
 		id: BuffId['proc:61:party bc drain'],
-		name: 'Party BB Gauge Drain',
+		name: 'Party BB Gauge Drain (Post-Attack)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Burst,
-		icons: () => [IconId.BUFF_BBFILLDOWN],
+		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_BBGAUGESCALED : IconId.ATK_AOE_BBGAUGESCALED, IconId.BUFF_BBFILLDOWN],
 	},
 	'UNKNOWN_CONDITIONAL_EFFECT_ID': {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,

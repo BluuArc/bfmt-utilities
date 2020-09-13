@@ -6161,8 +6161,16 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 42', () => {
 			const PARAMS_ORDER = ['atkLow%', 'atkHigh%', 'flatAtk'];
-			const expectedBuffId = 'proc:42:sacrificial attack';
+			const expectedBuffIdForAttack = 'proc:42:sacrificial attack';
+			const expectedBuffIdForSelfKo = 'proc:42:instant death';
 			const expectedOriginalId = '42';
+
+			const createExpectedBuffForSelfKo = () => baseBuffFactory({
+				id: expectedBuffIdForSelfKo,
+				value: true,
+				targetArea: TargetArea.Single,
+				targetType: TargetType.Self,
+			});
 
 			beforeEach(() => {
 				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
@@ -6170,7 +6178,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds([expectedBuffId]);
+			testValidBuffIds([expectedBuffIdForAttack]);
 
 			it('uses the params property when it exists', () => {
 				const params = '1,2,3';
@@ -6186,14 +6194,17 @@ describe('getProcEffectToBuffMapping method', () => {
 					acc[param] = +splitParams[index];
 					return acc;
 				}, {});
-				const expectedResult = [baseBuffFactory({
-					id: expectedBuffId,
-					value: {
-						...expectedValuesForParams,
-						hits: arbitraryHitCount,
-						distribution: arbitraryDamageDistribution,
-					},
-				})];
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForAttack,
+						value: {
+							...expectedValuesForParams,
+							hits: arbitraryHitCount,
+							distribution: arbitraryDamageDistribution,
+						},
+					}),
+					createExpectedBuffForSelfKo(),
+				];
 
 				const result = mappingFunction(effect, context);
 				expect(result).toEqual(expectedResult);
@@ -6215,13 +6226,14 @@ describe('getProcEffectToBuffMapping method', () => {
 				}, {});
 				const expectedResult = [
 					baseBuffFactory({
-						id: expectedBuffId,
+						id: expectedBuffIdForAttack,
 						value: {
 							...expectedValuesForParams,
 							hits: arbitraryHitCount,
 							distribution: arbitraryDamageDistribution,
 						},
 					}),
+					createExpectedBuffForSelfKo(),
 					baseBuffFactory({
 						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
 						value: {
@@ -6250,34 +6262,40 @@ describe('getProcEffectToBuffMapping method', () => {
 					acc[param] = +splitParams[index];
 					return acc;
 				}, {});
-				const expectedResult = [baseBuffFactory({
-					id: expectedBuffId,
-					value: {
-						...expectedValuesForParams,
-						hits: arbitraryHitCount,
-						distribution: arbitraryDamageDistribution,
-					},
-				})];
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForAttack,
+						value: {
+							...expectedValuesForParams,
+							hits: arbitraryHitCount,
+							distribution: arbitraryDamageDistribution,
+						},
+					}),
+					createExpectedBuffForSelfKo(),
+				];
 
 				const result = mappingFunction(effect, context);
 				expect(result).toEqual(expectedResult);
 			});
 
-			testMissingDamageFramesScenarios({ expectedBuffId });
+			testMissingDamageFramesScenarios({ expectedBuffId: expectedBuffIdForAttack, getAdditionalBuffs: () => [createExpectedBuffForSelfKo()] });
 
 			describe('when values are missing', () => {
 				PARAMS_ORDER.forEach((paramCase) => {
 					it(`returns only value for ${paramCase} if it is non-zero and other stats are zero`, () => {
 						const params = PARAMS_ORDER.map((prop) => prop === paramCase ? '789' : '0').join(',');
 						const effect = createArbitraryBaseEffect({ params });
-						const expectedResult = [baseBuffFactory({
-							id: expectedBuffId,
-							value: {
-								[paramCase]: 789,
-								hits: 0,
-								distribution: 0,
-							},
-						})];
+						const expectedResult = [
+							baseBuffFactory({
+								id: expectedBuffIdForAttack,
+								value: {
+									[paramCase]: 789,
+									hits: 0,
+									distribution: 0,
+								},
+							}),
+							createExpectedBuffForSelfKo(),
+						];
 
 						const result = mappingFunction(effect, createArbitraryContext());
 						expect(result).toEqual(expectedResult);
@@ -6289,11 +6307,18 @@ describe('getProcEffectToBuffMapping method', () => {
 				const effect = createArbitraryBaseEffect({ params: '0,0,1,123' });
 				const expectedResult = [
 					baseBuffFactory({
-						id: expectedBuffId,
+						id: expectedBuffIdForAttack,
 						sources: arbitrarySourceValue,
 						value: { flatAtk: 1, hits: 0, distribution: 0 },
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: expectedBuffIdForSelfKo,
+						sources: arbitrarySourceValue,
+						value: true,
+						targetArea: TargetArea.Single,
+						targetType: TargetType.Self,
+					}),
 					baseBuffFactory({
 						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
 						sources: arbitrarySourceValue,

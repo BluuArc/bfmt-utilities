@@ -2308,20 +2308,33 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				return acc;
 			}, {});
 
-		const results: IBuff[] = [];
+		let results: IBuff[];
 		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
-			results.push({
-				id: 'proc:42:sacrificial attack',
-				originalId,
-				sources,
-				effectDelay,
-				value: {
-					...filteredValue,
-					hits,
-					distribution,
+			results = [
+				{
+					id: 'proc:42:sacrificial attack',
+					originalId,
+					sources,
+					effectDelay,
+					value: {
+						...filteredValue,
+						hits,
+						distribution,
+					},
+					...targetData,
 				},
-				...targetData,
-			});
+				{
+					id: 'proc:42:instant death',
+					originalId,
+					sources,
+					effectDelay,
+					value: true,
+					targetArea: TargetArea.Single,
+					targetType: TargetType.Self,
+				}
+			];
+		} else {
+			results = [];
 		}
 
 		handlePostParse(results, unknownParams, {

@@ -1550,9 +1550,16 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
-	describe('proc:42:sacrificial attack', () => {
-		testDefaultIconResult(BuffId['proc:42:sacrificial attack'], [IconId.ATK_AOE_SACRIFICIAL]);
-		testIconResultWithBuff(BuffId['proc:42:sacrificial attack'], [IconId.ATK_ST_SACRIFICIAL], { targetArea: TargetArea.Single }, 'target area is single');
+	describe('proc 42 buffs', () => {
+		describe('proc:42:sacrificial attack', () => {
+			testDefaultIconResult(BuffId['proc:42:sacrificial attack'], [IconId.ATK_AOE_SACRIFICIAL]);
+			testIconResultWithBuff(BuffId['proc:42:sacrificial attack'], [IconId.ATK_ST_SACRIFICIAL], { targetArea: TargetArea.Single }, 'target area is single');
+		});
+
+		describe('proc:42:instant death', () => {
+			testDefaultIconResult(BuffId['proc:42:instant death'], [IconId.ATK_AOE_SACRIFICIAL, IconId.BUFF_KO]);
+			testIconResultWithBuff(BuffId['proc:42:instant death'], [IconId.ATK_ST_SACRIFICIAL, IconId.BUFF_KO], { targetArea: TargetArea.Single }, 'target area is single');
+		});
 	});
 
 	describe('proc:43:burst od fill', () => {
@@ -1741,7 +1748,8 @@ describe('BUFF_METADATA entries', () => {
 		});
 
 		describe('proc:61:party bc drain', () => {
-			testDefaultIconResult(BuffId['proc:61:party bc drain'], [IconId.BUFF_BBFILLDOWN]);
+			testDefaultIconResult(BuffId['proc:61:party bc drain'], [IconId.ATK_AOE_BBGAUGESCALED, IconId.BUFF_BBFILLDOWN]);
+			testIconResultWithBuff(BuffId['proc:61:party bc drain'], [IconId.ATK_ST_BBGAUGESCALED, IconId.BUFF_BBFILLDOWN], { targetArea: TargetArea.Single }, 'target area is single');
 		});
 	});
 

@@ -1171,6 +1171,8 @@ export enum BuffId {
 	'proc:40:add ailment-unknown' = 'proc:40:add ailment-unknown',
 
 	'proc:42:sacrificial attack' = 'proc:42:sacrificial attack',
+	'proc:42:instant death' = 'proc:42:instant death',
+
 	'proc:43:burst od fill' = 'proc:43:burst od fill',
 	'proc:44:damage over time' = 'proc:44:damage over time',
 
