@@ -32,7 +32,7 @@ export interface IBuffMetadata {
 }
 
 export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.freeze({
-	'TURN_DURATION_MODIFICATION': {
+	TURN_DURATION_MODIFICATION: {
 		id: BuffId.TURN_DURATION_MODIFICATION,
 		name: 'Passive Turn Duration Modification',
 		stat: UnitStat.turnDurationModification,
@@ -43,19 +43,19 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 				(buff.value as { duration: number }).duration < 0) ?
 				IconId.TURN_DURATION_DOWN : IconId.TURN_DURATION_UP],
 	},
-	'NO_PARAMS_SPECIFIED': {
+	NO_PARAMS_SPECIFIED: {
 		id: BuffId.NO_PARAMS_SPECIFIED,
 		name: 'No Parameters Specified',
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
 	},
-	'UNKNOWN_PASSIVE_EFFECT_ID': {
+	UNKNOWN_PASSIVE_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PASSIVE_EFFECT_ID,
 		name: 'Unknown Passive Effect',
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
 	},
-	'UNKNOWN_PASSIVE_BUFF_PARAMS': {
+	UNKNOWN_PASSIVE_BUFF_PARAMS: {
 		id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
 		name: 'Unknown Passive Buff Parameters',
 		stackType: BuffStackType.Unknown,
@@ -1170,13 +1170,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_ELEMENTDMGDOWN],
 	},
-	'UNKNOWN_PROC_EFFECT_ID': {
+	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
 	},
-	'UNKNOWN_PROC_BUFF_PARAMS': {
+	UNKNOWN_PROC_BUFF_PARAMS: {
 		id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
 		name: 'Unknown Proc Buff Parameters',
 		stackType: BuffStackType.Unknown,
@@ -2394,13 +2394,19 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_ELEMENTSHIELD],
 	},
-	'UNKNOWN_CONDITIONAL_EFFECT_ID': {
+	'proc:64:consecutive usage attack': {
+		id: BuffId['proc:64:consecutive usage attack'],
+		name: 'Consecutive Damage',
+		stackType: BuffStackType.Attack,
+		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_USAGESCALED : IconId.ATK_AOE_USAGESCALED],
+	},
+	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
 	},
-	'UNKNOWN_CONDITIONAL_BUFF_PARAMS': {
+	UNKNOWN_CONDITIONAL_BUFF_PARAMS: {
 		id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
 		name: 'Unknown Conditional Buff Parameters',
 		stackType: BuffStackType.Unknown,

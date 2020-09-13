@@ -1847,6 +1847,11 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc:64:consecutive usage attack', () => {
+		testDefaultIconResult(BuffId['proc:64:consecutive usage attack'], [IconId.ATK_AOE_USAGESCALED]);
+		testIconResultWithBuff(BuffId['proc:64:consecutive usage attack'], [IconId.ATK_ST_USAGESCALED], { targetArea: TargetArea.Single }, 'target area is single');
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

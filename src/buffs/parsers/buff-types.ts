@@ -862,10 +862,12 @@ export enum IconId {
 	ATK_AOE_HPSCALED = 'ATK_AOE_HPSCALED',
 	ATK_ST_BBGAUGESCALED = 'ATK_ST_BBGAUGESCALED',
 	ATK_AOE_BBGAUGESCALED = 'ATK_AOE_BBGAUGESCALED',
+	ATK_ST_USAGESCALED = 'ATK_ST_USAGESCALED',
+	ATK_AOE_USAGESCALED = 'ATK_AOE_USAGESCALED',
 }
 
 /**
- * @description Format of these IDs are `<passive|proc>:<original effect ID>:<stat>`.
+ * @description Format of these IDs are `<passive|proc|conditional>:<original effect ID>:<stat>`.
  * Usage of passive/proc and original effect ID are for easy tracking of the original effect
  * source of a given buff.
  */
@@ -1266,6 +1268,8 @@ export enum BuffId {
 	'proc:62:barrier-light' = 'proc:62:barrier-light',
 	'proc:62:barrier-dark' = 'proc:62:barrier-dark',
 	'proc:62:barrier-unknown' = 'proc:62:barrier-unknown',
+
+	'proc:64:consecutive usage attack' = 'proc:64:consecutive usage attack',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

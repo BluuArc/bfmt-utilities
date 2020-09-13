@@ -3434,4 +3434,70 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('64', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '64';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const { hits, distribution } = getAttackInformationFromContext(context);
+		const params: { [param: string]: AlphaNumeric } = {
+			'atk%': '0',
+			'addedAtkPerUse%': '0',
+			maxIncreases: '0',
+			flatAtk: '0',
+			'crit%': '0',
+			'bc%': '0',
+			'hc%': '0',
+			'dmg%': '0',
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			[params['atk%'], params['addedAtkPerUse%'], params.maxIncreases, params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], ...extraParams] = splitEffectParams(effect);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
+		} else {
+			params['atk%'] = (effect['bb atk%'] as number);
+			params['addedAtkPerUse%'] = (effect['bb atk% inc per use'] as number);
+			params.maxIncreases = (effect['bb atk% max number of inc'] as number);
+			params.flatAtk = (effect['bb flat atk'] as number);
+			params['crit%'] = (effect['bb crit%'] as number);
+			params['bc%'] = (effect['bb bc%'] as number);
+			params['hc%'] = (effect['bb hc%'] as number);
+			params['dmg%'] = (effect['bb dmg%'] as number);
+		}
+
+		const filteredValue = Object.entries(params)
+			.filter(([, value]) => value && +value)
+			.reduce((acc: { [param: string]: number }, [key, value]) => {
+				acc[key] = parseNumberOrDefault(value);
+				return acc;
+			}, {});
+
+		const results: IBuff[] = [];
+		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+			results.push({
+				id: 'proc:64:consecutive usage attack',
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					...filteredValue,
+					hits,
+					distribution,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }
