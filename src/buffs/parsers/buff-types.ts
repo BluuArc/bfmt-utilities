@@ -137,6 +137,7 @@ export interface IBuffConditions {
 	onBattleWin?: boolean;
 	whenAttacked?: boolean;
 	onNormalAttack?: boolean;
+	onGuard?: boolean;
 
 	minumumUniqueElements?: number;
 }
@@ -826,6 +827,8 @@ export enum IconId {
 
 	BUFF_GUARDCUT = 'BUFF_GUARDCUT',
 
+	BUFF_GUARDBBUP = 'BUFF_GUARDBBUP',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -1015,6 +1018,9 @@ export enum BuffId {
 	'passive:55:hp conditional' = 'passive:55:hp conditional',
 
 	'passive:58:guard mitigation' = 'passive:58:guard mitigation',
+
+	'passive:59:bc fill when attacked on guard-percent' = 'passive:59:bc fill when attacked on guard-percent',
+	'passive:59:bc fill when attacked on guard-flat' = 'passive:59:bc fill when attacked on guard-flat',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

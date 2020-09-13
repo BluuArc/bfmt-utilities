@@ -878,6 +878,16 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:58:guard mitigation'], [IconId.BUFF_GUARDCUT]);
 	});
 
+	describe('passive 59 buffs', () => {
+		describe('passive:59:bc fill when attacked on guard-flat', () => {
+			testDefaultIconResult(BuffId['passive:59:bc fill when attacked on guard-flat'], [IconId.BUFF_GUARDBBUP]);
+		});
+
+		describe('passive:59:bc fill when attacked on guard-percent', () => {
+			testDefaultIconResult(BuffId['passive:59:bc fill when attacked on guard-percent'], [IconId.BUFF_GUARDBBUP]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

@@ -5562,5 +5562,251 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				effectKey: 'guard increase mitigation%',
 			});
 		});
+
+		describe('passive 59', () => {
+			const expectedBuffIdForPercent = 'passive:59:bc fill when attacked on guard-percent';
+			const expectedBuffIdForFlat = 'passive:59:bc fill when attacked on guard-flat';
+			const expectedOriginalId = '59';
+
+			const PERCENT_FILL_EFFECT_KEY = 'bb gauge% filled when attacked while guarded';
+			const FLAT_FILL_EFFECT_KEY = 'bc filled when attacked while guarded';
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffIdForPercent, expectedBuffIdForFlat]);
+
+			it('uses the params property when it exists', () => {
+				const params = '1,200';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForPercent,
+						value: 1,
+						conditions: {
+							whenAttacked: true,
+							onGuard: true,
+						},
+					}),
+					baseBuffFactory({
+						id: expectedBuffIdForFlat,
+						value: 2,
+						conditions: {
+							whenAttacked: true,
+							onGuard: true,
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,200,3,4,5';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForPercent,
+						value: 1,
+						conditions: {
+							whenAttacked: true,
+							onGuard: true,
+						},
+					}),
+					baseBuffFactory({
+						id: expectedBuffIdForFlat,
+						value: 2,
+						conditions: {
+							whenAttacked: true,
+							onGuard: true,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_2: '3',
+							param_3: '4',
+							param_4: '5',
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = {
+					[PERCENT_FILL_EFFECT_KEY]: 3,
+					[FLAT_FILL_EFFECT_KEY]: 4,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForPercent,
+						value: 3,
+						conditions: {
+							whenAttacked: true,
+							onGuard: true,
+						},
+					}),
+					baseBuffFactory({
+						id: expectedBuffIdForFlat,
+						value: 4,
+						conditions: {
+							whenAttacked: true,
+							onGuard: true,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('converts effect properties to numbers when params property does not exist', () => {
+				const effect = {
+					[PERCENT_FILL_EFFECT_KEY]: '5',
+					[FLAT_FILL_EFFECT_KEY]: '6',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForPercent,
+						value: 5,
+						conditions: {
+							whenAttacked: true,
+							onGuard: true,
+						},
+					}),
+					baseBuffFactory({
+						id: expectedBuffIdForFlat,
+						value: 6,
+						conditions: {
+							whenAttacked: true,
+							onGuard: true,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				it('returns a single buff for percent fill if it is the only non-zero parameter', () => {
+					const params = '123,0';
+					const effect = { params };
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffIdForPercent,
+						value: 123,
+						conditions: {
+							whenAttacked: true,
+							onGuard: true,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a single buff for flat fill if it is the only non-zero parameter', () => {
+					const params = '0,12300';
+					const effect = { params };
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffIdForFlat,
+						value: 123,
+						conditions: {
+							whenAttacked: true,
+							onGuard: true,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a single buff for percent fill if it is the only non-zero parameter and the params property does not exist', () => {
+					const effect = { [PERCENT_FILL_EFFECT_KEY]: 456 };
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffIdForPercent,
+						value: 456,
+						conditions: {
+							whenAttacked: true,
+							onGuard: true,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a single buff for flat fill if it is the only non-zero parameter and the params property does not exist', () => {
+					const effect = { [FLAT_FILL_EFFECT_KEY]: 456 };
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffIdForFlat,
+						value: 456,
+						conditions: {
+							whenAttacked: true,
+							onGuard: true,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
+				it('defaults all effect properties to 0 for non-number values', () => {
+					const effect = {
+						[PERCENT_FILL_EFFECT_KEY]: 'not a number',
+						[FLAT_FILL_EFFECT_KEY]: 'not a number',
+					};
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('defaults values for effect params to 0 if they are non-number or missing', () => {
+					const effect = { params: 'non-number' };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,100,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForFlat,
+						sources: arbitrarySourceValue,
+						value: 1,
+						conditions: {
+							...arbitraryConditionValue,
+							whenAttacked: true,
+							onGuard: true,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
+			});
+		});
 	});
 });
