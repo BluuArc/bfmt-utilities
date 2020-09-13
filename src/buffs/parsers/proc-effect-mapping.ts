@@ -1,4 +1,4 @@
-import { ProcEffect, UnitElement, Ailment, TargetArea } from '../../datamine-types';
+import { ProcEffect, UnitElement, Ailment, TargetArea, TargetType } from '../../datamine-types';
 import { IBuff, IEffectToBuffConversionContext, IGenericBuffValue, BuffId, BuffConditionElement } from './buff-types';
 import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault, ITargetData, buffSourceIsBurstType, createUnknownParamsEntryFromExtraParams, createNoParamsEntry } from './_helpers';
 
@@ -2575,7 +2575,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		const { hits, distribution } = getAttackInformationFromContext(context);
 		const params: { [param: string]: AlphaNumeric } = {
 			'baseAtk%': '0',
-			'addedAtk%': '0',
+			'maxAddedAtk%': '0',
 			flatAtk: '0',
 			'crit%': '0',
 			'bc%': '0',
@@ -2590,12 +2590,12 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			let rawMaxAttackValue: string, rawProportionalMode: string;
 			[params['baseAtk%'], rawMaxAttackValue, rawProportionalMode, params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], ...extraParams] = splitEffectParams(effect);
 
-			params['addedAtk%'] = parseNumberOrDefault(rawMaxAttackValue) - parseNumberOrDefault(params['baseAtk%']);
+			params['maxAddedAtk%'] = parseNumberOrDefault(rawMaxAttackValue) - parseNumberOrDefault(params['baseAtk%']);
 			proportionalMode = rawProportionalMode === '1' ? 'lost' : 'remaining';
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
 		} else {
 			params['baseAtk%'] = (effect['bb base atk%'] as number);
-			params['addedAtk%'] = (effect['bb added atk% based on hp'] as number);
+			params['maxAddedAtk%'] = (effect['bb added atk% based on hp'] as number);
 			proportionalMode = (effect['bb added atk% proportional to hp'] as ProportionalMode) || 'unknown';
 			params.flatAtk = (effect['bb flat atk'] as number);
 			params['crit%'] = (effect['bb crit%'] as number);
@@ -3281,6 +3281,85 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				duration: turnDuration,
 				targetData,
 			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
+
+	map.set('61', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '61';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const { hits, distribution } = getAttackInformationFromContext(context);
+		const params: { [param: string]: AlphaNumeric } = {
+			'baseAtk%': '0',
+			'maxAddedAtk%': '0',
+			flatAtk: '0',
+			'crit%': '0',
+			'bc%': '0',
+			'hc%': '0',
+			'dmg%': '0',
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			let rawMaxAttackValue: string;
+			[params['baseAtk%'], rawMaxAttackValue, params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], ...extraParams] = splitEffectParams(effect);
+
+			params['maxAddedAtk%'] = parseNumberOrDefault(rawMaxAttackValue);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
+		} else {
+			params['baseAtk%'] = (effect['bb base atk%'] as number);
+			params['maxAddedAtk%'] = (effect['bb max atk% based on ally bb gauge and clear bb gauges'] as number);
+			params.flatAtk = (effect['bb flat atk'] as number);
+			params['crit%'] = (effect['bb crit%'] as number);
+			params['bc%'] = (effect['bb bc%'] as number);
+			params['hc%'] = (effect['bb hc%'] as number);
+			params['dmg%'] = (effect['bb dmg%'] as number);
+		}
+
+		const filteredValue = Object.entries(params)
+			.filter(([, value]) => value && +value)
+			.reduce((acc: { [param: string]: number }, [key, value]) => {
+				acc[key] = parseNumberOrDefault(value);
+				return acc;
+			}, {});
+
+		let results: IBuff[];
+		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+			results = [
+				{
+					id: 'proc:61:party bb gauge-scaled attack',
+					originalId,
+					sources,
+					effectDelay,
+					value: {
+						...filteredValue,
+						hits,
+						distribution,
+					},
+					...targetData,
+				},
+				{
+					id: 'proc:61:party bc drain',
+					originalId,
+					sources,
+					effectDelay,
+					value: true,
+					targetArea: TargetArea.Aoe,
+					targetType: TargetType.Party,
+				},
+			]
+		} else {
+			results = [];
 		}
 
 		handlePostParse(results, unknownParams, {

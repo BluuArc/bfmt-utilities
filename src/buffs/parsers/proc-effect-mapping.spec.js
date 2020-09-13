@@ -1,6 +1,6 @@
 const { getProcEffectToBuffMapping } = require('./proc-effect-mapping');
 const { BuffId } = require('./buff-types');
-const { UnitElement, Ailment } = require('../../datamine-types');
+const { UnitElement, Ailment, TargetArea, TargetType } = require('../../datamine-types');
 
 describe('getProcEffectToBuffMapping method', () => {
 	it('uses the same mapping object on multiple calls', () => {
@@ -270,6 +270,7 @@ describe('getProcEffectToBuffMapping method', () => {
 		 * @param {object} context
 		 * @param {string} context.expectedBuffId
 		 * @param {string} context.expectedTargetArea
+		 * @param {() => import('./buff-types').IBuff[]} context.getAdditionalBuffs
 		 * @param {boolean?} context.testHits
 		 * @param {(buff: import('./buff-types').IBuff) => void} context.updateExpectedBuffForOnlyHitsOrDistributionCase
 		 */
@@ -277,6 +278,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			expectedBuffId,
 			expectedTargetArea,
 			updateExpectedBuffForOnlyHitsOrDistributionCase,
+			getAdditionalBuffs,
 			testHits = true,
 		}) => {
 			describe('for missing parts of context.damageFrames', () => {
@@ -307,6 +309,9 @@ describe('getProcEffectToBuffMapping method', () => {
 								distribution: arbitraryDamageDistribution,
 							},
 						})];
+						if (getAdditionalBuffs) {
+							expectedResult.push(...getAdditionalBuffs());
+						}
 						applyTargetAreaAsNeeded(expectedResult[0]);
 						if (updateExpectedBuffForOnlyHitsOrDistributionCase) {
 							updateExpectedBuffForOnlyHitsOrDistributionCase(expectedResult[0]);
@@ -333,6 +338,9 @@ describe('getProcEffectToBuffMapping method', () => {
 								distribution: 0,
 							},
 						})];
+						if (getAdditionalBuffs) {
+							expectedResult.push(...getAdditionalBuffs());
+						}
 						applyTargetAreaAsNeeded(expectedResult[0]);
 						if (updateExpectedBuffForOnlyHitsOrDistributionCase) {
 							updateExpectedBuffForOnlyHitsOrDistributionCase(expectedResult[0]);
@@ -7009,7 +7017,7 @@ describe('getProcEffectToBuffMapping method', () => {
 
 		describe('proc 47', () => {
 			const PROPORTIONAL_MODE_BUFF_KEY = 'proportionalMode';
-			const ADDED_ATK_BUFF_KEY = 'addedAtk%';
+			const ADDED_ATK_BUFF_KEY = 'maxAddedAtk%';
 			const PARAMS_ORDER = ['baseAtk%', ADDED_ATK_BUFF_KEY, PROPORTIONAL_MODE_BUFF_KEY, 'flatAtk', 'crit%', 'bc%', 'hc%', 'dmg%'];
 			const expectedBuffId = 'proc:47:hp scaled attack';
 			const expectedOriginalId = '47';
@@ -9063,6 +9071,230 @@ describe('getProcEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 4] });
+			});
+		});
+
+		describe('proc 61', () => {
+			const ADDED_ATK_BUFF_KEY = 'maxAddedAtk%';
+			const PARAMS_ORDER = ['baseAtk%', ADDED_ATK_BUFF_KEY, 'flatAtk', 'crit%', 'bc%', 'hc%', 'dmg%'];
+			const expectedBuffIdForAttack = 'proc:61:party bb gauge-scaled attack';
+			const expectedBuffIdForBcDrain = 'proc:61:party bc drain';
+			const expectedOriginalId = '61';
+
+			const createExpectedBcDrainBuff = () => baseBuffFactory({
+				id: expectedBuffIdForBcDrain,
+				value: true,
+				targetArea: TargetArea.Aoe,
+				targetType: TargetType.Party,
+			});
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffIdForAttack, expectedBuffIdForBcDrain]);
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6,7';
+				const splitParams = params.split(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const context = createArbitraryContext({
+					damageFrames: {
+						hits: arbitraryHitCount,
+						[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
+					},
+				});
+				const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+					acc[param] = +splitParams[index];
+					return acc;
+				}, {});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForAttack,
+						value: {
+							...expectedValuesForParams,
+							hits: arbitraryHitCount,
+							distribution: arbitraryDamageDistribution,
+						},
+					}),
+					createExpectedBcDrainBuff(),
+				];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,8,9,10';
+				const splitParams = params.split(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const context = createArbitraryContext({
+					damageFrames: {
+						hits: arbitraryHitCount,
+						[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
+					},
+				});
+				const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+					acc[param] = +splitParams[index];
+					return acc;
+				}, {});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForAttack,
+						value: {
+							...expectedValuesForParams,
+							hits: arbitraryHitCount,
+							distribution: arbitraryDamageDistribution,
+						},
+					}),
+					createExpectedBcDrainBuff(),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_7: '8',
+							param_8: '9',
+							param_9: '10',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const mockValues = [7, 8, 9, 10, 11, 12, 13];
+				const valuesInEffect = PARAMS_ORDER.reduce((acc, stat, index) => {
+					let key;
+					if (stat === 'flatAtk') {
+						key = 'bb flat atk';
+					} else if (stat === 'baseAtk%') {
+						key = 'bb base atk%';
+					} else if (stat === ADDED_ATK_BUFF_KEY) {
+						key = 'bb max atk% based on ally bb gauge and clear bb gauges';
+					} else {
+						key = `bb ${stat}`;
+					}
+					acc[key] = mockValues[index];
+					return acc;
+				}, {});
+				const effect = createArbitraryBaseEffect(valuesInEffect);
+				const context = createArbitraryContext({
+					damageFrames: {
+						hits: arbitraryHitCount,
+						[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: arbitraryDamageDistribution,
+					},
+				});
+				const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+					acc[param] = mockValues[index];
+					return acc;
+				}, {});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForAttack,
+						value: {
+							...expectedValuesForParams,
+							hits: arbitraryHitCount,
+							distribution: arbitraryDamageDistribution,
+						},
+					}),
+					createExpectedBcDrainBuff(),
+				];
+
+
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			testMissingDamageFramesScenarios({
+				expectedBuffId: expectedBuffIdForAttack,
+				getAdditionalBuffs: () => [createExpectedBcDrainBuff()],
+			});
+
+			PARAMS_ORDER.forEach((paramCase) => {
+				it(`returns associated values for ${paramCase} if it is non-zero and other stats are zero`, () => {
+					const params = PARAMS_ORDER.map((param) => param === paramCase ? '123' : '0').join(',');
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [
+						baseBuffFactory({
+							id: expectedBuffIdForAttack,
+							value: {
+								[paramCase]: 123,
+								hits: 0,
+								distribution: 0,
+							},
+						}),
+						createExpectedBcDrainBuff(),
+					];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`returns associated values for ${paramCase} if it is non-zero and other stats are zero and params property does not exist`, () => {
+					const valuesInEffect = PARAMS_ORDER.reduce((acc, stat) => {
+						let key;
+						if (stat === 'flatAtk') {
+							key = 'bb flat atk';
+						} else if (stat === 'baseAtk%') {
+							key = 'bb base atk%';
+						} else if (stat === ADDED_ATK_BUFF_KEY) {
+							key = 'bb max atk% based on ally bb gauge and clear bb gauges';
+						}  else {
+							key = `bb ${stat}`;
+						}
+						acc[key] = stat === paramCase ? 789 : 0;
+						return acc;
+					}, {});
+					const effect = createArbitraryBaseEffect(valuesInEffect);
+					const expectedResult = [
+						baseBuffFactory({
+							id: expectedBuffIdForAttack,
+							value: {
+								[paramCase]: 789,
+								hits: 0,
+								distribution: 0,
+							},
+						}),
+						createExpectedBcDrainBuff(),
+					];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({ params: '0,0,1,0,0,0,0,123' });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForAttack,
+						sources: arbitrarySourceValue,
+						value: { flatAtk: 1, hits: 0, distribution: 0 },
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: expectedBuffIdForBcDrain,
+						sources: arbitrarySourceValue,
+						value: true,
+						targetArea: TargetArea.Aoe,
+						targetType: TargetType.Party,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 7] });
 			});
 		});
 	});

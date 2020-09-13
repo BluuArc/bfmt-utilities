@@ -848,6 +848,8 @@ export enum IconId {
 	ATK_AOE_SACRIFICIAL = 'ATK_AOE_SACRIFICIAL',
 	ATK_ST_HPSCALED = 'ATK_ST_HPSCALED',
 	ATK_AOE_HPSCALED = 'ATK_AOE_HPSCALED',
+	ATK_ST_BBGAUGESCALED = 'ATK_ST_BBGAUGESCALED',
+	ATK_AOE_BBGAUGESCALED = 'ATK_AOE_BBGAUGESCALED',
 }
 
 /**
@@ -1222,6 +1224,9 @@ export enum BuffId {
 	'proc:59:attack reduction-bb' = 'proc:59:attack reduction-bb',
 	'proc:59:attack reduction-sbb' = 'proc:59:attack reduction-sbb',
 	'proc:59:attack reduction-ubb' = 'proc:59:attack reduction-ubb',
+
+	'proc:61:party bb gauge-scaled attack' = 'proc:61:party bb gauge-scaled attack',
+	'proc:61:party bc drain' = 'proc:61:party bc drain',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

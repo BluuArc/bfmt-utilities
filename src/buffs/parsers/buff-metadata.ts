@@ -2221,6 +2221,19 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_UBBATKDOWN],
 	},
+	'proc:61:party bb gauge-scaled attack': {
+		id: BuffId['proc:61:party bb gauge-scaled attack'],
+		name: 'Party BB Gauge-Scaled Damage',
+		stackType: BuffStackType.Attack,
+		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_BBGAUGESCALED : IconId.ATK_AOE_BBGAUGESCALED],
+	},
+	'proc:61:party bc drain': {
+		id: BuffId['proc:61:party bc drain'],
+		name: 'Party BB Gauge Drain',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_BBFILLDOWN],
+	},
 	'UNKNOWN_CONDITIONAL_EFFECT_ID': {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

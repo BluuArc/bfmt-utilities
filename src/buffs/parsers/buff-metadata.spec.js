@@ -1734,6 +1734,17 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc 61 buffs', () => {
+		describe('proc:61:party bb gauge-scaled attack', () => {
+			testDefaultIconResult(BuffId['proc:61:party bb gauge-scaled attack'], [IconId.ATK_AOE_BBGAUGESCALED]);
+			testIconResultWithBuff(BuffId['proc:61:party bb gauge-scaled attack'], [IconId.ATK_ST_BBGAUGESCALED], { targetArea: TargetArea.Single }, 'target area is single');
+		});
+
+		describe('proc:61:party bc drain', () => {
+			testDefaultIconResult(BuffId['proc:61:party bc drain'], [IconId.BUFF_BBFILLDOWN]);
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});
