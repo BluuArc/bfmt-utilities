@@ -2232,4 +2232,61 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('61', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '61';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let percentFill: number, flatFill: number;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawPercentFill, rawFlatFill, ...extraParams] = splitEffectParams(typedEffect);
+			percentFill = parseNumberOrDefault(rawPercentFill);
+			flatFill = parseNumberOrDefault(rawFlatFill) / 100;
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		} else {
+			percentFill = parseNumberOrDefault(typedEffect['bb gauge% filled on guard'] as number);
+			flatFill = parseNumberOrDefault(typedEffect['bc filled on guard'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (percentFill !== 0) {
+			results.push({
+				id: 'passive:61:bc fill on guard-percent',
+				originalId,
+				sources,
+				value: percentFill,
+				conditions: {
+					...conditionInfo,
+					onGuard: true,
+				},
+				...targetData,
+			});
+		}
+
+		if (flatFill !== 0) {
+			results.push({
+				id: 'passive:61:bc fill on guard-flat',
+				originalId,
+				sources,
+				value: flatFill,
+				conditions: {
+					...conditionInfo,
+					onGuard: true,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

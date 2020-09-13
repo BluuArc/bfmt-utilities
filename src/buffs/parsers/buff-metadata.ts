@@ -1058,6 +1058,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_GUARDBBUP],
 	},
+	'passive:61:bc fill on guard-percent': {
+		id: BuffId['passive:61:bc fill on guard-percent'],
+		name: 'Passive BC Fill on Guard (Percentage)',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_GUARDBBUP],
+	},
+	'passive:61:bc fill on guard-flat': {
+		id: BuffId['passive:61:bc fill on guard-flat'],
+		name: 'Passive BC Fill on Guard (Flat Amount)',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_GUARDBBUP],
+	},
 	'UNKNOWN_PROC_EFFECT_ID': {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

@@ -1022,6 +1022,9 @@ export enum BuffId {
 	'passive:59:bc fill when attacked on guard-percent' = 'passive:59:bc fill when attacked on guard-percent',
 	'passive:59:bc fill when attacked on guard-flat' = 'passive:59:bc fill when attacked on guard-flat',
 
+	'passive:61:bc fill on guard-percent' = 'passive:61:bc fill on guard-percent',
+	'passive:61:bc fill on guard-flat' = 'passive:61:bc fill on guard-flat',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

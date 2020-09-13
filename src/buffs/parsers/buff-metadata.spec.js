@@ -888,6 +888,16 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 61 buffs', () => {
+		describe('passive:61:bc fill on guard-flat', () => {
+			testDefaultIconResult(BuffId['passive:61:bc fill on guard-flat'], [IconId.BUFF_GUARDBBUP]);
+		});
+
+		describe('passive:61:bc fill on guard-percent', () => {
+			testDefaultIconResult(BuffId['passive:61:bc fill on guard-percent'], [IconId.BUFF_GUARDBBUP]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
