@@ -1753,6 +1753,40 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc 62 buffs', () => {
+		describe('proc:62:barrier-fire', () => {
+			testDefaultIconResult(BuffId['proc:62:barrier-fire'], [IconId.BUFF_FIRESHIELD]);
+		});
+
+		describe('proc:62:barrier-water', () => {
+			testDefaultIconResult(BuffId['proc:62:barrier-water'], [IconId.BUFF_WATERSHIELD]);
+		});
+
+		describe('proc:62:barrier-earth', () => {
+			testDefaultIconResult(BuffId['proc:62:barrier-earth'], [IconId.BUFF_EARTHSHIELD]);
+		});
+
+		describe('proc:62:barrier-thunder', () => {
+			testDefaultIconResult(BuffId['proc:62:barrier-thunder'], [IconId.BUFF_THUNDERSHIELD]);
+		});
+
+		describe('proc:62:barrier-light', () => {
+			testDefaultIconResult(BuffId['proc:62:barrier-light'], [IconId.BUFF_LIGHTSHIELD]);
+		});
+
+		describe('proc:62:barrier-dark', () => {
+			testDefaultIconResult(BuffId['proc:62:barrier-dark'], [IconId.BUFF_DARKSHIELD]);
+		});
+
+		describe('proc:62:barrier-all', () => {
+			testDefaultIconResult(BuffId['proc:62:barrier-all'], [IconId.BUFF_ELEMENTSHIELD]);
+		});
+
+		describe('proc:62:barrier-unknown', () => {
+			testDefaultIconResult(BuffId['proc:62:barrier-unknown'], [IconId.BUFF_ELEMENTSHIELD]);
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

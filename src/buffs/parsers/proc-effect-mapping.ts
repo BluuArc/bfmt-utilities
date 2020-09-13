@@ -1892,14 +1892,14 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		if (effect.params) {
 			const [rawElement, ...extraParams] = splitEffectParams(effect);
 			if (rawElement && rawElement !== '0') {
-				element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+				element = NON_ZERO_ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
 			}
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
 		} else {
 			const effectElement = effect['set attack element attribute'] as string;
 			if (effectElement) {
-				const sanitizedElement = Object.values(ELEMENT_MAPPING).find((e) => effectElement === e);
+				const sanitizedElement = Object.values(NON_ZERO_ELEMENT_MAPPING).find((e) => effectElement === e);
 				if (sanitizedElement && sanitizedElement !== BuffConditionElement.All) {
 					element = sanitizedElement;
 				} else {
@@ -3373,6 +3373,56 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			]
 		} else {
 			results = [];
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
+
+	map.set('62', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '62';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let element: UnitElement | BuffConditionElement;
+		let hp = 0, defense = 0, damageAbsorption = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawElement, rawHp, rawDefense, rawDamageAbsorption, ...extraParams] = splitEffectParams(effect);
+
+			element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+			hp = parseNumberOrDefault(rawHp);
+			defense = parseNumberOrDefault(rawDefense);
+			damageAbsorption = parseNumberOrDefault(rawDamageAbsorption);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+		} else {
+			const effectElement = effect['elemental barrier element'] as UnitElement;
+			element = (effectElement && Object.values(ELEMENT_MAPPING).find((e) => e === effectElement)) || BuffConditionElement.Unknown;
+
+			hp = parseNumberOrDefault(effect['elemental barrier hp'] as number);
+			defense = parseNumberOrDefault(effect['elemental barrier def'] as number);
+			damageAbsorption = parseNumberOrDefault(effect['elemental barrier absorb dmg%'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (hp !== 0 || defense !== 0 || damageAbsorption !== 0) {
+			results.push({
+				id: `proc:62:barrier-${element}`,
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					hp,
+					defense,
+					'damageAbsorption%': damageAbsorption,
+				},
+				...targetData,
+			});
 		}
 
 		handlePostParse(results, unknownParams, {

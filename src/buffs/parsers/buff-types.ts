@@ -251,6 +251,8 @@ export enum UnitStat {
 	reduceDamageToOne = 'reduceDamageToOne',
 	guardMitigation = 'guardMitigation',
 
+	barrier = 'barrier',
+
 	fireElementalDamage = 'fireElementalDamage',
 	waterElementalDamage = 'waterElementalDamage',
 	earthElementalDamage = 'earthElementalDamage',
@@ -356,6 +358,8 @@ export interface IUnitState {
 	darkMitigation: IBuff[];
 	reduceDamageToOne: IBuff[];
 	guardMitigation: IBuff[];
+
+	barrier: IBuff[];
 
 	fireElementalDamage: IBuff[];
 	waterElementalDamage: IBuff[];
@@ -695,7 +699,7 @@ export enum IconId {
 	BUFF_ADDRECDOWN = 'BUFF_ADDRECDOWN',
 
 	BUFF_POISONCOUNTER = 'BUFF_POISONCOUNTER',
-	BUFF_POISIONCOUNTER = 'BUFF_POISONCOUNTER',  // in-game it's a typo, so this corrects it
+	BUFF_POISIONCOUNTER = 'BUFF_POISONCOUNTER', // in-game it's a typo, so this corrects it
 	BUFF_WEAKCOUNTER = 'BUFF_WEAKCOUNTER',
 	BUFF_SICKCOUNTER = 'BUFF_SICKCOUNTER',
 	BUFF_INJCONTER = 'BUFF_INJCONTER',
@@ -828,6 +832,14 @@ export enum IconId {
 	BUFF_GUARDCUT = 'BUFF_GUARDCUT',
 
 	BUFF_GUARDBBUP = 'BUFF_GUARDBBUP',
+
+	BUFF_FIRESHIELD = 'BUFF_FIRESHIELD', // barrier
+	BUFF_WATERSHIELD = 'BUFF_WATERSHIELD',
+	BUFF_EARTHSHIELD = 'BUFF_EARTHSHIELD',
+	BUFF_THUNDERSHIELD = 'BUFF_THUNDERSHIELD',
+	BUFF_LIGHTSHIELD = 'BUFF_LIGHTSHIELD',
+	BUFF_DARKSHIELD = 'BUFF_DARKSHIELD',
+	BUFF_ELEMENTSHIELD = 'BUFF_ELEMENTSHIELD',
 
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
@@ -1229,6 +1241,15 @@ export enum BuffId {
 
 	'proc:61:party bb gauge-scaled attack' = 'proc:61:party bb gauge-scaled attack',
 	'proc:61:party bc drain' = 'proc:61:party bc drain',
+
+	'proc:62:barrier-all' = 'proc:62:barrier-all',
+	'proc:62:barrier-fire' = 'proc:62:barrier-fire',
+	'proc:62:barrier-water' = 'proc:62:barrier-water',
+	'proc:62:barrier-earth' = 'proc:62:barrier-earth',
+	'proc:62:barrier-thunder' = 'proc:62:barrier-thunder',
+	'proc:62:barrier-light' = 'proc:62:barrier-light',
+	'proc:62:barrier-dark' = 'proc:62:barrier-dark',
+	'proc:62:barrier-unknown' = 'proc:62:barrier-unknown',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
