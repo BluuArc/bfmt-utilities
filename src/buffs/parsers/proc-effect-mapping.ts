@@ -3224,4 +3224,72 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('59', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '59';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const [rawBb, rawSbb, rawUbb, rawTurnDuration, ...extraParams] = splitEffectWithUnknownProcParamsProperty(effect);
+		const bb = parseNumberOrDefault(rawBb);
+		const sbb = parseNumberOrDefault(rawSbb);
+		const ubb = parseNumberOrDefault(rawUbb);
+		const turnDuration = parseNumberOrDefault(rawTurnDuration);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+
+		const results: IBuff[] = [];
+		if (bb !== 0) {
+			results.push({
+				id: 'proc:59:attack reduction-bb',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: bb,
+				...targetData,
+			});
+		}
+
+		if (sbb !== 0) {
+			results.push({
+				id: 'proc:59:attack reduction-sbb',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: sbb,
+				...targetData,
+			});
+		}
+
+		if (ubb !== 0) {
+			results.push({
+				id: 'proc:59:attack reduction-ubb',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: ubb,
+				...targetData,
+			});
+		}
+
+		if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['bb', 'sbb', 'ubb'].map((type) => `proc:59:attack reduction-${type}`),
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

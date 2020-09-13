@@ -2172,6 +2172,27 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_SPARKDMGUP],
 	},
+	'proc:59:attack reduction-bb': {
+		id: BuffId['proc:59:attack reduction-bb'],
+		name: 'Active BB ATK Reduction',
+		stat: UnitStat.bbAtk,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_BBATKDOWN],
+	},
+	'proc:59:attack reduction-sbb': {
+		id: BuffId['proc:59:attack reduction-sbb'],
+		name: 'Active SBB ATK Reduction',
+		stat: UnitStat.bbAtk,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_SBBATKDOWN],
+	},
+	'proc:59:attack reduction-ubb': {
+		id: BuffId['proc:59:attack reduction-ubb'],
+		name: 'Active UBB ATK Reduction',
+		stat: UnitStat.bbAtk,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_UBBATKDOWN],
+	},
 	'UNKNOWN_CONDITIONAL_EFFECT_ID': {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

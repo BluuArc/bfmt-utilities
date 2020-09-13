@@ -1700,6 +1700,20 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:58:spark vulnerability'], [IconId.BUFF_SPARKDMGUP]);
 	});
 
+	describe('proc 59', () => {
+		describe('proc:59:attack reduction-bb', () => {
+			testDefaultIconResult(BuffId['proc:59:attack reduction-bb'], [IconId.BUFF_BBATKDOWN]);
+		});
+
+		describe('proc:59:attack reduction-sbb', () => {
+			testDefaultIconResult(BuffId['proc:59:attack reduction-sbb'], [IconId.BUFF_SBBATKDOWN]);
+		});
+
+		describe('proc:59:attack reduction-ubb', () => {
+			testDefaultIconResult(BuffId['proc:59:attack reduction-ubb'], [IconId.BUFF_UBBATKDOWN]);
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});
