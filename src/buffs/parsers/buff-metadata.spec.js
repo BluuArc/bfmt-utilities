@@ -898,6 +898,36 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 62 buffs', () => {
+		describe('passive:62:mitigate-fire', () => {
+			testDefaultIconResult(BuffId['passive:62:mitigate-fire'], [IconId.BUFF_FIREDMGDOWN]);
+		});
+
+		describe('passive:62:mitigate-water', () => {
+			testDefaultIconResult(BuffId['passive:62:mitigate-water'], [IconId.BUFF_WATERDMGDOWN]);
+		});
+
+		describe('passive:62:mitigate-earth', () => {
+			testDefaultIconResult(BuffId['passive:62:mitigate-earth'], [IconId.BUFF_EARTHDMGDOWN]);
+		});
+
+		describe('passive:62:mitigate-thunder', () => {
+			testDefaultIconResult(BuffId['passive:62:mitigate-thunder'], [IconId.BUFF_THUNDERDMGDOWN]);
+		});
+
+		describe('passive:62:mitigate-light', () => {
+			testDefaultIconResult(BuffId['passive:62:mitigate-light'], [IconId.BUFF_LIGHTDMGDOWN]);
+		});
+
+		describe('passive:62:mitigate-dark', () => {
+			testDefaultIconResult(BuffId['passive:62:mitigate-dark'], [IconId.BUFF_DARKDMGDOWN]);
+		});
+
+		describe('passive:62:mitigate-unknown', () => {
+			testDefaultIconResult(BuffId['passive:62:mitigate-unknown'], [IconId.BUFF_ELEMENTDMGDOWN]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

@@ -2331,7 +2331,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 					value: true,
 					targetArea: TargetArea.Single,
 					targetType: TargetType.Self,
-				}
+				},
 			];
 		} else {
 			results = [];
@@ -3370,7 +3370,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 					targetArea: TargetArea.Aoe,
 					targetType: TargetType.Party,
 				},
-			]
+			];
 		} else {
 			results = [];
 		}

@@ -9497,7 +9497,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					'elemental barrier def': 'defense',
 					'elemental barrier absorb dmg%': 'damageAbsorption%',
 				};
-				Object.entries(NON_ELEMENTAL_EFFECT_KEY_TO_BUFF_KEY_MAPPING).forEach(([effectKey, buffKey]) => {
+				Object.keys(NON_ELEMENTAL_EFFECT_KEY_TO_BUFF_KEY_MAPPING).forEach(([buffKey]) => {
 					it(`defaults to 0 for non-number ${buffKey} parameter`, () => {
 						const params = [
 							'0',

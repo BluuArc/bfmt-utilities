@@ -1039,6 +1039,14 @@ export enum BuffId {
 	'passive:61:bc fill on guard-percent' = 'passive:61:bc fill on guard-percent',
 	'passive:61:bc fill on guard-flat' = 'passive:61:bc fill on guard-flat',
 
+	'passive:62:mitigate-fire' = 'passive:62:mitigate-fire',
+	'passive:62:mitigate-water' = 'passive:62:mitigate-water',
+	'passive:62:mitigate-earth' = 'passive:62:mitigate-earth',
+	'passive:62:mitigate-thunder' = 'passive:62:mitigate-thunder',
+	'passive:62:mitigate-light' = 'passive:62:mitigate-light',
+	'passive:62:mitigate-dark' = 'passive:62:mitigate-dark',
+	'passive:62:mitigate-unknown' = 'passive:62:mitigate-unknown',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

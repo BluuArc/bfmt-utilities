@@ -6041,5 +6041,168 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
 			});
 		});
+
+		describe('passive 62', () => {
+			const expectedOriginalId = '62';
+			const ELEMENT_MAPPING = {
+				1: UnitElement.Fire,
+				2: UnitElement.Water,
+				3: UnitElement.Earth,
+				4: UnitElement.Thunder,
+				5: UnitElement.Light,
+				6: UnitElement.Dark,
+			};
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((elem) => `passive:62:mitigate-${elem}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6,7';
+				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
+					return baseBuffFactory({
+						id: `passive:62:mitigate-${element}`,
+						value: 7,
+					});
+				});
+
+				const effect = { params };
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,8,9,10';
+				const expectedResult = Object.values(ELEMENT_MAPPING).map((element) => {
+					return baseBuffFactory({
+						id: `passive:62:mitigate-${element}`,
+						value: 7,
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_7: '8',
+						param_8: '9',
+						param_9: '10',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to stat-specific properties when the params property does not exist', () => {
+				const elements = Object.values(ELEMENT_MAPPING);
+				const effect = elements.reduce((acc, element) => {
+					acc[`mitigate ${element} attacks`] = true;
+					return acc;
+				}, {});
+				effect['dmg% mitigation for elemental attacks'] = 14;
+				const expectedResult = elements.map((element) => {
+					return baseBuffFactory({
+						id: `passive:62:mitigate-${element}`,
+						value: 14,
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			Object.entries(ELEMENT_MAPPING).forEach(([knownElementKey, knownElementValue]) => {
+				it(`parses raw value for ${knownElementValue} in params property`, () => {
+					const params = `${knownElementKey},0,0,0,0,0,123`;
+					const expectedResult = [baseBuffFactory({
+						id: `passive:62:mitigate-${knownElementValue}`,
+						value: 123,
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`parses value for ${knownElementValue} when its effect property is true and not given params property`, () => {
+					const effect = {
+						[`mitigate ${knownElementValue} attacks`]: true,
+						'dmg% mitigation for elemental attacks': 456,
+					};
+					const expectedResult = [baseBuffFactory({
+						id: `passive:62:mitigate-${knownElementValue}`,
+						value: 456,
+					})];
+
+					const context = createArbitraryContext();
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`returns an unknown element buff for ${knownElementValue} when its effect property is false and not given params property`, () => {
+					const effect = {
+						[`mitigate ${knownElementValue} attacks`]: false,
+						'dmg% mitigation for elemental attacks': 456,
+					};
+					const expectedResult = [baseBuffFactory({
+						id: 'passive:62:mitigate-unknown',
+						value: 456,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('defaults to unknown element if corresponding element value cannot be found from parsed params', () => {
+				const params = 'not-an-element,0,0,0,0,0,789';
+				const expectedResult = [baseBuffFactory({
+					id: 'passive:62:mitigate-unknown',
+					value: 789,
+				})];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff if parsed mitigation value from params is zero', () => {
+				const params = '1,2,3,4,5,6,0';
+				const effect = { params };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '5,0,0,0,0,0,6,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:62:mitigate-light',
+						sources: arbitrarySourceValue,
+						value: 6,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 7] });
+			});
+		});
 	});
 });
