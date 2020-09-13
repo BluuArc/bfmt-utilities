@@ -138,6 +138,7 @@ export interface IBuffConditions {
 	whenAttacked?: boolean;
 	onNormalAttack?: boolean;
 	onGuard?: boolean;
+	onCriticalHit?: boolean;
 
 	minumumUniqueElements?: number;
 }
@@ -1060,6 +1061,8 @@ export enum BuffId {
 	'passive:64:attack boost-bb' = 'passive:64:attack boost-bb',
 	'passive:64:attack boost-sbb' = 'passive:64:attack boost-sbb',
 	'passive:64:attack boost-ubb' = 'passive:64:attack boost-ubb',
+
+	'passive:65:bc fill on crit' = 'passive:65:bc fill on crit',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

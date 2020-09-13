@@ -2462,4 +2462,21 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('65', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parsePassiveWithNumericalValueRangeAndChance({
+			effect,
+			context,
+			injectionContext,
+			originalId: '65',
+			effectKeyLow: 'bc fill on crit min',
+			effectKeyHigh: 'bc fill on crit max',
+			effectKeyChance: 'bc fill on crit%',
+			buffKeyLow: 'fillLow',
+			buffKeyHigh: 'fillHigh',
+			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
+			generateBaseConditions: () => ({ onCriticalHit: true }),
+			buffId: 'passive:65:bc fill on crit',
+		});
+	});
 }

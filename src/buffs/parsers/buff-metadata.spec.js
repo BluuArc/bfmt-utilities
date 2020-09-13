@@ -972,6 +972,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive:65:bc fill on crit', () => {
+		testDefaultIconResult(BuffId['passive:65:bc fill on crit'], [IconId.BUFF_BBREC]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

@@ -6510,5 +6510,19 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 3] });
 			});
 		});
+
+		describe('passive 65', () => {
+			testPassiveWithNumericalValueRangeAndChance({
+				expectedOriginalId: '65',
+				expectedBuffId: 'passive:65:bc fill on crit',
+				effectKeyLow: 'bc fill on crit min',
+				effectKeyHigh: 'bc fill on crit max',
+				effectKeyChance: 'bc fill on crit%',
+				buffKeyLow: 'fillLow',
+				buffKeyHigh: 'fillHigh',
+				getExpectedValueFromParam: (param) => +param / 100,
+				generateBaseConditions: () => ({ onCriticalHit: true }),
+			});
+		});
 	});
 });
