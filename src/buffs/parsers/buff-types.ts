@@ -1047,6 +1047,14 @@ export enum BuffId {
 	'passive:62:mitigate-dark' = 'passive:62:mitigate-dark',
 	'passive:62:mitigate-unknown' = 'passive:62:mitigate-unknown',
 
+	'passive:63:first turn mitigate-fire' = 'passive:63:first turn mitigate-fire',
+	'passive:63:first turn mitigate-water' = 'passive:63:first turn mitigate-water',
+	'passive:63:first turn mitigate-earth' = 'passive:63:first turn mitigate-earth',
+	'passive:63:first turn mitigate-thunder' = 'passive:63:first turn mitigate-thunder',
+	'passive:63:first turn mitigate-light' = 'passive:63:first turn mitigate-light',
+	'passive:63:first turn mitigate-dark' = 'passive:63:first turn mitigate-dark',
+	'passive:63:first turn mitigate-unknown' = 'passive:63:first turn mitigate-unknown',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

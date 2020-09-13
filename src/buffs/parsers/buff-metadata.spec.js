@@ -928,6 +928,36 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 63 buffs', () => {
+		describe('passive:63:first turn mitigate-fire', () => {
+			testDefaultIconResult(BuffId['passive:63:first turn mitigate-fire'], [IconId.BUFF_FIREDMGDOWN]);
+		});
+
+		describe('passive:63:first turn mitigate-water', () => {
+			testDefaultIconResult(BuffId['passive:63:first turn mitigate-water'], [IconId.BUFF_WATERDMGDOWN]);
+		});
+
+		describe('passive:63:first turn mitigate-earth', () => {
+			testDefaultIconResult(BuffId['passive:63:first turn mitigate-earth'], [IconId.BUFF_EARTHDMGDOWN]);
+		});
+
+		describe('passive:63:first turn mitigate-thunder', () => {
+			testDefaultIconResult(BuffId['passive:63:first turn mitigate-thunder'], [IconId.BUFF_THUNDERDMGDOWN]);
+		});
+
+		describe('passive:63:first turn mitigate-light', () => {
+			testDefaultIconResult(BuffId['passive:63:first turn mitigate-light'], [IconId.BUFF_LIGHTDMGDOWN]);
+		});
+
+		describe('passive:63:first turn mitigate-dark', () => {
+			testDefaultIconResult(BuffId['passive:63:first turn mitigate-dark'], [IconId.BUFF_DARKDMGDOWN]);
+		});
+
+		describe('passive:63:first turn mitigate-unknown', () => {
+			testDefaultIconResult(BuffId['passive:63:first turn mitigate-unknown'], [IconId.BUFF_ELEMENTDMGDOWN]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

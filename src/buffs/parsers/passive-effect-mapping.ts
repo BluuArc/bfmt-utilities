@@ -2341,4 +2341,60 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('63', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '63';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let elements: (UnitElement | BuffConditionElement)[];
+		let mitigation = 0, turnDuration = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			elements = params.filter((value, index) => value !== '0' && index < 6)
+				.map((e) => ELEMENT_MAPPING[e] || BuffConditionElement.Unknown);
+			mitigation = parseNumberOrDefault(params[6]);
+			turnDuration = parseNumberOrDefault(params[7]);
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(8), 8, injectionContext);
+		} else {
+			elements = Object.values(ELEMENT_MAPPING).filter((element) => !!typedEffect[`mitigate ${element} attacks`]);
+			mitigation = parseNumberOrDefault(typedEffect['dmg% mitigation for elemental attacks'] as number);
+			turnDuration = parseNumberOrDefault(typedEffect['dmg% mitigation for elemental attacks buff for first x turns'] as number);
+		}
+
+		let results: IBuff[] = [];
+		if (mitigation !== 0) {
+			results = elements.map((element) => ({
+				id: `passive:63:first turn mitigate-${element}`,
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: mitigation,
+				conditions: { ...conditionInfo },
+				...targetData,
+			}));
+
+			if (results.length === 0) {
+				results.push({
+					id: 'passive:63:first turn mitigate-unknown',
+					originalId,
+					sources,
+					duration: turnDuration,
+					value: mitigation,
+					conditions: { ...conditionInfo },
+					...targetData,
+				});
+			}
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }
