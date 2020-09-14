@@ -2,6 +2,7 @@ const { getPassiveEffectToBuffMapping } = require('./passive-effect-mapping');
 const { TargetType, TargetArea, UnitElement, UnitType, UnitGender } = require('../../datamine-types');
 const { BuffId } = require('./buff-types');
 const { getConditionalEffectToBuffMapping } = require('./conditional-effect-mapping');
+const { getProcEffectToBuffMapping } = require('./proc-effect-mapping');
 
 describe('getPassiveEffectToBuffMapping method', () => {
 	it('uses the same mapping object on multiple calls', () => {
@@ -5435,7 +5436,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				});
 			});
 
-			it('calls corresponding conditional effect conversion function', () => {
+			it('calls corresponding conditional effect conversion function defined in injection context', () => {
 				const params = `${arbitraryKnownConditionalId},2&3&4,3,4,1,6`;
 				const expectedResult = [baseBuffFactory({
 					id: expectedBuffId,
@@ -6522,6 +6523,692 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				buffKeyHigh: 'fillHigh',
 				getExpectedValueFromParam: (param) => +param / 100,
 				generateBaseConditions: () => ({ onCriticalHit: true }),
+			});
+		});
+
+		describe('passive 66', () => {
+			const BURST_TYPES = ['bb', 'sbb', 'ubb'];
+			const expectedOriginalId = '66';
+
+			const arbitraryKnownProcId = 'arbitrary proc id for passive 66';
+			const getArbitraryBuffsForProcEffect = () => [{ arbitrary: 'proc buff' }];
+			let mockProcEffectConversionFunctionSpy;
+			let injectionContext;
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+
+				mockProcEffectConversionFunctionSpy = jasmine.createSpy('mockProcEffectConversionFunctionSpy');
+				mockProcEffectConversionFunctionSpy.and.callFake(() => getArbitraryBuffsForProcEffect());
+				injectionContext = { convertProcEffectToBuffs: mockProcEffectConversionFunctionSpy };
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(BURST_TYPES.map((b) => `passive:66:add effect to skill-${b}`));
+
+			it('uses the params property when it exists', () => {
+				const params = `${arbitraryKnownProcId},2,3,4,5,1,1,1`;
+				const expectedResult = BURST_TYPES.map((b) => {
+					return baseBuffFactory({
+						id: `passive:66:add effect to skill-${b}`,
+						value: getArbitraryBuffsForProcEffect(),
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext(), injectionContext);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `${arbitraryKnownProcId},2,3,4,5,1,1,1,9,10,11`;
+				const expectedResult = BURST_TYPES.map((b) => {
+					return baseBuffFactory({
+						id: `passive:66:add effect to skill-${b}`,
+						value: getArbitraryBuffsForProcEffect(),
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_8: '9',
+						param_9: '10',
+						param_10: '11',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext(), injectionContext);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = {
+					'triggered effect': [{ 'proc id': arbitraryKnownProcId }],
+					'trigger on bb': true,
+					'trigger on sbb': true,
+					'trigger on ubb': true,
+				};
+				const expectedResult = BURST_TYPES.map((b) => {
+					return baseBuffFactory({
+						id: `passive:66:add effect to skill-${b}`,
+						value: getArbitraryBuffsForProcEffect(),
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext(), injectionContext);
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when trigger burst types are missing or false', () => {
+				BURST_TYPES.forEach((burstCase) => {
+					it(`returns a single buff for ${burstCase} if it is the only one that is true`, () => {
+						const params = [
+							`${arbitraryKnownProcId},2,3,4,5`,
+							...BURST_TYPES.map((b) => b === burstCase ? '1' : '0'),
+						].join(',');
+						const expectedResult = [baseBuffFactory({
+							id: `passive:66:add effect to skill-${burstCase}`,
+							value: getArbitraryBuffsForProcEffect(),
+						})];
+
+						const effect = { params };
+						const result = mappingFunction(effect, createArbitraryContext(), injectionContext);
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns a single buff for ${burstCase} if it is the only one that is true and params property does not exist`, () => {
+						const triggerValues = BURST_TYPES.reduce((acc, b) => {
+							acc[`trigger on ${b}`] = b === burstCase;
+							return acc;
+						}, {});
+						const effect = {
+							'triggered effect': [{ 'proc id': arbitraryKnownProcId }],
+							...triggerValues,
+						};
+						const expectedResult = [baseBuffFactory({
+							id: `passive:66:add effect to skill-${burstCase}`,
+							value: getArbitraryBuffsForProcEffect(),
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext(), injectionContext);
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns a single buff for ${burstCase} if it is the only one that is present and params property does not exist`, () => {
+						const triggerValues = BURST_TYPES.reduce((acc, b) => {
+							if (b === burstCase) {
+								acc[`trigger on ${b}`] = true;
+							}
+							return acc;
+						}, {});
+						const effect = {
+							'triggered effect': [{ 'proc id': arbitraryKnownProcId }],
+							...triggerValues,
+						};
+						const expectedResult = [baseBuffFactory({
+							id: `passive:66:add effect to skill-${burstCase}`,
+							value: getArbitraryBuffsForProcEffect(),
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext(), injectionContext);
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('returns a no params buff if no burst types are true', () => {
+					const params = `${arbitraryKnownProcId},2,3,4,5,0,0,0`;
+					const effect = { params };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), injectionContext });
+				});
+
+				it('returns a no params buff if no burst types are true and params property does not exist', () => {
+					const triggerValues = BURST_TYPES.reduce((acc, b) => {
+						acc[`trigger on ${b}`] = false;
+						return acc;
+					}, {});
+					const effect = {
+						'triggered effect': [{ 'proc id': arbitraryKnownProcId }],
+						...triggerValues,
+					};
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), injectionContext });
+				});
+
+				it('returns a no params buff if no burst types are present', () => {
+					const params = `${arbitraryKnownProcId}`;
+					expectNoParamsBuffWithEffectAndContext({ effect: { params }, context: createArbitraryContext(), injectionContext });
+				});
+
+				it('returns a no params buff if no burst types are present and params property does not exist', () => {
+					const effect = {
+						'triggered effect': [{ 'proc id': arbitraryKnownProcId }],
+					};
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), injectionContext });
+				});
+			});
+
+			describe('when parsing proc effects', () => {
+				it('calls corresponding proc effect conversion function', () => {
+					const params = `${arbitraryKnownProcId},2&3&4,123,456,4,1,1,1`;
+					const expectedResult = BURST_TYPES.map((b) => {
+						return baseBuffFactory({
+							id: `passive:66:add effect to skill-${b}`,
+							value: getArbitraryBuffsForProcEffect(),
+						});
+					});
+
+					const effect = { params };
+					const context = createArbitraryContext();
+					const result = mappingFunction(effect, context, injectionContext);
+					expect(result).toEqual(expectedResult);
+					expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+						'proc id': arbitraryKnownProcId,
+						params: '2,3,4',
+						'effect delay time(ms)/frame': '66.7/4',
+						'target area': '456',
+						'target type': '123',
+					}, context);
+				});
+
+				it('calls corresponding proc effect conversion function when params property does not exist', () => {
+					const effect = {
+						'triggered effect': [{
+							'proc id': arbitraryKnownProcId,
+							arbitraryProcProperty: 'proc triggered effect',
+						}],
+						'trigger on bb': true,
+						'trigger on sbb': true,
+						'trigger on ubb': true,
+					};
+					const expectedResult = BURST_TYPES.map((b) => {
+						return baseBuffFactory({
+							id: `passive:66:add effect to skill-${b}`,
+							value: getArbitraryBuffsForProcEffect(),
+						});
+					});
+
+					const context = createArbitraryContext();
+					const result = mappingFunction(effect, context, injectionContext);
+					expect(result).toEqual(expectedResult);
+					expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+						'proc id': arbitraryKnownProcId,
+						arbitraryProcProperty: 'proc triggered effect',
+					}, context);
+				});
+
+				it('calls corresponding proc effect conversion function when not defined via injection context', () => {
+					const params = `${arbitraryKnownProcId},2&3&4,123,456,4,1,1,1`;
+					const expectedResult = BURST_TYPES.map((b) => {
+						return baseBuffFactory({
+							id: `passive:66:add effect to skill-${b}`,
+							value: getArbitraryBuffsForProcEffect(),
+						});
+					});
+
+					getProcEffectToBuffMapping(true).set(arbitraryKnownProcId, mockProcEffectConversionFunctionSpy);
+
+					const effect = { params };
+					const context = createArbitraryContext();
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+					expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+						'proc id': arbitraryKnownProcId,
+						params: '2,3,4',
+						'effect delay time(ms)/frame': '66.7/4',
+						'target area': '456',
+						'target type': '123',
+					}, context);
+				});
+
+				it('calls corresponding proc effect conversion function when not defined via injection context and params property does not exist', () => {
+					const effect = {
+						'triggered effect': [{
+							'proc id': arbitraryKnownProcId,
+							arbitraryProcProperty: 'proc triggered effect',
+						}],
+						'trigger on bb': true,
+						'trigger on sbb': true,
+						'trigger on ubb': true,
+					};
+					const expectedResult = BURST_TYPES.map((b) => {
+						return baseBuffFactory({
+							id: `passive:66:add effect to skill-${b}`,
+							value: getArbitraryBuffsForProcEffect(),
+						});
+					});
+
+					getProcEffectToBuffMapping(true).set(arbitraryKnownProcId, mockProcEffectConversionFunctionSpy);
+
+					const context = createArbitraryContext();
+					const result = mappingFunction(effect, context);
+					expect(result).toEqual(expectedResult);
+					expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+						'proc id': arbitraryKnownProcId,
+						arbitraryProcProperty: 'proc triggered effect',
+					}, context);
+				});
+
+				it('returns a no params buff if no triggered buffs are found', () => {
+					const params = `${arbitraryKnownProcId},2&3&4,123,456,4,1,1,1`;
+					const effect = { params };
+					mockProcEffectConversionFunctionSpy.and.returnValue([]);
+
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), injectionContext });
+				});
+
+				it('returns a no params buff if no triggered buffs are found and params property does not exist', () => {
+					const effect = {
+						'triggered effect': [{
+							'proc id': arbitraryKnownProcId,
+							arbitraryProcProperty: 'proc triggered effect',
+						}],
+						'trigger on bb': true,
+						'trigger on sbb': true,
+						'trigger on ubb': true,
+					};
+					mockProcEffectConversionFunctionSpy.and.returnValue([]);
+
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), injectionContext });
+				});
+
+				it('returns a no params buff if triggered effect property is not an array and params property does not exist', () => {
+					const effect = {
+						'triggered effect': {
+							'proc id': arbitraryKnownProcId,
+							arbitraryProcProperty: 'proc triggered effect',
+						},
+						'trigger on bb': true,
+						'trigger on sbb': true,
+						'trigger on ubb': true,
+					};
+
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), injectionContext });
+				});
+
+				describe('and parsing their target type', () => {
+					const TARGET_TYPE_MAPPING = {
+						1: TargetType.Party,
+						2: TargetType.Enemy,
+						3: TargetType.Self,
+					};
+					Object.entries(TARGET_TYPE_MAPPING).forEach(([targetKey, targetValue]) => {
+						it(`parses target type [${targetKey}] as [${targetValue}] for proc effect`, () => {
+							const params = `${arbitraryKnownProcId},2&3&4,${targetKey},456,4,1,1,1`;
+							const expectedResult = BURST_TYPES.map((b) => {
+								return baseBuffFactory({
+									id: `passive:66:add effect to skill-${b}`,
+									value: getArbitraryBuffsForProcEffect(),
+								});
+							});
+
+							const effect = { params };
+							const context = createArbitraryContext();
+							const result = mappingFunction(effect, context, injectionContext);
+							expect(result).toEqual(expectedResult);
+							expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+								'proc id': arbitraryKnownProcId,
+								params: '2,3,4',
+								'effect delay time(ms)/frame': '66.7/4',
+								'target area': '456',
+								'target type': targetValue,
+							}, context);
+						});
+					});
+
+					it('uses the input target type for proc effect if the parameter value does not have a mapping', () => {
+						const params = `${arbitraryKnownProcId},2&3&4,arbitrary target type,456,4,1,1,1`;
+						const expectedResult = BURST_TYPES.map((b) => {
+							return baseBuffFactory({
+								id: `passive:66:add effect to skill-${b}`,
+								value: getArbitraryBuffsForProcEffect(),
+							});
+						});
+
+						const effect = { params };
+						const context = createArbitraryContext();
+						const result = mappingFunction(effect, context, injectionContext);
+						expect(result).toEqual(expectedResult);
+						expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+							'proc id': arbitraryKnownProcId,
+							params: '2,3,4',
+							'effect delay time(ms)/frame': '66.7/4',
+							'target area': '456',
+							'target type': 'arbitrary target type',
+						}, context);
+					});
+
+					it('sets target type for proc effect to [unknown target type] if input target type does not have a mapping and is falsy', () => {
+						const params = `${arbitraryKnownProcId},2&3&4,,456,4,1,1,1`;
+						const expectedResult = BURST_TYPES.map((b) => {
+							return baseBuffFactory({
+								id: `passive:66:add effect to skill-${b}`,
+								value: getArbitraryBuffsForProcEffect(),
+							});
+						});
+
+						const effect = { params };
+						const context = createArbitraryContext();
+						const result = mappingFunction(effect, context, injectionContext);
+						expect(result).toEqual(expectedResult);
+						expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+							'proc id': arbitraryKnownProcId,
+							params: '2,3,4',
+							'effect delay time(ms)/frame': '66.7/4',
+							'target area': '456',
+							'target type': 'unknown target type',
+						}, context);
+					});
+				});
+
+				describe('and parsing their target area', () => {
+					const TARGET_AREA_MAPPING = {
+						1: TargetArea.Single,
+						2: TargetArea.Aoe,
+					};
+					Object.entries(TARGET_AREA_MAPPING).forEach(([targetKey, targetValue]) => {
+						it(`parses target area [${targetKey}] as [${targetValue}] for proc effect`, () => {
+							const params = `${arbitraryKnownProcId},2&3&4,123,${targetKey},4,1,1,1`;
+							const expectedResult = BURST_TYPES.map((b) => {
+								return baseBuffFactory({
+									id: `passive:66:add effect to skill-${b}`,
+									value: getArbitraryBuffsForProcEffect(),
+								});
+							});
+
+							const effect = { params };
+							const context = createArbitraryContext();
+							const result = mappingFunction(effect, context, injectionContext);
+							expect(result).toEqual(expectedResult);
+							expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+								'proc id': arbitraryKnownProcId,
+								params: '2,3,4',
+								'effect delay time(ms)/frame': '66.7/4',
+								'target area': targetValue,
+								'target type': '123',
+							}, context);
+						});
+					});
+
+					it('uses the input target area for proc effect if the parameter value does not have a mapping', () => {
+						const params = `${arbitraryKnownProcId},2&3&4,123,arbitrary target area,4,1,1,1`;
+						const expectedResult = BURST_TYPES.map((b) => {
+							return baseBuffFactory({
+								id: `passive:66:add effect to skill-${b}`,
+								value: getArbitraryBuffsForProcEffect(),
+							});
+						});
+
+						const effect = { params };
+						const context = createArbitraryContext();
+						const result = mappingFunction(effect, context, injectionContext);
+						expect(result).toEqual(expectedResult);
+						expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+							'proc id': arbitraryKnownProcId,
+							params: '2,3,4',
+							'effect delay time(ms)/frame': '66.7/4',
+							'target area': 'arbitrary target area',
+							'target type': '123',
+						}, context);
+					});
+
+					it('sets target area for proc effect to [unknown target area] if input target area does not have a mapping and is falsy', () => {
+						const params = `${arbitraryKnownProcId},2&3&4,123,,4,1,1,1`;
+						const expectedResult = BURST_TYPES.map((b) => {
+							return baseBuffFactory({
+								id: `passive:66:add effect to skill-${b}`,
+								value: getArbitraryBuffsForProcEffect(),
+							});
+						});
+
+						const effect = { params };
+						const context = createArbitraryContext();
+						const result = mappingFunction(effect, context, injectionContext);
+						expect(result).toEqual(expectedResult);
+						expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+							'proc id': arbitraryKnownProcId,
+							params: '2,3,4',
+							'effect delay time(ms)/frame': '66.7/4',
+							'target area': 'unknown target area',
+							'target type': '123',
+						}, context);
+					});
+				});
+
+				describe('and multiple proc entries exist', () => {
+					const anotherArbitraryKnownProcId = 'another arbitrary proc id for passive 66';
+					const getArbitraryBuffsForAnotherProcEffect = () => [{ anotherArbitrary: 'proc buff for the other proc id' }];
+					let mockAnotherProcEffectConversionFunctionSpy;
+
+					beforeEach(() => {
+						mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+						baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+
+						mockAnotherProcEffectConversionFunctionSpy = jasmine.createSpy('mockProcEffectConversionFunctionSpy');
+						mockAnotherProcEffectConversionFunctionSpy.and.callFake(() => getArbitraryBuffsForAnotherProcEffect());
+
+						const procMapping = getProcEffectToBuffMapping(true);
+						procMapping.set(arbitraryKnownProcId, mockProcEffectConversionFunctionSpy);
+						procMapping.set(anotherArbitraryKnownProcId, mockAnotherProcEffectConversionFunctionSpy);
+					});
+
+					it('calls corresponding proc effect conversion function for each proc buff', () => {
+						const params = `${arbitraryKnownProcId}~${anotherArbitraryKnownProcId},2&3&4~5&6&7&8,123~321,456~654,4~1,1,1,1`;
+						const expectedResult = BURST_TYPES.map((b) => {
+							return baseBuffFactory({
+								id: `passive:66:add effect to skill-${b}`,
+								value: getArbitraryBuffsForProcEffect().concat(getArbitraryBuffsForAnotherProcEffect()),
+							});
+						});
+
+						const effect = { params };
+						const context = createArbitraryContext();
+						const result = mappingFunction(effect, context);
+						expect(result).toEqual(expectedResult);
+						expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+							'proc id': arbitraryKnownProcId,
+							params: '2,3,4',
+							'effect delay time(ms)/frame': '66.7/4',
+							'target area': '456',
+							'target type': '123',
+						}, context);
+						expect(mockAnotherProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+							'proc id': anotherArbitraryKnownProcId,
+							params: '5,6,7,8',
+							'effect delay time(ms)/frame': '16.7/1',
+							'target area': '654',
+							'target type': '321',
+						}, context);
+					});
+
+					it('calls corresponding proc effect conversion function for each proc buff if params property does not exist', () => {
+						const effect = {
+							'triggered effect': [
+								{
+									'proc id': arbitraryKnownProcId,
+									arbitraryProcProperty: 'proc triggered effect',
+								},
+								{
+									'proc id': anotherArbitraryKnownProcId,
+									anotherArbitraryProcProperty: 'proc triggered effect 2',
+									extraProperty: 'extra property on second proc effect',
+								},
+							],
+							'trigger on bb': true,
+							'trigger on sbb': true,
+							'trigger on ubb': true,
+						};
+						const expectedResult = BURST_TYPES.map((b) => {
+							return baseBuffFactory({
+								id: `passive:66:add effect to skill-${b}`,
+								value: getArbitraryBuffsForProcEffect().concat(getArbitraryBuffsForAnotherProcEffect()),
+							});
+						});
+
+
+						const context = createArbitraryContext();
+						const result = mappingFunction(effect, context);
+						expect(result).toEqual(expectedResult);
+						expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+							'proc id': arbitraryKnownProcId,
+							arbitraryProcProperty: 'proc triggered effect',
+						}, context);
+						expect(mockAnotherProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+							'proc id': anotherArbitraryKnownProcId,
+							anotherArbitraryProcProperty: 'proc triggered effect 2',
+							extraProperty: 'extra property on second proc effect',
+						}, context);
+					});
+
+					describe('and number of proc IDs is greater than given parameter data', () => {
+						it('defaults missing proc params to empty string', () => {
+							const params = `${arbitraryKnownProcId}~${anotherArbitraryKnownProcId},2&3&4,123~321,456~654,4~1,1,1,1`;
+							const expectedResult = BURST_TYPES.map((b) => {
+								return baseBuffFactory({
+									id: `passive:66:add effect to skill-${b}`,
+									value: getArbitraryBuffsForProcEffect().concat(getArbitraryBuffsForAnotherProcEffect()),
+								});
+							});
+
+							const effect = { params };
+							const context = createArbitraryContext();
+							const result = mappingFunction(effect, context);
+							expect(result).toEqual(expectedResult);
+							expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+								'proc id': arbitraryKnownProcId,
+								params: '2,3,4',
+								'effect delay time(ms)/frame': '66.7/4',
+								'target area': '456',
+								'target type': '123',
+							}, context);
+							expect(mockAnotherProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+								'proc id': anotherArbitraryKnownProcId,
+								params: '',
+								'effect delay time(ms)/frame': '16.7/1',
+								'target area': '654',
+								'target type': '321',
+							}, context);
+						});
+
+						it('defaults missing target type property to [unknown target type]', () => {
+							const params = `${arbitraryKnownProcId}~${anotherArbitraryKnownProcId},2&3&4~5&6&7&8,123,456~654,4~1,1,1,1`;
+							const expectedResult = BURST_TYPES.map((b) => {
+								return baseBuffFactory({
+									id: `passive:66:add effect to skill-${b}`,
+									value: getArbitraryBuffsForProcEffect().concat(getArbitraryBuffsForAnotherProcEffect()),
+								});
+							});
+
+							const effect = { params };
+							const context = createArbitraryContext();
+							const result = mappingFunction(effect, context);
+							expect(result).toEqual(expectedResult);
+							expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+								'proc id': arbitraryKnownProcId,
+								params: '2,3,4',
+								'effect delay time(ms)/frame': '66.7/4',
+								'target area': '456',
+								'target type': '123',
+							}, context);
+							expect(mockAnotherProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+								'proc id': anotherArbitraryKnownProcId,
+								params: '5,6,7,8',
+								'effect delay time(ms)/frame': '16.7/1',
+								'target area': '654',
+								'target type': 'unknown target type',
+							}, context);
+						});
+
+						it('defaults missing target area property to [unknown target area]', () => {
+							const params = `${arbitraryKnownProcId}~${anotherArbitraryKnownProcId},2&3&4~5&6&7&8,123~321,456,4~1,1,1,1`;
+							const expectedResult = BURST_TYPES.map((b) => {
+								return baseBuffFactory({
+									id: `passive:66:add effect to skill-${b}`,
+									value: getArbitraryBuffsForProcEffect().concat(getArbitraryBuffsForAnotherProcEffect()),
+								});
+							});
+
+							const effect = { params };
+							const context = createArbitraryContext();
+							const result = mappingFunction(effect, context);
+							expect(result).toEqual(expectedResult);
+							expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+								'proc id': arbitraryKnownProcId,
+								params: '2,3,4',
+								'effect delay time(ms)/frame': '66.7/4',
+								'target area': '456',
+								'target type': '123',
+							}, context);
+							expect(mockAnotherProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+								'proc id': anotherArbitraryKnownProcId,
+								params: '5,6,7,8',
+								'effect delay time(ms)/frame': '16.7/1',
+								'target area': 'unknown target area',
+								'target type': '321',
+							}, context);
+						});
+
+						it('defaults missing start frame property to 0', () => {
+							const params = `${arbitraryKnownProcId}~${anotherArbitraryKnownProcId},2&3&4~5&6&7&8,123~321,456~654,4,1,1,1`;
+							const expectedResult = BURST_TYPES.map((b) => {
+								return baseBuffFactory({
+									id: `passive:66:add effect to skill-${b}`,
+									value: getArbitraryBuffsForProcEffect().concat(getArbitraryBuffsForAnotherProcEffect()),
+								});
+							});
+
+							const effect = { params };
+							const context = createArbitraryContext();
+							const result = mappingFunction(effect, context);
+							expect(result).toEqual(expectedResult);
+							expect(mockProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+								'proc id': arbitraryKnownProcId,
+								params: '2,3,4',
+								'effect delay time(ms)/frame': '66.7/4',
+								'target area': '456',
+								'target type': '123',
+							}, context);
+							expect(mockAnotherProcEffectConversionFunctionSpy).toHaveBeenCalledWith({
+								'proc id': anotherArbitraryKnownProcId,
+								params: '5,6,7,8',
+								'effect delay time(ms)/frame': '0.0/0',
+								'target area': '654',
+								'target type': '321',
+							}, context);
+						});
+					});
+				});
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext(), injectionContext });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: `${arbitraryKnownProcId},2,3,4,5,1,0,0,789`,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:66:add effect to skill-bb',
+						sources: arbitrarySourceValue,
+						value: getArbitraryBuffsForProcEffect(),
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				injectionContext = { ...injectionContext, ...createDefaultInjectionContext() };
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 8] });
 			});
 		});
 	});

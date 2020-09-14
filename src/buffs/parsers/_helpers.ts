@@ -35,6 +35,7 @@ export interface IPassiveBuffProcessingInjectionContext extends IBaseBuffProcess
 	processExtraSkillConditions?: (effect: ExtraSkillPassiveEffect) => IBuffConditions;
 	getPassiveTargetData?: (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect) => ITargetData;
 	convertConditionalEffectToBuffs?: (effect: IConditionalEffect, context: IEffectToBuffConversionContext) => IBuff[];
+	convertProcEffectToBuffs?: (effect: ProcEffect, context: IEffectToBuffConversionContext) => IBuff[];
 }
 
 /**

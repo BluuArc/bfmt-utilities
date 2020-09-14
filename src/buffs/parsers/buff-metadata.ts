@@ -1198,6 +1198,24 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
 	},
+	'passive:66:add effect to skill-bb': {
+		id: BuffId['passive:66:add effect to skill-bb'],
+		name: 'Passive Added Effect to Brave Burst',
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_ADDTO_BB],
+	},
+	'passive:66:add effect to skill-sbb': {
+		id: BuffId['passive:66:add effect to skill-sbb'],
+		name: 'Passive Added Effect to Super Brave Burst',
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_ADDTO_SBB],
+	},
+	'passive:66:add effect to skill-ubb': {
+		id: BuffId['passive:66:add effect to skill-ubb'],
+		name: 'Passive Added Effect to Ultimate Brave Burst',
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_ADDTO_UBB],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

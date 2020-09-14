@@ -1,7 +1,8 @@
-import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect, UnitElement, UnitType, Ailment, UnitGender } from '../../datamine-types';
+import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect, UnitElement, UnitType, Ailment, UnitGender, IProcEffect, TargetType, TargetArea, ProcEffect } from '../../datamine-types';
 import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement, IBuffConditions, IConditionalEffect } from './buff-types';
 import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext, ITargetData, parseNumberOrDefault, createUnknownParamsEntryFromExtraParams, createNoParamsEntry } from './_helpers';
 import convertConditionalEffectToBuffs from './convertConditionalEffectToBuffs';
+import convertProcEffectToBuffs from './convertProcEffectToBuffs';
 
 /**
  * @description Type representing a function that can parse a passive effect into an array of buffs.
@@ -67,6 +68,17 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		9: Ailment.RecoveryReduction,
 	};
 
+	const TARGET_TYPE_MAPPING: { [param: string]: TargetType } = {
+		1: TargetType.Party,
+		2: TargetType.Enemy,
+		3: TargetType.Self,
+	};
+
+	const TARGET_AREA_MAPPING: { [param: string]: TargetArea } = {
+		1: TargetArea.Single,
+		2: TargetArea.Aoe,
+	};
+
 	type AlphaNumeric = string | number;
 	type CoreStat = 'hp' | 'atk' | 'def' | 'rec' | 'crit';
 	type DropType = 'bc' | 'hc' | 'item' | 'zel' | 'karma';
@@ -85,6 +97,11 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 	const convertConditionalEffectToBuffsWithInjectionContext = (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
 		const conversionFunction = (injectionContext && injectionContext.convertConditionalEffectToBuffs) || convertConditionalEffectToBuffs;
+		return conversionFunction(effect, context);
+	};
+
+	const convertProcEffectToBuffsWithInjectionContext = (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const conversionFunction = (injectionContext && injectionContext.convertProcEffectToBuffs) || convertProcEffectToBuffs;
 		return conversionFunction(effect, context);
 	};
 
@@ -2478,5 +2495,93 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			generateBaseConditions: () => ({ onCriticalHit: true }),
 			buffId: 'passive:65:bc fill on crit',
 		});
+	});
+
+	map.set('66', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '66';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let triggeredBuffs: IBuff[] = [];
+		let triggerOnBb = false, triggerOnSbb = false, triggerOnUbb = false;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawProcIds, rawParams = '', rawTargetTypes = '', rawTargetAreas = '', rawStartFrames = '', rawTriggerOnBb, rawTriggerOnSbb, rawTriggerOnUbb, ...extraParams] = splitEffectParams(typedEffect);
+			const allProcIds = rawProcIds.split('~');
+			const allProcParams = rawParams.split('~');
+			const allTargetTypes = rawTargetTypes.split('~');
+			const allTargetAreas = rawTargetAreas.split('~');
+			const allStartFrames = rawStartFrames.split('~');
+
+			const FRAME_IN_MS = (16 + (2 / 3));
+			allProcIds.forEach((procId, index) => {
+				const params = (allProcParams[index] || '').replace(/&/g, ',');
+				const targetType = allTargetTypes[index];
+				const targetArea = allTargetAreas[index];
+				const startFrame = parseNumberOrDefault(allStartFrames[index]);
+				const effectDelayInMs = (startFrame * FRAME_IN_MS).toFixed(1);
+				const procEffect: IProcEffect = {
+					'proc id': procId,
+					params,
+					'effect delay time(ms)/frame': `${effectDelayInMs}/${startFrame}`,
+					'target area': TARGET_AREA_MAPPING[targetArea] || targetArea || 'unknown target area',
+					'target type': TARGET_TYPE_MAPPING[targetType] || targetType || 'unknown target type',
+				};
+
+				const procBuffs = convertProcEffectToBuffsWithInjectionContext(procEffect, context, injectionContext);
+				triggeredBuffs = triggeredBuffs.concat(procBuffs);
+			});
+
+			triggerOnBb = rawTriggerOnBb === '1';
+			triggerOnSbb = rawTriggerOnSbb === '1';
+			triggerOnUbb = rawTriggerOnUbb === '1';
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
+		} else {
+			const triggeredEffects = typedEffect['triggered effect'] as ProcEffect[];
+			if (Array.isArray(triggeredEffects)) {
+				triggeredEffects.forEach((procEffect) => {
+					const procBuffs = convertProcEffectToBuffsWithInjectionContext(procEffect, context, injectionContext);
+					triggeredBuffs = triggeredBuffs.concat(procBuffs);
+				});
+			}
+
+			triggerOnBb = !!typedEffect['trigger on bb'];
+			triggerOnSbb = !!typedEffect['trigger on sbb'];
+			triggerOnUbb = !!typedEffect['trigger on ubb'];
+		}
+
+		const results: IBuff[] = [];
+		if ((triggerOnBb || triggerOnSbb || triggerOnUbb) && triggeredBuffs.length > 0) {
+			const addBuffOfBurstType = (burstType: string): void => {
+				results.push({
+					id: `passive:66:add effect to skill-${burstType}`,
+					originalId,
+					sources,
+					value: triggeredBuffs,
+					conditions: { ...conditionInfo },
+					...targetData,
+				});
+			};
+			if (triggerOnBb) {
+				addBuffOfBurstType('bb');
+			}
+			if (triggerOnSbb) {
+				addBuffOfBurstType('sbb');
+			}
+			if (triggerOnUbb) {
+				addBuffOfBurstType('ubb');
+			}
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
 	});
 }

@@ -976,6 +976,20 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:65:bc fill on crit'], [IconId.BUFF_BBREC]);
 	});
 
+	describe('passive 66', () => {
+		describe('passive:66:add effect to skill-bb', () => {
+			testDefaultIconResult(BuffId['passive:66:add effect to skill-bb'], [IconId.BUFF_ADDTO_BB]);
+		});
+
+		describe('passive:66:add effect to skill-sbb', () => {
+			testDefaultIconResult(BuffId['passive:66:add effect to skill-sbb'], [IconId.BUFF_ADDTO_SBB]);
+		});
+
+		describe('passive:66:add effect to skill-ubb', () => {
+			testDefaultIconResult(BuffId['passive:66:add effect to skill-ubb'], [IconId.BUFF_ADDTO_UBB]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

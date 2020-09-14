@@ -179,7 +179,7 @@ export interface IBuff {
 	sources: string[];
 
 	// TODO: specific type for triggered buffs?
-	value?: string | number | IGenericBuffValue | any;
+	value?: string | number | IBuff[] | IGenericBuffValue | any;
 	conditions?: IBuffConditions;
 }
 
@@ -427,6 +427,10 @@ export enum IconId {
 	TURN_DURATION_UP = 'TURN_DURATION_UP',
 	TURN_DURATION_DOWN = 'TURN_DURATION_DOWN',
 	CONDITIONALBUFF_HPTHRESH = 'CONDITIONALBUFF_HPTHRESH',
+
+	BUFF_ADDTO_BB = 'BUFF_ADDTO_BB',
+	BUFF_ADDTO_SBB = 'BUFF_ADDTO_SBB',
+	BUFF_ADDTO_UBB = 'BUFF_ADDTO_UBB',
 
 	BUFF_HPUP = 'BUFF_HPUP',
 	BUFF_HPDOWN = 'BUFF_HPDOWN',
@@ -1069,6 +1073,10 @@ export enum BuffId {
 	'passive:64:attack boost-ubb' = 'passive:64:attack boost-ubb',
 
 	'passive:65:bc fill on crit' = 'passive:65:bc fill on crit',
+
+	'passive:66:add effect to skill-bb' = 'passive:66:add effect to skill-bb',
+	'passive:66:add effect to skill-sbb' = 'passive:66:add effect to skill-sbb',
+	'passive:66:add effect to skill-ubb' = 'passive:66:add effect to skill-ubb',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
