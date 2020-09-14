@@ -2435,6 +2435,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_AILDMGUP],
 	},
+	'proc:66:chance revive': {
+		id: BuffId['proc:66:chance revive'],
+		name: 'Instant Revive (Chance)',
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_KOBLOCK],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

@@ -1874,6 +1874,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:65:ailment attack boost'], [IconId.BUFF_AILDMGUP]);
 	});
 
+	describe('proc:66:chance revive', () => {
+		testDefaultIconResult(BuffId['proc:66:chance revive'], [IconId.BUFF_KOBLOCK]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

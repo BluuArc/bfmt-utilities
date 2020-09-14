@@ -3512,4 +3512,43 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			originalId: '65',
 		});
 	});
+
+	map.set('66', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '66';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let recoveredHp = 0, chance = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawRecoveredHp, rawChance, ...extraParams] = splitEffectParams(effect);
+			recoveredHp = parseNumberOrDefault(rawRecoveredHp);
+			chance = parseNumberOrDefault(rawChance);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		} else {
+			recoveredHp = parseNumberOrDefault(effect['revive unit hp%'] as number);
+			chance = parseNumberOrDefault(effect['revive unit chance%'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (chance !== 0) {
+			results.push({
+				id: 'proc:66:chance revive',
+				originalId,
+				sources,
+				effectDelay,
+				value: { 'reviveToHp%': recoveredHp, chance },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }
