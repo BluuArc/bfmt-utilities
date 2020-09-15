@@ -1078,6 +1078,8 @@ export enum BuffId {
 	'passive:66:add effect to skill-sbb' = 'passive:66:add effect to skill-sbb',
 	'passive:66:add effect to skill-ubb' = 'passive:66:add effect to skill-ubb',
 
+	'passive:69:chance ko resistance' = 'passive:69:chance ko resistance',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

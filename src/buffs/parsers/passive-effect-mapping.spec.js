@@ -7211,5 +7211,184 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 8] });
 			});
 		});
+
+		describe('passive 69', () => {
+			const expectedBuffId = 'passive:69:chance ko resistance';
+			const expectedOriginalId = '69';
+
+			const RECOVERED_HP_BUFF_KEY = 'recoveredHp%';
+			const PARAMS_ORDER = [RECOVERED_HP_BUFF_KEY, 'maxCount', 'chanceLow', 'chanceHigh'];
+			const EFFECT_KEY_MAPPING = {
+				'angel idol recover hp%': RECOVERED_HP_BUFF_KEY,
+				'angel idol recover counts': 'maxCount',
+				'angel idol recover chance% low': 'chanceLow',
+				'angel idol recover chance% high': 'chanceHigh',
+			};
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4';
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						[RECOVERED_HP_BUFF_KEY]: 1,
+						maxCount: 2,
+						chanceLow: 3,
+						chanceHigh: 4,
+					},
+				})];
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							[RECOVERED_HP_BUFF_KEY]: 1,
+							maxCount: 2,
+							chanceLow: 3,
+							chanceHigh: 4,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_4: '5',
+							param_5: '6',
+							param_6: '7',
+						},
+					}),
+				];
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to stat-specific properties when the params property does not exist', () => {
+				const effect = {
+					'angel idol recover hp%': 5,
+					'angel idol recover counts': 6,
+					'angel idol recover chance% low': 7,
+					'angel idol recover chance% high': 8,
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						[RECOVERED_HP_BUFF_KEY]: 5,
+						maxCount: 6,
+						chanceLow: 7,
+						chanceHigh: 8,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing or 0', () => {
+				Object.entries(EFFECT_KEY_MAPPING).forEach(([effectKey, buffKey]) => {
+					it(`defaults to 0 for missing ${buffKey} parameter`, () => {
+						const params = PARAMS_ORDER.map((p) => p !== buffKey ? '123' : '').join(',');
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							value: {
+								[RECOVERED_HP_BUFF_KEY]: buffKey !== RECOVERED_HP_BUFF_KEY ? 123 : 0,
+								maxCount: buffKey !== 'maxCount' ? 123 : 0,
+								chanceLow: buffKey !== 'chanceLow' ? 123 : 0,
+								chanceHigh: buffKey !== 'chanceHigh' ? 123 : 0,
+							},
+						})];
+
+						const effect = { params };
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`defaults to 0 for missing ${buffKey} parameter if params property does not exist`, () => {
+						const effect = Object.keys(EFFECT_KEY_MAPPING).reduce((acc, localEffectKey) => {
+							if (localEffectKey !== effectKey) {
+								acc[localEffectKey] = 456;
+							}
+							return acc;
+						}, {});
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							value: {
+								[RECOVERED_HP_BUFF_KEY]: buffKey !== RECOVERED_HP_BUFF_KEY ? 456 : 0,
+								maxCount: buffKey !== 'maxCount' ? 456 : 0,
+								chanceLow: buffKey !== 'chanceLow' ? 456 : 0,
+								chanceHigh: buffKey !== 'chanceHigh' ? 456 : 0,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
+				it('returns a no params buff if chanceLow and chanceHigh are 0', () => {
+					const effect = { params: '123,456,0,0' };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('returns a no params buff if chanceLow and chanceHigh are 0 and params property does not exist', () => {
+					const effect = {
+						'angel idol recover hp%': 12,
+						'angel idol recover counts': 34,
+						'angel idol recover chance% low': 0,
+						'angel idol recover chance% high': 0,
+					};
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '1,2,3,4,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						value: {
+							[RECOVERED_HP_BUFF_KEY]: 1,
+							maxCount: 2,
+							chanceLow: 3,
+							chanceHigh: 4,
+						},
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 4] });
+			});
+		});
 	});
 });

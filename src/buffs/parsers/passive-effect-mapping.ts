@@ -2584,4 +2584,55 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('69', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '69';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let recoveredHp = 0, maxCount = 0;
+		let chanceLow = 0, chanceHigh = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawRecoveredHp, rawMaxCount, rawChanceLow, rawChanceHigh, ...extraParams] = splitEffectParams(typedEffect);
+			recoveredHp = parseNumberOrDefault(rawRecoveredHp);
+			maxCount = parseNumberOrDefault(rawMaxCount);
+			chanceLow = parseNumberOrDefault(rawChanceLow);
+			chanceHigh = parseNumberOrDefault(rawChanceHigh);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+		} else {
+			recoveredHp = parseNumberOrDefault(typedEffect['angel idol recover hp%'] as number);
+			maxCount = parseNumberOrDefault(typedEffect['angel idol recover counts'] as number);
+			chanceLow = parseNumberOrDefault(typedEffect['angel idol recover chance% low'] as number);
+			chanceHigh = parseNumberOrDefault(typedEffect['angel idol recover chance% high'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (chanceLow !== 0 || chanceHigh !== 0) {
+			results.push({
+				id: 'passive:69:chance ko resistance',
+				originalId,
+				sources,
+				value: {
+					'recoveredHp%': recoveredHp,
+					maxCount,
+					chanceLow,
+					chanceHigh,
+				},
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

@@ -990,6 +990,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive:69:chance ko resistance', () => {
+		testDefaultIconResult(BuffId['passive:69:chance ko resistance'], [IconId.BUFF_KOBLOCK]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
