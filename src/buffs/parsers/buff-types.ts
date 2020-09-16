@@ -1296,6 +1296,7 @@ export enum BuffId {
 	'proc:65:ailment attack boost' = 'proc:65:ailment attack boost',
 	'proc:66:chance revive' = 'proc:66:chance revive',
 	'proc:67:bc fill on spark' = 'proc:67:bc fill on spark',
+	'proc:68:guard mitigation' = 'proc:68:guard mitigation',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

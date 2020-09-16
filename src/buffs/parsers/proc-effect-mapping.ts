@@ -3613,4 +3613,16 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
 		});
 	});
+
+	map.set('68', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithSingleNumericalParameterAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			effectValueKey: 'guard increase mitigation%',
+			effectTurnDurationKey: 'guard increase mitigation buff turns (113)',
+			buffId: 'proc:68:guard mitigation',
+			originalId: '68',
+		});
+	});
 }

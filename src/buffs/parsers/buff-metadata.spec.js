@@ -1900,6 +1900,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:67:bc fill on spark'], [IconId.BUFF_SPARKBBUP]);
 	});
 
+	describe('proc:68:guard mitigation', () => {
+		testDefaultIconResult(BuffId['proc:68:guard mitigation'], [IconId.BUFF_GUARDCUT]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

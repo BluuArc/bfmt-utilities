@@ -10018,5 +10018,14 @@ describe('getProcEffectToBuffMapping method', () => {
 				getExpectedValueFromParam: (param) => +param / 100,
 			});
 		});
+
+		describe('proc 68', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '68',
+				expectedBuffId: 'proc:68:guard mitigation',
+				effectValueKey: 'guard increase mitigation%',
+				effectTurnDurationKey: 'guard increase mitigation buff turns (113)',
+			});
+		});
 	});
 });

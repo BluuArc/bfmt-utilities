@@ -2473,6 +2473,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_SPARKBBUP],
 	},
+	'proc:68:guard mitigation': {
+		id: BuffId['proc:68:guard mitigation'],
+		name: 'Active Guard Damage Reduction',
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_GUARDCUT],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',
