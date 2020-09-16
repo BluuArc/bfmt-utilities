@@ -3534,7 +3534,6 @@ describe('getProcEffectToBuffMapping method', () => {
 			testProcWithProcWithNumericalValueRangeAndChanceAndTurnDuration({
 				expectedOriginalId: '20',
 				expectedBuffId: 'proc:20:bc fill on hit',
-				effectValueKey: 'increase bb gauge gradual',
 				effectKeyLow: 'bc fill when attacked low',
 				effectKeyHigh: 'bc fill when attacked high',
 				effectKeyChance: 'bc fill when attacked%',
@@ -10003,6 +10002,20 @@ describe('getProcEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 2] });
+			});
+		});
+
+		describe('proc 67', () => {
+			testProcWithProcWithNumericalValueRangeAndChanceAndTurnDuration({
+				expectedOriginalId: '67',
+				expectedBuffId: 'proc:67:bc fill on spark',
+				effectKeyLow: 'bc fill on spark low',
+				effectKeyHigh: 'bc fill on spark high',
+				effectKeyChance: 'bc fill on spark%',
+				effectTurnDurationKey: 'bc fill on spark buff turns (111)',
+				buffKeyLow: 'fillLow',
+				buffKeyHigh: 'fillHigh',
+				getExpectedValueFromParam: (param) => +param / 100,
 			});
 		});
 	});

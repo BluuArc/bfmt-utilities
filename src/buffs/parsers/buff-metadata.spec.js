@@ -1896,6 +1896,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:66:chance revive'], [IconId.BUFF_KOBLOCK]);
 	});
 
+	describe('proc:67:bc fill on spark', () => {
+		testDefaultIconResult(BuffId['proc:67:bc fill on spark'], [IconId.BUFF_SPARKBBUP]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

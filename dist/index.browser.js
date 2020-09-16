@@ -2424,6 +2424,7 @@ var bfmtUtilities = function (exports) {
     BuffId["passive:66:add effect to skill-bb"] = "passive:66:add effect to skill-bb";
     BuffId["passive:66:add effect to skill-sbb"] = "passive:66:add effect to skill-sbb";
     BuffId["passive:66:add effect to skill-ubb"] = "passive:66:add effect to skill-ubb";
+    BuffId["passive:69:chance ko resistance"] = "passive:69:chance ko resistance";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1:attack"] = "proc:1:attack";
@@ -2597,6 +2598,7 @@ var bfmtUtilities = function (exports) {
     BuffId["proc:64:consecutive usage attack"] = "proc:64:consecutive usage attack";
     BuffId["proc:65:ailment attack boost"] = "proc:65:ailment attack boost";
     BuffId["proc:66:chance revive"] = "proc:66:chance revive";
+    BuffId["proc:67:bc fill on spark"] = "proc:67:bc fill on spark";
     BuffId["UNKNOWN_CONDITIONAL_EFFECT_ID"] = "UNKNOWN_CONDITIONAL_EFFECT_ID";
     BuffId["UNKNOWN_CONDITIONAL_BUFF_PARAMS"] = "UNKNOWN_CONDITIONAL_BUFF_PARAMS";
     BuffId["conditional:8:gradual heal"] = "conditional:8:gradual heal";
@@ -2991,6 +2993,87 @@ var bfmtUtilities = function (exports) {
           duration: turnDuration,
           value
         }, targetData));
+      } else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+        results.push(createTurnDurationEntry({
+          originalId,
+          sources,
+          buffs: [buffId],
+          duration: turnDuration,
+          targetData
+        }));
+      }
+
+      handlePostParse(results, unknownParams, {
+        originalId,
+        sources,
+        targetData,
+        effectDelay
+      });
+      return results;
+    };
+
+    const parseProcWithNumericalValueRangeAndChanceAndTurnDuration = ({
+      effect,
+      context,
+      injectionContext,
+      originalId,
+      buffId,
+      effectKeyLow,
+      effectKeyHigh,
+      effectKeyChance,
+      effectTurnDurationKey,
+      buffKeyLow,
+      buffKeyHigh,
+      parseParamValue = rawValue => parseNumberOrDefault(rawValue),
+      generateConditions
+    }) => {
+      const {
+        targetData,
+        sources,
+        effectDelay
+      } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+      let valueLow = 0;
+      let valueHigh = 0;
+      let chance = 0;
+      let turnDuration = 0;
+      let unknownParams;
+
+      if (effect.params) {
+        const [rawValueLow, rawValueHigh, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+        valueLow = parseParamValue(rawValueLow);
+        valueHigh = parseParamValue(rawValueHigh);
+        chance = parseNumberOrDefault(rawChance);
+        turnDuration = parseNumberOrDefault(rawTurnDuration);
+        unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+      } else {
+        valueLow = parseNumberOrDefault(effect[effectKeyLow]);
+        valueHigh = parseNumberOrDefault(effect[effectKeyHigh]);
+        chance = parseNumberOrDefault(effect[effectKeyChance]);
+        turnDuration = parseNumberOrDefault(effect[effectTurnDurationKey]);
+      }
+
+      const hasAnyValues = valueLow !== 0 || valueHigh !== 0 || chance !== 0;
+      const results = [];
+
+      if (hasAnyValues) {
+        const entry = Object.assign({
+          id: buffId,
+          originalId,
+          sources,
+          effectDelay,
+          duration: turnDuration,
+          value: {
+            [buffKeyLow]: valueLow,
+            [buffKeyHigh]: valueHigh,
+            chance
+          }
+        }, targetData);
+
+        if (generateConditions) {
+          entry.conditions = generateConditions();
+        }
+
+        results.push(entry);
       } else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
         results.push(createTurnDurationEntry({
           originalId,
@@ -4050,68 +4133,23 @@ var bfmtUtilities = function (exports) {
       });
     });
     map.set('20', (effect, context, injectionContext) => {
-      const originalId = '20';
-      const {
-        targetData,
-        sources,
-        effectDelay
-      } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-      let fillLow = 0;
-      let fillHigh = 0;
-      let chance = 0;
-      let turnDuration = 0;
-      let unknownParams;
-
-      if (effect.params) {
-        const [rawFillLow, rawFillHigh, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
-        fillLow = parseNumberOrDefault(rawFillLow) / 100;
-        fillHigh = parseNumberOrDefault(rawFillHigh) / 100;
-        chance = parseNumberOrDefault(rawChance);
-        turnDuration = parseNumberOrDefault(rawTurnDuration);
-        unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
-      } else {
-        fillLow = parseNumberOrDefault(effect['bc fill when attacked low']);
-        fillHigh = parseNumberOrDefault(effect['bc fill when attacked high']);
-        chance = parseNumberOrDefault(effect['bc fill when attacked%']);
-        turnDuration = parseNumberOrDefault(effect['bc fill when attacked turns (38)']);
-      }
-
-      const hasAnyFillValues = fillLow !== 0 || fillHigh !== 0;
-      const results = [];
-
-      if (hasAnyFillValues) {
-        results.push(Object.assign({
-          id: 'proc:20:bc fill on hit',
-          originalId,
-          sources,
-          effectDelay,
-          duration: turnDuration,
-          conditions: {
-            whenAttacked: true
-          },
-          value: {
-            fillLow,
-            fillHigh,
-            chance
-          }
-        }, targetData));
-      } else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
-        results.push(createTurnDurationEntry({
-          originalId,
-          sources,
-          buffs: ['proc:20:bc fill on hit'],
-          duration: turnDuration,
-          targetData
-        }));
-      }
-
-      handlePostParse(results, unknownParams, {
-        originalId,
-        sources,
-        targetData,
-        effectDelay
+      return parseProcWithNumericalValueRangeAndChanceAndTurnDuration({
+        effect,
+        context,
+        injectionContext,
+        originalId: '20',
+        buffId: 'proc:20:bc fill on hit',
+        effectKeyLow: 'bc fill when attacked low',
+        effectKeyHigh: 'bc fill when attacked high',
+        effectKeyChance: 'bc fill when attacked%',
+        effectTurnDurationKey: 'bc fill when attacked turns (38)',
+        buffKeyLow: 'fillLow',
+        buffKeyHigh: 'fillHigh',
+        parseParamValue: rawValue => parseNumberOrDefault(rawValue) / 100,
+        generateConditions: () => ({
+          whenAttacked: true
+        })
       });
-      return results;
     });
     map.set('22', (effect, context, injectionContext) => {
       return parseProcWithSingleNumericalParameterAndTurnDuration({
@@ -6349,6 +6387,22 @@ var bfmtUtilities = function (exports) {
         effectDelay
       });
       return results;
+    });
+    map.set('67', (effect, context, injectionContext) => {
+      return parseProcWithNumericalValueRangeAndChanceAndTurnDuration({
+        effect,
+        context,
+        injectionContext,
+        originalId: '67',
+        buffId: 'proc:67:bc fill on spark',
+        effectKeyLow: 'bc fill on spark low',
+        effectKeyHigh: 'bc fill on spark high',
+        effectKeyChance: 'bc fill on spark%',
+        effectTurnDurationKey: 'bc fill on spark buff turns (111)',
+        buffKeyLow: 'fillLow',
+        buffKeyHigh: 'fillHigh',
+        parseParamValue: rawValue => parseNumberOrDefault(rawValue) / 100
+      });
     });
   }
   /**
@@ -9203,7 +9257,7 @@ var bfmtUtilities = function (exports) {
       let unknownParams;
 
       if (typedEffect.params) {
-        const [rawProcIds = '', rawParams = '', rawTargetTypes = '', rawTargetAreas = '', rawStartFrames = '', rawTriggerOnBb, rawTriggerOnSbb, rawTriggerOnUbb, ...extraParams] = splitEffectParams(typedEffect);
+        const [rawProcIds, rawParams = '', rawTargetTypes = '', rawTargetAreas = '', rawStartFrames = '', rawTriggerOnBb, rawTriggerOnSbb, rawTriggerOnUbb, ...extraParams] = splitEffectParams(typedEffect);
         const allProcIds = rawProcIds.split('~');
         const allProcParams = rawParams.split('~');
         const allTargetTypes = rawTargetTypes.split('~');
@@ -9211,17 +9265,17 @@ var bfmtUtilities = function (exports) {
         const allStartFrames = rawStartFrames.split('~');
         const FRAME_IN_MS = 16 + 2 / 3;
         allProcIds.forEach((procId, index) => {
-          const startFrame = allStartFrames[index];
-          const targetArea = allTargetAreas[index];
-          const targetType = allTargetTypes[index];
           const params = (allProcParams[index] || '').replace(/&/g, ',');
-          const effectDelayInMs = (parseNumberOrDefault(startFrame) * FRAME_IN_MS).toFixed(1);
+          const targetType = allTargetTypes[index];
+          const targetArea = allTargetAreas[index];
+          const startFrame = parseNumberOrDefault(allStartFrames[index]);
+          const effectDelayInMs = (startFrame * FRAME_IN_MS).toFixed(1);
           const procEffect = {
             'proc id': procId,
             params,
             'effect delay time(ms)/frame': `${effectDelayInMs}/${startFrame}`,
-            'target area': TARGET_AREA_MAPPING[targetArea] || targetArea,
-            'target type': TARGET_TYPE_MAPPING[targetType] || targetType
+            'target area': TARGET_AREA_MAPPING[targetArea] || targetArea || 'unknown target area',
+            'target type': TARGET_TYPE_MAPPING[targetType] || targetType || 'unknown target type'
           };
           const procBuffs = convertProcEffectToBuffsWithInjectionContext(procEffect, context, injectionContext);
           triggeredBuffs = triggeredBuffs.concat(procBuffs);
@@ -9269,6 +9323,59 @@ var bfmtUtilities = function (exports) {
         if (triggerOnUbb) {
           addBuffOfBurstType('ubb');
         }
+      }
+
+      handlePostParse(results, unknownParams, {
+        originalId,
+        sources,
+        targetData,
+        conditionInfo
+      });
+      return results;
+    });
+    map.set('69', (effect, context, injectionContext) => {
+      const originalId = '69';
+      const {
+        conditionInfo,
+        targetData,
+        sources
+      } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+      const typedEffect = effect;
+      let recoveredHp = 0,
+          maxCount = 0;
+      let chanceLow = 0,
+          chanceHigh = 0;
+      let unknownParams;
+
+      if (typedEffect.params) {
+        const [rawRecoveredHp, rawMaxCount, rawChanceLow, rawChanceHigh, ...extraParams] = splitEffectParams(typedEffect);
+        recoveredHp = parseNumberOrDefault(rawRecoveredHp);
+        maxCount = parseNumberOrDefault(rawMaxCount);
+        chanceLow = parseNumberOrDefault(rawChanceLow);
+        chanceHigh = parseNumberOrDefault(rawChanceHigh);
+        unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+      } else {
+        recoveredHp = parseNumberOrDefault(typedEffect['angel idol recover hp%']);
+        maxCount = parseNumberOrDefault(typedEffect['angel idol recover counts']);
+        chanceLow = parseNumberOrDefault(typedEffect['angel idol recover chance% low']);
+        chanceHigh = parseNumberOrDefault(typedEffect['angel idol recover chance% high']);
+      }
+
+      const results = [];
+
+      if (chanceLow !== 0 || chanceHigh !== 0) {
+        results.push(Object.assign({
+          id: 'passive:69:chance ko resistance',
+          originalId,
+          sources,
+          value: {
+            'recoveredHp%': recoveredHp,
+            maxCount,
+            chanceLow,
+            chanceHigh
+          },
+          conditions: Object.assign({}, conditionInfo)
+        }, targetData));
       }
 
       handlePostParse(results, unknownParams, {
@@ -10514,6 +10621,13 @@ var bfmtUtilities = function (exports) {
       name: 'Passive Added Effect to Ultimate Brave Burst',
       stackType: BuffStackType.Passive,
       icons: () => [IconId.BUFF_ADDTO_UBB]
+    },
+    'passive:69:chance ko resistance': {
+      id: BuffId['passive:69:chance ko resistance'],
+      name: 'Passive KO Resistance (Chance)',
+      stat: UnitStat.koResistance,
+      stackType: BuffStackType.Passive,
+      icons: () => [IconId.BUFF_KOBLOCK]
     },
     UNKNOWN_PROC_EFFECT_ID: {
       id: BuffId.UNKNOWN_PROC_EFFECT_ID,
@@ -11767,6 +11881,13 @@ var bfmtUtilities = function (exports) {
       name: 'Instant Revive (Chance)',
       stackType: BuffStackType.Burst,
       icons: () => [IconId.BUFF_KOBLOCK]
+    },
+    'proc:67:bc fill on spark': {
+      id: BuffId['proc:67:bc fill on spark'],
+      name: 'Active BC Fill on Spark',
+      stat: UnitStat.bbGauge,
+      stackType: BuffStackType.Active,
+      icons: () => [IconId.BUFF_SPARKBBUP]
     },
     UNKNOWN_CONDITIONAL_EFFECT_ID: {
       id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,

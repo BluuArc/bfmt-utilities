@@ -1415,7 +1415,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			buffKeyLow: 'fillLow',
 			buffKeyHigh: 'fillHigh',
 			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
-			generateConditions: () => ({ whenAttacked: true })
+			generateConditions: () => ({ whenAttacked: true }),
 		});
 	});
 
@@ -3595,5 +3595,22 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		});
 
 		return results;
+	});
+
+	map.set('67', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithNumericalValueRangeAndChanceAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			originalId: '67',
+			buffId: 'proc:67:bc fill on spark',
+			effectKeyLow: 'bc fill on spark low',
+			effectKeyHigh: 'bc fill on spark high',
+			effectKeyChance: 'bc fill on spark%',
+			effectTurnDurationKey: 'bc fill on spark buff turns (111)',
+			buffKeyLow: 'fillLow',
+			buffKeyHigh: 'fillHigh',
+			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
+		});
 	});
 }

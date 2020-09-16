@@ -2466,6 +2466,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_KOBLOCK],
 	},
+	'proc:67:bc fill on spark': {
+		id: BuffId['proc:67:bc fill on spark'],
+		name: 'Active BC Fill on Spark',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_SPARKBBUP],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

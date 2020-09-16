@@ -1295,6 +1295,7 @@ export enum BuffId {
 	'proc:64:consecutive usage attack' = 'proc:64:consecutive usage attack',
 	'proc:65:ailment attack boost' = 'proc:65:ailment attack boost',
 	'proc:66:chance revive' = 'proc:66:chance revive',
+	'proc:67:bc fill on spark' = 'proc:67:bc fill on spark',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
