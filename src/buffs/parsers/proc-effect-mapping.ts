@@ -1,5 +1,5 @@
 import { ProcEffect, UnitElement, Ailment, TargetArea, TargetType } from '../../datamine-types';
-import { IBuff, IEffectToBuffConversionContext, IGenericBuffValue, BuffId, BuffConditionElement } from './buff-types';
+import { IBuff, IEffectToBuffConversionContext, IGenericBuffValue, BuffId, BuffConditionElement, IBuffConditions } from './buff-types';
 import { IProcBuffProcessingInjectionContext, getProcTargetData, createSourcesFromContext, parseNumberOrDefault, ITargetData, buffSourceIsBurstType, createUnknownParamsEntryFromExtraParams, createNoParamsEntry } from './_helpers';
 
 /**
@@ -201,15 +201,18 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		};
 	};
 
-	interface IProcWithSingleNumericalParameterAndTurnDurationContext {
+	interface ITemplatedParsingFunctionContext {
 		effect: ProcEffect;
 		context: IEffectToBuffConversionContext,
 		injectionContext?: IProcBuffProcessingInjectionContext;
-		effectValueKey: string;
 		effectTurnDurationKey: string;
-		parseParamValue?: (rawValue: string) => number,
 		buffId: string;
+		parseParamValue?: (rawValue: string) => number,
 		originalId: string;
+	}
+
+	interface IProcWithSingleNumericalParameterAndTurnDurationContext extends ITemplatedParsingFunctionContext {
+		effectValueKey: string;
 	}
 	const parseProcWithSingleNumericalParameterAndTurnDuration = ({
 		effect,
@@ -247,6 +250,94 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				value,
 				...targetData,
 			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: [buffId],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	};
+
+	interface IProcWithNumericalValueRangeAndChanceAndTurnDurationContext extends ITemplatedParsingFunctionContext {
+		effectKeyLow: string;
+		effectKeyHigh: string;
+		effectKeyChance: string;
+
+		buffKeyLow: string;
+		buffKeyHigh: string;
+
+		generateConditions?: () => IBuffConditions,
+	}
+	const parseProcWithNumericalValueRangeAndChanceAndTurnDuration = ({
+		effect,
+		context,
+		injectionContext,
+		originalId,
+		buffId,
+		effectKeyLow,
+		effectKeyHigh,
+		effectKeyChance,
+		effectTurnDurationKey,
+		buffKeyLow,
+		buffKeyHigh,
+		parseParamValue = (rawValue: string) => parseNumberOrDefault(rawValue),
+		generateConditions,
+	}: IProcWithNumericalValueRangeAndChanceAndTurnDurationContext): IBuff[] => {
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let valueLow = 0;
+		let valueHigh = 0;
+		let chance = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawValueLow, rawValueHigh, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			valueLow = parseParamValue(rawValueLow);
+			valueHigh = parseParamValue(rawValueHigh);
+			chance = parseNumberOrDefault(rawChance);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+		} else {
+			valueLow = parseNumberOrDefault(effect[effectKeyLow] as number);
+			valueHigh = parseNumberOrDefault(effect[effectKeyHigh] as number);
+			chance = parseNumberOrDefault(effect[effectKeyChance] as number);
+			turnDuration = parseNumberOrDefault(effect[effectTurnDurationKey] as number);
+		}
+
+		const hasAnyValues = valueLow !== 0 || valueHigh !== 0 || chance !== 0;
+		const results: IBuff[] = [];
+		if (hasAnyValues) {
+			const entry: IBuff = {
+				id: buffId,
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: {
+					[buffKeyLow]: valueLow,
+					[buffKeyHigh]: valueHigh,
+					chance,
+				},
+				...targetData,
+			};
+			if (generateConditions) {
+				entry.conditions = generateConditions();
+			}
+			results.push(entry);
 		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
 			results.push(createTurnDurationEntry({
 				originalId,
@@ -1311,67 +1402,21 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 	});
 
 	map.set('20', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
-		const originalId = '20';
-		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-
-		let fillLow = 0;
-		let fillHigh = 0;
-		let chance = 0;
-		let turnDuration = 0;
-
-		let unknownParams: IGenericBuffValue | undefined;
-		if (effect.params) {
-			const [rawFillLow, rawFillHigh, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
-			fillLow = parseNumberOrDefault(rawFillLow) / 100;
-			fillHigh = parseNumberOrDefault(rawFillHigh) / 100;
-			chance = parseNumberOrDefault(rawChance);
-			turnDuration = parseNumberOrDefault(rawTurnDuration);
-
-			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
-		} else {
-			fillLow = parseNumberOrDefault(effect['bc fill when attacked low'] as number);
-			fillHigh = parseNumberOrDefault(effect['bc fill when attacked high'] as number);
-			chance = parseNumberOrDefault(effect['bc fill when attacked%'] as number);
-			turnDuration = parseNumberOrDefault(effect['bc fill when attacked turns (38)'] as number);
-		}
-
-		const hasAnyFillValues = fillLow !== 0 || fillHigh !== 0;
-		const results: IBuff[] = [];
-		if (hasAnyFillValues) {
-			results.push({
-				id: 'proc:20:bc fill on hit',
-				originalId,
-				sources,
-				effectDelay,
-				duration: turnDuration,
-				conditions: {
-					whenAttacked: true,
-				},
-				value: {
-					fillLow,
-					fillHigh,
-					chance,
-				},
-				...targetData,
-			});
-		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
-			results.push(createTurnDurationEntry({
-				originalId,
-				sources,
-				buffs: ['proc:20:bc fill on hit'],
-				duration: turnDuration,
-				targetData,
-			}));
-		}
-
-		handlePostParse(results, unknownParams, {
-			originalId,
-			sources,
-			targetData,
-			effectDelay,
+		return parseProcWithNumericalValueRangeAndChanceAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			originalId: '20',
+			buffId: 'proc:20:bc fill on hit',
+			effectKeyLow: 'bc fill when attacked low',
+			effectKeyHigh: 'bc fill when attacked high',
+			effectKeyChance: 'bc fill when attacked%',
+			effectTurnDurationKey: 'bc fill when attacked turns (38)',
+			buffKeyLow: 'fillLow',
+			buffKeyHigh: 'fillHigh',
+			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
+			generateConditions: () => ({ whenAttacked: true })
 		});
-
-		return results;
 	});
 
 	map.set('22', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
