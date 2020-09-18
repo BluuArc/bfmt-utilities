@@ -3780,4 +3780,76 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('75', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '75';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const { hits, distribution } = getAttackInformationFromContext(context);
+		const params: { [param: string]: AlphaNumeric } = {
+			'baseAtk%': '0',
+			'addedAttackPerUnitWithMatchingElement%': '0',
+			flatAtk: '0',
+			'crit%': '0',
+			'bc%': '0',
+			'hc%': '0',
+			'dmg%': '0',
+		};
+		let element: UnitElement | BuffConditionElement;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[], rawElement: string;
+			[rawElement, params['baseAtk%'], params['addedAttackPerUnitWithMatchingElement%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], ...extraParams] = splitEffectParams(effect);
+			element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
+		} else {
+			// in Deathmax's datamine, this proc is incorrectly parsed as a tri-stat buff
+			const effectElement = effect['counted element for buff multiplier'] as string;
+			if (!effectElement) {
+				element = BuffConditionElement.Unknown;
+			} else {
+				element = effectElement as UnitElement;
+			}
+			params['baseAtk%'] = (effect['atk% buff (1)'] as number);
+			params['addedAttackPerUnitWithMatchingElement%'] = (effect['def% buff (3)'] as number);
+			params.flatAtk = (effect['rec% buff (5)'] as number);
+			params['crit%'] = (effect['crit% buff (7)'] as number);
+			params['bc%'] = (effect['buff turns'] as number);
+		}
+
+		const filteredValue = Object.entries(params)
+			.filter(([, value]) => value && +value)
+			.reduce((acc: { [param: string]: number }, [key, value]) => {
+				acc[key] = parseNumberOrDefault(value);
+				return acc;
+			}, {});
+
+		const results: IBuff[] = [];
+		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+			results.push({
+				id: 'proc:75:element squad-scaled attack',
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					...filteredValue,
+					elementToMatch: element,
+					hits,
+					distribution,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

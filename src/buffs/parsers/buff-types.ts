@@ -884,6 +884,8 @@ export enum IconId {
 	ATK_AOE_BBGAUGESCALED = 'ATK_AOE_BBGAUGESCALED',
 	ATK_ST_USAGESCALED = 'ATK_ST_USAGESCALED',
 	ATK_AOE_USAGESCALED = 'ATK_AOE_USAGESCALED',
+	ATK_ST_ELEMENTSCALED = 'ATK_ST_ELEMENTSCALED',
+	ATK_AOE_ELEMENTSCALED = 'ATK_AOE_ELEMENTSCALED',
 }
 
 /**
@@ -1338,6 +1340,8 @@ export enum BuffId {
 	'proc:73:resist-atk down' = 'proc:73:resist-atk down',
 	'proc:73:resist-def down' = 'proc:73:resist-def down',
 	'proc:73:resist-rec down' = 'proc:73:resist-rec down',
+
+	'proc:75:element squad-scaled attack' = 'proc:75:element squad-scaled attack',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

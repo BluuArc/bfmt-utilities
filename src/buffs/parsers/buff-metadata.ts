@@ -2654,6 +2654,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_RESISTRECDOWN],
 	},
+	'proc:75:element squad-scaled attack': {
+		id: BuffId['proc:75:element squad-scaled attack'],
+		name: 'Element Squad-Scaled Damage',
+		stackType: BuffStackType.Attack,
+		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_ELEMENTSCALED : IconId.ATK_AOE_ELEMENTSCALED],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

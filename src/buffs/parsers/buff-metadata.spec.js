@@ -2014,6 +2014,11 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc:75:element squad-scaled attack', () => {
+		testDefaultIconResult(BuffId['proc:75:element squad-scaled attack'], [IconId.ATK_AOE_ELEMENTSCALED]);
+		testIconResultWithBuff(BuffId['proc:75:element squad-scaled attack'], [IconId.ATK_ST_ELEMENTSCALED], { targetArea: TargetArea.Single }, 'target area is single');
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});
