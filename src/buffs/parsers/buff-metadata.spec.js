@@ -1024,6 +1024,16 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 72 buffs', () => {
+		describe('passive:72:effect at turn start-hp', () => {
+			testDefaultIconResult(BuffId['passive:72:effect at turn start-hp'], [IconId.BUFF_HPTURNSTART]);
+		});
+
+		describe('passive:72:effect at turn start-bc', () => {
+			testDefaultIconResult(BuffId['passive:72:effect at turn start-bc'], [IconId.BUFF_BCTURNSTART]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

@@ -291,6 +291,8 @@ export enum UnitStat {
 	extraAction = 'extraAction',
 
 	damageOverTime = 'damageOverTime',
+
+	effectOccurrenceShift = 'effectOccurrenceShift',
 }
 
 /**
@@ -401,6 +403,8 @@ export interface IUnitState {
 	extraAction: IBuff[];
 
 	damageOverTime: IBuff[];
+
+	effectOccurrenceShift: IBuff[];
 }
 
 /**
@@ -853,6 +857,9 @@ export enum IconId {
 
 	BUFF_AILDMGUP = 'BUFF_AILDMGUP',
 
+	BUFF_HPTURNSTART = 'BUFF_HPTURNSTART',
+	BUFF_BCTURNSTART = 'BUFF_BCTURNSTART',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -1088,6 +1095,9 @@ export enum BuffId {
 	'passive:71:inflict on hit-injury' = 'passive:71:inflict on hit-injury',
 	'passive:71:inflict on hit-curse' = 'passive:71:inflict on hit-curse',
 	'passive:71:inflict on hit-paralysis' = 'passive:71:inflict on hit-paralysis',
+
+	'passive:72:effect at turn start-hp' = 'passive:72:effect at turn start-hp',
+	'passive:72:effect at turn start-bc' = 'passive:72:effect at turn start-bc',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

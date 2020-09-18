@@ -37,6 +37,7 @@ export function getPassiveEffectToBuffMapping (reload?: boolean): Map<string, Pa
  * @internal
  */
 function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
+	const UNKNOWN_PASSIVE_PARAM_EFFECT_KEY = 'unknown passive params';
 	const ELEMENT_MAPPING: { [key: string]: UnitElement | BuffConditionElement } = {
 		1: UnitElement.Fire,
 		2: UnitElement.Water,
@@ -108,6 +109,11 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	// Disable rule as this function is only called once it's confirmed that `effect.params` exists
 	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 	const splitEffectParams = (effect: IPassiveEffect): string[] => effect.params!.split(',');
+
+	const splitEffectWithUnknownPassiveParamsProperty = (effect: IPassiveEffect): string[] => {
+		const rawParams: string = effect.params || (effect[UNKNOWN_PASSIVE_PARAM_EFFECT_KEY] as string) || '';
+		return splitEffectParams({ params: rawParams } as IPassiveEffect);
+	};
 
 	interface IBaseLocalParamsContext {
 		originalId: string;
@@ -2690,6 +2696,47 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 				});
 			}
 		});
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
+
+	map.set('72', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '72';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawHpAtTurnStart, rawBcAtTurnStart, ...extraParams] = splitEffectWithUnknownPassiveParamsProperty(effect as IPassiveEffect);
+		const hpAtTurnStart = rawHpAtTurnStart === '1';
+		const bcAtTurnStart = rawBcAtTurnStart === '1';
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+
+		const results: IBuff[] = [];
+		if (hpAtTurnStart) {
+			results.push({
+				id: 'passive:72:effect at turn start-hp',
+				originalId,
+				sources,
+				value: true,
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		if (bcAtTurnStart) {
+			results.push({
+				id: 'passive:72:effect at turn start-bc',
+				originalId,
+				sources,
+				value: true,
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
 
 		handlePostParse(results, unknownParams, {
 			originalId,

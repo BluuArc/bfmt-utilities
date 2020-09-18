@@ -1272,6 +1272,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_PARALYCOUNTER],
 	},
+	'passive:72:effect at turn start-hp': {
+		id: BuffId['passive:72:effect at turn start-hp'],
+		name: 'Gradual HP Effects Occur at Turn Start',
+		stat: UnitStat.effectOccurrenceShift,
+		stackType: BuffStackType.Singleton,
+		icons: () => [IconId.BUFF_HPTURNSTART],
+	},
+	'passive:72:effect at turn start-bc': {
+		id: BuffId['passive:72:effect at turn start-bc'],
+		name: 'Gradual Battle Crystal Effects Occur at Turn Start',
+		stat: UnitStat.effectOccurrenceShift,
+		stackType: BuffStackType.Singleton,
+		icons: () => [IconId.BUFF_BCTURNSTART],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
