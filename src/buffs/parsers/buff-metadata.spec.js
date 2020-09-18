@@ -998,6 +998,32 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:70:od fill rate'], [IconId.BUFF_ODFILLBOOST]);
 	});
 
+	describe('passive 71 buffs', () => {
+		describe('passive:71:inflict on hit-poison', () => {
+			testDefaultIconResult(BuffId['passive:71:inflict on hit-poison'], [IconId.BUFF_POISONCOUNTER]);
+		});
+
+		describe('passive:71:inflict on hit-weak', () => {
+			testDefaultIconResult(BuffId['passive:71:inflict on hit-weak'], [IconId.BUFF_WEAKCOUNTER]);
+		});
+
+		describe('passive:71:inflict on hit-sick', () => {
+			testDefaultIconResult(BuffId['passive:71:inflict on hit-sick'], [IconId.BUFF_SICKCOUNTER]);
+		});
+
+		describe('passive:71:inflict on hit-injury', () => {
+			testDefaultIconResult(BuffId['passive:71:inflict on hit-injury'], [IconId.BUFF_INJCONTER]);
+		});
+
+		describe('passive:71:inflict on hit-curse', () => {
+			testDefaultIconResult(BuffId['passive:71:inflict on hit-curse'], [IconId.BUFF_CURSECOUNTER]);
+		});
+
+		describe('passive:71:inflict on hit-paralysis', () => {
+			testDefaultIconResult(BuffId['passive:71:inflict on hit-paralysis'], [IconId.BUFF_PARALYCOUNTER]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

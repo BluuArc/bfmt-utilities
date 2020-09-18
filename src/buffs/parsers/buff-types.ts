@@ -1082,6 +1082,13 @@ export enum BuffId {
 	'passive:69:chance ko resistance' = 'passive:69:chance ko resistance',
 	'passive:70:od fill rate' = 'passive:70:od fill rate',
 
+	'passive:71:inflict on hit-poison' = 'passive:71:inflict on hit-poison',
+	'passive:71:inflict on hit-weak' = 'passive:71:inflict on hit-weak',
+	'passive:71:inflict on hit-sick' = 'passive:71:inflict on hit-sick',
+	'passive:71:inflict on hit-injury' = 'passive:71:inflict on hit-injury',
+	'passive:71:inflict on hit-curse' = 'passive:71:inflict on hit-curse',
+	'passive:71:inflict on hit-paralysis' = 'passive:71:inflict on hit-paralysis',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

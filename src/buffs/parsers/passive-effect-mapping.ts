@@ -84,7 +84,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	type DropType = 'bc' | 'hc' | 'item' | 'zel' | 'karma';
 
 	const STATS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
-	const AILMENTS_ORDER = ['poison', 'weak', 'sick', 'injury', 'curse', 'paralysis'];
+	const AILMENTS_ORDER = [Ailment.Poison, Ailment.Weak, Ailment.Sick, Ailment.Injury, Ailment.Curse, Ailment.Paralysis];
 	const DROP_TYPES_ORDER: DropType[] = ['bc', 'hc', 'item', 'zel', 'karma'];
 
 	const retrieveCommonInfoForEffects = (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext) => {
@@ -2645,5 +2645,59 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffId: 'passive:70:od fill rate',
 			originalId: '70',
 		});
+	});
+
+	map.set('71', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '71';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const inflictionChances: { [ailment: string]: AlphaNumeric } = {
+			poison: '0',
+			weak: '0',
+			sick: '0',
+			injury: '0',
+			curse: '0',
+			paralysis: '0',
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			[inflictionChances.poison, inflictionChances.weak, inflictionChances.sick, inflictionChances.injury, inflictionChances.curse, inflictionChances.paralysis, ...extraParams] = splitEffectParams(typedEffect);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+		} else {
+			const ailmentKeysInEffect = Object.keys(effect).filter((k) => k.startsWith('counter inflict'));
+			AILMENTS_ORDER.forEach((ailment) => {
+				const correspondingKey = ailmentKeysInEffect.find((k) => k.includes(ailment));
+				if (correspondingKey) {
+					inflictionChances[ailment] = typedEffect[correspondingKey] as number;
+				}
+			});
+		}
+
+		const results: IBuff[] = [];
+		AILMENTS_ORDER.forEach((ailment) => {
+			const value = parseNumberOrDefault(inflictionChances[ailment]);
+			if (value !== 0) {
+				results.push({
+					id: `passive:71:inflict on hit-${ailment}`,
+					originalId,
+					sources,
+					value,
+					conditions: { ...conditionInfo },
+					...targetData,
+				});
+			}
+		});
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
 	});
 }
