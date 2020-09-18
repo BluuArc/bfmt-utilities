@@ -1223,6 +1223,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_KOBLOCK],
 	},
+	'passive:70:od fill rate': {
+		id: BuffId['passive:70:od fill rate'],
+		name: 'Passive OD Gauge Fill Rate',
+		stat: UnitStat.odGauge,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_ODFILLBOOST],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

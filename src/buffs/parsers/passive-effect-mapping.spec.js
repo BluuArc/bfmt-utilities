@@ -7390,5 +7390,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 4] });
 			});
 		});
+
+		describe('passive 70', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '70',
+				expectedBuffId: 'passive:70:od fill rate',
+				effectKey: 'od fill rate%',
+			});
+		});
 	});
 });

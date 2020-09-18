@@ -824,7 +824,8 @@ export enum IconId {
 
 	BUFF_DBLSTRIKE = 'BUFF_DBLSTRIKE',
 
-	BUFF_OVERDRIVEUP = 'BUFF_OVERDRIVEUP',
+	BUFF_OVERDRIVEUP = 'BUFF_OVERDRIVEUP', // gradual OD fill
+	BUFF_ODFILLBOOST = 'BUFF_ODFILLBOOST', // OD fill rate
 
 	BUFF_TURNDMG = 'BUFF_TURNDMG',
 
@@ -1079,6 +1080,7 @@ export enum BuffId {
 	'passive:66:add effect to skill-ubb' = 'passive:66:add effect to skill-ubb',
 
 	'passive:69:chance ko resistance' = 'passive:69:chance ko resistance',
+	'passive:70:od fill rate' = 'passive:70:od fill rate',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
