@@ -1289,15 +1289,15 @@ describe('BUFF_METADATA entries', () => {
 		});
 
 		describe('proc:10:cleanse-atk down', () => {
-			testDefaultIconResult(BuffId['proc:10:cleanse-atk down'], [IconId.BUFF_ATKDOWNBLK]);
+			testDefaultIconResult(BuffId['proc:10:cleanse-atk down'], [IconId.BUFF_RESISTATKDOWN]);
 		});
 
 		describe('proc:10:cleanse-def down', () => {
-			testDefaultIconResult(BuffId['proc:10:cleanse-def down'], [IconId.BUFF_DEFDOWNBLK]);
+			testDefaultIconResult(BuffId['proc:10:cleanse-def down'], [IconId.BUFF_RESISTDEFDOWN]);
 		});
 
 		describe('proc:10:cleanse-rec down', () => {
-			testDefaultIconResult(BuffId['proc:10:cleanse-rec down'], [IconId.BUFF_RECDOWNBLK]);
+			testDefaultIconResult(BuffId['proc:10:cleanse-rec down'], [IconId.BUFF_RESISTRECDOWN]);
 		});
 
 		describe('proc:10:cleanse-unknown', () => {
@@ -1598,15 +1598,15 @@ describe('BUFF_METADATA entries', () => {
 		});
 
 		describe('proc:38:cleanse-atk down', () => {
-			testDefaultIconResult(BuffId['proc:38:cleanse-atk down'], [IconId.BUFF_ATKDOWNBLK]);
+			testDefaultIconResult(BuffId['proc:38:cleanse-atk down'], [IconId.BUFF_RESISTATKDOWN]);
 		});
 
 		describe('proc:38:cleanse-def down', () => {
-			testDefaultIconResult(BuffId['proc:38:cleanse-def down'], [IconId.BUFF_DEFDOWNBLK]);
+			testDefaultIconResult(BuffId['proc:38:cleanse-def down'], [IconId.BUFF_RESISTDEFDOWN]);
 		});
 
 		describe('proc:38:cleanse-rec down', () => {
-			testDefaultIconResult(BuffId['proc:38:cleanse-rec down'], [IconId.BUFF_RECDOWNBLK]);
+			testDefaultIconResult(BuffId['proc:38:cleanse-rec down'], [IconId.BUFF_RESISTRECDOWN]);
 		});
 
 		describe('proc:38:cleanse-unknown', () => {
@@ -1956,6 +1956,20 @@ describe('BUFF_METADATA entries', () => {
 
 	describe('proc:71:bc efficacy reduction', () => {
 		testDefaultIconResult(BuffId['proc:71:bc efficacy reduction'], [IconId.BUFF_BBFILLDOWN]);
+	});
+
+	describe('proc 73 buffs', () => {
+		describe('proc:73:resist-atk down', () => {
+			testDefaultIconResult(BuffId['proc:73:resist-atk down'], [IconId.BUFF_RESISTATKDOWN]);
+		});
+
+		describe('proc:73:resist-def down', () => {
+			testDefaultIconResult(BuffId['proc:73:resist-def down'], [IconId.BUFF_RESISTDEFDOWN]);
+		});
+
+		describe('proc:73:resist-rec down', () => {
+			testDefaultIconResult(BuffId['proc:73:resist-rec down'], [IconId.BUFF_RESISTRECDOWN]);
+		});
 	});
 
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {

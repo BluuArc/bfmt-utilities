@@ -686,9 +686,9 @@ export enum IconId {
 	BUFF_CURSEBLK = 'BUFF_CURSEBLK',
 	BUFF_PARALYSISBLK = 'BUFF_PARALYSISBLK',
 
-	BUFF_ATKDOWNBLK = 'BUFF_ATKDOWNBLK',
-	BUFF_DEFDOWNBLK = 'BUFF_DEFDOWNBLK',
-	BUFF_RECDOWNBLK = 'BUFF_RECDOWNBLK',
+	BUFF_RESISTATKDOWN = 'BUFF_RESISTATKDOWN',
+	BUFF_RESISTDEFDOWN = 'BUFF_RESISTDEFDOWN',
+	BUFF_RESISTRECDOWN = 'BUFF_RESISTRECDOWN',
 	BUFF_AILMENTBLK = 'BUFF_AILMENTBLK',
 
 	DEBUFF_POISON = 'DEBUFF_POISON',
@@ -1321,6 +1321,10 @@ export enum BuffId {
 	'proc:69:bc fill on guard-percent' = 'proc:69:bc fill on guard-percent',
 
 	'proc:71:bc efficacy reduction' = 'proc:71:bc efficacy reduction',
+
+	'proc:73:resist-atk down' = 'proc:73:resist-atk down',
+	'proc:73:resist-def down' = 'proc:73:resist-def down',
+	'proc:73:resist-rec down' = 'proc:73:resist-rec down',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

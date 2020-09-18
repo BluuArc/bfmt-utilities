@@ -3650,7 +3650,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				percentFill = parseNumberOrDefault(effect['bb bc fill% on guard'] as number);
 			}
 
-			turnDuration = parseNumberOrDefault(effect['bb bc fill on guard buff turns (114)'])
+			turnDuration = parseNumberOrDefault(effect['bb bc fill on guard buff turns (114)']);
 		}
 
 		const results: IBuff[] = [];
@@ -3714,5 +3714,70 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			buffId: 'proc:71:bc efficacy reduction',
 			originalId: '71',
 		});
+	});
+
+	map.set('73', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '73';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const AILMENTS_ORDER = [Ailment.AttackReduction, Ailment.DefenseReduction, Ailment.RecoveryReduction];
+		const resistances: { [ailment: string]: AlphaNumeric } = {
+			[Ailment.AttackReduction]: '0',
+			[Ailment.DefenseReduction]: '0',
+			[Ailment.RecoveryReduction]: '0',
+		};
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let rawDuration: string, extraParams: string[];
+			[resistances[Ailment.AttackReduction], resistances[Ailment.DefenseReduction], resistances[Ailment.RecoveryReduction], rawDuration, ...extraParams] = splitEffectParams(effect);
+			turnDuration = parseNumberOrDefault(rawDuration);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+		} else {
+			const ailmentKeysInEffect = Object.keys(effect).filter((k) => k.includes('resist%'));
+			AILMENTS_ORDER.forEach((ailment) => {
+				const correspondingKey = ailmentKeysInEffect.find((k) => k.includes(ailment));
+				if (correspondingKey) {
+					resistances[ailment] = effect[correspondingKey] as number;
+				}
+			});
+			turnDuration = parseNumberOrDefault(effect['stat down immunity buff turns'] as number);
+		}
+
+		const results: IBuff[] = [];
+		AILMENTS_ORDER.forEach((ailment) => {
+			const value = parseNumberOrDefault(resistances[ailment]);
+			if (value !== 0) {
+				results.push({
+					id: `proc:73:resist-${ailment}`,
+					originalId,
+					sources,
+					effectDelay,
+					value,
+					duration: turnDuration,
+					...targetData,
+				});
+			}
+		});
+
+		if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: AILMENTS_ORDER.map((a) => `proc:73:resist-${a}`),
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
 	});
 }
