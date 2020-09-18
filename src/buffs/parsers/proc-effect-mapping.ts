@@ -3703,4 +3703,16 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('71', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithSingleNumericalParameterAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			effectValueKey: 'bb fill inc%',
+			effectTurnDurationKey: 'bb fill inc buff turns (112)',
+			buffId: 'proc:71:bc efficacy reduction',
+			originalId: '71',
+		});
+	});
 }

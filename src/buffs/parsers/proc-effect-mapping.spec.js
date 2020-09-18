@@ -10334,5 +10334,14 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 3] });
 			});
 		});
+
+		describe('proc 71', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '71',
+				expectedBuffId: 'proc:71:bc efficacy reduction',
+				effectValueKey: 'bb fill inc%',
+				effectTurnDurationKey: 'bb fill inc buff turns (112)',
+			});
+		});
 	});
 });

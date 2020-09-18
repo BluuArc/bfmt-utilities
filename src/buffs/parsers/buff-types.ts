@@ -1301,6 +1301,8 @@ export enum BuffId {
 	'proc:69:bc fill on guard-flat' = 'proc:69:bc fill on guard-flat',
 	'proc:69:bc fill on guard-percent' = 'proc:69:bc fill on guard-percent',
 
+	'proc:71:bc efficacy reduction' = 'proc:71:bc efficacy reduction',
+
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
 

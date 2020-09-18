@@ -1900,6 +1900,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:67:bc fill on spark'], [IconId.BUFF_SPARKBBUP]);
 	});
 
+	describe('proc:68:guard mitigation', () => {
+		testDefaultIconResult(BuffId['proc:68:guard mitigation'], [IconId.BUFF_GUARDCUT]);
+	});
+
 	describe('proc 69 buffs', () => {
 		describe('proc:69:bc fill on guard-flat', () => {
 			testDefaultIconResult(BuffId['proc:69:bc fill on guard-flat'], [IconId.BUFF_GUARDBBUP]);
@@ -1910,8 +1914,8 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
-	describe('proc:68:guard mitigation', () => {
-		testDefaultIconResult(BuffId['proc:68:guard mitigation'], [IconId.BUFF_GUARDCUT]);
+	describe('proc:71:bc efficacy reduction', () => {
+		testDefaultIconResult(BuffId['proc:71:bc efficacy reduction'], [IconId.BUFF_BBFILLDOWN]);
 	});
 
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {

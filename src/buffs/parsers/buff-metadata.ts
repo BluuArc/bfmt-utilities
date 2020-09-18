@@ -2493,6 +2493,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_GUARDBBUP],
 	},
+	'proc:71:bc efficacy reduction': {
+		id: BuffId['proc:71:bc efficacy reduction'],
+		name: 'Active BC Efficacy Reduction',
+		stat: UnitStat.bcEfficacy,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_BBFILLDOWN],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',
