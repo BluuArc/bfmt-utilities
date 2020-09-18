@@ -2747,4 +2747,61 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('73', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '73';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const AILMENTS_ORDER = [Ailment.Poison, Ailment.Weak, Ailment.Sick, Ailment.Injury, Ailment.Curse, Ailment.Paralysis, Ailment.AttackReduction, Ailment.DefenseReduction, Ailment.RecoveryReduction];
+		const results: IBuff[] = [];
+		const resistances: { [ailment: string]: AlphaNumeric } = {
+			poison: '0',
+			weak: '0',
+			sick: '0',
+			injury: '0',
+			curse: '0',
+			paralysis: '0',
+			'atk down': '0',
+			'def down': '0',
+			'rec down': '0',
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			[resistances.poison, resistances.weak, resistances.sick, resistances.injury, resistances.curse, resistances.paralysis, resistances['atk down'], resistances['def down'], resistances['rec down'], ...extraParams] = splitEffectParams(typedEffect);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 9, injectionContext);
+		} else {
+			AILMENTS_ORDER.forEach((ailment) => {
+				const effectKey = ailment !== 'weak' ? ailment : 'weaken';
+				resistances[ailment] = (typedEffect[`${effectKey} resist%`] as string);
+			});
+		}
+
+		AILMENTS_ORDER.forEach((ailment) => {
+			const value = parseNumberOrDefault(resistances[ailment]);
+			if (value !== 0) {
+				results.push({
+					id: `passive:73:resist-${ailment}`,
+					originalId,
+					sources,
+					value,
+					conditions: { ...conditionInfo },
+					...targetData,
+				});
+			}
+		});
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
+
+
 }

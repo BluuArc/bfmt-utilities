@@ -1034,6 +1034,44 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 73 buffs', () => {
+		describe('passive:73:resist-poison', () => {
+			testDefaultIconResult(BuffId['passive:73:resist-poison'], [IconId.BUFF_POISONBLK]);
+		});
+
+		describe('passive:73:resist-weak', () => {
+			testDefaultIconResult(BuffId['passive:73:resist-weak'], [IconId.BUFF_WEAKBLK]);
+		});
+
+		describe('passive:73:resist-sick', () => {
+			testDefaultIconResult(BuffId['passive:73:resist-sick'], [IconId.BUFF_SICKBLK]);
+		});
+
+		describe('passive:73:resist-injury', () => {
+			testDefaultIconResult(BuffId['passive:73:resist-injury'], [IconId.BUFF_INJURYBLK]);
+		});
+
+		describe('passive:73:resist-curse', () => {
+			testDefaultIconResult(BuffId['passive:73:resist-curse'], [IconId.BUFF_CURSEBLK]);
+		});
+
+		describe('passive:73:resist-paralysis', () => {
+			testDefaultIconResult(BuffId['passive:73:resist-paralysis'], [IconId.BUFF_PARALYSISBLK]);
+		});
+
+		describe('passive:73:resist-atk down', () => {
+			testDefaultIconResult(BuffId['passive:73:resist-atk down'], [IconId.BUFF_RESISTATKDOWN]);
+		});
+
+		describe('passive:73:resist-def down', () => {
+			testDefaultIconResult(BuffId['passive:73:resist-def down'], [IconId.BUFF_RESISTDEFDOWN]);
+		});
+
+		describe('passive:73:resist-rec down', () => {
+			testDefaultIconResult(BuffId['passive:73:resist-rec down'], [IconId.BUFF_RESISTRECDOWN]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

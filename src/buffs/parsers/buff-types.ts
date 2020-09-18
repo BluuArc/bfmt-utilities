@@ -1099,6 +1099,16 @@ export enum BuffId {
 	'passive:72:effect at turn start-hp' = 'passive:72:effect at turn start-hp',
 	'passive:72:effect at turn start-bc' = 'passive:72:effect at turn start-bc',
 
+	'passive:73:resist-poison' = 'passive:73:resist-poison',
+	'passive:73:resist-weak' = 'passive:73:resist-weak',
+	'passive:73:resist-sick' = 'passive:73:resist-sick',
+	'passive:73:resist-injury' = 'passive:73:resist-injury',
+	'passive:73:resist-curse' = 'passive:73:resist-curse',
+	'passive:73:resist-paralysis' = 'passive:73:resist-paralysis',
+	'passive:73:resist-atk down' = 'passive:73:resist-atk down',
+	'passive:73:resist-def down' = 'passive:73:resist-def down',
+	'passive:73:resist-rec down' = 'passive:73:resist-rec down',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 
