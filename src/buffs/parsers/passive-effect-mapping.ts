@@ -1699,7 +1699,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 					value: +value,
 					conditions: {
 						...conditionInfo,
-						minumumUniqueElements: minimumElements,
+						minimumUniqueElements: minimumElements,
 					},
 					...targetData,
 				});
@@ -2803,5 +2803,49 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		return results;
 	});
 
+	map.set('74', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '74';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
+		const typedEffect = (effect as IPassiveEffect);
+		let requiredAilments: Ailment[], attackBoost = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawRequiredAilments, rawBoost, ...extraParams] = splitEffectParams(typedEffect);
+			requiredAilments = rawRequiredAilments.split('&')
+				.filter((p) => p !== '0')
+				.map((p) => AILMENT_MAPPING[p] || Ailment.Unknown);
+			attackBoost = parseNumberOrDefault(rawBoost);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		} else {
+			const ailmentKeysInEffect = Object.keys(typedEffect).filter((k) => ((typedEffect[k] as boolean) === true) && k.startsWith('atk% buff when enemy has'));
+			requiredAilments = AILMENTS_ORDER.filter((ailment) => ailmentKeysInEffect.find((k) => k.includes(ailment)));
+			attackBoost = parseNumberOrDefault(typedEffect['atk% buff when enemy has ailment']);
+		}
+
+		const results: IBuff[] = [];
+		if (attackBoost !== 0) {
+			results.push({
+				id: 'passive:74:ailment attack boost',
+				originalId,
+				sources,
+				value: attackBoost,
+				conditions: {
+					...conditionInfo,
+					targetHasAnyOfGivenAilments: requiredAilments,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

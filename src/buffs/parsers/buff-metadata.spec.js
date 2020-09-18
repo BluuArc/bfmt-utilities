@@ -1072,6 +1072,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive:74:ailment attack boost', () => {
+		testDefaultIconResult(BuffId['passive:74:ailment attack boost'], [IconId.BUFF_AILDMGUP]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

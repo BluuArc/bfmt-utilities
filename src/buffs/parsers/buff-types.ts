@@ -1,4 +1,4 @@
-import { TargetType, TargetArea, SphereTypeId, IBurstDamageFramesEntry, UnitElement, UnitType, UnitGender } from '../../datamine-types';
+import { TargetType, TargetArea, SphereTypeId, IBurstDamageFramesEntry, UnitElement, UnitType, UnitGender, Ailment } from '../../datamine-types';
 
 /**
  * @description Provides info at a glance regarding a buff's source and how it stacks.
@@ -140,7 +140,8 @@ export interface IBuffConditions {
 	onGuard?: boolean;
 	onCriticalHit?: boolean;
 
-	minumumUniqueElements?: number;
+	minimumUniqueElements?: number;
+	targetHasAnyOfGivenAilments?: Ailment[];
 }
 
 /**
@@ -1108,6 +1109,8 @@ export enum BuffId {
 	'passive:73:resist-atk down' = 'passive:73:resist-atk down',
 	'passive:73:resist-def down' = 'passive:73:resist-def down',
 	'passive:73:resist-rec down' = 'passive:73:resist-rec down',
+
+	'passive:74:ailment attack boost' = 'passive:74:ailment attack boost',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
