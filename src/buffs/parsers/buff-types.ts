@@ -1298,6 +1298,9 @@ export enum BuffId {
 	'proc:67:bc fill on spark' = 'proc:67:bc fill on spark',
 	'proc:68:guard mitigation' = 'proc:68:guard mitigation',
 
+	'proc:69:bc fill on guard-flat' = 'proc:69:bc fill on guard-flat',
+	'proc:69:bc fill on guard-percent' = 'proc:69:bc fill on guard-percent',
+
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
 

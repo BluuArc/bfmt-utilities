@@ -2479,6 +2479,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_GUARDCUT],
 	},
+	'proc:69:bc fill on guard-percent': {
+		id: BuffId['proc:69:bc fill on guard-percent'],
+		name: 'Active BC Fill on Guard (Percentage)',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_GUARDBBUP],
+	},
+	'proc:69:bc fill on guard-flat': {
+		id: BuffId['proc:69:bc fill on guard-flat'],
+		name: 'Active BC Fill on Guard (Flat Amount)',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_GUARDBBUP],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

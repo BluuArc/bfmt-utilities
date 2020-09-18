@@ -3625,4 +3625,82 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			originalId: '68',
 		});
 	});
+
+	map.set('69', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '69';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let flatFill = 0;
+		let percentFill = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawFlatFill, rawPercentFill, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			flatFill = parseNumberOrDefault(rawFlatFill) / 100;
+			percentFill = parseNumberOrDefault(rawPercentFill);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			if ('bb bc fill on guard' in effect) {
+				flatFill = parseNumberOrDefault(effect['bb bc fill on guard'] as number);
+			}
+			if ('bb bc fill% on guard' in effect) {
+				percentFill = parseNumberOrDefault(effect['bb bc fill% on guard'] as number);
+			}
+
+			turnDuration = parseNumberOrDefault(effect['bb bc fill on guard buff turns (114)'])
+		}
+
+		const results: IBuff[] = [];
+		if (flatFill !== 0) {
+			results.push({
+				id: 'proc:69:bc fill on guard-flat',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: flatFill,
+				conditions: {
+					onGuard: true,
+				},
+				...targetData,
+			});
+		}
+
+		if (percentFill !== 0) {
+			results.push({
+				id: 'proc:69:bc fill on guard-percent',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: percentFill,
+				conditions: {
+					onGuard: true,
+				},
+				...targetData,
+			});
+		}
+
+		if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['proc:69:bc fill on guard-flat', 'proc:69:bc fill on guard-percent'],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }
