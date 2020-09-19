@@ -1356,6 +1356,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_AILDMGUP],
 	},
+	'passive:75:spark vulnerability': {
+		id: BuffId['passive:75:spark vulnerability'],
+		name: 'Passive Spark Vulnerability',
+		stat: UnitStat.sparkDamage,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_SPARKDMGUP],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

@@ -1113,6 +1113,7 @@ export enum BuffId {
 	'passive:73:resist-rec down' = 'passive:73:resist-rec down',
 
 	'passive:74:ailment attack boost' = 'passive:74:ailment attack boost',
+	'passive:75:spark vulnerability' = 'passive:75:spark vulnerability',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

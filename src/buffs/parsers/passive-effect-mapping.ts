@@ -2848,4 +2848,49 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('75', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '75';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let damageIncrease = 0, chance = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawDamageIncrease, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(typedEffect);
+			damageIncrease = parseNumberOrDefault(rawDamageIncrease);
+			chance = parseNumberOrDefault(rawChance);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			damageIncrease = parseNumberOrDefault(typedEffect['spark debuff%'] as number);
+			chance = parseNumberOrDefault(typedEffect['spark debuff chance%'] as number);
+			turnDuration = parseNumberOrDefault(typedEffect['spark debuff turns'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (chance !== 0) {
+			results.push({
+				id: 'passive:75:spark vulnerability',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: { 'sparkDamage%': damageIncrease, chance },
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

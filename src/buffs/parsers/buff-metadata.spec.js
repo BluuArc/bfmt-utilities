@@ -1076,6 +1076,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:74:ailment attack boost'], [IconId.BUFF_AILDMGUP]);
 	});
 
+	describe('passive:75:spark vulnerability', () => {
+		testDefaultIconResult(BuffId['passive:75:spark vulnerability'], [IconId.BUFF_SPARKDMGUP]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
