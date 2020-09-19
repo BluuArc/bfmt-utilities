@@ -1080,6 +1080,16 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:75:spark vulnerability'], [IconId.BUFF_SPARKDMGUP]);
 	});
 
+	describe('passive 77 buffs', () => {
+		describe('passive:77:spark damage reduction-base', () => {
+			testDefaultIconResult(BuffId['passive:77:spark damage reduction-base'], [IconId.BUFF_SPARKDMGDOWN]);
+		});
+
+		describe('passive:77:spark damage reduction-buff', () => {
+			testDefaultIconResult(BuffId['passive:77:spark damage reduction-buff'], [IconId.BUFF_SPARKDMGDOWN]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

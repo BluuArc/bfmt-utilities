@@ -1363,6 +1363,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_SPARKDMGUP],
 	},
+	'passive:77:spark damage reduction-base': {
+		id: BuffId['passive:77:spark damage reduction-base'],
+		name: 'Passive Base Spark Damage Reduction',
+		stat: UnitStat.sparkDamageMitigation,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_SPARKDMGDOWN],
+	},
+	'passive:77:spark damage reduction-buff': {
+		id: BuffId['passive:77:spark damage reduction-buff'],
+		name: 'Passive Buffed Spark Damage Reduction',
+		stat: UnitStat.sparkDamageMitigation,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_SPARKDMGDOWN],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

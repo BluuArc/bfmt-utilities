@@ -276,6 +276,7 @@ export enum UnitStat {
 	criticalDamageMitigation = 'criticalDamageMitigation',
 
 	sparkDamage = 'sparkDamage',
+	sparkDamageMitigation = 'sparkDamageMitigation',
 
 	bbAtk = 'bbAtk',
 
@@ -388,6 +389,7 @@ export interface IUnitState {
 	criticalDamageMitigation: IBuff[];
 
 	sparkDamage: IBuff[];
+	sparkDamageMitigation: IBuff[];
 
 	bbAtk: IBuff[];
 
@@ -788,6 +790,7 @@ export enum IconId {
 	BUFF_SPARKUP = 'BUFF_SPARKUP',
 	BUFF_SPARKDOWN = 'BUFF_SPARKDOWN',
 	BUFF_SPARKDMGUP = 'BUFF_SPARKDMGUP', // spark vulnerability
+	BUFF_SPARKDMGDOWN = 'BUFF_SPARKDMGDOWN', // spark damage reduction
 
 	BUFF_SPARKHC = 'BUFF_SPARKHC',
 	BUFF_SPARKBC = 'BUFF_SPARKBC',
@@ -1114,6 +1117,9 @@ export enum BuffId {
 
 	'passive:74:ailment attack boost' = 'passive:74:ailment attack boost',
 	'passive:75:spark vulnerability' = 'passive:75:spark vulnerability',
+
+	'passive:77:spark damage reduction-base' = 'passive:77:spark damage reduction-base',
+	'passive:77:spark damage reduction-buff' = 'passive:77:spark damage reduction-buff',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
