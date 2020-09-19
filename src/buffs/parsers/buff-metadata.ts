@@ -1377,6 +1377,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_SPARKDMGDOWN],
 	},
+	'passive:78:damage taken conditional': {
+		id: BuffId['passive:78:damage taken conditional'],
+		name: 'Passive Conditional Effect after Damage Received Threshold',
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.CONDITIONALBUFF_DAMAGETAKENTHRESH],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

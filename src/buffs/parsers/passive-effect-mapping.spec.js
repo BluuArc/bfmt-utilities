@@ -5552,7 +5552,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: 'passive:55:hp conditional',
+						id: expectedBuffId,
 						sources: arbitrarySourceValue,
 						value: {
 							triggeredBuffs: getArbitraryBuffsForConditionalEffect(),
@@ -8508,6 +8508,193 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
+			});
+		});
+
+		describe('passive 78', () => {
+			const expectedBuffId = 'passive:78:damage taken conditional';
+			const expectedOriginalId = '78';
+
+			const arbitraryKnownConditionalId = 'arbitrary conditional id for passive 78';
+			const getArbitraryBuffsForConditionalEffect = () => [{ arbitrary: 'conditional buff' }];
+			let mockConditionalEffectConversionFunctionSpy;
+			let injectionContext;
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+
+				mockConditionalEffectConversionFunctionSpy = jasmine.createSpy('mockConditionalEffectConversionFunctionSpy');
+				mockConditionalEffectConversionFunctionSpy.and.callFake(() => getArbitraryBuffsForConditionalEffect());
+				injectionContext = { convertConditionalEffectToBuffs: mockConditionalEffectConversionFunctionSpy };
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = `${arbitraryKnownConditionalId},2,3,4,5`;
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						triggeredBuffs: getArbitraryBuffsForConditionalEffect(),
+						maxTriggerCount: 3,
+					},
+					conditions: {
+						damageTakenExceeds: 4,
+					},
+				})];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext(), injectionContext);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `${arbitraryKnownConditionalId},2,3,4,5,6,7,8`;
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							triggeredBuffs: getArbitraryBuffsForConditionalEffect(),
+							maxTriggerCount: 3,
+						},
+						conditions: {
+							damageTakenExceeds: 4,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_5: '6',
+							param_6: '7',
+							param_7: '8',
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext(), injectionContext);
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('calls corresponding conditional effect conversion function defined in injection context', () => {
+				const params = `${arbitraryKnownConditionalId},2&3&4,3,4,5`;
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						triggeredBuffs: getArbitraryBuffsForConditionalEffect(),
+						maxTriggerCount: 3,
+					},
+					conditions: {
+						damageTakenExceeds: 4,
+					},
+				})];
+
+				const effect = { params };
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expect(mockConditionalEffectConversionFunctionSpy).toHaveBeenCalledWith({
+					id: arbitraryKnownConditionalId,
+					params: '2&3&4',
+					turnDuration: 5,
+				}, context);
+			});
+
+			it('calls corresponding conditional effect conversion function when not defined via injection context', () => {
+				const params = `${arbitraryKnownConditionalId},2&3&4,3,4,5`;
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						triggeredBuffs: getArbitraryBuffsForConditionalEffect(),
+						maxTriggerCount: 3,
+					},
+					conditions: {
+						damageTakenExceeds: 4,
+					},
+				})];
+
+				getConditionalEffectToBuffMapping(true).set(arbitraryKnownConditionalId, mockConditionalEffectConversionFunctionSpy);
+
+				const effect = { params };
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+				expect(mockConditionalEffectConversionFunctionSpy).toHaveBeenCalledWith({
+					id: arbitraryKnownConditionalId,
+					params: '2&3&4',
+					turnDuration: 5,
+				}, context);
+			});
+
+			it('defaults numerical values to 0 if they are missing or non-number', () => {
+				const params = `${arbitraryKnownConditionalId},params,not a number,not a number,not a number`;
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						triggeredBuffs: getArbitraryBuffsForConditionalEffect(),
+						maxTriggerCount: 0,
+					},
+					conditions: {
+						damageTakenExceeds: 0,
+					},
+				})];
+
+				const effect = { params };
+				const context = createArbitraryContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expect(mockConditionalEffectConversionFunctionSpy).toHaveBeenCalledWith({
+					id: arbitraryKnownConditionalId,
+					params: 'params',
+					turnDuration: 0,
+				}, context);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				mockConditionalEffectConversionFunctionSpy.and.returnValue([]);
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext(), injectionContext });
+			});
+
+			it('returns a no params buff if no triggered buffs are found', () => {
+				const params = `${arbitraryKnownConditionalId},2,3,4,5`;
+				mockConditionalEffectConversionFunctionSpy.and.returnValue([]);
+				expectNoParamsBuffWithEffectAndContext({ effect: { params }, context: createArbitraryContext(), injectionContext });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: `${arbitraryKnownConditionalId},2,3,456,5,789`,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						value: {
+							triggeredBuffs: getArbitraryBuffsForConditionalEffect(),
+							maxTriggerCount: 3,
+						},
+						conditions: {
+							...arbitraryConditionValue,
+							damageTakenExceeds: 456,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				injectionContext = { ...injectionContext, ...createDefaultInjectionContext() };
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 5] });
 			});
 		});
 	});

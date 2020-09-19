@@ -132,6 +132,7 @@ export interface IBuffConditions {
 	hpLessThanOrEqualTo?: number;
 	bbGaugeGreaterThanOrEqualTo?: number;
 	bbGaugeLessThanOrEqualTo?: number;
+	damageTakenExceeds?: number;
 
 	onEnemyDefeat?: boolean;
 	onBattleWin?: boolean;
@@ -434,6 +435,7 @@ export enum IconId {
 	TURN_DURATION_UP = 'TURN_DURATION_UP',
 	TURN_DURATION_DOWN = 'TURN_DURATION_DOWN',
 	CONDITIONALBUFF_HPTHRESH = 'CONDITIONALBUFF_HPTHRESH',
+	CONDITIONALBUFF_DAMAGETAKENTHRESH = 'CONDITIONALBUFF_DAMAGETAKENTHRESH',
 
 	BUFF_ADDTO_BB = 'BUFF_ADDTO_BB',
 	BUFF_ADDTO_SBB = 'BUFF_ADDTO_SBB',
@@ -1129,6 +1131,8 @@ export enum BuffId {
 
 	'passive:77:spark damage reduction-base' = 'passive:77:spark damage reduction-base',
 	'passive:77:spark damage reduction-buff' = 'passive:77:spark damage reduction-buff',
+
+	'passive:78:damage taken conditional' = 'passive:78:damage taken conditional',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

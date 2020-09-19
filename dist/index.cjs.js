@@ -1696,6 +1696,7 @@ var UnitStat;
     UnitStat["criticalDamage"] = "criticalDamage";
     UnitStat["criticalDamageMitigation"] = "criticalDamageMitigation";
     UnitStat["sparkDamage"] = "sparkDamage";
+    UnitStat["sparkDamageMitigation"] = "sparkDamageMitigation";
     UnitStat["bbAtk"] = "bbAtk";
     UnitStat["hitCountModification"] = "hitCountModification";
     UnitStat["damageReflect"] = "damageReflect";
@@ -1704,6 +1705,7 @@ var UnitStat;
     UnitStat["buffStabilityModification"] = "buffStabilityModification";
     UnitStat["extraAction"] = "extraAction";
     UnitStat["damageOverTime"] = "damageOverTime";
+    UnitStat["effectOccurrenceShift"] = "effectOccurrenceShift";
 })(UnitStat || (UnitStat = {}));
 var IconId;
 (function (IconId) {
@@ -1711,6 +1713,7 @@ var IconId;
     IconId["TURN_DURATION_UP"] = "TURN_DURATION_UP";
     IconId["TURN_DURATION_DOWN"] = "TURN_DURATION_DOWN";
     IconId["CONDITIONALBUFF_HPTHRESH"] = "CONDITIONALBUFF_HPTHRESH";
+    IconId["CONDITIONALBUFF_DAMAGETAKENTHRESH"] = "CONDITIONALBUFF_DAMAGETAKENTHRESH";
     IconId["BUFF_ADDTO_BB"] = "BUFF_ADDTO_BB";
     IconId["BUFF_ADDTO_SBB"] = "BUFF_ADDTO_SBB";
     IconId["BUFF_ADDTO_UBB"] = "BUFF_ADDTO_UBB";
@@ -1946,15 +1949,23 @@ var IconId;
     IconId["BUFF_HPSCALEDDEFDOWN"] = "BUFF_HPSCALEDDEFDOWN";
     IconId["BUFF_HPSCALEDRECUP"] = "BUFF_HPSCALEDRECUP";
     IconId["BUFF_HPSCALEDRECDOWN"] = "BUFF_HPSCALEDRECDOWN";
+    IconId["BUFF_SELFATKUP"] = "BUFF_SELFATKUP";
+    IconId["BUFF_ATKDOWNLOCK"] = "BUFF_ATKDOWNLOCK";
+    IconId["BUFF_SELFDEFUP"] = "BUFF_SELFDEFUP";
+    IconId["BUFF_DEFDOWNLOCK"] = "BUFF_DEFDOWNLOCK";
+    IconId["BUFF_SELFRECUP"] = "BUFF_SELFRECUP";
+    IconId["BUFF_RECDOWNLOCK"] = "BUFF_RECDOWNLOCK";
+    IconId["BUFF_SELFCRTRATEUP"] = "BUFF_SELFCRTRATEUP";
+    IconId["BUFF_CRTRATEDOWNLOCK"] = "BUFF_CRTRATEDOWNLOCK";
     IconId["BUFF_POISONBLK"] = "BUFF_POISONBLK";
     IconId["BUFF_WEAKBLK"] = "BUFF_WEAKBLK";
     IconId["BUFF_SICKBLK"] = "BUFF_SICKBLK";
     IconId["BUFF_INJURYBLK"] = "BUFF_INJURYBLK";
     IconId["BUFF_CURSEBLK"] = "BUFF_CURSEBLK";
     IconId["BUFF_PARALYSISBLK"] = "BUFF_PARALYSISBLK";
-    IconId["BUFF_ATKDOWNBLK"] = "BUFF_ATKDOWNBLK";
-    IconId["BUFF_DEFDOWNBLK"] = "BUFF_DEFDOWNBLK";
-    IconId["BUFF_RECDOWNBLK"] = "BUFF_RECDOWNBLK";
+    IconId["BUFF_RESISTATKDOWN"] = "BUFF_RESISTATKDOWN";
+    IconId["BUFF_RESISTDEFDOWN"] = "BUFF_RESISTDEFDOWN";
+    IconId["BUFF_RESISTRECDOWN"] = "BUFF_RESISTRECDOWN";
     IconId["BUFF_AILMENTBLK"] = "BUFF_AILMENTBLK";
     IconId["DEBUFF_POISON"] = "DEBUFF_POISON";
     IconId["DEBUFF_WEAK"] = "DEBUFF_WEAK";
@@ -2036,6 +2047,7 @@ var IconId;
     IconId["BUFF_SPARKUP"] = "BUFF_SPARKUP";
     IconId["BUFF_SPARKDOWN"] = "BUFF_SPARKDOWN";
     IconId["BUFF_SPARKDMGUP"] = "BUFF_SPARKDMGUP";
+    IconId["BUFF_SPARKDMGDOWN"] = "BUFF_SPARKDMGDOWN";
     IconId["BUFF_SPARKHC"] = "BUFF_SPARKHC";
     IconId["BUFF_SPARKBC"] = "BUFF_SPARKBC";
     IconId["BUFF_SPARKITEM"] = "BUFF_SPARKITEM";
@@ -2067,6 +2079,7 @@ var IconId;
     IconId["BUFF_SUMMONUNIT"] = "BUFF_SUMMONUNIT";
     IconId["BUFF_DBLSTRIKE"] = "BUFF_DBLSTRIKE";
     IconId["BUFF_OVERDRIVEUP"] = "BUFF_OVERDRIVEUP";
+    IconId["BUFF_ODFILLBOOST"] = "BUFF_ODFILLBOOST";
     IconId["BUFF_TURNDMG"] = "BUFF_TURNDMG";
     IconId["BUFF_BBATKUP"] = "BUFF_BBATKUP";
     IconId["BUFF_SBBATKUP"] = "BUFF_SBBATKUP";
@@ -2085,6 +2098,8 @@ var IconId;
     IconId["BUFF_DARKSHIELD"] = "BUFF_DARKSHIELD";
     IconId["BUFF_ELEMENTSHIELD"] = "BUFF_ELEMENTSHIELD";
     IconId["BUFF_AILDMGUP"] = "BUFF_AILDMGUP";
+    IconId["BUFF_HPTURNSTART"] = "BUFF_HPTURNSTART";
+    IconId["BUFF_BCTURNSTART"] = "BUFF_BCTURNSTART";
     IconId["ATK_ST"] = "ATK_ST";
     IconId["ATK_AOE"] = "ATK_AOE";
     IconId["ATK_RT"] = "ATK_RT";
@@ -2108,6 +2123,8 @@ var IconId;
     IconId["ATK_AOE_BBGAUGESCALED"] = "ATK_AOE_BBGAUGESCALED";
     IconId["ATK_ST_USAGESCALED"] = "ATK_ST_USAGESCALED";
     IconId["ATK_AOE_USAGESCALED"] = "ATK_AOE_USAGESCALED";
+    IconId["ATK_ST_ELEMENTSCALED"] = "ATK_ST_ELEMENTSCALED";
+    IconId["ATK_AOE_ELEMENTSCALED"] = "ATK_AOE_ELEMENTSCALED";
 })(IconId || (IconId = {}));
 /**
  * @description Format of these IDs are `<passive|proc|conditional>:<original effect ID>:<stat>`.
@@ -2275,6 +2292,29 @@ var BuffId;
     BuffId["passive:66:add effect to skill-sbb"] = "passive:66:add effect to skill-sbb";
     BuffId["passive:66:add effect to skill-ubb"] = "passive:66:add effect to skill-ubb";
     BuffId["passive:69:chance ko resistance"] = "passive:69:chance ko resistance";
+    BuffId["passive:70:od fill rate"] = "passive:70:od fill rate";
+    BuffId["passive:71:inflict on hit-poison"] = "passive:71:inflict on hit-poison";
+    BuffId["passive:71:inflict on hit-weak"] = "passive:71:inflict on hit-weak";
+    BuffId["passive:71:inflict on hit-sick"] = "passive:71:inflict on hit-sick";
+    BuffId["passive:71:inflict on hit-injury"] = "passive:71:inflict on hit-injury";
+    BuffId["passive:71:inflict on hit-curse"] = "passive:71:inflict on hit-curse";
+    BuffId["passive:71:inflict on hit-paralysis"] = "passive:71:inflict on hit-paralysis";
+    BuffId["passive:72:effect at turn start-hp"] = "passive:72:effect at turn start-hp";
+    BuffId["passive:72:effect at turn start-bc"] = "passive:72:effect at turn start-bc";
+    BuffId["passive:73:resist-poison"] = "passive:73:resist-poison";
+    BuffId["passive:73:resist-weak"] = "passive:73:resist-weak";
+    BuffId["passive:73:resist-sick"] = "passive:73:resist-sick";
+    BuffId["passive:73:resist-injury"] = "passive:73:resist-injury";
+    BuffId["passive:73:resist-curse"] = "passive:73:resist-curse";
+    BuffId["passive:73:resist-paralysis"] = "passive:73:resist-paralysis";
+    BuffId["passive:73:resist-atk down"] = "passive:73:resist-atk down";
+    BuffId["passive:73:resist-def down"] = "passive:73:resist-def down";
+    BuffId["passive:73:resist-rec down"] = "passive:73:resist-rec down";
+    BuffId["passive:74:ailment attack boost"] = "passive:74:ailment attack boost";
+    BuffId["passive:75:spark vulnerability"] = "passive:75:spark vulnerability";
+    BuffId["passive:77:spark damage reduction-base"] = "passive:77:spark damage reduction-base";
+    BuffId["passive:77:spark damage reduction-buff"] = "passive:77:spark damage reduction-buff";
+    BuffId["passive:78:damage taken conditional"] = "passive:78:damage taken conditional";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1:attack"] = "proc:1:attack";
@@ -2449,6 +2489,19 @@ var BuffId;
     BuffId["proc:65:ailment attack boost"] = "proc:65:ailment attack boost";
     BuffId["proc:66:chance revive"] = "proc:66:chance revive";
     BuffId["proc:67:bc fill on spark"] = "proc:67:bc fill on spark";
+    BuffId["proc:68:guard mitigation"] = "proc:68:guard mitigation";
+    BuffId["proc:69:bc fill on guard-flat"] = "proc:69:bc fill on guard-flat";
+    BuffId["proc:69:bc fill on guard-percent"] = "proc:69:bc fill on guard-percent";
+    BuffId["proc:71:bc efficacy reduction"] = "proc:71:bc efficacy reduction";
+    BuffId["proc:73:resist-atk down"] = "proc:73:resist-atk down";
+    BuffId["proc:73:resist-def down"] = "proc:73:resist-def down";
+    BuffId["proc:73:resist-rec down"] = "proc:73:resist-rec down";
+    BuffId["proc:75:element squad-scaled attack"] = "proc:75:element squad-scaled attack";
+    BuffId["proc:76:extra action"] = "proc:76:extra action";
+    BuffId["proc:78:self stat boost-atk"] = "proc:78:self stat boost-atk";
+    BuffId["proc:78:self stat boost-def"] = "proc:78:self stat boost-def";
+    BuffId["proc:78:self stat boost-rec"] = "proc:78:self stat boost-rec";
+    BuffId["proc:78:self stat boost-crit"] = "proc:78:self stat boost-crit";
     BuffId["UNKNOWN_CONDITIONAL_EFFECT_ID"] = "UNKNOWN_CONDITIONAL_EFFECT_ID";
     BuffId["UNKNOWN_CONDITIONAL_BUFF_PARAMS"] = "UNKNOWN_CONDITIONAL_BUFF_PARAMS";
     BuffId["conditional:8:gradual heal"] = "conditional:8:gradual heal";
@@ -3043,10 +3096,10 @@ function setMapping(map) {
             coreStatProperties.forEach((statType) => {
                 const effectKey = keys.find((k) => k.startsWith(`${statType}% buff`));
                 if (effectKey) {
-                    params[statType] = parseNumberOrDefault(effect[effectKey]);
+                    params[statType] = effect[effectKey];
                 }
             });
-            params.turnDuration = parseNumberOrDefault(effect['buff turns']);
+            params.turnDuration = effect['buff turns'];
         }
         // ensure numerical properties are actually numbers
         coreStatProperties.concat(['turnDuration']).forEach((prop) => {
@@ -5370,6 +5423,294 @@ function setMapping(map) {
             parseParamValue: (rawValue) => parseNumberOrDefault(rawValue) / 100,
         });
     });
+    map.set('68', (effect, context, injectionContext) => {
+        return parseProcWithSingleNumericalParameterAndTurnDuration({
+            effect,
+            context,
+            injectionContext,
+            effectValueKey: 'guard increase mitigation%',
+            effectTurnDurationKey: 'guard increase mitigation buff turns (113)',
+            buffId: 'proc:68:guard mitigation',
+            originalId: '68',
+        });
+    });
+    map.set('69', (effect, context, injectionContext) => {
+        const originalId = '69';
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        let flatFill = 0;
+        let percentFill = 0;
+        let turnDuration = 0;
+        let unknownParams;
+        if (effect.params) {
+            const [rawFlatFill, rawPercentFill, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+            flatFill = parseNumberOrDefault(rawFlatFill) / 100;
+            percentFill = parseNumberOrDefault(rawPercentFill);
+            turnDuration = parseNumberOrDefault(rawTurnDuration);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+        }
+        else {
+            if ('bb bc fill on guard' in effect) {
+                flatFill = parseNumberOrDefault(effect['bb bc fill on guard']);
+            }
+            if ('bb bc fill% on guard' in effect) {
+                percentFill = parseNumberOrDefault(effect['bb bc fill% on guard']);
+            }
+            turnDuration = parseNumberOrDefault(effect['bb bc fill on guard buff turns (114)']);
+        }
+        const results = [];
+        if (flatFill !== 0) {
+            results.push(Object.assign({ id: 'proc:69:bc fill on guard-flat', originalId,
+                sources,
+                effectDelay, duration: turnDuration, value: flatFill, conditions: {
+                    onGuard: true,
+                } }, targetData));
+        }
+        if (percentFill !== 0) {
+            results.push(Object.assign({ id: 'proc:69:bc fill on guard-percent', originalId,
+                sources,
+                effectDelay, duration: turnDuration, value: percentFill, conditions: {
+                    onGuard: true,
+                } }, targetData));
+        }
+        if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+            results.push(createTurnDurationEntry({
+                originalId,
+                sources,
+                buffs: ['proc:69:bc fill on guard-flat', 'proc:69:bc fill on guard-percent'],
+                duration: turnDuration,
+                targetData,
+            }));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
+        return results;
+    });
+    map.set('71', (effect, context, injectionContext) => {
+        return parseProcWithSingleNumericalParameterAndTurnDuration({
+            effect,
+            context,
+            injectionContext,
+            effectValueKey: 'bb fill inc%',
+            effectTurnDurationKey: 'bb fill inc buff turns (112)',
+            buffId: 'proc:71:bc efficacy reduction',
+            originalId: '71',
+        });
+    });
+    map.set('73', (effect, context, injectionContext) => {
+        const originalId = '73';
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const AILMENTS_ORDER = [Ailment.AttackReduction, Ailment.DefenseReduction, Ailment.RecoveryReduction];
+        const resistances = {
+            [Ailment.AttackReduction]: '0',
+            [Ailment.DefenseReduction]: '0',
+            [Ailment.RecoveryReduction]: '0',
+        };
+        let turnDuration = 0;
+        let unknownParams;
+        if (effect.params) {
+            let rawDuration, extraParams;
+            [resistances[Ailment.AttackReduction], resistances[Ailment.DefenseReduction], resistances[Ailment.RecoveryReduction], rawDuration, ...extraParams] = splitEffectParams(effect);
+            turnDuration = parseNumberOrDefault(rawDuration);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+        }
+        else {
+            const ailmentKeysInEffect = Object.keys(effect).filter((k) => k.includes('resist%'));
+            AILMENTS_ORDER.forEach((ailment) => {
+                const correspondingKey = ailmentKeysInEffect.find((k) => k.includes(ailment));
+                if (correspondingKey) {
+                    resistances[ailment] = effect[correspondingKey];
+                }
+            });
+            turnDuration = parseNumberOrDefault(effect['stat down immunity buff turns']);
+        }
+        const results = [];
+        AILMENTS_ORDER.forEach((ailment) => {
+            const value = parseNumberOrDefault(resistances[ailment]);
+            if (value !== 0) {
+                results.push(Object.assign({ id: `proc:73:resist-${ailment}`, originalId,
+                    sources,
+                    effectDelay,
+                    value, duration: turnDuration }, targetData));
+            }
+        });
+        if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+            results.push(createTurnDurationEntry({
+                originalId,
+                sources,
+                buffs: AILMENTS_ORDER.map((a) => `proc:73:resist-${a}`),
+                duration: turnDuration,
+                targetData,
+            }));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
+        return results;
+    });
+    map.set('75', (effect, context, injectionContext) => {
+        const originalId = '75';
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const { hits, distribution } = getAttackInformationFromContext(context);
+        const params = {
+            'baseAtk%': '0',
+            'addedAttackPerUnitWithMatchingElement%': '0',
+            flatAtk: '0',
+            'crit%': '0',
+            'bc%': '0',
+            'hc%': '0',
+            'dmg%': '0',
+        };
+        let element;
+        let unknownParams;
+        if (effect.params) {
+            let extraParams, rawElement;
+            [rawElement, params['baseAtk%'], params['addedAttackPerUnitWithMatchingElement%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], ...extraParams] = splitEffectParams(effect);
+            element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
+        }
+        else {
+            // in Deathmax's datamine, this proc is incorrectly parsed as a tri-stat buff
+            const effectElement = effect['counted element for buff multiplier'];
+            if (!effectElement) {
+                element = BuffConditionElement.Unknown;
+            }
+            else {
+                element = effectElement;
+            }
+            params['baseAtk%'] = effect['atk% buff (1)'];
+            params['addedAttackPerUnitWithMatchingElement%'] = effect['def% buff (3)'];
+            params.flatAtk = effect['rec% buff (5)'];
+            params['crit%'] = effect['crit% buff (7)'];
+            params['bc%'] = effect['buff turns'];
+        }
+        const filteredValue = Object.entries(params)
+            .filter(([, value]) => value && +value)
+            .reduce((acc, [key, value]) => {
+            acc[key] = parseNumberOrDefault(value);
+            return acc;
+        }, {});
+        const results = [];
+        if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+            results.push(Object.assign({ id: 'proc:75:element squad-scaled attack', originalId,
+                sources,
+                effectDelay, value: Object.assign(Object.assign({}, filteredValue), { elementToMatch: element, hits,
+                    distribution }) }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
+        return results;
+    });
+    map.set('76', (effect, context, injectionContext) => {
+        const originalId = '76';
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        let maxExtraActions = 0, chance = 0;
+        let turnDuration = 0;
+        let unknownParams;
+        if (effect.params) {
+            const [rawMaxExtraActions, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+            maxExtraActions = parseNumberOrDefault(rawMaxExtraActions);
+            chance = parseNumberOrDefault(rawChance);
+            turnDuration = parseNumberOrDefault(rawTurnDuration);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+        }
+        else {
+            maxExtraActions = parseNumberOrDefault(effect['max number of extra actions']);
+            chance = parseNumberOrDefault(effect['chance% for extra action']);
+            turnDuration = parseNumberOrDefault(effect['extra action buff turns (123)']);
+        }
+        const results = [];
+        if (chance !== 0) {
+            results.push(Object.assign({ id: 'proc:76:extra action', originalId,
+                sources,
+                effectDelay, duration: turnDuration, value: { maxExtraActions, chance } }, targetData));
+        }
+        else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+            results.push(createTurnDurationEntry({
+                originalId,
+                sources,
+                buffs: ['proc:76:extra action'],
+                duration: turnDuration,
+                targetData,
+            }));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
+        return results;
+    });
+    map.set('78', (effect, context, injectionContext) => {
+        const originalId = '78';
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const params = {
+            atk: '0',
+            def: '0',
+            rec: '0',
+            crit: '0',
+            turnDuration: '0',
+        };
+        const coreStatProperties = ['atk', 'def', 'rec', 'crit'];
+        let unknownParams;
+        if (effect.params) {
+            let extraParams;
+            [params.atk, params.def, params.rec, params.crit, params.turnDuration, ...extraParams] = splitEffectParams(effect);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+        }
+        else {
+            coreStatProperties.forEach((statType) => {
+                const effectKey = `self ${statType}% buff`;
+                if (effectKey in effect) {
+                    params[statType] = effect[effectKey];
+                }
+            });
+            params.turnDuration = effect['self stat buff turns'];
+        }
+        // ensure numerical properties are actually numbers
+        coreStatProperties.concat(['turnDuration']).forEach((prop) => {
+            params[prop] = parseNumberOrDefault(params[prop]);
+        });
+        const hasAnyStats = coreStatProperties.some((statKey) => params[statKey] !== 0);
+        const results = [];
+        if (hasAnyStats) {
+            coreStatProperties.forEach((statKey) => {
+                const value = params[statKey];
+                if (value !== 0) {
+                    results.push(Object.assign({ id: `proc:78:self stat boost-${statKey}`, originalId,
+                        sources,
+                        effectDelay, duration: params.turnDuration, value }, targetData));
+                }
+            });
+        }
+        else if (isTurnDurationBuff(context, params.turnDuration, injectionContext)) {
+            results.push(createTurnDurationEntry({
+                originalId,
+                sources,
+                buffs: coreStatProperties.map((statKey) => `proc:78:self stat boost-${statKey}`),
+                duration: params.turnDuration,
+                targetData,
+            }));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
+        return results;
+    });
 }
 
 /**
@@ -5647,6 +5988,7 @@ function getPassiveEffectToBuffMapping(reload) {
  * @internal
  */
 function setMapping$2(map) {
+    const UNKNOWN_PASSIVE_PARAM_EFFECT_KEY = 'unknown passive params';
     const ELEMENT_MAPPING = {
         1: UnitElement.Fire,
         2: UnitElement.Water,
@@ -5685,7 +6027,7 @@ function setMapping$2(map) {
         2: TargetArea.Aoe,
     };
     const STATS_ORDER = ['atk', 'def', 'rec', 'crit', 'hp'];
-    const AILMENTS_ORDER = ['poison', 'weak', 'sick', 'injury', 'curse', 'paralysis'];
+    const AILMENTS_ORDER = [Ailment.Poison, Ailment.Weak, Ailment.Sick, Ailment.Injury, Ailment.Curse, Ailment.Paralysis];
     const DROP_TYPES_ORDER = ['bc', 'hc', 'item', 'zel', 'karma'];
     const retrieveCommonInfoForEffects = (effect, context, injectionContext) => {
         const conditionInfo = ((injectionContext && injectionContext.processExtraSkillConditions) || processExtraSkillConditions)(effect);
@@ -5704,6 +6046,10 @@ function setMapping$2(map) {
     // Disable rule as this function is only called once it's confirmed that `effect.params` exists
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const splitEffectParams = (effect) => effect.params.split(',');
+    const splitEffectWithUnknownPassiveParamsProperty = (effect) => {
+        const rawParams = effect.params || effect[UNKNOWN_PASSIVE_PARAM_EFFECT_KEY] || '';
+        return splitEffectParams({ params: rawParams });
+    };
     const createUnknownParamsEntry = (unknownParams, { originalId, sources, targetData, conditionInfo, }) => (Object.assign({ id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS, originalId,
         sources, value: unknownParams, conditions: Object.assign({}, conditionInfo) }, targetData));
     /**
@@ -5731,6 +6077,7 @@ function setMapping$2(map) {
     (function (ThresholdType) {
         ThresholdType["Hp"] = "hp";
         ThresholdType["Bb"] = "bb gauge";
+        ThresholdType["DamageTaken"] = "damage taken";
     })(ThresholdType || (ThresholdType = {}));
     const parseThresholdValuesFromParamsProperty = (rawThreshold, rawRequireAboveFlag, thresholdType) => {
         return {
@@ -5741,6 +6088,7 @@ function setMapping$2(map) {
     };
     const parseThresholdValuesFromEffect = (effect, thresholdType, suffix = 'buff requirement') => {
         let threshold = 0, requireAbove = false;
+        // TODO: damage taken threshold?
         if (`${thresholdType} above % ${suffix}` in effect) {
             threshold = parseNumberOrDefault(effect[`${thresholdType} above % ${suffix}`]);
             requireAbove = true;
@@ -5768,6 +6116,9 @@ function setMapping$2(map) {
             else {
                 conditions = { bbGaugeLessThanOrEqualTo: threshold };
             }
+        }
+        else if (type === ThresholdType.DamageTaken) {
+            conditions = { damageTakenExceeds: threshold };
         }
         return conditions;
     };
@@ -6892,7 +7243,7 @@ function setMapping$2(map) {
             const value = parseNumberOrDefault(stats[stat]);
             if (value !== 0) {
                 results.push(Object.assign({ id: `passive:41:unique element count-${stat}`, originalId,
-                    sources, value: +value, conditions: Object.assign(Object.assign({}, conditionInfo), { minumumUniqueElements: minimumElements }) }, targetData));
+                    sources, value: +value, conditions: Object.assign(Object.assign({}, conditionInfo), { minimumUniqueElements: minimumElements }) }, targetData));
             }
         });
         handlePostParse(results, unknownParams, {
@@ -7567,6 +7918,259 @@ function setMapping$2(map) {
         });
         return results;
     });
+    map.set('70', (effect, context, injectionContext) => {
+        return parsePassiveWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            effectKey: 'od fill rate%',
+            buffId: 'passive:70:od fill rate',
+            originalId: '70',
+        });
+    });
+    map.set('71', (effect, context, injectionContext) => {
+        const originalId = '71';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const inflictionChances = {
+            poison: '0',
+            weak: '0',
+            sick: '0',
+            injury: '0',
+            curse: '0',
+            paralysis: '0',
+        };
+        let unknownParams;
+        if (typedEffect.params) {
+            let extraParams;
+            [inflictionChances.poison, inflictionChances.weak, inflictionChances.sick, inflictionChances.injury, inflictionChances.curse, inflictionChances.paralysis, ...extraParams] = splitEffectParams(typedEffect);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+        }
+        else {
+            const ailmentKeysInEffect = Object.keys(effect).filter((k) => k.startsWith('counter inflict'));
+            AILMENTS_ORDER.forEach((ailment) => {
+                const correspondingKey = ailmentKeysInEffect.find((k) => k.includes(ailment));
+                if (correspondingKey) {
+                    inflictionChances[ailment] = typedEffect[correspondingKey];
+                }
+            });
+        }
+        const results = [];
+        AILMENTS_ORDER.forEach((ailment) => {
+            const value = parseNumberOrDefault(inflictionChances[ailment]);
+            if (value !== 0) {
+                results.push(Object.assign({ id: `passive:71:inflict on hit-${ailment}`, originalId,
+                    sources,
+                    value, conditions: Object.assign({}, conditionInfo) }, targetData));
+            }
+        });
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('72', (effect, context, injectionContext) => {
+        const originalId = '72';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const [rawHpAtTurnStart, rawBcAtTurnStart, ...extraParams] = splitEffectWithUnknownPassiveParamsProperty(effect);
+        const hpAtTurnStart = rawHpAtTurnStart === '1';
+        const bcAtTurnStart = rawBcAtTurnStart === '1';
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        const results = [];
+        if (hpAtTurnStart) {
+            results.push(Object.assign({ id: 'passive:72:effect at turn start-hp', originalId,
+                sources, value: true, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        if (bcAtTurnStart) {
+            results.push(Object.assign({ id: 'passive:72:effect at turn start-bc', originalId,
+                sources, value: true, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('73', (effect, context, injectionContext) => {
+        const originalId = '73';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const AILMENTS_ORDER = [Ailment.Poison, Ailment.Weak, Ailment.Sick, Ailment.Injury, Ailment.Curse, Ailment.Paralysis, Ailment.AttackReduction, Ailment.DefenseReduction, Ailment.RecoveryReduction];
+        const results = [];
+        const resistances = {
+            poison: '0',
+            weak: '0',
+            sick: '0',
+            injury: '0',
+            curse: '0',
+            paralysis: '0',
+            'atk down': '0',
+            'def down': '0',
+            'rec down': '0',
+        };
+        let unknownParams;
+        if (typedEffect.params) {
+            let extraParams;
+            [resistances.poison, resistances.weak, resistances.sick, resistances.injury, resistances.curse, resistances.paralysis, resistances['atk down'], resistances['def down'], resistances['rec down'], ...extraParams] = splitEffectParams(typedEffect);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 9, injectionContext);
+        }
+        else {
+            AILMENTS_ORDER.forEach((ailment) => {
+                const effectKey = ailment !== 'weak' ? ailment : 'weaken';
+                resistances[ailment] = typedEffect[`${effectKey} resist%`];
+            });
+        }
+        AILMENTS_ORDER.forEach((ailment) => {
+            const value = parseNumberOrDefault(resistances[ailment]);
+            if (value !== 0) {
+                results.push(Object.assign({ id: `passive:73:resist-${ailment}`, originalId,
+                    sources,
+                    value, conditions: Object.assign({}, conditionInfo) }, targetData));
+            }
+        });
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('74', (effect, context, injectionContext) => {
+        const originalId = '74';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        let requiredAilments, attackBoost = 0;
+        let unknownParams;
+        if (typedEffect.params) {
+            const [rawRequiredAilments, rawBoost, ...extraParams] = splitEffectParams(typedEffect);
+            requiredAilments = rawRequiredAilments.split('&')
+                .filter((p) => p !== '0')
+                .map((p) => AILMENT_MAPPING[p] || Ailment.Unknown);
+            attackBoost = parseNumberOrDefault(rawBoost);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        }
+        else {
+            const ailmentKeysInEffect = Object.keys(typedEffect).filter((k) => (typedEffect[k] === true) && k.startsWith('atk% buff when enemy has'));
+            requiredAilments = AILMENTS_ORDER.filter((ailment) => ailmentKeysInEffect.find((k) => k.includes(ailment)));
+            attackBoost = parseNumberOrDefault(typedEffect['atk% buff when enemy has ailment']);
+        }
+        const results = [];
+        if (attackBoost !== 0) {
+            results.push(Object.assign({ id: 'passive:74:ailment attack boost', originalId,
+                sources, value: attackBoost, conditions: Object.assign(Object.assign({}, conditionInfo), { targetHasAnyOfGivenAilments: requiredAilments }) }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('75', (effect, context, injectionContext) => {
+        const originalId = '75';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        let damageIncrease = 0, chance = 0;
+        let turnDuration = 0;
+        let unknownParams;
+        if (typedEffect.params) {
+            const [rawDamageIncrease, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(typedEffect);
+            damageIncrease = parseNumberOrDefault(rawDamageIncrease);
+            chance = parseNumberOrDefault(rawChance);
+            turnDuration = parseNumberOrDefault(rawTurnDuration);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+        }
+        else {
+            damageIncrease = parseNumberOrDefault(typedEffect['spark debuff%']);
+            chance = parseNumberOrDefault(typedEffect['spark debuff chance%']);
+            turnDuration = parseNumberOrDefault(typedEffect['spark debuff turns']);
+        }
+        const results = [];
+        if (chance !== 0) {
+            results.push(Object.assign({ id: 'passive:75:spark vulnerability', originalId,
+                sources, duration: turnDuration, value: { 'sparkDamage%': damageIncrease, chance }, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('77', (effect, context, injectionContext) => {
+        const originalId = '77';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        let baseResist = 0, buffResist = 0;
+        let unknownParams;
+        if (typedEffect.params) {
+            const [rawBaseResist, rawBuffResist, ...extraParams] = splitEffectParams(typedEffect);
+            baseResist = parseNumberOrDefault(rawBaseResist);
+            buffResist = parseNumberOrDefault(rawBuffResist);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        }
+        else {
+            baseResist = parseNumberOrDefault(typedEffect['base spark dmg% resist']);
+            buffResist = parseNumberOrDefault(typedEffect['buff spark dmg% resist']);
+        }
+        const results = [];
+        if (baseResist !== 0) {
+            results.push(Object.assign({ id: 'passive:77:spark damage reduction-base', originalId,
+                sources, value: baseResist, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        if (buffResist !== 0) {
+            results.push(Object.assign({ id: 'passive:77:spark damage reduction-buff', originalId,
+                sources, value: buffResist, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('78', (effect, context, injectionContext) => {
+        const originalId = '78';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const results = [];
+        let unknownParams;
+        if (typedEffect.params) {
+            const params = splitEffectParams(typedEffect);
+            const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
+                id: params[0],
+                params: params[1],
+                turnDuration: parseNumberOrDefault(params[4]),
+            }, context, injectionContext);
+            const maxTriggerCount = parseNumberOrDefault(params[2]);
+            const thresholdInfo = parseThresholdValuesFromParamsProperty(params[3], '1', ThresholdType.DamageTaken);
+            unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(5), 5, injectionContext);
+            if (triggeredBuffs.length > 0) {
+                const thresholdConditions = getThresholdConditions(thresholdInfo);
+                results.push(Object.assign({ id: 'passive:78:damage taken conditional', originalId,
+                    sources, value: {
+                        triggeredBuffs,
+                        maxTriggerCount,
+                    }, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData));
+            }
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
 }
 
 /**
@@ -7783,37 +8387,37 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
     };
 })()), { 'passive:4:resist-poison': {
         id: BuffId['passive:4:resist-poison'],
-        name: 'Passive Poison Resist',
+        name: 'Passive Poison Resistance',
         stat: UnitStat.poisonResist,
         stackType: BuffStackType.Passive,
         icons: () => [IconId.BUFF_POISONBLK],
     }, 'passive:4:resist-weak': {
         id: BuffId['passive:4:resist-weak'],
-        name: 'Passive Weak Resist',
+        name: 'Passive Weak Resistance',
         stat: UnitStat.weakResist,
         stackType: BuffStackType.Passive,
         icons: () => [IconId.BUFF_WEAKBLK],
     }, 'passive:4:resist-sick': {
         id: BuffId['passive:4:resist-sick'],
-        name: 'Passive Sick Resist',
+        name: 'Passive Sick Resistance',
         stat: UnitStat.sickResist,
         stackType: BuffStackType.Passive,
         icons: () => [IconId.BUFF_SICKBLK],
     }, 'passive:4:resist-injury': {
         id: BuffId['passive:4:resist-injury'],
-        name: 'Passive Injury Resist',
+        name: 'Passive Injury Resistance',
         stat: UnitStat.injuryResist,
         stackType: BuffStackType.Passive,
         icons: () => [IconId.BUFF_INJURYBLK],
     }, 'passive:4:resist-curse': {
         id: BuffId['passive:4:resist-curse'],
-        name: 'Passive Curse Resist',
+        name: 'Passive Curse Resistance',
         stat: UnitStat.curseResist,
         stackType: BuffStackType.Passive,
         icons: () => [IconId.BUFF_CURSEBLK],
     }, 'passive:4:resist-paralysis': {
         id: BuffId['passive:4:resist-paralysis'],
-        name: 'Passive Paralysis Resist',
+        name: 'Passive Paralysis Resistance',
         stat: UnitStat.paralysisResist,
         stackType: BuffStackType.Passive,
         icons: () => [IconId.BUFF_PARALYSISBLK],
@@ -8644,6 +9248,143 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.koResistance,
         stackType: BuffStackType.Passive,
         icons: () => [IconId.BUFF_KOBLOCK],
+    }, 'passive:70:od fill rate': {
+        id: BuffId['passive:70:od fill rate'],
+        name: 'Passive OD Gauge Fill Rate',
+        stat: UnitStat.odGauge,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_ODFILLBOOST],
+    }, 'passive:71:inflict on hit-poison': {
+        id: BuffId['passive:71:inflict on hit-poison'],
+        name: 'Passive Poison Counter',
+        stat: UnitStat.poisonCounter,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_POISONCOUNTER],
+    }, 'passive:71:inflict on hit-weak': {
+        id: BuffId['passive:71:inflict on hit-weak'],
+        name: 'Passive Weak Counter',
+        stat: UnitStat.weakCounter,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_WEAKCOUNTER],
+    }, 'passive:71:inflict on hit-sick': {
+        id: BuffId['passive:71:inflict on hit-sick'],
+        name: 'Passive Sick Counter',
+        stat: UnitStat.sickCounter,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_SICKCOUNTER],
+    }, 'passive:71:inflict on hit-injury': {
+        id: BuffId['passive:71:inflict on hit-injury'],
+        name: 'Passive Injury Counter',
+        stat: UnitStat.injuryCounter,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_INJCONTER],
+    }, 'passive:71:inflict on hit-curse': {
+        id: BuffId['passive:71:inflict on hit-curse'],
+        name: 'Passive Curse Counter',
+        stat: UnitStat.curseCounter,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_CURSECOUNTER],
+    }, 'passive:71:inflict on hit-paralysis': {
+        id: BuffId['passive:71:inflict on hit-paralysis'],
+        name: 'Passive Paralysis Counter',
+        stat: UnitStat.paralysisCounter,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_PARALYCOUNTER],
+    }, 'passive:72:effect at turn start-hp': {
+        id: BuffId['passive:72:effect at turn start-hp'],
+        name: 'Gradual HP Effects Occur at Turn Start',
+        stat: UnitStat.effectOccurrenceShift,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_HPTURNSTART],
+    }, 'passive:72:effect at turn start-bc': {
+        id: BuffId['passive:72:effect at turn start-bc'],
+        name: 'Gradual Battle Crystal Effects Occur at Turn Start',
+        stat: UnitStat.effectOccurrenceShift,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_BCTURNSTART],
+    }, 'passive:73:resist-poison': {
+        id: BuffId['passive:73:resist-poison'],
+        name: 'Passive Poison Resistance',
+        stat: UnitStat.poisonResist,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_POISONBLK],
+    }, 'passive:73:resist-weak': {
+        id: BuffId['passive:73:resist-weak'],
+        name: 'Passive Weak Resistance',
+        stat: UnitStat.weakResist,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_WEAKBLK],
+    }, 'passive:73:resist-sick': {
+        id: BuffId['passive:73:resist-sick'],
+        name: 'Passive Sick Resistance',
+        stat: UnitStat.sickResist,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_SICKBLK],
+    }, 'passive:73:resist-injury': {
+        id: BuffId['passive:73:resist-injury'],
+        name: 'Passive Injury Resistance',
+        stat: UnitStat.injuryResist,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_INJURYBLK],
+    }, 'passive:73:resist-curse': {
+        id: BuffId['passive:73:resist-curse'],
+        name: 'Passive Curse Resistance',
+        stat: UnitStat.curseResist,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_CURSEBLK],
+    }, 'passive:73:resist-paralysis': {
+        id: BuffId['passive:73:resist-paralysis'],
+        name: 'Passive Paralysis Resistance',
+        stat: UnitStat.paralysisResist,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_PARALYSISBLK],
+    }, 'passive:73:resist-atk down': {
+        id: BuffId['passive:73:resist-atk down'],
+        name: 'Passive Attack Reduction Resistance',
+        stat: UnitStat.atkDownResist,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_RESISTATKDOWN],
+    }, 'passive:73:resist-def down': {
+        id: BuffId['passive:73:resist-def down'],
+        name: 'Passive Defense Reduction Resistance',
+        stat: UnitStat.defDownResist,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_RESISTDEFDOWN],
+    }, 'passive:73:resist-rec down': {
+        id: BuffId['passive:73:resist-rec down'],
+        name: 'Passive Recovery Reduction Resistance',
+        stat: UnitStat.recDownResist,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_RESISTRECDOWN],
+    }, 'passive:74:ailment attack boost': {
+        id: BuffId['passive:74:ailment attack boost'],
+        name: 'Passive Attack Boost on Status Afflicted Foes',
+        stat: UnitStat.ailmentAttackBoost,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_AILDMGUP],
+    }, 'passive:75:spark vulnerability': {
+        id: BuffId['passive:75:spark vulnerability'],
+        name: 'Passive Spark Vulnerability',
+        stat: UnitStat.sparkDamage,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_SPARKDMGUP],
+    }, 'passive:77:spark damage reduction-base': {
+        id: BuffId['passive:77:spark damage reduction-base'],
+        name: 'Passive Base Spark Damage Reduction',
+        stat: UnitStat.sparkDamageMitigation,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_SPARKDMGDOWN],
+    }, 'passive:77:spark damage reduction-buff': {
+        id: BuffId['passive:77:spark damage reduction-buff'],
+        name: 'Passive Buffed Spark Damage Reduction',
+        stat: UnitStat.sparkDamageMitigation,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_SPARKDMGDOWN],
+    }, 'passive:78:damage taken conditional': {
+        id: BuffId['passive:78:damage taken conditional'],
+        name: 'Passive Conditional Effect after Damage Received Threshold',
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.CONDITIONALBUFF_DAMAGETAKENTHRESH],
     }, UNKNOWN_PROC_EFFECT_ID: {
         id: BuffId.UNKNOWN_PROC_EFFECT_ID,
         name: 'Unknown Proc Effect',
@@ -8869,19 +9610,19 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         name: 'Attack Reduction Cleanse',
         stat: UnitStat.atkDownResist,
         stackType: BuffStackType.Burst,
-        icons: () => [IconId.BUFF_ATKDOWNBLK],
+        icons: () => [IconId.BUFF_RESISTATKDOWN],
     }, 'proc:10:cleanse-def down': {
         id: BuffId['proc:10:cleanse-def down'],
         name: 'Defense Reduction Cleanse',
         stat: UnitStat.defDownResist,
         stackType: BuffStackType.Burst,
-        icons: () => [IconId.BUFF_DEFDOWNBLK],
+        icons: () => [IconId.BUFF_RESISTDEFDOWN],
     }, 'proc:10:cleanse-rec down': {
         id: BuffId['proc:10:cleanse-rec down'],
         name: 'Recovery Reduction Cleanse',
         stat: UnitStat.recDownResist,
         stackType: BuffStackType.Burst,
-        icons: () => [IconId.BUFF_RECDOWNBLK],
+        icons: () => [IconId.BUFF_RESISTRECDOWN],
     }, 'proc:10:cleanse-unknown': {
         id: BuffId['proc:10:cleanse-unknown'],
         name: 'Unknown Ailment Cleanse',
@@ -9011,37 +9752,37 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         icons: () => [IconId.BUFF_ELEMENTDMGDOWN],
     }, 'proc:17:resist-poison': {
         id: BuffId['proc:17:resist-poison'],
-        name: 'Active Poison Resist',
+        name: 'Active Poison Resistance',
         stat: UnitStat.poisonResist,
         stackType: BuffStackType.Active,
         icons: () => [IconId.BUFF_POISONBLK],
     }, 'proc:17:resist-weak': {
         id: BuffId['proc:17:resist-weak'],
-        name: 'Active Weak Resist',
+        name: 'Active Weak Resistance',
         stat: UnitStat.weakResist,
         stackType: BuffStackType.Active,
         icons: () => [IconId.BUFF_WEAKBLK],
     }, 'proc:17:resist-sick': {
         id: BuffId['proc:17:resist-sick'],
-        name: 'Active Sick Resist',
+        name: 'Active Sick Resistance',
         stat: UnitStat.sickResist,
         stackType: BuffStackType.Active,
         icons: () => [IconId.BUFF_SICKBLK],
     }, 'proc:17:resist-injury': {
         id: BuffId['proc:17:resist-injury'],
-        name: 'Active Injury Resist',
+        name: 'Active Injury Resistance',
         stat: UnitStat.injuryResist,
         stackType: BuffStackType.Active,
         icons: () => [IconId.BUFF_INJURYBLK],
     }, 'proc:17:resist-curse': {
         id: BuffId['proc:17:resist-curse'],
-        name: 'Active Curse Resist',
+        name: 'Active Curse Resistance',
         stat: UnitStat.curseResist,
         stackType: BuffStackType.Active,
         icons: () => [IconId.BUFF_CURSEBLK],
     }, 'proc:17:resist-paralysis': {
         id: BuffId['proc:17:resist-paralysis'],
-        name: 'Active Paralysis Resist',
+        name: 'Active Paralysis Resistance',
         stat: UnitStat.paralysisResist,
         stackType: BuffStackType.Active,
         icons: () => [IconId.BUFF_PARALYSISBLK],
@@ -9280,19 +10021,19 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         name: 'Attack Reduction Cleanse',
         stat: UnitStat.atkDownResist,
         stackType: BuffStackType.Burst,
-        icons: () => [IconId.BUFF_ATKDOWNBLK],
+        icons: () => [IconId.BUFF_RESISTATKDOWN],
     }, 'proc:38:cleanse-def down': {
         id: BuffId['proc:38:cleanse-def down'],
         name: 'Defense Reduction Cleanse',
         stat: UnitStat.defDownResist,
         stackType: BuffStackType.Burst,
-        icons: () => [IconId.BUFF_DEFDOWNBLK],
+        icons: () => [IconId.BUFF_RESISTDEFDOWN],
     }, 'proc:38:cleanse-rec down': {
         id: BuffId['proc:38:cleanse-rec down'],
         name: 'Recovery Reduction Cleanse',
         stat: UnitStat.recDownResist,
         stackType: BuffStackType.Burst,
-        icons: () => [IconId.BUFF_RECDOWNBLK],
+        icons: () => [IconId.BUFF_RESISTRECDOWN],
     }, 'proc:38:cleanse-unknown': {
         id: BuffId['proc:38:cleanse-unknown'],
         name: 'Unknown Ailment Cleanse',
@@ -9722,6 +10463,58 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.bbGauge,
         stackType: BuffStackType.Active,
         icons: () => [IconId.BUFF_SPARKBBUP],
+    }, 'proc:68:guard mitigation': {
+        id: BuffId['proc:68:guard mitigation'],
+        name: 'Active Guard Damage Reduction',
+        stackType: BuffStackType.Active,
+        icons: () => [IconId.BUFF_GUARDCUT],
+    }, 'proc:69:bc fill on guard-percent': {
+        id: BuffId['proc:69:bc fill on guard-percent'],
+        name: 'Active BC Fill on Guard (Percentage)',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Active,
+        icons: () => [IconId.BUFF_GUARDBBUP],
+    }, 'proc:69:bc fill on guard-flat': {
+        id: BuffId['proc:69:bc fill on guard-flat'],
+        name: 'Active BC Fill on Guard (Flat Amount)',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Active,
+        icons: () => [IconId.BUFF_GUARDBBUP],
+    }, 'proc:71:bc efficacy reduction': {
+        id: BuffId['proc:71:bc efficacy reduction'],
+        name: 'Active BC Efficacy Reduction',
+        stat: UnitStat.bcEfficacy,
+        stackType: BuffStackType.Active,
+        icons: () => [IconId.BUFF_BBFILLDOWN],
+    }, 'proc:73:resist-atk down': {
+        id: BuffId['proc:73:resist-atk down'],
+        name: 'Active Attack Reduction Resistance',
+        stat: UnitStat.atkDownResist,
+        stackType: BuffStackType.Burst,
+        icons: () => [IconId.BUFF_RESISTATKDOWN],
+    }, 'proc:73:resist-def down': {
+        id: BuffId['proc:73:resist-def down'],
+        name: 'Active Defense Reduction Resistance',
+        stat: UnitStat.defDownResist,
+        stackType: BuffStackType.Burst,
+        icons: () => [IconId.BUFF_RESISTDEFDOWN],
+    }, 'proc:73:resist-rec down': {
+        id: BuffId['proc:73:resist-rec down'],
+        name: 'Active Recovery Reduction Resistance',
+        stat: UnitStat.recDownResist,
+        stackType: BuffStackType.Burst,
+        icons: () => [IconId.BUFF_RESISTRECDOWN],
+    }, 'proc:75:element squad-scaled attack': {
+        id: BuffId['proc:75:element squad-scaled attack'],
+        name: 'Element Squad-Scaled Damage',
+        stackType: BuffStackType.Attack,
+        icons: (buff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_ELEMENTSCALED : IconId.ATK_AOE_ELEMENTSCALED],
+    }, 'proc:76:extra action': {
+        id: BuffId['proc:76:extra action'],
+        name: 'Active Extra Action',
+        stat: UnitStat.extraAction,
+        stackType: BuffStackType.Active,
+        icons: () => [IconId.BUFF_DBLSTRIKE],
     }, UNKNOWN_CONDITIONAL_EFFECT_ID: {
         id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
         name: 'Unknown Conditional Effect',
@@ -9768,6 +10561,30 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.atkDownCounter,
         stackType: BuffStackType.ConditionalTimed,
         icons: () => [IconId.BUFF_PROB_ATKREDUC],
+    }, 'proc:78:self stat boost-atk': {
+        id: BuffId['proc:78:self stat boost-atk'],
+        name: 'Active Self Attack Boost',
+        stat: UnitStat.atk,
+        stackType: BuffStackType.Active,
+        icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_ATKDOWNLOCK : IconId.BUFF_SELFATKUP],
+    }, 'proc:78:self stat boost-def': {
+        id: BuffId['proc:78:self stat boost-def'],
+        name: 'Active Self Defense Boost',
+        stat: UnitStat.def,
+        stackType: BuffStackType.Active,
+        icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_DEFDOWNLOCK : IconId.BUFF_SELFDEFUP],
+    }, 'proc:78:self stat boost-rec': {
+        id: BuffId['proc:78:self stat boost-rec'],
+        name: 'Active Self Recovery Boost',
+        stat: UnitStat.rec,
+        stackType: BuffStackType.Active,
+        icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_RECDOWNLOCK : IconId.BUFF_SELFRECUP],
+    }, 'proc:78:self stat boost-crit': {
+        id: BuffId['proc:78:self stat boost-crit'],
+        name: 'Active Self Critical Hit Rate Boost',
+        stat: UnitStat.crit,
+        stackType: BuffStackType.Active,
+        icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_CRTRATEDOWNLOCK : IconId.BUFF_SELFCRTRATEUP],
     } }));
 
 /**
