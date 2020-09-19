@@ -2742,4 +2742,32 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_PROB_ATKREDUC],
 	},
+	'proc:78:self stat boost-atk': {
+		id: BuffId['proc:78:self stat boost-atk'],
+		name: 'Active Self Attack Boost',
+		stat: UnitStat.atk,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_ATKDOWNLOCK : IconId.BUFF_SELFATKUP],
+	},
+	'proc:78:self stat boost-def': {
+		id: BuffId['proc:78:self stat boost-def'],
+		name: 'Active Self Defense Boost',
+		stat: UnitStat.def,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_DEFDOWNLOCK : IconId.BUFF_SELFDEFUP],
+	},
+	'proc:78:self stat boost-rec': {
+		id: BuffId['proc:78:self stat boost-rec'],
+		name: 'Active Self Recovery Boost',
+		stat: UnitStat.rec,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_RECDOWNLOCK : IconId.BUFF_SELFRECUP],
+	},
+	'proc:78:self stat boost-crit': {
+		id: BuffId['proc:78:self stat boost-crit'],
+		name: 'Active Self Critical Hit Rate Boost',
+		stat: UnitStat.crit,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_CRTRATEDOWNLOCK : IconId.BUFF_SELFCRTRATEUP],
+	},
 });

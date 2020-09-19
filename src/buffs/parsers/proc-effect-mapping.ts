@@ -631,11 +631,11 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			coreStatProperties.forEach((statType) => {
 				const effectKey = keys.find((k) => k.startsWith(`${statType}% buff`));
 				if (effectKey) {
-					params[statType] = parseNumberOrDefault(effect[effectKey] as number);
+					params[statType] = effect[effectKey] as number;
 				}
 			});
 
-			params.turnDuration = parseNumberOrDefault(effect['buff turns'] as number);
+			params.turnDuration = effect['buff turns'] as number;
 		}
 
 		// ensure numerical properties are actually numbers
@@ -3891,6 +3891,79 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 				sources,
 				buffs: ['proc:76:extra action'],
 				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
+
+	map.set('78', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '78';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const params = {
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+			crit: '0' as AlphaNumeric,
+			turnDuration: '0' as AlphaNumeric,
+		};
+		type CoreStatProperty = 'atk' | 'def' | 'rec' | 'crit';
+		const coreStatProperties: CoreStatProperty[] = ['atk', 'def', 'rec', 'crit'];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			[params.atk, params.def, params.rec, params.crit, params.turnDuration, ...extraParams] = splitEffectParams(effect);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+		} else {
+			coreStatProperties.forEach((statType) => {
+				const effectKey = `self ${statType}% buff`;
+				if (effectKey in effect) {
+					params[statType] = effect[effectKey] as number;
+				}
+			});
+
+			params.turnDuration = effect['self stat buff turns'] as number;
+		}
+
+		// ensure numerical properties are actually numbers
+		(coreStatProperties as string[]).concat(['turnDuration']).forEach((prop) => {
+			params[prop as CoreStatProperty | 'turnDuration'] = parseNumberOrDefault(params[prop as CoreStatProperty | 'turnDuration']);
+		});
+
+		const hasAnyStats = coreStatProperties.some((statKey) => params[statKey] !== 0);
+		const results: IBuff[] = [];
+		if (hasAnyStats) {
+			coreStatProperties.forEach((statKey) => {
+				const value = params[statKey];
+				if (value !== 0) {
+					results.push({
+						id: `proc:78:self stat boost-${statKey}`,
+						originalId,
+						sources,
+						effectDelay,
+						duration: params.turnDuration as number,
+						value,
+						...targetData,
+					});
+				}
+			});
+		} else if (isTurnDurationBuff(context, params.turnDuration as number, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: coreStatProperties.map((statKey) => `proc:78:self stat boost-${statKey}`),
+				duration: params.turnDuration as number,
 				targetData,
 			}));
 		}

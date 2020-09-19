@@ -682,6 +682,15 @@ export enum IconId {
 	BUFF_HPSCALEDRECUP = 'BUFF_HPSCALEDRECUP',
 	BUFF_HPSCALEDRECDOWN = 'BUFF_HPSCALEDRECDOWN',
 
+	BUFF_SELFATKUP = 'BUFF_SELFATKUP',
+	BUFF_ATKDOWNLOCK = 'BUFF_ATKDOWNLOCK',
+	BUFF_SELFDEFUP = 'BUFF_SELFDEFUP',
+	BUFF_DEFDOWNLOCK = 'BUFF_DEFDOWNLOCK',
+	BUFF_SELFRECUP = 'BUFF_SELFRECUP',
+	BUFF_RECDOWNLOCK = 'BUFF_RECDOWNLOCK',
+	BUFF_SELFCRTRATEUP = 'BUFF_SELFCRTRATEUP',
+	BUFF_CRTRATEDOWNLOCK = 'BUFF_CRTRATEDOWNLOCK',
+
 	BUFF_POISONBLK = 'BUFF_POISONBLK',
 	BUFF_WEAKBLK = 'BUFF_WEAKBLK',
 	BUFF_SICKBLK = 'BUFF_SICKBLK',
@@ -1350,6 +1359,11 @@ export enum BuffId {
 
 	'proc:75:element squad-scaled attack' = 'proc:75:element squad-scaled attack',
 	'proc:76:extra action' = 'proc:76:extra action',
+
+	'proc:78:self stat boost-atk' = 'proc:78:self stat boost-atk',
+	'proc:78:self stat boost-def' = 'proc:78:self stat boost-def',
+	'proc:78:self stat boost-rec' = 'proc:78:self stat boost-rec',
+	'proc:78:self stat boost-crit' = 'proc:78:self stat boost-crit',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

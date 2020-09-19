@@ -2037,6 +2037,28 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:76:extra action'], [IconId.BUFF_DBLSTRIKE]);
 	});
 
+	describe('proc 78 buffs', () => {
+		describe('proc:78:self stat boost-atk', () => {
+			testDefaultIconResult(BuffId['proc:78:self stat boost-atk'], [IconId.BUFF_SELFATKUP]);
+			testIconResultWithBuff(BuffId['proc:78:self stat boost-atk'], [IconId.BUFF_ATKDOWNLOCK], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('proc:78:self stat boost-def', () => {
+			testDefaultIconResult(BuffId['proc:78:self stat boost-def'], [IconId.BUFF_SELFDEFUP]);
+			testIconResultWithBuff(BuffId['proc:78:self stat boost-def'], [IconId.BUFF_DEFDOWNLOCK], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('proc:78:self stat boost-rec', () => {
+			testDefaultIconResult(BuffId['proc:78:self stat boost-rec'], [IconId.BUFF_SELFRECUP]);
+			testIconResultWithBuff(BuffId['proc:78:self stat boost-rec'], [IconId.BUFF_RECDOWNLOCK], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('proc:78:self stat boost-crit', () => {
+			testDefaultIconResult(BuffId['proc:78:self stat boost-crit'], [IconId.BUFF_SELFCRTRATEUP]);
+			testIconResultWithBuff(BuffId['proc:78:self stat boost-crit'], [IconId.BUFF_CRTRATEDOWNLOCK], { value: -1 }, 'buff value is less than 0');
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});
