@@ -2681,6 +2681,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Attack,
 		icons: (buff: IBuff) => [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST_ELEMENTSCALED : IconId.ATK_AOE_ELEMENTSCALED],
 	},
+	'proc:76:extra action': {
+		id: BuffId['proc:76:extra action'],
+		name: 'Active Extra Action',
+		stat: UnitStat.extraAction,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_DBLSTRIKE],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

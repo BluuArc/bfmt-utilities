@@ -1349,6 +1349,7 @@ export enum BuffId {
 	'proc:73:resist-rec down' = 'proc:73:resist-rec down',
 
 	'proc:75:element squad-scaled attack' = 'proc:75:element squad-scaled attack',
+	'proc:76:extra action' = 'proc:76:extra action',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

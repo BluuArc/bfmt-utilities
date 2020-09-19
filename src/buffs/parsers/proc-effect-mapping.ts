@@ -3852,4 +3852,56 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('76', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '76';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let maxExtraActions = 0, chance = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawMaxExtraActions, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			maxExtraActions = parseNumberOrDefault(rawMaxExtraActions);
+			chance = parseNumberOrDefault(rawChance);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			maxExtraActions = parseNumberOrDefault(effect['max number of extra actions'] as number);
+			chance = parseNumberOrDefault(effect['chance% for extra action'] as number);
+			turnDuration = parseNumberOrDefault(effect['extra action buff turns (123)'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (chance !== 0) {
+			results.push({
+				id: 'proc:76:extra action',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: { maxExtraActions, chance },
+				...targetData,
+			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['proc:76:extra action'],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

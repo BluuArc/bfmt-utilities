@@ -2033,6 +2033,10 @@ describe('BUFF_METADATA entries', () => {
 		testIconResultWithBuff(BuffId['proc:75:element squad-scaled attack'], [IconId.ATK_ST_ELEMENTSCALED], { targetArea: TargetArea.Single }, 'target area is single');
 	});
 
+	describe('proc:76:extra action', () => {
+		testDefaultIconResult(BuffId['proc:76:extra action'], [IconId.BUFF_DBLSTRIKE]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});
