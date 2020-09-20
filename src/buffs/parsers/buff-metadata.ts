@@ -2811,6 +2811,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_DAMAGECUT],
 	},
+	'conditional:37:gradual bc fill': {
+		id: BuffId['conditional:37:gradual bc fill'],
+		name: 'Conditional Gradual BC Fill',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_BBREC],
+	},
 	'conditional:40:spark damage': {
 		id: BuffId['conditional:40:spark damage'],
 		name: 'Conditional Spark Damage Boost',

@@ -2042,6 +2042,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:36:mitigation'], [IconId.BUFF_DAMAGECUT]);
 	});
 
+	describe('conditional:37:gradual bc fill', () => {
+		testDefaultIconResult(BuffId['conditional:37:gradual bc fill'], [IconId.BUFF_BBREC]);
+	});
+
 	describe('conditional:40:spark damage', () => {
 		testDefaultIconResult(BuffId['conditional:40:spark damage'], [IconId.BUFF_SPARKUP]);
 		testIconResultWithBuff(BuffId['conditional:40:spark damage'], [IconId.BUFF_SPARKDOWN], { value: -1 }, 'buff value is less than 0');

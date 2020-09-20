@@ -739,6 +739,14 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 37', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '37',
+				expectedBuffId: 'conditional:37:gradual bc fill',
+				getExpectedValueFromParam: (param) => +param / 100,
+			});
+		});
+
 		describe('conditional 40', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '40',

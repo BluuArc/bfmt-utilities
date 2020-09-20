@@ -297,6 +297,17 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		});
 	});
 
+	map.set('37', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '37',
+			buffId: 'conditional:37:gradual bc fill',
+			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) / 100,
+		});
+	});
+
 	map.set('40', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		return parseConditionalWithSingleNumericalParameter({
 			effect,
