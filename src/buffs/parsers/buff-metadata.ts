@@ -2694,60 +2694,6 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_DBLSTRIKE],
 	},
-	UNKNOWN_CONDITIONAL_EFFECT_ID: {
-		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
-		name: 'Unknown Conditional Effect',
-		stackType: BuffStackType.Unknown,
-		icons: () => [IconId.UNKNOWN],
-	},
-	UNKNOWN_CONDITIONAL_BUFF_PARAMS: {
-		id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
-		name: 'Unknown Conditional Buff Parameters',
-		stackType: BuffStackType.Unknown,
-		icons: () => [IconId.UNKNOWN],
-	},
-	'conditional:8:gradual heal': {
-		id: BuffId['conditional:8:gradual heal'],
-		name: 'Conditional Gradual Heal',
-		stat: UnitStat.hpRecovery,
-		stackType: BuffStackType.ConditionalTimed,
-		icons: () => [IconId.BUFF_HPREC],
-	},
-	'conditional:12:guaranteed ko resistance': {
-		id: BuffId['conditional:12:guaranteed ko resistance'],
-		name: 'Conditional Guaranteed KO Resistance',
-		stat: UnitStat.koResistance,
-		stackType: BuffStackType.ConditionalTimed,
-		icons: () => [IconId.BUFF_KOBLK],
-	},
-	'conditional:36:mitigation': {
-		id: BuffId['conditional:36:mitigation'],
-		name: 'Conditional Damage Reduction',
-		stat: UnitStat.mitigation,
-		stackType: BuffStackType.ConditionalTimed,
-		icons: () => [IconId.BUFF_DAMAGECUT],
-	},
-	'conditional:91:chance ko resistance': {
-		id: BuffId['conditional:91:chance ko resistance'],
-		name: 'Conditional KO Resistance (Chance)',
-		stat: UnitStat.koResistance,
-		stackType: BuffStackType.ConditionalTimed,
-		icons: () => [IconId.BUFF_KOBLOCK],
-	},
-	'conditional:133:heal on hit': {
-		id: BuffId['conditional:133:heal on hit'],
-		name: 'Conditional Heal when Attacked (Chance)',
-		stat: UnitStat.hpRecovery,
-		stackType: BuffStackType.ConditionalTimed,
-		icons: () => [IconId.BUFF_BEENATK_HPREC],
-	},
-	'conditional:153:chance inflict atk down on hit': {
-		id: BuffId['conditional:153:chance inflict atk down on hit'],
-		name: 'Conditional Attack Reduction Counter (Chance)',
-		stat: UnitStat.atkDownCounter,
-		stackType: BuffStackType.ConditionalTimed,
-		icons: () => [IconId.BUFF_PROB_ATKREDUC],
-	},
 	'proc:78:self stat boost-atk': {
 		id: BuffId['proc:78:self stat boost-atk'],
 		name: 'Active Self Attack Boost',
@@ -2775,5 +2721,101 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stat: UnitStat.crit,
 		stackType: BuffStackType.Active,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_CRTRATEDOWNLOCK : IconId.BUFF_SELFCRTRATEUP],
+	},
+	UNKNOWN_CONDITIONAL_EFFECT_ID: {
+		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
+		name: 'Unknown Conditional Effect',
+		stackType: BuffStackType.Unknown,
+		icons: () => [IconId.UNKNOWN],
+	},
+	UNKNOWN_CONDITIONAL_BUFF_PARAMS: {
+		id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+		name: 'Unknown Conditional Buff Parameters',
+		stackType: BuffStackType.Unknown,
+		icons: () => [IconId.UNKNOWN],
+	},
+	'conditional:8:gradual heal': {
+		id: BuffId['conditional:8:gradual heal'],
+		name: 'Conditional Gradual Heal',
+		stat: UnitStat.hpRecovery,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_HPREC],
+	},
+	'conditional:12:guaranteed ko resistance': {
+		id: BuffId['conditional:12:guaranteed ko resistance'],
+		name: 'Conditional Guaranteed KO Resistance',
+		stat: UnitStat.koResistance,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_KOBLK],
+	},
+	...(() => {
+		const createIconGetterForStat = (stat: string) => {
+			return (buff: IBuff) => {
+				let element: UnitElement | BuffConditionElement | string = '';
+				let polarity = 'UP';
+				if (buff) {
+					if (buff.value && buff.value < 0) {
+						polarity = 'DOWN';
+					}
+
+					if (buff.conditions && buff.conditions.targetElements) {
+						element = buff.conditions.targetElements[0];
+					}
+				}
+				if (typeof element !== 'string') {
+					element = '';
+				}
+				let iconKey = `BUFF_${element.toUpperCase()}${stat}${polarity}`;
+				if (!element || !(iconKey in IconId)) {
+					iconKey = `BUFF_ELEMENT${stat}${polarity}`;
+				}
+				return [IconId[iconKey as IconId]];
+			};
+		};
+
+		return {
+			'conditional:13:elemental attack buff': {
+				id: BuffId['conditional:13:elemental attack buff'],
+				name: 'Passive Elemental Attack Boost',
+				stat: UnitStat.atk,
+				stackType: BuffStackType.ConditionalTimed,
+				icons: createIconGetterForStat('ATK'),
+			},
+			// 'passive:2:elemental-def': { // TODO: conditional:14
+			// 	id: BuffId['passive:2:elemental-def'],
+			// 	name: 'Passive Elemental Defense Boost',
+			// 	stat: UnitStat.def,
+			// 	stackType: BuffStackType.Passive,
+			// 	icons: createIconGetterForStat('DEF'),
+			// },
+		};
+	})(),
+	'conditional:36:mitigation': {
+		id: BuffId['conditional:36:mitigation'],
+		name: 'Conditional Damage Reduction',
+		stat: UnitStat.mitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_DAMAGECUT],
+	},
+	'conditional:91:chance ko resistance': {
+		id: BuffId['conditional:91:chance ko resistance'],
+		name: 'Conditional KO Resistance (Chance)',
+		stat: UnitStat.koResistance,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_KOBLOCK],
+	},
+	'conditional:133:heal on hit': {
+		id: BuffId['conditional:133:heal on hit'],
+		name: 'Conditional Heal when Attacked (Chance)',
+		stat: UnitStat.hpRecovery,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_BEENATK_HPREC],
+	},
+	'conditional:153:chance inflict atk down on hit': {
+		id: BuffId['conditional:153:chance inflict atk down on hit'],
+		name: 'Conditional Attack Reduction Counter (Chance)',
+		stat: UnitStat.atkDownCounter,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_PROB_ATKREDUC],
 	},
 });

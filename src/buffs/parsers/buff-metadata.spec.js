@@ -32,6 +32,72 @@ describe('BUFF_METADATA entries', () => {
 		});
 	};
 
+	const STAT_TO_ICON_KEY_MAPPING = {
+		hp: 'HP',
+		atk: 'ATK',
+		def: 'DEF',
+		rec: 'REC',
+		crit: 'CRTRATE',
+	};
+	const testElementalVariantsAndPolarities = (buffId, iconStatKey) => {
+		const POSSIBLE_KNOWN_ELEMENTS = [
+			UnitElement.Fire,
+			UnitElement.Water,
+			UnitElement.Earth,
+			UnitElement.Thunder,
+			UnitElement.Light,
+			UnitElement.Dark,
+		];
+
+		[-1, 1].forEach((polarityValue) => {
+			const polarityKey = polarityValue < 0 ? 'DOWN' : 'UP';
+			const polarityCase = polarityValue < 0 ? 'negative' : 'positive';
+			POSSIBLE_KNOWN_ELEMENTS.forEach((element) => {
+				testIconResultWithBuff(
+					BuffId[buffId],
+					[IconId[`BUFF_${element.toUpperCase()}${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetElements: [element] } },
+					`buff value is ${polarityCase} and first target element condition is ${element}`,
+				);
+			});
+
+			testIconResultWithBuff(
+				BuffId[buffId],
+				[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+				{ value: polarityValue },
+				`buff value is ${polarityCase} and no conditions are given`,
+			);
+
+			testIconResultWithBuff(
+				BuffId[buffId],
+				[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+				{ value: polarityValue, conditions: {} },
+				`buff value is ${polarityCase} and no target element conditions are given`,
+			);
+
+			testIconResultWithBuff(
+				BuffId[buffId],
+				[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+				{ value: polarityValue, conditions: { targetConditions: [] } },
+				`buff value is ${polarityCase} and target element conditions array is empty`,
+			);
+
+			testIconResultWithBuff(
+				BuffId[buffId],
+				[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+				{ value: polarityValue, conditions: { targetElements: [{ arbitrary: 'value' }] } },
+				`buff value is ${polarityCase} and a non-string element is given`,
+			);
+
+			testIconResultWithBuff(
+				BuffId[buffId],
+				[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+				{ value: polarityValue, conditions: { targetElements: ['a fake element'] } },
+				`buff value is ${polarityCase} and an invalid target condition element is given`,
+			);
+		});
+	};
+
 	it('all have functions for their "icons" property', () => {
 		Object.values(BUFF_METADATA).forEach((entry) => {
 			expect(typeof entry.icons)
@@ -2077,6 +2143,11 @@ describe('BUFF_METADATA entries', () => {
 
 	describe('conditional:12:guaranteed ko resistance', () => {
 		testDefaultIconResult(BuffId['conditional:12:guaranteed ko resistance'], [IconId.BUFF_KOBLK]);
+	});
+
+	describe('conditional:13:elemental attack buff', () => {
+		testDefaultIconResult(BuffId['conditional:13:elemental attack buff'], [IconId.BUFF_ELEMENTATKUP]);
+		testElementalVariantsAndPolarities('conditional:13:elemental attack buff', STAT_TO_ICON_KEY_MAPPING.atk);
 	});
 
 	describe('conditional:36:mitigation', () => {

@@ -1,6 +1,6 @@
-import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, IConditionalEffect } from './buff-types';
+import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, IConditionalEffect, BuffConditionElement } from './buff-types';
 import { IBaseBuffProcessingInjectionContext, createSourcesFromContext, parseNumberOrDefault, createUnknownParamsEntryFromExtraParams, createNoParamsEntry, ITargetData } from './_helpers';
-import { TargetType, TargetArea } from '../../datamine-types';
+import { TargetType, TargetArea, UnitElement } from '../../datamine-types';
 
 /**
  * @description Type representing a function that can parse a conditional effect into an array of buffs.
@@ -35,6 +35,16 @@ export function getConditionalEffectToBuffMapping (reload?: boolean): Map<string
  * @internal
  */
 function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
+	const ELEMENT_MAPPING: { [key: string]: UnitElement | BuffConditionElement } = {
+		0: BuffConditionElement.All,
+		1: UnitElement.Fire,
+		2: UnitElement.Water,
+		3: UnitElement.Earth,
+		4: UnitElement.Thunder,
+		5: UnitElement.Light,
+		6: UnitElement.Dark,
+	};
+
 	interface ILocalParamsContext {
 		originalId: string;
 		sources: string[];
@@ -147,6 +157,38 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 			value: recoverValue,
 			...targetData,
 		}];
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
+
+	map.set('13', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '13';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawElement, rawValue, ...extraParams] = splitParams;
+		const element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+		const value = parseNumberOrDefault(rawValue);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+
+		const results: IBuff[] = [];
+		if (value !== 0) {
+			results.push({
+				id: 'conditional:13:elemental attack buff',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value,
+				conditions: {
+					targetElements: [element],
+				},
+				...targetData,
+			});
+		}
 
 		handlePostParse(results, unknownParams, {
 			originalId,

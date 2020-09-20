@@ -1,6 +1,6 @@
 const { getConditionalEffectToBuffMapping } = require('./conditional-effect-mapping');
 const { BuffId } = require('./buff-types');
-const { TargetType, TargetArea } = require('../../datamine-types');
+const { TargetType, TargetArea, UnitElement } = require('../../datamine-types');
 
 describe('getConditionalEffectToBuffMapping method', () => {
 	it('uses the same mapping object on multiple calls', () => {
@@ -45,6 +45,16 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		const arbitraryUnknownValue = { unknownValue: 'some unknown value' };
 
 		const BUFF_TARGET_PROPS = ['targetType', 'targetArea'];
+
+		const ELEMENT_MAPPING = {
+			0: 'all',
+			1: UnitElement.Fire,
+			2: UnitElement.Water,
+			3: UnitElement.Earth,
+			4: UnitElement.Thunder,
+			5: UnitElement.Light,
+			6: UnitElement.Dark,
+		};
 
 		const createDefaultInjectionContext = () => {
 			/**
@@ -354,6 +364,162 @@ describe('getConditionalEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456']), 1] });
+			});
+		});
+
+		describe('conditional 13', () => {
+			const expectedOriginalId = '13';
+			const expectedBuffId = 'conditional:13:elemental attack buff';
+
+			beforeEach(() => {
+				mappingFunction = getConditionalEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params and turn duration properties', () => {
+				const effect = {
+					params: '1&2',
+					turnDuration: 123,
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 123,
+					value: 2,
+					conditions: {
+						targetElements: ['fire'],
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const effect = {
+					params: '1&2&3&4&5',
+					turnDuration: 123,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						duration: 123,
+						value: 2,
+						conditions: {
+							targetElements: ['fire'],
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+						value: {
+							param_2: '3',
+							param_3: '4',
+							param_4: '5',
+						},
+					}),
+				];
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff if value chance from params is zero', () => {
+				const effect = { params: '1&0', turnDuration: 123 };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			describe('when parsing elements', () => {
+				Object.entries(ELEMENT_MAPPING).forEach(([elementKey, elementValue]) => {
+					it(`parses element key [${elementKey}] as [${elementValue}]`, () => {
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							duration: 456,
+							value: 123,
+							conditions: {
+								targetElements: [elementValue],
+							},
+						})];
+
+						const result = mappingFunction({ params: `${elementKey}&123`, turnDuration: 456 }, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('defaults element to "unknown" if it is missing', () => {
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: 2,
+						value: 123,
+						conditions: {
+							targetElements: ['unknown'],
+						},
+					})];
+
+					const result = mappingFunction({ params: '&123', turnDuration: 2 }, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults element to "unknown" if it is not one of the mapped elements', () => {
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: 2,
+						value: 123,
+						conditions: {
+							targetElements: ['unknown'],
+						},
+					})];
+
+					const result = mappingFunction({ params: '1234&123', turnDuration: 2 }, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('defaults the turn duration to 0 if it is missing', () => {
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 0,
+					value: 456,
+					conditions: {
+						targetElements: ['fire'],
+					},
+				})];
+
+				const result = mappingFunction({ params: '1&456' }, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses createSourcesfromContext and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '1&2&456',
+					turnDuration: 789,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						duration: 789,
+						value: 2,
+						conditions: {
+							targetElements: ['fire'],
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+					}),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456']), 2] });
 			});
 		});
 
