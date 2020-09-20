@@ -2010,6 +2010,16 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS, [IconId.UNKNOWN]);
 	});
 
+	describe('conditional:1:attack buff', () => {
+		testDefaultIconResult(BuffId['conditional:1:attack buff'], [IconId.BUFF_ATKUP]);
+		testIconResultWithBuff(BuffId['conditional:1:attack buff'], [IconId.BUFF_ATKDOWN], { value: -1 }, 'buff value is less than 0');
+	});
+
+	describe('conditional:3:defense buff', () => {
+		testDefaultIconResult(BuffId['conditional:3:defense buff'], [IconId.BUFF_DEFUP]);
+		testIconResultWithBuff(BuffId['conditional:3:defense buff'], [IconId.BUFF_DEFDOWN], { value: -1 }, 'buff value is less than 0');
+	});
+
 	describe('conditional:8:gradual heal', () => {
 		testDefaultIconResult(BuffId['conditional:8:gradual heal'], [IconId.BUFF_HPREC]);
 	});

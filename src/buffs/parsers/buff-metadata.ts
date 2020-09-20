@@ -2734,6 +2734,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Unknown,
 		icons: () => [IconId.UNKNOWN],
 	},
+	'conditional:1:attack buff': {
+		id: BuffId['conditional:1:attack buff'],
+		name: 'Conditional Attack Boost',
+		stat: UnitStat.atk,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_ATKDOWN : IconId.BUFF_ATKUP],
+	},
+	'conditional:3:defense buff': {
+		id: BuffId['conditional:3:defense buff'],
+		name: 'Conditional Defense Boost',
+		stat: UnitStat.def,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_DEFDOWN : IconId.BUFF_DEFUP],
+	},
 	'conditional:8:gradual heal': {
 		id: BuffId['conditional:8:gradual heal'],
 		name: 'Conditional Gradual Heal',

@@ -257,6 +257,20 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		};
 
+		describe('conditional 1', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '1',
+				expectedBuffId: 'conditional:1:attack buff',
+			});
+		});
+
+		describe('conditional 3', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '3',
+				expectedBuffId: 'conditional:3:defense buff',
+			});
+		});
+
 		describe('conditional 8', () => {
 			const expectedOriginalId = '8';
 			const expectedBuffId = 'conditional:8:gradual heal';
