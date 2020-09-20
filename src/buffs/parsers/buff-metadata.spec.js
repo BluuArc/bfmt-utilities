@@ -39,16 +39,20 @@ describe('BUFF_METADATA entries', () => {
 		rec: 'REC',
 		crit: 'CRTRATE',
 	};
-	const testElementalVariantsAndPolarities = (buffId, iconStatKey) => {
-		const POSSIBLE_KNOWN_ELEMENTS = [
-			UnitElement.Fire,
-			UnitElement.Water,
-			UnitElement.Earth,
-			UnitElement.Thunder,
-			UnitElement.Light,
-			UnitElement.Dark,
-		];
-
+	const POSSIBLE_KNOWN_ELEMENTS = [
+		UnitElement.Fire,
+		UnitElement.Water,
+		UnitElement.Earth,
+		UnitElement.Thunder,
+		UnitElement.Light,
+		UnitElement.Dark,
+	];
+	/**
+	 * @description This set of tests are for buffs that are purely elemental (i.e. not mixed between non-elemental and elemental)
+	 * @param {string} buffId
+	 * @param {string} iconStatKey
+	 */
+	const testElementalVariantsAndPolaritiesOfElementalStatBuff = (buffId, iconStatKey) => {
 		[-1, 1].forEach((polarityValue) => {
 			const polarityKey = polarityValue < 0 ? 'DOWN' : 'UP';
 			const polarityCase = polarityValue < 0 ? 'negative' : 'positive';
@@ -78,6 +82,61 @@ describe('BUFF_METADATA entries', () => {
 			testIconResultWithBuff(
 				BuffId[buffId],
 				[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+				{ value: polarityValue, conditions: { targetConditions: [] } },
+				`buff value is ${polarityCase} and target element conditions array is empty`,
+			);
+
+			testIconResultWithBuff(
+				BuffId[buffId],
+				[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+				{ value: polarityValue, conditions: { targetElements: [{ arbitrary: 'value' }] } },
+				`buff value is ${polarityCase} and a non-string element is given`,
+			);
+
+			testIconResultWithBuff(
+				BuffId[buffId],
+				[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+				{ value: polarityValue, conditions: { targetElements: ['a fake element'] } },
+				`buff value is ${polarityCase} and an invalid target condition element is given`,
+			);
+		});
+	};
+
+	/**
+	 * @description This set of tests are for buffs that are can be non-elemental or elemental
+	 * @param {string} buffId
+	 * @param {string} iconStatKey
+	 */
+	const testElementalVariantsAndPolaritiesOfRegularOrElementalStatBuff = (buffId, iconStatKey) => {
+		[-1, 1].forEach((polarityValue) => {
+			const polarityKey = polarityValue < 0 ? 'DOWN' : 'UP';
+			const polarityCase = polarityValue < 0 ? 'negative' : 'positive';
+			POSSIBLE_KNOWN_ELEMENTS.forEach((element) => {
+				testIconResultWithBuff(
+					BuffId[buffId],
+					[IconId[`BUFF_${element.toUpperCase()}${iconStatKey}${polarityKey}`]],
+					{ value: polarityValue, conditions: { targetElements: [element] } },
+					`buff value is ${polarityCase} and first target element condition is ${element}`,
+				);
+			});
+
+			testIconResultWithBuff(
+				BuffId[buffId],
+				[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
+				{ value: polarityValue },
+				`buff value is ${polarityCase} and no conditions are given`,
+			);
+
+			testIconResultWithBuff(
+				BuffId[buffId],
+				[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
+				{ value: polarityValue, conditions: {} },
+				`buff value is ${polarityCase} and no target element conditions are given`,
+			);
+
+			testIconResultWithBuff(
+				BuffId[buffId],
+				[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
 				{ value: polarityValue, conditions: { targetConditions: [] } },
 				`buff value is ${polarityCase} and target element conditions array is empty`,
 			);
@@ -159,91 +218,29 @@ describe('BUFF_METADATA entries', () => {
 	});
 
 	describe('passive 2 buffs', () => {
-		const POSSIBLE_KNOWN_ELEMENTS = [
-			UnitElement.Fire,
-			UnitElement.Water,
-			UnitElement.Earth,
-			UnitElement.Thunder,
-			UnitElement.Light,
-			UnitElement.Dark,
-		];
-		/**
-		 * @param {string} stat
-		 */
-		const testElementalVariantsAndPolarities = (stat) => {
-			[-1, 1].forEach((polarityValue) => {
-				const polarityKey = polarityValue < 0 ? 'DOWN' : 'UP';
-				const polarityCase = polarityValue < 0 ? 'negative' : 'positive';
-				const iconStatKey = stat !== 'crit' ? stat.toUpperCase() : 'CRTRATE';
-				POSSIBLE_KNOWN_ELEMENTS.forEach((element) => {
-					testIconResultWithBuff(
-						BuffId[`passive:2:elemental-${stat}`],
-						[IconId[`BUFF_${element.toUpperCase()}${iconStatKey}${polarityKey}`]],
-						{ value: polarityValue, conditions: { targetElements: [element] }},
-						`buff value is ${polarityCase} and first target element condition is ${element}`,
-					);
-				});
-
-				testIconResultWithBuff(
-					BuffId[`passive:2:elemental-${stat}`],
-					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue },
-					`buff value is ${polarityCase} and no conditions are given`,
-				);
-
-				testIconResultWithBuff(
-					BuffId[`passive:2:elemental-${stat}`],
-					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue, conditions: {} },
-					`buff value is ${polarityCase} and no target element conditions are given`,
-				);
-
-				testIconResultWithBuff(
-					BuffId[`passive:2:elemental-${stat}`],
-					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue, conditions: { targetConditions: [] } },
-					`buff value is ${polarityCase} and target element conditions array is empty`,
-				);
-
-				testIconResultWithBuff(
-					BuffId[`passive:2:elemental-${stat}`],
-					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue, conditions: { targetElements: [{ arbitrary: 'value' }] } },
-					`buff value is ${polarityCase} and a non-string element is given`,
-				);
-
-				testIconResultWithBuff(
-					BuffId[`passive:2:elemental-${stat}`],
-					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue, conditions: { targetElements: ['a fake element']} },
-					`buff value is ${polarityCase} and an invalid target condition element is given`,
-				);
-			});
-		};
-
 		describe('passive:2:elemental-hp', () => {
 			testDefaultIconResult(BuffId['passive:2:elemental-hp'], [IconId.BUFF_ELEMENTHPUP]);
-			testElementalVariantsAndPolarities('hp');
+			testElementalVariantsAndPolaritiesOfElementalStatBuff('passive:2:elemental-hp', STAT_TO_ICON_KEY_MAPPING.hp);
 		});
 
 		describe('passive:2:elemental-atk', () => {
 			testDefaultIconResult(BuffId['passive:2:elemental-atk'], [IconId.BUFF_ELEMENTATKUP]);
-			testElementalVariantsAndPolarities('atk');
+			testElementalVariantsAndPolaritiesOfElementalStatBuff('passive:2:elemental-atk', STAT_TO_ICON_KEY_MAPPING.atk);
 		});
 
 		describe('passive:2:elemental-def', () => {
 			testDefaultIconResult(BuffId['passive:2:elemental-def'], [IconId.BUFF_ELEMENTDEFUP]);
-			testElementalVariantsAndPolarities('def');
+			testElementalVariantsAndPolaritiesOfElementalStatBuff('passive:2:elemental-def', STAT_TO_ICON_KEY_MAPPING.def);
 		});
 
 		describe('passive:2:elemental-rec', () => {
 			testDefaultIconResult(BuffId['passive:2:elemental-rec'], [IconId.BUFF_ELEMENTRECUP]);
-			testElementalVariantsAndPolarities('rec');
+			testElementalVariantsAndPolaritiesOfElementalStatBuff('passive:2:elemental-rec', STAT_TO_ICON_KEY_MAPPING.rec);
 		});
 
 		describe('passive:2:elemental-crit', () => {
 			testDefaultIconResult(BuffId['passive:2:elemental-crit'], [IconId.BUFF_ELEMENTCRTRATEUP]);
-			testElementalVariantsAndPolarities('crit');
+			testElementalVariantsAndPolaritiesOfElementalStatBuff('passive:2:elemental-crit', STAT_TO_ICON_KEY_MAPPING.crit);
 		});
 	});
 
@@ -1192,86 +1189,24 @@ describe('BUFF_METADATA entries', () => {
 	});
 
 	describe('proc 5 buffs', () => {
-		const POSSIBLE_KNOWN_ELEMENTS = [
-			UnitElement.Fire,
-			UnitElement.Water,
-			UnitElement.Earth,
-			UnitElement.Thunder,
-			UnitElement.Light,
-			UnitElement.Dark,
-		];
-		/**
-		 * @param {string} stat
-		 */
-		const testElementalVariantsAndPolarities = (stat) => {
-			[-1, 1].forEach((polarityValue) => {
-				const polarityKey = polarityValue < 0 ? 'DOWN' : 'UP';
-				const polarityCase = polarityValue < 0 ? 'negative' : 'positive';
-				const iconStatKey = stat !== 'crit' ? stat.toUpperCase() : 'CRTRATE';
-				POSSIBLE_KNOWN_ELEMENTS.forEach((element) => {
-					testIconResultWithBuff(
-						BuffId[`proc:5:regular or elemental-${stat}`],
-						[IconId[`BUFF_${element.toUpperCase()}${iconStatKey}${polarityKey}`]],
-						{ value: polarityValue, conditions: { targetElements: [element] } },
-						`buff value is ${polarityCase} and first target element condition is ${element}`,
-					);
-				});
-
-				testIconResultWithBuff(
-					BuffId[`proc:5:regular or elemental-${stat}`],
-					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue },
-					`buff value is ${polarityCase} and no conditions are given`,
-				);
-
-				testIconResultWithBuff(
-					BuffId[`proc:5:regular or elemental-${stat}`],
-					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue, conditions: {} },
-					`buff value is ${polarityCase} and no target element conditions are given`,
-				);
-
-				testIconResultWithBuff(
-					BuffId[`proc:5:regular or elemental-${stat}`],
-					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue, conditions: { targetConditions: [] } },
-					`buff value is ${polarityCase} and target element conditions array is empty`,
-				);
-
-				testIconResultWithBuff(
-					BuffId[`proc:5:regular or elemental-${stat}`],
-					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue, conditions: { targetElements: [{ arbitrary: 'value' }] } },
-					`buff value is ${polarityCase} and a non-string element is given`,
-				);
-
-				testIconResultWithBuff(
-					BuffId[`proc:5:regular or elemental-${stat}`],
-					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue, conditions: { targetElements: ['a fake element'] } },
-					`buff value is ${polarityCase} and an invalid target condition element is given`,
-				);
-			});
-		};
-
 		describe('proc:5:regular or elemental-atk', () => {
 			testDefaultIconResult(BuffId['proc:5:regular or elemental-atk'], [IconId.BUFF_ATKUP]);
-			testElementalVariantsAndPolarities('atk');
+			testElementalVariantsAndPolaritiesOfRegularOrElementalStatBuff('proc:5:regular or elemental-atk', STAT_TO_ICON_KEY_MAPPING.atk);
 		});
 
 		describe('proc:5:regular or elemental-def', () => {
 			testDefaultIconResult(BuffId['proc:5:regular or elemental-def'], [IconId.BUFF_DEFUP]);
-			testElementalVariantsAndPolarities('def');
+			testElementalVariantsAndPolaritiesOfRegularOrElementalStatBuff('proc:5:regular or elemental-def', STAT_TO_ICON_KEY_MAPPING.def);
 		});
 
 		describe('proc:5:regular or elemental-rec', () => {
 			testDefaultIconResult(BuffId['proc:5:regular or elemental-rec'], [IconId.BUFF_RECUP]);
-			testElementalVariantsAndPolarities('rec');
+			testElementalVariantsAndPolaritiesOfRegularOrElementalStatBuff('proc:5:regular or elemental-rec', STAT_TO_ICON_KEY_MAPPING.rec);
 		});
 
 		describe('proc:5:regular or elemental-crit', () => {
 			testDefaultIconResult(BuffId['proc:5:regular or elemental-crit'], [IconId.BUFF_CRTRATEUP]);
-			testElementalVariantsAndPolarities('crit');
+			testElementalVariantsAndPolaritiesOfRegularOrElementalStatBuff('proc:5:regular or elemental-crit', STAT_TO_ICON_KEY_MAPPING.crit);
 		});
 	});
 
@@ -1307,81 +1242,19 @@ describe('BUFF_METADATA entries', () => {
 	});
 
 	describe('proc 9 buffs', () => {
-		const POSSIBLE_KNOWN_ELEMENTS = [
-			UnitElement.Fire,
-			UnitElement.Water,
-			UnitElement.Earth,
-			UnitElement.Thunder,
-			UnitElement.Light,
-			UnitElement.Dark,
-		];
-		/**
-		 * @param {string} stat
-		 */
-		const testElementalVariantsAndPolarities = (stat) => {
-			[-1, 1].forEach((polarityValue) => {
-				const polarityKey = polarityValue < 0 ? 'DOWN' : 'UP';
-				const polarityCase = polarityValue < 0 ? 'negative' : 'positive';
-				const iconStatKey = stat !== 'crit' ? stat.toUpperCase() : 'CRTRATE';
-				POSSIBLE_KNOWN_ELEMENTS.forEach((element) => {
-					testIconResultWithBuff(
-						BuffId[`proc:9:regular or elemental reduction-${stat}`],
-						[IconId[`BUFF_${element.toUpperCase()}${iconStatKey}${polarityKey}`]],
-						{ value: polarityValue, conditions: { targetElements: [element] } },
-						`buff value is ${polarityCase} and first target element condition is ${element}`,
-					);
-				});
-
-				testIconResultWithBuff(
-					BuffId[`proc:9:regular or elemental reduction-${stat}`],
-					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue },
-					`buff value is ${polarityCase} and no conditions are given`,
-				);
-
-				testIconResultWithBuff(
-					BuffId[`proc:9:regular or elemental reduction-${stat}`],
-					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue, conditions: {} },
-					`buff value is ${polarityCase} and no target element conditions are given`,
-				);
-
-				testIconResultWithBuff(
-					BuffId[`proc:9:regular or elemental reduction-${stat}`],
-					[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue, conditions: { targetConditions: [] } },
-					`buff value is ${polarityCase} and target element conditions array is empty`,
-				);
-
-				testIconResultWithBuff(
-					BuffId[`proc:9:regular or elemental reduction-${stat}`],
-					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue, conditions: { targetElements: [{ arbitrary: 'value' }] } },
-					`buff value is ${polarityCase} and a non-string element is given`,
-				);
-
-				testIconResultWithBuff(
-					BuffId[`proc:9:regular or elemental reduction-${stat}`],
-					[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
-					{ value: polarityValue, conditions: { targetElements: ['a fake element'] } },
-					`buff value is ${polarityCase} and an invalid target condition element is given`,
-				);
-			});
-		};
-
 		describe('proc:9:regular or elemental reduction-atk', () => {
 			testDefaultIconResult(BuffId['proc:9:regular or elemental reduction-atk'], [IconId.BUFF_ATKDOWN]);
-			testElementalVariantsAndPolarities('atk');
+			testElementalVariantsAndPolaritiesOfRegularOrElementalStatBuff('proc:9:regular or elemental reduction-atk', STAT_TO_ICON_KEY_MAPPING.atk);
 		});
 
 		describe('proc:9:regular or elemental reduction-def', () => {
 			testDefaultIconResult(BuffId['proc:9:regular or elemental reduction-def'], [IconId.BUFF_DEFDOWN]);
-			testElementalVariantsAndPolarities('def');
+			testElementalVariantsAndPolaritiesOfRegularOrElementalStatBuff('proc:9:regular or elemental reduction-def', STAT_TO_ICON_KEY_MAPPING.def);
 		});
 
 		describe('proc:9:regular or elemental reduction-rec', () => {
 			testDefaultIconResult(BuffId['proc:9:regular or elemental reduction-rec'], [IconId.BUFF_RECDOWN]);
-			testElementalVariantsAndPolarities('rec');
+			testElementalVariantsAndPolaritiesOfRegularOrElementalStatBuff('proc:9:regular or elemental reduction-rec', STAT_TO_ICON_KEY_MAPPING.rec);
 		});
 
 		describe('proc:9:regular or elemental reduction-unknown', () => {
@@ -2147,7 +2020,7 @@ describe('BUFF_METADATA entries', () => {
 
 	describe('conditional:13:elemental attack buff', () => {
 		testDefaultIconResult(BuffId['conditional:13:elemental attack buff'], [IconId.BUFF_ELEMENTATKUP]);
-		testElementalVariantsAndPolarities('conditional:13:elemental attack buff', STAT_TO_ICON_KEY_MAPPING.atk);
+		testElementalVariantsAndPolaritiesOfElementalStatBuff('conditional:13:elemental attack buff', STAT_TO_ICON_KEY_MAPPING.atk);
 	});
 
 	describe('conditional:36:mitigation', () => {
