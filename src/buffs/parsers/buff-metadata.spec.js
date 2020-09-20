@@ -2023,6 +2023,11 @@ describe('BUFF_METADATA entries', () => {
 		testElementalVariantsAndPolaritiesOfElementalStatBuff('conditional:13:elemental attack buff', STAT_TO_ICON_KEY_MAPPING.atk);
 	});
 
+	describe('conditional:14:elemental defense buff', () => {
+		testDefaultIconResult(BuffId['conditional:14:elemental defense buff'], [IconId.BUFF_ELEMENTDEFUP]);
+		testElementalVariantsAndPolaritiesOfElementalStatBuff('conditional:14:elemental defense buff', STAT_TO_ICON_KEY_MAPPING.def);
+	});
+
 	describe('conditional:36:mitigation', () => {
 		testDefaultIconResult(BuffId['conditional:36:mitigation'], [IconId.BUFF_DAMAGECUT]);
 	});

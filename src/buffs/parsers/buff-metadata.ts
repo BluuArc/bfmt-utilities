@@ -2781,13 +2781,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 				stackType: BuffStackType.ConditionalTimed,
 				icons: createIconGetterForStat('ATK'),
 			},
-			// 'passive:2:elemental-def': { // TODO: conditional:14
-			// 	id: BuffId['passive:2:elemental-def'],
-			// 	name: 'Passive Elemental Defense Boost',
-			// 	stat: UnitStat.def,
-			// 	stackType: BuffStackType.Passive,
-			// 	icons: createIconGetterForStat('DEF'),
-			// },
+			'conditional:14:elemental defense buff': {
+				id: BuffId['conditional:14:elemental defense buff'],
+				name: 'Passive Elemental Defense Boost',
+				stat: UnitStat.def,
+				stackType: BuffStackType.ConditionalTimed,
+				icons: createIconGetterForStat('DEF'),
+			},
 		};
 	})(),
 	'conditional:36:mitigation': {

@@ -199,6 +199,38 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return results;
 	});
 
+	map.set('14', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '14';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawElement, rawValue, ...extraParams] = splitParams;
+		const element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+		const value = parseNumberOrDefault(rawValue);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+
+		const results: IBuff[] = [];
+		if (value !== 0) {
+			results.push({
+				id: 'conditional:14:elemental defense buff',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value,
+				conditions: {
+					targetElements: [element],
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
+
 	map.set('36', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '36';
 		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
