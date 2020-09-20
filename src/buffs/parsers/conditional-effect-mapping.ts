@@ -259,6 +259,58 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return results;
 	});
 
+	map.set('72', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '72';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawBb, rawSbb, rawUbb, ...extraParams] = splitParams;
+		const bb = parseNumberOrDefault(rawBb);
+		const sbb = parseNumberOrDefault(rawSbb);
+		const ubb = parseNumberOrDefault(rawUbb);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+
+		const results: IBuff[] = [];
+		if (bb !== 0) {
+			results.push({
+				id: 'conditional:72:attack boost-bb',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: bb,
+				...targetData,
+			});
+		}
+
+		if (sbb !== 0) {
+			results.push({
+				id: 'conditional:72:attack boost-sbb',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: sbb,
+				...targetData,
+			});
+		}
+
+		if (ubb !== 0) {
+			results.push({
+				id: 'conditional:72:attack boost-ubb',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: ubb,
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
+
 	map.set('91', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '91';
 		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);

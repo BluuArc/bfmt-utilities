@@ -2032,6 +2032,20 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:36:mitigation'], [IconId.BUFF_DAMAGECUT]);
 	});
 
+	describe('conditional 72', () => {
+		describe('conditional:72:attack boost-bb', () => {
+			testDefaultIconResult(BuffId['conditional:72:attack boost-bb'], [IconId.BUFF_BBATKUP]);
+		});
+
+		describe('conditional:72:attack boost-sbb', () => {
+			testDefaultIconResult(BuffId['conditional:72:attack boost-sbb'], [IconId.BUFF_SBBATKUP]);
+		});
+
+		describe('conditional:72:attack boost-ubb', () => {
+			testDefaultIconResult(BuffId['conditional:72:attack boost-ubb'], [IconId.BUFF_UBBATKUP]);
+		});
+	});
+
 	describe('conditional:91:chance ko resistance', () => {
 		testDefaultIconResult(BuffId['conditional:91:chance ko resistance'], [IconId.BUFF_KOBLOCK]);
 	});

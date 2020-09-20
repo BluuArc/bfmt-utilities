@@ -1377,6 +1377,12 @@ export enum BuffId {
 	'conditional:13:elemental attack buff' = 'conditional:13:elemental attack buff',
 	'conditional:14:elemental defense buff' = 'conditional:14:elemental defense buff',
 	'conditional:36:mitigation' = 'conditional:36:mitigation',
+
+	'conditional:72:attack boost-bb' = 'conditional:72:attack boost-bb',
+	'conditional:72:attack boost-sbb' = 'conditional:72:attack boost-sbb',
+	'conditional:72:attack boost-ubb' = 'conditional:72:attack boost-ubb',
+
+
 	'conditional:91:chance ko resistance' = 'conditional:91:chance ko resistance',
 	'conditional:133:heal on hit' = 'conditional:133:heal on hit',
 	'conditional:153:chance inflict atk down on hit' = 'conditional:153:chance inflict atk down on hit',

@@ -2797,6 +2797,27 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_DAMAGECUT],
 	},
+	'conditional:72:attack boost-bb': {
+		id: BuffId['conditional:72:attack boost-bb'],
+		name: 'Conditional BB ATK Boost',
+		stat: UnitStat.bbAtk,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_BBATKUP],
+	},
+	'conditional:72:attack boost-sbb': {
+		id: BuffId['conditional:72:attack boost-sbb'],
+		name: 'Conditional SBB ATK Boost',
+		stat: UnitStat.bbAtk,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_SBBATKUP],
+	},
+	'conditional:72:attack boost-ubb': {
+		id: BuffId['conditional:72:attack boost-ubb'],
+		name: 'Conditional UBB ATK Boost',
+		stat: UnitStat.bbAtk,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_UBBATKUP],
+	},
 	'conditional:91:chance ko resistance': {
 		id: BuffId['conditional:91:chance ko resistance'],
 		name: 'Conditional KO Resistance (Chance)',

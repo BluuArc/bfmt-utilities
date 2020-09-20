@@ -777,6 +777,126 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 72', () => {
+			const BURST_TYPES = ['bb', 'sbb', 'ubb'];
+			const expectedOriginalId = '72';
+
+			beforeEach(() => {
+				mappingFunction = getConditionalEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(BURST_TYPES.map((burstType) => `conditional:72:attack boost-${burstType}`));
+
+			it('uses the params and turn duration properties', () => {
+				const effect = {
+					params: '1&2&3',
+					turnDuration: 2,
+				};
+				const splitParams = effect.params.split('&');
+				const expectedResult = BURST_TYPES.map((burstType, index) => {
+					return baseBuffFactory({
+						id: `conditional:72:attack boost-${burstType}`,
+						duration: 2,
+						value: +(splitParams[index]),
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const effect = {
+					params: '1&2&3&4&5&6',
+					turnDuration: 2,
+				};
+				const splitParams = effect.params.split('&');
+				const expectedResult = BURST_TYPES.map((burstType, index) => {
+					return baseBuffFactory({
+						id: `conditional:72:attack boost-${burstType}`,
+						duration: 2,
+						value: +(splitParams[index]),
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+					value: {
+						param_3: '4',
+						param_4: '5',
+						param_5: '6',
+					},
+				})]);
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			BURST_TYPES.forEach((burstCase) => {
+				it(`returns only value for ${burstCase} if it is non-zero and other non-turn values are 0`, () => {
+					const effect = {
+						params: BURST_TYPES.map((type) => type === burstCase ? '123' : '0').join('&'),
+						turnDuration: 456,
+					};
+					const expectedResult = [baseBuffFactory({
+						id: `conditional:72:attack boost-${burstCase}`,
+						duration: 456,
+						value: 123,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('defaults the turn duration to 0 if it is missing', () => {
+				const effect = {
+					params: '1&2&3',
+				};
+				const splitParams = effect.params.split('&');
+				const expectedResult = BURST_TYPES.map((burstType, index) => {
+					return baseBuffFactory({
+						id: `conditional:72:attack boost-${burstType}`,
+						duration: 0,
+						value: +(splitParams[index]),
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses createSourcesfromContext and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0&0&123&456',
+					turnDuration: 789,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'conditional:72:attack boost-ubb',
+						sources: arbitrarySourceValue,
+						duration: 789,
+						value: 123,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+					}),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456']), 3] });
+			});
+		});
+
 		describe('conditional 91', () => {
 			const expectedOriginalId = '91';
 			const expectedBuffId = 'conditional:91:chance ko resistance';
