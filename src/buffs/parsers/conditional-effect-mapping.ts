@@ -297,6 +297,16 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		});
 	});
 
+	map.set('40', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '40',
+			buffId: 'conditional:40:spark damage',
+		});
+	});
+
 	map.set('72', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '72';
 		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);

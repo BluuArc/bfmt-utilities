@@ -2042,6 +2042,11 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:36:mitigation'], [IconId.BUFF_DAMAGECUT]);
 	});
 
+	describe('conditional:40:spark damage', () => {
+		testDefaultIconResult(BuffId['conditional:40:spark damage'], [IconId.BUFF_SPARKUP]);
+		testIconResultWithBuff(BuffId['conditional:40:spark damage'], [IconId.BUFF_SPARKDOWN], { value: -1 }, 'buff value is less than 0');
+	});
+
 	describe('conditional 72', () => {
 		describe('conditional:72:attack boost-bb', () => {
 			testDefaultIconResult(BuffId['conditional:72:attack boost-bb'], [IconId.BUFF_BBATKUP]);

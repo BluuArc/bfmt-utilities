@@ -739,6 +739,13 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 40', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '40',
+				expectedBuffId: 'conditional:40:spark damage',
+			});
+		});
+
 		describe('conditional 72', () => {
 			const BURST_TYPES = ['bb', 'sbb', 'ubb'];
 			const expectedOriginalId = '72';
