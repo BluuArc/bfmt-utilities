@@ -2832,6 +2832,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_UBBATKUP],
 	},
+	'conditional:84:critical damage': {
+		id: BuffId['conditional:84:critical damage'],
+		name: 'Conditional Critical Damage Boost',
+		stat: UnitStat.criticalDamage,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_CRTUP],
+	},
 	'conditional:91:chance ko resistance': {
 		id: BuffId['conditional:91:chance ko resistance'],
 		name: 'Conditional KO Resistance (Chance)',

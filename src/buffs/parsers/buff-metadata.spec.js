@@ -2056,6 +2056,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('conditional:84:critical damage', () => {
+		testDefaultIconResult(BuffId['conditional:84:critical damage'], [IconId.BUFF_CRTUP]);
+	});
+
 	describe('conditional:91:chance ko resistance', () => {
 		testDefaultIconResult(BuffId['conditional:91:chance ko resistance'], [IconId.BUFF_KOBLOCK]);
 	});

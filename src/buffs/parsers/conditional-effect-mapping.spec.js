@@ -149,6 +149,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			expectedOriginalId,
 			expectedBuffId,
 			expectToReturnBuffWithValueOfZero = false,
+			getExpectedValueFromParam = (param) => +param,
 		}) => {
 			beforeEach(() => {
 				mappingFunction = getConditionalEffectToBuffMapping().get(expectedOriginalId);
@@ -166,7 +167,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 				const expectedResult = [baseBuffFactory({
 					id: expectedBuffId,
 					duration: 2,
-					value: 1,
+					value: getExpectedValueFromParam(1),
 				})];
 
 				const result = mappingFunction(effect, createArbitraryContext());
@@ -182,7 +183,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 					baseBuffFactory({
 						id: expectedBuffId,
 						duration: 2,
-						value: 1,
+						value: getExpectedValueFromParam(1),
 					}),
 					baseBuffFactory({
 						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
@@ -222,7 +223,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 					const expectedResult = [baseBuffFactory({
 						id: expectedBuffId,
 						duration: 0,
-						value: 123,
+						value: getExpectedValueFromParam(123),
 					})];
 
 					const result = mappingFunction({ params: '123' }, createArbitraryContext());
@@ -240,7 +241,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 						id: expectedBuffId,
 						sources: arbitrarySourceValue,
 						duration: 789,
-						value: 123,
+						value: getExpectedValueFromParam(123),
 					}),
 					baseBuffFactory({
 						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
@@ -855,6 +856,14 @@ describe('getConditionalEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456']), 3] });
+			});
+		});
+
+		describe('conditional 84', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '84',
+				expectedBuffId: 'conditional:84:critical damage',
+				getExpectedValueFromParam: (param) => (+param) * 100,
 			});
 		});
 

@@ -119,6 +119,8 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		 * with the given `buffId` if the parsed value is 0. Defaults to false.
 		 */
 		returnBuffWithValueOfZero?: boolean;
+
+		parseParamValue?: (rawValue: string) => number;
 	}
 	const parseConditionalWithSingleNumericalParameter = ({
 		effect,
@@ -127,10 +129,11 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		originalId,
 		buffId,
 		returnBuffWithValueOfZero = false,
+		parseParamValue = (rawValue: string) => parseNumberOrDefault(rawValue),
 	}: IConditionalWithSingleNumericalParameterContext): IBuff[] => {
 		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 		const [rawValue, ...extraParams] = splitParams;
-		const value = parseNumberOrDefault(rawValue);
+		const value = parseParamValue(rawValue);
 		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
 
 		const results: IBuff[] = [];
@@ -344,6 +347,17 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		});
 
 		return results;
+	});
+
+	map.set('84', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '84',
+			buffId: 'conditional:84:critical damage',
+			parseParamValue: (rawValue: string) => parseNumberOrDefault(rawValue) * 100,
+		});
 	});
 
 	map.set('91', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
