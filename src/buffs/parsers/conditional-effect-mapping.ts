@@ -107,6 +107,53 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return { targetData, sources, splitParams, turnDuration };
 	};
 
+	interface IConditionalWithSingleNumericalParameterContext {
+		effect: IConditionalEffect;
+		context: IEffectToBuffConversionContext;
+		injectionContext?: IBaseBuffProcessingInjectionContext;
+		originalId: string;
+		buffId: string;
+
+		/**
+		 * @description This determines whether to return a `NO_PARAMS_BUFF`or the buff
+		 * with the given `buffId` if the parsed value is 0. Defaults to false.
+		 */
+		returnBuffWithValueOfZero?: boolean;
+	}
+	const parseConditionalWithSingleNumericalParameter = ({
+		effect,
+		context,
+		injectionContext,
+		originalId,
+		buffId,
+		returnBuffWithValueOfZero = false,
+	}: IConditionalWithSingleNumericalParameterContext): IBuff[] => {
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawValue, ...extraParams] = splitParams;
+		const value = parseNumberOrDefault(rawValue);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+
+		const results: IBuff[] = [];
+		if (returnBuffWithValueOfZero || value !== 0) {
+			results.push({
+				id: buffId,
+				originalId,
+				sources,
+				duration: turnDuration,
+				value,
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	};
+
 	map.set('8', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '8';
 		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
@@ -143,28 +190,14 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 	});
 
 	map.set('12', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
-		const originalId = '12';
-		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-		const [rawRecoverValue, ...extraParams] = splitParams;
-		const recoverValue = parseNumberOrDefault(rawRecoverValue);
-		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
-
-		const results: IBuff[] = [{
-			id: 'conditional:12:guaranteed ko resistance',
-			originalId,
-			sources,
-			duration: turnDuration,
-			value: recoverValue,
-			...targetData,
-		}];
-
-		handlePostParse(results, unknownParams, {
-			originalId,
-			sources,
-			targetData,
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '12',
+			buffId: 'conditional:12:guaranteed ko resistance',
+			returnBuffWithValueOfZero: true,
 		});
-
-		return results;
 	});
 
 	map.set('13', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
@@ -232,31 +265,13 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 	});
 
 	map.set('36', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
-		const originalId = '36';
-		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-		const [rawMitigationValue, ...extraParams] = splitParams;
-		const mitigationValue = parseNumberOrDefault(rawMitigationValue);
-		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
-
-		const results: IBuff[] = [];
-		if (mitigationValue !== 0) {
-			results.push({
-				id: 'conditional:36:mitigation',
-				originalId,
-				sources,
-				duration: turnDuration,
-				value: mitigationValue,
-				...targetData,
-			});
-		}
-
-		handlePostParse(results, unknownParams, {
-			originalId,
-			sources,
-			targetData,
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '36',
+			buffId: 'conditional:36:mitigation',
 		});
-
-		return results;
 	});
 
 	map.set('72', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
