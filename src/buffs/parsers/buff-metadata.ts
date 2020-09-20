@@ -2825,6 +2825,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_KOBLOCK],
 	},
+	'conditional:132:od fill rate': {
+		id: BuffId['conditional:132:od fill rate'],
+		name: 'Conditional OD Gauge Fill Rate',
+		stat: UnitStat.odGauge,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_ODFILLBOOST],
+	},
 	'conditional:133:heal on hit': {
 		id: BuffId['conditional:133:heal on hit'],
 		name: 'Conditional Heal when Attacked (Chance)',

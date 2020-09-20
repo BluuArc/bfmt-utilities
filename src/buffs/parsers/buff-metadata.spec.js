@@ -2050,6 +2050,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:91:chance ko resistance'], [IconId.BUFF_KOBLOCK]);
 	});
 
+	describe('conditional:132:od fill rate', () => {
+		testDefaultIconResult(BuffId['conditional:132:od fill rate'], [IconId.BUFF_ODFILLBOOST]);
+	});
+
 	describe('conditional:133:heal on hit', () => {
 		testDefaultIconResult(BuffId['conditional:133:heal on hit'], [IconId.BUFF_BEENATK_HPREC]);
 	});

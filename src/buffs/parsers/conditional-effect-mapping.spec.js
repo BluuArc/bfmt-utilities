@@ -970,6 +970,13 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 132', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '132',
+				expectedBuffId: 'conditional:132:od fill rate',
+			});
+		});
+
 		describe('conditional 133', () => {
 			const expectedOriginalId = '133';
 			const expectedBuffId = 'conditional:133:heal on hit';

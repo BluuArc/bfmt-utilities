@@ -358,6 +358,16 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return results;
 	});
 
+	map.set('132', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '132',
+			buffId: 'conditional:132:od fill rate',
+		});
+	});
+
 	map.set('133', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '133';
 		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);

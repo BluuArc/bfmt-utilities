@@ -1382,8 +1382,8 @@ export enum BuffId {
 	'conditional:72:attack boost-sbb' = 'conditional:72:attack boost-sbb',
 	'conditional:72:attack boost-ubb' = 'conditional:72:attack boost-ubb',
 
-
 	'conditional:91:chance ko resistance' = 'conditional:91:chance ko resistance',
+	'conditional:132:od fill rate' = 'conditional:132:od fill rate',
 	'conditional:133:heal on hit' = 'conditional:133:heal on hit',
 	'conditional:153:chance inflict atk down on hit' = 'conditional:153:chance inflict atk down on hit',
 }
