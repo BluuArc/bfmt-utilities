@@ -2073,6 +2073,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:91:chance ko resistance'], [IconId.BUFF_KOBLOCK]);
 	});
 
+	describe('conditional:98:thunder barrier', () => {
+		testDefaultIconResult(BuffId['conditional:98:thunder barrier'], [IconId.BUFF_THUNDERSHIELD]);
+	});
+
 	describe('conditional:99:light barrier', () => {
 		testDefaultIconResult(BuffId['conditional:99:light barrier'], [IconId.BUFF_LIGHTSHIELD]);
 	});

@@ -498,6 +498,38 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return results;
 	});
 
+	map.set('98', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '98';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawElement, rawHp, ...extraParams] = splitParams;
+		const element = ELEMENT_MAPPING[rawElement] || rawElement || BuffConditionElement.Unknown;
+		const hp = parseNumberOrDefault(rawHp);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+
+		const results: IBuff[] = [];
+		if (hp !== 0) {
+			results.push({
+				id: 'conditional:98:thunder barrier',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: {
+					hp,
+					parsedElement: element,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
+
 	map.set('132', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		return parseConditionalWithSingleNumericalParameter({
 			effect,

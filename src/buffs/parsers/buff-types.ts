@@ -1390,6 +1390,7 @@ export enum BuffId {
 	'conditional:84:critical damage' = 'conditional:84:critical damage',
 	'conditional:91:chance ko resistance' = 'conditional:91:chance ko resistance',
 
+	'conditional:98:thunder barrier' = 'conditional:98:thunder barrier',
 	'conditional:99:light barrier' = 'conditional:99:light barrier',
 
 	'conditional:132:od fill rate' = 'conditional:132:od fill rate',
