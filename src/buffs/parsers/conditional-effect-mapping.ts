@@ -107,11 +107,14 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return { targetData, sources, splitParams, turnDuration };
 	};
 
-	interface IConditionalWithSingleNumericalParameterContext {
+	interface ITemplatedParsingFunctionContext {
 		effect: IConditionalEffect;
 		context: IEffectToBuffConversionContext;
 		injectionContext?: IBaseBuffProcessingInjectionContext;
 		originalId: string;
+	}
+
+	interface IConditionalWithSingleNumericalParameterContext extends ITemplatedParsingFunctionContext{
 		buffId: string;
 
 		/**
@@ -144,6 +147,56 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 				sources,
 				duration: turnDuration,
 				value,
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	};
+
+	interface IConditionalWithOnlyBaseAndBuffResistanceParameterContext extends ITemplatedParsingFunctionContext {
+		baseResistanceBuffId: string;
+		buffResistanceBuffId: string;
+	}
+	const parseConditionalWithOnlyBaseAndBuffResistanceParameters = ({
+		effect,
+		context,
+		injectionContext,
+		originalId,
+		baseResistanceBuffId,
+		buffResistanceBuffId,
+	}: IConditionalWithOnlyBaseAndBuffResistanceParameterContext): IBuff[] => {
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawBaseResist, rawBuffResist, ...extraParams] = splitParams;
+		const baseResist = parseNumberOrDefault(rawBaseResist);
+		const buffResist = parseNumberOrDefault(rawBuffResist);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+
+		const results: IBuff[] = [];
+		if (baseResist !== 0) {
+			results.push({
+				id: baseResistanceBuffId,
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: baseResist,
+				...targetData,
+			});
+		}
+
+		if (buffResist !== 0) {
+			results.push({
+				id: buffResistanceBuffId,
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: buffResist,
 				...targetData,
 			});
 		}
@@ -491,43 +544,14 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 	});
 
 	map.set('143', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
-		const originalId = '143';
-		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-		const [rawBaseResist, rawBuffResist, ...extraParams] = splitParams;
-		const baseResist = parseNumberOrDefault(rawBaseResist);
-		const buffResist = parseNumberOrDefault(rawBuffResist);
-		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
-
-		const results: IBuff[] = [];
-		if (baseResist !== 0) {
-			results.push({
-				id: 'conditional:143:critical damage reduction-base',
-				originalId,
-				sources,
-				duration: turnDuration,
-				value: baseResist,
-				...targetData,
-			});
-		}
-
-		if (buffResist !== 0) {
-			results.push({
-				id: 'conditional:143:critical damage reduction-buff',
-				originalId,
-				sources,
-				duration: turnDuration,
-				value: buffResist,
-				...targetData,
-			});
-		}
-
-		handlePostParse(results, unknownParams, {
-			originalId,
-			sources,
-			targetData,
+		return parseConditionalWithOnlyBaseAndBuffResistanceParameters({
+			effect,
+			context,
+			injectionContext,
+			originalId: '143',
+			baseResistanceBuffId: 'conditional:143:critical damage reduction-base',
+			buffResistanceBuffId: 'conditional:143:critical damage reduction-buff',
 		});
-
-		return results;
 	});
 
 	map.set('153', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
