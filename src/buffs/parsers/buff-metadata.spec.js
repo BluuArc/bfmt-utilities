@@ -2020,6 +2020,11 @@ describe('BUFF_METADATA entries', () => {
 		testIconResultWithBuff(BuffId['conditional:3:defense buff'], [IconId.BUFF_DEFDOWN], { value: -1 }, 'buff value is less than 0');
 	});
 
+	describe('conditional:5:recovery buff', () => {
+		testDefaultIconResult(BuffId['conditional:5:recovery buff'], [IconId.BUFF_RECUP]);
+		testIconResultWithBuff(BuffId['conditional:5:recovery buff'], [IconId.BUFF_RECDOWN], { value: -1 }, 'buff value is less than 0');
+	});
+
 	describe('conditional:8:gradual heal', () => {
 		testDefaultIconResult(BuffId['conditional:8:gradual heal'], [IconId.BUFF_HPREC]);
 	});

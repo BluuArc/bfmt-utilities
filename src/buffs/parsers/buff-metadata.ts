@@ -2748,6 +2748,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_DEFDOWN : IconId.BUFF_DEFUP],
 	},
+	'conditional:5:recovery buff': {
+		id: BuffId['conditional:5:recovery buff'],
+		name: 'Conditional Recovery Boost',
+		stat: UnitStat.rec,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_RECDOWN : IconId.BUFF_RECUP],
+	},
 	'conditional:8:gradual heal': {
 		id: BuffId['conditional:8:gradual heal'],
 		name: 'Conditional Gradual Heal',

@@ -440,6 +440,13 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 5', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '5',
+				expectedBuffId: 'conditional:5:recovery buff',
+			});
+		});
+
 		describe('conditional 8', () => {
 			const expectedOriginalId = '8';
 			const expectedBuffId = 'conditional:8:gradual heal';
