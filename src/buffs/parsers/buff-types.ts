@@ -1389,6 +1389,9 @@ export enum BuffId {
 
 	'conditional:84:critical damage' = 'conditional:84:critical damage',
 	'conditional:91:chance ko resistance' = 'conditional:91:chance ko resistance',
+
+	'conditional:99:light barrier' = 'conditional:99:light barrier',
+
 	'conditional:132:od fill rate' = 'conditional:132:od fill rate',
 	'conditional:133:heal on hit' = 'conditional:133:heal on hit',
 	'conditional:153:chance inflict atk down on hit' = 'conditional:153:chance inflict atk down on hit',

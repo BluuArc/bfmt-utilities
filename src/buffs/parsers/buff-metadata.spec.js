@@ -2073,6 +2073,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:91:chance ko resistance'], [IconId.BUFF_KOBLOCK]);
 	});
 
+	describe('conditional:99:light barrier', () => {
+		testDefaultIconResult(BuffId['conditional:99:light barrier'], [IconId.BUFF_LIGHTSHIELD]);
+	});
+
 	describe('conditional:132:od fill rate', () => {
 		testDefaultIconResult(BuffId['conditional:132:od fill rate'], [IconId.BUFF_ODFILLBOOST]);
 	});

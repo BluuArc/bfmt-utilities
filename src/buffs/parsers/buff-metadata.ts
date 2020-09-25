@@ -2860,6 +2860,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_KOBLOCK],
 	},
+	'conditional:99:light barrier': {
+		id: BuffId['conditional:99:light barrier'],
+		name: 'Conditional Light Barrier',
+		stat: UnitStat.barrier,
+		stackType: BuffStackType.Singleton,
+		icons: () => [IconId.BUFF_LIGHTSHIELD],
+	},
 	'conditional:132:od fill rate': {
 		id: BuffId['conditional:132:od fill rate'],
 		name: 'Conditional OD Gauge Fill Rate',
