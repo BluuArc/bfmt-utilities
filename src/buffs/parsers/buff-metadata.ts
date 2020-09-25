@@ -2895,6 +2895,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_CRTDOWN],
 	},
+	'conditional:145:elemental weakness damage reduction-base': {
+		id: BuffId['conditional:145:elemental weakness damage reduction-base'],
+		name: 'Conditional Base Elemental Weakness Damage Reduction',
+		stat: UnitStat.elementalWeaknessDamageMitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_ELEMENTDOWN],
+	},
+	'conditional:145:elemental weakness damage reduction-buff': {
+		id: BuffId['conditional:145:elemental weakness damage reduction-buff'],
+		name: 'Conditional Buffed Elemental Weakness Damage Reduction',
+		stat: UnitStat.elementalWeaknessDamageMitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_ELEMENTDOWN],
+	},
 	'conditional:153:chance inflict atk down on hit': {
 		id: BuffId['conditional:153:chance inflict atk down on hit'],
 		name: 'Conditional Attack Reduction Counter (Chance)',

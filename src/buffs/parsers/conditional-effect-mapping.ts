@@ -114,7 +114,7 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		originalId: string;
 	}
 
-	interface IConditionalWithSingleNumericalParameterContext extends ITemplatedParsingFunctionContext{
+	interface IConditionalWithSingleNumericalParameterContext extends ITemplatedParsingFunctionContext {
 		buffId: string;
 
 		/**
@@ -551,6 +551,17 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 			originalId: '143',
 			baseResistanceBuffId: 'conditional:143:critical damage reduction-base',
 			buffResistanceBuffId: 'conditional:143:critical damage reduction-buff',
+		});
+	});
+
+	map.set('145', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithOnlyBaseAndBuffResistanceParameters({
+			effect,
+			context,
+			injectionContext,
+			originalId: '145',
+			baseResistanceBuffId: 'conditional:145:elemental weakness damage reduction-base',
+			buffResistanceBuffId: 'conditional:145:elemental weakness damage reduction-buff',
 		});
 	});
 

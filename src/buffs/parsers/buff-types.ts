@@ -1398,5 +1398,8 @@ export enum BuffId {
 	'conditional:143:critical damage reduction-base' = 'conditional:143:critical damage reduction-base',
 	'conditional:143:critical damage reduction-buff' = 'conditional:143:critical damage reduction-buff',
 
+	'conditional:145:elemental weakness damage reduction-base' = 'conditional:145:elemental weakness damage reduction-base',
+	'conditional:145:elemental weakness damage reduction-buff' = 'conditional:145:elemental weakness damage reduction-buff',
+
 	'conditional:153:chance inflict atk down on hit' = 'conditional:153:chance inflict atk down on hit',
 }

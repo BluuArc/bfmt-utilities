@@ -2095,6 +2095,16 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('conditional 145 buffs', () => {
+		describe('conditional:145:elemental weakness damage reduction-base', () => {
+			testDefaultIconResult(BuffId['conditional:145:elemental weakness damage reduction-base'], [IconId.BUFF_ELEMENTDOWN]);
+		});
+
+		describe('conditional:145:elemental weakness damage reduction-buff', () => {
+			testDefaultIconResult(BuffId['conditional:145:elemental weakness damage reduction-buff'], [IconId.BUFF_ELEMENTDOWN]);
+		});
+	});
+
 	describe('conditional:153:chance inflict atk down on hit', () => {
 		testDefaultIconResult(BuffId['conditional:153:chance inflict atk down on hit'], [IconId.BUFF_PROB_ATKREDUC]);
 	});

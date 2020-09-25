@@ -1484,6 +1484,14 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 145', () => {
+			testPassiveWithOnlyBaseAndBuffResistanceParameters({
+				expectedOriginalId: '145',
+				expectedBuffIdForBase: 'conditional:145:elemental weakness damage reduction-base',
+				expectedBuffIdForBuff: 'conditional:145:elemental weakness damage reduction-buff',
+			});
+		});
+
 		describe('conditional 153', () => {
 			const expectedOriginalId = '153';
 			const expectedBuffId = 'conditional:153:chance inflict atk down on hit';
