@@ -1394,5 +1394,9 @@ export enum BuffId {
 
 	'conditional:132:od fill rate' = 'conditional:132:od fill rate',
 	'conditional:133:heal on hit' = 'conditional:133:heal on hit',
+
+	'conditional:143:critical damage reduction-base' = 'conditional:143:critical damage reduction-base',
+	'conditional:143:critical damage reduction-buff' = 'conditional:143:critical damage reduction-buff',
+
 	'conditional:153:chance inflict atk down on hit' = 'conditional:153:chance inflict atk down on hit',
 }

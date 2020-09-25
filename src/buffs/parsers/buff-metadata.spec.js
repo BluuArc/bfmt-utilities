@@ -2085,6 +2085,16 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:133:heal on hit'], [IconId.BUFF_BEENATK_HPREC]);
 	});
 
+	describe('conditional 143 buffs', () => {
+		describe('conditional:143:critical damage reduction-base', () => {
+			testDefaultIconResult(BuffId['conditional:143:critical damage reduction-base'], [IconId.BUFF_CRTDOWN]);
+		});
+
+		describe('conditional:143:critical damage reduction-buff', () => {
+			testDefaultIconResult(BuffId['conditional:143:critical damage reduction-buff'], [IconId.BUFF_CRTDOWN]);
+		});
+	});
+
 	describe('conditional:153:chance inflict atk down on hit', () => {
 		testDefaultIconResult(BuffId['conditional:153:chance inflict atk down on hit'], [IconId.BUFF_PROB_ATKREDUC]);
 	});

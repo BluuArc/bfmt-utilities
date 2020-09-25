@@ -2881,6 +2881,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_BEENATK_HPREC],
 	},
+	'conditional:143:critical damage reduction-base': {
+		id: BuffId['conditional:143:critical damage reduction-base'],
+		name: 'Conditional Base Critical Damage Reduction',
+		stat: UnitStat.criticalDamageMitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_CRTDOWN],
+	},
+	'conditional:143:critical damage reduction-buff': {
+		id: BuffId['conditional:143:critical damage reduction-buff'],
+		name: 'Conditional Buffed Critical Damage Reduction',
+		stat: UnitStat.criticalDamageMitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_CRTDOWN],
+	},
 	'conditional:153:chance inflict atk down on hit': {
 		id: BuffId['conditional:153:chance inflict atk down on hit'],
 		name: 'Conditional Attack Reduction Counter (Chance)',
