@@ -195,8 +195,10 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 	const parseThresholdValuesFromEffect = (effect: IPassiveEffect, thresholdType: ThresholdType, suffix = 'buff requirement'): IThresholdActivationInfo => {
 		let threshold = 0, requireAbove = false;
-		// TODO: damage taken threshold?
-		if (`${thresholdType} above % ${suffix}` in effect) {
+		if (thresholdType === ThresholdType.DamageTaken) {
+			threshold = parseNumberOrDefault(effect['damage threshold activation'] as string);
+			requireAbove = true;
+		} else if (`${thresholdType} above % ${suffix}` in effect) {
 			threshold = parseNumberOrDefault(effect[`${thresholdType} above % ${suffix}`] as string);
 			requireAbove = true;
 		} else {
@@ -2983,6 +2985,50 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 					...targetData,
 				});
 			}
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
+
+	map.set('79', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '79';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let flatFill: number, thresholdInfo: IThresholdActivationInfo;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			flatFill = parseNumberOrDefault(params[0]) / 100;
+			thresholdInfo = parseThresholdValuesFromParamsProperty(params[2], '1', ThresholdType.DamageTaken);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(['0', params[1], '0'].concat(params.slice(3)), 0, injectionContext);
+		} else {
+			flatFill = parseNumberOrDefault(typedEffect['increase bb gauge'] as number);
+			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.DamageTaken);
+		}
+
+		const results: IBuff[] = [];
+		if (flatFill !== 0) {
+			const thresholdConditions = getThresholdConditions(thresholdInfo);
+			results.push({
+				id: 'passive:79:bc fill after damage taken conditional',
+				originalId,
+				sources,
+				value: flatFill,
+				conditions: {
+					...conditionInfo,
+					...thresholdConditions,
+				},
+				...targetData,
+			});
 		}
 
 		handlePostParse(results, unknownParams, {

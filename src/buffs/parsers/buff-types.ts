@@ -1133,6 +1133,7 @@ export enum BuffId {
 	'passive:77:spark damage reduction-buff' = 'passive:77:spark damage reduction-buff',
 
 	'passive:78:damage taken conditional' = 'passive:78:damage taken conditional',
+	'passive:79:bc fill after damage taken conditional' = 'passive:79:bc fill after damage taken conditional',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

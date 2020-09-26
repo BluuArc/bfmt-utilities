@@ -3749,7 +3749,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					[extraHitDamageEffectKey]: 'extraHitDamage',
 				};
 				Object.keys(effectPropToResultPropMapping).forEach((effectProp) => {
-					it(`defaults to 0 for missing ${effectProp} value`, () => {
+					it(`defaults to 0 for missing ${effectProp} value when params property does not exist`, () => {
 						const effect = Object.keys(effectPropToResultPropMapping)
 							.filter((prop) => prop !== effectProp)
 							.reduce((acc, prop) => {
@@ -3780,7 +3780,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
 
-				it('returns a no params buff if they effect params are non-number or missing', () => {
+				it('returns a no params buff if the effect params are non-number or missing', () => {
 					const effect = { params: 'non-number' };
 					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
 				});
@@ -8695,6 +8695,173 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 5] });
+			});
+		});
+
+		describe('passive 79', () => {
+			const expectedBuffId = 'passive:79:bc fill after damage taken conditional';
+			const expectedOriginalId = '79';
+			const increaseBbGaugeKey = 'increase bb gauge';
+			const damageThresholdKey = 'damage threshold activation';
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = '100,0,2';
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: 1,
+					conditions: {
+						damageTakenExceeds: 2,
+					},
+				})];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '100,2,3,4,5,6';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: 1,
+						conditions: {
+							damageTakenExceeds: 3,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_1: '2',
+							param_3: '4',
+							param_4: '5',
+							param_5: '6',
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = {
+					[increaseBbGaugeKey]: 3,
+					[damageThresholdKey]: 4,
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: 3,
+					conditions: {
+						damageTakenExceeds: 4,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('converts effect properties to numbers when params property does not exist', () => {
+				const effect = {
+					[increaseBbGaugeKey]: '5',
+					[damageThresholdKey]: '6',
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: 5,
+					conditions: {
+						damageTakenExceeds: 6,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				it('defaults to 0 for missing threshold value', () => {
+					const params = '12300,0';
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: 123,
+						conditions: {
+							damageTakenExceeds: 0,
+						},
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults to 0 for missing threshold value when params property does not exist', () => {
+					const effect = {
+						[increaseBbGaugeKey]: 456,
+					};
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: 456,
+						conditions: {
+							damageTakenExceeds: 0,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a no params buff if all effect properties are non-number values', () => {
+					const effect = {
+						[increaseBbGaugeKey]: 'not a number',
+						[damageThresholdKey]: 'not a number',
+					};
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('returns a no params buff if the effect params are non-number or missing', () => {
+					const effect = { params: 'non-number' };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '100,2,3,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						value: 1,
+						conditions: {
+							...arbitraryConditionValue,
+							damageTakenExceeds: 3,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['0', '2', '0', '789']), 0] });
 			});
 		});
 	});
