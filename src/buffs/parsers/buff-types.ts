@@ -1388,6 +1388,7 @@ export enum BuffId {
 	'conditional:72:attack boost-sbb' = 'conditional:72:attack boost-sbb',
 	'conditional:72:attack boost-ubb' = 'conditional:72:attack boost-ubb',
 
+	'conditional:74:add atk down to attack' = 'conditional:74:add atk down to attack',
 	'conditional:84:critical damage' = 'conditional:84:critical damage',
 	'conditional:91:chance ko resistance' = 'conditional:91:chance ko resistance',
 
