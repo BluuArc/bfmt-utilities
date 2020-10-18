@@ -2006,6 +2006,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc:79:player exp boost', () => {
+		testDefaultIconResult(BuffId['proc:79:player exp boost'], [IconId.BUFF_PLAYEREXP]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

@@ -296,6 +296,8 @@ export enum UnitStat {
 	damageOverTime = 'damageOverTime',
 
 	effectOccurrenceShift = 'effectOccurrenceShift',
+
+	expModification = 'expModification',
 }
 
 /**
@@ -409,6 +411,8 @@ export interface IUnitState {
 	damageOverTime: IBuff[];
 
 	effectOccurrenceShift: IBuff[];
+
+	expModification: IBuff[];
 }
 
 /**
@@ -874,6 +878,8 @@ export enum IconId {
 
 	BUFF_HPTURNSTART = 'BUFF_HPTURNSTART',
 	BUFF_BCTURNSTART = 'BUFF_BCTURNSTART',
+
+	BUFF_PLAYEREXP = 'BUFF_PLAYEREXP',
 
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
@@ -1369,6 +1375,8 @@ export enum BuffId {
 	'proc:78:self stat boost-def' = 'proc:78:self stat boost-def',
 	'proc:78:self stat boost-rec' = 'proc:78:self stat boost-rec',
 	'proc:78:self stat boost-crit' = 'proc:78:self stat boost-crit',
+
+	'proc:79:player exp boost' = 'proc:79:player exp boost',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

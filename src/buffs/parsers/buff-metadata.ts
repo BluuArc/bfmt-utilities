@@ -2729,6 +2729,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_CRTRATEDOWNLOCK : IconId.BUFF_SELFCRTRATEUP],
 	},
+	'proc:79:player exp boost': {
+		id: BuffId['proc:79:player exp boost'],
+		name: 'Active Player EXP Boost',
+		stat: UnitStat.expModification,
+		stackType: BuffStackType.Singleton,
+		icons: () => [IconId.BUFF_PLAYEREXP],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

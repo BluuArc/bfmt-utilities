@@ -3977,4 +3977,35 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('79', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '79';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawExpBoost, rawDurationInMinutes = '', ...extraParams] = splitEffectWithUnknownProcParamsProperty(effect);
+		const expBoost = parseNumberOrDefault(rawExpBoost);
+		const durationInMinutes = parseNumberOrDefault(rawDurationInMinutes);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+
+		const results: IBuff[] = [];
+		if (expBoost !== 0) {
+			results.push({
+				id: 'proc:79:player exp boost',
+				originalId,
+				sources,
+				effectDelay,
+				value: { 'expBoost%': expBoost, durationInMinutes },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
+
 }
