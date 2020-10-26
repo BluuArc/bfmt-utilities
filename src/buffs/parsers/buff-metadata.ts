@@ -2736,6 +2736,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_PLAYEREXP],
 	},
+	'proc:82:resummon': {
+		id: BuffId['proc:82:resummon'],
+		name: 'Resummon Unit',
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_SUMMONUNIT],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

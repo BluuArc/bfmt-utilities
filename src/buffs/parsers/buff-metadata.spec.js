@@ -2010,6 +2010,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:79:player exp boost'], [IconId.BUFF_PLAYEREXP]);
 	});
 
+	describe('proc:82:resummon', () => {
+		testDefaultIconResult(BuffId['proc:82:resummon'], [IconId.BUFF_SUMMONUNIT]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

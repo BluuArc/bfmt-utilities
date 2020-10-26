@@ -4008,4 +4008,35 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		return results;
 	});
 
+	map.set('82', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '82';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [summonGroup, rawPercentHp, ...extraParams] = splitEffectWithUnknownProcParamsProperty(effect);
+		const percentHp = parseNumberOrDefault(rawPercentHp);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+
+		const results: IBuff[] = [];
+		if (summonGroup) {
+			results.push({
+				id: 'proc:82:resummon',
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					summonGroup,
+					'startingHp%': percentHp,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }
