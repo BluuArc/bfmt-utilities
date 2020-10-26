@@ -1161,6 +1161,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:79:bc fill after damage taken conditional'], [IconId.BUFF_DAMAGEBB]);
 	});
 
+	describe('passive:80:damage dealt conditional', () => {
+		testDefaultIconResult(BuffId['passive:80:damage dealt conditional'], [IconId.CONDITIONALBUFF_DAMAGEDEALTTHRESH]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

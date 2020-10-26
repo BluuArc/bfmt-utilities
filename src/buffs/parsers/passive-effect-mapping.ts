@@ -178,6 +178,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		Hp = 'hp',
 		Bb = 'bb gauge',
 		DamageTaken = 'damage taken',
+		DamageDealt = 'damage dealt',
 	}
 	interface IThresholdActivationInfo {
 		threshold: number;
@@ -197,6 +198,9 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		let threshold = 0, requireAbove = false;
 		if (thresholdType === ThresholdType.DamageTaken) {
 			threshold = parseNumberOrDefault(effect['damage threshold activation'] as string);
+			requireAbove = true;
+		} else if (thresholdType === ThresholdType.DamageDealt) {
+			threshold = parseNumberOrDefault(effect['damage dealt threshold activation'] as string);
 			requireAbove = true;
 		} else if (`${thresholdType} above % ${suffix}` in effect) {
 			threshold = parseNumberOrDefault(effect[`${thresholdType} above % ${suffix}`] as string);
@@ -225,6 +229,8 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			}
 		} else if (type === ThresholdType.DamageTaken) {
 			conditions = { damageTakenExceeds: threshold };
+		} else if (type === ThresholdType.DamageDealt) {
+			conditions = { damageDealtExceeds: threshold };
 		}
 
 		return conditions;
@@ -3029,6 +3035,51 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 				},
 				...targetData,
 			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
+
+	map.set('80', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '80';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
+				id: params[0],
+				params: params[1],
+				turnDuration: parseNumberOrDefault(params[4]),
+			}, context, injectionContext);
+			const maxTriggerCount = parseNumberOrDefault(params[2]);
+			const thresholdInfo = parseThresholdValuesFromParamsProperty(params[3], '1', ThresholdType.DamageDealt);
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(5), 5, injectionContext);
+
+			if (triggeredBuffs.length > 0) {
+				const thresholdConditions = getThresholdConditions(thresholdInfo);
+				results.push({
+					id: 'passive:80:damage dealt conditional',
+					originalId,
+					sources,
+					value: {
+						triggeredBuffs,
+						maxTriggerCount,
+					},
+					conditions: { ...conditionInfo, ...thresholdConditions },
+					...targetData,
+				});
+			}
 		}
 
 		handlePostParse(results, unknownParams, {
