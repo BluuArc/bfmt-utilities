@@ -1144,6 +1144,8 @@ export enum BuffId {
 	'passive:79:bc fill after damage taken conditional' = 'passive:79:bc fill after damage taken conditional',
 
 	'passive:80:damage dealt conditional' = 'passive:80:damage dealt conditional',
+	'passive:81:bc fill after damage dealt conditional-flat' = 'passive:81:bc fill after damage dealt conditional-flat',
+	'passive:81:bc fill after damage dealt conditional-percent' = 'passive:81:bc fill after damage dealt conditional-percent',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

@@ -1165,6 +1165,16 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:80:damage dealt conditional'], [IconId.CONDITIONALBUFF_DAMAGEDEALTTHRESH]);
 	});
 
+	describe('passive 81 buffs', () => {
+		describe('passive:81:bc fill after damage dealt conditional-flat', () => {
+			testDefaultIconResult(BuffId['passive:81:bc fill after damage dealt conditional-flat'], [IconId.BUFF_DAMAGEBB]);
+		});
+
+		describe('passive:81:bc fill after damage dealt conditional-percent', () => {
+			testDefaultIconResult(BuffId['passive:81:bc fill after damage dealt conditional-percent'], [IconId.BUFF_DAMAGEBB]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

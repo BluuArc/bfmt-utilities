@@ -1396,6 +1396,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.CONDITIONALBUFF_DAMAGEDEALTTHRESH],
 	},
+	'passive:81:bc fill after damage dealt conditional-flat': {
+		id: BuffId['passive:81:bc fill after damage dealt conditional-flat'],
+		name: 'Passive Flat BC Fill after Damage Dealt Threshold',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_DAMAGEBB],
+	},
+	'passive:81:bc fill after damage dealt conditional-percent': {
+		id: BuffId['passive:81:bc fill after damage dealt conditional-percent'],
+		name: 'Passive Percent BC Fill after Damage Dealt Threshold',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_DAMAGEBB],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

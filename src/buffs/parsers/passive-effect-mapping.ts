@@ -3091,4 +3091,65 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('81', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '81';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let flatFill: number, percentFill: number, thresholdInfo: IThresholdActivationInfo;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			flatFill = parseNumberOrDefault(params[0]) / 100;
+			percentFill = parseNumberOrDefault(params[1]);
+			thresholdInfo = parseThresholdValuesFromParamsProperty(params[2], '1', ThresholdType.DamageDealt);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(3), 3, injectionContext);
+		} else {
+			flatFill = parseNumberOrDefault(typedEffect['increase bb gauge'] as number);
+			percentFill = 0; // NOTE: deathmax datamine does not parse this property
+			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.DamageDealt);
+		}
+
+		const results: IBuff[] = [];
+		if (flatFill !== 0) {
+			const thresholdConditions = getThresholdConditions(thresholdInfo);
+			results.push({
+				id: 'passive:81:bc fill after damage dealt conditional-flat',
+				originalId,
+				sources,
+				value: flatFill,
+				conditions: {
+					...conditionInfo,
+					...thresholdConditions,
+				},
+				...targetData,
+			});
+		}
+
+		if (percentFill !== 0) {
+			const thresholdConditions = getThresholdConditions(thresholdInfo);
+			results.push({
+				id: 'passive:81:bc fill after damage dealt conditional-percent',
+				originalId,
+				sources,
+				value: percentFill,
+				conditions: {
+					...conditionInfo,
+					...thresholdConditions,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }
