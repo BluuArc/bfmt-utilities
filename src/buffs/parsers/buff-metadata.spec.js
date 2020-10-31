@@ -2079,6 +2079,30 @@ describe('BUFF_METADATA entries', () => {
 		testElementalVariantsAndPolaritiesOfElementalStatBuff('conditional:14:elemental defense buff', STAT_TO_ICON_KEY_MAPPING.def);
 	});
 
+	describe('conditional:21:fire mitigation', () => {
+		testDefaultIconResult(BuffId['conditional:21:fire mitigation'], [IconId.BUFF_FIREDMGDOWN]);
+	});
+
+	describe('conditional:22:water mitigation', () => {
+		testDefaultIconResult(BuffId['conditional:22:water mitigation'], [IconId.BUFF_WATERDMGDOWN]);
+	});
+
+	describe('conditional:23:earth mitigation', () => {
+		testDefaultIconResult(BuffId['conditional:23:earth mitigation'], [IconId.BUFF_EARTHDMGDOWN]);
+	});
+
+	describe('conditional:24:thunder mitigation', () => {
+		testDefaultIconResult(BuffId['conditional:24:thunder mitigation'], [IconId.BUFF_THUNDERDMGDOWN]);
+	});
+
+	describe('conditional:25:light mitigation', () => {
+		testDefaultIconResult(BuffId['conditional:25:light mitigation'], [IconId.BUFF_LIGHTDMGDOWN]);
+	});
+
+	describe('conditional:26:dark mitigation', () => {
+		testDefaultIconResult(BuffId['conditional:26:dark mitigation'], [IconId.BUFF_DARKDMGDOWN]);
+	});
+
 	describe('conditional:36:mitigation', () => {
 		testDefaultIconResult(BuffId['conditional:36:mitigation'], [IconId.BUFF_DAMAGECUT]);
 	});

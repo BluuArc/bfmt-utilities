@@ -907,6 +907,48 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 21', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '21',
+				expectedBuffId: 'conditional:21:fire mitigation',
+			});
+		});
+
+		describe('conditional 22', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '22',
+				expectedBuffId: 'conditional:22:water mitigation',
+			});
+		});
+
+		describe('conditional 23', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '23',
+				expectedBuffId: 'conditional:23:earth mitigation',
+			});
+		});
+
+		describe('conditional 24', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '24',
+				expectedBuffId: 'conditional:24:thunder mitigation',
+			});
+		});
+
+		describe('conditional 25', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '25',
+				expectedBuffId: 'conditional:25:light mitigation',
+			});
+		});
+
+		describe('conditional 26', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '26',
+				expectedBuffId: 'conditional:26:dark mitigation',
+			});
+		});
+
 		describe('conditional 36', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '36',

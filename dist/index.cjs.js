@@ -1706,6 +1706,7 @@ var UnitStat;
     UnitStat["extraAction"] = "extraAction";
     UnitStat["damageOverTime"] = "damageOverTime";
     UnitStat["effectOccurrenceShift"] = "effectOccurrenceShift";
+    UnitStat["expModification"] = "expModification";
 })(UnitStat || (UnitStat = {}));
 var IconId;
 (function (IconId) {
@@ -1714,6 +1715,8 @@ var IconId;
     IconId["TURN_DURATION_DOWN"] = "TURN_DURATION_DOWN";
     IconId["CONDITIONALBUFF_HPTHRESH"] = "CONDITIONALBUFF_HPTHRESH";
     IconId["CONDITIONALBUFF_DAMAGETAKENTHRESH"] = "CONDITIONALBUFF_DAMAGETAKENTHRESH";
+    IconId["CONDITIONALBUFF_DAMAGEDEALTTHRESH"] = "CONDITIONALBUFF_DAMAGEDEALTTHRESH";
+    IconId["CONDITIONALBUFF_BCRECEIVEDTHRESH"] = "CONDITIONALBUFF_BCRECEIVEDTHRESH";
     IconId["BUFF_ADDTO_BB"] = "BUFF_ADDTO_BB";
     IconId["BUFF_ADDTO_SBB"] = "BUFF_ADDTO_SBB";
     IconId["BUFF_ADDTO_UBB"] = "BUFF_ADDTO_UBB";
@@ -2100,6 +2103,7 @@ var IconId;
     IconId["BUFF_AILDMGUP"] = "BUFF_AILDMGUP";
     IconId["BUFF_HPTURNSTART"] = "BUFF_HPTURNSTART";
     IconId["BUFF_BCTURNSTART"] = "BUFF_BCTURNSTART";
+    IconId["BUFF_PLAYEREXP"] = "BUFF_PLAYEREXP";
     IconId["ATK_ST"] = "ATK_ST";
     IconId["ATK_AOE"] = "ATK_AOE";
     IconId["ATK_RT"] = "ATK_RT";
@@ -2315,6 +2319,12 @@ var BuffId;
     BuffId["passive:77:spark damage reduction-base"] = "passive:77:spark damage reduction-base";
     BuffId["passive:77:spark damage reduction-buff"] = "passive:77:spark damage reduction-buff";
     BuffId["passive:78:damage taken conditional"] = "passive:78:damage taken conditional";
+    BuffId["passive:79:bc fill after damage taken conditional-flat"] = "passive:79:bc fill after damage taken conditional-flat";
+    BuffId["passive:79:bc fill after damage taken conditional-percent"] = "passive:79:bc fill after damage taken conditional-percent";
+    BuffId["passive:80:damage dealt conditional"] = "passive:80:damage dealt conditional";
+    BuffId["passive:81:bc fill after damage dealt conditional-flat"] = "passive:81:bc fill after damage dealt conditional-flat";
+    BuffId["passive:81:bc fill after damage dealt conditional-percent"] = "passive:81:bc fill after damage dealt conditional-percent";
+    BuffId["passive:82:bc received conditional"] = "passive:82:bc received conditional";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1:attack"] = "proc:1:attack";
@@ -2502,13 +2512,41 @@ var BuffId;
     BuffId["proc:78:self stat boost-def"] = "proc:78:self stat boost-def";
     BuffId["proc:78:self stat boost-rec"] = "proc:78:self stat boost-rec";
     BuffId["proc:78:self stat boost-crit"] = "proc:78:self stat boost-crit";
+    BuffId["proc:79:player exp boost"] = "proc:79:player exp boost";
+    BuffId["proc:82:resummon"] = "proc:82:resummon";
     BuffId["UNKNOWN_CONDITIONAL_EFFECT_ID"] = "UNKNOWN_CONDITIONAL_EFFECT_ID";
     BuffId["UNKNOWN_CONDITIONAL_BUFF_PARAMS"] = "UNKNOWN_CONDITIONAL_BUFF_PARAMS";
+    BuffId["conditional:1:attack buff"] = "conditional:1:attack buff";
+    BuffId["conditional:3:defense buff"] = "conditional:3:defense buff";
+    BuffId["conditional:5:recovery buff"] = "conditional:5:recovery buff";
     BuffId["conditional:8:gradual heal"] = "conditional:8:gradual heal";
     BuffId["conditional:12:guaranteed ko resistance"] = "conditional:12:guaranteed ko resistance";
+    BuffId["conditional:13:elemental attack buff"] = "conditional:13:elemental attack buff";
+    BuffId["conditional:14:elemental defense buff"] = "conditional:14:elemental defense buff";
+    BuffId["conditional:21:fire mitigation"] = "conditional:21:fire mitigation";
+    BuffId["conditional:22:water mitigation"] = "conditional:22:water mitigation";
+    BuffId["conditional:23:earth mitigation"] = "conditional:23:earth mitigation";
+    BuffId["conditional:24:thunder mitigation"] = "conditional:24:thunder mitigation";
+    BuffId["conditional:25:light mitigation"] = "conditional:25:light mitigation";
+    BuffId["conditional:26:dark mitigation"] = "conditional:26:dark mitigation";
     BuffId["conditional:36:mitigation"] = "conditional:36:mitigation";
+    BuffId["conditional:37:gradual bc fill"] = "conditional:37:gradual bc fill";
+    BuffId["conditional:40:spark damage"] = "conditional:40:spark damage";
+    BuffId["conditional:72:attack boost-bb"] = "conditional:72:attack boost-bb";
+    BuffId["conditional:72:attack boost-sbb"] = "conditional:72:attack boost-sbb";
+    BuffId["conditional:72:attack boost-ubb"] = "conditional:72:attack boost-ubb";
+    BuffId["conditional:74:add atk down to attack"] = "conditional:74:add atk down to attack";
+    BuffId["conditional:75:add def down to attack"] = "conditional:75:add def down to attack";
+    BuffId["conditional:84:critical damage"] = "conditional:84:critical damage";
     BuffId["conditional:91:chance ko resistance"] = "conditional:91:chance ko resistance";
+    BuffId["conditional:98:thunder barrier"] = "conditional:98:thunder barrier";
+    BuffId["conditional:99:light barrier"] = "conditional:99:light barrier";
+    BuffId["conditional:132:od fill rate"] = "conditional:132:od fill rate";
     BuffId["conditional:133:heal on hit"] = "conditional:133:heal on hit";
+    BuffId["conditional:143:critical damage reduction-base"] = "conditional:143:critical damage reduction-base";
+    BuffId["conditional:143:critical damage reduction-buff"] = "conditional:143:critical damage reduction-buff";
+    BuffId["conditional:145:elemental weakness damage reduction-base"] = "conditional:145:elemental weakness damage reduction-base";
+    BuffId["conditional:145:elemental weakness damage reduction-buff"] = "conditional:145:elemental weakness damage reduction-buff";
     BuffId["conditional:153:chance inflict atk down on hit"] = "conditional:153:chance inflict atk down on hit";
 })(BuffId || (BuffId = {}));
 
@@ -5711,6 +5749,50 @@ function setMapping(map) {
         });
         return results;
     });
+    map.set('79', (effect, context, injectionContext) => {
+        const originalId = '79';
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const [rawExpBoost, rawDurationInMinutes = '', ...extraParams] = splitEffectWithUnknownProcParamsProperty(effect);
+        const expBoost = parseNumberOrDefault(rawExpBoost);
+        const durationInMinutes = parseNumberOrDefault(rawDurationInMinutes);
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        const results = [];
+        if (expBoost !== 0) {
+            results.push(Object.assign({ id: 'proc:79:player exp boost', originalId,
+                sources,
+                effectDelay, value: { 'expBoost%': expBoost, durationInMinutes } }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
+        return results;
+    });
+    map.set('82', (effect, context, injectionContext) => {
+        const originalId = '82';
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const [summonGroup, rawPercentHp, ...extraParams] = splitEffectWithUnknownProcParamsProperty(effect);
+        const percentHp = parseNumberOrDefault(rawPercentHp);
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        const results = [];
+        if (summonGroup) {
+            results.push(Object.assign({ id: 'proc:82:resummon', originalId,
+                sources,
+                effectDelay, value: {
+                    summonGroup,
+                    'startingHp%': percentHp,
+                } }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
+        return results;
+    });
 }
 
 /**
@@ -5773,6 +5855,15 @@ function getConditionalEffectToBuffMapping(reload) {
  * @internal
  */
 function setMapping$1(map) {
+    const ELEMENT_MAPPING = {
+        0: BuffConditionElement.All,
+        1: UnitElement.Fire,
+        2: UnitElement.Water,
+        3: UnitElement.Earth,
+        4: UnitElement.Thunder,
+        5: UnitElement.Light,
+        6: UnitElement.Dark,
+    };
     const createUnknownParamsEntry = (unknownParams, { originalId, sources, targetData, }) => (Object.assign({ id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS, originalId,
         sources, value: unknownParams }, targetData));
     /**
@@ -5803,6 +5894,72 @@ function setMapping$1(map) {
         const turnDuration = parseNumberOrDefault(effect.turnDuration);
         return { targetData, sources, splitParams, turnDuration };
     };
+    const parseConditionalWithSingleNumericalParameter = ({ effect, context, injectionContext, originalId, buffId, returnBuffWithValueOfZero = false, parseParamValue = (rawValue) => parseNumberOrDefault(rawValue), }) => {
+        const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const [rawValue, ...extraParams] = splitParams;
+        const value = parseParamValue(rawValue);
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+        const results = [];
+        if (returnBuffWithValueOfZero || value !== 0) {
+            results.push(Object.assign({ id: buffId, originalId,
+                sources, duration: turnDuration, value }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+        });
+        return results;
+    };
+    const parseConditionalWithOnlyBaseAndBuffResistanceParameters = ({ effect, context, injectionContext, originalId, baseResistanceBuffId, buffResistanceBuffId, }) => {
+        const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const [rawBaseResist, rawBuffResist, ...extraParams] = splitParams;
+        const baseResist = parseNumberOrDefault(rawBaseResist);
+        const buffResist = parseNumberOrDefault(rawBuffResist);
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        const results = [];
+        if (baseResist !== 0) {
+            results.push(Object.assign({ id: baseResistanceBuffId, originalId,
+                sources, duration: turnDuration, value: baseResist }, targetData));
+        }
+        if (buffResist !== 0) {
+            results.push(Object.assign({ id: buffResistanceBuffId, originalId,
+                sources, duration: turnDuration, value: buffResist }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+        });
+        return results;
+    };
+    map.set('1', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '1',
+            buffId: 'conditional:1:attack buff',
+        });
+    });
+    map.set('3', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '3',
+            buffId: 'conditional:3:defense buff',
+        });
+    });
+    map.set('5', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '5',
+            buffId: 'conditional:5:recovery buff',
+        });
+    });
     map.set('8', (effect, context, injectionContext) => {
         const originalId = '8';
         const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
@@ -5828,30 +5985,28 @@ function setMapping$1(map) {
         return results;
     });
     map.set('12', (effect, context, injectionContext) => {
-        const originalId = '12';
-        const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-        const [rawRecoverValue, ...extraParams] = splitParams;
-        const recoverValue = parseNumberOrDefault(rawRecoverValue);
-        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
-        const results = [Object.assign({ id: 'conditional:12:guaranteed ko resistance', originalId,
-                sources, duration: turnDuration, value: recoverValue }, targetData)];
-        handlePostParse(results, unknownParams, {
-            originalId,
-            sources,
-            targetData,
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '12',
+            buffId: 'conditional:12:guaranteed ko resistance',
+            returnBuffWithValueOfZero: true,
         });
-        return results;
     });
-    map.set('36', (effect, context, injectionContext) => {
-        const originalId = '36';
+    map.set('13', (effect, context, injectionContext) => {
+        const originalId = '13';
         const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-        const [rawMitigationValue, ...extraParams] = splitParams;
-        const mitigationValue = parseNumberOrDefault(rawMitigationValue);
-        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+        const [rawElement, rawValue, ...extraParams] = splitParams;
+        const element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+        const value = parseNumberOrDefault(rawValue);
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
         const results = [];
-        if (mitigationValue !== 0) {
-            results.push(Object.assign({ id: 'conditional:36:mitigation', originalId,
-                sources, duration: turnDuration, value: mitigationValue }, targetData));
+        if (value !== 0) {
+            results.push(Object.assign({ id: 'conditional:13:elemental attack buff', originalId,
+                sources, duration: turnDuration, value, conditions: {
+                    targetElements: [element],
+                } }, targetData));
         }
         handlePostParse(results, unknownParams, {
             originalId,
@@ -5859,6 +6014,195 @@ function setMapping$1(map) {
             targetData,
         });
         return results;
+    });
+    map.set('14', (effect, context, injectionContext) => {
+        const originalId = '14';
+        const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const [rawElement, rawValue, ...extraParams] = splitParams;
+        const element = ELEMENT_MAPPING[rawElement] || BuffConditionElement.Unknown;
+        const value = parseNumberOrDefault(rawValue);
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        const results = [];
+        if (value !== 0) {
+            results.push(Object.assign({ id: 'conditional:14:elemental defense buff', originalId,
+                sources, duration: turnDuration, value, conditions: {
+                    targetElements: [element],
+                } }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+        });
+        return results;
+    });
+    map.set('21', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '21',
+            buffId: 'conditional:21:fire mitigation',
+        });
+    });
+    map.set('22', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '22',
+            buffId: 'conditional:22:water mitigation',
+        });
+    });
+    map.set('23', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '23',
+            buffId: 'conditional:23:earth mitigation',
+        });
+    });
+    map.set('24', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '24',
+            buffId: 'conditional:24:thunder mitigation',
+        });
+    });
+    map.set('25', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '25',
+            buffId: 'conditional:25:light mitigation',
+        });
+    });
+    map.set('26', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '26',
+            buffId: 'conditional:26:dark mitigation',
+        });
+    });
+    map.set('36', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '36',
+            buffId: 'conditional:36:mitigation',
+        });
+    });
+    map.set('37', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '37',
+            buffId: 'conditional:37:gradual bc fill',
+            parseParamValue: (rawValue) => parseNumberOrDefault(rawValue) / 100,
+        });
+    });
+    map.set('40', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '40',
+            buffId: 'conditional:40:spark damage',
+        });
+    });
+    map.set('72', (effect, context, injectionContext) => {
+        const originalId = '72';
+        const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const [rawBb, rawSbb, rawUbb, ...extraParams] = splitParams;
+        const bb = parseNumberOrDefault(rawBb);
+        const sbb = parseNumberOrDefault(rawSbb);
+        const ubb = parseNumberOrDefault(rawUbb);
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+        const results = [];
+        if (bb !== 0) {
+            results.push(Object.assign({ id: 'conditional:72:attack boost-bb', originalId,
+                sources, duration: turnDuration, value: bb }, targetData));
+        }
+        if (sbb !== 0) {
+            results.push(Object.assign({ id: 'conditional:72:attack boost-sbb', originalId,
+                sources, duration: turnDuration, value: sbb }, targetData));
+        }
+        if (ubb !== 0) {
+            results.push(Object.assign({ id: 'conditional:72:attack boost-ubb', originalId,
+                sources, duration: turnDuration, value: ubb }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+        });
+        return results;
+    });
+    map.set('74', (effect, context, injectionContext) => {
+        const originalId = '74';
+        const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const [rawReductionValue, rawChance, rawDebuffTurns, ...extraParams] = splitParams;
+        const reductionValue = parseNumberOrDefault(rawReductionValue);
+        const chance = parseNumberOrDefault(rawChance);
+        const debuffTurnDuration = parseNumberOrDefault(rawDebuffTurns);
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+        const results = [];
+        if (reductionValue !== 0 || chance !== 0 || debuffTurnDuration !== 0) {
+            results.push(Object.assign({ id: 'conditional:74:add atk down to attack', originalId,
+                sources, duration: turnDuration, value: {
+                    reductionValue,
+                    chance,
+                    debuffTurnDuration,
+                } }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+        });
+        return results;
+    });
+    map.set('75', (effect, context, injectionContext) => {
+        const originalId = '75';
+        const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const [rawReductionValue, rawChance, rawDebuffTurns, ...extraParams] = splitParams;
+        const reductionValue = parseNumberOrDefault(rawReductionValue);
+        const chance = parseNumberOrDefault(rawChance);
+        const debuffTurnDuration = parseNumberOrDefault(rawDebuffTurns);
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+        const results = [];
+        if (reductionValue !== 0 || chance !== 0 || debuffTurnDuration !== 0) {
+            results.push(Object.assign({ id: 'conditional:75:add def down to attack', originalId,
+                sources, duration: turnDuration, value: {
+                    reductionValue,
+                    chance,
+                    debuffTurnDuration,
+                } }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+        });
+        return results;
+    });
+    map.set('84', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '84',
+            buffId: 'conditional:84:critical damage',
+            parseParamValue: (rawValue) => parseNumberOrDefault(rawValue) * 100,
+        });
     });
     map.set('91', (effect, context, injectionContext) => {
         const originalId = '91';
@@ -5881,6 +6225,59 @@ function setMapping$1(map) {
             targetData,
         });
         return results;
+    });
+    map.set('99', (effect, context, injectionContext) => {
+        const originalId = '99';
+        const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const [rawElement, rawHp, ...extraParams] = splitParams;
+        const element = ELEMENT_MAPPING[rawElement] || rawElement || BuffConditionElement.Unknown;
+        const hp = parseNumberOrDefault(rawHp);
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        const results = [];
+        if (hp !== 0) {
+            results.push(Object.assign({ id: 'conditional:99:light barrier', originalId,
+                sources, duration: turnDuration, value: {
+                    hp,
+                    parsedElement: element,
+                } }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+        });
+        return results;
+    });
+    map.set('98', (effect, context, injectionContext) => {
+        const originalId = '98';
+        const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const [rawElement, rawHp, ...extraParams] = splitParams;
+        const element = ELEMENT_MAPPING[rawElement] || rawElement || BuffConditionElement.Unknown;
+        const hp = parseNumberOrDefault(rawHp);
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        const results = [];
+        if (hp !== 0) {
+            results.push(Object.assign({ id: 'conditional:98:thunder barrier', originalId,
+                sources, duration: turnDuration, value: {
+                    hp,
+                    parsedElement: element,
+                } }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+        });
+        return results;
+    });
+    map.set('132', (effect, context, injectionContext) => {
+        return parseConditionalWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            originalId: '132',
+            buffId: 'conditional:132:od fill rate',
+        });
     });
     map.set('133', (effect, context, injectionContext) => {
         const originalId = '133';
@@ -5905,6 +6302,26 @@ function setMapping$1(map) {
             targetData,
         });
         return results;
+    });
+    map.set('143', (effect, context, injectionContext) => {
+        return parseConditionalWithOnlyBaseAndBuffResistanceParameters({
+            effect,
+            context,
+            injectionContext,
+            originalId: '143',
+            baseResistanceBuffId: 'conditional:143:critical damage reduction-base',
+            buffResistanceBuffId: 'conditional:143:critical damage reduction-buff',
+        });
+    });
+    map.set('145', (effect, context, injectionContext) => {
+        return parseConditionalWithOnlyBaseAndBuffResistanceParameters({
+            effect,
+            context,
+            injectionContext,
+            originalId: '145',
+            baseResistanceBuffId: 'conditional:145:elemental weakness damage reduction-base',
+            buffResistanceBuffId: 'conditional:145:elemental weakness damage reduction-buff',
+        });
     });
     map.set('153', (effect, context, injectionContext) => {
         const originalId = '153';
@@ -6078,6 +6495,8 @@ function setMapping$2(map) {
         ThresholdType["Hp"] = "hp";
         ThresholdType["Bb"] = "bb gauge";
         ThresholdType["DamageTaken"] = "damage taken";
+        ThresholdType["DamageDealt"] = "damage dealt";
+        ThresholdType["BcReceived"] = "bc receive count";
     })(ThresholdType || (ThresholdType = {}));
     const parseThresholdValuesFromParamsProperty = (rawThreshold, rawRequireAboveFlag, thresholdType) => {
         return {
@@ -6087,17 +6506,28 @@ function setMapping$2(map) {
         };
     };
     const parseThresholdValuesFromEffect = (effect, thresholdType, suffix = 'buff requirement') => {
-        let threshold = 0, requireAbove = false;
-        // TODO: damage taken threshold?
-        if (`${thresholdType} above % ${suffix}` in effect) {
-            threshold = parseNumberOrDefault(effect[`${thresholdType} above % ${suffix}`]);
-            requireAbove = true;
+        let effectKey, requireAbove = true;
+        if (thresholdType === ThresholdType.DamageTaken) {
+            effectKey = 'damage threshold activation';
+        }
+        else if (thresholdType === ThresholdType.DamageDealt) {
+            effectKey = 'damage dealt threshold activation';
+        }
+        else if (thresholdType === ThresholdType.BcReceived) {
+            effectKey = 'bc receive count buff activation';
+        }
+        else if (`${thresholdType} above % ${suffix}` in effect) {
+            effectKey = `${thresholdType} above % ${suffix}`;
         }
         else {
-            threshold = parseNumberOrDefault(effect[`${thresholdType} below % ${suffix}`]);
+            effectKey = `${thresholdType} below % ${suffix}`;
             requireAbove = false;
         }
-        return { threshold, requireAbove, type: thresholdType };
+        return {
+            threshold: parseNumberOrDefault(effect[effectKey]),
+            requireAbove,
+            type: thresholdType,
+        };
     };
     const getThresholdConditions = ({ threshold, requireAbove, type }) => {
         let conditions;
@@ -6119,6 +6549,12 @@ function setMapping$2(map) {
         }
         else if (type === ThresholdType.DamageTaken) {
             conditions = { damageTakenExceeds: threshold };
+        }
+        else if (type === ThresholdType.DamageDealt) {
+            conditions = { damageDealtExceeds: threshold };
+        }
+        else if (type === ThresholdType.BcReceived) {
+            conditions = { bcReceivedExceeds: threshold };
         }
         return conditions;
     };
@@ -8171,6 +8607,146 @@ function setMapping$2(map) {
         });
         return results;
     });
+    map.set('79', (effect, context, injectionContext) => {
+        const originalId = '79';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        let flatFill, percentFill, thresholdInfo;
+        let unknownParams;
+        if (typedEffect.params) {
+            const params = splitEffectParams(typedEffect);
+            flatFill = parseNumberOrDefault(params[0]) / 100;
+            percentFill = parseNumberOrDefault(params[1]);
+            thresholdInfo = parseThresholdValuesFromParamsProperty(params[2], '1', ThresholdType.DamageTaken);
+            unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(3), 3, injectionContext);
+        }
+        else {
+            flatFill = parseNumberOrDefault(typedEffect['increase bb gauge']);
+            percentFill = 0; // NOTE: deathmax datamine does not parse this property
+            thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.DamageTaken);
+        }
+        const results = [];
+        if (flatFill !== 0) {
+            const thresholdConditions = getThresholdConditions(thresholdInfo);
+            results.push(Object.assign({ id: 'passive:79:bc fill after damage taken conditional-flat', originalId,
+                sources, value: flatFill, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData));
+        }
+        if (percentFill !== 0) {
+            const thresholdConditions = getThresholdConditions(thresholdInfo);
+            results.push(Object.assign({ id: 'passive:79:bc fill after damage taken conditional-percent', originalId,
+                sources, value: percentFill, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('80', (effect, context, injectionContext) => {
+        const originalId = '80';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const results = [];
+        let unknownParams;
+        if (typedEffect.params) {
+            const params = splitEffectParams(typedEffect);
+            const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
+                id: params[0],
+                params: params[1],
+                turnDuration: parseNumberOrDefault(params[4]),
+            }, context, injectionContext);
+            const maxTriggerCount = parseNumberOrDefault(params[2]);
+            const thresholdInfo = parseThresholdValuesFromParamsProperty(params[3], '1', ThresholdType.DamageDealt);
+            unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(5), 5, injectionContext);
+            if (triggeredBuffs.length > 0) {
+                const thresholdConditions = getThresholdConditions(thresholdInfo);
+                results.push(Object.assign({ id: 'passive:80:damage dealt conditional', originalId,
+                    sources, value: {
+                        triggeredBuffs,
+                        maxTriggerCount,
+                    }, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData));
+            }
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('81', (effect, context, injectionContext) => {
+        const originalId = '81';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        let flatFill, percentFill, thresholdInfo;
+        let unknownParams;
+        if (typedEffect.params) {
+            const params = splitEffectParams(typedEffect);
+            flatFill = parseNumberOrDefault(params[0]) / 100;
+            percentFill = parseNumberOrDefault(params[1]);
+            thresholdInfo = parseThresholdValuesFromParamsProperty(params[2], '1', ThresholdType.DamageDealt);
+            unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(3), 3, injectionContext);
+        }
+        else {
+            flatFill = parseNumberOrDefault(typedEffect['increase bb gauge']);
+            percentFill = 0; // NOTE: deathmax datamine does not parse this property
+            thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.DamageDealt);
+        }
+        const results = [];
+        if (flatFill !== 0) {
+            const thresholdConditions = getThresholdConditions(thresholdInfo);
+            results.push(Object.assign({ id: 'passive:81:bc fill after damage dealt conditional-flat', originalId,
+                sources, value: flatFill, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData));
+        }
+        if (percentFill !== 0) {
+            const thresholdConditions = getThresholdConditions(thresholdInfo);
+            results.push(Object.assign({ id: 'passive:81:bc fill after damage dealt conditional-percent', originalId,
+                sources, value: percentFill, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('82', (effect, context, injectionContext) => {
+        const originalId = '82';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const results = [];
+        let unknownParams;
+        if (typedEffect.params) {
+            const params = splitEffectParams(typedEffect);
+            const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
+                id: params[0],
+                params: params[1],
+                turnDuration: parseNumberOrDefault(params[4]),
+            }, context, injectionContext);
+            const maxTriggerCount = parseNumberOrDefault(params[2]);
+            const thresholdInfo = parseThresholdValuesFromParamsProperty(params[3], '1', ThresholdType.BcReceived);
+            unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(5), 5, injectionContext);
+            if (triggeredBuffs.length > 0) {
+                const thresholdConditions = getThresholdConditions(thresholdInfo);
+                results.push(Object.assign({ id: 'passive:82:bc received conditional', originalId,
+                    sources, value: {
+                        triggeredBuffs,
+                        maxTriggerCount,
+                    }, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData));
+            }
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
 }
 
 /**
@@ -8209,7 +8785,7 @@ function convertPassiveEffectToBuffs(effect, context) {
         : defaultConversionFunction$2(effect, context);
 }
 
-const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ TURN_DURATION_MODIFICATION: {
+const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ TURN_DURATION_MODIFICATION: {
         id: BuffId.TURN_DURATION_MODIFICATION,
         name: 'Passive Turn Duration Modification',
         stat: UnitStat.turnDurationModification,
@@ -9385,6 +9961,40 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         name: 'Passive Conditional Effect after Damage Received Threshold',
         stackType: BuffStackType.Passive,
         icons: () => [IconId.CONDITIONALBUFF_DAMAGETAKENTHRESH],
+    }, 'passive:79:bc fill after damage taken conditional-flat': {
+        id: BuffId['passive:79:bc fill after damage taken conditional-flat'],
+        name: 'Passive Flat BC Fill after Damage Taken Received Threshold',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_DAMAGEBB],
+    }, 'passive:79:bc fill after damage taken conditional-percent': {
+        id: BuffId['passive:79:bc fill after damage taken conditional-percent'],
+        name: 'Passive Percent BC Fill after Damage Taken Received Threshold',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_DAMAGEBB],
+    }, 'passive:80:damage dealt conditional': {
+        id: BuffId['passive:80:damage dealt conditional'],
+        name: 'Passive Conditional Effect after Damage Dealt Threshold',
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.CONDITIONALBUFF_DAMAGEDEALTTHRESH],
+    }, 'passive:81:bc fill after damage dealt conditional-flat': {
+        id: BuffId['passive:81:bc fill after damage dealt conditional-flat'],
+        name: 'Passive Flat BC Fill after Damage Dealt Threshold',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_DAMAGEBB],
+    }, 'passive:81:bc fill after damage dealt conditional-percent': {
+        id: BuffId['passive:81:bc fill after damage dealt conditional-percent'],
+        name: 'Passive Percent BC Fill after Damage Dealt Threshold',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_DAMAGEBB],
+    }, 'passive:82:bc received conditional': {
+        id: BuffId['passive:82:bc received conditional'],
+        name: 'Passive Conditional Effect after BC Received Threshold',
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.CONDITIONALBUFF_BCRECEIVEDTHRESH],
     }, UNKNOWN_PROC_EFFECT_ID: {
         id: BuffId.UNKNOWN_PROC_EFFECT_ID,
         name: 'Unknown Proc Effect',
@@ -10515,52 +11125,6 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.extraAction,
         stackType: BuffStackType.Active,
         icons: () => [IconId.BUFF_DBLSTRIKE],
-    }, UNKNOWN_CONDITIONAL_EFFECT_ID: {
-        id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
-        name: 'Unknown Conditional Effect',
-        stackType: BuffStackType.Unknown,
-        icons: () => [IconId.UNKNOWN],
-    }, UNKNOWN_CONDITIONAL_BUFF_PARAMS: {
-        id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
-        name: 'Unknown Conditional Buff Parameters',
-        stackType: BuffStackType.Unknown,
-        icons: () => [IconId.UNKNOWN],
-    }, 'conditional:8:gradual heal': {
-        id: BuffId['conditional:8:gradual heal'],
-        name: 'Conditional Gradual Heal',
-        stat: UnitStat.hpRecovery,
-        stackType: BuffStackType.ConditionalTimed,
-        icons: () => [IconId.BUFF_HPREC],
-    }, 'conditional:12:guaranteed ko resistance': {
-        id: BuffId['conditional:12:guaranteed ko resistance'],
-        name: 'Conditional Guaranteed KO Resistance',
-        stat: UnitStat.koResistance,
-        stackType: BuffStackType.ConditionalTimed,
-        icons: () => [IconId.BUFF_KOBLK],
-    }, 'conditional:36:mitigation': {
-        id: BuffId['conditional:36:mitigation'],
-        name: 'Conditional Damage Reduction',
-        stat: UnitStat.mitigation,
-        stackType: BuffStackType.ConditionalTimed,
-        icons: () => [IconId.BUFF_DAMAGECUT],
-    }, 'conditional:91:chance ko resistance': {
-        id: BuffId['conditional:91:chance ko resistance'],
-        name: 'Conditional KO Resistance (Chance)',
-        stat: UnitStat.koResistance,
-        stackType: BuffStackType.ConditionalTimed,
-        icons: () => [IconId.BUFF_KOBLOCK],
-    }, 'conditional:133:heal on hit': {
-        id: BuffId['conditional:133:heal on hit'],
-        name: 'Conditional Heal when Attacked (Chance)',
-        stat: UnitStat.hpRecovery,
-        stackType: BuffStackType.ConditionalTimed,
-        icons: () => [IconId.BUFF_BEENATK_HPREC],
-    }, 'conditional:153:chance inflict atk down on hit': {
-        id: BuffId['conditional:153:chance inflict atk down on hit'],
-        name: 'Conditional Attack Reduction Counter (Chance)',
-        stat: UnitStat.atkDownCounter,
-        stackType: BuffStackType.ConditionalTimed,
-        icons: () => [IconId.BUFF_PROB_ATKREDUC],
     }, 'proc:78:self stat boost-atk': {
         id: BuffId['proc:78:self stat boost-atk'],
         name: 'Active Self Attack Boost',
@@ -10585,6 +11149,246 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.crit,
         stackType: BuffStackType.Active,
         icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_CRTRATEDOWNLOCK : IconId.BUFF_SELFCRTRATEUP],
+    }, 'proc:79:player exp boost': {
+        id: BuffId['proc:79:player exp boost'],
+        name: 'Active Player EXP Boost',
+        stat: UnitStat.expModification,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_PLAYEREXP],
+    }, 'proc:82:resummon': {
+        id: BuffId['proc:82:resummon'],
+        name: 'Resummon Unit',
+        stackType: BuffStackType.Burst,
+        icons: () => [IconId.BUFF_SUMMONUNIT],
+    }, UNKNOWN_CONDITIONAL_EFFECT_ID: {
+        id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
+        name: 'Unknown Conditional Effect',
+        stackType: BuffStackType.Unknown,
+        icons: () => [IconId.UNKNOWN],
+    }, UNKNOWN_CONDITIONAL_BUFF_PARAMS: {
+        id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+        name: 'Unknown Conditional Buff Parameters',
+        stackType: BuffStackType.Unknown,
+        icons: () => [IconId.UNKNOWN],
+    }, 'conditional:1:attack buff': {
+        id: BuffId['conditional:1:attack buff'],
+        name: 'Conditional Attack Boost',
+        stat: UnitStat.atk,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_ATKDOWN : IconId.BUFF_ATKUP],
+    }, 'conditional:3:defense buff': {
+        id: BuffId['conditional:3:defense buff'],
+        name: 'Conditional Defense Boost',
+        stat: UnitStat.def,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_DEFDOWN : IconId.BUFF_DEFUP],
+    }, 'conditional:5:recovery buff': {
+        id: BuffId['conditional:5:recovery buff'],
+        name: 'Conditional Recovery Boost',
+        stat: UnitStat.rec,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: (buff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_RECDOWN : IconId.BUFF_RECUP],
+    }, 'conditional:8:gradual heal': {
+        id: BuffId['conditional:8:gradual heal'],
+        name: 'Conditional Gradual Heal',
+        stat: UnitStat.hpRecovery,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_HPREC],
+    }, 'conditional:12:guaranteed ko resistance': {
+        id: BuffId['conditional:12:guaranteed ko resistance'],
+        name: 'Conditional Guaranteed KO Resistance',
+        stat: UnitStat.koResistance,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_KOBLK],
+    } }), (() => {
+    const createIconGetterForStat = (stat) => {
+        return (buff) => {
+            let element = '';
+            let polarity = 'UP';
+            if (buff) {
+                if (buff.value && buff.value < 0) {
+                    polarity = 'DOWN';
+                }
+                if (buff.conditions && buff.conditions.targetElements) {
+                    element = buff.conditions.targetElements[0];
+                }
+            }
+            if (typeof element !== 'string') {
+                element = '';
+            }
+            let iconKey = `BUFF_${element.toUpperCase()}${stat}${polarity}`;
+            if (!element || !(iconKey in IconId)) {
+                iconKey = `BUFF_ELEMENT${stat}${polarity}`;
+            }
+            return [IconId[iconKey]];
+        };
+    };
+    return {
+        'conditional:13:elemental attack buff': {
+            id: BuffId['conditional:13:elemental attack buff'],
+            name: 'Passive Elemental Attack Boost',
+            stat: UnitStat.atk,
+            stackType: BuffStackType.ConditionalTimed,
+            icons: createIconGetterForStat('ATK'),
+        },
+        'conditional:14:elemental defense buff': {
+            id: BuffId['conditional:14:elemental defense buff'],
+            name: 'Passive Elemental Defense Boost',
+            stat: UnitStat.def,
+            stackType: BuffStackType.ConditionalTimed,
+            icons: createIconGetterForStat('DEF'),
+        },
+    };
+})()), { 'conditional:21:fire mitigation': {
+        id: BuffId['conditional:21:fire mitigation'],
+        name: 'Active Fire Damage Reduction',
+        stat: UnitStat.fireMitigation,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_FIREDMGDOWN],
+    }, 'conditional:22:water mitigation': {
+        id: BuffId['conditional:22:water mitigation'],
+        name: 'Active Water Damage Reduction',
+        stat: UnitStat.waterMitigation,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_WATERDMGDOWN],
+    }, 'conditional:23:earth mitigation': {
+        id: BuffId['conditional:23:earth mitigation'],
+        name: 'Active Earth Damage Reduction',
+        stat: UnitStat.earthMitigation,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_EARTHDMGDOWN],
+    }, 'conditional:24:thunder mitigation': {
+        id: BuffId['conditional:24:thunder mitigation'],
+        name: 'Active Thunder Damage Reduction',
+        stat: UnitStat.thunderMitigation,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_THUNDERDMGDOWN],
+    }, 'conditional:25:light mitigation': {
+        id: BuffId['conditional:25:light mitigation'],
+        name: 'Active Light Damage Reduction',
+        stat: UnitStat.lightMitigation,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_LIGHTDMGDOWN],
+    }, 'conditional:26:dark mitigation': {
+        id: BuffId['conditional:26:dark mitigation'],
+        name: 'Active Dark Damage Reduction',
+        stat: UnitStat.darkMitigation,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_DARKDMGDOWN],
+    }, 'conditional:36:mitigation': {
+        id: BuffId['conditional:36:mitigation'],
+        name: 'Conditional Damage Reduction',
+        stat: UnitStat.mitigation,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_DAMAGECUT],
+    }, 'conditional:37:gradual bc fill': {
+        id: BuffId['conditional:37:gradual bc fill'],
+        name: 'Conditional Gradual BC Fill',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_BBREC],
+    }, 'conditional:40:spark damage': {
+        id: BuffId['conditional:40:spark damage'],
+        name: 'Conditional Spark Damage Boost',
+        stat: UnitStat.sparkDamage,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_SPARKDOWN : IconId.BUFF_SPARKUP],
+    }, 'conditional:72:attack boost-bb': {
+        id: BuffId['conditional:72:attack boost-bb'],
+        name: 'Conditional BB ATK Boost',
+        stat: UnitStat.bbAtk,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_BBATKUP],
+    }, 'conditional:72:attack boost-sbb': {
+        id: BuffId['conditional:72:attack boost-sbb'],
+        name: 'Conditional SBB ATK Boost',
+        stat: UnitStat.bbAtk,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_SBBATKUP],
+    }, 'conditional:72:attack boost-ubb': {
+        id: BuffId['conditional:72:attack boost-ubb'],
+        name: 'Conditional UBB ATK Boost',
+        stat: UnitStat.bbAtk,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_UBBATKUP],
+    }, 'conditional:74:add atk down to attack': {
+        id: BuffId['conditional:74:add atk down to attack'],
+        name: 'Conditional Attack Reduction Infliction Added to Attack',
+        stat: UnitStat.atkDownInflict,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_ADDATKDOWN],
+    }, 'conditional:75:add def down to attack': {
+        id: BuffId['conditional:75:add def down to attack'],
+        name: 'Conditional Defense Reduction Infliction Added to Attack',
+        stat: UnitStat.defDownInflict,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_ADDDEFDOWN],
+    }, 'conditional:84:critical damage': {
+        id: BuffId['conditional:84:critical damage'],
+        name: 'Conditional Critical Damage Boost',
+        stat: UnitStat.criticalDamage,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_CRTUP],
+    }, 'conditional:91:chance ko resistance': {
+        id: BuffId['conditional:91:chance ko resistance'],
+        name: 'Conditional KO Resistance (Chance)',
+        stat: UnitStat.koResistance,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_KOBLOCK],
+    }, 'conditional:98:thunder barrier': {
+        id: BuffId['conditional:98:thunder barrier'],
+        name: 'Thunder Barrier',
+        stat: UnitStat.barrier,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_THUNDERSHIELD],
+    }, 'conditional:99:light barrier': {
+        id: BuffId['conditional:99:light barrier'],
+        name: 'Conditional Light Barrier',
+        stat: UnitStat.barrier,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_LIGHTSHIELD],
+    }, 'conditional:132:od fill rate': {
+        id: BuffId['conditional:132:od fill rate'],
+        name: 'Conditional OD Gauge Fill Rate',
+        stat: UnitStat.odGauge,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_ODFILLBOOST],
+    }, 'conditional:133:heal on hit': {
+        id: BuffId['conditional:133:heal on hit'],
+        name: 'Conditional Heal when Attacked (Chance)',
+        stat: UnitStat.hpRecovery,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_BEENATK_HPREC],
+    }, 'conditional:143:critical damage reduction-base': {
+        id: BuffId['conditional:143:critical damage reduction-base'],
+        name: 'Conditional Base Critical Damage Reduction',
+        stat: UnitStat.criticalDamageMitigation,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_CRTDOWN],
+    }, 'conditional:143:critical damage reduction-buff': {
+        id: BuffId['conditional:143:critical damage reduction-buff'],
+        name: 'Conditional Buffed Critical Damage Reduction',
+        stat: UnitStat.criticalDamageMitigation,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_CRTDOWN],
+    }, 'conditional:145:elemental weakness damage reduction-base': {
+        id: BuffId['conditional:145:elemental weakness damage reduction-base'],
+        name: 'Conditional Base Elemental Weakness Damage Reduction',
+        stat: UnitStat.elementalWeaknessDamageMitigation,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_ELEMENTDOWN],
+    }, 'conditional:145:elemental weakness damage reduction-buff': {
+        id: BuffId['conditional:145:elemental weakness damage reduction-buff'],
+        name: 'Conditional Buffed Elemental Weakness Damage Reduction',
+        stat: UnitStat.elementalWeaknessDamageMitigation,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_ELEMENTDOWN],
+    }, 'conditional:153:chance inflict atk down on hit': {
+        id: BuffId['conditional:153:chance inflict atk down on hit'],
+        name: 'Conditional Attack Reduction Counter (Chance)',
+        stat: UnitStat.atkDownCounter,
+        stackType: BuffStackType.ConditionalTimed,
+        icons: () => [IconId.BUFF_PROB_ATKREDUC],
     } }));
 
 /**

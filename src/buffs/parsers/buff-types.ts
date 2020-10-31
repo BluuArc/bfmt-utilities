@@ -1401,6 +1401,14 @@ export enum BuffId {
 	'conditional:12:guaranteed ko resistance' = 'conditional:12:guaranteed ko resistance',
 	'conditional:13:elemental attack buff' = 'conditional:13:elemental attack buff',
 	'conditional:14:elemental defense buff' = 'conditional:14:elemental defense buff',
+
+	'conditional:21:fire mitigation' = 'conditional:21:fire mitigation',
+	'conditional:22:water mitigation' = 'conditional:22:water mitigation',
+	'conditional:23:earth mitigation' = 'conditional:23:earth mitigation',
+	'conditional:24:thunder mitigation' = 'conditional:24:thunder mitigation',
+	'conditional:25:light mitigation' = 'conditional:25:light mitigation',
+	'conditional:26:dark mitigation' = 'conditional:26:dark mitigation',
+
 	'conditional:36:mitigation' = 'conditional:36:mitigation',
 	'conditional:37:gradual bc fill' = 'conditional:37:gradual bc fill',
 	'conditional:40:spark damage' = 'conditional:40:spark damage',

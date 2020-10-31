@@ -2864,6 +2864,48 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 			},
 		};
 	})(),
+	'conditional:21:fire mitigation': {
+		id: BuffId['conditional:21:fire mitigation'],
+		name: 'Active Fire Damage Reduction',
+		stat: UnitStat.fireMitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_FIREDMGDOWN],
+	},
+	'conditional:22:water mitigation': {
+		id: BuffId['conditional:22:water mitigation'],
+		name: 'Active Water Damage Reduction',
+		stat: UnitStat.waterMitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_WATERDMGDOWN],
+	},
+	'conditional:23:earth mitigation': {
+		id: BuffId['conditional:23:earth mitigation'],
+		name: 'Active Earth Damage Reduction',
+		stat: UnitStat.earthMitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_EARTHDMGDOWN],
+	},
+	'conditional:24:thunder mitigation': {
+		id: BuffId['conditional:24:thunder mitigation'],
+		name: 'Active Thunder Damage Reduction',
+		stat: UnitStat.thunderMitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_THUNDERDMGDOWN],
+	},
+	'conditional:25:light mitigation': {
+		id: BuffId['conditional:25:light mitigation'],
+		name: 'Active Light Damage Reduction',
+		stat: UnitStat.lightMitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_LIGHTDMGDOWN],
+	},
+	'conditional:26:dark mitigation': {
+		id: BuffId['conditional:26:dark mitigation'],
+		name: 'Active Dark Damage Reduction',
+		stat: UnitStat.darkMitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_DARKDMGDOWN],
+	},
 	'conditional:36:mitigation': {
 		id: BuffId['conditional:36:mitigation'],
 		name: 'Conditional Damage Reduction',
