@@ -1181,6 +1181,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive:82:bc received conditional', () => {
+		testDefaultIconResult(BuffId['passive:82:bc received conditional'], [IconId.CONDITIONALBUFF_BCRECEIVEDTHRESH]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
