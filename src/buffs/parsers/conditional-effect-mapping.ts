@@ -467,6 +467,40 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return results;
 	});
 
+	map.set('75', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '75';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawReductionValue, rawChance, rawDebuffTurns, ...extraParams] = splitParams;
+		const reductionValue = parseNumberOrDefault(rawReductionValue);
+		const chance = parseNumberOrDefault(rawChance);
+		const debuffTurnDuration = parseNumberOrDefault(rawDebuffTurns);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+
+		const results: IBuff[] = [];
+		if (reductionValue !== 0 || chance !== 0 || debuffTurnDuration !== 0) {
+			results.push({
+				id: 'conditional:75:add def down to attack',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: {
+					reductionValue,
+					chance,
+					debuffTurnDuration,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
+
 	map.set('84', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		return parseConditionalWithSingleNumericalParameter({
 			effect,

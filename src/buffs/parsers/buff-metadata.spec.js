@@ -2090,6 +2090,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:74:add atk down to attack'], [IconId.BUFF_ADDATKDOWN]);
 	});
 
+	describe('conditional:75:add def down to attack', () => {
+		testDefaultIconResult(BuffId['conditional:75:add def down to attack'], [IconId.BUFF_ADDDEFDOWN]);
+	});
+
 	describe('conditional:84:critical damage', () => {
 		testDefaultIconResult(BuffId['conditional:84:critical damage'], [IconId.BUFF_CRTUP]);
 	});

@@ -2886,6 +2886,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_ADDATKDOWN],
 	},
+	'conditional:75:add def down to attack': {
+		id: BuffId['conditional:75:add def down to attack'],
+		name: 'Conditional Defense Reduction Infliction Added to Attack',
+		stat: UnitStat.defDownInflict,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_ADDDEFDOWN],
+	},
 	'conditional:84:critical damage': {
 		id: BuffId['conditional:84:critical damage'],
 		name: 'Conditional Critical Damage Boost',
