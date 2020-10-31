@@ -1141,7 +1141,8 @@ export enum BuffId {
 	'passive:77:spark damage reduction-buff' = 'passive:77:spark damage reduction-buff',
 
 	'passive:78:damage taken conditional' = 'passive:78:damage taken conditional',
-	'passive:79:bc fill after damage taken conditional' = 'passive:79:bc fill after damage taken conditional',
+	'passive:79:bc fill after damage taken conditional-flat' = 'passive:79:bc fill after damage taken conditional-flat',
+	'passive:79:bc fill after damage taken conditional-percent' = 'passive:79:bc fill after damage taken conditional-percent',
 
 	'passive:80:damage dealt conditional' = 'passive:80:damage dealt conditional',
 	'passive:81:bc fill after damage dealt conditional-flat' = 'passive:81:bc fill after damage dealt conditional-flat',

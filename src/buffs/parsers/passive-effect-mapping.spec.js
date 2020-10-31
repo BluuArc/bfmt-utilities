@@ -8699,7 +8699,8 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 79', () => {
-			const expectedBuffId = 'passive:79:bc fill after damage taken conditional';
+			const expectedFlatFillBuffId = 'passive:79:bc fill after damage taken conditional-flat';
+			const expectedPercentFillBuffId = 'passive:79:bc fill after damage taken conditional-percent';
 			const expectedOriginalId = '79';
 			const increaseBbGaugeKey = 'increase bb gauge';
 			const damageThresholdKey = 'damage threshold activation';
@@ -8710,17 +8711,26 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds([expectedBuffId]);
+			testValidBuffIds([expectedFlatFillBuffId, expectedPercentFillBuffId]);
 
 			it('uses the params property when it exists', () => {
-				const params = '100,0,2';
-				const expectedResult = [baseBuffFactory({
-					id: expectedBuffId,
-					value: 1,
-					conditions: {
-						damageTakenExceeds: 2,
-					},
-				})];
+				const params = '100,200,2';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatFillBuffId,
+						value: 1,
+						conditions: {
+							damageTakenExceeds: 2,
+						},
+					}),
+					baseBuffFactory({
+						id: expectedPercentFillBuffId,
+						value: 200,
+						conditions: {
+							damageTakenExceeds: 2,
+						},
+					}),
+				];
 
 				const effect = { params };
 				const result = mappingFunction(effect, createArbitraryContext());
@@ -8728,11 +8738,18 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			it('returns a buff entry for extra parameters', () => {
-				const params = '100,2,3,4,5,6';
+				const params = '100,200,3,4,5,6';
 				const expectedResult = [
 					baseBuffFactory({
-						id: expectedBuffId,
+						id: expectedFlatFillBuffId,
 						value: 1,
+						conditions: {
+							damageTakenExceeds: 3,
+						},
+					}),
+					baseBuffFactory({
+						id: expectedPercentFillBuffId,
+						value: 200,
 						conditions: {
 							damageTakenExceeds: 3,
 						},
@@ -8740,7 +8757,6 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					baseBuffFactory({
 						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
 						value: {
-							param_1: '2',
 							param_3: '4',
 							param_4: '5',
 							param_5: '6',
@@ -8759,7 +8775,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					[damageThresholdKey]: 4,
 				};
 				const expectedResult = [baseBuffFactory({
-					id: expectedBuffId,
+					id: expectedFlatFillBuffId,
 					value: 3,
 					conditions: {
 						damageTakenExceeds: 4,
@@ -8776,7 +8792,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					[damageThresholdKey]: '6',
 				};
 				const expectedResult = [baseBuffFactory({
-					id: expectedBuffId,
+					id: expectedFlatFillBuffId,
 					value: 5,
 					conditions: {
 						damageTakenExceeds: 6,
@@ -8788,15 +8804,54 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			describe('when values are missing', () => {
-				it('defaults to 0 for missing threshold value', () => {
-					const params = '12300,0';
+				it('only returns percent fill value if flat fill value is 0', () => {
+					const params = '0,45600,789';
 					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
-						value: 123,
+						id: expectedPercentFillBuffId,
+						value: 45600,
 						conditions: {
-							damageTakenExceeds: 0,
+							damageTakenExceeds: 789,
 						},
 					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('only returns flat fill value if percent fill value is 0', () => {
+					const params = '12300,0,789';
+					const expectedResult = [baseBuffFactory({
+						id: expectedFlatFillBuffId,
+						value: 123,
+						conditions: {
+							damageTakenExceeds: 789,
+						},
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults to 0 for missing threshold value', () => {
+					const params = '12300,45600';
+					const expectedResult = [
+						baseBuffFactory({
+							id: expectedFlatFillBuffId,
+							value: 123,
+							conditions: {
+								damageTakenExceeds: 0,
+							},
+						}),
+						baseBuffFactory({
+							id: expectedPercentFillBuffId,
+							value: 45600,
+							conditions: {
+								damageTakenExceeds: 0,
+							},
+						}),
+					];
 
 					const effect = { params };
 					const result = mappingFunction(effect, createArbitraryContext());
@@ -8808,7 +8863,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						[increaseBbGaugeKey]: 456,
 					};
 					const expectedResult = [baseBuffFactory({
-						id: expectedBuffId,
+						id: expectedFlatFillBuffId,
 						value: 456,
 						conditions: {
 							damageTakenExceeds: 0,
@@ -8835,13 +8890,23 @@ describe('getPassiveEffectToBuffMapping method', () => {
 
 			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
 				const effect = {
-					params: '100,2,3,789',
+					params: '100,200,3,789',
 				};
 				const expectedResult = [
 					baseBuffFactory({
-						id: expectedBuffId,
+						id: expectedFlatFillBuffId,
 						sources: arbitrarySourceValue,
 						value: 1,
+						conditions: {
+							...arbitraryConditionValue,
+							damageTakenExceeds: 3,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: expectedPercentFillBuffId,
+						sources: arbitrarySourceValue,
+						value: 200,
 						conditions: {
 							...arbitraryConditionValue,
 							damageTakenExceeds: 3,
@@ -8861,7 +8926,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const injectionContext = createDefaultInjectionContext();
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
-				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['0', '2', '0', '789']), 0] });
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 3] });
 			});
 		});
 
