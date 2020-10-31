@@ -2209,4 +2209,38 @@ describe('BUFF_METADATA entries', () => {
 	describe('conditional:153:chance inflict atk down on hit', () => {
 		testDefaultIconResult(BuffId['conditional:153:chance inflict atk down on hit'], [IconId.BUFF_PROB_ATKREDUC]);
 	});
+
+	describe('conditional 10500 buffs', () => {
+		describe('conditional:10500:shield-fire', () => {
+			testDefaultIconResult(BuffId['conditional:10500:shield-fire'], [IconId.SG_BUFF_FIRE]);
+		});
+
+		describe('conditional:10500:shield-water', () => {
+			testDefaultIconResult(BuffId['conditional:10500:shield-water'], [IconId.SG_BUFF_WATER]);
+		});
+
+		describe('conditional:10500:shield-earth', () => {
+			testDefaultIconResult(BuffId['conditional:10500:shield-earth'], [IconId.SG_BUFF_EARTH]);
+		});
+
+		describe('conditional:10500:shield-thunder', () => {
+			testDefaultIconResult(BuffId['conditional:10500:shield-thunder'], [IconId.SG_BUFF_THUNDER]);
+		});
+
+		describe('conditional:10500:shield-light', () => {
+			testDefaultIconResult(BuffId['conditional:10500:shield-light'], [IconId.SG_BUFF_LIGHT]);
+		});
+
+		describe('conditional:10500:shield-dark', () => {
+			testDefaultIconResult(BuffId['conditional:10500:shield-dark'], [IconId.SG_BUFF_DARK]);
+		});
+
+		describe('conditional:10500:shield-all', () => {
+			testDefaultIconResult(BuffId['conditional:10500:shield-all'], [IconId.SG_BUFF_ALL]);
+		});
+
+		describe('conditional:10500:shield-unknown', () => {
+			testDefaultIconResult(BuffId['conditional:10500:shield-unknown'], [IconId.SG_BUFF_UNKNOWN]);
+		});
+	});
 });

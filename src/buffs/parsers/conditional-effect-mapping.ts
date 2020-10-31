@@ -835,4 +835,37 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('10500', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '10500';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawElementValue, rawHp, rawDefense, ...extraParams] = splitParams;
+		const element = ELEMENT_MAPPING[rawElementValue] || BuffConditionElement.Unknown;
+		const hp = parseNumberOrDefault(rawHp);
+		const defense = parseNumberOrDefault(rawDefense);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+
+		const results: IBuff[] = [];
+		if (hp !== 0 || defense !== 0) {
+			results.push({
+				id: `conditional:10500:shield-${element}`,
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: {
+					hp,
+					defense,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
 }

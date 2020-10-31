@@ -300,6 +300,8 @@ export enum UnitStat {
 	effectOccurrenceShift = 'effectOccurrenceShift',
 
 	expModification = 'expModification',
+
+	shield = 'shield',
 }
 
 /**
@@ -415,6 +417,8 @@ export interface IUnitState {
 	effectOccurrenceShift: IBuff[];
 
 	expModification: IBuff[];
+
+	shield: IBuff[];
 }
 
 /**
@@ -884,6 +888,15 @@ export enum IconId {
 	BUFF_BCTURNSTART = 'BUFF_BCTURNSTART',
 
 	BUFF_PLAYEREXP = 'BUFF_PLAYEREXP',
+
+	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
+	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
+	SG_BUFF_WATER = 'SG_BUFF_WATER',
+	SG_BUFF_EARTH = 'SG_BUFF_EARTH',
+	SG_BUFF_THUNDER = 'SG_BUFF_THUNDER',
+	SG_BUFF_LIGHT = 'SG_BUFF_LIGHT',
+	SG_BUFF_DARK = 'SG_BUFF_DARK',
+	SG_BUFF_UNKNOWN = 'SG_BUFF_UNKNOWN',
 
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
@@ -1443,4 +1456,13 @@ export enum BuffId {
 	'conditional:145:elemental weakness damage reduction-buff' = 'conditional:145:elemental weakness damage reduction-buff',
 
 	'conditional:153:chance inflict atk down on hit' = 'conditional:153:chance inflict atk down on hit',
+
+	'conditional:10500:shield-all' = 'conditional:10500:shield-all',
+	'conditional:10500:shield-fire' = 'conditional:10500:shield-fire',
+	'conditional:10500:shield-water' = 'conditional:10500:shield-water',
+	'conditional:10500:shield-earth' = 'conditional:10500:shield-earth',
+	'conditional:10500:shield-thunder' = 'conditional:10500:shield-thunder',
+	'conditional:10500:shield-light' = 'conditional:10500:shield-light',
+	'conditional:10500:shield-dark' = 'conditional:10500:shield-dark',
+	'conditional:10500:shield-unknown' = 'conditional:10500:shield-unknown',
 }

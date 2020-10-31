@@ -2154,5 +2154,172 @@ describe('getConditionalEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456']), 3] });
 			});
 		});
+
+		describe('conditional 10500', () => {
+			const expectedOriginalId = '10500';
+
+			beforeEach(() => {
+				mappingFunction = getConditionalEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `conditional:10500:shield-${element}`));
+
+			it('uses the params and turn duration properties', () => {
+				const effect = {
+					params: '0&1&2',
+					turnDuration: 2,
+				};
+				const expectedResult = [baseBuffFactory({
+					id: 'conditional:10500:shield-all',
+					duration: 2,
+					value: {
+						hp: 1,
+						defense: 2,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const effect = {
+					params: '1&2&3&4&5&6',
+					turnDuration: 2,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'conditional:10500:shield-fire',
+						duration: 2,
+						value: {
+							hp: 2,
+							defense: 3,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+						value: {
+							param_3: '4',
+							param_4: '5',
+							param_5: '6',
+						},
+					}),
+				];
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when parsing element parameter', () => {
+				Object.entries(ELEMENT_MAPPING).forEach(([elementKey, elementValue]) => {
+					it(`parses value for ${elementValue}`, () => {
+						const effect = {
+							params: `${elementKey}&1&2`,
+							turnDuration: 456,
+						};
+						const expectedResult = [baseBuffFactory({
+							id: `conditional:10500:shield-${elementValue}`,
+							duration: 456,
+							value: {
+								hp: 1,
+								defense: 2,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('parses unknown elements to "unknown"', () => {
+					const effect = {
+						params: '1234&1&2',
+						turnDuration: 456,
+					};
+					const expectedResult = [baseBuffFactory({
+						id: 'conditional:10500:shield-unknown',
+						duration: 456,
+						value: {
+							hp: 1,
+							defense: 2,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			describe('when non-elemental parameters are missing or 0', () => {
+				const PARAMS_ORDER = ['hp', 'defense'];
+				PARAMS_ORDER.forEach((paramCase) => {
+					it(`defaults to 0 for missing ${paramCase} value`, () => {
+						const params = ['0', ...PARAMS_ORDER.map((p) => p !== paramCase ? '123' : '')].join('&');
+						const effect = { params, turnDuration: 456 };
+
+						const expectedValues = PARAMS_ORDER.reduce((acc, param) => {
+							acc[param] = param !== paramCase ? 123 : 0;
+							return acc;
+						}, {});
+						const expectedResult = [baseBuffFactory({
+							id: 'conditional:10500:shield-all',
+							duration: 456,
+							value: expectedValues,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
+				it('defaults the turn duration to 0 if it is missing', () => {
+					const expectedResult = [baseBuffFactory({
+						id: 'conditional:10500:shield-fire',
+						duration: 0,
+						value: {
+							hp: 2,
+							defense: 3,
+						},
+					})];
+
+					const result = mappingFunction({ params: '1&2&3' }, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('uses createSourcesfromContext and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '1&2&3&456',
+					turnDuration: 789,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'conditional:10500:shield-fire',
+						sources: arbitrarySourceValue,
+						duration: 789,
+						value: {
+							hp: 2,
+							defense: 3,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+					}),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456']), 3] });
+			});
+		});
 	});
 });
