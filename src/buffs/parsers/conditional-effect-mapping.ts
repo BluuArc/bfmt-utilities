@@ -441,6 +441,72 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		});
 	});
 
+	map.set('51', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '51',
+			buffId: 'conditional:51:add fire element',
+			returnBuffWithValueOfZero: true,
+		});
+	});
+
+	map.set('52', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '52',
+			buffId: 'conditional:52:add water element',
+			returnBuffWithValueOfZero: true,
+		});
+	});
+
+	map.set('53', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '53',
+			buffId: 'conditional:53:add earth element',
+			returnBuffWithValueOfZero: true,
+		});
+	});
+
+	map.set('54', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '54',
+			buffId: 'conditional:54:add thunder element',
+			returnBuffWithValueOfZero: true,
+		});
+	});
+
+	map.set('55', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '55',
+			buffId: 'conditional:55:add light element',
+			returnBuffWithValueOfZero: true,
+		});
+	});
+
+	map.set('56', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '56',
+			buffId: 'conditional:56:add dark element',
+			returnBuffWithValueOfZero: true,
+		});
+	});
+
 	map.set('72', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '72';
 		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);

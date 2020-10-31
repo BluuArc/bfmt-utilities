@@ -971,6 +971,54 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 51', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '51',
+				expectedBuffId: 'conditional:51:add fire element',
+				expectToReturnBuffWithValueOfZero: true,
+			});
+		});
+
+		describe('conditional 52', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '52',
+				expectedBuffId: 'conditional:52:add water element',
+				expectToReturnBuffWithValueOfZero: true,
+			});
+		});
+
+		describe('conditional 53', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '53',
+				expectedBuffId: 'conditional:53:add earth element',
+				expectToReturnBuffWithValueOfZero: true,
+			});
+		});
+
+		describe('conditional 54', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '54',
+				expectedBuffId: 'conditional:54:add thunder element',
+				expectToReturnBuffWithValueOfZero: true,
+			});
+		});
+
+		describe('conditional 55', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '55',
+				expectedBuffId: 'conditional:55:add light element',
+				expectToReturnBuffWithValueOfZero: true,
+			});
+		});
+
+		describe('conditional 56', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '56',
+				expectedBuffId: 'conditional:56:add dark element',
+				expectToReturnBuffWithValueOfZero: true,
+			});
+		});
+
 		describe('conditional 72', () => {
 			const BURST_TYPES = ['bb', 'sbb', 'ubb'];
 			const expectedOriginalId = '72';

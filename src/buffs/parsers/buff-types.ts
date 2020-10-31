@@ -1413,6 +1413,13 @@ export enum BuffId {
 	'conditional:37:gradual bc fill' = 'conditional:37:gradual bc fill',
 	'conditional:40:spark damage' = 'conditional:40:spark damage',
 
+	'conditional:51:add fire element' = 'conditional:51:add fire element',
+	'conditional:52:add water element' = 'conditional:52:add water element',
+	'conditional:53:add earth element' = 'conditional:53:add earth element',
+	'conditional:54:add thunder element' = 'conditional:54:add thunder element',
+	'conditional:55:add light element' = 'conditional:55:add light element',
+	'conditional:56:add dark element' = 'conditional:56:add dark element',
+
 	'conditional:72:attack boost-bb' = 'conditional:72:attack boost-bb',
 	'conditional:72:attack boost-sbb' = 'conditional:72:attack boost-sbb',
 	'conditional:72:attack boost-ubb' = 'conditional:72:attack boost-ubb',

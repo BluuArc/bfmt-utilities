@@ -2116,6 +2116,30 @@ describe('BUFF_METADATA entries', () => {
 		testIconResultWithBuff(BuffId['conditional:40:spark damage'], [IconId.BUFF_SPARKDOWN], { value: -1 }, 'buff value is less than 0');
 	});
 
+	describe('conditional:51:add fire element', () => {
+		testDefaultIconResult(BuffId['conditional:51:add fire element'], [IconId.BUFF_ADDFIRE]);
+	});
+
+	describe('conditional:52:add water element', () => {
+		testDefaultIconResult(BuffId['conditional:52:add water element'], [IconId.BUFF_ADDWATER]);
+	});
+
+	describe('conditional:53:add earth element', () => {
+		testDefaultIconResult(BuffId['conditional:53:add earth element'], [IconId.BUFF_ADDEARTH]);
+	});
+
+	describe('conditional:54:add thunder element', () => {
+		testDefaultIconResult(BuffId['conditional:54:add thunder element'], [IconId.BUFF_ADDTHUNDER]);
+	});
+
+	describe('conditional:55:add light element', () => {
+		testDefaultIconResult(BuffId['conditional:55:add light element'], [IconId.BUFF_ADDLIGHT]);
+	});
+
+	describe('conditional:56:add dark element', () => {
+		testDefaultIconResult(BuffId['conditional:56:add dark element'], [IconId.BUFF_ADDDARK]);
+	});
+
 	describe('conditional 72', () => {
 		describe('conditional:72:attack boost-bb', () => {
 			testDefaultIconResult(BuffId['conditional:72:attack boost-bb'], [IconId.BUFF_BBATKUP]);
