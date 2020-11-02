@@ -2178,6 +2178,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:99:light barrier'], [IconId.BUFF_LIGHTSHIELD]);
 	});
 
+	describe('conditional:131:spark critical', () => {
+		testDefaultIconResult(BuffId['conditional:131:spark critical'], [IconId.BUFF_SPARKCRTACTIVATED]);
+	});
+
 	describe('conditional:132:od fill rate', () => {
 		testDefaultIconResult(BuffId['conditional:132:od fill rate'], [IconId.BUFF_ODFILLBOOST]);
 	});

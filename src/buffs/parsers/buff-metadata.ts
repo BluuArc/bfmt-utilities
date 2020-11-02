@@ -3032,6 +3032,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_LIGHTSHIELD],
 	},
+	'conditional:131:spark critical': {
+		id: BuffId['conditional:131:spark critical'],
+		name: 'Conditional Spark Critical',
+		stat: UnitStat.sparkDamage,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_SPARKCRTACTIVATED],
+	},
 	'conditional:132:od fill rate': {
 		id: BuffId['conditional:132:od fill rate'],
 		name: 'Conditional OD Gauge Fill Rate',

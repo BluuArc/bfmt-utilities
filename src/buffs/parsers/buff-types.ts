@@ -889,6 +889,8 @@ export enum IconId {
 
 	BUFF_PLAYEREXP = 'BUFF_PLAYEREXP',
 
+	BUFF_SPARKCRTACTIVATED = 'BUFF_SPARKCRTACTIVATED',
+
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
 	SG_BUFF_WATER = 'SG_BUFF_WATER',
@@ -1446,6 +1448,7 @@ export enum BuffId {
 	'conditional:98:thunder barrier' = 'conditional:98:thunder barrier',
 	'conditional:99:light barrier' = 'conditional:99:light barrier',
 
+	'conditional:131:spark critical' = 'conditional:131:spark critical',
 	'conditional:132:od fill rate' = 'conditional:132:od fill rate',
 	'conditional:133:heal on hit' = 'conditional:133:heal on hit',
 

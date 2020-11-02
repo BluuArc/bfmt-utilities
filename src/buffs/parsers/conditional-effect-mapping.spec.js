@@ -1850,6 +1850,141 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 131', () => {
+			const expectedOriginalId = '131';
+			const expectedBuffId = 'conditional:131:spark critical';
+
+			const SPARK_DAMAGE_BUFF_KEY = 'sparkDamage%';
+
+			beforeEach(() => {
+				mappingFunction = getConditionalEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params and turn duration properties', () => {
+				const effect = {
+					params: '1&2',
+					turnDuration: 2,
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 2,
+					value: {
+						chance: 1,
+						[SPARK_DAMAGE_BUFF_KEY]: 2,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const effect = {
+					params: '1&2&3&4&5',
+					turnDuration: 2,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						duration: 2,
+						value: {
+							chance: 1,
+							[SPARK_DAMAGE_BUFF_KEY]: 2,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+						value: {
+							param_2: '3',
+							param_3: '4',
+							param_4: '5',
+						},
+					}),
+				];
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('returns a buff when parsed chance from params is zero', () => {
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 2,
+					value: {
+						chance: 0,
+						[SPARK_DAMAGE_BUFF_KEY]: 123,
+					},
+				})];
+
+				const result = mappingFunction({ params: '0&123', turnDuration: 2 }, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it(`defaults ${SPARK_DAMAGE_BUFF_KEY} to 0 if it is missing`, () => {
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 2,
+					value: {
+						chance: 123,
+						[SPARK_DAMAGE_BUFF_KEY]: 0,
+					},
+				})];
+
+				const result = mappingFunction({ params: '123', turnDuration: 2 }, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('defaults the turn duration to 0 if it is missing', () => {
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 0,
+					value: {
+						chance: 123,
+						[SPARK_DAMAGE_BUFF_KEY]: 456,
+					},
+				})];
+
+				const result = mappingFunction({ params: '123&456' }, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses createSourcesfromContext and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '1&2&456',
+					turnDuration: 789,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						duration: 789,
+						value: {
+							chance: 1,
+							[SPARK_DAMAGE_BUFF_KEY]: 2,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+					}),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456']), 2] });
+			});
+		});
+
 		describe('conditional 132', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '132',

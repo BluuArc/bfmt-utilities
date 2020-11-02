@@ -734,6 +734,38 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return results;
 	});
 
+	map.set('131', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '131';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawChance, rawSparkDamage, ...extraParams] = splitParams;
+		const chance = parseNumberOrDefault(rawChance);
+		const sparkDamage = parseNumberOrDefault(rawSparkDamage);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+
+		const results: IBuff[] = [];
+		if (chance !== 0 || sparkDamage !== 0) {
+			results.push({
+				id: 'conditional:131:spark critical',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: {
+					chance,
+					'sparkDamage%': sparkDamage,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
+
 	map.set('132', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		return parseConditionalWithSingleNumericalParameter({
 			effect,
