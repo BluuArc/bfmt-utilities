@@ -497,7 +497,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		};
 
 		/**
-		 * @description Common set of tests for condition passives that use only one numerical condition for activation.
+		 * @description Common set of tests for conditional passives that use only one numerical condition for activation.
 		 * @param {object} context
 		 * @param {string} context.expectedOriginalId
 		 * @param {string} context.expectedBuffId
@@ -678,6 +678,227 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 5] });
+			});
+		};
+
+		/**
+		 * @description Common set of tests for conditional BC fill passives that use only one numerical condition for activation.
+		 * @param {object} context
+		 * @param {string} context.expectedOriginalId
+		 * @param {string} context.expectedFlatFillBuffId
+		 * @param {string} context.expectedPercentFillBuffId
+		 * @param {string} context.flatFillEffectKey
+		 * @param {string} context.conditionalThresholdEffectKey
+		 * @param {(param: number) => import('./buff-types').IBuffConditions} context.getExpectedConditionsFromParam
+		 */
+		const testConditionalBcFillWithSingleNumericalCondition = ({
+			expectedOriginalId,
+			expectedFlatFillBuffId,
+			expectedPercentFillBuffId,
+			flatFillEffectKey,
+			conditionalThresholdEffectKey,
+			getExpectedConditionsFromParam = () => ({}),
+		}) => {
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedFlatFillBuffId, expectedPercentFillBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = '100,200,2';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatFillBuffId,
+						value: 1,
+						conditions: getExpectedConditionsFromParam(2),
+					}),
+					baseBuffFactory({
+						id: expectedPercentFillBuffId,
+						value: 200,
+						conditions: getExpectedConditionsFromParam(2),
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '100,200,3,4,5,6';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatFillBuffId,
+						value: 1,
+						conditions: getExpectedConditionsFromParam(3),
+					}),
+					baseBuffFactory({
+						id: expectedPercentFillBuffId,
+						value: 200,
+						conditions: getExpectedConditionsFromParam(3),
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_3: '4',
+							param_4: '5',
+							param_5: '6',
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = {
+					[flatFillEffectKey]: 3,
+					[conditionalThresholdEffectKey]: 4,
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedFlatFillBuffId,
+					value: 3,
+					conditions: getExpectedConditionsFromParam(4),
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('converts effect properties to numbers when params property does not exist', () => {
+				const effect = {
+					[flatFillEffectKey]: '5',
+					[conditionalThresholdEffectKey]: '6',
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedFlatFillBuffId,
+					value: 5,
+					conditions: getExpectedConditionsFromParam(6),
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				it('only returns percent fill value if flat fill value is 0', () => {
+					const params = '0,45600,789';
+					const expectedResult = [baseBuffFactory({
+						id: expectedPercentFillBuffId,
+						value: 45600,
+						conditions: getExpectedConditionsFromParam(789),
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('only returns flat fill value if percent fill value is 0', () => {
+					const params = '12300,0,789';
+					const expectedResult = [baseBuffFactory({
+						id: expectedFlatFillBuffId,
+						value: 123,
+						conditions: getExpectedConditionsFromParam(789),
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults to 0 for missing threshold value', () => {
+					const params = '12300,45600';
+					const expectedResult = [
+						baseBuffFactory({
+							id: expectedFlatFillBuffId,
+							value: 123,
+							conditions: getExpectedConditionsFromParam(0),
+						}),
+						baseBuffFactory({
+							id: expectedPercentFillBuffId,
+							value: 45600,
+							conditions: getExpectedConditionsFromParam(0),
+						}),
+					];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults to 0 for missing threshold value when params property does not exist', () => {
+					const effect = {
+						[flatFillEffectKey]: 456,
+					};
+					const expectedResult = [baseBuffFactory({
+						id: expectedFlatFillBuffId,
+						value: 456,
+						conditions: getExpectedConditionsFromParam(0),
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a no params buff if all effect properties are non-number values', () => {
+					const effect = {
+						[flatFillEffectKey]: 'not a number',
+						[conditionalThresholdEffectKey]: 'not a number',
+					};
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('returns a no params buff if the effect params are non-number or missing', () => {
+					const effect = { params: 'non-number' };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '100,200,3,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatFillBuffId,
+						sources: arbitrarySourceValue,
+						value: 1,
+						conditions: {
+							...arbitraryConditionValue,
+							...getExpectedConditionsFromParam(3),
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: expectedPercentFillBuffId,
+						sources: arbitrarySourceValue,
+						value: 200,
+						conditions: {
+							...arbitraryConditionValue,
+							...getExpectedConditionsFromParam(3),
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 3] });
 			});
 		};
 
@@ -8706,234 +8927,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		});
 
 		describe('passive 79', () => {
-			const expectedFlatFillBuffId = 'passive:79:bc fill after damage taken conditional-flat';
-			const expectedPercentFillBuffId = 'passive:79:bc fill after damage taken conditional-percent';
-			const expectedOriginalId = '79';
-			const increaseBbGaugeKey = 'increase bb gauge';
-			const damageThresholdKey = 'damage threshold activation';
-
-			beforeEach(() => {
-				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
-				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
-			});
-
-			testFunctionExistence(expectedOriginalId);
-			testValidBuffIds([expectedFlatFillBuffId, expectedPercentFillBuffId]);
-
-			it('uses the params property when it exists', () => {
-				const params = '100,200,2';
-				const expectedResult = [
-					baseBuffFactory({
-						id: expectedFlatFillBuffId,
-						value: 1,
-						conditions: {
-							damageTakenExceeds: 2,
-						},
-					}),
-					baseBuffFactory({
-						id: expectedPercentFillBuffId,
-						value: 200,
-						conditions: {
-							damageTakenExceeds: 2,
-						},
-					}),
-				];
-
-				const effect = { params };
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
-			});
-
-			it('returns a buff entry for extra parameters', () => {
-				const params = '100,200,3,4,5,6';
-				const expectedResult = [
-					baseBuffFactory({
-						id: expectedFlatFillBuffId,
-						value: 1,
-						conditions: {
-							damageTakenExceeds: 3,
-						},
-					}),
-					baseBuffFactory({
-						id: expectedPercentFillBuffId,
-						value: 200,
-						conditions: {
-							damageTakenExceeds: 3,
-						},
-					}),
-					baseBuffFactory({
-						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
-						value: {
-							param_3: '4',
-							param_4: '5',
-							param_5: '6',
-						},
-					}),
-				];
-
-				const effect = { params };
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
-			});
-
-			it('falls back to effect properties when params property does not exist', () => {
-				const effect = {
-					[increaseBbGaugeKey]: 3,
-					[damageThresholdKey]: 4,
-				};
-				const expectedResult = [baseBuffFactory({
-					id: expectedFlatFillBuffId,
-					value: 3,
-					conditions: {
-						damageTakenExceeds: 4,
-					},
-				})];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
-			});
-
-			it('converts effect properties to numbers when params property does not exist', () => {
-				const effect = {
-					[increaseBbGaugeKey]: '5',
-					[damageThresholdKey]: '6',
-				};
-				const expectedResult = [baseBuffFactory({
-					id: expectedFlatFillBuffId,
-					value: 5,
-					conditions: {
-						damageTakenExceeds: 6,
-					},
-				})];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
-			});
-
-			describe('when values are missing', () => {
-				it('only returns percent fill value if flat fill value is 0', () => {
-					const params = '0,45600,789';
-					const expectedResult = [baseBuffFactory({
-						id: expectedPercentFillBuffId,
-						value: 45600,
-						conditions: {
-							damageTakenExceeds: 789,
-						},
-					})];
-
-					const effect = { params };
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
-				});
-
-				it('only returns flat fill value if percent fill value is 0', () => {
-					const params = '12300,0,789';
-					const expectedResult = [baseBuffFactory({
-						id: expectedFlatFillBuffId,
-						value: 123,
-						conditions: {
-							damageTakenExceeds: 789,
-						},
-					})];
-
-					const effect = { params };
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
-				});
-
-				it('defaults to 0 for missing threshold value', () => {
-					const params = '12300,45600';
-					const expectedResult = [
-						baseBuffFactory({
-							id: expectedFlatFillBuffId,
-							value: 123,
-							conditions: {
-								damageTakenExceeds: 0,
-							},
-						}),
-						baseBuffFactory({
-							id: expectedPercentFillBuffId,
-							value: 45600,
-							conditions: {
-								damageTakenExceeds: 0,
-							},
-						}),
-					];
-
-					const effect = { params };
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
-				});
-
-				it('defaults to 0 for missing threshold value when params property does not exist', () => {
-					const effect = {
-						[increaseBbGaugeKey]: 456,
-					};
-					const expectedResult = [baseBuffFactory({
-						id: expectedFlatFillBuffId,
-						value: 456,
-						conditions: {
-							damageTakenExceeds: 0,
-						},
-					})];
-
-					const result = mappingFunction(effect, createArbitraryContext());
-					expect(result).toEqual(expectedResult);
-				});
-
-				it('returns a no params buff if all effect properties are non-number values', () => {
-					const effect = {
-						[increaseBbGaugeKey]: 'not a number',
-						[damageThresholdKey]: 'not a number',
-					};
-					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
-				});
-
-				it('returns a no params buff if the effect params are non-number or missing', () => {
-					const effect = { params: 'non-number' };
-					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
-				});
-			});
-
-			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
-				const effect = {
-					params: '100,200,3,789',
-				};
-				const expectedResult = [
-					baseBuffFactory({
-						id: expectedFlatFillBuffId,
-						sources: arbitrarySourceValue,
-						value: 1,
-						conditions: {
-							...arbitraryConditionValue,
-							damageTakenExceeds: 3,
-						},
-						...arbitraryTargetData,
-					}, BUFF_TARGET_PROPS),
-					baseBuffFactory({
-						id: expectedPercentFillBuffId,
-						sources: arbitrarySourceValue,
-						value: 200,
-						conditions: {
-							...arbitraryConditionValue,
-							damageTakenExceeds: 3,
-						},
-						...arbitraryTargetData,
-					}, BUFF_TARGET_PROPS),
-					baseBuffFactory({
-						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
-						sources: arbitrarySourceValue,
-						value: arbitraryUnknownValue,
-						conditions: arbitraryConditionValue,
-						...arbitraryTargetData,
-					}, BUFF_TARGET_PROPS),
-				];
-
-				const context = createArbitraryContext();
-				const injectionContext = createDefaultInjectionContext();
-				const result = mappingFunction(effect, context, injectionContext);
-				expect(result).toEqual(expectedResult);
-				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 3] });
+			testConditionalBcFillWithSingleNumericalCondition({
+				expectedFlatFillBuffId: 'passive:79:bc fill after damage taken conditional-flat',
+				expectedPercentFillBuffId: 'passive:79:bc fill after damage taken conditional-percent',
+				expectedOriginalId: '79',
+				flatFillEffectKey: 'increase bb gauge',
+				conditionalThresholdEffectKey: 'damage threshold activation',
+				getExpectedConditionsFromParam: (param) => ({ damageTakenExceeds: param }),
 			});
 		});
 

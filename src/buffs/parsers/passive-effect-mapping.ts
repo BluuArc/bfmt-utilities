@@ -432,6 +432,82 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		return results;
 	};
 
+	interface IConditionalBcFillWithSingleNumericalConditionContext extends ITemplatedParsingFunctionContext {
+		thresholdType: ThresholdType;
+		flatFillBuffId: string;
+		percentFillBuffId: string;
+		flatFillEffectKey: string;
+		// percentFillEffectKey: string; // NOTE: deathmax datamine does not parse this property in conditional effects
+	}
+	const parseConditionalBcFillWithSingleNumericalCondition = ({
+		effect,
+		context,
+		injectionContext,
+		originalId,
+		thresholdType,
+		flatFillBuffId,
+		percentFillBuffId,
+		flatFillEffectKey,
+	}: IConditionalBcFillWithSingleNumericalConditionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let flatFill: number, percentFill: number, thresholdInfo: IThresholdActivationInfo;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			flatFill = parseNumberOrDefault(params[0]) / 100;
+			percentFill = parseNumberOrDefault(params[1]);
+			thresholdInfo = parseThresholdValuesFromParamsProperty(params[2], '1', thresholdType);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(3), 3, injectionContext);
+		} else {
+			flatFill = parseNumberOrDefault(typedEffect[flatFillEffectKey] as number);
+			percentFill = 0; // NOTE: deathmax datamine does not parse this property
+			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, thresholdType);
+		}
+
+		const results: IBuff[] = [];
+		if (flatFill !== 0) {
+			const thresholdConditions = getThresholdConditions(thresholdInfo);
+			results.push({
+				id: flatFillBuffId,
+				originalId,
+				sources,
+				value: flatFill,
+				conditions: {
+					...conditionInfo,
+					...thresholdConditions,
+				},
+				...targetData,
+			});
+		}
+
+		if (percentFill !== 0) {
+			const thresholdConditions = getThresholdConditions(thresholdInfo);
+			results.push({
+				id: percentFillBuffId,
+				originalId,
+				sources,
+				value: percentFill,
+				conditions: {
+					...conditionInfo,
+					...thresholdConditions,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	};
+
 	map.set('1', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '1';
 		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
@@ -3031,64 +3107,16 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	});
 
 	map.set('79', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
-		const originalId = '79';
-		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-
-		const typedEffect = (effect as IPassiveEffect);
-		let flatFill: number, percentFill: number, thresholdInfo: IThresholdActivationInfo;
-		let unknownParams: IGenericBuffValue | undefined;
-		if (typedEffect.params) {
-			const params = splitEffectParams(typedEffect);
-			flatFill = parseNumberOrDefault(params[0]) / 100;
-			percentFill = parseNumberOrDefault(params[1]);
-			thresholdInfo = parseThresholdValuesFromParamsProperty(params[2], '1', ThresholdType.DamageTaken);
-
-			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(3), 3, injectionContext);
-		} else {
-			flatFill = parseNumberOrDefault(typedEffect['increase bb gauge'] as number);
-			percentFill = 0; // NOTE: deathmax datamine does not parse this property
-			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.DamageTaken);
-		}
-
-		const results: IBuff[] = [];
-		if (flatFill !== 0) {
-			const thresholdConditions = getThresholdConditions(thresholdInfo);
-			results.push({
-				id: 'passive:79:bc fill after damage taken conditional-flat',
-				originalId,
-				sources,
-				value: flatFill,
-				conditions: {
-					...conditionInfo,
-					...thresholdConditions,
-				},
-				...targetData,
-			});
-		}
-
-		if (percentFill !== 0) {
-			const thresholdConditions = getThresholdConditions(thresholdInfo);
-			results.push({
-				id: 'passive:79:bc fill after damage taken conditional-percent',
-				originalId,
-				sources,
-				value: percentFill,
-				conditions: {
-					...conditionInfo,
-					...thresholdConditions,
-				},
-				...targetData,
-			});
-		}
-
-		handlePostParse(results, unknownParams, {
-			originalId,
-			sources,
-			targetData,
-			conditionInfo,
+		return parseConditionalBcFillWithSingleNumericalCondition({
+			effect,
+			context,
+			injectionContext,
+			originalId: '79',
+			thresholdType: ThresholdType.DamageTaken,
+			flatFillBuffId: 'passive:79:bc fill after damage taken conditional-flat',
+			percentFillBuffId: 'passive:79:bc fill after damage taken conditional-percent',
+			flatFillEffectKey: 'increase bb gauge',
 		});
-
-		return results;
 	});
 
 	map.set('80', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
