@@ -3120,153 +3120,37 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	});
 
 	map.set('80', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
-		const originalId = '80';
-		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-
-		const typedEffect = (effect as IPassiveEffect);
-		const results: IBuff[] = [];
-
-		let unknownParams: IGenericBuffValue | undefined;
-		if (typedEffect.params) {
-			const params = splitEffectParams(typedEffect);
-			const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
-				id: params[0],
-				params: params[1],
-				turnDuration: parseNumberOrDefault(params[4]),
-			}, context, injectionContext);
-			const maxTriggerCount = parseNumberOrDefault(params[2]);
-			const thresholdInfo = parseThresholdValuesFromParamsProperty(params[3], '1', ThresholdType.DamageDealt);
-			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(5), 5, injectionContext);
-
-			if (triggeredBuffs.length > 0) {
-				const thresholdConditions = getThresholdConditions(thresholdInfo);
-				results.push({
-					id: 'passive:80:damage dealt conditional',
-					originalId,
-					sources,
-					value: {
-						triggeredBuffs,
-						maxTriggerCount,
-					},
-					conditions: { ...conditionInfo, ...thresholdConditions },
-					...targetData,
-				});
-			}
-		}
-
-		handlePostParse(results, unknownParams, {
-			originalId,
-			sources,
-			targetData,
-			conditionInfo,
+		return parseConditionalPassiveWithSingleNumericalCondition({
+			effect,
+			context,
+			injectionContext,
+			originalId: '80',
+			buffId: 'passive:80:damage dealt conditional',
+			thresholdType: ThresholdType.DamageDealt,
 		});
-
-		return results;
 	});
 
 	map.set('81', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
-		const originalId = '81';
-		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-
-		const typedEffect = (effect as IPassiveEffect);
-		let flatFill: number, percentFill: number, thresholdInfo: IThresholdActivationInfo;
-		let unknownParams: IGenericBuffValue | undefined;
-		if (typedEffect.params) {
-			const params = splitEffectParams(typedEffect);
-			flatFill = parseNumberOrDefault(params[0]) / 100;
-			percentFill = parseNumberOrDefault(params[1]);
-			thresholdInfo = parseThresholdValuesFromParamsProperty(params[2], '1', ThresholdType.DamageDealt);
-
-			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(3), 3, injectionContext);
-		} else {
-			flatFill = parseNumberOrDefault(typedEffect['increase bb gauge'] as number);
-			percentFill = 0; // NOTE: deathmax datamine does not parse this property
-			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.DamageDealt);
-		}
-
-		const results: IBuff[] = [];
-		if (flatFill !== 0) {
-			const thresholdConditions = getThresholdConditions(thresholdInfo);
-			results.push({
-				id: 'passive:81:bc fill after damage dealt conditional-flat',
-				originalId,
-				sources,
-				value: flatFill,
-				conditions: {
-					...conditionInfo,
-					...thresholdConditions,
-				},
-				...targetData,
-			});
-		}
-
-		if (percentFill !== 0) {
-			const thresholdConditions = getThresholdConditions(thresholdInfo);
-			results.push({
-				id: 'passive:81:bc fill after damage dealt conditional-percent',
-				originalId,
-				sources,
-				value: percentFill,
-				conditions: {
-					...conditionInfo,
-					...thresholdConditions,
-				},
-				...targetData,
-			});
-		}
-
-		handlePostParse(results, unknownParams, {
-			originalId,
-			sources,
-			targetData,
-			conditionInfo,
+		return parseConditionalBcFillWithSingleNumericalCondition({
+			effect,
+			context,
+			injectionContext,
+			originalId: '81',
+			thresholdType: ThresholdType.DamageDealt,
+			flatFillBuffId: 'passive:81:bc fill after damage dealt conditional-flat',
+			percentFillBuffId: 'passive:81:bc fill after damage dealt conditional-percent',
+			flatFillEffectKey: 'increase bb gauge',
 		});
-
-		return results;
 	});
 
 	map.set('82', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
-		const originalId = '82';
-		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-
-		const typedEffect = (effect as IPassiveEffect);
-		const results: IBuff[] = [];
-
-		let unknownParams: IGenericBuffValue | undefined;
-		if (typedEffect.params) {
-			const params = splitEffectParams(typedEffect);
-			const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
-				id: params[0],
-				params: params[1],
-				turnDuration: parseNumberOrDefault(params[4]),
-			}, context, injectionContext);
-			const maxTriggerCount = parseNumberOrDefault(params[2]);
-			const thresholdInfo = parseThresholdValuesFromParamsProperty(params[3], '1', ThresholdType.BcReceived);
-			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(5), 5, injectionContext);
-
-			if (triggeredBuffs.length > 0) {
-				const thresholdConditions = getThresholdConditions(thresholdInfo);
-				results.push({
-					id: 'passive:82:bc received conditional',
-					originalId,
-					sources,
-					value: {
-						triggeredBuffs,
-						maxTriggerCount,
-					},
-					conditions: { ...conditionInfo, ...thresholdConditions },
-					...targetData,
-				});
-			}
-		}
-
-		handlePostParse(results, unknownParams, {
-			originalId,
-			sources,
-			targetData,
-			conditionInfo,
+		return parseConditionalPassiveWithSingleNumericalCondition({
+			effect,
+			context,
+			injectionContext,
+			originalId: '82',
+			buffId: 'passive:82:bc received conditional',
+			thresholdType: ThresholdType.BcReceived,
 		});
-
-		return results;
 	});
 }
