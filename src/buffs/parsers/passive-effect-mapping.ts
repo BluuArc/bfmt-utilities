@@ -377,6 +377,61 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		return results;
 	};
 
+	interface IConditionalPassiveWithSingleNumericalConditionContext extends ITemplatedParsingFunctionContext {
+		buffId: string;
+		thresholdType: ThresholdType;
+	}
+	const parseConditionalPassiveWithSingleNumericalCondition = ({
+		effect,
+		context,
+		injectionContext,
+		originalId,
+		buffId,
+		thresholdType,
+	}: IConditionalPassiveWithSingleNumericalConditionContext): IBuff[] => {
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
+				id: params[0],
+				params: params[1],
+				turnDuration: parseNumberOrDefault(params[4]),
+			}, context, injectionContext);
+			const maxTriggerCount = parseNumberOrDefault(params[2]);
+			const thresholdInfo = parseThresholdValuesFromParamsProperty(params[3], '1', thresholdType);
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(5), 5, injectionContext);
+
+			if (triggeredBuffs.length > 0) {
+				const thresholdConditions = getThresholdConditions(thresholdInfo);
+				results.push({
+					id: buffId,
+					originalId,
+					sources,
+					value: {
+						triggeredBuffs,
+						maxTriggerCount,
+					},
+					conditions: { ...conditionInfo, ...thresholdConditions },
+					...targetData,
+				});
+			}
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	};
+
 	map.set('1', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '1';
 		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
@@ -2965,48 +3020,14 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	});
 
 	map.set('78', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
-		const originalId = '78';
-		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-
-		const typedEffect = (effect as IPassiveEffect);
-		const results: IBuff[] = [];
-
-		let unknownParams: IGenericBuffValue | undefined;
-		if (typedEffect.params) {
-			const params = splitEffectParams(typedEffect);
-			const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
-				id: params[0],
-				params: params[1],
-				turnDuration: parseNumberOrDefault(params[4]),
-			}, context, injectionContext);
-			const maxTriggerCount = parseNumberOrDefault(params[2]);
-			const thresholdInfo = parseThresholdValuesFromParamsProperty(params[3], '1', ThresholdType.DamageTaken);
-			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(5), 5, injectionContext);
-
-			if (triggeredBuffs.length > 0) {
-				const thresholdConditions = getThresholdConditions(thresholdInfo);
-				results.push({
-					id: 'passive:78:damage taken conditional',
-					originalId,
-					sources,
-					value: {
-						triggeredBuffs,
-						maxTriggerCount,
-					},
-					conditions: { ...conditionInfo, ...thresholdConditions },
-					...targetData,
-				});
-			}
-		}
-
-		handlePostParse(results, unknownParams, {
-			originalId,
-			sources,
-			targetData,
-			conditionInfo,
+		return parseConditionalPassiveWithSingleNumericalCondition({
+			effect,
+			context,
+			injectionContext,
+			originalId: '78',
+			buffId: 'passive:78:damage taken conditional',
+			thresholdType: ThresholdType.DamageTaken,
 		});
-
-		return results;
 	});
 
 	map.set('79', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
