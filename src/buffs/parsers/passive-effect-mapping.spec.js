@@ -8963,5 +8963,16 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				getExpectedConditionsFromParam: (param) => ({ bcReceivedExceeds: param }),
 			});
 		});
+
+		describe('passive 83', () => {
+			testConditionalBcFillWithSingleNumericalCondition({
+				expectedFlatFillBuffId: 'passive:83:bc fill after bc received conditional-flat',
+				expectedPercentFillBuffId: 'passive:83:bc fill after bc received conditional-percent',
+				expectedOriginalId: '83',
+				flatFillEffectKey: 'increase bb gauge',
+				conditionalThresholdEffectKey: 'bc receive count activation',
+				getExpectedConditionsFromParam: (param) => ({ bcReceivedExceeds: param }),
+			});
+		});
 	});
 });

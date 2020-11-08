@@ -196,13 +196,14 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 	};
 
 	const parseThresholdValuesFromEffect = (effect: IPassiveEffect, thresholdType: ThresholdType, suffix = 'buff requirement'): IThresholdActivationInfo => {
-		let effectKey: string, requireAbove = true;
+		let effectKey: string, fallbackEffectKey: string | undefined, requireAbove = true;
 		if (thresholdType === ThresholdType.DamageTaken) {
 			effectKey = 'damage threshold activation';
 		} else if (thresholdType === ThresholdType.DamageDealt) {
 			effectKey = 'damage dealt threshold activation';
 		} else if (thresholdType === ThresholdType.BcReceived) {
 			effectKey = 'bc receive count buff activation';
+			fallbackEffectKey = 'bc receive count activation';
 		} else if (`${thresholdType} above % ${suffix}` in effect) {
 			effectKey = `${thresholdType} above % ${suffix}`;
 		} else {
@@ -210,8 +211,11 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			requireAbove = false;
 		}
 
+		const threshold = !fallbackEffectKey
+			? parseNumberOrDefault(effect[effectKey] as string)
+			: parseNumberOrDefault(effect[effectKey] as string, parseNumberOrDefault(effect[fallbackEffectKey] as string))
 		return {
-			threshold: parseNumberOrDefault(effect[effectKey] as string),
+			threshold,
 			requireAbove,
 			type: thresholdType,
 		};
@@ -3151,6 +3155,19 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			originalId: '82',
 			buffId: 'passive:82:bc received conditional',
 			thresholdType: ThresholdType.BcReceived,
+		});
+	});
+
+	map.set('83', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalBcFillWithSingleNumericalCondition({
+			effect,
+			context,
+			injectionContext,
+			originalId: '83',
+			thresholdType: ThresholdType.BcReceived,
+			flatFillBuffId: 'passive:83:bc fill after bc received conditional-flat',
+			percentFillBuffId: 'passive:83:bc fill after bc received conditional-percent',
+			flatFillEffectKey: 'increase bb gauge',
 		});
 	});
 }

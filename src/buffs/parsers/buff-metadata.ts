@@ -1423,6 +1423,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.CONDITIONALBUFF_BCRECEIVEDTHRESH],
 	},
+	'passive:83:bc fill after bc received conditional-flat': {
+		id: BuffId['passive:83:bc fill after bc received conditional-flat'],
+		name: 'Passive Flat BC Fill after BC Received Threshold',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_BBREC],
+	},
+	'passive:83:bc fill after bc received conditional-percent': {
+		id: BuffId['passive:83:bc fill after bc received conditional-percent'],
+		name: 'Passive Percent BC Fill after BC Received Threshold',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_BBREC],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
