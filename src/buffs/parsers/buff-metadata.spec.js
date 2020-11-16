@@ -2052,6 +2052,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:83:spark critical'], [IconId.BUFF_SPARKCRTACTIVATED]);
 	});
 
+	describe('proc:84:od fill rate', () => {
+		testDefaultIconResult(BuffId['proc:84:od fill rate'], [IconId.BUFF_ODFILLBOOST]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

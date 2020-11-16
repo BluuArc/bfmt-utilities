@@ -4091,4 +4091,16 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('84', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithSingleNumericalParameterAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			effectValueKey: 'od fill rate% buff',
+			effectTurnDurationKey: 'od fill rate buff turns (132)',
+			buffId: 'proc:84:od fill rate',
+			originalId: '84',
+		});
+	});
 }

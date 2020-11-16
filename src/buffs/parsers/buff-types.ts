@@ -1407,6 +1407,7 @@ export enum BuffId {
 	'proc:79:player exp boost' = 'proc:79:player exp boost',
 	'proc:82:resummon' = 'proc:82:resummon',
 	'proc:83:spark critical' = 'proc:83:spark critical',
+	'proc:84:od fill rate' = 'proc:84:od fill rate',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

@@ -2796,6 +2796,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_SPARKCRTACTIVATED],
 	},
+	'proc:84:od fill rate': {
+		id: BuffId['proc:84:od fill rate'],
+		name: 'Active OD Gauge Fill Rate',
+		stat: UnitStat.odGauge,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ODFILLBOOST],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

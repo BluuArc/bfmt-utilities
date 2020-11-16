@@ -11423,5 +11423,13 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('proc 84', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '84',
+				expectedBuffId: 'proc:84:od fill rate',
+				effectValueKey: 'od fill rate% buff',
+				effectTurnDurationKey: 'od fill rate buff turns (132)',
+			});
+		});
 	});
 });
