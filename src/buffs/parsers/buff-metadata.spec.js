@@ -1195,6 +1195,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive:84:hc received conditional', () => {
+		testDefaultIconResult(BuffId['passive:84:hc received conditional'], [IconId.CONDITIONALBUFF_HCRECEIVEDTHRESH]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

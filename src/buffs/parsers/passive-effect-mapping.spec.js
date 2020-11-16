@@ -8974,5 +8974,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				getExpectedConditionsFromParam: (param) => ({ bcReceivedExceeds: param }),
 			});
 		});
+
+		describe('passive 84', () => {
+			testConditionalPassiveWithSingleNumericalCondition({
+				expectedOriginalId: '84',
+				expectedBuffId: 'passive:84:hc received conditional',
+				getExpectedConditionsFromParam: (param) => ({ hcReceivedExceeds: param }),
+			});
+		});
 	});
 });
