@@ -1418,6 +1418,7 @@ export enum BuffId {
 	'conditional:1:attack buff' = 'conditional:1:attack buff',
 	'conditional:3:defense buff' = 'conditional:3:defense buff',
 	'conditional:5:recovery buff' = 'conditional:5:recovery buff',
+	'conditional:7:critical hit rate buff' = 'conditional:7:critical hit rate buff',
 
 	'conditional:8:gradual heal' = 'conditional:8:gradual heal',
 	'conditional:12:guaranteed ko resistance' = 'conditional:12:guaranteed ko resistance',

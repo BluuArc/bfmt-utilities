@@ -2083,6 +2083,11 @@ describe('BUFF_METADATA entries', () => {
 		testIconResultWithBuff(BuffId['conditional:5:recovery buff'], [IconId.BUFF_RECDOWN], { value: -1 }, 'buff value is less than 0');
 	});
 
+	describe('conditional:7:critical hit rate buff', () => {
+		testDefaultIconResult(BuffId['conditional:7:critical hit rate buff'], [IconId.BUFF_CRTRATEUP]);
+		testIconResultWithBuff(BuffId['conditional:7:critical hit rate buff'], [IconId.BUFF_CRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
+	});
+
 	describe('conditional:8:gradual heal', () => {
 		testDefaultIconResult(BuffId['conditional:8:gradual heal'], [IconId.BUFF_HPREC]);
 	});
