@@ -11445,5 +11445,18 @@ describe('getProcEffectToBuffMapping method', () => {
 				generateConditions: () => ({ whenAttacked: true }),
 			});
 		});
+
+		describe('proc 86', () => {
+			testProcWithProcWithNumericalValueRangeAndChanceAndTurnDuration({
+				expectedOriginalId: '86',
+				expectedBuffId: 'proc:86:hp absorb',
+				effectKeyLow: 'hp drain% low',
+				effectKeyHigh: 'hp drain% high',
+				effectKeyChance: 'hp drain chance%',
+				effectTurnDurationKey: 'hp drain buff turns (134)',
+				buffKeyLow: 'drainHealLow%',
+				buffKeyHigh: 'drainHealHigh%',
+			});
+		});
 	});
 });

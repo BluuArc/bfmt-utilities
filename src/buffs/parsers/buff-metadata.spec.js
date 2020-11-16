@@ -2074,6 +2074,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:85:heal on hit'], [IconId.BUFF_BEENATK_HPREC]);
 	});
 
+	describe('proc:86:hp absorb', () => {
+		testDefaultIconResult(BuffId['proc:86:hp absorb'], [IconId.BUFF_HPABS]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

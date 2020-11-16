@@ -4120,4 +4120,20 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			generateConditions: () => ({ whenAttacked: true }),
 		});
 	});
+
+	map.set('86', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithNumericalValueRangeAndChanceAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			originalId: '86',
+			buffId: 'proc:86:hp absorb',
+			effectKeyLow: 'hp drain% low',
+			effectKeyHigh: 'hp drain% high',
+			effectKeyChance: 'hp drain chance%',
+			effectTurnDurationKey: 'hp drain buff turns (134)',
+			buffKeyLow: 'drainHealLow%',
+			buffKeyHigh: 'drainHealHigh%',
+		});
+	});
 }

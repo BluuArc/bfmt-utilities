@@ -427,7 +427,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'passive:17:hp absorb': {
 		id: BuffId['passive:17:hp absorb'],
-		name: 'HP Absorption',
+		name: 'Passive HP Absorption',
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_HPABS],
@@ -2829,6 +2829,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stat: UnitStat.hpRecovery,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_BEENATK_HPREC],
+	},
+	'proc:86:hp absorb': {
+		id: BuffId['proc:86:hp absorb'],
+		name: 'Active HP Absorption',
+		stat: UnitStat.hpRecovery,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_HPABS],
 	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,

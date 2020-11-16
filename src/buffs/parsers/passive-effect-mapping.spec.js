@@ -2491,8 +2491,8 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				effectKeyLow: 'hp drain% low',
 				effectKeyHigh: 'hp drain% high',
 				effectKeyChance: 'hp drain chance%',
-				buffKeyLow: 'drainHealLow',
-				buffKeyHigh: 'drainHealHigh',
+				buffKeyLow: 'drainHealLow%',
+				buffKeyHigh: 'drainHealHigh%',
 			});
 		});
 
