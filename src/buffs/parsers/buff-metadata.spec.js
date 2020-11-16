@@ -2048,6 +2048,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:82:resummon'], [IconId.BUFF_SUMMONUNIT]);
 	});
 
+	describe('proc:83:spark critical', () => {
+		testDefaultIconResult(BuffId['proc:83:spark critical'], [IconId.BUFF_SPARKCRTACTIVATED]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});
