@@ -1457,6 +1457,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBREC],
 	},
+	'passive:86:spark count conditional': {
+		id: BuffId['passive:86:spark count conditional'],
+		name: 'Passive Conditional Effect after Spark Count Threshold',
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.CONDITIONALBUFF_SPARKCOUNTTHRESH],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

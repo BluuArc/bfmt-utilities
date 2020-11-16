@@ -8993,5 +8993,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				getExpectedConditionsFromParam: (param) => ({ hcReceivedExceeds: param }),
 			});
 		});
+
+		describe('passive 86', () => {
+			testConditionalPassiveWithSingleNumericalCondition({
+				expectedOriginalId: '86',
+				expectedBuffId: 'passive:86:spark count conditional',
+				getExpectedConditionsFromParam: (param) => ({ sparkCountExceeds: param }),
+			});
+		});
 	});
 });

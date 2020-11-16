@@ -136,6 +136,7 @@ export interface IBuffConditions {
 	damageDealtExceeds?: number;
 	bcReceivedExceeds?: number;
 	hcReceivedExceeds?: number;
+	sparkCountExceeds?: number;
 
 	onEnemyDefeat?: boolean;
 	onBattleWin?: boolean;
@@ -450,6 +451,7 @@ export enum IconId {
 	CONDITIONALBUFF_DAMAGEDEALTTHRESH = 'CONDITIONALBUFF_DAMAGEDEALTTHRESH',
 	CONDITIONALBUFF_BCRECEIVEDTHRESH = 'CONDITIONALBUFF_BCRECEIVEDTHRESH',
 	CONDITIONALBUFF_HCRECEIVEDTHRESH = 'CONDITIONALBUFF_HCRECEIVEDTHRESH',
+	CONDITIONALBUFF_SPARKCOUNTTHRESH = 'CONDITIONALBUFF_SPARKCOUNTTHRESH',
 
 	BUFF_ADDTO_BB = 'BUFF_ADDTO_BB',
 	BUFF_ADDTO_SBB = 'BUFF_ADDTO_SBB',
@@ -1174,6 +1176,8 @@ export enum BuffId {
 	'passive:84:hc received conditional' = 'passive:84:hc received conditional',
 	'passive:85:bc fill after hc received conditional-flat' = 'passive:85:bc fill after hc received conditional-flat',
 	'passive:85:bc fill after hc received conditional-percent' = 'passive:85:bc fill after hc received conditional-percent',
+
+	'passive:86:spark count conditional' = 'passive:86:spark count conditional',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

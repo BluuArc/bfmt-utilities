@@ -181,6 +181,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		DamageDealt = 'damage dealt',
 		BcReceived = 'bc receive count',
 		HcReceived = 'hc receive count',
+		SparkCount = 'spark count',
 	}
 	interface IThresholdActivationInfo {
 		threshold: number;
@@ -208,6 +209,9 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		} else if (thresholdType === ThresholdType.HcReceived) {
 			effectKey = 'hc receive count buff activation';
 			fallbackEffectKey = 'hc receive count activation';
+		} else if (thresholdType === ThresholdType.SparkCount) {
+			effectKey = 'spark count buff activation';
+			fallbackEffectKey = 'spark count activation';
 		} else if (`${thresholdType} above % ${suffix}` in effect) {
 			effectKey = `${thresholdType} above % ${suffix}`;
 		} else {
@@ -247,6 +251,8 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			conditions = { bcReceivedExceeds: threshold };
 		} else if (type === ThresholdType.HcReceived) {
 			conditions = { hcReceivedExceeds: threshold };
+		} else if (type === ThresholdType.SparkCount) {
+			conditions = { sparkCountExceeds: threshold };
 		}
 
 		return conditions;
@@ -3198,6 +3204,17 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			flatFillBuffId: 'passive:85:bc fill after hc received conditional-flat',
 			percentFillBuffId: 'passive:85:bc fill after hc received conditional-percent',
 			flatFillEffectKey: 'increase bb gauge',
+		});
+	});
+
+	map.set('86', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalPassiveWithSingleNumericalCondition({
+			effect,
+			context,
+			injectionContext,
+			originalId: '86',
+			buffId: 'passive:86:spark count conditional',
+			thresholdType: ThresholdType.SparkCount,
 		});
 	});
 }

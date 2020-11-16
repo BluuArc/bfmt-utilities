@@ -1209,6 +1209,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive:86:spark count conditional', () => {
+		testDefaultIconResult(BuffId['passive:86:spark count conditional'], [IconId.CONDITIONALBUFF_SPARKCOUNTTHRESH]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
