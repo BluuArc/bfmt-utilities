@@ -3187,4 +3187,17 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			thresholdType: ThresholdType.HcReceived,
 		});
 	});
+
+	map.set('85', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalBcFillWithSingleNumericalCondition({
+			effect,
+			context,
+			injectionContext,
+			originalId: '85',
+			thresholdType: ThresholdType.HcReceived,
+			flatFillBuffId: 'passive:85:bc fill after hc received conditional-flat',
+			percentFillBuffId: 'passive:85:bc fill after hc received conditional-percent',
+			flatFillEffectKey: 'increase bb gauge',
+		});
+	});
 }

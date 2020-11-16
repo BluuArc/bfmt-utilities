@@ -1199,6 +1199,16 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:84:hc received conditional'], [IconId.CONDITIONALBUFF_HCRECEIVEDTHRESH]);
 	});
 
+	describe('passive 85 buffs', () => {
+		describe('passive:85:bc fill after hc received conditional-flat', () => {
+			testDefaultIconResult(BuffId['passive:85:bc fill after hc received conditional-flat'], [IconId.BUFF_BBREC]);
+		});
+
+		describe('passive:85:bc fill after hc received conditional-percent', () => {
+			testDefaultIconResult(BuffId['passive:85:bc fill after hc received conditional-percent'], [IconId.BUFF_BBREC]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

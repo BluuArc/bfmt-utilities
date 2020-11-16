@@ -1170,7 +1170,10 @@ export enum BuffId {
 	'passive:82:bc received conditional' = 'passive:82:bc received conditional',
 	'passive:83:bc fill after bc received conditional-flat' = 'passive:83:bc fill after bc received conditional-flat',
 	'passive:83:bc fill after bc received conditional-percent' = 'passive:83:bc fill after bc received conditional-percent',
+
 	'passive:84:hc received conditional' = 'passive:84:hc received conditional',
+	'passive:85:bc fill after hc received conditional-flat' = 'passive:85:bc fill after hc received conditional-flat',
+	'passive:85:bc fill after hc received conditional-percent' = 'passive:85:bc fill after hc received conditional-percent',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
