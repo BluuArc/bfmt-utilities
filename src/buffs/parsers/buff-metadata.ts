@@ -2823,6 +2823,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ODFILLBOOST],
 	},
+	'proc:85:heal on hit': {
+		id: BuffId['proc:85:heal on hit'],
+		name: 'Active Heal when Attacked (Chance)',
+		stat: UnitStat.hpRecovery,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_BEENATK_HPREC],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

@@ -4103,4 +4103,21 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			originalId: '84',
 		});
 	});
+
+	map.set('85', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithNumericalValueRangeAndChanceAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			originalId: '85',
+			buffId: 'proc:85:heal on hit',
+			effectKeyLow: 'hp recover from dmg% low',
+			effectKeyHigh: 'hp recover from dmg% high',
+			effectKeyChance: 'hp recover from dmg chance',
+			effectTurnDurationKey: 'hp recover from dmg buff turns (133)',
+			buffKeyLow: 'healLow',
+			buffKeyHigh: 'healHigh',
+			generateConditions: () => ({ whenAttacked: true }),
+		});
+	});
 }

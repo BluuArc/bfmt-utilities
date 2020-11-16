@@ -11431,5 +11431,19 @@ describe('getProcEffectToBuffMapping method', () => {
 				effectTurnDurationKey: 'od fill rate buff turns (132)',
 			});
 		});
+
+		describe('proc 85', () => {
+			testProcWithProcWithNumericalValueRangeAndChanceAndTurnDuration({
+				expectedOriginalId: '85',
+				expectedBuffId: 'proc:85:heal on hit',
+				effectKeyLow: 'hp recover from dmg% low',
+				effectKeyHigh: 'hp recover from dmg% high',
+				effectKeyChance: 'hp recover from dmg chance',
+				effectTurnDurationKey: 'hp recover from dmg buff turns (133)',
+				buffKeyLow: 'healLow',
+				buffKeyHigh: 'healHigh',
+				generateConditions: () => ({ whenAttacked: true }),
+			});
+		});
 	});
 });

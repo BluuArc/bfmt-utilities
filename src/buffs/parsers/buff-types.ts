@@ -1414,6 +1414,7 @@ export enum BuffId {
 	'proc:82:resummon' = 'proc:82:resummon',
 	'proc:83:spark critical' = 'proc:83:spark critical',
 	'proc:84:od fill rate' = 'proc:84:od fill rate',
+	'proc:85:heal on hit' = 'proc:85:heal on hit',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

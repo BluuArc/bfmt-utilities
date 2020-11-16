@@ -2070,6 +2070,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:84:od fill rate'], [IconId.BUFF_ODFILLBOOST]);
 	});
 
+	describe('proc:85:heal on hit', () => {
+		testDefaultIconResult(BuffId['proc:85:heal on hit'], [IconId.BUFF_BEENATK_HPREC]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});
