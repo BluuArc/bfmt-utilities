@@ -137,6 +137,7 @@ export interface IBuffConditions {
 	bcReceivedExceeds?: number;
 	hcReceivedExceeds?: number;
 	sparkCountExceeds?: number;
+	onGuardChance?: number;
 
 	onEnemyDefeat?: boolean;
 	onBattleWin?: boolean;
@@ -184,7 +185,6 @@ export interface IBuff {
 	 */
 	sources: string[];
 
-	// TODO: specific type for triggered buffs?
 	value?: string | number | IBuff[] | IGenericBuffValue | any;
 	conditions?: IBuffConditions;
 }
@@ -452,6 +452,7 @@ export enum IconId {
 	CONDITIONALBUFF_BCRECEIVEDTHRESH = 'CONDITIONALBUFF_BCRECEIVEDTHRESH',
 	CONDITIONALBUFF_HCRECEIVEDTHRESH = 'CONDITIONALBUFF_HCRECEIVEDTHRESH',
 	CONDITIONALBUFF_SPARKCOUNTTHRESH = 'CONDITIONALBUFF_SPARKCOUNTTHRESH',
+	CONDITIONALBUFF_GUARD = 'CONDITIONALBUFF_GUARD',
 
 	BUFF_ADDTO_BB = 'BUFF_ADDTO_BB',
 	BUFF_ADDTO_SBB = 'BUFF_ADDTO_SBB',
@@ -1186,6 +1187,8 @@ export enum BuffId {
 	'passive:86:spark count conditional' = 'passive:86:spark count conditional',
 	'passive:87:bc fill after spark count conditional-flat' = 'passive:87:bc fill after spark count conditional-flat',
 	'passive:87:bc fill after spark count conditional-percent' = 'passive:87:bc fill after spark count conditional-percent',
+
+	'passive:88:on guard conditional' = 'passive:88:on guard conditional',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

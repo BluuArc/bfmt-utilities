@@ -1223,6 +1223,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive:88:on guard conditional', () => {
+		testDefaultIconResult(BuffId['passive:88:on guard conditional'], [IconId.CONDITIONALBUFF_GUARD]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

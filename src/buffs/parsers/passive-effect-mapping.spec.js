@@ -9012,5 +9012,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				getExpectedConditionsFromParam: (param) => ({ sparkCountExceeds: param }),
 			});
 		});
+
+		describe('passive 88', () => {
+			testConditionalPassiveWithSingleNumericalCondition({
+				expectedOriginalId: '88',
+				expectedBuffId: 'passive:88:on guard conditional',
+				getExpectedConditionsFromParam: (param) => ({ onGuardChance: param }),
+			});
+		});
 	});
 });
