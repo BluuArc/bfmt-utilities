@@ -3190,6 +3190,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_CRTDOWN],
 	},
+	'conditional:144:spark damage reduction-base': {
+		id: BuffId['conditional:144:spark damage reduction-base'],
+		name: 'Conditional Base Spark Damage Reduction',
+		stat: UnitStat.sparkDamageMitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_SPARKDMGDOWN],
+	},
+	'conditional:144:spark damage reduction-buff': {
+		id: BuffId['conditional:144:spark damage reduction-buff'],
+		name: 'Conditional Buffed Spark Damage Reduction',
+		stat: UnitStat.sparkDamageMitigation,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_SPARKDMGDOWN],
+	},
 	'conditional:145:elemental weakness damage reduction-base': {
 		id: BuffId['conditional:145:elemental weakness damage reduction-base'],
 		name: 'Conditional Base Elemental Weakness Damage Reduction',

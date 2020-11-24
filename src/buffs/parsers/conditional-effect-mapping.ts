@@ -852,6 +852,17 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		});
 	});
 
+	map.set('144', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithOnlyBaseAndBuffResistanceParameters({
+			effect,
+			context,
+			injectionContext,
+			originalId: '144',
+			baseResistanceBuffId: 'conditional:144:spark damage reduction-base',
+			buffResistanceBuffId: 'conditional:144:spark damage reduction-buff',
+		});
+	});
+
 	map.set('145', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		return parseConditionalWithOnlyBaseAndBuffResistanceParameters({
 			effect,

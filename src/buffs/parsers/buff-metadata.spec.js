@@ -2282,6 +2282,16 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('conditional 144 buffs', () => {
+		describe('conditional:144:spark damage reduction-base', () => {
+			testDefaultIconResult(BuffId['conditional:144:spark damage reduction-base'], [IconId.BUFF_SPARKDMGDOWN]);
+		});
+
+		describe('conditional:144:spark damage reduction-buff', () => {
+			testDefaultIconResult(BuffId['conditional:144:spark damage reduction-buff'], [IconId.BUFF_SPARKDMGDOWN]);
+		});
+	});
+
 	describe('conditional 145 buffs', () => {
 		describe('conditional:145:elemental weakness damage reduction-base', () => {
 			testDefaultIconResult(BuffId['conditional:145:elemental weakness damage reduction-base'], [IconId.BUFF_ELEMENTDOWN]);

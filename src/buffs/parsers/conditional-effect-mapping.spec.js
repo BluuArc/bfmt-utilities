@@ -2158,6 +2158,14 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 144', () => {
+			testPassiveWithOnlyBaseAndBuffResistanceParameters({
+				expectedOriginalId: '144',
+				expectedBuffIdForBase: 'conditional:144:spark damage reduction-base',
+				expectedBuffIdForBuff: 'conditional:144:spark damage reduction-buff',
+			});
+		});
+
 		describe('conditional 145', () => {
 			testPassiveWithOnlyBaseAndBuffResistanceParameters({
 				expectedOriginalId: '145',
