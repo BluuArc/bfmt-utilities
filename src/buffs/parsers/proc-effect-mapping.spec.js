@@ -11458,5 +11458,18 @@ describe('getProcEffectToBuffMapping method', () => {
 				buffKeyHigh: 'drainHealHigh%',
 			});
 		});
+
+		describe('proc 87', () => {
+			testProcWithProcWithNumericalValueRangeAndChanceAndTurnDuration({
+				expectedOriginalId: '87',
+				expectedBuffId: 'proc:87:heal on spark',
+				effectKeyLow: 'spark recover hp low',
+				effectKeyHigh: 'spark recover hp high',
+				effectKeyChance: 'spark recover hp chance%',
+				effectTurnDurationKey: 'spark recover hp buff turns (135)',
+				buffKeyLow: 'healLow',
+				buffKeyHigh: 'healHigh',
+			});
+		});
 	});
 });

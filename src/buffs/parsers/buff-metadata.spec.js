@@ -2092,6 +2092,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:86:hp absorb'], [IconId.BUFF_HPABS]);
 	});
 
+	describe('proc:87:heal on spark', () => {
+		testDefaultIconResult(BuffId['proc:87:heal on spark'], [IconId.BUFF_SPARK_HPREC]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

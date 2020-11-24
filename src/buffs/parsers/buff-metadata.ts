@@ -2857,6 +2857,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_HPABS],
 	},
+	'proc:87:heal on spark': {
+		id: BuffId['proc:87:heal on spark'],
+		name: 'Active Heal on Spark (Chance)',
+		stat: UnitStat.hpRecovery,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_SPARK_HPREC],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

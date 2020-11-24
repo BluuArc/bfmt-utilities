@@ -4136,4 +4136,20 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			buffKeyHigh: 'drainHealHigh%',
 		});
 	});
+
+	map.set('87', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithNumericalValueRangeAndChanceAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			originalId: '87',
+			buffId: 'proc:87:heal on spark',
+			effectKeyLow: 'spark recover hp low',
+			effectKeyHigh: 'spark recover hp high',
+			effectKeyChance: 'spark recover hp chance%',
+			effectTurnDurationKey: 'spark recover hp buff turns (135)',
+			buffKeyLow: 'healLow',
+			buffKeyHigh: 'healHigh',
+		});
+	});
 }

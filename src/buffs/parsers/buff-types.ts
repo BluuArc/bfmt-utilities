@@ -895,6 +895,8 @@ export enum IconId {
 
 	BUFF_SPARKCRTACTIVATED = 'BUFF_SPARKCRTACTIVATED',
 
+	BUFF_SPARK_HPREC = 'BUFF_SPARK_HPREC',
+
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
 	SG_BUFF_WATER = 'SG_BUFF_WATER',
@@ -1424,6 +1426,7 @@ export enum BuffId {
 	'proc:84:od fill rate' = 'proc:84:od fill rate',
 	'proc:85:heal on hit' = 'proc:85:heal on hit',
 	'proc:86:hp absorb' = 'proc:86:hp absorb',
+	'proc:87:heal on spark' = 'proc:87:heal on spark',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
