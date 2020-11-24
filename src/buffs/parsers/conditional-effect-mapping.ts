@@ -744,6 +744,26 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return results;
 	});
 
+	map.set('124', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '124',
+			buffId: 'conditional:124:self attack buff',
+		});
+	});
+
+	map.set('125', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			originalId: '125',
+			buffId: 'conditional:125:self defense buff',
+		});
+	});
+
 	map.set('131', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '131';
 		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);

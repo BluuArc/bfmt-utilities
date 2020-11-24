@@ -1857,6 +1857,20 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 124', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '124',
+				expectedBuffId: 'conditional:124:self attack buff',
+			});
+		});
+
+		describe('conditional 125', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '125',
+				expectedBuffId: 'conditional:125:self defense buff',
+			});
+		});
+
 		describe('conditional 131', () => {
 			const expectedOriginalId = '131';
 			const expectedBuffId = 'conditional:131:spark critical';

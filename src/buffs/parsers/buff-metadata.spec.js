@@ -2250,6 +2250,16 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:99:light barrier'], [IconId.BUFF_LIGHTSHIELD]);
 	});
 
+	describe('conditional:124:self attack buff', () => {
+		testDefaultIconResult(BuffId['conditional:124:self attack buff'], [IconId.BUFF_SELFATKUP]);
+		testIconResultWithBuff(BuffId['conditional:124:self attack buff'], [IconId.BUFF_ATKDOWNLOCK], { value: -1 }, 'buff value is less than 0');
+	});
+
+	describe('conditional:125:self defense buff', () => {
+		testDefaultIconResult(BuffId['conditional:125:self defense buff'], [IconId.BUFF_SELFDEFUP]);
+		testIconResultWithBuff(BuffId['conditional:125:self defense buff'], [IconId.BUFF_DEFDOWNLOCK], { value: -1 }, 'buff value is less than 0');
+	});
+
 	describe('conditional:131:spark critical', () => {
 		testDefaultIconResult(BuffId['conditional:131:spark critical'], [IconId.BUFF_SPARKCRTACTIVATED]);
 	});

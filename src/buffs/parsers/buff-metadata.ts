@@ -3141,6 +3141,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Singleton,
 		icons: () => [IconId.BUFF_LIGHTSHIELD],
 	},
+	'conditional:124:self attack buff': {
+		id: BuffId['conditional:124:self attack buff'],
+		name: 'Conditional Self Attack Boost',
+		stat: UnitStat.atk,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_ATKDOWNLOCK : IconId.BUFF_SELFATKUP],
+	},
+	'conditional:125:self defense buff': {
+		id: BuffId['conditional:125:self defense buff'],
+		name: 'Conditional Self Defense Boost',
+		stat: UnitStat.def,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: (buff: IBuff) => [(buff && buff.value && buff.value < 0) ? IconId.BUFF_DEFDOWNLOCK : IconId.BUFF_SELFDEFUP],
+	},
 	'conditional:131:spark critical': {
 		id: BuffId['conditional:131:spark critical'],
 		name: 'Conditional Spark Critical',
