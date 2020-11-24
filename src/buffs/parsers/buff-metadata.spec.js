@@ -2263,6 +2263,32 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:153:chance inflict atk down on hit'], [IconId.BUFF_PROB_ATKREDUC]);
 	});
 
+	describe('conditional 10001 buffs', () => {
+		describe('conditional:10001:stealth', () => {
+			testDefaultIconResult(BuffId['conditional:10001:stealth'], [IconId.SG_BUFF_STEALTH]);
+		});
+
+		describe('conditional:10001:stealth-atk', () => {
+			testDefaultIconResult(BuffId['conditional:10001:stealth-atk'], [IconId.SG_BUFF_STEALTH, IconId.BUFF_ATKUP]);
+			testIconResultWithBuff(BuffId['conditional:10001:stealth-atk'], [IconId.SG_BUFF_STEALTH, IconId.BUFF_ATKDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('conditional:10001:stealth-def', () => {
+			testDefaultIconResult(BuffId['conditional:10001:stealth-def'], [IconId.SG_BUFF_STEALTH, IconId.BUFF_DEFUP]);
+			testIconResultWithBuff(BuffId['conditional:10001:stealth-def'], [IconId.SG_BUFF_STEALTH, IconId.BUFF_DEFDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('conditional:10001:stealth-rec', () => {
+			testDefaultIconResult(BuffId['conditional:10001:stealth-rec'], [IconId.SG_BUFF_STEALTH, IconId.BUFF_RECUP]);
+			testIconResultWithBuff(BuffId['conditional:10001:stealth-rec'], [IconId.SG_BUFF_STEALTH, IconId.BUFF_RECDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('conditional:10001:stealth-crit', () => {
+			testDefaultIconResult(BuffId['conditional:10001:stealth-crit'], [IconId.SG_BUFF_STEALTH, IconId.BUFF_CRTRATEUP]);
+			testIconResultWithBuff(BuffId['conditional:10001:stealth-crit'], [IconId.SG_BUFF_STEALTH, IconId.BUFF_CRTRATEDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+	});
+
 	describe('conditional 10500 buffs', () => {
 		describe('conditional:10500:shield-fire', () => {
 			testDefaultIconResult(BuffId['conditional:10500:shield-fire'], [IconId.SG_BUFF_FIRE]);

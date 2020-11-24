@@ -904,6 +904,8 @@ export enum IconId {
 	SG_BUFF_DARK = 'SG_BUFF_DARK',
 	SG_BUFF_UNKNOWN = 'SG_BUFF_UNKNOWN',
 
+	SG_BUFF_STEALTH = 'SG_BUFF_STEALTH',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -1476,6 +1478,12 @@ export enum BuffId {
 	'conditional:145:elemental weakness damage reduction-buff' = 'conditional:145:elemental weakness damage reduction-buff',
 
 	'conditional:153:chance inflict atk down on hit' = 'conditional:153:chance inflict atk down on hit',
+
+	'conditional:10001:stealth' = 'conditional:10001:stealth',
+	'conditional:10001:stealth-atk' = 'conditional:10001:stealth-atk',
+	'conditional:10001:stealth-def' = 'conditional:10001:stealth-def',
+	'conditional:10001:stealth-rec' = 'conditional:10001:stealth-rec',
+	'conditional:10001:stealth-crit' = 'conditional:10001:stealth-crit',
 
 	'conditional:10500:shield-all' = 'conditional:10500:shield-all',
 	'conditional:10500:shield-fire' = 'conditional:10500:shield-fire',

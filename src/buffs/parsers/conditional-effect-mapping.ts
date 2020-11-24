@@ -878,6 +878,50 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return results;
 	});
 
+	map.set('10001', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '10001';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawAttack, rawDefense, rawCritRate, rawRecovery, ...extraParams] = splitParams;
+		const stats = {
+			atk: parseNumberOrDefault(rawAttack),
+			def: parseNumberOrDefault(rawDefense),
+			rec: parseNumberOrDefault(rawRecovery),
+			crit: parseNumberOrDefault(rawCritRate),
+		};
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+
+		const makeBaseBuff = () => ({
+			originalId,
+			sources,
+			duration: turnDuration,
+			...targetData,
+		});
+		const results: IBuff[] = [{
+			...makeBaseBuff(),
+			id: 'conditional:10001:stealth',
+			value: true,
+		}];
+
+		['atk', 'def', 'crit', 'rec'].forEach((stat) => {
+			const value = stats[stat as 'atk' | 'def' | 'rec' | 'crit'];
+			if (value !== 0) {
+				results.push({
+					...makeBaseBuff(),
+					id: `conditional:10001:stealth-${stat}`,
+					value,
+				});
+			}
+		});
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
+
 	map.set('10500', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '10500';
 		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);

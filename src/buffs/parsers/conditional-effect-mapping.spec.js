@@ -2297,6 +2297,153 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 10001', () => {
+			const STAT_PARAMS_ORDER = ['atk', 'def', 'crit', 'rec'];
+			const expectedOriginalId = '10001';
+			const expectedStealthBuffKey = 'conditional:10001:stealth';
+
+			beforeEach(() => {
+				mappingFunction = getConditionalEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedStealthBuffKey].concat(STAT_PARAMS_ORDER.map((statType) => `${expectedStealthBuffKey}-${statType}`)));
+
+			it('uses the params and turn duration properties', () => {
+				const effect = {
+					params: '1&2&3&4',
+					turnDuration: 2,
+				};
+				const splitParams = effect.params.split('&');
+				const expectedResult = [baseBuffFactory({
+					id: expectedStealthBuffKey,
+					duration: 2,
+					value: true,
+				})].concat(STAT_PARAMS_ORDER.map((statType, index) => {
+					return baseBuffFactory({
+						id: `${expectedStealthBuffKey}-${statType}`,
+						duration: 2,
+						value: +(splitParams[index]),
+					});
+				}));
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const effect = {
+					params: '1&2&3&4&5&6&7',
+					turnDuration: 2,
+				};
+				const splitParams = effect.params.split('&');
+				const expectedResult = [baseBuffFactory({
+					id: expectedStealthBuffKey,
+					duration: 2,
+					value: true,
+				})].concat(STAT_PARAMS_ORDER.map((statType, index) => {
+					return baseBuffFactory({
+						id: `${expectedStealthBuffKey}-${statType}`,
+						duration: 2,
+						value: +(splitParams[index]),
+					});
+				})).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+					value: {
+						param_4: '5',
+						param_5: '6',
+						param_6: '7',
+					},
+				})]);
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			STAT_PARAMS_ORDER.forEach((statCase) => {
+				it(`returns only stat value for ${statCase} with base stealth buff if it is non-zero and other stat values are 0`, () => {
+					const effect = {
+						params: STAT_PARAMS_ORDER.map((type) => type === statCase ? '123' : '0').join('&'),
+						turnDuration: 456,
+					};
+					const expectedResult = [
+						baseBuffFactory({
+							id: expectedStealthBuffKey,
+							duration: 456,
+							value: true,
+						}),
+						baseBuffFactory({
+							id: `${expectedStealthBuffKey}-${statCase}`,
+							duration: 456,
+							value: 123,
+						}),
+					];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('returns just the base stealth buff when no parameters are given', () => {
+				const effect = {
+					turnDuration: 456,
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedStealthBuffKey,
+					duration: 456,
+					value: true,
+				})];
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('defaults the turn duration to 0 if it is missing', () => {
+				const effect = {
+					params: '',
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedStealthBuffKey,
+					duration: 0,
+					value: true,
+				})];
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses createSourcesfromContext and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0&0&0&123&456',
+					turnDuration: 789,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedStealthBuffKey,
+						sources: arbitrarySourceValue,
+						duration: 789,
+						value: true,
+					}),
+					baseBuffFactory({
+						id: `${expectedStealthBuffKey}-rec`,
+						sources: arbitrarySourceValue,
+						duration: 789,
+						value: 123,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+					}),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456']), 4] });
+			});
+		});
+
 		describe('conditional 10500', () => {
 			const expectedOriginalId = '10500';
 
