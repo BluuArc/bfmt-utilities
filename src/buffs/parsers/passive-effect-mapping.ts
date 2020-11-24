@@ -3217,4 +3217,17 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			thresholdType: ThresholdType.SparkCount,
 		});
 	});
+
+	map.set('87', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalBcFillWithSingleNumericalCondition({
+			effect,
+			context,
+			injectionContext,
+			originalId: '87',
+			thresholdType: ThresholdType.SparkCount,
+			flatFillBuffId: 'passive:87:bc fill after spark count conditional-flat',
+			percentFillBuffId: 'passive:87:bc fill after spark count conditional-percent',
+			flatFillEffectKey: 'increase bb gauge',
+		});
+	});
 }

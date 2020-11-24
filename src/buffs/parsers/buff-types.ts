@@ -1180,6 +1180,8 @@ export enum BuffId {
 	'passive:85:bc fill after hc received conditional-percent' = 'passive:85:bc fill after hc received conditional-percent',
 
 	'passive:86:spark count conditional' = 'passive:86:spark count conditional',
+	'passive:87:bc fill after spark count conditional-flat' = 'passive:87:bc fill after spark count conditional-flat',
+	'passive:87:bc fill after spark count conditional-percent' = 'passive:87:bc fill after spark count conditional-percent',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

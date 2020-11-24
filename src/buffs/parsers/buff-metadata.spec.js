@@ -1213,6 +1213,16 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:86:spark count conditional'], [IconId.CONDITIONALBUFF_SPARKCOUNTTHRESH]);
 	});
 
+	describe('passive 87 buffs', () => {
+		describe('passive:87:bc fill after spark count conditional-flat', () => {
+			testDefaultIconResult(BuffId['passive:87:bc fill after spark count conditional-flat'], [IconId.BUFF_BBREC]);
+		});
+
+		describe('passive:87:bc fill after spark count conditional-percent', () => {
+			testDefaultIconResult(BuffId['passive:87:bc fill after spark count conditional-percent'], [IconId.BUFF_BBREC]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

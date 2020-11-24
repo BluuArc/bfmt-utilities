@@ -9001,5 +9001,16 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				getExpectedConditionsFromParam: (param) => ({ sparkCountExceeds: param }),
 			});
 		});
+
+		describe('passive 87', () => {
+			testConditionalBcFillWithSingleNumericalCondition({
+				expectedFlatFillBuffId: 'passive:87:bc fill after spark count conditional-flat',
+				expectedPercentFillBuffId: 'passive:87:bc fill after spark count conditional-percent',
+				expectedOriginalId: '87',
+				flatFillEffectKey: 'increase bb gauge',
+				conditionalThresholdEffectKey: 'spark count activation',
+				getExpectedConditionsFromParam: (param) => ({ sparkCountExceeds: param }),
+			});
+		});
 	});
 });
