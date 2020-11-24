@@ -1481,6 +1481,8 @@ export enum BuffId {
 	'conditional:98:thunder barrier' = 'conditional:98:thunder barrier',
 	'conditional:99:light barrier' = 'conditional:99:light barrier',
 
+	'conditional:111:bc fill on spark' = 'conditional:111:bc fill on spark',
+
 	'conditional:124:self attack buff' = 'conditional:124:self attack buff',
 	'conditional:125:self defense buff' = 'conditional:125:self defense buff',
 

@@ -680,6 +680,38 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return results;
 	});
 
+	map.set('98', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '98';
+		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		const [rawElement, rawHp, ...extraParams] = splitParams;
+		const element = ELEMENT_MAPPING[rawElement] || rawElement || BuffConditionElement.Unknown;
+		const hp = parseNumberOrDefault(rawHp);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+
+		const results: IBuff[] = [];
+		if (hp !== 0) {
+			results.push({
+				id: 'conditional:98:thunder barrier',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: {
+					hp,
+					parsedElement: element,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+		});
+
+		return results;
+	});
+
 	map.set('99', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		const originalId = '99';
 		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
@@ -712,24 +744,26 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return results;
 	});
 
-	map.set('98', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
-		const originalId = '98';
+	map.set('111', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '111';
 		const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-		const [rawElement, rawHp, ...extraParams] = splitParams;
-		const element = ELEMENT_MAPPING[rawElement] || rawElement || BuffConditionElement.Unknown;
-		const hp = parseNumberOrDefault(rawHp);
-		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		const [rawFillLow, rawFillHigh, rawChance, ...extraParams] = splitParams;
+		const fillLow = parseNumberOrDefault(rawFillLow) / 100;
+		const fillHigh = parseNumberOrDefault(rawFillHigh) / 100;
+		const chance = parseNumberOrDefault(rawChance);
+		const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
 
 		const results: IBuff[] = [];
-		if (hp !== 0) {
+		if (fillLow !== 0 || fillHigh !== 0 || chance !== 0) {
 			results.push({
-				id: 'conditional:98:thunder barrier',
+				id: 'conditional:111:bc fill on spark',
 				originalId,
 				sources,
 				duration: turnDuration,
 				value: {
-					hp,
-					parsedElement: element,
+					fillLow,
+					fillHigh,
+					chance,
 				},
 				...targetData,
 			});

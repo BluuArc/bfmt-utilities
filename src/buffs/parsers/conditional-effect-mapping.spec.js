@@ -1857,6 +1857,145 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 111', () => {
+			const expectedOriginalId = '111';
+			const expectedBuffId = 'conditional:111:bc fill on spark';
+
+			beforeEach(() => {
+				mappingFunction = getConditionalEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params and turn duration properties', () => {
+				const effect = {
+					params: '100&200&3',
+					turnDuration: 2,
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 2,
+					value: {
+						fillLow: 1,
+						fillHigh: 2,
+						chance: 3,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const effect = {
+					params: '100&200&3&4&5&6',
+					turnDuration: 2,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						duration: 2,
+						value: {
+							fillLow: 1,
+							fillHigh: 2,
+							chance: 3,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+						value: {
+							param_3: '4',
+							param_4: '5',
+							param_5: '6',
+						},
+					}),
+				];
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				const PARAMS_ORDER = ['fillLow', 'fillHigh', 'chance'];
+				PARAMS_ORDER.forEach((paramCase) => {
+					it(`defaults to 0 for missing ${paramCase} value`, () => {
+						const params = PARAMS_ORDER.map((p) => p !== paramCase ? '12300' : '').join('&');
+						const effect = { params, turnDuration: 456 };
+
+						const expectedValues = PARAMS_ORDER.reduce((acc, param) => {
+							let value;
+							if (param !== paramCase) {
+								// fillHigh and fillLow divide by 100
+								value = param === 'chance' ? 12300 : 123;
+							} else {
+								value = 0;
+							}
+							acc[param] = value;
+							return acc;
+						}, {});
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							duration: 456,
+							value: expectedValues,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
+				it('defaults the turn duration to 0 if it is missing', () => {
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: 0,
+						value: {
+							fillLow: 1,
+							fillHigh: 2,
+							chance: 3,
+						},
+					})];
+
+					const result = mappingFunction({ params: '100&200&3' }, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('uses createSourcesfromContext and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '100&200&3&456',
+					turnDuration: 789,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						duration: 789,
+						value: {
+							fillLow: 1,
+							fillHigh: 2,
+							chance: 3,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_CONDITIONAL_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+					}),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456']), 3] });
+			});
+		});
+
 		describe('conditional 124', () => {
 			testPassiveWithSingleNumericalParameter({
 				expectedOriginalId: '124',
