@@ -183,6 +183,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		HcReceived = 'hc receive count',
 		SparkCount = 'spark count',
 		ChanceGuard = 'on guard',
+		ChanceCrit = 'on crit',
 	}
 	interface IThresholdActivationInfo {
 		threshold: number;
@@ -256,6 +257,8 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			conditions = { sparkCountExceeds: threshold };
 		} else if (type === ThresholdType.ChanceGuard) {
 			conditions = { onGuardChance: threshold };
+		} else if (type === ThresholdType.ChanceCrit) {
+			conditions = { onCriticalHitChance: threshold };
 		}
 
 		return conditions;
@@ -3242,6 +3245,17 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			originalId: '88',
 			buffId: 'passive:88:on guard conditional',
 			thresholdType: ThresholdType.ChanceGuard,
+		});
+	});
+
+	map.set('89', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalPassiveWithSingleNumericalCondition({
+			effect,
+			context,
+			injectionContext,
+			originalId: '89',
+			buffId: 'passive:89:on critical hit conditional',
+			thresholdType: ThresholdType.ChanceCrit,
 		});
 	});
 }

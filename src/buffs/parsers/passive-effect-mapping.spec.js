@@ -9020,5 +9020,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				getExpectedConditionsFromParam: (param) => ({ onGuardChance: param }),
 			});
 		});
+
+		describe('passive 89', () => {
+			testConditionalPassiveWithSingleNumericalCondition({
+				expectedOriginalId: '89',
+				expectedBuffId: 'passive:89:on critical hit conditional',
+				getExpectedConditionsFromParam: (param) => ({ onCriticalHitChance: param }),
+			});
+		});
 	});
 });

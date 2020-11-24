@@ -1227,6 +1227,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:88:on guard conditional'], [IconId.CONDITIONALBUFF_GUARD]);
 	});
 
+	describe('passive:89:on critical hit conditional', () => {
+		testDefaultIconResult(BuffId['passive:89:on critical hit conditional'], [IconId.CONDITIONALBUFF_CRIT]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
