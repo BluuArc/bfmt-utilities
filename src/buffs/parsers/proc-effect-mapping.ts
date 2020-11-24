@@ -4152,4 +4152,52 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			buffKeyHigh: 'healHigh',
 		});
 	});
+
+	map.set('88', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '88';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let value = 0, turnDuration = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const params = splitEffectParams(effect);
+			value = parseNumberOrDefault(params[0]);
+			turnDuration = parseNumberOrDefault(params[6]);
+
+			const extraParams = ['0', ...params.slice(1, 6), '0', ...params.slice(7)];
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 0, injectionContext);
+		} else {
+			value = parseNumberOrDefault(effect['spark dmg inc%'] as number);
+			turnDuration = parseNumberOrDefault(effect['spark dmg inc% turns (136)'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (value !== 0) {
+			results.push({
+				id: 'proc:88:self spark damage',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value,
+				...targetData,
+			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['proc:88:self spark damage'],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

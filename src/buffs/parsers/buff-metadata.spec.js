@@ -2096,6 +2096,11 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:87:heal on spark'], [IconId.BUFF_SPARK_HPREC]);
 	});
 
+	describe('proc:88:self spark damage', () => {
+		testDefaultIconResult(BuffId['proc:88:self spark damage'], [IconId.BUFF_SPARKDMGUP2]);
+		testIconResultWithBuff(BuffId['proc:88:self spark damage'], [IconId.BUFF_SPARKDMGDOWN2], { value: -1 }, 'buff value is less than 0');
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

@@ -818,6 +818,8 @@ export enum IconId {
 	BUFF_SPARKDOWN = 'BUFF_SPARKDOWN',
 	BUFF_SPARKDMGUP = 'BUFF_SPARKDMGUP', // spark vulnerability
 	BUFF_SPARKDMGDOWN = 'BUFF_SPARKDMGDOWN', // spark damage reduction
+	BUFF_SPARKDMGUP2 = 'BUFF_SPARKDMGUP2', // self spark damage boost
+	BUFF_SPARKDMGDOWN2 = 'BUFF_SPARKDMGDOWN2',
 
 	BUFF_SPARKHC = 'BUFF_SPARKHC',
 	BUFF_SPARKBC = 'BUFF_SPARKBC',
@@ -1427,6 +1429,7 @@ export enum BuffId {
 	'proc:85:heal on hit' = 'proc:85:heal on hit',
 	'proc:86:hp absorb' = 'proc:86:hp absorb',
 	'proc:87:heal on spark' = 'proc:87:heal on spark',
+	'proc:88:self spark damage' = 'proc:88:self spark damage',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

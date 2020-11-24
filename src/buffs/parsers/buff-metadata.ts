@@ -2864,6 +2864,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_SPARK_HPREC],
 	},
+	'proc:88:self spark damage': {
+		id: BuffId['proc:88:self spark damage'],
+		name: 'Active Self Spark Damage Boost',
+		stat: UnitStat.sparkDamage,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_SPARKDMGDOWN2 : IconId.BUFF_SPARKDMGUP2],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',
