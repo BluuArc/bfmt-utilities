@@ -11616,5 +11616,152 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['0', '2', '3', '4', '5', '6', '0', '123']), 0] });
 			});
 		});
+
+		describe('proc 89', () => {
+			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec'];
+			const paramToResultStatMapping = {
+				1: 'atk',
+				2: 'def',
+				3: 'rec',
+				4: 'hp',
+			};
+			const expectedOriginalId = '89';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `proc:89:self converted-${stat}`));
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,3,4,${arbitraryTurnDuration}`;
+				const splitParams = params.split(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `proc:89:self converted-${stat}`,
+						duration: arbitraryTurnDuration,
+						value: {
+							convertedStat: 'atk',
+							value: +splitParams[index + 1],
+						},
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `2,2,3,4,${arbitraryTurnDuration},6,7,8`;
+				const splitParams = params.split(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `proc:89:self converted-${stat}`,
+						duration: arbitraryTurnDuration,
+						value: {
+							convertedStat: 'def',
+							value: +splitParams[index + 1],
+						},
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_5: '6',
+						param_6: '7',
+						param_7: '8',
+					},
+				})]);
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			STAT_PARAMS_ORDER.forEach((statCase) => {
+				Object.entries(paramToResultStatMapping).forEach(([convertedStatKey, convertedStatValue]) => {
+					it(`returns only value for ${statCase} converted from ${convertedStatValue} if it is non-zero and other stats are zero and converted stat is ${convertedStatValue}`, () => {
+						const params = [convertedStatKey, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0'), arbitraryTurnDuration].join(',');
+						const effect = createArbitraryBaseEffect({ params });
+						const expectedResult = [baseBuffFactory({
+							id: `proc:89:self converted-${statCase}`,
+							duration: arbitraryTurnDuration,
+							value: {
+								convertedStat: convertedStatValue,
+								value: 123,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it(`converts converted stat values with no mapping to "unknown" and the only non-zero stat is ${statCase}`, () => {
+					const params = ['123', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0'), arbitraryTurnDuration].join(',');
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: `proc:89:self converted-${statCase}`,
+						duration: arbitraryTurnDuration,
+						value: {
+							convertedStat: 'unknown',
+							value: 123,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+			});
+
+			it('returns a no params buff if the effect params are non-number or missing', () => {
+				const effect = createArbitraryBaseEffect({ params: 'non-number' });
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff if no params are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			describe('when all stats are 0', () => {
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,${duration}`,
+					buffIdsInTurnDurationBuff: STAT_PARAMS_ORDER.map((stat) => `proc:89:self converted-${stat}`),
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: `4,0,0,1,${arbitraryTurnDuration},123`,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:89:self converted-rec',
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: {
+							convertedStat: 'hp',
+							value: 1,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 5] });
+			});
+		});
 	});
 });

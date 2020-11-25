@@ -2109,6 +2109,26 @@ describe('BUFF_METADATA entries', () => {
 		testIconResultWithBuff(BuffId['proc:88:self spark damage'], [IconId.BUFF_SPARKDMGDOWN2], { value: -1 }, 'buff value is less than 0');
 	});
 
+	describe('proc 89 buffs', () => {
+		describe('proc:89:self converted-atk', () => {
+			testDefaultIconResult(BuffId['proc:89:self converted-atk'], [IconId.BUFF_SELFCONVERTATKUP]);
+			testIconResultWithBuff(BuffId['proc:89:self converted-atk'], [IconId.BUFF_SELFCONVERTATKUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['proc:89:self converted-atk'], [IconId.BUFF_SELFCONVERTATKDOWN], { value: { value: -1 } }, 'buff value is less than 0');
+		});
+
+		describe('proc:89:self converted-def', () => {
+			testDefaultIconResult(BuffId['proc:89:self converted-def'], [IconId.BUFF_SELFCONVERTDEFUP]);
+			testIconResultWithBuff(BuffId['proc:89:self converted-def'], [IconId.BUFF_SELFCONVERTDEFUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['proc:89:self converted-def'], [IconId.BUFF_SELFCONVERTDEFDOWN], { value: { value: -1 } }, 'buff value is less than 0');
+		});
+
+		describe('proc:89:self converted-rec', () => {
+			testDefaultIconResult(BuffId['proc:89:self converted-rec'], [IconId.BUFF_SELFCONVERTRECUP]);
+			testIconResultWithBuff(BuffId['proc:89:self converted-rec'], [IconId.BUFF_SELFCONVERTRECUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['proc:89:self converted-rec'], [IconId.BUFF_SELFCONVERTRECDOWN], { value: { value: -1 } }, 'buff value is less than 0');
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

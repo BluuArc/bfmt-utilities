@@ -4200,4 +4200,73 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('89', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '89';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		type CoreStatProperty = 'atk' | 'def' | 'rec' | 'hp' | 'unknown';
+		const coreStatProperties: CoreStatProperty[] = ['atk', 'def', 'rec'];
+		const coreStatPropertyMapping: { [key: string]: CoreStatProperty } = {
+			1: 'atk',
+			2: 'def',
+			3: 'rec',
+			4: 'hp',
+		};
+		const stats = {
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+		};
+		let turnDuration = 0;
+		let convertedStat: CoreStatProperty = 'unknown';
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			let rawConvertedStat: string, rawTurnDuration: string;
+			[rawConvertedStat, stats.atk, stats.def, stats.rec, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			convertedStat = coreStatPropertyMapping[rawConvertedStat] || 'unknown';
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+		}
+		const results: IBuff[] = [];
+		coreStatProperties.forEach((stat) => {
+			const value = parseNumberOrDefault(stats[stat as 'atk' | 'def' | 'rec']);
+			if (value !== 0) {
+				results.push({
+					id: `proc:89:self converted-${stat}`,
+					originalId,
+					sources,
+					effectDelay,
+					duration: turnDuration,
+					value: {
+						convertedStat,
+						value,
+					},
+					...targetData,
+				});
+			}
+		});
+
+		if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: coreStatProperties.map((statKey) => `proc:89:self converted-${statKey}`),
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

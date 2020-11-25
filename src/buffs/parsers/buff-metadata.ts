@@ -2883,6 +2883,27 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_SPARKDMGDOWN2 : IconId.BUFF_SPARKDMGUP2],
 	},
+	'proc:89:self converted-atk': {
+		id: BuffId['proc:89:self converted-atk'],
+		name: 'Active Converted Attack Boost',
+		stat: UnitStat.atk,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_SELFCONVERTATKDOWN : IconId.BUFF_SELFCONVERTATKUP],
+	},
+	'proc:89:self converted-def': {
+		id: BuffId['proc:89:self converted-def'],
+		name: 'Active Converted Defense Boost',
+		stat: UnitStat.def,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_SELFCONVERTDEFDOWN : IconId.BUFF_SELFCONVERTDEFUP],
+	},
+	'proc:89:self converted-rec': {
+		id: BuffId['proc:89:self converted-rec'],
+		name: 'Active Converted Recovery Boost',
+		stat: UnitStat.rec,
+		stackType: BuffStackType.Active,
+		icons: (buff: IBuff) => [(buff && buff.value && (buff.value as { value: number }).value && (buff.value as { value: number }).value < 0) ? IconId.BUFF_SELFCONVERTRECDOWN : IconId.BUFF_SELFCONVERTRECUP],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',
