@@ -1202,6 +1202,13 @@ export enum BuffId {
 	'passive:88:on guard conditional' = 'passive:88:on guard conditional',
 	'passive:89:on critical hit conditional' = 'passive:89:on critical hit conditional',
 
+	'passive:90:inflict on crit-poison' = 'passive:90:inflict on crit-poison',
+	'passive:90:inflict on crit-weak' = 'passive:90:inflict on crit-weak',
+	'passive:90:inflict on crit-sick' = 'passive:90:inflict on crit-sick',
+	'passive:90:inflict on crit-injury' = 'passive:90:inflict on crit-injury',
+	'passive:90:inflict on crit-curse' = 'passive:90:inflict on crit-curse',
+	'passive:90:inflict on crit-paralysis' = 'passive:90:inflict on crit-paralysis',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

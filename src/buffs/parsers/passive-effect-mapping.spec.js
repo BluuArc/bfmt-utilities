@@ -9028,5 +9028,165 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				getExpectedConditionsFromParam: (param) => ({ onCriticalHitChance: param }),
 			});
 		});
+
+		describe('passive 90', () => {
+			const expectedOriginalId = '90';
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(AILMENTS_ORDER.map((ailment) => `passive:90:inflict on crit-${ailment}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6';
+				const splitParams = params.split(',');
+				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
+					return baseBuffFactory({
+						id: `passive:90:inflict on crit-${ailment}`,
+						value: +(splitParams[index]),
+						conditions: { onCriticalHit: true },
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,8,9';
+				const splitParams = params.split(',');
+				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
+					return baseBuffFactory({
+						id: `passive:90:inflict on crit-${ailment}`,
+						value: +(splitParams[index]),
+						conditions: { onCriticalHit: true },
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_6: '7',
+						param_7: '8',
+						param_8: '9',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to ailment-specific properties when the params property does not exist', () => {
+				const mockValues = [7, 8, 9, 10, 11, 12];
+				const effect = AILMENTS_ORDER.reduce((acc, ailment, index) => {
+					acc[`inflict ${ailment !== 'weak' ? ailment : 'weaken'}%`] = mockValues[index];
+					return acc;
+				}, {});
+
+				const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
+					return baseBuffFactory({
+						id: `passive:90:inflict on crit-${ailment}`,
+						value: mockValues[index],
+						conditions: { onCriticalHit: true },
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			AILMENTS_ORDER.forEach((ailmentCase) => {
+				it(`returns only value for ${ailmentCase} if it is non-zero and other stats are zero`, () => {
+					const params = AILMENTS_ORDER.map((ailment) => ailment === ailmentCase ? '123' : '0').join(',');
+					const expectedResult = [baseBuffFactory({
+						id: `passive:90:inflict on crit-${ailmentCase}`,
+						value: 123,
+						conditions: { onCriticalHit: true },
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`returns only value for ${ailmentCase} if it is non-zero and other stats are zero and params property does not exist`, () => {
+					const effect = AILMENTS_ORDER.reduce((acc, ailment) => {
+						acc[`inflict ${ailment !== 'weak' ? ailment : 'weaken'}%`] = ailment !== ailmentCase ? 0 : 123;
+						return acc;
+					}, {});
+					const expectedResult = [baseBuffFactory({
+						id: `passive:90:inflict on crit-${ailmentCase}`,
+						value: 123,
+						conditions: { onCriticalHit: true },
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`returns only value for ${ailmentCase} if the only present stat are zero and params property does not exist`, () => {
+					const effect = { [`inflict ${ailmentCase !== 'weak' ? ailmentCase : 'weaken'}%`]: 123 };
+					const expectedResult = [baseBuffFactory({
+						id: `passive:90:inflict on crit-${ailmentCase}`,
+						value: 123,
+						conditions: { onCriticalHit: true },
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('defaults all params properties to 0 for non-number values', () => {
+				const effect = { params: 'not a number' };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number values and params property does not exist', () => {
+				const effect = AILMENTS_ORDER.reduce((acc, ailment) => {
+					acc[`inflict ${ailment !== 'weak' ? ailment : 'weaken'}%`] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,0,0,456,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:90:inflict on crit-paralysis',
+						sources: arbitrarySourceValue,
+						value: 456,
+						conditions: {
+							...arbitraryConditionValue,
+							onCriticalHit: true,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
+			});
+		});
 	});
 });

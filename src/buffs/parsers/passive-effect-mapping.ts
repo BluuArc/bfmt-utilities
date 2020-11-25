@@ -3258,4 +3258,61 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			thresholdType: ThresholdType.ChanceCrit,
 		});
 	});
+
+	map.set('90', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '90';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const inflictionChances: { [ailment: string]: AlphaNumeric } = {
+			poison: '0',
+			weak: '0',
+			sick: '0',
+			injury: '0',
+			curse: '0',
+			paralysis: '0',
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			[inflictionChances.poison, inflictionChances.weak, inflictionChances.sick, inflictionChances.injury, inflictionChances.curse, inflictionChances.paralysis, ...extraParams] = splitEffectParams(typedEffect);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 6, injectionContext);
+		} else {
+			const ailmentKeysInEffect = Object.keys(effect).filter((k) => k.startsWith('inflict'));
+			AILMENTS_ORDER.forEach((ailment) => {
+				const correspondingKey = ailmentKeysInEffect.find((k) => k.includes(ailment));
+				if (correspondingKey) {
+					inflictionChances[ailment] = typedEffect[correspondingKey] as number;
+				}
+			});
+		}
+
+		const results: IBuff[] = [];
+		AILMENTS_ORDER.forEach((ailment) => {
+			const value = parseNumberOrDefault(inflictionChances[ailment]);
+			if (value !== 0) {
+				results.push({
+					id: `passive:90:inflict on crit-${ailment}`,
+					originalId,
+					sources,
+					value,
+					conditions: {
+						...conditionInfo,
+						onCriticalHit: true,
+					},
+					...targetData,
+				});
+			}
+		});
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

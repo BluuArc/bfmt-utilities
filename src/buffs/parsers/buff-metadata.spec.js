@@ -1231,6 +1231,32 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:89:on critical hit conditional'], [IconId.CONDITIONALBUFF_CRIT]);
 	});
 
+	describe('passive 90 buffs', () => {
+		describe('passive:90:inflict on crit-poison', () => {
+			testDefaultIconResult(BuffId['passive:90:inflict on crit-poison'], [IconId.BUFF_ADDPOISON]);
+		});
+
+		describe('passive:90:inflict on crit-weak', () => {
+			testDefaultIconResult(BuffId['passive:90:inflict on crit-weak'], [IconId.BUFF_ADDWEAK]);
+		});
+
+		describe('passive:90:inflict on crit-sick', () => {
+			testDefaultIconResult(BuffId['passive:90:inflict on crit-sick'], [IconId.BUFF_ADDSICK]);
+		});
+
+		describe('passive:90:inflict on crit-injury', () => {
+			testDefaultIconResult(BuffId['passive:90:inflict on crit-injury'], [IconId.BUFF_ADDINJURY]);
+		});
+
+		describe('passive:90:inflict on crit-curse', () => {
+			testDefaultIconResult(BuffId['passive:90:inflict on crit-curse'], [IconId.BUFF_ADDCURSE]);
+		});
+
+		describe('passive:90:inflict on crit-paralysis', () => {
+			testDefaultIconResult(BuffId['passive:90:inflict on crit-paralysis'], [IconId.BUFF_ADDPARA]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
