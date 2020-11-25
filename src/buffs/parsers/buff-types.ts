@@ -471,6 +471,8 @@ export enum IconId {
 	BUFF_CRTRATEUP = 'BUFF_CRTRATEUP',
 	BUFF_CRTRATEDOWN = 'BUFF_CRTRATEDOWN',
 
+	BUFF_SELFHPUP = 'BUFF_SELFHPUP',
+
 	BUFF_HPTHRESHATKUP = 'BUFF_HPTHRESHATKUP',
 	BUFF_HPTHRESHATKDOWN = 'BUFF_HPTHRESHATKDOWN',
 	BUFF_HPTHRESHDEFUP = 'BUFF_HPTHRESHDEFUP',
@@ -1447,6 +1449,9 @@ export enum BuffId {
 	'proc:89:self converted-atk' = 'proc:89:self converted-atk',
 	'proc:89:self converted-def' = 'proc:89:self converted-def',
 	'proc:89:self converted-rec' = 'proc:89:self converted-rec',
+
+	'proc:92:self max hp boost-flat' = 'proc:92:self max hp boost-flat',
+	'proc:92:self max hp boost-percent' = 'proc:92:self max hp boost-percent',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

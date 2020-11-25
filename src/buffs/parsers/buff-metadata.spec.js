@@ -2129,6 +2129,16 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc 92 buffs', () => {
+		describe('proc:92:self max hp boost-flat', () => {
+			testDefaultIconResult(BuffId['proc:92:self max hp boost-flat'], [IconId.BUFF_SELFHPUP]);
+		});
+
+		describe('proc:92:self max hp boost-percent', () => {
+			testDefaultIconResult(BuffId['proc:92:self max hp boost-percent'], [IconId.BUFF_SELFHPUP]);
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

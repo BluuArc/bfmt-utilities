@@ -4269,4 +4269,53 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('92', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '92';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let flatHpBoost = 0;
+		let percentHpBoost = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawFlatBoost, rawPercentBoost, ...extraParams] = splitEffectParams(effect);
+			flatHpBoost = parseNumberOrDefault(rawFlatBoost);
+			percentHpBoost = parseNumberOrDefault(rawPercentBoost);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		}
+
+		const results: IBuff[] = [];
+		if (flatHpBoost !== 0) {
+			results.push({
+				id: 'proc:92:self max hp boost-flat',
+				originalId,
+				sources,
+				effectDelay,
+				value: flatHpBoost,
+				...targetData,
+			});
+		}
+
+		if (percentHpBoost !== 0) {
+			results.push({
+				id: 'proc:92:self max hp boost-percent',
+				originalId,
+				sources,
+				effectDelay,
+				value: percentHpBoost,
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

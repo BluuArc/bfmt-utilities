@@ -11723,7 +11723,7 @@ describe('getProcEffectToBuffMapping method', () => {
 			});
 
 			it('returns a no params buff if no params are given', () => {
-				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				expectNoParamsBuffWithEffectAndContext({ effect: createArbitraryBaseEffect(), context: createArbitraryContext() });
 			});
 
 			describe('when all stats are 0', () => {
@@ -11761,6 +11761,135 @@ describe('getProcEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 5] });
+			});
+		});
+
+		describe('proc 92', () => {
+			const expectedFlatFillId = 'proc:92:self max hp boost-flat';
+			const expectedPercentFillId = 'proc:92:self max hp boost-percent';
+			const expectedOriginalId = '92';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedFlatFillId, expectedPercentFillId]);
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatFillId,
+						value: 1,
+					}),
+					baseBuffFactory({
+						id: expectedPercentFillId,
+						value: 2,
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatFillId,
+						value: 1,
+					}),
+					baseBuffFactory({
+						id: expectedPercentFillId,
+						value: 2,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_2: '3',
+							param_3: '4',
+							param_4: '5',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				it('defaults to 0 for missing flat fill value', () => {
+					const params = ',123';
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [
+						baseBuffFactory({
+							id: expectedPercentFillId,
+							value: 123,
+						}),
+					];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults to 0 for missing percent fill value', () => {
+					const params = '123';
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [
+						baseBuffFactory({
+							id: expectedFlatFillId,
+							value: 123,
+						}),
+					];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					const effect = createArbitraryBaseEffect();
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('defaults all effect properties to 0 for non-number values', () => {
+					const params = 'not a number,not a number';
+					const effect = createArbitraryBaseEffect({ params });
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({ params: '1,2,123' });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatFillId,
+						sources: arbitrarySourceValue,
+						value: 1,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: expectedPercentFillId,
+						sources: arbitrarySourceValue,
+						value: 2,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 2] });
 			});
 		});
 	});
