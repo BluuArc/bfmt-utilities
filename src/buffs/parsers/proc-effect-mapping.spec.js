@@ -4642,6 +4642,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					return baseBuffFactory({
 						id: `proc:30:add element-${element}`,
 						duration: arbitraryTurnDuration,
+						value: true,
 					});
 				});
 
@@ -4656,6 +4657,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					return baseBuffFactory({
 						id: `proc:30:add element-${element}`,
 						duration: arbitraryTurnDuration,
+						value: true,
 					});
 				}).concat([baseBuffFactory({
 					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
@@ -4680,6 +4682,7 @@ describe('getProcEffectToBuffMapping method', () => {
 					return baseBuffFactory({
 						id: `proc:30:add element-${element}`,
 						duration: arbitraryTurnDuration,
+						value: true,
 					});
 				});
 
@@ -4696,6 +4699,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						const expectedResult = [baseBuffFactory({
 							id: `proc:30:add element-${elementValue}`,
 							duration: arbitraryTurnDuration,
+							value: true,
 						})];
 
 						const result = mappingFunction(effect, createArbitraryContext());
@@ -4711,6 +4715,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						const expectedResult = [baseBuffFactory({
 							id: `proc:30:add element-${elementValue}`,
 							duration: arbitraryTurnDuration,
+							value: true,
 						})];
 
 						const result = mappingFunction(effect, createArbitraryContext());
@@ -4726,10 +4731,12 @@ describe('getProcEffectToBuffMapping method', () => {
 						baseBuffFactory({
 							id: 'proc:30:add element-unknown',
 							duration: arbitraryTurnDuration,
+							value: true,
 						}),
 						baseBuffFactory({
 							id: 'proc:30:add element-unknown',
 							duration: arbitraryTurnDuration,
+							value: true,
 						}),
 					];
 
@@ -4746,10 +4753,12 @@ describe('getProcEffectToBuffMapping method', () => {
 						baseBuffFactory({
 							id: 'proc:30:add element-unknown',
 							duration: arbitraryTurnDuration,
+							value: true,
 						}),
 						baseBuffFactory({
 							id: 'proc:30:add element-unknown',
 							duration: arbitraryTurnDuration,
+							value: true,
 						}),
 					];
 
@@ -4766,6 +4775,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						baseBuffFactory({
 							id: 'proc:30:add element-unknown',
 							duration: arbitraryTurnDuration,
+							value: true,
 						}),
 					];
 
@@ -4797,6 +4807,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						id: 'proc:30:add element-fire',
 						sources: arbitrarySourceValue,
 						duration: arbitraryTurnDuration,
+						value: true,
 						...arbitraryTargetData,
 					}, BUFF_TARGET_PROPS),
 					baseBuffFactory({

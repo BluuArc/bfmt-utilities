@@ -1850,6 +1850,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 					sources,
 					effectDelay,
 					duration: turnDuration,
+					value: true,
 					...targetData,
 				});
 			});
