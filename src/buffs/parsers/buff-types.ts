@@ -1214,6 +1214,14 @@ export enum BuffId {
 	'passive:91:first turn spark' = 'passive:91:first turn spark',
 	'passive:92:negate defense ignore' = 'passive:92:negate defense ignore',
 
+	'passive:93:add element-fire' = 'passive:93:add element-fire',
+	'passive:93:add element-water' = 'passive:93:add element-water',
+	'passive:93:add element-earth' = 'passive:93:add element-earth',
+	'passive:93:add element-thunder' = 'passive:93:add element-thunder',
+	'passive:93:add element-light' = 'passive:93:add element-light',
+	'passive:93:add element-dark' = 'passive:93:add element-dark',
+	'passive:93:add element-unknown' = 'passive:93:add element-unknown',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

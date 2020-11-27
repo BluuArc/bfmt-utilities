@@ -3363,4 +3363,37 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			originalId: '92',
 		});
 	});
+
+	map.set('93', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '93';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let elements: (UnitElement | BuffConditionElement)[] = [];
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			elements = params.filter((value, index) => value !== '0' && index < 6)
+				.map((e) => ELEMENT_MAPPING[e] || BuffConditionElement.Unknown);
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(6), 6, injectionContext);
+		}
+
+		const results: IBuff[] = elements.map((element) => ({
+			id: `passive:93:add element-${element}`,
+			originalId,
+			sources,
+			value: true,
+			conditions: { ...conditionInfo },
+			...targetData,
+		}));
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

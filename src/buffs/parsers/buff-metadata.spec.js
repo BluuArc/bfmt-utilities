@@ -1266,6 +1266,36 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:92:negate defense ignore'], [IconId.BUFF_IGNOREDEFBLK]);
 	});
 
+	describe('passive 93 buffs', () => {
+		describe('passive:93:add element-fire', () => {
+			testDefaultIconResult(BuffId['passive:93:add element-fire'], [IconId.BUFF_ADDFIRE]);
+		});
+
+		describe('passive:93:add element-water', () => {
+			testDefaultIconResult(BuffId['passive:93:add element-water'], [IconId.BUFF_ADDWATER]);
+		});
+
+		describe('passive:93:add element-earth', () => {
+			testDefaultIconResult(BuffId['passive:93:add element-earth'], [IconId.BUFF_ADDEARTH]);
+		});
+
+		describe('passive:93:add element-thunder', () => {
+			testDefaultIconResult(BuffId['passive:93:add element-thunder'], [IconId.BUFF_ADDTHUNDER]);
+		});
+
+		describe('passive:93:add element-light', () => {
+			testDefaultIconResult(BuffId['passive:93:add element-light'], [IconId.BUFF_ADDLIGHT]);
+		});
+
+		describe('passive:93:add element-dark', () => {
+			testDefaultIconResult(BuffId['passive:93:add element-dark'], [IconId.BUFF_ADDDARK]);
+		});
+
+		describe('passive:93:add element-unknown', () => {
+			testDefaultIconResult(BuffId['passive:93:add element-unknown'], [IconId.BUFF_ADDELEMENT]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
