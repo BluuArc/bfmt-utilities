@@ -9306,5 +9306,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123', '0', '0', '789']), 0] });
 			});
 		});
+
+		describe('passive 92', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '92',
+				expectedBuffId: 'passive:92:negate defense ignore',
+				effectKey: 'ignore def resist chance%',
+			});
+		});
 	});
 });

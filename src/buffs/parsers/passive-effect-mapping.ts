@@ -3352,4 +3352,15 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('92', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parsePassiveWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			effectKey: 'ignore def resist chance%',
+			buffId: 'passive:92:negate defense ignore',
+			originalId: '92',
+		});
+	});
 }

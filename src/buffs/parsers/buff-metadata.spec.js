@@ -1262,6 +1262,10 @@ describe('BUFF_METADATA entries', () => {
 		testIconResultWithBuff(BuffId['passive:91:first turn spark'], [IconId.BUFF_SPARKDOWN], { value: -1 }, 'buff value is less than 0');
 	});
 
+	describe('passive:92:negate defense ignore', () => {
+		testDefaultIconResult(BuffId['passive:92:negate defense ignore'], [IconId.BUFF_IGNOREDEFBLK]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

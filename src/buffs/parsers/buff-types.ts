@@ -277,6 +277,7 @@ export enum UnitStat {
 	revive = 'revive',
 
 	defenseIgnore = 'defenseIgnore',
+	defenseIgnoreMitigation = 'defenseIgnoreMitigation',
 
 	criticalDamage = 'criticalDamage',
 	criticalDamageMitigation = 'criticalDamageMitigation',
@@ -820,6 +821,7 @@ export enum IconId {
 	BUFF_HPABS = 'BUFF_HPABS',
 
 	BUFF_IGNOREDEF = 'BUFF_IGNOREDEF',
+	BUFF_IGNOREDEFBLK = 'BUFF_IGNOREDEFBLK',
 
 	BUFF_CRTUP = 'BUFF_CRTUP', // critical damage boost
 	BUFF_CRTDOWN = 'BUFF_CRTDOWN', // critical damage reduction
@@ -1210,6 +1212,7 @@ export enum BuffId {
 	'passive:90:inflict on crit-paralysis' = 'passive:90:inflict on crit-paralysis',
 
 	'passive:91:first turn spark' = 'passive:91:first turn spark',
+	'passive:92:negate defense ignore' = 'passive:92:negate defense ignore',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

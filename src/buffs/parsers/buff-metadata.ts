@@ -1538,6 +1538,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_SPARKDOWN : IconId.BUFF_SPARKUP],
 	},
+	'passive:92:negate defense ignore': {
+		id: BuffId['passive:92:negate defense ignore'],
+		name: 'Passive Defense Ignore Negation (Chance)',
+		stat: UnitStat.defenseIgnoreMitigation,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_IGNOREDEFBLK],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
