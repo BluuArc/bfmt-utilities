@@ -1209,6 +1209,8 @@ export enum BuffId {
 	'passive:90:inflict on crit-curse' = 'passive:90:inflict on crit-curse',
 	'passive:90:inflict on crit-paralysis' = 'passive:90:inflict on crit-paralysis',
 
+	'passive:91:first turn spark' = 'passive:91:first turn spark',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

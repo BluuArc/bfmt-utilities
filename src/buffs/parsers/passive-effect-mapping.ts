@@ -3315,4 +3315,41 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('91', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '91';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let value = 0, turnDuration = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [firstUnknownValue, rawValue, rawTurnDuration, ...extraParams] = splitEffectParams(typedEffect);
+			value = parseNumberOrDefault(rawValue);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+			unknownParams = createUnknownParamsEntryFromExtraParams([firstUnknownValue, '0', '0'].concat(extraParams), 0, injectionContext);
+		}
+
+		let results: IBuff[] = [];
+		if (value !== 0) {
+			results.push({
+				id: 'passive:91:first turn spark',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value,
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

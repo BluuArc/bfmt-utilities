@@ -1531,6 +1531,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ADDPARA],
 	},
+	'passive:91:first turn spark': {
+		id: BuffId['passive:91:first turn spark'],
+		name: 'Spark Damage Boost for First X Turns',
+		stat: UnitStat.sparkDamage,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_SPARKDOWN : IconId.BUFF_SPARKUP],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
