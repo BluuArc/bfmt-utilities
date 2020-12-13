@@ -11903,5 +11903,287 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 2] });
 			});
 		});
+
+		describe('proc 93', () => {
+			const BUFF_ID_MAPPING = {
+				criticalDamageBase: 'proc:93:critical damage resistance-base',
+				criticalDamageBuff: 'proc:93:critical damage resistance-buff',
+				elementDamageBase: 'proc:93:element damage resistance-base',
+				elementDamageBuff: 'proc:93:element damage resistance-buff',
+				sparkDamageBase: 'proc:93:spark damage resistance-base',
+				sparkDamageBuff: 'proc:93:spark damage resistance-buff',
+			};
+			const EFFECT_KEY_MAPPING = {
+				criticalDamageBase: 'crit dmg base damage resist% (143)',
+				criticalDamageBuff: 'crit dmg buffed damage resist% (143)',
+				elementDamageBase: 'strong base element damage resist% (144)',
+				elementDamageBuff: 'strong buffed element damage resist% (144)',
+				sparkDamageBase: 'spark dmg base resist% (145)',
+				sparkDamageBuff: 'spark dmg buffed resist% (145)',
+				turnDuration: 'dmg resist turns',
+			};
+			const PARAMS_ORDER = ['criticalDamageBase', 'criticalDamageBuff', 'elementDamageBase', 'elementDamageBuff', 'sparkDamageBase', 'sparkDamageBuff'];
+			const expectedOriginalId = '93';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(PARAMS_ORDER.map((k) => BUFF_ID_MAPPING[k]));
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,3,4,5,6,${arbitraryTurnDuration}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBase,
+						duration: arbitraryTurnDuration,
+						value: 1,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBuff,
+						duration: arbitraryTurnDuration,
+						value: 2,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBase,
+						duration: arbitraryTurnDuration,
+						value: 3,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBuff,
+						duration: arbitraryTurnDuration,
+						value: 4,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.sparkDamageBase,
+						duration: arbitraryTurnDuration,
+						value: 5,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.sparkDamageBuff,
+						duration: arbitraryTurnDuration,
+						value: 6,
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `1,2,3,4,5,6,${arbitraryTurnDuration},8,9,10`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBase,
+						duration: arbitraryTurnDuration,
+						value: 1,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBuff,
+						duration: arbitraryTurnDuration,
+						value: 2,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBase,
+						duration: arbitraryTurnDuration,
+						value: 3,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBuff,
+						duration: arbitraryTurnDuration,
+						value: 4,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.sparkDamageBase,
+						duration: arbitraryTurnDuration,
+						value: 5,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.sparkDamageBuff,
+						duration: arbitraryTurnDuration,
+						value: 6,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_7: '8',
+							param_8: '9',
+							param_9: '10',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[EFFECT_KEY_MAPPING.criticalDamageBase]: 7,
+					[EFFECT_KEY_MAPPING.criticalDamageBuff]: 8,
+					[EFFECT_KEY_MAPPING.elementDamageBase]: 9,
+					[EFFECT_KEY_MAPPING.elementDamageBuff]: 10,
+					[EFFECT_KEY_MAPPING.sparkDamageBase]: 11,
+					[EFFECT_KEY_MAPPING.sparkDamageBuff]: 12,
+					[EFFECT_KEY_MAPPING.turnDuration]: arbitraryTurnDuration,
+				});
+
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBase,
+						duration: arbitraryTurnDuration,
+						value: 7,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBuff,
+						duration: arbitraryTurnDuration,
+						value: 8,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBase,
+						duration: arbitraryTurnDuration,
+						value: 9,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBuff,
+						duration: arbitraryTurnDuration,
+						value: 10,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.sparkDamageBase,
+						duration: arbitraryTurnDuration,
+						value: 11,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.sparkDamageBuff,
+						duration: arbitraryTurnDuration,
+						value: 12,
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('parses effect properties to number when the params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[EFFECT_KEY_MAPPING.criticalDamageBase]: '7',
+					[EFFECT_KEY_MAPPING.criticalDamageBuff]: '8',
+					[EFFECT_KEY_MAPPING.elementDamageBase]: '9',
+					[EFFECT_KEY_MAPPING.elementDamageBuff]: '10',
+					[EFFECT_KEY_MAPPING.sparkDamageBase]: '11',
+					[EFFECT_KEY_MAPPING.sparkDamageBuff]: '12',
+					[EFFECT_KEY_MAPPING.turnDuration]: arbitraryTurnDuration,
+				});
+
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBase,
+						duration: arbitraryTurnDuration,
+						value: 7,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBuff,
+						duration: arbitraryTurnDuration,
+						value: 8,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBase,
+						duration: arbitraryTurnDuration,
+						value: 9,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.elementDamageBuff,
+						duration: arbitraryTurnDuration,
+						value: 10,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.sparkDamageBase,
+						duration: arbitraryTurnDuration,
+						value: 11,
+					}),
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.sparkDamageBuff,
+						duration: arbitraryTurnDuration,
+						value: 12,
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('for missing or 0 values', () => {
+				PARAMS_ORDER.forEach((key, index) => {
+					it(`returns a single buff for ${BUFF_ID_MAPPING[key]} if it's the only drop resistance parameter that is non-zero`, () => {
+						const params = Array.from({ length: PARAMS_ORDER.length }).fill(0).map((_, i) => i !== index ? '0' : '123').concat([arbitraryTurnDuration]).join(',');
+						const effect = createArbitraryBaseEffect({ params });
+						const expectedResult = [baseBuffFactory({
+							id: BUFF_ID_MAPPING[key],
+							duration: arbitraryTurnDuration,
+							value: 123,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					if (key in EFFECT_KEY_MAPPING) {
+						it(`returns a single buff for ${BUFF_ID_MAPPING[key]} if it's the only drop resistance parameter that is non-zero and the params property does not exist`, () => {
+							const effect = createArbitraryBaseEffect({
+								[EFFECT_KEY_MAPPING[key]]: 456,
+								[EFFECT_KEY_MAPPING.turnDuration]: arbitraryTurnDuration,
+							});
+							const expectedResult = [baseBuffFactory({
+								id: BUFF_ID_MAPPING[key],
+								duration: arbitraryTurnDuration,
+								value: 456,
+							})];
+
+							const result = mappingFunction(effect, createArbitraryContext());
+							expect(result).toEqual(expectedResult);
+						});
+					}
+				});
+
+				describe('when drop resistance parameters are 0', () => {
+					testTurnDurationScenarios({
+						createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,${duration}`,
+						buffIdsInTurnDurationBuff: PARAMS_ORDER.map((k) => BUFF_ID_MAPPING[k]),
+					});
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: `1,0,0,0,0,0,${arbitraryTurnDuration},123`,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: BUFF_ID_MAPPING.criticalDamageBase,
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: 1,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 7] });
+			});
+		});
 	});
 });

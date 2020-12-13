@@ -2204,6 +2204,32 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc 93 buffs', () => {
+		describe('proc:93:critical damage resistance-base', () => {
+			testDefaultIconResult(BuffId['proc:93:critical damage resistance-base'], [IconId.BUFF_CRTDOWN]);
+		});
+
+		describe('proc:93:critical damage resistance-buff', () => {
+			testDefaultIconResult(BuffId['proc:93:critical damage resistance-buff'], [IconId.BUFF_CRTDOWN]);
+		});
+
+		describe('proc:93:element damage resistance-base', () => {
+			testDefaultIconResult(BuffId['proc:93:element damage resistance-base'], [IconId.BUFF_ELEMENTDOWN]);
+		});
+
+		describe('proc:93:element damage resistance-buff', () => {
+			testDefaultIconResult(BuffId['proc:93:element damage resistance-buff'], [IconId.BUFF_ELEMENTDOWN]);
+		});
+
+		describe('proc:93:spark damage resistance-base', () => {
+			testDefaultIconResult(BuffId['proc:93:spark damage resistance-base'], [IconId.BUFF_SPARKDMGDOWN]);
+		});
+
+		describe('proc:93:spark damage resistance-buff', () => {
+			testDefaultIconResult(BuffId['proc:93:spark damage resistance-buff'], [IconId.BUFF_SPARKDMGDOWN]);
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

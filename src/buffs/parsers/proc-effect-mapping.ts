@@ -4319,4 +4319,105 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('93', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '93';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		enum ResistType {
+			CriticalDamage = 'critical damage',
+			ElementDamage = 'element damage',
+			SparkDamage = 'spark damage',
+		}
+		interface IResistanceInfo {
+			resistType: ResistType;
+			base: number;
+			buff: number;
+		}
+		const resistances: IResistanceInfo[] = [];
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawBaseCritDamageResist, rawBuffCritDamageResist, rawBaseElementDamageResist, rawBuffElementDamageResist, rawBaseSparkDamageResist, rawBuffSparkDamageResist, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			[
+				{ resistType: ResistType.CriticalDamage, base: parseNumberOrDefault(rawBaseCritDamageResist), buff: parseNumberOrDefault(rawBuffCritDamageResist) },
+				{ resistType: ResistType.ElementDamage, base: parseNumberOrDefault(rawBaseElementDamageResist), buff: parseNumberOrDefault(rawBuffElementDamageResist) },
+				{ resistType: ResistType.SparkDamage, base: parseNumberOrDefault(rawBaseSparkDamageResist), buff: parseNumberOrDefault(rawBuffSparkDamageResist) },
+			].forEach(({ resistType, base, buff }) => {
+				if (base !== 0 || buff !== 0) {
+					resistances.push({ resistType, base, buff });
+				}
+			});
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
+		} else {
+			[
+				{ resistType: ResistType.CriticalDamage, baseKey: 'crit dmg base damage resist% (143)', buffKey: 'crit dmg buffed damage resist% (143)' },
+				{ resistType: ResistType.ElementDamage, baseKey: 'strong base element damage resist% (144)', buffKey: 'strong buffed element damage resist% (144)' },
+				{ resistType: ResistType.SparkDamage, baseKey: 'spark dmg base resist% (145)', buffKey: 'spark dmg buffed resist% (145)' },
+			].forEach(({ resistType, baseKey, buffKey }) => {
+				const base = parseNumberOrDefault(effect[baseKey] as number);
+				const buff = parseNumberOrDefault(effect[buffKey] as number);
+				if (base !== 0 || buff !== 0) {
+					resistances.push({ resistType, base, buff });
+				}
+			});
+			turnDuration = parseNumberOrDefault(effect['dmg resist turns'] as number);
+		}
+
+		const results: IBuff[] = [];
+		resistances.forEach(({ resistType, base, buff }) => {
+			if (base !== 0) {
+				results.push({
+					id: `proc:93:${resistType} resistance-base`,
+					originalId,
+					sources,
+					effectDelay,
+					duration: turnDuration,
+					value: base,
+					...targetData,
+				});
+			}
+
+			if (buff !== 0) {
+				results.push({
+					id: `proc:93:${resistType} resistance-buff`,
+					originalId,
+					sources,
+					effectDelay,
+					duration: turnDuration,
+					value: buff,
+					...targetData,
+				});
+			}
+		});
+
+		if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			const buffs: string[] = [];
+			[ResistType.CriticalDamage, ResistType.ElementDamage, ResistType.SparkDamage].forEach((resistType) => {
+				buffs.push(
+					`proc:93:${resistType} resistance-base`,
+					`proc:93:${resistType} resistance-buff`,
+				);
+			});
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs,
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

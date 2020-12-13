@@ -1473,6 +1473,13 @@ export enum BuffId {
 	'proc:92:self max hp boost-flat' = 'proc:92:self max hp boost-flat',
 	'proc:92:self max hp boost-percent' = 'proc:92:self max hp boost-percent',
 
+	'proc:93:critical damage resistance-base' = 'proc:93:critical damage resistance-base',
+	'proc:93:critical damage resistance-buff' = 'proc:93:critical damage resistance-buff',
+	'proc:93:element damage resistance-base' = 'proc:93:element damage resistance-base',
+	'proc:93:element damage resistance-buff' = 'proc:93:element damage resistance-buff',
+	'proc:93:spark damage resistance-base' = 'proc:93:spark damage resistance-base',
+	'proc:93:spark damage resistance-buff' = 'proc:93:spark damage resistance-buff',
+
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
 
