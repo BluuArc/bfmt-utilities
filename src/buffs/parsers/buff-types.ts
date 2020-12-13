@@ -306,6 +306,8 @@ export enum UnitStat {
 	expModification = 'expModification',
 
 	shield = 'shield',
+
+	aoeNormalAttack = 'aoeNormalAttack',
 }
 
 /**
@@ -423,6 +425,8 @@ export interface IUnitState {
 	expModification: IBuff[];
 
 	shield: IBuff[];
+
+	aoeNormalAttack: IBuff[];
 }
 
 /**
@@ -912,6 +916,8 @@ export enum IconId {
 	BUFF_SPARKCRTACTIVATED = 'BUFF_SPARKCRTACTIVATED',
 
 	BUFF_SPARK_HPREC = 'BUFF_SPARK_HPREC',
+
+	BUFF_AOEATK = 'BUFF_AOEATK', // aoe normal attacks
 
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
@@ -1479,6 +1485,8 @@ export enum BuffId {
 	'proc:93:element damage resistance-buff' = 'proc:93:element damage resistance-buff',
 	'proc:93:spark damage resistance-base' = 'proc:93:spark damage resistance-base',
 	'proc:93:spark damage resistance-buff' = 'proc:93:spark damage resistance-buff',
+
+	'proc:94:aoe normal attack' = 'proc:94:aoe normal attack',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

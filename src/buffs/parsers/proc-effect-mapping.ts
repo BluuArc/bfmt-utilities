@@ -4420,4 +4420,56 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('94', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '94';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let damageIncrease = 0, chance = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawDamageIncrease, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			damageIncrease = parseNumberOrDefault(rawDamageIncrease);
+			chance = parseNumberOrDefault(rawChance);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		} else {
+			damageIncrease = parseNumberOrDefault(effect['aoe atk inc%'] as number);
+			chance = parseNumberOrDefault(effect['chance to aoe'] as number);
+			turnDuration = parseNumberOrDefault(effect['aoe atk turns (142)'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (chance !== 0) {
+			results.push({
+				id: 'proc:94:aoe normal attack',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: { 'damageModifier%': damageIncrease, chance },
+				...targetData,
+			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['proc:94:aoe normal attack'],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

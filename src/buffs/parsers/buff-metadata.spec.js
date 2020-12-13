@@ -2230,6 +2230,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc:94:aoe normal attack', () => {
+		testDefaultIconResult(BuffId['proc:94:aoe normal attack'], [IconId.BUFF_AOEATK]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

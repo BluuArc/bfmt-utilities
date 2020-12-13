@@ -3065,6 +3065,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_SPARKDMGDOWN],
 	},
+	'proc:94:aoe normal attack': {
+		id: BuffId['proc:94:aoe normal attack'],
+		name: 'Active Normal Attacks Hit All Foes',
+		stat: UnitStat.aoeNormalAttack,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_AOEATK],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',
