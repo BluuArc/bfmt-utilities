@@ -9452,5 +9452,148 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
 			});
 		});
+
+		describe('passive 96', () => {
+			const expectedBuffId = 'passive:96:aoe normal attack';
+			const expectedOriginalId = '96';
+			const MODIFIER_BUFF_KEY = 'damageModifier%';
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2';
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						[MODIFIER_BUFF_KEY]: 1,
+						chance: 2,
+					},
+				})];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = {
+					'aoe atk inc%': 123,
+					'chance to aoe': 456,
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						[MODIFIER_BUFF_KEY]: 123,
+						chance: 456,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('converts effect properties to numbers when params property does not exist', () => {
+				const effect = {
+					'aoe atk inc%': '123',
+					'chance to aoe': '456',
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						[MODIFIER_BUFF_KEY]: 123,
+						chance: 456,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing or zero', () => {
+				it('defaults damage modifier to 0 when damage modifier is missing and chance is non-zero', () => {
+					const params = ',123';
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							[MODIFIER_BUFF_KEY]: 0,
+							chance: 123,
+						},
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('defaults damage modifier to 0 when damage modifier is missing and chance is non-zero and params property does not exist', () => {
+					const effect = { 'chance to aoe': 456 };
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							[MODIFIER_BUFF_KEY]: 0,
+							chance: 456,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a no params buff when chance is 0', () => {
+					const effect = { params: '123' };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('returns a no params buff when chance is 0 and params property does not exist', () => {
+					const effect = { 'aoe atk inc%': '456' };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
+				it('defaults values for effect params to 0 if they are non-number or missing', () => {
+					const effect = { params: 'non-number' };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '3,4,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						value: {
+							[MODIFIER_BUFF_KEY]: 3,
+							chance: 4,
+						},
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
+			});
+		});
 	});
 });

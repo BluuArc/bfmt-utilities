@@ -1296,6 +1296,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive:96:aoe normal attack', () => {
+		testDefaultIconResult(BuffId['passive:96:aoe normal attack'], [IconId.BUFF_AOEATK]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
