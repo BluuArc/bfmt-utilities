@@ -875,6 +875,7 @@ export enum IconId {
 	BUFF_REMOVEBUFF = 'BUFF_REMOVEBUFF',
 	BUFF_DISABLELS = 'BUFF_DISABLELS',
 	BUFF_NULLSPHERE = 'BUFF_NULLSPHERE',
+	BUFF_NULLES = 'BUFF_NULLES',
 
 	BUFF_SUMMONUNIT = 'BUFF_SUMMONUNIT',
 
@@ -1492,6 +1493,7 @@ export enum BuffId {
 	'proc:94:aoe normal attack' = 'proc:94:aoe normal attack',
 
 	'proc:95:sphere lock' = 'proc:95:sphere lock',
+	'proc:96:es lock' = 'proc:96:es lock',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

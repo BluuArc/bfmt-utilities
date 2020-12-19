@@ -12345,5 +12345,12 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectedBuffId: 'proc:95:sphere lock',
 			});
 		});
+
+		describe('proc 96', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '96',
+				expectedBuffId: 'proc:96:es lock',
+			});
+		});
 	});
 });

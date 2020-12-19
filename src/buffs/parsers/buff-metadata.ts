@@ -3081,10 +3081,17 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'proc:95:sphere lock': {
 		id: BuffId['proc:95:sphere lock'],
-		name: 'Active Leader Skill Lock',
+		name: 'Active Sphere Lock',
 		stat: UnitStat.buffStabilityModification,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_NULLSPHERE],
+	},
+	'proc:96:es lock': {
+		id: BuffId['proc:96:es lock'],
+		name: 'Active Extra Skill Lock',
+		stat: UnitStat.buffStabilityModification,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_NULLES],
 	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,

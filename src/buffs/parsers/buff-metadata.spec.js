@@ -2242,6 +2242,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:95:sphere lock'], [IconId.BUFF_NULLSPHERE]);
 	});
 
+	describe('proc:96:es lock', () => {
+		testDefaultIconResult(BuffId['proc:96:es lock'], [IconId.BUFF_NULLES]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

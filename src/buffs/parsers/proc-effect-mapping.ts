@@ -4483,4 +4483,14 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			originalId: '95',
 		});
 	});
+
+	map.set('96', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithSingleNumericalParameterAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			buffId: 'proc:96:es lock',
+			originalId: '96',
+		});
+	});
 }
