@@ -114,6 +114,7 @@
 					source: bfmtUtilities.buffs.parsers.BuffSource.BraveBurst,
 					sourceId: unit.bb.id,
 					damageFrames: unit.bb["damage frames"],
+					sourceElement: unit.element,
 				},
 			);
 			if (unit.sbb) {
@@ -125,6 +126,7 @@
 						source: bfmtUtilities.buffs.parsers.BuffSource.SuperBraveBurst,
 						sourceId: unit.sbb.id,
 						damageFrames: unit.sbb["damage frames"],
+						sourceElement: unit.element,
 					},
 				);
 				detailSections.sbb.removeAttribute('hidden');
@@ -140,6 +142,7 @@
 						source: bfmtUtilities.buffs.parsers.BuffSource.UltimateBraveBurst,
 						sourceId: unit.ubb.id,
 						damageFrames: unit.ubb["damage frames"],
+						sourceElement: unit.element,
 					},
 				);
 				detailSections.ubb.removeAttribute('hidden');
@@ -208,6 +211,7 @@
 						localContext = {
 							...context,
 							damageFrames: context.damageFrames[index],
+							sourceElement: context.sourceElement,
 						};
 					} else {
 						localContext = context;

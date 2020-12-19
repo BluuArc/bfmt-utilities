@@ -121,7 +121,7 @@ export interface IBuffConditions {
 	unknowns?: string[];
 
 	/**
-	 * @description Array of elements required for this buff to activate.
+	 * @description Array of elements required on the target for this buff to activate.
 	 */
 	targetElements?: (UnitElement | BuffConditionElement)[];
 
@@ -446,6 +446,7 @@ export interface IEffectToBuffConversionContext {
 	previousSources?: string[];
 
 	damageFrames?: IBurstDamageFramesEntry;
+	sourceElement?: UnitElement;
 }
 
 export enum IconId {
@@ -1494,6 +1495,8 @@ export enum BuffId {
 
 	'proc:95:sphere lock' = 'proc:95:sphere lock',
 	'proc:96:es lock' = 'proc:96:es lock',
+
+	'proc:97:element specific attack' = 'proc:97:element specific attack',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

@@ -3093,6 +3093,28 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_NULLES],
 	},
+	'proc:97:element specific attack': {
+		id: BuffId['proc:97:element specific attack'],
+		name: 'Element Target Damage',
+		stackType: BuffStackType.Attack,
+		icons: (buff: IBuff) => {
+			let elements: (UnitElement | BuffConditionElement)[];
+			if (buff && buff.conditions && buff.conditions.targetElements && buff.conditions.targetElements.length > 0) {
+				elements = buff.conditions.targetElements;
+			} else {
+				elements = [BuffConditionElement.Unknown];
+			}
+			const elementalIconKeys = elements.map((inputElement) => {
+				const element = typeof inputElement === 'string' ? inputElement : '';
+				let iconKey = `BUFF_${element.toUpperCase()}DMGUP`;
+				if (!(iconKey in IconId)) {
+					iconKey = 'BUFF_ELEMENTDMGUP';
+				}
+				return IconId[iconKey as IconId];
+			});
+			return [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST : IconId.ATK_AOE].concat(elementalIconKeys);
+		},
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

@@ -4493,4 +4493,98 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			originalId: '96',
 		});
 	});
+
+	map.set('97', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '97';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		/**
+		 * @desc Mapping of a given element to the element that is weak to it. For example, given a key of
+		 * `fire`, the corresponding value is `earth` because `earth` units are weak to (i.e. take extra
+		 * damage from) `fire` attacks.
+		 */
+		const weakerElementMapping = {
+			[UnitElement.Fire]: UnitElement.Earth,
+			[UnitElement.Water]: UnitElement.Fire,
+			[UnitElement.Earth]: UnitElement.Thunder,
+			[UnitElement.Thunder]: UnitElement.Water,
+			[UnitElement.Light]: UnitElement.Dark,
+			[UnitElement.Dark]: UnitElement.Light,
+		};
+
+		const getOpposingWeakerElement = (inputElement?: UnitElement): UnitElement | BuffConditionElement => {
+			return (inputElement && Object.hasOwnProperty.call(weakerElementMapping, inputElement))
+				? weakerElementMapping[inputElement]
+				: BuffConditionElement.Unknown;
+		};
+
+		const { hits, distribution } = getAttackInformationFromContext(context);
+		const params: { [param: string]: AlphaNumeric } = {
+			'atk%': '0',
+			flatAtk: '0',
+			'crit%': '0',
+			'bc%': '0',
+			'hc%': '0',
+			'dmg%': '0',
+		};
+		const targetElements: (UnitElement | BuffConditionElement)[] = [getOpposingWeakerElement(context.sourceElement)];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[], rawTargetElementsParam: string;
+			[rawTargetElementsParam, params['atk%'], params.flatAtk, params['crit%'], params['bc%'], params['hc%'], params['dmg%'], ...extraParams] = splitEffectParams(effect);
+			if (rawTargetElementsParam && rawTargetElementsParam !== '0') {
+				targetElements.push(getOpposingWeakerElement(ELEMENT_MAPPING[rawTargetElementsParam] as UnitElement));
+			}
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 7, injectionContext);
+		} else {
+			// in Deathmax's datamine, this proc is incorrectly parsed as a tri-stat buff
+			const extraTargetElement = effect['additional element used for attack check'] as string;
+			if (extraTargetElement && extraTargetElement !== 'self only') {
+				targetElements.push(getOpposingWeakerElement(extraTargetElement as UnitElement));
+			} else if (!extraTargetElement) {
+				targetElements.push(BuffConditionElement.Unknown);
+			}
+			params['atk%'] = (effect['bb atk%'] as number);
+			params.flatAtk = (effect['bb flat atk'] as number);
+			params['crit%'] = (effect['bb crit%'] as number);
+			params['bc%'] = (effect['bb bc%'] as number);
+			params['hc%'] = (effect['bb hc%'] as number);
+			params['dmg%'] = (effect['bb dmg%'] as number);
+		}
+
+		const filteredValue = Object.entries(params)
+			.filter(([, value]) => value && +value)
+			.reduce((acc: { [param: string]: number }, [key, value]) => {
+				acc[key] = parseNumberOrDefault(value);
+				return acc;
+			}, {});
+
+		const results: IBuff[] = [];
+		if (hits !== 0 || distribution !== 0 || Object.keys(filteredValue).length > 0) {
+			results.push({
+				id: 'proc:97:element specific attack',
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					...filteredValue,
+					hits,
+					distribution,
+				},
+				conditions: { targetElements },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

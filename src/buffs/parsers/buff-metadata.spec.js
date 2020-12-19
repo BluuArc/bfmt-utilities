@@ -82,7 +82,7 @@ describe('BUFF_METADATA entries', () => {
 			testIconResultWithBuff(
 				BuffId[buffId],
 				[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
-				{ value: polarityValue, conditions: { targetConditions: [] } },
+				{ value: polarityValue, conditions: { targetElements: [] } },
 				`buff value is ${polarityCase} and target element conditions array is empty`,
 			);
 
@@ -136,8 +136,8 @@ describe('BUFF_METADATA entries', () => {
 
 			testIconResultWithBuff(
 				BuffId[buffId],
-				[IconId[`BUFF_${iconStatKey}${polarityKey}`]],
-				{ value: polarityValue, conditions: { targetConditions: [] } },
+				[IconId[`BUFF_ELEMENT${iconStatKey}${polarityKey}`]],
+				{ value: polarityValue, conditions: { targetElements: [] } },
 				`buff value is ${polarityCase} and target element conditions array is empty`,
 			);
 
@@ -2244,6 +2244,58 @@ describe('BUFF_METADATA entries', () => {
 
 	describe('proc:96:es lock', () => {
 		testDefaultIconResult(BuffId['proc:96:es lock'], [IconId.BUFF_NULLES]);
+	});
+
+	describe('proc:97:element specific attack', () => {
+		testDefaultIconResult(BuffId['proc:97:element specific attack'], [IconId.ATK_AOE, IconId.BUFF_ELEMENTDMGUP]);
+		testIconResultWithBuff(BuffId['proc:97:element specific attack'], [IconId.ATK_ST, IconId.BUFF_ELEMENTDMGUP], { targetArea: TargetArea.Single }, 'target area is single');
+
+		describe('when parsing elements', () => {
+			const buffId = BuffId['proc:97:element specific attack'];
+			POSSIBLE_KNOWN_ELEMENTS.forEach((element) => {
+				testIconResultWithBuff(
+					buffId,
+					[IconId.ATK_AOE, IconId[`BUFF_${element.toUpperCase()}DMGUP`]],
+					{ conditions: { targetElements: [element] } },
+					`first target element condition is ${element}`,
+				);
+			});
+
+			testIconResultWithBuff(
+				buffId,
+				[IconId.ATK_AOE, IconId.BUFF_ELEMENTDMGUP],
+				{ conditions: {} },
+				'no target element conditions are given',
+			);
+
+			testIconResultWithBuff(
+				buffId,
+				[IconId.ATK_AOE, IconId.BUFF_ELEMENTDMGUP],
+				{ conditions: { targetElements: [] } },
+				'target element conditions array is empty',
+			);
+
+			testIconResultWithBuff(
+				buffId,
+				[IconId.ATK_AOE, IconId.BUFF_ELEMENTDMGUP],
+				{ conditions: { targetElements: [{ arbitrary: 'value' }] } },
+				'a non-string element is given',
+			);
+
+			testIconResultWithBuff(
+				buffId,
+				[IconId.ATK_AOE, IconId.BUFF_ELEMENTDMGUP],
+				{ conditions: { targetElements: ['a fake element'] } },
+				'an invalid target condition element is given',
+			);
+
+			testIconResultWithBuff(
+				buffId,
+				[IconId.ATK_AOE, IconId.BUFF_FIREDMGUP, IconId.BUFF_ELEMENTDMGUP, IconId.BUFF_LIGHTDMGUP],
+				{ conditions: { targetElements: [UnitElement.Fire, 'a fake element', UnitElement.Light] } },
+				'multiple elements are given',
+			);
+		});
 	});
 
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
