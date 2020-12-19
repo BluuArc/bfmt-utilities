@@ -416,35 +416,37 @@ describe('getProcEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('falls back to effect properties when params property does not exist', () => {
-				const effect = createArbitraryBaseEffect({
-					[effectValueKey]: 2,
-					[effectTurnDurationKey]: arbitraryTurnDuration,
+			if (effectValueKey) {
+				it('falls back to effect properties when params property does not exist', () => {
+					const effect = createArbitraryBaseEffect({
+						[effectValueKey]: 2,
+						[effectTurnDurationKey]: arbitraryTurnDuration,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: arbitraryTurnDuration,
+						value: 2,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
 				});
-				const expectedResult = [baseBuffFactory({
-					id: expectedBuffId,
-					duration: arbitraryTurnDuration,
-					value: 2,
-				})];
 
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
-			});
+				it('converts effect properties to numbers when params property does not exist', () => {
+					const effect = createArbitraryBaseEffect({
+						[effectValueKey]: '3',
+						[effectTurnDurationKey]: arbitraryTurnDuration,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: arbitraryTurnDuration,
+						value: 3,
+					})];
 
-			it('converts effect properties to numbers when params property does not exist', () => {
-				const effect = createArbitraryBaseEffect({
-					[effectValueKey]: '3',
-					[effectTurnDurationKey]: arbitraryTurnDuration,
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
 				});
-				const expectedResult = [baseBuffFactory({
-					id: expectedBuffId,
-					duration: arbitraryTurnDuration,
-					value: 3,
-				})];
-
-				const result = mappingFunction(effect, createArbitraryContext());
-				expect(result).toEqual(expectedResult);
-			});
+			}
 
 			describe('when non-turn duration value is 0', () => {
 				testTurnDurationScenarios({
@@ -12334,6 +12336,13 @@ describe('getProcEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 3] });
+			});
+		});
+
+		describe('proc 95', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '95',
+				expectedBuffId: 'proc:95:sphere lock',
 			});
 		});
 	});

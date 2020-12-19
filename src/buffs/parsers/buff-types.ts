@@ -874,6 +874,7 @@ export enum IconId {
 
 	BUFF_REMOVEBUFF = 'BUFF_REMOVEBUFF',
 	BUFF_DISABLELS = 'BUFF_DISABLELS',
+	BUFF_NULLSPHERE = 'BUFF_NULLSPHERE',
 
 	BUFF_SUMMONUNIT = 'BUFF_SUMMONUNIT',
 
@@ -1489,6 +1490,8 @@ export enum BuffId {
 	'proc:93:spark damage resistance-buff' = 'proc:93:spark damage resistance-buff',
 
 	'proc:94:aoe normal attack' = 'proc:94:aoe normal attack',
+
+	'proc:95:sphere lock' = 'proc:95:sphere lock',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

@@ -2238,6 +2238,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:94:aoe normal attack'], [IconId.BUFF_AOEATK]);
 	});
 
+	describe('proc:95:sphere lock', () => {
+		testDefaultIconResult(BuffId['proc:95:sphere lock'], [IconId.BUFF_NULLSPHERE]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

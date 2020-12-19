@@ -205,14 +205,14 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		effect: ProcEffect;
 		context: IEffectToBuffConversionContext,
 		injectionContext?: IProcBuffProcessingInjectionContext;
-		effectTurnDurationKey: string;
+		effectTurnDurationKey?: string;
 		buffId: string;
 		parseParamValue?: (rawValue: string) => number,
 		originalId: string;
 	}
 
 	interface IProcWithSingleNumericalParameterAndTurnDurationContext extends ITemplatedParsingFunctionContext {
-		effectValueKey: string;
+		effectValueKey?: string;
 	}
 	const parseProcWithSingleNumericalParameterAndTurnDuration = ({
 		effect,
@@ -234,7 +234,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			turnDuration = parseNumberOrDefault(rawTurnDuration);
 
 			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
-		} else {
+		} else if (effectValueKey && effectTurnDurationKey) {
 			value = parseNumberOrDefault(effect[effectValueKey] as number);
 			turnDuration = parseNumberOrDefault(effect[effectTurnDurationKey] as number);
 		}
@@ -274,6 +274,7 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		effectKeyLow: string;
 		effectKeyHigh: string;
 		effectKeyChance: string;
+		effectTurnDurationKey: string;
 
 		buffKeyLow: string;
 		buffKeyHigh: string;
@@ -4471,5 +4472,15 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 		});
 
 		return results;
+	});
+
+	map.set('95', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithSingleNumericalParameterAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			buffId: 'proc:95:sphere lock',
+			originalId: '95',
+		});
 	});
 }
