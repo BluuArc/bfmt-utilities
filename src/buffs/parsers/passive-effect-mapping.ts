@@ -3448,4 +3448,45 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			originalId: '97',
 		});
 	});
+
+	map.set('100', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '100';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let sparkDamage = 0, chance = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawChance, rawSparkDamage, ...extraParams] = splitEffectParams(typedEffect);
+			chance = parseNumberOrDefault(rawChance);
+			sparkDamage = parseNumberOrDefault(rawSparkDamage);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		} else {
+			chance = parseNumberOrDefault(typedEffect['spark crit chance%'] as number);
+			sparkDamage = parseNumberOrDefault(typedEffect['spark crit dmg%'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (chance !== 0) {
+			results.push({
+				id: 'passive:100:spark critical',
+				originalId,
+				sources,
+				value: { 'sparkDamage%': sparkDamage, chance },
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

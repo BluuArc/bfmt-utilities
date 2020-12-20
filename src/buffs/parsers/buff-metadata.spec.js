@@ -1304,6 +1304,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:97:player exp boost'], [IconId.BUFF_PLAYEREXP]);
 	});
 
+	describe('passive:100:spark critical', () => {
+		testDefaultIconResult(BuffId['passive:100:spark critical'], [IconId.BUFF_SPARKCRTACTIVATED]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
