@@ -9595,5 +9595,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
 			});
 		});
+
+		describe('passive 97', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '97',
+				expectedBuffId: 'passive:97:player exp boost',
+				effectKey: 'xp gained increase%',
+			});
+		});
 	});
 });

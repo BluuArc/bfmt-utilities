@@ -1601,6 +1601,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_AOEATK],
 	},
+	'passive:97:player exp boost': {
+		id: BuffId['passive:97:player exp boost'],
+		name: 'Passive Player EXP Boost',
+		stat: UnitStat.expModification,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_PLAYEREXP],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

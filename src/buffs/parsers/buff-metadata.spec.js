@@ -1300,6 +1300,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:96:aoe normal attack'], [IconId.BUFF_AOEATK]);
 	});
 
+	describe('passive:97:player exp boost', () => {
+		testDefaultIconResult(BuffId['passive:97:player exp boost'], [IconId.BUFF_PLAYEREXP]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

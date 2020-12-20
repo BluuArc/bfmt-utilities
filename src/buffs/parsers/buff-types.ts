@@ -1232,6 +1232,7 @@ export enum BuffId {
 	'passive:93:add element-unknown' = 'passive:93:add element-unknown',
 
 	'passive:96:aoe normal attack' = 'passive:96:aoe normal attack',
+	'passive:97:player exp boost' = 'passive:97:player exp boost',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
