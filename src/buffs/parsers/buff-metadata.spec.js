@@ -1058,7 +1058,7 @@ describe('BUFF_METADATA entries', () => {
 	});
 
 	describe('passive:70:od fill rate', () => {
-		testDefaultIconResult(BuffId['passive:70:od fill rate'], [IconId.BUFF_ODFILLBOOST]);
+		testDefaultIconResult(BuffId['passive:70:od fill rate'], [IconId.BUFF_OVERDRIVEUP]);
 	});
 
 	describe('passive 71 buffs', () => {
@@ -1849,7 +1849,7 @@ describe('BUFF_METADATA entries', () => {
 	});
 
 	describe('proc:43:burst od fill', () => {
-		testDefaultIconResult(BuffId['proc:43:burst od fill'], [IconId.BUFF_OVERDRIVEUP]);
+		testDefaultIconResult(BuffId['proc:43:burst od fill'], [IconId.BUFF_ODFILLBOOST]);
 	});
 
 	describe('proc:44:damage over time', () => {
@@ -2166,7 +2166,7 @@ describe('BUFF_METADATA entries', () => {
 	});
 
 	describe('proc:84:od fill rate', () => {
-		testDefaultIconResult(BuffId['proc:84:od fill rate'], [IconId.BUFF_ODFILLBOOST]);
+		testDefaultIconResult(BuffId['proc:84:od fill rate'], [IconId.BUFF_OVERDRIVEUP]);
 	});
 
 	describe('proc:85:heal on hit', () => {
@@ -2304,6 +2304,10 @@ describe('BUFF_METADATA entries', () => {
 				'multiple elements are given',
 			);
 		});
+	});
+
+	describe('proc:113:gradual od fill', () => {
+		testDefaultIconResult(BuffId['proc:113:gradual od fill'], [IconId.BUFF_ODFILLBOOST]);
 	});
 
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
@@ -2470,7 +2474,7 @@ describe('BUFF_METADATA entries', () => {
 	});
 
 	describe('conditional:132:od fill rate', () => {
-		testDefaultIconResult(BuffId['conditional:132:od fill rate'], [IconId.BUFF_ODFILLBOOST]);
+		testDefaultIconResult(BuffId['conditional:132:od fill rate'], [IconId.BUFF_OVERDRIVEUP]);
 	});
 
 	describe('conditional:133:heal on hit', () => {

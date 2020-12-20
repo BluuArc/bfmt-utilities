@@ -4587,4 +4587,52 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('113', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '113';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let value = 0, turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const params = splitEffectParams(effect);
+			value = parseNumberOrDefault(params[2]);
+			turnDuration = parseNumberOrDefault(params[3]);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams([params[0], params[1], '0', '0'].concat(params.slice(4)), 0, injectionContext);
+		} else {
+			value = parseNumberOrDefault(effect['od fill'] as number);
+			turnDuration = parseNumberOrDefault(effect['od fill turns (148)'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (value !== 0) {
+			results.push({
+				id: 'proc:113:gradual od fill',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value,
+				...targetData,
+			});
+		} else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['proc:113:gradual od fill'],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

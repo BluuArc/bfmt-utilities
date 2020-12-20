@@ -1228,7 +1228,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		name: 'Passive OD Gauge Fill Rate',
 		stat: UnitStat.odGauge,
 		stackType: BuffStackType.Passive,
-		icons: () => [IconId.BUFF_ODFILLBOOST],
+		icons: () => [IconId.BUFF_OVERDRIVEUP],
 	},
 	'passive:71:inflict on hit-poison': {
 		id: BuffId['passive:71:inflict on hit-poison'],
@@ -2503,7 +2503,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		name: 'Burst OD Gauge Fill (Percentage)',
 		stat: UnitStat.odGauge,
 		stackType: BuffStackType.Burst,
-		icons: () => [IconId.BUFF_OVERDRIVEUP],
+		icons: () => [IconId.BUFF_ODFILLBOOST],
 	},
 	'proc:44:damage over time': {
 		id: BuffId['proc:44:damage over time'],
@@ -2979,7 +2979,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		name: 'Active OD Gauge Fill Rate',
 		stat: UnitStat.odGauge,
 		stackType: BuffStackType.Active,
-		icons: () => [IconId.BUFF_ODFILLBOOST],
+		icons: () => [IconId.BUFF_OVERDRIVEUP],
 	},
 	'proc:85:heal on hit': {
 		id: BuffId['proc:85:heal on hit'],
@@ -3128,6 +3128,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 			});
 			return [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST : IconId.ATK_AOE].concat(elementalIconKeys);
 		},
+	},
+	'proc:113:gradual od fill': {
+		id: BuffId['proc:113:gradual od fill'],
+		name: 'Active Gradual OD Gauge Fill (Flat Amount)',
+		stat: UnitStat.odGauge,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ODFILLBOOST],
 	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
@@ -3426,7 +3433,7 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		name: 'Conditional OD Gauge Fill Rate',
 		stat: UnitStat.odGauge,
 		stackType: BuffStackType.ConditionalTimed,
-		icons: () => [IconId.BUFF_ODFILLBOOST],
+		icons: () => [IconId.BUFF_OVERDRIVEUP],
 	},
 	'conditional:133:heal on hit': {
 		id: BuffId['conditional:133:heal on hit'],

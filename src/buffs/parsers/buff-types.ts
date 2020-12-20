@@ -882,8 +882,8 @@ export enum IconId {
 
 	BUFF_DBLSTRIKE = 'BUFF_DBLSTRIKE',
 
-	BUFF_OVERDRIVEUP = 'BUFF_OVERDRIVEUP', // gradual OD fill
-	BUFF_ODFILLBOOST = 'BUFF_ODFILLBOOST', // OD fill rate
+	BUFF_OVERDRIVEUP = 'BUFF_OVERDRIVEUP', // OD fill rate
+	BUFF_ODFILLBOOST = 'BUFF_ODFILLBOOST', // gradual OD fill
 
 	BUFF_TURNDMG = 'BUFF_TURNDMG',
 
@@ -1499,6 +1499,7 @@ export enum BuffId {
 	'proc:96:es lock' = 'proc:96:es lock',
 
 	'proc:97:element specific attack' = 'proc:97:element specific attack',
+	'proc:113:gradual od fill' = 'proc:113:gradual od fill',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
