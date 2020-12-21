@@ -3474,11 +3474,11 @@ describe('getPassiveEffectToBuffMapping method', () => {
 			});
 
 			STAT_PARAMS_ORDER.forEach((statCase) => {
-				[1, 2].forEach((hpThresholdCase) => {
-					it(`returns only value for ${statCase} if it is non-zero and other stats are zero and bb gauge threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'}`, () => {
-						const params = STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0').concat(['456', hpThresholdCase]).join(',');
+				[1, 2].forEach((bbThresholdCase) => {
+					it(`returns only value for ${statCase} if it is non-zero and other stats are zero and bb gauge threshold polarity is ${bbThresholdCase === 1 ? 'above' : 'below'}`, () => {
+						const params = STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0').concat(['456', bbThresholdCase]).join(',');
 						const expectedConditions = {};
-						if (hpThresholdCase === 1) {
+						if (bbThresholdCase === 1) {
 							expectedConditions.bbGaugeGreaterThanOrEqualTo = 456;
 						} else {
 							expectedConditions.bbGaugeLessThanOrEqualTo = 456;
@@ -3494,13 +3494,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 						expect(result).toEqual(expectedResult);
 					});
 
-					it(`returns only value for ${statCase} if it is non-zero and other stats are zero and bb gauge threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'} and params property does not exist`, () => {
+					it(`returns only value for ${statCase} if it is non-zero and other stats are zero and bb gauge threshold polarity is ${bbThresholdCase === 1 ? 'above' : 'below'} and params property does not exist`, () => {
 						const effect = {
 							[`${statCase}% buff`]: 123,
-							[hpThresholdCase === 1 ? BB_GAUGE_ABOVE_EFFECT_KEY : BB_GAUGE_BELOW_EFFECT_KEY]: 456,
+							[bbThresholdCase === 1 ? BB_GAUGE_ABOVE_EFFECT_KEY : BB_GAUGE_BELOW_EFFECT_KEY]: 456,
 						};
 						const expectedConditions = {};
-						if (hpThresholdCase === 1) {
+						if (bbThresholdCase === 1) {
 							expectedConditions.bbGaugeGreaterThanOrEqualTo = 456;
 						} else {
 							expectedConditions.bbGaugeLessThanOrEqualTo = 456;
@@ -10110,6 +10110,191 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 5] });
+			});
+		});
+
+		describe('passive 104', () => {
+			const expectedOriginalId = '104';
+			const allParamTypes = ['damage'].concat(DROP_TYPE_ORDER);
+			const effectKeyMapping = {
+				damage: 'damage% for spark',
+				bc: 'bc drop% for spark',
+				hc: 'hc drop% for spark',
+				item: 'item drop% for spark',
+				zel: 'zel drop% for spark',
+				karma: 'karma drop% for spark',
+			};
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(allParamTypes.map((paramType) => `passive:104:hp conditional spark-${paramType}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6,7,1';
+				const splitParams = params.split(',');
+				const expectedResult = allParamTypes.map((paramType, index) => {
+					return baseBuffFactory({
+						id: `passive:104:hp conditional spark-${paramType}`,
+						value: +(splitParams[index]),
+						conditions: {
+							hpGreaterThanOrEqualTo: 7,
+						},
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,2,9,10,11';
+				const splitParams = params.split(',');
+				const expectedResult = allParamTypes.map((paramType, index) => {
+					return baseBuffFactory({
+						id: `passive:104:hp conditional spark-${paramType}`,
+						value: +(splitParams[index]),
+						conditions: {
+							hpLessThanOrEqualTo: 7,
+						},
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_8: '9',
+						param_9: '10',
+						param_10: '11',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to stat-specific properties when the params property does not exist', () => {
+				const mockValues = [7, 8, 9, 10, 11, 12];
+				const effect = allParamTypes.reduce((acc, paramType, index) => {
+					acc[effectKeyMapping[paramType]] = mockValues[index];
+					return acc;
+				}, {});
+				effect[HP_ABOVE_EFFECT_KEY] = 13;
+
+				const expectedResult = allParamTypes.map((paramType, index) => {
+					return baseBuffFactory({
+						id: `passive:104:hp conditional spark-${paramType}`,
+						value: mockValues[index],
+						conditions: {
+							hpGreaterThanOrEqualTo: 13,
+						},
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			allParamTypes.forEach((paramTypeCase) => {
+				[1, 2].forEach((hpThresholdCase) => {
+					it(`returns only value for ${paramTypeCase} if it is non-zero and other values are zero and hp threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'}`, () => {
+						const params = allParamTypes.map((paramType) => paramType === paramTypeCase ? '123' : '0').concat(['456', hpThresholdCase]).join(',');
+						const expectedConditions = {};
+						if (hpThresholdCase === 1) {
+							expectedConditions.hpGreaterThanOrEqualTo = 456;
+						} else {
+							expectedConditions.hpLessThanOrEqualTo = 456;
+						}
+						const expectedResult = [baseBuffFactory({
+							id: `passive:104:hp conditional spark-${paramTypeCase}`,
+							value: 123,
+							conditions: expectedConditions,
+						})];
+
+						const effect = { params };
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns only value for ${paramTypeCase} if it is non-zero and other values are zero and params property does not exist and hp threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'} and params property does not exist`, () => {
+						const effect = {
+							[effectKeyMapping[paramTypeCase]]: 123,
+							[hpThresholdCase === 1 ? HP_ABOVE_EFFECT_KEY : HP_BELOW_EFFECT_KEY]: 456,
+						};
+						const expectedConditions = {};
+						if (hpThresholdCase === 1) {
+							expectedConditions.hpGreaterThanOrEqualTo = 456;
+						} else {
+							expectedConditions.hpLessThanOrEqualTo = 456;
+						}
+						const expectedResult = [baseBuffFactory({
+							id: `passive:104:hp conditional spark-${paramTypeCase}`,
+							value: 123,
+							conditions: expectedConditions,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff if all stats are 0', () => {
+				const params = allParamTypes.map(() => '0').concat(['2,1']).join(',');
+				const effect = { params };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('defaults all parameters to 0 if they are non-number or missing', () => {
+				const params = 'not a number';
+				const effect = { params };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('defaults all effect properties to 0 for non-number stat values', () => {
+				const effect = allParamTypes.reduce((acc, paramType) => {
+					acc[effectKeyMapping[paramType]] = 'not a number';
+					return acc;
+				}, {});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,0,0,1,456,1,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:104:hp conditional spark-karma',
+						sources: arbitrarySourceValue,
+						value: 1,
+						conditions: {
+							...arbitraryConditionValue,
+							hpGreaterThanOrEqualTo: 456,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 8] });
 			});
 		});
 	});

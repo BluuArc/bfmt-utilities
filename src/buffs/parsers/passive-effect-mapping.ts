@@ -3602,4 +3602,75 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('104', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '104';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const dropRates = {
+			bc: '0' as AlphaNumeric,
+			hc: '0' as AlphaNumeric,
+			item: '0' as AlphaNumeric,
+			zel: '0' as AlphaNumeric,
+			karma: '0' as AlphaNumeric,
+		};
+		let sparkDamageBoost = 0;
+		let thresholdInfo: IThresholdActivationInfo;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			let rawSparkDamageBoost: string;
+			let rawRequireAboveFlag: string;
+			let rawThreshold: string;
+			[rawSparkDamageBoost, dropRates.bc, dropRates.hc, dropRates.item, dropRates.zel, dropRates.karma, rawThreshold, rawRequireAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+			sparkDamageBoost = parseNumberOrDefault(rawSparkDamageBoost);
+			thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag, ThresholdType.Hp);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
+		} else {
+			sparkDamageBoost = parseNumberOrDefault(typedEffect['damage% for spark'] as string);
+			DROP_TYPES_ORDER.forEach((dropType) => {
+				dropRates[dropType] = (typedEffect[`${dropType} drop% for spark`] as string);
+			});
+			thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.Hp);
+		}
+
+		const thresholdConditions = getThresholdConditions(thresholdInfo);
+		const results: IBuff[] = [];
+		if (sparkDamageBoost !== 0) {
+			results.push({
+				id: 'passive:104:hp conditional spark-damage',
+				originalId,
+				sources,
+				value: sparkDamageBoost,
+				conditions: { ...conditionInfo, ...thresholdConditions },
+				...targetData,
+			});
+		}
+
+		DROP_TYPES_ORDER.forEach((dropType) => {
+			const value = parseNumberOrDefault(dropRates[dropType]);
+			if (value !== 0) {
+				results.push({
+					id: `passive:104:hp conditional spark-${dropType}`,
+					originalId,
+					sources,
+					value,
+					conditions: { ...conditionInfo, ...thresholdConditions },
+					...targetData,
+				});
+			}
+		});
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

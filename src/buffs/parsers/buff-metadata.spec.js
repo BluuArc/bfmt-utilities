@@ -1356,6 +1356,38 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 104 buffs', () => {
+		describe('passive:104:hp conditional spark-damage', () => {
+			testDefaultIconResult(BuffId['passive:104:hp conditional spark-damage'], [IconId.BUFF_SPARKUP]);
+			testIconResultWithBuff(BuffId['passive:104:hp conditional spark-damage'], [IconId.BUFF_SPARKDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:104:hp conditional spark-bc', () => {
+			testDefaultIconResult(BuffId['passive:104:hp conditional spark-bc'], [IconId.BUFF_SPARKBC]);
+			testIconResultWithBuff(BuffId['passive:104:hp conditional spark-bc'], [IconId.BUFF_BCDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:104:hp conditional spark-hc', () => {
+			testDefaultIconResult(BuffId['passive:104:hp conditional spark-hc'], [IconId.BUFF_SPARKHC]);
+			testIconResultWithBuff(BuffId['passive:104:hp conditional spark-hc'], [IconId.BUFF_HCDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:104:hp conditional spark-item', () => {
+			testDefaultIconResult(BuffId['passive:104:hp conditional spark-item'], [IconId.BUFF_SPARKITEM]);
+			testIconResultWithBuff(BuffId['passive:104:hp conditional spark-item'], [IconId.BUFF_ITEMDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:104:hp conditional spark-zel', () => {
+			testDefaultIconResult(BuffId['passive:104:hp conditional spark-zel'], [IconId.BUFF_SPARKZEL]);
+			testIconResultWithBuff(BuffId['passive:104:hp conditional spark-zel'], [IconId.BUFF_ZELDOWN], { value: -1 }, 'buff value is less than 0');
+		});
+
+		describe('passive:104:hp conditional spark-karma', () => {
+			testDefaultIconResult(BuffId['passive:104:hp conditional spark-karma'], [IconId.BUFF_SPARKKARMA]);
+			testIconResultWithBuff(BuffId['passive:104:hp conditional spark-karma'], [IconId.BUFF_KARMADOWN], { value: -1 }, 'buff value is less than 0');
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

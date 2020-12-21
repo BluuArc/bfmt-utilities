@@ -1248,6 +1248,13 @@ export enum BuffId {
 	'passive:103:hp conditional attack boost-sbb' = 'passive:103:hp conditional attack boost-sbb',
 	'passive:103:hp conditional attack boost-ubb' = 'passive:103:hp conditional attack boost-ubb',
 
+	'passive:104:hp conditional spark-damage' = 'passive:104:hp conditional spark-damage',
+	'passive:104:hp conditional spark-bc' = 'passive:104:hp conditional spark-bc',
+	'passive:104:hp conditional spark-hc' = 'passive:104:hp conditional spark-hc',
+	'passive:104:hp conditional spark-item' = 'passive:104:hp conditional spark-item',
+	'passive:104:hp conditional spark-zel' = 'passive:104:hp conditional spark-zel',
+	'passive:104:hp conditional spark-karma' = 'passive:104:hp conditional spark-karma',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 
