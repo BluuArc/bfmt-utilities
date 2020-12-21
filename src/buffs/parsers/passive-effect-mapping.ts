@@ -223,7 +223,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		const threshold = !fallbackEffectKey
 			? parseNumberOrDefault(effect[effectKey] as string)
-			: parseNumberOrDefault(effect[effectKey] as string, parseNumberOrDefault(effect[fallbackEffectKey] as string))
+			: parseNumberOrDefault(effect[effectKey] as string, parseNumberOrDefault(effect[fallbackEffectKey] as string));
 		return {
 			threshold,
 			requireAbove,
@@ -3330,7 +3330,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			unknownParams = createUnknownParamsEntryFromExtraParams([firstUnknownValue, '0', '0'].concat(extraParams), 0, injectionContext);
 		}
 
-		let results: IBuff[] = [];
+		const results: IBuff[] = [];
 		if (value !== 0) {
 			results.push({
 				id: 'passive:91:first turn spark',
