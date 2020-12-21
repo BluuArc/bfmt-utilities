@@ -9808,5 +9808,143 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				buffKeyHigh: 'healHigh',
 			});
 		});
+
+		describe('passive 102', () => {
+			const expectedOriginalId = '102';
+			const ELEMENT_MAPPING = {
+				1: UnitElement.Fire,
+				2: UnitElement.Water,
+				3: UnitElement.Earth,
+				4: UnitElement.Thunder,
+				5: UnitElement.Light,
+				6: UnitElement.Dark,
+			};
+			const validElements = [1, 2, 3, 4, 5, 6].map((elementKey) => ELEMENT_MAPPING[elementKey]);
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((elem) => `passive:102:add element-${elem}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6';
+				const expectedResult = validElements.map((element) => {
+					return baseBuffFactory({
+						id: `passive:102:add element-${element}`,
+						value: true,
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,7,8,9';
+				const expectedResult = validElements.map((element) => {
+					return baseBuffFactory({
+						id: `passive:102:add element-${element}`,
+						value: true,
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_6: '7',
+						param_7: '8',
+						param_8: '9',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			Object.entries(ELEMENT_MAPPING).forEach(([knownElementKey, knownElementValue]) => {
+				it(`parses value for ${knownElementValue} in params property`, () => {
+					const params = `${knownElementKey},0,0,0,0,0`;
+					const expectedResult = [baseBuffFactory({
+						id: `passive:102:add element-${knownElementValue}`,
+						value: true,
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`parses value for ${knownElementValue} in params property when there are less than 6 parameters`, () => {
+					const params = `${knownElementKey}`;
+					const expectedResult = [baseBuffFactory({
+						id: `passive:102:add element-${knownElementValue}`,
+						value: true,
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('defaults to unknown element if corresponding element value cannot be found from parsed params', () => {
+				const params = 'not-an-element,123';
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:102:add element-unknown',
+						value: true,
+					}),
+					baseBuffFactory({
+						id: 'passive:102:add element-unknown',
+						value: true,
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff if no elements are specified', () => {
+				const params = '0,0,0,0,0,0';
+				const effect = { params };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,0,0,5,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:102:add element-light',
+						sources: arbitrarySourceValue,
+						value: true,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
+			});
+		});
 	});
 });

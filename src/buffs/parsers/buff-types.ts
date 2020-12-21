@@ -1236,6 +1236,14 @@ export enum BuffId {
 	'passive:100:spark critical' = 'passive:100:spark critical',
 	'passive:101:heal on spark' = 'passive:101:heal on spark',
 
+	'passive:102:add element-fire' = 'passive:102:add element-fire',
+	'passive:102:add element-water' = 'passive:102:add element-water',
+	'passive:102:add element-earth' = 'passive:102:add element-earth',
+	'passive:102:add element-thunder' = 'passive:102:add element-thunder',
+	'passive:102:add element-light' = 'passive:102:add element-light',
+	'passive:102:add element-dark' = 'passive:102:add element-dark',
+	'passive:102:add element-unknown' = 'passive:102:add element-unknown',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 
