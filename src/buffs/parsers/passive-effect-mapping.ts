@@ -3538,4 +3538,68 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('103', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '103';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+		const boosts = {
+			bb: '0' as AlphaNumeric,
+			sbb: '0' as AlphaNumeric,
+			ubb: '0' as AlphaNumeric,
+		};
+		const BOOST_ORDER = ['bb', 'sbb', 'ubb'];
+		let thresholdInfo: IThresholdActivationInfo;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			let extraParams: string[];
+			let rawRequireAboveFlag: string;
+			let rawThreshold: string;
+			[boosts.bb, boosts.sbb, boosts.ubb, rawThreshold, rawRequireAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+			thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag, ThresholdType.Hp);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+		} else {
+			boosts.bb = (typedEffect['bb atk% add'] as string);
+			boosts.sbb = (typedEffect['sbb atk% add'] as string);
+			boosts.ubb = (typedEffect['ubb atk% add'] as string);
+
+			// not using existing effect threshold parsing functions because this is
+			// is parsed differently for some reason
+			thresholdInfo = {
+				threshold: parseNumberOrDefault(typedEffect['hp threshold'] as number),
+				requireAbove: (typedEffect['triggered when hp'] as string) === 'higher',
+				type: ThresholdType.Hp,
+			};
+		}
+
+		const thresholdConditions = getThresholdConditions(thresholdInfo);
+		BOOST_ORDER.forEach((boost) => {
+			const value = parseNumberOrDefault(boosts[boost as 'bb' | 'sbb' | 'ubb']);
+			if (value !== 0) {
+				const entry: IBuff = {
+					id: `passive:103:hp conditional attack boost-${boost}`,
+					originalId,
+					sources,
+					value,
+					conditions: { ...conditionInfo, ...thresholdConditions },
+					...targetData,
+				};
+
+				results.push(entry);
+			}
+		});
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

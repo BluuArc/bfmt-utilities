@@ -1244,6 +1244,10 @@ export enum BuffId {
 	'passive:102:add element-dark' = 'passive:102:add element-dark',
 	'passive:102:add element-unknown' = 'passive:102:add element-unknown',
 
+	'passive:103:hp conditional attack boost-bb' = 'passive:103:hp conditional attack boost-bb',
+	'passive:103:hp conditional attack boost-sbb' = 'passive:103:hp conditional attack boost-sbb',
+	'passive:103:hp conditional attack boost-ubb' = 'passive:103:hp conditional attack boost-ubb',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

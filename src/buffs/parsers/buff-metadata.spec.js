@@ -1342,6 +1342,20 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 103', () => {
+		describe('passive:103:hp conditional attack boost-bb', () => {
+			testDefaultIconResult(BuffId['passive:103:hp conditional attack boost-bb'], [IconId.BUFF_BBATKUP]);
+		});
+
+		describe('passive:103:hp conditional attack boost-sbb', () => {
+			testDefaultIconResult(BuffId['passive:103:hp conditional attack boost-sbb'], [IconId.BUFF_SBBATKUP]);
+		});
+
+		describe('passive:103:hp conditional attack boost-ubb', () => {
+			testDefaultIconResult(BuffId['passive:103:hp conditional attack boost-ubb'], [IconId.BUFF_UBBATKUP]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

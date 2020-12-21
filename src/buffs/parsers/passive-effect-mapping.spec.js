@@ -9946,5 +9946,171 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 6] });
 			});
 		});
+
+		describe('passive 103', () => {
+			const STAT_PARAMS_ORDER = ['bb', 'sbb', 'ubb'];
+			const HP_THRESHOLD_EFFECT_KEY = 'hp threshold';
+			const HP_THRESHOLD_TYPE_EFFECT_KEY = 'triggered when hp';
+			const expectedOriginalId = '103';
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:103:hp conditional attack boost-${stat}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,1';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:103:hp conditional attack boost-${stat}`,
+						value: +(splitParams[index]),
+						conditions: {
+							hpGreaterThanOrEqualTo: 4,
+						},
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,2,6,7,8';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:103:hp conditional attack boost-${stat}`,
+						value: +(splitParams[index]),
+						conditions: {
+							hpLessThanOrEqualTo: 4,
+						},
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_5: '6',
+						param_6: '7',
+						param_7: '8',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to stat-specific properties when the params property does not exist', () => {
+				const mockValues = [4, 5, 6];
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat, index) => {
+					acc[`${stat} atk% add`] = mockValues[index];
+					return acc;
+				}, {});
+				effect[HP_THRESHOLD_EFFECT_KEY] = 7;
+				effect[HP_THRESHOLD_TYPE_EFFECT_KEY] = 'higher';
+
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:103:hp conditional attack boost-${stat}`,
+						value: mockValues[index],
+						conditions: {
+							hpGreaterThanOrEqualTo: 7,
+						},
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			STAT_PARAMS_ORDER.forEach((statCase) => {
+				[1, 2].forEach((hpThresholdCase) => {
+					it(`returns only value for ${statCase} if it is non-zero and other stats are zero and hp threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'}`, () => {
+						const params = STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0').concat(['456', hpThresholdCase]).join(',');
+						const expectedConditions = {};
+						if (hpThresholdCase === 1) {
+							expectedConditions.hpGreaterThanOrEqualTo = 456;
+						} else {
+							expectedConditions.hpLessThanOrEqualTo = 456;
+						}
+						const expectedResult = [baseBuffFactory({
+							id: `passive:103:hp conditional attack boost-${statCase}`,
+							value: 123,
+							conditions: expectedConditions,
+						})];
+
+						const effect = { params };
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns only value for ${statCase} if it is non-zero and other stats are zero and hp threshold polarity is ${hpThresholdCase === 1 ? 'above' : 'below'} and params property does not exist`, () => {
+						const effect = {
+							[`${statCase} atk% add`]: 123,
+							[HP_THRESHOLD_EFFECT_KEY]: 456,
+							[HP_THRESHOLD_TYPE_EFFECT_KEY]: hpThresholdCase === 1 ? 'higher' : 'lower',
+						};
+						const expectedConditions = {};
+						if (hpThresholdCase === 1) {
+							expectedConditions.hpGreaterThanOrEqualTo = 456;
+						} else {
+							expectedConditions.hpLessThanOrEqualTo = 456;
+						}
+						const expectedResult = [baseBuffFactory({
+							id: `passive:103:hp conditional attack boost-${statCase}`,
+							value: 123,
+							conditions: expectedConditions,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff if all stats are 0', () => {
+				const params = '0,0,0,2,1';
+				const effect = { params };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,1,456,1,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:103:hp conditional attack boost-ubb',
+						sources: arbitrarySourceValue,
+						value: 1,
+						conditions: {
+							...arbitraryConditionValue,
+							hpGreaterThanOrEqualTo: 456,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 5] });
+			});
+		});
 	});
 });
