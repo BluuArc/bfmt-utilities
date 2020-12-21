@@ -9796,5 +9796,17 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
 			});
 		});
+
+		describe('passive 101', () => {
+			testPassiveWithNumericalValueRangeAndChance({
+				expectedOriginalId: '101',
+				expectedBuffId: 'passive:101:heal on spark',
+				effectKeyLow: 'heal on spark low',
+				effectKeyHigh: 'heal on spark high',
+				effectKeyChance: 'heal on spark%',
+				buffKeyLow: 'healLow',
+				buffKeyHigh: 'healHigh',
+			});
+		});
 	});
 });

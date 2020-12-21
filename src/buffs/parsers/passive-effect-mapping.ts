@@ -3489,4 +3489,19 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('101', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parsePassiveWithNumericalValueRangeAndChance({
+			effect,
+			context,
+			injectionContext,
+			originalId: '101',
+			effectKeyLow: 'heal on spark low',
+			effectKeyHigh: 'heal on spark high',
+			effectKeyChance: 'heal on spark%',
+			buffKeyLow: 'healLow',
+			buffKeyHigh: 'healHigh',
+			buffId: 'passive:101:heal on spark',
+		});
+	});
 }

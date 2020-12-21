@@ -1308,6 +1308,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:100:spark critical'], [IconId.BUFF_SPARKCRTACTIVATED]);
 	});
 
+	describe('passive:101:heal on spark', () => {
+		testDefaultIconResult(BuffId['passive:101:heal on spark'], [IconId.BUFF_SPARK_HPREC]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
