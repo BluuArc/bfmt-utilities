@@ -145,7 +145,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		 * @param {string} context.expectedBuffId
 		 * @param {boolean?} context.expectToReturnBuffWithValueOfZero
 		 */
-		const testPassiveWithSingleNumericalParameter = ({
+		const testConditionalWithSingleNumericalParameter = ({
 			expectedOriginalId,
 			expectedBuffId,
 			expectToReturnBuffWithValueOfZero = false,
@@ -265,7 +265,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		 * @param {string} context.expectedBuffIdForBase
 		 * @param {string} context.expectedBuffIdForBuff
 		 */
-		const testPassiveWithOnlyBaseAndBuffResistanceParameters = ({
+		const testConditionalWithOnlyBaseAndBuffResistanceParameters = ({
 			expectedOriginalId,
 			expectedBuffIdForBase,
 			expectedBuffIdForBuff,
@@ -427,28 +427,28 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		};
 
 		describe('conditional 1', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '1',
 				expectedBuffId: 'conditional:1:attack buff',
 			});
 		});
 
 		describe('conditional 3', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '3',
 				expectedBuffId: 'conditional:3:defense buff',
 			});
 		});
 
 		describe('conditional 5', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '5',
 				expectedBuffId: 'conditional:5:recovery buff',
 			});
 		});
 
 		describe('conditional 7', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '7',
 				expectedBuffId: 'conditional:7:critical hit rate buff',
 			});
@@ -595,7 +595,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 12', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '12',
 				expectedBuffId: 'conditional:12:guaranteed ko resistance',
 				expectToReturnBuffWithValueOfZero: true,
@@ -915,56 +915,56 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 21', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '21',
 				expectedBuffId: 'conditional:21:fire mitigation',
 			});
 		});
 
 		describe('conditional 22', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '22',
 				expectedBuffId: 'conditional:22:water mitigation',
 			});
 		});
 
 		describe('conditional 23', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '23',
 				expectedBuffId: 'conditional:23:earth mitigation',
 			});
 		});
 
 		describe('conditional 24', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '24',
 				expectedBuffId: 'conditional:24:thunder mitigation',
 			});
 		});
 
 		describe('conditional 25', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '25',
 				expectedBuffId: 'conditional:25:light mitigation',
 			});
 		});
 
 		describe('conditional 26', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '26',
 				expectedBuffId: 'conditional:26:dark mitigation',
 			});
 		});
 
 		describe('conditional 36', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '36',
 				expectedBuffId: 'conditional:36:mitigation',
 			});
 		});
 
 		describe('conditional 37', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '37',
 				expectedBuffId: 'conditional:37:gradual bc fill',
 				getExpectedValueFromParam: (param) => +param / 100,
@@ -972,14 +972,14 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 40', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '40',
 				expectedBuffId: 'conditional:40:spark damage',
 			});
 		});
 
 		describe('conditional 51', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '51',
 				expectedBuffId: 'conditional:51:add fire element',
 				expectToReturnBuffWithValueOfZero: true,
@@ -987,7 +987,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 52', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '52',
 				expectedBuffId: 'conditional:52:add water element',
 				expectToReturnBuffWithValueOfZero: true,
@@ -995,7 +995,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 53', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '53',
 				expectedBuffId: 'conditional:53:add earth element',
 				expectToReturnBuffWithValueOfZero: true,
@@ -1003,7 +1003,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 54', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '54',
 				expectedBuffId: 'conditional:54:add thunder element',
 				expectToReturnBuffWithValueOfZero: true,
@@ -1011,7 +1011,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 55', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '55',
 				expectedBuffId: 'conditional:55:add light element',
 				expectToReturnBuffWithValueOfZero: true,
@@ -1019,7 +1019,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 56', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '56',
 				expectedBuffId: 'conditional:56:add dark element',
 				expectToReturnBuffWithValueOfZero: true,
@@ -1411,7 +1411,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 84', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '84',
 				expectedBuffId: 'conditional:84:critical damage',
 				getExpectedValueFromParam: (param) => (+param) * 100,
@@ -1997,14 +1997,14 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 124', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '124',
 				expectedBuffId: 'conditional:124:self attack buff',
 			});
 		});
 
 		describe('conditional 125', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '125',
 				expectedBuffId: 'conditional:125:self defense buff',
 			});
@@ -2146,7 +2146,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 132', () => {
-			testPassiveWithSingleNumericalParameter({
+			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '132',
 				expectedBuffId: 'conditional:132:od fill rate',
 			});
@@ -2290,7 +2290,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 143', () => {
-			testPassiveWithOnlyBaseAndBuffResistanceParameters({
+			testConditionalWithOnlyBaseAndBuffResistanceParameters({
 				expectedOriginalId: '143',
 				expectedBuffIdForBase: 'conditional:143:critical damage reduction-base',
 				expectedBuffIdForBuff: 'conditional:143:critical damage reduction-buff',
@@ -2298,7 +2298,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 144', () => {
-			testPassiveWithOnlyBaseAndBuffResistanceParameters({
+			testConditionalWithOnlyBaseAndBuffResistanceParameters({
 				expectedOriginalId: '144',
 				expectedBuffIdForBase: 'conditional:144:spark damage reduction-base',
 				expectedBuffIdForBuff: 'conditional:144:spark damage reduction-buff',
@@ -2306,7 +2306,7 @@ describe('getConditionalEffectToBuffMapping method', () => {
 		});
 
 		describe('conditional 145', () => {
-			testPassiveWithOnlyBaseAndBuffResistanceParameters({
+			testConditionalWithOnlyBaseAndBuffResistanceParameters({
 				expectedOriginalId: '145',
 				expectedBuffIdForBase: 'conditional:145:elemental weakness damage reduction-base',
 				expectedBuffIdForBuff: 'conditional:145:elemental weakness damage reduction-buff',
