@@ -723,6 +723,36 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		return results;
 	});
 
+	map.set('95', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseBarrierConditionalBuff({
+			effect,
+			context,
+			injectionContext,
+			buffId: 'conditional:95:fire barrier',
+			originalId: '95',
+		});
+	});
+
+	map.set('96', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseBarrierConditionalBuff({
+			effect,
+			context,
+			injectionContext,
+			buffId: 'conditional:96:water barrier',
+			originalId: '96',
+		});
+	});
+
+	map.set('97', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseBarrierConditionalBuff({
+			effect,
+			context,
+			injectionContext,
+			buffId: 'conditional:97:earth barrier',
+			originalId: '97',
+		});
+	});
+
 	map.set('98', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
 		return parseBarrierConditionalBuff({
 			effect,
@@ -740,6 +770,16 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 			injectionContext,
 			buffId: 'conditional:99:light barrier',
 			originalId: '99',
+		});
+	});
+
+	map.set('100', (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext): IBuff[] => {
+		return parseBarrierConditionalBuff({
+			effect,
+			context,
+			injectionContext,
+			buffId: 'conditional:100:dark barrier',
+			originalId: '100',
 		});
 	});
 

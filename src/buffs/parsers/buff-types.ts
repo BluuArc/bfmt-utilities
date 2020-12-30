@@ -1577,8 +1577,12 @@ export enum BuffId {
 	'conditional:84:critical damage' = 'conditional:84:critical damage',
 	'conditional:91:chance ko resistance' = 'conditional:91:chance ko resistance',
 
+	'conditional:95:fire barrier' = 'conditional:95:fire barrier',
+	'conditional:96:water barrier' = 'conditional:96:water barrier',
+	'conditional:97:earth barrier' = 'conditional:97:earth barrier',
 	'conditional:98:thunder barrier' = 'conditional:98:thunder barrier',
 	'conditional:99:light barrier' = 'conditional:99:light barrier',
+	'conditional:100:dark barrier' = 'conditional:100:dark barrier',
 
 	'conditional:111:bc fill on spark' = 'conditional:111:bc fill on spark',
 

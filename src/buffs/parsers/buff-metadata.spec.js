@@ -2559,12 +2559,28 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:91:chance ko resistance'], [IconId.BUFF_KOBLOCK]);
 	});
 
+	describe('conditional:95:fire barrier', () => {
+		testDefaultIconResult(BuffId['conditional:95:fire barrier'], [IconId.BUFF_FIRESHIELD]);
+	});
+
+	describe('conditional:96:water barrier', () => {
+		testDefaultIconResult(BuffId['conditional:96:water barrier'], [IconId.BUFF_WATERSHIELD]);
+	});
+
+	describe('conditional:97:earth barrier', () => {
+		testDefaultIconResult(BuffId['conditional:97:earth barrier'], [IconId.BUFF_EARTHSHIELD]);
+	});
+
 	describe('conditional:98:thunder barrier', () => {
 		testDefaultIconResult(BuffId['conditional:98:thunder barrier'], [IconId.BUFF_THUNDERSHIELD]);
 	});
 
 	describe('conditional:99:light barrier', () => {
 		testDefaultIconResult(BuffId['conditional:99:light barrier'], [IconId.BUFF_LIGHTSHIELD]);
+	});
+
+	describe('conditional:100:dark barrier', () => {
+		testDefaultIconResult(BuffId['conditional:100:dark barrier'], [IconId.BUFF_DARKSHIELD]);
 	});
 
 	describe('conditional:111:bc fill on spark', () => {

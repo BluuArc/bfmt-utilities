@@ -1706,6 +1706,27 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 95', () => {
+			testBarrierConditionalBuff({
+				expectedOriginalId: '95',
+				expectedBuffId: 'conditional:95:fire barrier',
+			});
+		});
+
+		describe('conditional 96', () => {
+			testBarrierConditionalBuff({
+				expectedOriginalId: '96',
+				expectedBuffId: 'conditional:96:water barrier',
+			});
+		});
+
+		describe('conditional 97', () => {
+			testBarrierConditionalBuff({
+				expectedOriginalId: '97',
+				expectedBuffId: 'conditional:97:earth barrier',
+			});
+		});
+
 		describe('conditional 98', () => {
 			testBarrierConditionalBuff({
 				expectedOriginalId: '98',
@@ -1717,6 +1738,13 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			testBarrierConditionalBuff({
 				expectedOriginalId: '99',
 				expectedBuffId: 'conditional:99:light barrier',
+			});
+		});
+
+		describe('conditional 100', () => {
+			testBarrierConditionalBuff({
+				expectedOriginalId: '100',
+				expectedBuffId: 'conditional:100:dark barrier',
 			});
 		});
 
