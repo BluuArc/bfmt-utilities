@@ -1272,6 +1272,8 @@ export enum BuffId {
 	'passive:106:on overdrive conditional' = 'passive:106:on overdrive conditional',
 	'passive:107:add effect to leader skill' = 'passive:107:add effect to leader skill',
 
+	'passive:109:bc efficacy reduction' = 'passive:109:bc efficacy reduction',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

@@ -10580,7 +10580,6 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				}, expectedContext);
 			});
 
-
 			it('returns a no params buff when no parameters are given', () => {
 				mockPassiveEffectConversionFunctionSpy.and.returnValue([]);
 				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
@@ -10624,6 +10623,111 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
+			});
+		});
+
+		describe('passive 109', () => {
+			const expectedBuffId = 'passive:109:bc efficacy reduction';
+			const expectedOriginalId = '109';
+
+			const EFFICACY_CHANGE_BUFF_KEY = 'efficacyChange%';
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3';
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 3,
+					value: { [EFFICACY_CHANGE_BUFF_KEY]: 1, chance: 2 },
+				})];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						duration: 3,
+						value: { [EFFICACY_CHANGE_BUFF_KEY]: 1, chance: 2 },
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_3: '4',
+							param_4: '5',
+							param_5: '6',
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are 0 or missing', () => {
+				it('defaults to 0 for missing efficacy change parameter', () => {
+					const params = `,1,${123}`;
+					const effect = { params };
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						duration: 123,
+						value: { chance: 1, [EFFICACY_CHANGE_BUFF_KEY]: 0 },
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
+				it('returns a no params buff if chance is 0 and turn duration is 0', () => {
+					const params = '1,0,0';
+					const effect = { params };
+
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '1,2,3,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						duration: 3,
+						value: { [EFFICACY_CHANGE_BUFF_KEY]: 1, chance: 2 },
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 3] });
 			});
 		});
 	});

@@ -1424,6 +1424,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:107:add effect to leader skill'], [IconId.BUFF_ADDTO_LS]);
 	});
 
+	describe('passive:109:bc efficacy reduction', () => {
+		testDefaultIconResult(BuffId['passive:109:bc efficacy reduction'], [IconId.BUFF_BBFILLDOWN]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

@@ -3802,4 +3802,45 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 
 		return results;
 	});
+
+	map.set('109', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '109';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let efficacyChange = 0, chance = 0;
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawDamageIncrease, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(typedEffect);
+			efficacyChange = parseNumberOrDefault(rawDamageIncrease);
+			chance = parseNumberOrDefault(rawChance);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+		}
+
+		const results: IBuff[] = [];
+		if (chance !== 0) {
+			results.push({
+				id: 'passive:109:bc efficacy reduction',
+				originalId,
+				sources,
+				duration: turnDuration,
+				value: { 'efficacyChange%': efficacyChange, chance },
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }
