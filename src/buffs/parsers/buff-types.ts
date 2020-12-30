@@ -139,6 +139,7 @@ export interface IBuffConditions {
 	sparkCountExceeds?: number;
 	onGuardChance?: number;
 	onCriticalHitChance?: number;
+	onOverdriveChance?: number;
 
 	onEnemyDefeat?: boolean;
 	onBattleWin?: boolean;
@@ -461,6 +462,7 @@ export enum IconId {
 	CONDITIONALBUFF_SPARKCOUNTTHRESH = 'CONDITIONALBUFF_SPARKCOUNTTHRESH',
 	CONDITIONALBUFF_GUARD = 'CONDITIONALBUFF_GUARD',
 	CONDITIONALBUFF_CRIT = 'CONDITIONALBUFF_CRIT',
+	CONDITIONALBUFF_OD = 'CONDITIONALBUFF_OD',
 
 	BUFF_ADDTO_BB = 'BUFF_ADDTO_BB',
 	BUFF_ADDTO_SBB = 'BUFF_ADDTO_SBB',
@@ -1265,6 +1267,8 @@ export enum BuffId {
 	'passive:105:turn scaled-atk' = 'passive:105:turn scaled-atk',
 	'passive:105:turn scaled-def' = 'passive:105:turn scaled-def',
 	'passive:105:turn scaled-rec' = 'passive:105:turn scaled-rec',
+
+	'passive:106:on overdrive conditional' = 'passive:106:on overdrive conditional',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

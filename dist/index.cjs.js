@@ -1724,6 +1724,7 @@ var IconId;
     IconId["CONDITIONALBUFF_SPARKCOUNTTHRESH"] = "CONDITIONALBUFF_SPARKCOUNTTHRESH";
     IconId["CONDITIONALBUFF_GUARD"] = "CONDITIONALBUFF_GUARD";
     IconId["CONDITIONALBUFF_CRIT"] = "CONDITIONALBUFF_CRIT";
+    IconId["CONDITIONALBUFF_OD"] = "CONDITIONALBUFF_OD";
     IconId["BUFF_ADDTO_BB"] = "BUFF_ADDTO_BB";
     IconId["BUFF_ADDTO_SBB"] = "BUFF_ADDTO_SBB";
     IconId["BUFF_ADDTO_UBB"] = "BUFF_ADDTO_UBB";
@@ -1966,6 +1967,12 @@ var IconId;
     IconId["BUFF_HPSCALEDDEFDOWN"] = "BUFF_HPSCALEDDEFDOWN";
     IconId["BUFF_HPSCALEDRECUP"] = "BUFF_HPSCALEDRECUP";
     IconId["BUFF_HPSCALEDRECDOWN"] = "BUFF_HPSCALEDRECDOWN";
+    IconId["BUFF_TURNSCALEDATKUP"] = "BUFF_TURNSCALEDATKUP";
+    IconId["BUFF_TURNSCALEDATKDOWN"] = "BUFF_TURNSCALEDATKDOWN";
+    IconId["BUFF_TURNSCALEDDEFUP"] = "BUFF_TURNSCALEDDEFUP";
+    IconId["BUFF_TURNSCALEDDEFDOWN"] = "BUFF_TURNSCALEDDEFDOWN";
+    IconId["BUFF_TURNSCALEDRECUP"] = "BUFF_TURNSCALEDRECUP";
+    IconId["BUFF_TURNSCALEDRECDOWN"] = "BUFF_TURNSCALEDRECDOWN";
     IconId["BUFF_SELFATKUP"] = "BUFF_SELFATKUP";
     IconId["BUFF_ATKDOWNLOCK"] = "BUFF_ATKDOWNLOCK";
     IconId["BUFF_SELFDEFUP"] = "BUFF_SELFDEFUP";
@@ -2382,6 +2389,29 @@ var BuffId;
     BuffId["passive:93:add element-dark"] = "passive:93:add element-dark";
     BuffId["passive:93:add element-unknown"] = "passive:93:add element-unknown";
     BuffId["passive:96:aoe normal attack"] = "passive:96:aoe normal attack";
+    BuffId["passive:97:player exp boost"] = "passive:97:player exp boost";
+    BuffId["passive:100:spark critical"] = "passive:100:spark critical";
+    BuffId["passive:101:heal on spark"] = "passive:101:heal on spark";
+    BuffId["passive:102:add element-fire"] = "passive:102:add element-fire";
+    BuffId["passive:102:add element-water"] = "passive:102:add element-water";
+    BuffId["passive:102:add element-earth"] = "passive:102:add element-earth";
+    BuffId["passive:102:add element-thunder"] = "passive:102:add element-thunder";
+    BuffId["passive:102:add element-light"] = "passive:102:add element-light";
+    BuffId["passive:102:add element-dark"] = "passive:102:add element-dark";
+    BuffId["passive:102:add element-unknown"] = "passive:102:add element-unknown";
+    BuffId["passive:103:hp conditional attack boost-bb"] = "passive:103:hp conditional attack boost-bb";
+    BuffId["passive:103:hp conditional attack boost-sbb"] = "passive:103:hp conditional attack boost-sbb";
+    BuffId["passive:103:hp conditional attack boost-ubb"] = "passive:103:hp conditional attack boost-ubb";
+    BuffId["passive:104:hp conditional spark-damage"] = "passive:104:hp conditional spark-damage";
+    BuffId["passive:104:hp conditional spark-bc"] = "passive:104:hp conditional spark-bc";
+    BuffId["passive:104:hp conditional spark-hc"] = "passive:104:hp conditional spark-hc";
+    BuffId["passive:104:hp conditional spark-item"] = "passive:104:hp conditional spark-item";
+    BuffId["passive:104:hp conditional spark-zel"] = "passive:104:hp conditional spark-zel";
+    BuffId["passive:104:hp conditional spark-karma"] = "passive:104:hp conditional spark-karma";
+    BuffId["passive:105:turn scaled-atk"] = "passive:105:turn scaled-atk";
+    BuffId["passive:105:turn scaled-def"] = "passive:105:turn scaled-def";
+    BuffId["passive:105:turn scaled-rec"] = "passive:105:turn scaled-rec";
+    BuffId["passive:106:on overdrive conditional"] = "passive:106:on overdrive conditional";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1:attack"] = "proc:1:attack";
@@ -2592,6 +2622,7 @@ var BuffId;
     BuffId["proc:95:sphere lock"] = "proc:95:sphere lock";
     BuffId["proc:96:es lock"] = "proc:96:es lock";
     BuffId["proc:97:element specific attack"] = "proc:97:element specific attack";
+    BuffId["proc:113:gradual od fill"] = "proc:113:gradual od fill";
     BuffId["UNKNOWN_CONDITIONAL_EFFECT_ID"] = "UNKNOWN_CONDITIONAL_EFFECT_ID";
     BuffId["UNKNOWN_CONDITIONAL_BUFF_PARAMS"] = "UNKNOWN_CONDITIONAL_BUFF_PARAMS";
     BuffId["conditional:1:attack buff"] = "conditional:1:attack buff";
@@ -6330,6 +6361,44 @@ function setMapping(map) {
         });
         return results;
     });
+    map.set('113', (effect, context, injectionContext) => {
+        const originalId = '113';
+        const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        let value = 0, turnDuration = 0;
+        let unknownParams;
+        if (effect.params) {
+            const params = splitEffectParams(effect);
+            value = parseNumberOrDefault(params[2]);
+            turnDuration = parseNumberOrDefault(params[3]);
+            unknownParams = createUnknownParamsEntryFromExtraParams([params[0], params[1], '0', '0'].concat(params.slice(4)), 0, injectionContext);
+        }
+        else {
+            value = parseNumberOrDefault(effect['od fill']);
+            turnDuration = parseNumberOrDefault(effect['od fill turns (148)']);
+        }
+        const results = [];
+        if (value !== 0) {
+            results.push(Object.assign({ id: 'proc:113:gradual od fill', originalId,
+                sources,
+                effectDelay, duration: turnDuration, value }, targetData));
+        }
+        else if (isTurnDurationBuff(context, turnDuration, injectionContext)) {
+            results.push(createTurnDurationEntry({
+                originalId,
+                sources,
+                buffs: ['proc:113:gradual od fill'],
+                duration: turnDuration,
+                targetData,
+            }));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            effectDelay,
+        });
+        return results;
+    });
 }
 
 /**
@@ -7231,6 +7300,7 @@ function setMapping$2(map) {
         ThresholdType["SparkCount"] = "spark count";
         ThresholdType["ChanceGuard"] = "on guard";
         ThresholdType["ChanceCrit"] = "on crit";
+        ThresholdType["ChanceOverDrive"] = "on overdrive activation";
     })(ThresholdType || (ThresholdType = {}));
     const parseThresholdValuesFromParamsProperty = (rawThreshold, rawRequireAboveFlag, thresholdType) => {
         return {
@@ -7313,6 +7383,9 @@ function setMapping$2(map) {
         }
         else if (type === ThresholdType.ChanceCrit) {
             conditions = { onCriticalHitChance: threshold };
+        }
+        else if (type === ThresholdType.ChanceOverDrive) {
+            conditions = { onOverdriveChance: threshold };
         }
         return conditions;
     };
@@ -9586,7 +9659,7 @@ function setMapping$2(map) {
             turnDuration = parseNumberOrDefault(rawTurnDuration);
             unknownParams = createUnknownParamsEntryFromExtraParams([firstUnknownValue, '0', '0'].concat(extraParams), 0, injectionContext);
         }
-        let results = [];
+        const results = [];
         if (value !== 0) {
             results.push(Object.assign({ id: 'passive:91:first turn spark', originalId,
                 sources, duration: turnDuration, value, conditions: Object.assign({}, conditionInfo) }, targetData));
@@ -9619,6 +9692,7 @@ function setMapping$2(map) {
             const params = splitEffectParams(typedEffect);
             elements = params.filter((value, index) => value !== '0' && index < 6)
                 .map((e) => ELEMENT_MAPPING[e] || BuffConditionElement.Unknown);
+            // is last parameter turn duration, where -1 is lasting indefinitely?
             unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(6), 6, injectionContext);
         }
         const results = elements.map((element) => (Object.assign({ id: `passive:93:add element-${element}`, originalId,
@@ -9659,6 +9733,249 @@ function setMapping$2(map) {
             conditionInfo,
         });
         return results;
+    });
+    map.set('97', (effect, context, injectionContext) => {
+        return parsePassiveWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            effectKey: 'xp gained increase%',
+            buffId: 'passive:97:player exp boost',
+            originalId: '97',
+        });
+    });
+    map.set('100', (effect, context, injectionContext) => {
+        const originalId = '100';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        let sparkDamage = 0, chance = 0;
+        let unknownParams;
+        if (typedEffect.params) {
+            const [rawChance, rawSparkDamage, ...extraParams] = splitEffectParams(typedEffect);
+            chance = parseNumberOrDefault(rawChance);
+            sparkDamage = parseNumberOrDefault(rawSparkDamage);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        }
+        else {
+            chance = parseNumberOrDefault(typedEffect['spark crit chance%']);
+            sparkDamage = parseNumberOrDefault(typedEffect['spark crit dmg%']);
+        }
+        const results = [];
+        if (chance !== 0) {
+            results.push(Object.assign({ id: 'passive:100:spark critical', originalId,
+                sources, value: { 'sparkDamage%': sparkDamage, chance }, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('101', (effect, context, injectionContext) => {
+        return parsePassiveWithNumericalValueRangeAndChance({
+            effect,
+            context,
+            injectionContext,
+            originalId: '101',
+            effectKeyLow: 'heal on spark low',
+            effectKeyHigh: 'heal on spark high',
+            effectKeyChance: 'heal on spark%',
+            buffKeyLow: 'healLow',
+            buffKeyHigh: 'healHigh',
+            buffId: 'passive:101:heal on spark',
+        });
+    });
+    map.set('102', (effect, context, injectionContext) => {
+        const originalId = '102';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        let elements = [];
+        let unknownParams;
+        if (typedEffect.params) {
+            const params = splitEffectParams(typedEffect);
+            elements = params.filter((value, index) => value !== '0' && index < 6)
+                .map((e) => ELEMENT_MAPPING[e] || BuffConditionElement.Unknown);
+            unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(6), 6, injectionContext);
+        }
+        const results = elements.map((element) => (Object.assign({ id: `passive:102:add element-${element}`, originalId,
+            sources, value: true, conditions: Object.assign({}, conditionInfo) }, targetData)));
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('103', (effect, context, injectionContext) => {
+        const originalId = '103';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const results = [];
+        const boosts = {
+            bb: '0',
+            sbb: '0',
+            ubb: '0',
+        };
+        const BOOST_ORDER = ['bb', 'sbb', 'ubb'];
+        let thresholdInfo;
+        let unknownParams;
+        if (typedEffect.params) {
+            let extraParams;
+            let rawRequireAboveFlag;
+            let rawThreshold;
+            [boosts.bb, boosts.sbb, boosts.ubb, rawThreshold, rawRequireAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+            thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag, ThresholdType.Hp);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+        }
+        else {
+            boosts.bb = typedEffect['bb atk% add'];
+            boosts.sbb = typedEffect['sbb atk% add'];
+            boosts.ubb = typedEffect['ubb atk% add'];
+            // not using existing effect threshold parsing functions because this is
+            // is parsed differently for some reason
+            thresholdInfo = {
+                threshold: parseNumberOrDefault(typedEffect['hp threshold']),
+                requireAbove: typedEffect['triggered when hp'] === 'higher',
+                type: ThresholdType.Hp,
+            };
+        }
+        const thresholdConditions = getThresholdConditions(thresholdInfo);
+        BOOST_ORDER.forEach((boost) => {
+            const value = parseNumberOrDefault(boosts[boost]);
+            if (value !== 0) {
+                const entry = Object.assign({ id: `passive:103:hp conditional attack boost-${boost}`, originalId,
+                    sources,
+                    value, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData);
+                results.push(entry);
+            }
+        });
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('104', (effect, context, injectionContext) => {
+        const originalId = '104';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const dropRates = {
+            bc: '0',
+            hc: '0',
+            item: '0',
+            zel: '0',
+            karma: '0',
+        };
+        let sparkDamageBoost = 0;
+        let thresholdInfo;
+        let unknownParams;
+        if (typedEffect.params) {
+            let extraParams;
+            let rawSparkDamageBoost;
+            let rawRequireAboveFlag;
+            let rawThreshold;
+            [rawSparkDamageBoost, dropRates.bc, dropRates.hc, dropRates.item, dropRates.zel, dropRates.karma, rawThreshold, rawRequireAboveFlag, ...extraParams] = splitEffectParams(typedEffect);
+            sparkDamageBoost = parseNumberOrDefault(rawSparkDamageBoost);
+            thresholdInfo = parseThresholdValuesFromParamsProperty(rawThreshold, rawRequireAboveFlag, ThresholdType.Hp);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 8, injectionContext);
+        }
+        else {
+            sparkDamageBoost = parseNumberOrDefault(typedEffect['damage% for spark']);
+            DROP_TYPES_ORDER.forEach((dropType) => {
+                dropRates[dropType] = typedEffect[`${dropType} drop% for spark`];
+            });
+            thresholdInfo = parseThresholdValuesFromEffect(typedEffect, ThresholdType.Hp);
+        }
+        const thresholdConditions = getThresholdConditions(thresholdInfo);
+        const results = [];
+        if (sparkDamageBoost !== 0) {
+            results.push(Object.assign({ id: 'passive:104:hp conditional spark-damage', originalId,
+                sources, value: sparkDamageBoost, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData));
+        }
+        DROP_TYPES_ORDER.forEach((dropType) => {
+            const value = parseNumberOrDefault(dropRates[dropType]);
+            if (value !== 0) {
+                results.push(Object.assign({ id: `passive:104:hp conditional spark-${dropType}`, originalId,
+                    sources,
+                    value, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData));
+            }
+        });
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('105', (effect, context, injectionContext) => {
+        const originalId = '105';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const availableStats = ['atk', 'def', 'rec'];
+        const stats = [];
+        let turnCount;
+        let unknownParams;
+        if (typedEffect.params) {
+            const params = splitEffectParams(typedEffect);
+            const scaleLowToHigh = params[6] === '1';
+            availableStats.forEach((stat, index) => {
+                const minValue = parseNumberOrDefault(params[index * 2]);
+                const maxValue = parseNumberOrDefault(params[(index * 2) + 1]);
+                if (minValue !== 0 || maxValue !== 0) {
+                    stats.push({
+                        stat,
+                        startingValue: scaleLowToHigh ? minValue : maxValue,
+                        endingValue: scaleLowToHigh ? maxValue : minValue,
+                    });
+                }
+            });
+            turnCount = parseNumberOrDefault(params[7]);
+            unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(8), 8, injectionContext);
+        }
+        else {
+            const scaleLowToHigh = 'increase from min to max' in typedEffect;
+            availableStats.forEach((stat) => {
+                const minValue = parseNumberOrDefault(typedEffect[`${stat}% min buff`]);
+                const maxValue = parseNumberOrDefault(typedEffect[`${stat}% max buff`]);
+                if (minValue !== 0 || maxValue !== 0) {
+                    stats.push({
+                        stat,
+                        startingValue: scaleLowToHigh ? minValue : maxValue,
+                        endingValue: scaleLowToHigh ? maxValue : minValue,
+                    });
+                }
+            });
+            turnCount = parseNumberOrDefault(typedEffect['turn count']);
+        }
+        const results = stats.map(({ stat, startingValue, endingValue }) => (Object.assign({ id: `passive:105:turn scaled-${stat}`, originalId,
+            sources, value: {
+                'startingValue%': startingValue,
+                'endingValue%': endingValue,
+                turnCount,
+            }, conditions: Object.assign({}, conditionInfo) }, targetData)));
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('106', (effect, context, injectionContext) => {
+        return parseConditionalPassiveWithSingleNumericalCondition({
+            effect,
+            context,
+            injectionContext,
+            originalId: '106',
+            buffId: 'passive:106:on overdrive conditional',
+            thresholdType: ThresholdType.ChanceOverDrive,
+        });
     });
 }
 
@@ -10742,7 +11059,7 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         name: 'Passive OD Gauge Fill Rate',
         stat: UnitStat.odGauge,
         stackType: BuffStackType.Passive,
-        icons: () => [IconId.BUFF_ODFILLBOOST],
+        icons: () => [IconId.BUFF_OVERDRIVEUP],
     }, 'passive:71:inflict on hit-poison': {
         id: BuffId['passive:71:inflict on hit-poison'],
         name: 'Passive Poison Counter',
@@ -11060,6 +11377,170 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.aoeNormalAttack,
         stackType: BuffStackType.Passive,
         icons: () => [IconId.BUFF_AOEATK],
+    }, 'passive:97:player exp boost': {
+        id: BuffId['passive:97:player exp boost'],
+        name: 'Passive Player EXP Boost',
+        stat: UnitStat.expModification,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_PLAYEREXP],
+    }, 'passive:100:spark critical': {
+        id: BuffId['passive:100:spark critical'],
+        name: 'Passive Spark Critical',
+        stat: UnitStat.sparkDamage,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_SPARKCRTACTIVATED],
+    }, 'passive:101:heal on spark': {
+        id: BuffId['passive:101:heal on spark'],
+        name: 'Passive Heal on Spark (Chance)',
+        stat: UnitStat.hpRecovery,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_SPARK_HPREC],
+    }, 'passive:102:add element-fire': {
+        id: BuffId['passive:102:add element-fire'],
+        name: 'Passive Added Element to Attack (Fire)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_ADDFIRE],
+    }, 'passive:102:add element-water': {
+        id: BuffId['passive:102:add element-water'],
+        name: 'Passive Added Element to Attack (Water)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_ADDWATER],
+    }, 'passive:102:add element-earth': {
+        id: BuffId['passive:102:add element-earth'],
+        name: 'Passive Added Element to Attack (Earth)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_ADDEARTH],
+    }, 'passive:102:add element-thunder': {
+        id: BuffId['passive:102:add element-thunder'],
+        name: 'Passive Added Element to Attack (Thunder)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_ADDTHUNDER],
+    }, 'passive:102:add element-light': {
+        id: BuffId['passive:102:add element-light'],
+        name: 'Passive Added Element to Attack (Light)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_ADDLIGHT],
+    }, 'passive:102:add element-dark': {
+        id: BuffId['passive:102:add element-dark'],
+        name: 'Passive Added Element to Attack (Dark)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_ADDDARK],
+    }, 'passive:102:add element-unknown': {
+        id: BuffId['passive:102:add element-unknown'],
+        name: 'Passive Added Element to Attack (Unspecified Element)',
+        stat: UnitStat.elementModification,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_ADDELEMENT],
+    }, 'passive:103:hp conditional attack boost-bb': {
+        id: BuffId['passive:103:hp conditional attack boost-bb'],
+        name: 'Passive BB ATK Boost when HP Passes Threshold',
+        stat: UnitStat.bbAtk,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_BBATKUP],
+    }, 'passive:103:hp conditional attack boost-sbb': {
+        id: BuffId['passive:103:hp conditional attack boost-sbb'],
+        name: 'Passive SBB ATK Boost when HP Passes Threshold',
+        stat: UnitStat.bbAtk,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_SBBATKUP],
+    }, 'passive:103:hp conditional attack boost-ubb': {
+        id: BuffId['passive:103:hp conditional attack boost-ubb'],
+        name: 'Passive UBB ATK Boost when HP Passes Threshold',
+        stat: UnitStat.bbAtk,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_UBBATKUP],
+    }, 'passive:104:hp conditional spark-damage': {
+        id: BuffId['passive:104:hp conditional spark-damage'],
+        name: 'Passive Spark Damage Boost when HP Passes Threshold',
+        stat: UnitStat.sparkDamage,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_SPARKDOWN : IconId.BUFF_SPARKUP],
+    }, 'passive:104:hp conditional spark-bc': {
+        id: BuffId['passive:104:hp conditional spark-bc'],
+        name: 'Passive Battle Crystal Drop Rate Boost during Spark when HP Passes Threshold',
+        stat: UnitStat.bcDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_BCDOWN : IconId.BUFF_SPARKBC],
+    }, 'passive:104:hp conditional spark-hc': {
+        id: BuffId['passive:104:hp conditional spark-hc'],
+        name: 'Passive Heart Crystal Drop Rate Boost during Spark when HP Passes Threshold',
+        stat: UnitStat.hcDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_HCDOWN : IconId.BUFF_SPARKHC],
+    }, 'passive:104:hp conditional spark-item': {
+        id: BuffId['passive:104:hp conditional spark-item'],
+        name: 'Passive Item Drop Rate Boost during Spark when HP Passes Threshold',
+        stat: UnitStat.itemDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ITEMDOWN : IconId.BUFF_SPARKITEM],
+    }, 'passive:104:hp conditional spark-zel': {
+        id: BuffId['passive:104:hp conditional spark-zel'],
+        name: 'Passive Zel Drop Rate Boost during Spark when HP Passes Threshold',
+        stat: UnitStat.zelDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_ZELDOWN : IconId.BUFF_SPARKZEL],
+    }, 'passive:104:hp conditional spark-karma': {
+        id: BuffId['passive:104:hp conditional spark-karma'],
+        name: 'Passive Karma Drop Rate Boost during Spark when HP Passes Threshold',
+        stat: UnitStat.karmaDropRate,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_KARMADOWN : IconId.BUFF_SPARKKARMA],
+    }, 'passive:105:turn scaled-atk': {
+        id: BuffId['passive:105:turn scaled-atk'],
+        name: 'Passive Turn-Scaled Attack Boost',
+        stat: UnitStat.atk,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => {
+            let icon = IconId.BUFF_TURNSCALEDATKUP;
+            if (buff && buff.value) {
+                const buffValue = buff.value;
+                if (buffValue['startingValue%'] > buffValue['endingValue%']) {
+                    icon = IconId.BUFF_TURNSCALEDATKDOWN;
+                }
+            }
+            return [icon];
+        },
+    }, 'passive:105:turn scaled-def': {
+        id: BuffId['passive:105:turn scaled-def'],
+        name: 'Passive Turn-Scaled Defense Boost',
+        stat: UnitStat.def,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => {
+            let icon = IconId.BUFF_TURNSCALEDDEFUP;
+            if (buff && buff.value) {
+                const buffValue = buff.value;
+                if (buffValue['startingValue%'] > buffValue['endingValue%']) {
+                    icon = IconId.BUFF_TURNSCALEDDEFDOWN;
+                }
+            }
+            return [icon];
+        },
+    }, 'passive:105:turn scaled-rec': {
+        id: BuffId['passive:105:turn scaled-rec'],
+        name: 'Passive Turn-Scaled Recovery Boost',
+        stat: UnitStat.rec,
+        stackType: BuffStackType.Passive,
+        icons: (buff) => {
+            let icon = IconId.BUFF_TURNSCALEDRECUP;
+            if (buff && buff.value) {
+                const buffValue = buff.value;
+                if (buffValue['startingValue%'] > buffValue['endingValue%']) {
+                    icon = IconId.BUFF_TURNSCALEDRECDOWN;
+                }
+            }
+            return [icon];
+        },
+    }, 'passive:106:on overdrive conditional': {
+        id: BuffId['passive:106:on overdrive conditional'],
+        name: 'Passive Conditional Effect on Overdrive (Chance)',
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.CONDITIONALBUFF_OD],
     }, UNKNOWN_PROC_EFFECT_ID: {
         id: BuffId.UNKNOWN_PROC_EFFECT_ID,
         name: 'Unknown Proc Effect',
@@ -11830,7 +12311,7 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         name: 'Burst OD Gauge Fill (Percentage)',
         stat: UnitStat.odGauge,
         stackType: BuffStackType.Burst,
-        icons: () => [IconId.BUFF_OVERDRIVEUP],
+        icons: () => [IconId.BUFF_ODFILLBOOST],
     }, 'proc:44:damage over time': {
         id: BuffId['proc:44:damage over time'],
         name: 'Active Damage over Time',
@@ -12236,7 +12717,7 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         name: 'Active OD Gauge Fill Rate',
         stat: UnitStat.odGauge,
         stackType: BuffStackType.Active,
-        icons: () => [IconId.BUFF_ODFILLBOOST],
+        icons: () => [IconId.BUFF_OVERDRIVEUP],
     }, 'proc:85:heal on hit': {
         id: BuffId['proc:85:heal on hit'],
         name: 'Active Heal when Attacked (Chance)',
@@ -12367,6 +12848,12 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
             });
             return [(buff && buff.targetArea === TargetArea.Single) ? IconId.ATK_ST : IconId.ATK_AOE].concat(elementalIconKeys);
         },
+    }, 'proc:113:gradual od fill': {
+        id: BuffId['proc:113:gradual od fill'],
+        name: 'Active Gradual OD Gauge Fill (Flat Amount)',
+        stat: UnitStat.odGauge,
+        stackType: BuffStackType.Active,
+        icons: () => [IconId.BUFF_ODFILLBOOST],
     }, UNKNOWN_CONDITIONAL_EFFECT_ID: {
         id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
         name: 'Unknown Conditional Effect',
@@ -12625,7 +13112,7 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         name: 'Conditional OD Gauge Fill Rate',
         stat: UnitStat.odGauge,
         stackType: BuffStackType.ConditionalTimed,
-        icons: () => [IconId.BUFF_ODFILLBOOST],
+        icons: () => [IconId.BUFF_OVERDRIVEUP],
     }, 'conditional:133:heal on hit': {
         id: BuffId['conditional:133:heal on hit'],
         name: 'Conditional Heal when Attacked (Chance)',

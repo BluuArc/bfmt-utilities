@@ -184,6 +184,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		SparkCount = 'spark count',
 		ChanceGuard = 'on guard',
 		ChanceCrit = 'on crit',
+		ChanceOverDrive = 'on overdrive activation',
 	}
 	interface IThresholdActivationInfo {
 		threshold: number;
@@ -259,6 +260,8 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			conditions = { onGuardChance: threshold };
 		} else if (type === ThresholdType.ChanceCrit) {
 			conditions = { onCriticalHitChance: threshold };
+		} else if (type === ThresholdType.ChanceOverDrive) {
+			conditions = { onOverdriveChance: threshold };
 		}
 
 		return conditions;
@@ -3742,6 +3745,16 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 		});
 
 		return results;
+	});
 
+	map.set('106', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalPassiveWithSingleNumericalCondition({
+			effect,
+			context,
+			injectionContext,
+			originalId: '106',
+			buffId: 'passive:106:on overdrive conditional',
+			thresholdType: ThresholdType.ChanceOverDrive,
+		});
 	});
 }

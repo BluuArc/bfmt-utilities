@@ -1416,6 +1416,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive:106:on overdrive conditional', () => {
+		testDefaultIconResult(BuffId['passive:106:on overdrive conditional'], [IconId.CONDITIONALBUFF_OD]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

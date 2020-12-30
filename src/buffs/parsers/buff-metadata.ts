@@ -1794,6 +1794,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 			return [icon];
 		},
 	},
+	'passive:106:on overdrive conditional': {
+		id: BuffId['passive:106:on overdrive conditional'],
+		name: 'Passive Conditional Effect on Overdrive (Chance)',
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.CONDITIONALBUFF_OD],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

@@ -10470,5 +10470,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 8] });
 			});
 		});
+
+		describe('passive 106', () => {
+			testConditionalPassiveWithSingleNumericalCondition({
+				expectedOriginalId: '106',
+				expectedBuffId: 'passive:106:on overdrive conditional',
+				getExpectedConditionsFromParam: (param) => ({ onOverdriveChance: param }),
+			});
+		});
 	});
 });
