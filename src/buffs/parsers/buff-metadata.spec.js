@@ -1388,6 +1388,34 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive 105 buffs', () => {
+		const STARTING_VALUE_KEY = 'startingValue%';
+		const ENDING_VALUE_KEY = 'endingValue%';
+		describe('passive:105:turn scaled-atk', () => {
+			testDefaultIconResult(BuffId['passive:105:turn scaled-atk'], [IconId.BUFF_TURNSCALEDATKUP]);
+			testIconResultWithBuff(BuffId['passive:105:turn scaled-atk'], [IconId.BUFF_TURNSCALEDATKUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['passive:105:turn scaled-atk'], [IconId.BUFF_TURNSCALEDATKUP], { value: { [STARTING_VALUE_KEY]: 0, [ENDING_VALUE_KEY]: 0} }, 'starting and ending buff values are the same');
+			testIconResultWithBuff(BuffId['passive:105:turn scaled-atk'], [IconId.BUFF_TURNSCALEDATKUP], { value: { [STARTING_VALUE_KEY]: 0, [ENDING_VALUE_KEY]: 1 } }, 'starting buff value is less than ending buff value');
+			testIconResultWithBuff(BuffId['passive:105:turn scaled-atk'], [IconId.BUFF_TURNSCALEDATKDOWN], { value: { [STARTING_VALUE_KEY]: 1, [ENDING_VALUE_KEY]: 0 } }, 'starting buff value is greater than ending buff value');
+		});
+
+		describe('passive:105:turn scaled-def', () => {
+			testDefaultIconResult(BuffId['passive:105:turn scaled-def'], [IconId.BUFF_TURNSCALEDDEFUP]);
+			testIconResultWithBuff(BuffId['passive:105:turn scaled-def'], [IconId.BUFF_TURNSCALEDDEFUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['passive:105:turn scaled-def'], [IconId.BUFF_TURNSCALEDDEFUP], { value: { [STARTING_VALUE_KEY]: 0, [ENDING_VALUE_KEY]: 0 } }, 'starting and ending buff values are the same');
+			testIconResultWithBuff(BuffId['passive:105:turn scaled-def'], [IconId.BUFF_TURNSCALEDDEFUP], { value: { [STARTING_VALUE_KEY]: 0, [ENDING_VALUE_KEY]: 1 } }, 'starting buff value is less than ending buff value');
+			testIconResultWithBuff(BuffId['passive:105:turn scaled-def'], [IconId.BUFF_TURNSCALEDDEFDOWN], { value: { [STARTING_VALUE_KEY]: 1, [ENDING_VALUE_KEY]: 0 } }, 'starting buff value is greater than ending buff value');
+		});
+
+		describe('passive:105:turn scaled-rec', () => {
+			testDefaultIconResult(BuffId['passive:105:turn scaled-rec'], [IconId.BUFF_TURNSCALEDRECUP]);
+			testIconResultWithBuff(BuffId['passive:105:turn scaled-rec'], [IconId.BUFF_TURNSCALEDRECUP], { value: {} }, 'buff value is not present');
+			testIconResultWithBuff(BuffId['passive:105:turn scaled-rec'], [IconId.BUFF_TURNSCALEDRECUP], { value: { [STARTING_VALUE_KEY]: 0, [ENDING_VALUE_KEY]: 0 } }, 'starting and ending buff values are the same');
+			testIconResultWithBuff(BuffId['passive:105:turn scaled-rec'], [IconId.BUFF_TURNSCALEDRECUP], { value: { [STARTING_VALUE_KEY]: 0, [ENDING_VALUE_KEY]: 1 } }, 'starting buff value is less than ending buff value');
+			testIconResultWithBuff(BuffId['passive:105:turn scaled-rec'], [IconId.BUFF_TURNSCALEDRECDOWN], { value: { [STARTING_VALUE_KEY]: 1, [ENDING_VALUE_KEY]: 0 } }, 'starting buff value is greater than ending buff value');
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

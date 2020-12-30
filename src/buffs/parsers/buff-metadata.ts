@@ -1734,6 +1734,66 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: (buff: IBuff) => [buff && buff.value && buff.value < 0 ? IconId.BUFF_KARMADOWN : IconId.BUFF_SPARKKARMA],
 	},
+	'passive:105:turn scaled-atk': {
+		id: BuffId['passive:105:turn scaled-atk'],
+		name: 'Passive Turn-Scaled Attack Boost',
+		stat: UnitStat.atk,
+		stackType: BuffStackType.Passive,
+		icons: (buff: IBuff) => {
+			let icon = IconId.BUFF_TURNSCALEDATKUP;
+			interface ITurnScaledBuffValue {
+				'startingValue%': number;
+				'endingValue%': number;
+			}
+			if (buff && buff.value) {
+				const buffValue = buff.value as ITurnScaledBuffValue;
+				if (buffValue['startingValue%'] > buffValue['endingValue%']) {
+					icon = IconId.BUFF_TURNSCALEDATKDOWN;
+				}
+			}
+			return [icon];
+		},
+	},
+	'passive:105:turn scaled-def': {
+		id: BuffId['passive:105:turn scaled-def'],
+		name: 'Passive Turn-Scaled Defense Boost',
+		stat: UnitStat.def,
+		stackType: BuffStackType.Passive,
+		icons: (buff: IBuff) => {
+			let icon = IconId.BUFF_TURNSCALEDDEFUP;
+			interface ITurnScaledBuffValue {
+				'startingValue%': number;
+				'endingValue%': number;
+			}
+			if (buff && buff.value) {
+				const buffValue = buff.value as ITurnScaledBuffValue;
+				if (buffValue['startingValue%'] > buffValue['endingValue%']) {
+					icon = IconId.BUFF_TURNSCALEDDEFDOWN;
+				}
+			}
+			return [icon];
+		},
+	},
+	'passive:105:turn scaled-rec': {
+		id: BuffId['passive:105:turn scaled-rec'],
+		name: 'Passive Turn-Scaled Recovery Boost',
+		stat: UnitStat.rec,
+		stackType: BuffStackType.Passive,
+		icons: (buff: IBuff) => {
+			let icon = IconId.BUFF_TURNSCALEDRECUP;
+			interface ITurnScaledBuffValue {
+				'startingValue%': number;
+				'endingValue%': number;
+			}
+			if (buff && buff.value) {
+				const buffValue = buff.value as ITurnScaledBuffValue;
+				if (buffValue['startingValue%'] > buffValue['endingValue%']) {
+					icon = IconId.BUFF_TURNSCALEDRECDOWN;
+				}
+			}
+			return [icon];
+		},
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

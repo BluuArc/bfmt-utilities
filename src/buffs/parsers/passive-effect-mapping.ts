@@ -3673,4 +3673,75 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('105', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '105';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		interface IScalingInfo {
+			startingValue: number;
+			endingValue: number;
+			stat: CoreStat;
+		}
+		const typedEffect = (effect as IPassiveEffect);
+		const availableStats: CoreStat[] = ['atk', 'def', 'rec'];
+		const stats: IScalingInfo[] = [];
+		let turnCount: number;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			const scaleLowToHigh = params[6] === '1';
+			availableStats.forEach((stat, index) => {
+				const minValue = parseNumberOrDefault(params[index * 2]);
+				const maxValue = parseNumberOrDefault(params[(index * 2) + 1]);
+				if (minValue !== 0 || maxValue !== 0) {
+					stats.push({
+						stat,
+						startingValue: scaleLowToHigh ? minValue : maxValue,
+						endingValue: scaleLowToHigh ? maxValue : minValue,
+					});
+				}
+			});
+			turnCount = parseNumberOrDefault(params[7]);
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(8), 8, injectionContext);
+		} else {
+			const scaleLowToHigh = 'increase from min to max' in typedEffect;
+			availableStats.forEach((stat) => {
+				const minValue = parseNumberOrDefault(typedEffect[`${stat}% min buff`] as number);
+				const maxValue = parseNumberOrDefault(typedEffect[`${stat}% max buff`] as number);
+				if (minValue !== 0 || maxValue !== 0) {
+					stats.push({
+						stat,
+						startingValue: scaleLowToHigh ? minValue : maxValue,
+						endingValue: scaleLowToHigh ? maxValue : minValue,
+					});
+				}
+			});
+			turnCount = parseNumberOrDefault(typedEffect['turn count'] as number);
+		}
+
+		const results: IBuff[] = stats.map(({ stat, startingValue, endingValue }) => ({
+			id: `passive:105:turn scaled-${stat}`,
+			originalId,
+			sources,
+			value: {
+				'startingValue%': startingValue,
+				'endingValue%': endingValue,
+				turnCount,
+			},
+			conditions: { ...conditionInfo },
+			...targetData,
+		}));
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+
+	});
 }

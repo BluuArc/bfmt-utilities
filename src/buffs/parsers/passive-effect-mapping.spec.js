@@ -10297,5 +10297,178 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 8] });
 			});
 		});
+
+		describe('passive 105', () => {
+			const STAT_PARAMS_ORDER = ['atk', 'def', 'rec'];
+			const STARTING_VALUE_BUFF_KEY = 'startingValue%';
+			const ENDING_VALUE_BUFF_KEY = 'endingValue%';
+			const INCREASING_EFFECT_KEY = 'increase from min to max';
+			const DECREASING_EFFECT_KEY = 'decrease from min to max';
+			const TURN_COUNT_EFFECT_KEY = 'turn count';
+			const expectedOriginalId = '105';
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `passive:105:turn scaled-${stat}`));
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2,3,4,5,6,1,8';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:105:turn scaled-${stat}`,
+						value: {
+							[STARTING_VALUE_BUFF_KEY]: +(splitParams[index * 2]),
+							[ENDING_VALUE_BUFF_KEY]: +(splitParams[(index * 2) + 1]),
+							turnCount: 8,
+						},
+					});
+				});
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5,6,1,8,9,10,11';
+				const splitParams = params.split(',');
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:105:turn scaled-${stat}`,
+						value: {
+							[STARTING_VALUE_BUFF_KEY]: +(splitParams[index * 2]),
+							[ENDING_VALUE_BUFF_KEY]: +(splitParams[(index * 2) + 1]),
+							turnCount: 8,
+						},
+					});
+				}).concat([baseBuffFactory({
+					id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+					value: {
+						param_8: '9',
+						param_9: '10',
+						param_10: '11',
+					},
+				})]);
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to stat-specific properties when the params property does not exist', () => {
+				const mockValues = [9, 10, 11, 12, 13, 14];
+				const effect = STAT_PARAMS_ORDER.reduce((acc, stat, index) => {
+					acc[`${stat}% min buff`] = mockValues[index * 2];
+					acc[`${stat}% max buff`] = mockValues[(index * 2) + 1];
+					return acc;
+				}, {});
+				effect[INCREASING_EFFECT_KEY] = 1;
+				effect[TURN_COUNT_EFFECT_KEY] = 15;
+
+				const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+					return baseBuffFactory({
+						id: `passive:105:turn scaled-${stat}`,
+						value: {
+							[STARTING_VALUE_BUFF_KEY]: +(mockValues[index * 2]),
+							[ENDING_VALUE_BUFF_KEY]: +(mockValues[(index * 2) + 1]),
+							turnCount: 15,
+						},
+					});
+				});
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			STAT_PARAMS_ORDER.forEach((statCase) => {
+				[true, false].forEach((scaleLowToHigh) => {
+					it(`returns only value for ${statCase} when scaling is ${scaleLowToHigh ? 'low-to-high' : 'high-to-low'} and other stats are zero`, () => {
+						const params = [...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '0,123' : '0,0'), scaleLowToHigh ? '1' : '0', '0'].join(',');
+						const expectedResult = [baseBuffFactory({
+							id: `passive:105:turn scaled-${statCase}`,
+							value: {
+								[STARTING_VALUE_BUFF_KEY]: scaleLowToHigh ? 0 : 123,
+								[ENDING_VALUE_BUFF_KEY]: scaleLowToHigh ? 123 : 0,
+								turnCount: 0,
+							},
+						})];
+
+						const effect = { params };
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns only value for ${statCase} when scaling is ${scaleLowToHigh ? 'low-to-high' : 'high-to-low'} and other stats are zero and params property does not exist`, () => {
+						const effect = STAT_PARAMS_ORDER.reduce((acc, stat) => {
+							if (stat === statCase) {
+								acc[`${stat}% min buff`] = 0;
+								acc[`${stat}% max buff`] = 123;
+							} else {
+								acc[`${stat}% min buff`] = 0;
+								acc[`${stat}% max buff`] = 0;
+							}
+							return acc;
+						}, {});
+						if (scaleLowToHigh) {
+							effect[INCREASING_EFFECT_KEY] = 1;
+						} else {
+							effect[DECREASING_EFFECT_KEY] = 0;
+						}
+
+						const expectedResult = [baseBuffFactory({
+							id: `passive:105:turn scaled-${statCase}`,
+							value: {
+								[STARTING_VALUE_BUFF_KEY]: scaleLowToHigh ? 0 : 123,
+								[ENDING_VALUE_BUFF_KEY]: scaleLowToHigh ? 123 : 0,
+								turnCount: 0,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '0,0,0,0,123,456,1,678,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'passive:105:turn scaled-rec',
+						sources: arbitrarySourceValue,
+						value: {
+							[STARTING_VALUE_BUFF_KEY]: 123,
+							[ENDING_VALUE_BUFF_KEY]: 456,
+							turnCount: 678,
+						},
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 8] });
+			});
+		});
 	});
 });

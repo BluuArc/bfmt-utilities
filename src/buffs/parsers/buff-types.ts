@@ -718,6 +718,13 @@ export enum IconId {
 	BUFF_HPSCALEDRECUP = 'BUFF_HPSCALEDRECUP',
 	BUFF_HPSCALEDRECDOWN = 'BUFF_HPSCALEDRECDOWN',
 
+	BUFF_TURNSCALEDATKUP = 'BUFF_TURNSCALEDATKUP',
+	BUFF_TURNSCALEDATKDOWN = 'BUFF_TURNSCALEDATKDOWN',
+	BUFF_TURNSCALEDDEFUP = 'BUFF_TURNSCALEDDEFUP',
+	BUFF_TURNSCALEDDEFDOWN = 'BUFF_TURNSCALEDDEFDOWN',
+	BUFF_TURNSCALEDRECUP = 'BUFF_TURNSCALEDRECUP',
+	BUFF_TURNSCALEDRECDOWN = 'BUFF_TURNSCALEDRECDOWN',
+
 	BUFF_SELFATKUP = 'BUFF_SELFATKUP',
 	BUFF_ATKDOWNLOCK = 'BUFF_ATKDOWNLOCK',
 	BUFF_SELFDEFUP = 'BUFF_SELFDEFUP',
@@ -1254,6 +1261,10 @@ export enum BuffId {
 	'passive:104:hp conditional spark-item' = 'passive:104:hp conditional spark-item',
 	'passive:104:hp conditional spark-zel' = 'passive:104:hp conditional spark-zel',
 	'passive:104:hp conditional spark-karma' = 'passive:104:hp conditional spark-karma',
+
+	'passive:105:turn scaled-atk' = 'passive:105:turn scaled-atk',
+	'passive:105:turn scaled-def' = 'passive:105:turn scaled-def',
+	'passive:105:turn scaled-rec' = 'passive:105:turn scaled-rec',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
