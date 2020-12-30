@@ -1800,6 +1800,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.CONDITIONALBUFF_OD],
 	},
+	'passive:107:add effect to leader skill': {
+		id: BuffId['passive:107:add effect to leader skill'],
+		name: 'Passive Added Effect to Leader Skill',
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_ADDTO_LS],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

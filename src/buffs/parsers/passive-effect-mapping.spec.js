@@ -10478,5 +10478,153 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				getExpectedConditionsFromParam: (param) => ({ onOverdriveChance: param }),
 			});
 		});
+
+		describe('passive 107', () => {
+			const expectedOriginalId = '107';
+			const expectedBuffId = 'passive:107:add effect to leader skill';
+			const arbitraryKnownPassiveId = `arbitrary passive id for passive ${expectedOriginalId}`;
+			const getArbitraryBuffsForPassiveEffect = () => [{ arbitrary: `passive buff for passive ${expectedOriginalId}` }];
+			let mockPassiveEffectConversionFunctionSpy;
+
+			beforeEach(() => {
+				mockPassiveEffectConversionFunctionSpy = jasmine.createSpy('mockPassiveEffectConversionFunctionSpy');
+				mockPassiveEffectConversionFunctionSpy.and.callFake(() => getArbitraryBuffsForPassiveEffect());
+				mappingFunction = getPassiveEffectToBuffMapping(true, mockPassiveEffectConversionFunctionSpy).get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = `${arbitraryKnownPassiveId},2`;
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: getArbitraryBuffsForPassiveEffect(),
+				})];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `${arbitraryKnownPassiveId},2,3,4,5`;
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: getArbitraryBuffsForPassiveEffect(),
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_2: '3',
+							param_3: '4',
+							param_4: '5',
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('calls passive effect conversion function with expected parameters', () => {
+				const params = `${arbitraryKnownPassiveId},2$3$4`;
+				const context = {
+					...createArbitraryContext(),
+					arbitraryKey: 'arbitrary value',
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: getArbitraryBuffsForPassiveEffect(),
+				})];
+				const expectedContext = {
+					...createArbitraryContext(),
+					arbitraryKey: 'arbitrary value', // expect original context values to be identical except for source property
+					source: 'ls',
+				};
+
+				const effect = { params };
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+				expect(mockPassiveEffectConversionFunctionSpy).toHaveBeenCalledWith({
+					'passive id': arbitraryKnownPassiveId,
+					params: '2,3,4',
+				}, expectedContext);
+			});
+
+			it('calls passive effect conversion function with expected parameters when added passive parameter is not given', () => {
+				const params = `${arbitraryKnownPassiveId}`;
+				const context = {
+					...createArbitraryContext(),
+					arbitraryKey: 'arbitrary value',
+				};
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: getArbitraryBuffsForPassiveEffect(),
+				})];
+				const expectedContext = {
+					...createArbitraryContext(),
+					arbitraryKey: 'arbitrary value', // expect original context values to be identical except for source property
+					source: 'ls',
+				};
+
+				const effect = { params };
+				const result = mappingFunction(effect, context);
+				expect(result).toEqual(expectedResult);
+				expect(mockPassiveEffectConversionFunctionSpy).toHaveBeenCalledWith({
+					'passive id': arbitraryKnownPassiveId,
+					params: '',
+				}, expectedContext);
+			});
+
+
+			it('returns a no params buff when no parameters are given', () => {
+				mockPassiveEffectConversionFunctionSpy.and.returnValue([]);
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff if no added buffs are found', () => {
+				const params = `${arbitraryKnownPassiveId},2`;
+				mockPassiveEffectConversionFunctionSpy.and.returnValue([]);
+				expectNoParamsBuffWithEffectAndContext({ effect: { params }, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff if no the passive effect version function is not given in the mapping', () => {
+				mappingFunction = getPassiveEffectToBuffMapping(true).get(expectedOriginalId);
+				const params = `${arbitraryKnownPassiveId},2`;
+				expectNoParamsBuffWithEffectAndContext({ effect: { params }, context: createArbitraryContext() });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: `${arbitraryKnownPassiveId},2,789`,
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						value: getArbitraryBuffsForPassiveEffect(),
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
+			});
+		});
 	});
 });

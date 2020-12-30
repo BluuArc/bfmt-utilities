@@ -1728,6 +1728,7 @@ var IconId;
     IconId["BUFF_ADDTO_BB"] = "BUFF_ADDTO_BB";
     IconId["BUFF_ADDTO_SBB"] = "BUFF_ADDTO_SBB";
     IconId["BUFF_ADDTO_UBB"] = "BUFF_ADDTO_UBB";
+    IconId["BUFF_ADDTO_LS"] = "BUFF_ADDTO_LS";
     IconId["BUFF_HPUP"] = "BUFF_HPUP";
     IconId["BUFF_HPDOWN"] = "BUFF_HPDOWN";
     IconId["BUFF_ATKUP"] = "BUFF_ATKUP";
@@ -2412,6 +2413,7 @@ var BuffId;
     BuffId["passive:105:turn scaled-def"] = "passive:105:turn scaled-def";
     BuffId["passive:105:turn scaled-rec"] = "passive:105:turn scaled-rec";
     BuffId["passive:106:on overdrive conditional"] = "passive:106:on overdrive conditional";
+    BuffId["passive:107:add effect to leader skill"] = "passive:107:add effect to leader skill";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1:attack"] = "proc:1:attack";
@@ -2655,8 +2657,12 @@ var BuffId;
     BuffId["conditional:75:add def down to attack"] = "conditional:75:add def down to attack";
     BuffId["conditional:84:critical damage"] = "conditional:84:critical damage";
     BuffId["conditional:91:chance ko resistance"] = "conditional:91:chance ko resistance";
+    BuffId["conditional:95:fire barrier"] = "conditional:95:fire barrier";
+    BuffId["conditional:96:water barrier"] = "conditional:96:water barrier";
+    BuffId["conditional:97:earth barrier"] = "conditional:97:earth barrier";
     BuffId["conditional:98:thunder barrier"] = "conditional:98:thunder barrier";
     BuffId["conditional:99:light barrier"] = "conditional:99:light barrier";
+    BuffId["conditional:100:dark barrier"] = "conditional:100:dark barrier";
     BuffId["conditional:111:bc fill on spark"] = "conditional:111:bc fill on spark";
     BuffId["conditional:124:self attack buff"] = "conditional:124:self attack buff";
     BuffId["conditional:125:self defense buff"] = "conditional:125:self defense buff";
@@ -6539,6 +6545,27 @@ function setMapping$1(map) {
         });
         return results;
     };
+    const parseBarrierConditionalBuff = ({ effect, context, injectionContext, buffId, originalId, }) => {
+        const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const [rawElement, rawHp, ...extraParams] = splitParams;
+        const element = ELEMENT_MAPPING[rawElement] || rawElement || BuffConditionElement.Unknown;
+        const hp = parseNumberOrDefault(rawHp);
+        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        const results = [];
+        if (hp !== 0) {
+            results.push(Object.assign({ id: buffId, originalId,
+                sources, duration: turnDuration, value: {
+                    hp,
+                    parsedElement: element,
+                } }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+        });
+        return results;
+    };
     map.set('1', (effect, context, injectionContext) => {
         return parseConditionalWithSingleNumericalParameter({
             effect,
@@ -6901,49 +6928,59 @@ function setMapping$1(map) {
         });
         return results;
     });
-    map.set('98', (effect, context, injectionContext) => {
-        const originalId = '98';
-        const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-        const [rawElement, rawHp, ...extraParams] = splitParams;
-        const element = ELEMENT_MAPPING[rawElement] || rawElement || BuffConditionElement.Unknown;
-        const hp = parseNumberOrDefault(rawHp);
-        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
-        const results = [];
-        if (hp !== 0) {
-            results.push(Object.assign({ id: 'conditional:98:thunder barrier', originalId,
-                sources, duration: turnDuration, value: {
-                    hp,
-                    parsedElement: element,
-                } }, targetData));
-        }
-        handlePostParse(results, unknownParams, {
-            originalId,
-            sources,
-            targetData,
+    map.set('95', (effect, context, injectionContext) => {
+        return parseBarrierConditionalBuff({
+            effect,
+            context,
+            injectionContext,
+            buffId: 'conditional:95:fire barrier',
+            originalId: '95',
         });
-        return results;
+    });
+    map.set('96', (effect, context, injectionContext) => {
+        return parseBarrierConditionalBuff({
+            effect,
+            context,
+            injectionContext,
+            buffId: 'conditional:96:water barrier',
+            originalId: '96',
+        });
+    });
+    map.set('97', (effect, context, injectionContext) => {
+        return parseBarrierConditionalBuff({
+            effect,
+            context,
+            injectionContext,
+            buffId: 'conditional:97:earth barrier',
+            originalId: '97',
+        });
+    });
+    map.set('98', (effect, context, injectionContext) => {
+        return parseBarrierConditionalBuff({
+            effect,
+            context,
+            injectionContext,
+            buffId: 'conditional:98:thunder barrier',
+            originalId: '98',
+        });
     });
     map.set('99', (effect, context, injectionContext) => {
-        const originalId = '99';
-        const { targetData, sources, splitParams, turnDuration } = retrieveCommonInfoForEffects(effect, context, injectionContext);
-        const [rawElement, rawHp, ...extraParams] = splitParams;
-        const element = ELEMENT_MAPPING[rawElement] || rawElement || BuffConditionElement.Unknown;
-        const hp = parseNumberOrDefault(rawHp);
-        const unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
-        const results = [];
-        if (hp !== 0) {
-            results.push(Object.assign({ id: 'conditional:99:light barrier', originalId,
-                sources, duration: turnDuration, value: {
-                    hp,
-                    parsedElement: element,
-                } }, targetData));
-        }
-        handlePostParse(results, unknownParams, {
-            originalId,
-            sources,
-            targetData,
+        return parseBarrierConditionalBuff({
+            effect,
+            context,
+            injectionContext,
+            buffId: 'conditional:99:light barrier',
+            originalId: '99',
         });
-        return results;
+    });
+    map.set('100', (effect, context, injectionContext) => {
+        return parseBarrierConditionalBuff({
+            effect,
+            context,
+            injectionContext,
+            buffId: 'conditional:100:dark barrier',
+            originalId: '100',
+        });
     });
     map.set('111', (effect, context, injectionContext) => {
         const originalId = '111';
@@ -7188,22 +7225,24 @@ let mapping$2;
  * @description Retrieve the passive-to-buff conversion function mapping for the library. Internally, this is a
  * lazy-loaded singleton to not impact first-load performance.
  * @param reload Optionally re-create the mapping.
+ * @param convertPassiveEffectToBuffs Function used for recursive passive buff parsing.
  * @returns Mapping of passive IDs to functions.
  */
-function getPassiveEffectToBuffMapping(reload) {
+function getPassiveEffectToBuffMapping(reload, convertPassiveEffectToBuffs) {
     if (!mapping$2 || reload) {
         mapping$2 = new Map();
-        setMapping$2(mapping$2);
+        setMapping$2(mapping$2, convertPassiveEffectToBuffs || (() => []));
     }
     return mapping$2;
 }
 /**
  * @description Apply the mapping of passive effect IDs to conversion functions to the given Map object.
  * @param map Map to add conversion mapping onto.
+ * @param convertPassiveEffectToBuffs Function used for recursive passive buff parsing.
  * @returns Does not return anything.
  * @internal
  */
-function setMapping$2(map) {
+function setMapping$2(map, convertPassiveEffectToBuffs) {
     const UNKNOWN_PASSIVE_PARAM_EFFECT_KEY = 'unknown passive params';
     const ELEMENT_MAPPING = {
         1: UnitElement.Fire,
@@ -9977,6 +10016,34 @@ function setMapping$2(map) {
             thresholdType: ThresholdType.ChanceOverDrive,
         });
     });
+    map.set('107', (effect, context, injectionContext) => {
+        const originalId = '107';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const results = [];
+        let unknownParams;
+        if (typedEffect.params) {
+            const [addedPassiveId, addedPassiveParams = '', ...extraParams] = splitEffectParams(typedEffect);
+            const addedPassiveAsEffect = {
+                'passive id': addedPassiveId,
+                params: addedPassiveParams.split('$').join(','),
+            };
+            const addedPassiveContext = Object.assign(Object.assign({}, context), { source: BuffSource.LeaderSkill });
+            const addedBuffs = convertPassiveEffectToBuffs(addedPassiveAsEffect, addedPassiveContext);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+            if (addedBuffs.length > 0) {
+                results.push(Object.assign({ id: 'passive:107:add effect to leader skill', originalId,
+                    sources, value: addedBuffs, conditions: Object.assign({}, conditionInfo) }, targetData));
+            }
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
 }
 
 /**
@@ -10008,7 +10075,7 @@ function convertPassiveEffectToBuffs(effect, context) {
         throw new TypeError('context parameter should be an object');
     }
     const id = (isPassiveEffect(effect) && getEffectId(effect));
-    const conversionFunction = (id && getPassiveEffectToBuffMapping(context.reloadMapping).get(id));
+    const conversionFunction = (id && getPassiveEffectToBuffMapping(context.reloadMapping, convertPassiveEffectToBuffs).get(id));
     // TODO: warning if result is empty?
     return typeof conversionFunction === 'function'
         ? conversionFunction(effect, context)
@@ -11541,6 +11608,11 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         name: 'Passive Conditional Effect on Overdrive (Chance)',
         stackType: BuffStackType.Passive,
         icons: () => [IconId.CONDITIONALBUFF_OD],
+    }, 'passive:107:add effect to leader skill': {
+        id: BuffId['passive:107:add effect to leader skill'],
+        name: 'Passive Added Effect to Leader Skill',
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_ADDTO_LS],
     }, UNKNOWN_PROC_EFFECT_ID: {
         id: BuffId.UNKNOWN_PROC_EFFECT_ID,
         name: 'Unknown Proc Effect',
@@ -13071,9 +13143,27 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.koResistance,
         stackType: BuffStackType.ConditionalTimed,
         icons: () => [IconId.BUFF_KOBLOCK],
+    }, 'conditional:95:fire barrier': {
+        id: BuffId['conditional:95:fire barrier'],
+        name: 'Conditional Fire Barrier',
+        stat: UnitStat.barrier,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_FIRESHIELD],
+    }, 'conditional:96:water barrier': {
+        id: BuffId['conditional:96:water barrier'],
+        name: 'Conditional Water Barrier',
+        stat: UnitStat.barrier,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_WATERSHIELD],
+    }, 'conditional:97:earth barrier': {
+        id: BuffId['conditional:97:earth barrier'],
+        name: 'Conditional Earth Barrier',
+        stat: UnitStat.barrier,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_EARTHSHIELD],
     }, 'conditional:98:thunder barrier': {
         id: BuffId['conditional:98:thunder barrier'],
-        name: 'Thunder Barrier',
+        name: 'Conditional Thunder Barrier',
         stat: UnitStat.barrier,
         stackType: BuffStackType.Singleton,
         icons: () => [IconId.BUFF_THUNDERSHIELD],
@@ -13083,6 +13173,12 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         stat: UnitStat.barrier,
         stackType: BuffStackType.Singleton,
         icons: () => [IconId.BUFF_LIGHTSHIELD],
+    }, 'conditional:100:dark barrier': {
+        id: BuffId['conditional:100:dark barrier'],
+        name: 'Conditional Dark Barrier',
+        stat: UnitStat.barrier,
+        stackType: BuffStackType.Singleton,
+        icons: () => [IconId.BUFF_DARKSHIELD],
     }, 'conditional:111:bc fill on spark': {
         id: BuffId['conditional:111:bc fill on spark'],
         name: 'Conditional BC Fill on Spark',

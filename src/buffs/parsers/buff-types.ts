@@ -467,6 +467,7 @@ export enum IconId {
 	BUFF_ADDTO_BB = 'BUFF_ADDTO_BB',
 	BUFF_ADDTO_SBB = 'BUFF_ADDTO_SBB',
 	BUFF_ADDTO_UBB = 'BUFF_ADDTO_UBB',
+	BUFF_ADDTO_LS = 'BUFF_ADDTO_LS',
 
 	BUFF_HPUP = 'BUFF_HPUP',
 	BUFF_HPDOWN = 'BUFF_HPDOWN',
@@ -1269,6 +1270,7 @@ export enum BuffId {
 	'passive:105:turn scaled-rec' = 'passive:105:turn scaled-rec',
 
 	'passive:106:on overdrive conditional' = 'passive:106:on overdrive conditional',
+	'passive:107:add effect to leader skill' = 'passive:107:add effect to leader skill',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

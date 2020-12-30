@@ -1,5 +1,5 @@
 import { PassiveEffect, IPassiveEffect, ExtraSkillPassiveEffect, SpEnhancementEffect, UnitElement, UnitType, Ailment, UnitGender, IProcEffect, TargetType, TargetArea, ProcEffect } from '../../datamine-types';
-import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement, IBuffConditions, IConditionalEffect } from './buff-types';
+import { IEffectToBuffConversionContext, IBuff, IGenericBuffValue, BuffId, BuffConditionElement, IBuffConditions, IConditionalEffect, BuffSource } from './buff-types';
 import { createSourcesFromContext, processExtraSkillConditions, getPassiveTargetData, IPassiveBuffProcessingInjectionContext, ITargetData, parseNumberOrDefault, createUnknownParamsEntryFromExtraParams, createNoParamsEntry } from './_helpers';
 import convertConditionalEffectToBuffs from './convertConditionalEffectToBuffs';
 import convertProcEffectToBuffs from './convertProcEffectToBuffs';
@@ -19,12 +19,13 @@ let mapping: Map<string, PassiveEffectToBuffFunction>;
  * @description Retrieve the passive-to-buff conversion function mapping for the library. Internally, this is a
  * lazy-loaded singleton to not impact first-load performance.
  * @param reload Optionally re-create the mapping.
+ * @param convertPassiveEffectToBuffs Function used for recursive passive buff parsing.
  * @returns Mapping of passive IDs to functions.
  */
-export function getPassiveEffectToBuffMapping (reload?: boolean): Map<string, PassiveEffectToBuffFunction> {
+export function getPassiveEffectToBuffMapping (reload?: boolean, convertPassiveEffectToBuffs?: (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext) => IBuff[]): Map<string, PassiveEffectToBuffFunction> {
 	if (!mapping || reload) {
 		mapping = new Map<string, PassiveEffectToBuffFunction>();
-		setMapping(mapping);
+		setMapping(mapping, convertPassiveEffectToBuffs || (() => []));
 	}
 
 	return mapping;
@@ -33,10 +34,11 @@ export function getPassiveEffectToBuffMapping (reload?: boolean): Map<string, Pa
 /**
  * @description Apply the mapping of passive effect IDs to conversion functions to the given Map object.
  * @param map Map to add conversion mapping onto.
+ * @param convertPassiveEffectToBuffs Function used for recursive passive buff parsing.
  * @returns Does not return anything.
  * @internal
  */
-function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
+function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassiveEffectToBuffs: (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext) => IBuff[]): void {
 	const UNKNOWN_PASSIVE_PARAM_EFFECT_KEY = 'unknown passive params';
 	const ELEMENT_MAPPING: { [key: string]: UnitElement | BuffConditionElement } = {
 		1: UnitElement.Fire,
@@ -3756,5 +3758,48 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>): void {
 			buffId: 'passive:106:on overdrive conditional',
 			thresholdType: ThresholdType.ChanceOverDrive,
 		});
+	});
+
+	map.set('107', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '107';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [addedPassiveId, addedPassiveParams = '', ...extraParams] = splitEffectParams(typedEffect);
+			const addedPassiveAsEffect: IPassiveEffect = {
+				'passive id': addedPassiveId,
+				params: addedPassiveParams.split('$').join(','),
+			};
+			const addedPassiveContext: IEffectToBuffConversionContext = {
+				...context,
+				source: BuffSource.LeaderSkill,
+			};
+			const addedBuffs = convertPassiveEffectToBuffs(addedPassiveAsEffect, addedPassiveContext);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+
+			if (addedBuffs.length > 0) {
+				results.push({
+					id: 'passive:107:add effect to leader skill',
+					originalId,
+					sources,
+					value: addedBuffs,
+					conditions: { ...conditionInfo },
+					...targetData,
+				});
+			}
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
 	});
 }

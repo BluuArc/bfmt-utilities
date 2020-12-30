@@ -1420,6 +1420,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:106:on overdrive conditional'], [IconId.CONDITIONALBUFF_OD]);
 	});
 
+	describe('passive:107:add effect to leader skill', () => {
+		testDefaultIconResult(BuffId['passive:107:add effect to leader skill'], [IconId.BUFF_ADDTO_LS]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
