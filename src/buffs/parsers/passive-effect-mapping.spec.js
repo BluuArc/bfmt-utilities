@@ -10730,5 +10730,151 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 3] });
 			});
 		});
+
+		describe('passive 110', () => {
+			const expectedBuffIdForPercent = 'passive:110:bc drain-percent';
+			const expectedBuffIdForFlat = 'passive:110:bc drain-flat';
+			const expectedOriginalId = '110';
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffIdForPercent, expectedBuffIdForFlat]);
+
+			it('uses the params property when it exists', () => {
+				const params = '100,200,3,4,5';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForFlat,
+						value: {
+							drainLow: 1,
+							drainHigh: 2,
+							chance: 5,
+						},
+					}),
+					baseBuffFactory({
+						id: expectedBuffIdForPercent,
+						value: {
+							drainLow: 3,
+							drainHigh: 4,
+							chance: 5,
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '100,200,3,4,5,6,7,8';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForFlat,
+						value: {
+							drainLow: 1,
+							drainHigh: 2,
+							chance: 5,
+						},
+					}),
+					baseBuffFactory({
+						id: expectedBuffIdForPercent,
+						value: {
+							drainLow: 3,
+							drainHigh: 4,
+							chance: 5,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_5: '6',
+							param_6: '7',
+							param_7: '8',
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				[true, false].forEach((isFlatFill) => {
+					[true, false].forEach((isTestingLowValues) => {
+						it(`returns a single buff for ${isFlatFill ? 'flat' : 'percent'} fill if it's ${isTestingLowValues ? 'low' : 'high'} value is the only non-zero parameter`, () => {
+							const params = [
+								(isFlatFill && isTestingLowValues) ? 12300 : 0,
+								(isFlatFill && !isTestingLowValues) ? 12300 : 0,
+								(!isFlatFill && isTestingLowValues) ? 123 : 0,
+								(!isFlatFill && !isTestingLowValues) ? 123 : 0,
+								'0', // chance
+							].join(',');
+							const expectedResult = [baseBuffFactory({
+								id: isFlatFill ? expectedBuffIdForFlat : expectedBuffIdForPercent,
+								value: {
+									drainLow: isTestingLowValues ? 123 : 0,
+									drainHigh: isTestingLowValues ? 0 : 123,
+									chance: 0,
+								},
+							})];
+
+							const effect = { params };
+							const result = mappingFunction(effect, createArbitraryContext());
+							expect(result).toEqual(expectedResult);
+						});
+					});
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
+				it('defaults values for effect params to 0 if they are non-number or missing', () => {
+					const effect = { params: 'non-number' };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '100,200,3,4,5,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForFlat,
+						sources: arbitrarySourceValue,
+						value: { drainLow: 1, drainHigh: 2, chance: 5 },
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: expectedBuffIdForPercent,
+						sources: arbitrarySourceValue,
+						value: { drainLow: 3, drainHigh: 4, chance: 5 },
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 5] });
+			});
+		});
 	});
 });

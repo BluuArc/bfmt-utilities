@@ -3843,4 +3843,66 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 
 		return results;
 	});
+
+	map.set('110', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '110';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let flatDrainLow = 0, flatDrainHigh = 0;
+		let percentDrainLow = 0, percentDrainHigh = 0;
+		let chance = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawFlatDrainLow, rawFlatDrainHigh, rawPercentDrainLow, rawPercentDrainHigh, rawChance, ...extraParams] = splitEffectParams(typedEffect);
+			flatDrainLow = parseNumberOrDefault(rawFlatDrainLow) / 100;
+			flatDrainHigh = parseNumberOrDefault(rawFlatDrainHigh) / 100;
+			percentDrainLow = parseNumberOrDefault(rawPercentDrainLow);
+			percentDrainHigh = parseNumberOrDefault(rawPercentDrainHigh);
+			chance = parseNumberOrDefault(rawChance);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+		}
+
+		const results: IBuff[] = [];
+		if (flatDrainLow !== 0 || flatDrainHigh !== 0) {
+			results.push({
+				id: 'passive:110:bc drain-flat',
+				originalId,
+				sources,
+				value: {
+					drainLow: flatDrainLow,
+					drainHigh: flatDrainHigh,
+					chance,
+				},
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		if (percentDrainLow !== 0 || percentDrainHigh !== 0) {
+			results.push({
+				id: 'passive:110:bc drain-percent',
+				originalId,
+				sources,
+				value: {
+					drainLow: percentDrainLow,
+					drainHigh: percentDrainHigh,
+					chance,
+				},
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

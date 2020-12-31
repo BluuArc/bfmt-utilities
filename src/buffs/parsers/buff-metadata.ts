@@ -1813,6 +1813,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBFILLDOWN],
 	},
+	'passive:110:bc drain-flat': {
+		id: BuffId['passive:110:bc drain-flat'],
+		name: 'Passive BB Gauge Drain (Chance) (Flat Amount)',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_BBFILLDOWN],
+	},
+	'passive:110:bc drain-percent': {
+		id: BuffId['passive:110:bc drain-percent'],
+		name: 'Passive BB Gauge Drain (Chance) (Percentage)',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_BBFILLDOWN],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

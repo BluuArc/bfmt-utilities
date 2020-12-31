@@ -1274,6 +1274,9 @@ export enum BuffId {
 
 	'passive:109:bc efficacy reduction' = 'passive:109:bc efficacy reduction',
 
+	'passive:110:bc drain-flat' = 'passive:110:bc drain-flat',
+	'passive:110:bc drain-percent' = 'passive:110:bc drain-percent',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

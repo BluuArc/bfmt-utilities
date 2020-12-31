@@ -1428,6 +1428,16 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:109:bc efficacy reduction'], [IconId.BUFF_BBFILLDOWN]);
 	});
 
+	describe('passive 110 buffs', () => {
+		describe('passive:110:bc drain-flat', () => {
+			testDefaultIconResult(BuffId['passive:110:bc drain-flat'], [IconId.BUFF_BBFILLDOWN]);
+		});
+
+		describe('passive:110:bc drain-percent', () => {
+			testDefaultIconResult(BuffId['passive:110:bc drain-percent'], [IconId.BUFF_BBFILLDOWN]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
