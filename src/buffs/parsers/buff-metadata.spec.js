@@ -1456,6 +1456,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:113:hp conditional'], [IconId.CONDITIONALBUFF_HPTHRESH]);
 	});
 
+	describe('passive:114:when attacked conditional', () => {
+		testDefaultIconResult(BuffId['passive:114:when attacked conditional'], [IconId.CONDITIONALBUFF_WHENHIT]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

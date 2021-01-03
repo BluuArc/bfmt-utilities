@@ -502,11 +502,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 		 * @param {string} context.expectedOriginalId
 		 * @param {string} context.expectedBuffId
 		 * @param {(param: number) => import('./buff-types').IBuffConditions} context.getExpectedConditionsFromParam
+		 * @param {(effect: import('./buff-types').IConditionalEffect) => void} context.modifyExpectedConditionalEffect
 		 */
 		const testConditionalPassiveWithSingleNumericalCondition = ({
 			expectedOriginalId,
 			expectedBuffId,
 			getExpectedConditionsFromParam = () => ({}),
+			modifyExpectedConditionalEffect = () => {},
 		}) => {
 			const arbitraryKnownConditionalId = `arbitrary conditional id for passive ${expectedOriginalId}`;
 			const getArbitraryBuffsForConditionalEffect = () => [{ arbitrary: `conditional buff for passive ${expectedOriginalId}` }];
@@ -577,16 +579,19 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					},
 					conditions: getExpectedConditionsFromParam(4),
 				})];
+				const expectedConditionalEffect = {
+					id: arbitraryKnownConditionalId,
+					params: '2&3&4',
+					turnDuration: 5,
+				};
+
+				modifyExpectedConditionalEffect(expectedConditionalEffect);
 
 				const effect = { params };
 				const context = createArbitraryContext();
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
-				expect(mockConditionalEffectConversionFunctionSpy).toHaveBeenCalledWith({
-					id: arbitraryKnownConditionalId,
-					params: '2&3&4',
-					turnDuration: 5,
-				}, context);
+				expect(mockConditionalEffectConversionFunctionSpy).toHaveBeenCalledWith(expectedConditionalEffect, context);
 			});
 
 			it('calls corresponding conditional effect conversion function when not defined via injection context', () => {
@@ -599,6 +604,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					},
 					conditions: getExpectedConditionsFromParam(4),
 				})];
+				const expectedConditionalEffect = {
+					id: arbitraryKnownConditionalId,
+					params: '2&3&4',
+					turnDuration: 5,
+				};
+
+				modifyExpectedConditionalEffect(expectedConditionalEffect);
 
 				getConditionalEffectToBuffMapping(true).set(arbitraryKnownConditionalId, mockConditionalEffectConversionFunctionSpy);
 
@@ -606,11 +618,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const context = createArbitraryContext();
 				const result = mappingFunction(effect, context);
 				expect(result).toEqual(expectedResult);
-				expect(mockConditionalEffectConversionFunctionSpy).toHaveBeenCalledWith({
-					id: arbitraryKnownConditionalId,
-					params: '2&3&4',
-					turnDuration: 5,
-				}, context);
+				expect(mockConditionalEffectConversionFunctionSpy).toHaveBeenCalledWith(expectedConditionalEffect, context);
 			});
 
 			it('defaults numerical values to 0 if they are missing or non-number', () => {
@@ -623,16 +631,19 @@ describe('getPassiveEffectToBuffMapping method', () => {
 					},
 					conditions: getExpectedConditionsFromParam(0),
 				})];
+				const expectedConditionalEffect = {
+					id: arbitraryKnownConditionalId,
+					params: 'params',
+					turnDuration: 0,
+				};
+
+				modifyExpectedConditionalEffect(expectedConditionalEffect);
 
 				const effect = { params };
 				const context = createArbitraryContext();
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
-				expect(mockConditionalEffectConversionFunctionSpy).toHaveBeenCalledWith({
-					id: arbitraryKnownConditionalId,
-					params: 'params',
-					turnDuration: 0,
-				}, context);
+				expect(mockConditionalEffectConversionFunctionSpy).toHaveBeenCalledWith(expectedConditionalEffect, context);
 			});
 
 			it('returns a no params buff when no parameters are given', () => {
@@ -11269,6 +11280,17 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				const result = mappingFunction(effect, context, injectionContext);
 				expect(result).toEqual(expectedResult);
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 4] });
+			});
+		});
+
+		describe('passive 114', () => {
+			testConditionalPassiveWithSingleNumericalCondition({
+				expectedOriginalId: '114',
+				expectedBuffId: 'passive:114:when attacked conditional',
+				getExpectedConditionsFromParam: (param) => ({ whenAttackedChance: param }),
+				modifyExpectedConditionalEffect: (effect) => {
+					effect.targetType = 'enemy';
+				},
 			});
 		});
 	});

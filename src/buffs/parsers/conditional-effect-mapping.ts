@@ -96,12 +96,12 @@ function setMapping(map: Map<string, ConditionalEffectToBuffFunction>): void {
 		}
 	};
 
-	const getDefaultTargetData = (): ITargetData => ({ targetType: TargetType.Self, targetArea: TargetArea.Single });
+	const getDefaultTargetData = (targetType?: TargetType): ITargetData => ({ targetType: targetType || TargetType.Self, targetArea: TargetArea.Single });
 
 	const retrieveCommonInfoForEffects = (effect: IConditionalEffect, context: IEffectToBuffConversionContext, injectionContext?: IBaseBuffProcessingInjectionContext) => {
 		const sources = ((injectionContext && injectionContext.createSourcesFromContext) || createSourcesFromContext)(context);
 		const splitParams = typeof effect.params === 'string' ? effect.params.split('&') : [];
-		const targetData = getDefaultTargetData();
+		const targetData = getDefaultTargetData(effect.targetType);
 		const turnDuration = parseNumberOrDefault(effect.turnDuration);
 
 		return { targetData, sources, splitParams, turnDuration };

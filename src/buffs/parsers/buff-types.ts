@@ -96,6 +96,7 @@ export interface IConditionalEffect {
 	id: string;
 	params: string;
 	turnDuration: number;
+	targetType?: TargetType;
 }
 
 export interface IBuffConditions {
@@ -140,6 +141,7 @@ export interface IBuffConditions {
 	onGuardChance?: number;
 	onCriticalHitChance?: number;
 	onOverdriveChance?: number;
+	whenAttackedChance?: number;
 
 	onEnemyDefeat?: boolean;
 	onBattleWin?: boolean;
@@ -473,6 +475,7 @@ export enum IconId {
 	CONDITIONALBUFF_GUARD = 'CONDITIONALBUFF_GUARD',
 	CONDITIONALBUFF_CRIT = 'CONDITIONALBUFF_CRIT',
 	CONDITIONALBUFF_OD = 'CONDITIONALBUFF_OD',
+	CONDITIONALBUFF_WHENHIT = 'CONDITIONALBUFF_WHENHIT',
 
 	BUFF_ADDTO_BB = 'BUFF_ADDTO_BB',
 	BUFF_ADDTO_SBB = 'BUFF_ADDTO_SBB',
@@ -1298,6 +1301,7 @@ export enum BuffId {
 	'passive:112:point gain boost-colo' = 'passive:112:point gain boost-colo',
 
 	'passive:113:hp conditional' = 'passive:113:hp conditional',
+	'passive:114:when attacked conditional' = 'passive:114:when attacked conditional',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

@@ -187,6 +187,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 		ChanceGuard = 'on guard',
 		ChanceCrit = 'on crit',
 		ChanceOverDrive = 'on overdrive activation',
+		ChanceWhenAttacked = 'when attacked',
 	}
 	interface IThresholdActivationInfo {
 		threshold: number;
@@ -264,6 +265,8 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 			conditions = { onCriticalHitChance: threshold };
 		} else if (type === ThresholdType.ChanceOverDrive) {
 			conditions = { onOverdriveChance: threshold };
+		} else if (type === ThresholdType.ChanceWhenAttacked) {
+			conditions = { whenAttackedChance: threshold };
 		}
 
 		return conditions;
@@ -407,6 +410,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 	interface IConditionalPassiveWithSingleNumericalConditionContext extends ITemplatedParsingFunctionContext {
 		buffId: string;
 		thresholdType: ThresholdType;
+		modifyConditionalEffect?: (effect: IConditionalEffect) => void;
 	}
 	const parseConditionalPassiveWithSingleNumericalCondition = ({
 		effect,
@@ -415,6 +419,7 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 		originalId,
 		buffId,
 		thresholdType,
+		modifyConditionalEffect,
 	}: IConditionalPassiveWithSingleNumericalConditionContext): IBuff[] => {
 		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
 
@@ -424,11 +429,15 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 		let unknownParams: IGenericBuffValue | undefined;
 		if (typedEffect.params) {
 			const params = splitEffectParams(typedEffect);
-			const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
+			const conditionalEffect: IConditionalEffect = {
 				id: params[0],
 				params: params[1],
 				turnDuration: parseNumberOrDefault(params[4]),
-			}, context, injectionContext);
+			};
+			if (typeof modifyConditionalEffect === 'function') {
+				modifyConditionalEffect(conditionalEffect);
+			}
+			const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext(conditionalEffect, context, injectionContext);
 			const maxTriggerCount = parseNumberOrDefault(params[2]);
 			const thresholdInfo = parseThresholdValuesFromParamsProperty(params[3], '1', thresholdType);
 			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(5), 5, injectionContext);
@@ -4011,5 +4020,17 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 		});
 
 		return results;
+	});
+
+	map.set('114', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parseConditionalPassiveWithSingleNumericalCondition({
+			effect,
+			context,
+			injectionContext,
+			originalId: '114',
+			buffId: 'passive:114:when attacked conditional',
+			thresholdType: ThresholdType.ChanceWhenAttacked,
+			modifyConditionalEffect: (effect: IConditionalEffect) => { effect.targetType = TargetType.Enemy; },
+		});
 	});
 }
