@@ -10876,5 +10876,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 5] });
 			});
 		});
+
+		describe('passive 111', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '111',
+				expectedBuffId: 'passive:111:skill activation rate boost',
+				effectKey: 'increase skill activation in arena%',
+			});
+		});
 	});
 });

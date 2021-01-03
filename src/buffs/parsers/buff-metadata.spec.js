@@ -1438,6 +1438,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('passive:111:skill activation rate boost', () => {
+		testDefaultIconResult(BuffId['passive:111:skill activation rate boost'], [IconId.BUFF_SKILLACTIVATIONRATEUP]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

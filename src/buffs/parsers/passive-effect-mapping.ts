@@ -3905,4 +3905,15 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 
 		return results;
 	});
+
+	map.set('111', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		return parsePassiveWithSingleNumericalParameter({
+			effect,
+			context,
+			injectionContext,
+			effectKey: 'increase skill activation in arena%',
+			buffId: 'passive:111:skill activation rate boost',
+			originalId: '111',
+		});
+	});
 }

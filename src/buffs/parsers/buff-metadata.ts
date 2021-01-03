@@ -1827,6 +1827,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_BBFILLDOWN],
 	},
+	'passive:111:skill activation rate boost': {
+		id: BuffId['passive:111:skill activation rate boost'],
+		name: 'Passive Brave Burst Activation Rate Boost',
+		stat: UnitStat.skillActivationRate,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_SKILLACTIVATIONRATEUP],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
