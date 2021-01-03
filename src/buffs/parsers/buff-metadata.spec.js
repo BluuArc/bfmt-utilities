@@ -2627,6 +2627,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['conditional:111:bc fill on spark'], [IconId.BUFF_SPARKBBUP]);
 	});
 
+	describe('conditional:112:bc efficacy reduction', () => {
+		testDefaultIconResult(BuffId['conditional:112:bc efficacy reduction'], [IconId.BUFF_BBFILLDOWN]);
+	});
+
 	describe('conditional:124:self attack buff', () => {
 		testDefaultIconResult(BuffId['conditional:124:self attack buff'], [IconId.BUFF_SELFATKUP]);
 		testIconResultWithBuff(BuffId['conditional:124:self attack buff'], [IconId.BUFF_ATKDOWNLOCK], { value: -1 }, 'buff value is less than 0');

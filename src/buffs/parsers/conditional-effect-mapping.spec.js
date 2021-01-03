@@ -1887,6 +1887,13 @@ describe('getConditionalEffectToBuffMapping method', () => {
 			});
 		});
 
+		describe('conditional 112', () => {
+			testConditionalWithSingleNumericalParameter({
+				expectedOriginalId: '112',
+				expectedBuffId: 'conditional:112:bc efficacy reduction',
+			});
+		});
+
 		describe('conditional 124', () => {
 			testConditionalWithSingleNumericalParameter({
 				expectedOriginalId: '124',

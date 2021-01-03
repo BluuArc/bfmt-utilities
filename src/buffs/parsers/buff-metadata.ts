@@ -3680,6 +3680,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.ConditionalTimed,
 		icons: () => [IconId.BUFF_SPARKBBUP],
 	},
+	'conditional:112:bc efficacy reduction': {
+		id: BuffId['conditional:112:bc efficacy reduction'],
+		name: 'Conditional BC Efficacy Reduction',
+		stat: UnitStat.bcEfficacy,
+		stackType: BuffStackType.ConditionalTimed,
+		icons: () => [IconId.BUFF_BBFILLDOWN],
+	},
 	'conditional:124:self attack buff': {
 		id: BuffId['conditional:124:self attack buff'],
 		name: 'Conditional Self Attack Boost',

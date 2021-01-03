@@ -1618,6 +1618,7 @@ export enum BuffId {
 	'conditional:100:dark barrier' = 'conditional:100:dark barrier',
 
 	'conditional:111:bc fill on spark' = 'conditional:111:bc fill on spark',
+	'conditional:112:bc efficacy reduction' = 'conditional:112:bc efficacy reduction',
 
 	'conditional:124:self attack buff' = 'conditional:124:self attack buff',
 	'conditional:125:self defense buff' = 'conditional:125:self defense buff',
