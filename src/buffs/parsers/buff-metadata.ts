@@ -1848,6 +1848,12 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_CBPUP],
 	},
+	'passive:113:hp conditional': {
+		id: BuffId['passive:113:hp conditional'],
+		name: 'Passive Conditional Persistent Effect based on HP Threshold',
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.CONDITIONALBUFF_HPTHRESH],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

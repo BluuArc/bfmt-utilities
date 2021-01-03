@@ -1297,6 +1297,8 @@ export enum BuffId {
 	'passive:112:point gain boost-arena' = 'passive:112:point gain boost-arena',
 	'passive:112:point gain boost-colo' = 'passive:112:point gain boost-colo',
 
+	'passive:113:hp conditional' = 'passive:113:hp conditional',
+
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
 

@@ -3967,4 +3967,49 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 
 		return results;
 	});
+
+	map.set('113', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '113';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
+				id: params[0],
+				params: params[1],
+				turnDuration: -1, // always active as long as condition is met
+			}, context, injectionContext);
+			const maxTriggerCount = -1;
+			const thresholdInfo = parseThresholdValuesFromParamsProperty(params[2], params[3], ThresholdType.Hp);
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(4), 4, injectionContext);
+
+			if (triggeredBuffs.length > 0) {
+				const thresholdConditions = getThresholdConditions(thresholdInfo);
+				results.push({
+					id: 'passive:113:hp conditional',
+					originalId,
+					sources,
+					value: {
+						triggeredBuffs,
+						maxTriggerCount,
+					},
+					conditions: { ...conditionInfo, ...thresholdConditions },
+					...targetData,
+				});
+			}
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

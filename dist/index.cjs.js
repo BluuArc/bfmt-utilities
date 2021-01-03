@@ -1710,6 +1710,9 @@ var UnitStat;
     UnitStat["expModification"] = "expModification";
     UnitStat["shield"] = "shield";
     UnitStat["aoeNormalAttack"] = "aoeNormalAttack";
+    UnitStat["skillActivationRate"] = "skillActivationRate";
+    UnitStat["arenaBattlePointModification"] = "arenaBattlePointModification";
+    UnitStat["coloBattlePointModification"] = "coloBattlePointModification";
 })(UnitStat || (UnitStat = {}));
 var IconId;
 (function (IconId) {
@@ -2134,6 +2137,9 @@ var IconId;
     IconId["BUFF_SPARKCRTACTIVATED"] = "BUFF_SPARKCRTACTIVATED";
     IconId["BUFF_SPARK_HPREC"] = "BUFF_SPARK_HPREC";
     IconId["BUFF_AOEATK"] = "BUFF_AOEATK";
+    IconId["BUFF_SKILLACTIVATIONRATEUP"] = "BUFF_SKILLACTIVATIONRATEUP";
+    IconId["BUFF_ABPUP"] = "BUFF_ABPUP";
+    IconId["BUFF_CBPUP"] = "BUFF_CBPUP";
     IconId["SG_BUFF_ALL"] = "SG_BUFF_ALL";
     IconId["SG_BUFF_FIRE"] = "SG_BUFF_FIRE";
     IconId["SG_BUFF_WATER"] = "SG_BUFF_WATER";
@@ -2414,6 +2420,13 @@ var BuffId;
     BuffId["passive:105:turn scaled-rec"] = "passive:105:turn scaled-rec";
     BuffId["passive:106:on overdrive conditional"] = "passive:106:on overdrive conditional";
     BuffId["passive:107:add effect to leader skill"] = "passive:107:add effect to leader skill";
+    BuffId["passive:109:bc efficacy reduction"] = "passive:109:bc efficacy reduction";
+    BuffId["passive:110:bc drain-flat"] = "passive:110:bc drain-flat";
+    BuffId["passive:110:bc drain-percent"] = "passive:110:bc drain-percent";
+    BuffId["passive:111:skill activation rate boost"] = "passive:111:skill activation rate boost";
+    BuffId["passive:112:point gain boost-arena"] = "passive:112:point gain boost-arena";
+    BuffId["passive:112:point gain boost-colo"] = "passive:112:point gain boost-colo";
+    BuffId["passive:113:hp conditional"] = "passive:113:hp conditional";
     BuffId["UNKNOWN_PROC_EFFECT_ID"] = "UNKNOWN_PROC_EFFECT_ID";
     BuffId["UNKNOWN_PROC_BUFF_PARAMS"] = "UNKNOWN_PROC_BUFF_PARAMS";
     BuffId["proc:1:attack"] = "proc:1:attack";
@@ -10044,6 +10057,151 @@ function setMapping$2(map, convertPassiveEffectToBuffs) {
         });
         return results;
     });
+    map.set('109', (effect, context, injectionContext) => {
+        const originalId = '109';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        let efficacyChange = 0, chance = 0;
+        let turnDuration = 0;
+        let unknownParams;
+        if (typedEffect.params) {
+            const [rawDamageIncrease, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(typedEffect);
+            efficacyChange = parseNumberOrDefault(rawDamageIncrease);
+            chance = parseNumberOrDefault(rawChance);
+            turnDuration = parseNumberOrDefault(rawTurnDuration);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 3, injectionContext);
+        }
+        const results = [];
+        if (chance !== 0) {
+            results.push(Object.assign({ id: 'passive:109:bc efficacy reduction', originalId,
+                sources, duration: turnDuration, value: { 'efficacyChange%': efficacyChange, chance }, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('110', (effect, context, injectionContext) => {
+        const originalId = '110';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        let flatDrainLow = 0, flatDrainHigh = 0;
+        let percentDrainLow = 0, percentDrainHigh = 0;
+        let chance = 0;
+        let unknownParams;
+        if (typedEffect.params) {
+            const [rawFlatDrainLow, rawFlatDrainHigh, rawPercentDrainLow, rawPercentDrainHigh, rawChance, ...extraParams] = splitEffectParams(typedEffect);
+            flatDrainLow = parseNumberOrDefault(rawFlatDrainLow) / 100;
+            flatDrainHigh = parseNumberOrDefault(rawFlatDrainHigh) / 100;
+            percentDrainLow = parseNumberOrDefault(rawPercentDrainLow);
+            percentDrainHigh = parseNumberOrDefault(rawPercentDrainHigh);
+            chance = parseNumberOrDefault(rawChance);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+        }
+        const results = [];
+        if (flatDrainLow !== 0 || flatDrainHigh !== 0) {
+            results.push(Object.assign({ id: 'passive:110:bc drain-flat', originalId,
+                sources, value: {
+                    drainLow: flatDrainLow,
+                    drainHigh: flatDrainHigh,
+                    chance,
+                }, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        if (percentDrainLow !== 0 || percentDrainHigh !== 0) {
+            results.push(Object.assign({ id: 'passive:110:bc drain-percent', originalId,
+                sources, value: {
+                    drainLow: percentDrainLow,
+                    drainHigh: percentDrainHigh,
+                    chance,
+                }, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('111', (effect, context, injectionContext) => {
+        return parsePassiveWithSingleNumericalParameter({
+            effect,
+            context,
+            injectionContext,
+            effectKey: 'increase skill activation in arena%',
+            buffId: 'passive:111:skill activation rate boost',
+            originalId: '111',
+        });
+    });
+    map.set('112', (effect, context, injectionContext) => {
+        const originalId = '112';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        let abp, cbp;
+        let unknownParams;
+        if (typedEffect.params) {
+            const [rawAbp, rawCbp, ...extraParams] = splitEffectParams(typedEffect);
+            abp = parseNumberOrDefault(rawAbp);
+            cbp = parseNumberOrDefault(rawCbp);
+            unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+        }
+        else {
+            abp = parseNumberOrDefault(typedEffect['abp gain%']);
+            cbp = parseNumberOrDefault(typedEffect['cbp gain%']);
+        }
+        const results = [];
+        if (abp !== 0) {
+            results.push(Object.assign({ id: 'passive:112:point gain boost-arena', originalId,
+                sources, value: abp, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        if (cbp !== 0) {
+            results.push(Object.assign({ id: 'passive:112:point gain boost-colo', originalId,
+                sources, value: cbp, conditions: Object.assign({}, conditionInfo) }, targetData));
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
+    map.set('113', (effect, context, injectionContext) => {
+        const originalId = '112';
+        const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+        const typedEffect = effect;
+        const results = [];
+        let unknownParams;
+        if (typedEffect.params) {
+            const params = splitEffectParams(typedEffect);
+            const triggeredBuffs = convertConditionalEffectToBuffsWithInjectionContext({
+                id: params[0],
+                params: params[1],
+                turnDuration: -1,
+            }, context, injectionContext);
+            const maxTriggerCount = -1;
+            const thresholdInfo = parseThresholdValuesFromParamsProperty(params[2], params[3], ThresholdType.Hp);
+            unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(4), 4, injectionContext);
+            if (triggeredBuffs.length > 0) {
+                const thresholdConditions = getThresholdConditions(thresholdInfo);
+                results.push(Object.assign({ id: 'passive:113:hp conditional', originalId,
+                    sources, value: {
+                        triggeredBuffs,
+                        maxTriggerCount,
+                    }, conditions: Object.assign(Object.assign({}, conditionInfo), thresholdConditions) }, targetData));
+            }
+        }
+        handlePostParse(results, unknownParams, {
+            originalId,
+            sources,
+            targetData,
+            conditionInfo,
+        });
+        return results;
+    });
 }
 
 /**
@@ -11613,6 +11771,47 @@ const BUFF_METADATA = Object.freeze(Object.assign(Object.assign(Object.assign(Ob
         name: 'Passive Added Effect to Leader Skill',
         stackType: BuffStackType.Passive,
         icons: () => [IconId.BUFF_ADDTO_LS],
+    }, 'passive:109:bc efficacy reduction': {
+        id: BuffId['passive:109:bc efficacy reduction'],
+        name: 'Passive BC Efficacy Reduction (Chance)',
+        stat: UnitStat.bcEfficacy,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_BBFILLDOWN],
+    }, 'passive:110:bc drain-flat': {
+        id: BuffId['passive:110:bc drain-flat'],
+        name: 'Passive BB Gauge Drain (Chance) (Flat Amount)',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_BBFILLDOWN],
+    }, 'passive:110:bc drain-percent': {
+        id: BuffId['passive:110:bc drain-percent'],
+        name: 'Passive BB Gauge Drain (Chance) (Percentage)',
+        stat: UnitStat.bbGauge,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_BBFILLDOWN],
+    }, 'passive:111:skill activation rate boost': {
+        id: BuffId['passive:111:skill activation rate boost'],
+        name: 'Passive Brave Burst Activation Rate Boost',
+        stat: UnitStat.skillActivationRate,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_SKILLACTIVATIONRATEUP],
+    }, 'passive:112:point gain boost-arena': {
+        id: BuffId['passive:112:point gain boost-arena'],
+        name: 'Passive Arena Battle Point Boost',
+        stat: UnitStat.arenaBattlePointModification,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_ABPUP],
+    }, 'passive:112:point gain boost-colo': {
+        id: BuffId['passive:112:point gain boost-colo'],
+        name: 'Passive Colosseum Battle Point Boost',
+        stat: UnitStat.coloBattlePointModification,
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.BUFF_CBPUP],
+    }, 'passive:113:hp conditional': {
+        id: BuffId['passive:113:hp conditional'],
+        name: 'Passive Conditional Effect based on HP Threshold',
+        stackType: BuffStackType.Passive,
+        icons: () => [IconId.CONDITIONALBUFF_HPTHRESH],
     }, UNKNOWN_PROC_EFFECT_ID: {
         id: BuffId.UNKNOWN_PROC_EFFECT_ID,
         name: 'Unknown Proc Effect',
