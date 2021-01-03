@@ -1442,6 +1442,16 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:111:skill activation rate boost'], [IconId.BUFF_SKILLACTIVATIONRATEUP]);
 	});
 
+	describe('passive 112 buffs', () => {
+		describe('passive:112:point gain boost-arena', () => {
+			testDefaultIconResult(BuffId['passive:112:point gain boost-arena'], [IconId.BUFF_ABPUP]);
+		});
+
+		describe('passive:112:point gain boost-colo', () => {
+			testDefaultIconResult(BuffId['passive:112:point gain boost-colo'], [IconId.BUFF_CBPUP]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

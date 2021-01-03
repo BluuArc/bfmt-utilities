@@ -3916,4 +3916,55 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 			originalId: '111',
 		});
 	});
+
+	map.set('112', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '112';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let abp: number, cbp: number;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawAbp, rawCbp, ...extraParams] = splitEffectParams(typedEffect);
+			abp = parseNumberOrDefault(rawAbp);
+			cbp = parseNumberOrDefault(rawCbp);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		} else {
+			abp = parseNumberOrDefault(typedEffect['abp gain%'] as number);
+			cbp = parseNumberOrDefault(typedEffect['cbp gain%'] as number);
+		}
+
+		const results: IBuff[] = [];
+		if (abp !== 0) {
+			results.push({
+				id: 'passive:112:point gain boost-arena',
+				originalId,
+				sources,
+				value: abp,
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		if (cbp !== 0) {
+			results.push({
+				id: 'passive:112:point gain boost-colo',
+				originalId,
+				sources,
+				value: cbp,
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

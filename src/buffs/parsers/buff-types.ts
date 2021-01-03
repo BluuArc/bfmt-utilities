@@ -311,6 +311,9 @@ export enum UnitStat {
 	aoeNormalAttack = 'aoeNormalAttack',
 
 	skillActivationRate = 'skillActivationRate',
+
+	arenaBattlePointModification = 'arenaBattlePointModification',
+	coloBattlePointModification = 'coloBattlePointModification',
 }
 
 /**
@@ -432,6 +435,9 @@ export interface IUnitState {
 	aoeNormalAttack: IBuff[];
 
 	skillActivationRate: IBuff[];
+
+	arenaBattlePointModification: IBuff[];
+	coloBattlePointModification: IBuff[];
 }
 
 /**
@@ -938,6 +944,9 @@ export enum IconId {
 
 	BUFF_SKILLACTIVATIONRATEUP = 'BUFF_SKILLACTIVATIONRATEUP',
 
+	BUFF_ABPUP = 'BUFF_ABPUP',
+	BUFF_CBPUP = 'BUFF_CBPUP',
+
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
 	SG_BUFF_WATER = 'SG_BUFF_WATER',
@@ -1284,6 +1293,9 @@ export enum BuffId {
 	'passive:110:bc drain-percent' = 'passive:110:bc drain-percent',
 
 	'passive:111:skill activation rate boost' = 'passive:111:skill activation rate boost',
+
+	'passive:112:point gain boost-arena' = 'passive:112:point gain boost-arena',
+	'passive:112:point gain boost-colo' = 'passive:112:point gain boost-colo',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

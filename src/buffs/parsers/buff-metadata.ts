@@ -1834,6 +1834,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_SKILLACTIVATIONRATEUP],
 	},
+	'passive:112:point gain boost-arena': {
+		id: BuffId['passive:112:point gain boost-arena'],
+		name: 'Passive Arena Battle Point Boost',
+		stat: UnitStat.arenaBattlePointModification,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_ABPUP],
+	},
+	'passive:112:point gain boost-colo': {
+		id: BuffId['passive:112:point gain boost-colo'],
+		name: 'Passive Colosseum Battle Point Boost',
+		stat: UnitStat.coloBattlePointModification,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_CBPUP],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',
