@@ -516,6 +516,8 @@ export enum IconId {
 	BUFF_HPREC = 'BUFF_HPREC',
 	BUFF_BBREC = 'BUFF_BBREC',
 
+	BUFF_BBREDUC = 'BUFF_BBREDUC',
+
 	BUFF_DAMAGEBB = 'BUFF_DAMAGEBB',
 	BUFF_BEENATK_HPREC = 'BUFF_BEENATK_HPREC',
 
@@ -1568,6 +1570,9 @@ export enum BuffId {
 
 	'proc:97:element specific attack' = 'proc:97:element specific attack',
 	'proc:113:gradual od fill' = 'proc:113:gradual od fill',
+
+	'proc:119:gradual bc drain-flat' = 'proc:119:gradual bc drain-flat',
+	'proc:119:gradual bc drain-percent' = 'proc:119:gradual bc drain-percent',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

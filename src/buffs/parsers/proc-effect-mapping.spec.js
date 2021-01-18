@@ -12858,5 +12858,190 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456','789', '0', '0', '123']), 0] });
 			});
 		});
+
+		describe('proc 119', () => {
+			const expectedFlatDrainId = 'proc:119:gradual bc drain-flat';
+			const expectedPercentDrainId = 'proc:119:gradual bc drain-percent';
+			const expectedOriginalId = '119';
+			const DRAIN_PERCENT_KEY = 'drain%';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedFlatDrainId, expectedPercentDrainId]);
+
+			it('uses the params property when it exists', () => {
+				const params = `100,2,3,${arbitraryTurnDuration}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatDrainId,
+						duration: arbitraryTurnDuration,
+						value: {
+							drain: 1,
+							chance: 3,
+						},
+					}),
+					baseBuffFactory({
+						id: expectedPercentDrainId,
+						duration: arbitraryTurnDuration,
+						value: {
+							[DRAIN_PERCENT_KEY]: 2,
+							chance: 3,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `100,2,3,${arbitraryTurnDuration},5,6,7`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatDrainId,
+						duration: arbitraryTurnDuration,
+						value: {
+							drain: 1,
+							chance: 3,
+						},
+					}),
+					baseBuffFactory({
+						id: expectedPercentDrainId,
+						duration: arbitraryTurnDuration,
+						value: {
+							[DRAIN_PERCENT_KEY]: 2,
+							chance: 3,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_4: '5',
+							param_5: '6',
+							param_6: '7',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				it('does not return a flat drain buff if it is 0', () => {
+					const params = `0,123,3,${arbitraryTurnDuration}`;
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: expectedPercentDrainId,
+						duration: arbitraryTurnDuration,
+						value: {
+							[DRAIN_PERCENT_KEY]: 123,
+							chance: 3,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('does not return a percent drain buff if it is 0', () => {
+					const params = `12300,0,3,${arbitraryTurnDuration}`;
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: expectedFlatDrainId,
+						duration: arbitraryTurnDuration,
+						value: {
+							drain: 123,
+							chance: 3,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					const effect = createArbitraryBaseEffect();
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('defaults to 0 for missing chance and turn duration', () => {
+					const params = '12300,456';
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [
+						baseBuffFactory({
+							id: expectedFlatDrainId,
+							duration: 0,
+							value: {
+								drain: 123,
+								chance: 0,
+							},
+						}),
+						baseBuffFactory({
+							id: expectedPercentDrainId,
+							duration: 0,
+							value: {
+								[DRAIN_PERCENT_KEY]: 456,
+								chance: 0,
+							},
+						}),
+					];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				testTurnDurationScenarios({
+					createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,${duration}`,
+					buffIdsInTurnDurationBuff: [expectedFlatDrainId, expectedPercentDrainId],
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: `100,2,3,${arbitraryTurnDuration},123`,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatDrainId,
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: {
+							drain: 1,
+							chance: 3,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: expectedPercentDrainId,
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: {
+							[DRAIN_PERCENT_KEY]: 2,
+							chance: 3,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 4] });
+			});
+		});
 	});
 });

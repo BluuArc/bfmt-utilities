@@ -2462,6 +2462,16 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:113:gradual od fill'], [IconId.BUFF_ODFILLBOOST]);
 	});
 
+	describe('proc 119 buffs', () => {
+		describe('proc:119:gradual bc drain-flat', () => {
+			testDefaultIconResult(BuffId['proc:119:gradual bc drain-flat'], [IconId.BUFF_BBREDUC]);
+		});
+
+		describe('proc:119:gradual bc drain-percent', () => {
+			testDefaultIconResult(BuffId['proc:119:gradual bc drain-percent'], [IconId.BUFF_BBREDUC]);
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

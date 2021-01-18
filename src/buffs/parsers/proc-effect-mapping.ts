@@ -4635,4 +4635,73 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('119', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '119';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let flatDrain = 0,  percentDrain = 0;
+		let chance = 0, turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawFlat, rawPercent, rawChance, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			flatDrain = parseNumberOrDefault(rawFlat) / 100;
+			percentDrain = parseNumberOrDefault(rawPercent);
+			chance = parseNumberOrDefault(rawChance);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+		}
+
+		const results: IBuff[] = [];
+		if (flatDrain !== 0) {
+			results.push({
+				id: 'proc:119:gradual bc drain-flat',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: {
+					drain: flatDrain,
+					chance,
+				},
+				...targetData,
+			});
+		}
+
+		if (percentDrain !== 0) {
+			results.push({
+				id: 'proc:119:gradual bc drain-percent',
+				originalId,
+				sources,
+				effectDelay,
+				duration: turnDuration,
+				value: {
+					'drain%': percentDrain,
+					chance,
+				},
+				...targetData,
+			});
+		}
+
+		if (results.length === 0 && isTurnDurationBuff(context, turnDuration, injectionContext)) {
+			results.push(createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['proc:119:gradual bc drain-flat', 'proc:119:gradual bc drain-percent'],
+				duration: turnDuration,
+				targetData,
+			}));
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

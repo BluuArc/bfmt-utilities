@@ -3381,6 +3381,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ODFILLBOOST],
 	},
+	'proc:119:gradual bc drain-flat': {
+		id: BuffId['proc:119:gradual bc drain-flat'],
+		name: 'Active Dradual BB Gauge Drain (Chance) (Flat Amount)',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_BBREDUC],
+	},
+	'proc:119:gradual bc drain-percent': {
+		id: BuffId['proc:119:gradual bc drain-percent'],
+		name: 'Active Dradual BB Gauge Drain (Chance) (Percentage)',
+		stat: UnitStat.bbGauge,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_BBREDUC],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',
