@@ -212,7 +212,7 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expect(result).toEqual(expectedResult);
 			});
 
-			it('falls back to stat-specific properties when the params property does not exist', () => {
+			it('falls back to effect properties when the params property does not exist', () => {
 				const effect = { [effectKey]: 456 };
 				const expectedResult = [baseBuffFactory({
 					id: expectedBuffId,
@@ -11291,6 +11291,108 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				modifyExpectedConditionalEffect: (effect) => {
 					effect.targetType = 'enemy';
 				},
+			});
+		});
+
+		describe('passive 127', () => {
+			const expectedBuffId = 'passive:127:damage over time reduction';
+			const expectedOriginalId = '127';
+
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const effect = { params: '0,123' };
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: 123,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const effect = { params: '1,123,3,4,5' };
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: 123,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_0: '1',
+							param_2: '3',
+							param_3: '4',
+							param_4: '5',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for unknown intermediate parameters', () => {
+				const effect = { params: '123,456' };
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: 456,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_0: '123',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+			});
+
+			it('returns a no params buff if parsed value from params is zero', () => {
+				const effect = { params: '0,0' };
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '456,200,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						value: 200,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456', '0', '789']), 0] });
 			});
 		});
 	});

@@ -1460,6 +1460,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:114:when attacked conditional'], [IconId.CONDITIONALBUFF_WHENHIT]);
 	});
 
+	describe('passive:127:damage over time reduction', () => {
+		testDefaultIconResult(BuffId['passive:127:damage over time reduction'], [IconId.BUFF_ATKREDUC]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

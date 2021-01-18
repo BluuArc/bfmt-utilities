@@ -303,6 +303,7 @@ export enum UnitStat {
 	extraAction = 'extraAction',
 
 	damageOverTime = 'damageOverTime',
+	damageOverTimeMitigation = 'damageOverTimeMitigation',
 
 	effectOccurrenceShift = 'effectOccurrenceShift',
 
@@ -427,6 +428,7 @@ export interface IUnitState {
 	extraAction: IBuff[];
 
 	damageOverTime: IBuff[];
+	damageOverTimeMitigation: IBuff[];
 
 	effectOccurrenceShift: IBuff[];
 
@@ -911,6 +913,7 @@ export enum IconId {
 	BUFF_ODFILLBOOST = 'BUFF_ODFILLBOOST', // gradual OD fill
 
 	BUFF_TURNDMG = 'BUFF_TURNDMG',
+	BUFF_ATKREDUC = 'BUFF_ATKREDUC',
 
 	BUFF_BBATKUP = 'BUFF_BBATKUP',
 	BUFF_SBBATKUP = 'BUFF_SBBATKUP',
@@ -1304,6 +1307,8 @@ export enum BuffId {
 
 	'passive:113:hp conditional' = 'passive:113:hp conditional',
 	'passive:114:when attacked conditional' = 'passive:114:when attacked conditional',
+
+	'passive:127:damage over time reduction' = 'passive:127:damage over time reduction',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

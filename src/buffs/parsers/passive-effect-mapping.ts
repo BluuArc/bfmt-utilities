@@ -4033,4 +4033,39 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 			modifyConditionalEffect: (effect: IConditionalEffect) => { effect.targetType = TargetType.Enemy; },
 		});
 	});
+
+	map.set('127', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '127';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		const results: IBuff[] = [];
+		let reduction = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			reduction = parseNumberOrDefault(params[1]);
+			unknownParams = createUnknownParamsEntryFromExtraParams([params[0], '0'].concat(params.slice(2)), 0, injectionContext);
+		}
+
+		if (reduction !== 0) {
+			results.push({
+				id: 'passive:127:damage over time reduction',
+				originalId,
+				sources,
+				value: reduction,
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }
