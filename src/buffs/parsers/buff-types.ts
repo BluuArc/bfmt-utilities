@@ -956,6 +956,8 @@ export enum IconId {
 	BUFF_ABPUP = 'BUFF_ABPUP',
 	BUFF_CBPUP = 'BUFF_CBPUP',
 
+	BUFF_TARGETED = 'BUFF_TARGETED',
+
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
 	SG_BUFF_WATER = 'SG_BUFF_WATER',
@@ -1582,6 +1584,7 @@ export enum BuffId {
 
 	'proc:123:od gauge drain' = 'proc:123:od gauge drain',
 	'proc:126:damage over time reduction' = 'proc:126:damage over time reduction',
+	'proc:127:lock on' = 'proc:127:lock on',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

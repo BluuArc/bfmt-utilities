@@ -4749,4 +4749,36 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			originalId: '126',
 		});
 	});
+
+	map.set('127', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '127';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			turnDuration = parseNumberOrDefault(rawTurnDuration);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+		}
+
+		const results: IBuff[] = [{
+			id: 'proc:127:lock on',
+			originalId,
+			sources,
+			effectDelay,
+			duration: turnDuration,
+			value: true,
+			...targetData,
+		}];
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

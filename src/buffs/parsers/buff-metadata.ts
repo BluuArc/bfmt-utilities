@@ -3416,6 +3416,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_ATKREDUC],
 	},
+	'proc:127:lock on': {
+		id: BuffId['proc:127:lock on'],
+		name: 'Active Lock On',
+		stat: UnitStat.targetingModification,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_TARGETED],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

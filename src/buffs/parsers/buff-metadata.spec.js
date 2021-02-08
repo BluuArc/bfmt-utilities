@@ -2484,6 +2484,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:126:damage over time reduction'], [IconId.BUFF_ATKREDUC]);
 	});
 
+	describe('proc:127:lock on', () => {
+		testDefaultIconResult(BuffId['proc:127:lock on'], [IconId.BUFF_TARGETED]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

@@ -13194,5 +13194,101 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectedBuffId: 'proc:126:damage over time reduction',
 			});
 		});
+
+		describe('proc 127', () => {
+			const expectedBuffId = 'proc:127:lock on';
+			const expectedOriginalId = '127';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const effect = createArbitraryBaseEffect({ params: '1' });
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 1,
+					value: true,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const effect = createArbitraryBaseEffect({ params: '1,2,3,4' });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						duration: 1,
+						value: true,
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_1: '2',
+							param_2: '3',
+							param_3: '4',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff value when params value is 0', () => {
+				const effect = createArbitraryBaseEffect({ params: '0' });
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 0,
+					value: true,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff value when params value is missing', () => {
+				const effect = createArbitraryBaseEffect();
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					duration: 0,
+					value: true,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({ params: '10,123' });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						duration: 10,
+						value: true,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 1] });
+			});
+		});
 	});
 });
