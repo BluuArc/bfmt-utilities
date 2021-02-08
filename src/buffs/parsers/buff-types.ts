@@ -911,6 +911,7 @@ export enum IconId {
 
 	BUFF_OVERDRIVEUP = 'BUFF_OVERDRIVEUP', // OD fill rate
 	BUFF_ODFILLBOOST = 'BUFF_ODFILLBOOST', // gradual OD fill
+	BUFF_ODFILLDRAIN = 'BUFF_ODFILLDRAIN', // OD drain
 
 	BUFF_TURNDMG = 'BUFF_TURNDMG',
 	BUFF_ATKREDUC = 'BUFF_ATKREDUC',
@@ -1578,6 +1579,8 @@ export enum BuffId {
 
 	'proc:119:gradual bc drain-flat' = 'proc:119:gradual bc drain-flat',
 	'proc:119:gradual bc drain-percent' = 'proc:119:gradual bc drain-percent',
+
+	'proc:123:od gauge drain' = 'proc:123:od gauge drain',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

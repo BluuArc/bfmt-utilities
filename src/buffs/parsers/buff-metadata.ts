@@ -3390,17 +3390,24 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 	},
 	'proc:119:gradual bc drain-flat': {
 		id: BuffId['proc:119:gradual bc drain-flat'],
-		name: 'Active Dradual BB Gauge Drain (Chance) (Flat Amount)',
+		name: 'Active Gradual BB Gauge Drain (Chance) (Flat Amount)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_BBREDUC],
 	},
 	'proc:119:gradual bc drain-percent': {
 		id: BuffId['proc:119:gradual bc drain-percent'],
-		name: 'Active Dradual BB Gauge Drain (Chance) (Percentage)',
+		name: 'Active Gradual BB Gauge Drain (Chance) (Percentage)',
 		stat: UnitStat.bbGauge,
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_BBREDUC],
+	},
+	'proc:123:od gauge drain': {
+		id: BuffId['proc:123:od gauge drain'],
+		name: 'Burst OD Gauge Drain',
+		stat: UnitStat.odGauge,
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_ODFILLDRAIN],
 	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,

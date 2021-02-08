@@ -4704,4 +4704,39 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('123', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '123';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let drainPercent = 0, chance = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawChance, unknownSecondParam, rawDrainPercent, ...extraParams] = splitEffectParams(effect);
+			drainPercent = parseNumberOrDefault(rawDrainPercent);
+			chance = parseNumberOrDefault(rawChance);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams([unknownSecondParam, '0'].concat(extraParams), 1, injectionContext);
+		}
+		const results: IBuff[] = [];
+		if (chance !== 0 || drainPercent !== 0) {
+			results.push({
+				id: 'proc:123:od gauge drain',
+				originalId,
+				sources,
+				effectDelay,
+				value: { 'drain%': drainPercent, chance },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

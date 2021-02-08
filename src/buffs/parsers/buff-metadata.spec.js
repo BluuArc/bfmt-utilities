@@ -2476,6 +2476,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc:123:od gauge drain', () => {
+		testDefaultIconResult(BuffId['proc:123:od gauge drain'], [IconId.BUFF_ODFILLDRAIN]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});
