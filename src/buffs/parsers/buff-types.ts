@@ -1581,6 +1581,7 @@ export enum BuffId {
 	'proc:119:gradual bc drain-percent' = 'proc:119:gradual bc drain-percent',
 
 	'proc:123:od gauge drain' = 'proc:123:od gauge drain',
+	'proc:126:damage over time reduction' = 'proc:126:damage over time reduction',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

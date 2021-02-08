@@ -2480,6 +2480,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:123:od gauge drain'], [IconId.BUFF_ODFILLDRAIN]);
 	});
 
+	describe('proc:126:damage over time reduction', () => {
+		testDefaultIconResult(BuffId['proc:126:damage over time reduction'], [IconId.BUFF_ATKREDUC]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

@@ -3409,6 +3409,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_ODFILLDRAIN],
 	},
+	'proc:126:damage over time reduction': {
+		id: BuffId['proc:126:damage over time reduction'],
+		name: 'Active Damage Over Time Reduction',
+		stat: UnitStat.damageOverTimeMitigation,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_ATKREDUC],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

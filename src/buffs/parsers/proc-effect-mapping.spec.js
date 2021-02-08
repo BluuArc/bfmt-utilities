@@ -13187,5 +13187,12 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['2', '0', '123']), 1] });
 			});
 		});
+
+		describe('proc 126', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '126',
+				expectedBuffId: 'proc:126:damage over time reduction',
+			});
+		});
 	});
 });
