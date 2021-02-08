@@ -3423,6 +3423,27 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_TARGETED],
 	},
+	'proc:130:inflict on hit-atk down': {
+		id: BuffId['proc:130:inflict on hit-atk down'],
+		name: 'Active Attack Reduction Counter (Chance)',
+		stat: UnitStat.atkDownCounter,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_PROB_ATKREDUC],
+	},
+	'proc:130:inflict on hit-def down': {
+		id: BuffId['proc:130:inflict on hit-def down'],
+		name: 'Active Defense Reduction Counter (Chance)',
+		stat: UnitStat.defDownCounter,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_PROB_DEFREDUC],
+	},
+	'proc:130:inflict on hit-rec down': {
+		id: BuffId['proc:130:inflict on hit-rec down'],
+		name: 'Active Recovery Reduction Counter (Chance)',
+		stat: UnitStat.recDownCounter,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_PROB_RECREDUC],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

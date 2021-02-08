@@ -13290,5 +13290,294 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 1] });
 			});
 		});
+
+		describe('proc 130', () => {
+			const expectedOriginalId = '130';
+			const AILMENTS_ORDER = ['atk', 'def', 'rec'];
+			const EFFECT_KEY_VALUE_MAPPING = {
+				atk: 'atk% buff (153)',
+				def: 'def% buff (154)',
+				rec: 'rec% buff (155)',
+			};
+			const EFFECT_KEY_CHANCE_MAPPING = {
+				atk: 'atk buff chance%',
+				def: 'def buff chance%',
+				rec: 'rec buff chance%',
+			};
+			const DEBUFF_TURN_EFFECT_KEY = 'debuff turns';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(AILMENTS_ORDER.map((a) => `proc:130:inflict on hit-${a} down`));
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,3,4,5,6,7,${arbitraryTurnDuration}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:130:inflict on hit-atk down',
+						duration: arbitraryTurnDuration,
+						value: {
+							reductionValue: 1,
+							chance: 4,
+							debuffTurnDuration: 7,
+						},
+					}),
+					baseBuffFactory({
+						id: 'proc:130:inflict on hit-def down',
+						duration: arbitraryTurnDuration,
+						value: {
+							reductionValue: 2,
+							chance: 5,
+							debuffTurnDuration: 7,
+						},
+					}),
+					baseBuffFactory({
+						id: 'proc:130:inflict on hit-rec down',
+						duration: arbitraryTurnDuration,
+						value: {
+							reductionValue: 3,
+							chance: 6,
+							debuffTurnDuration: 7,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `1,2,3,4,5,6,7,${arbitraryTurnDuration},9,10,11`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:130:inflict on hit-atk down',
+						duration: arbitraryTurnDuration,
+						value: {
+							reductionValue: 1,
+							chance: 4,
+							debuffTurnDuration: 7,
+						},
+					}),
+					baseBuffFactory({
+						id: 'proc:130:inflict on hit-def down',
+						duration: arbitraryTurnDuration,
+						value: {
+							reductionValue: 2,
+							chance: 5,
+							debuffTurnDuration: 7,
+						},
+					}),
+					baseBuffFactory({
+						id: 'proc:130:inflict on hit-rec down',
+						duration: arbitraryTurnDuration,
+						value: {
+							reductionValue: 3,
+							chance: 6,
+							debuffTurnDuration: 7,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_8: '9',
+							param_9: '10',
+							param_10: '11',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[EFFECT_KEY_VALUE_MAPPING.atk]: 1,
+					[EFFECT_KEY_CHANCE_MAPPING.atk]: 2,
+					[EFFECT_KEY_VALUE_MAPPING.def]: 3,
+					[EFFECT_KEY_CHANCE_MAPPING.def]: 4,
+					[EFFECT_KEY_VALUE_MAPPING.rec]: 5,
+					[EFFECT_KEY_CHANCE_MAPPING.rec]: 6,
+					[DEBUFF_TURN_EFFECT_KEY]: 7,
+					[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:130:inflict on hit-atk down',
+						duration: arbitraryTurnDuration,
+						value: {
+							reductionValue: 1,
+							chance: 2,
+							debuffTurnDuration: 7,
+						},
+					}),
+					baseBuffFactory({
+						id: 'proc:130:inflict on hit-def down',
+						duration: arbitraryTurnDuration,
+						value: {
+							reductionValue: 3,
+							chance: 4,
+							debuffTurnDuration: 7,
+						},
+					}),
+					baseBuffFactory({
+						id: 'proc:130:inflict on hit-rec down',
+						duration: arbitraryTurnDuration,
+						value: {
+							reductionValue: 5,
+							chance: 6,
+							debuffTurnDuration: 7,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are 0 or missing', () => {
+				AILMENTS_ORDER.forEach((type) => {
+					it(`returns an entry for ${type} when its reduction value is the only non-zero value of the individual reduction properties`, () => {
+						const params = [
+							type === 'atk' ? '123' : '0',
+							type === 'def' ? '123' : '0',
+							type === 'rec' ? '123' : '0',
+							'0,0,0', // chance values of 0
+							'0',
+							arbitraryTurnDuration,
+						].join(',');
+						const effect = createArbitraryBaseEffect({ params });
+						const expectedResult = [baseBuffFactory({
+							id: `proc:130:inflict on hit-${type} down`,
+							duration: arbitraryTurnDuration,
+							value: {
+								reductionValue: 123,
+								chance: 0,
+								debuffTurnDuration: 0,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns an entry for ${type} when its reduction chance is the only non-zero value of the individual reduction properties`, () => {
+						const params = [
+							'0,0,0', // reduction values of 0
+							type === 'atk' ? '123' : '0',
+							type === 'def' ? '123' : '0',
+							type === 'rec' ? '123' : '0',
+							'0',
+							arbitraryTurnDuration,
+						].join(',');
+						const effect = createArbitraryBaseEffect({ params });
+						const expectedResult = [baseBuffFactory({
+							id: `proc:130:inflict on hit-${type} down`,
+							duration: arbitraryTurnDuration,
+							value: {
+								reductionValue: 0,
+								chance: 123,
+								debuffTurnDuration: 0,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns an entry for ${type} when its reduction value is the only non-zero value of the individual reduction properties and the params property does not exist`, () => {
+						const effect = createArbitraryBaseEffect({
+							[EFFECT_KEY_VALUE_MAPPING[type]]: 456,
+							[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+						});
+						const expectedResult = [baseBuffFactory({
+							id: `proc:130:inflict on hit-${type} down`,
+							duration: arbitraryTurnDuration,
+							value: {
+								reductionValue: 456,
+								chance: 0,
+								debuffTurnDuration: 0,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns an entry for ${type} when its reduction chance is the only non-zero value of the individual reduction properties`, () => {
+						const effect = createArbitraryBaseEffect({
+							[EFFECT_KEY_CHANCE_MAPPING[type]]: 456,
+							[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
+						});
+						const expectedResult = [baseBuffFactory({
+							id: `proc:130:inflict on hit-${type} down`,
+							duration: arbitraryTurnDuration,
+							value: {
+								reductionValue: 0,
+								chance: 456,
+								debuffTurnDuration: 0,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				describe('for buff duration', () => {
+					testTurnDurationScenarios({
+						createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,0,${duration}`,
+						buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((a) => `proc:130:inflict on hit-${a} down`),
+						modifyTurnDurationBuff: (buff) => {
+							buff.value.debuffTurnDuration = 0;
+						},
+					});
+				});
+
+				describe('for debuff duration', () => {
+					testTurnDurationScenarios({
+						createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,${duration},0`,
+						buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((a) => `proc:130:inflict on hit-${a} down`),
+						modifyTurnDurationBuff: (buff) => {
+							buff.value.debuffTurnDuration = buff.value.duration;
+							buff.value.duration = 0;
+						},
+					});
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: `1,0,0,0,0,0,0,${arbitraryTurnDuration},123`,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:130:inflict on hit-atk down',
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: { reductionValue: 1, chance: 0, debuffTurnDuration: 0 },
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 8] });
+			});
+		});
 	});
 });

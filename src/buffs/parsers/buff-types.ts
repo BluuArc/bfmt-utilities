@@ -1586,6 +1586,10 @@ export enum BuffId {
 	'proc:126:damage over time reduction' = 'proc:126:damage over time reduction',
 	'proc:127:lock on' = 'proc:127:lock on',
 
+	'proc:130:inflict on hit-atk down' = 'proc:130:inflict on hit-atk down',
+	'proc:130:inflict on hit-def down' = 'proc:130:inflict on hit-def down',
+	'proc:130:inflict on hit-rec down' = 'proc:130:inflict on hit-rec down',
+
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
 

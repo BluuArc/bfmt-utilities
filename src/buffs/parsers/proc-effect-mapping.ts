@@ -4781,4 +4781,88 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('130', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '130';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		interface IStatReductionInfo {
+			type: Ailment;
+			reductionValue: number;
+			chance: number;
+		}
+		const inflictedReductions: IStatReductionInfo[] = [];
+		let debuffTurnDuration = 0, turnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const params = splitEffectParams(effect);
+			[
+				{ type: Ailment.AttackReduction, reductionValue: parseNumberOrDefault(params[0]), chance: parseNumberOrDefault(params[3]) },
+				{ type: Ailment.DefenseReduction, reductionValue: parseNumberOrDefault(params[1]), chance: parseNumberOrDefault(params[4]) },
+				{ type: Ailment.RecoveryReduction, reductionValue: parseNumberOrDefault(params[2]), chance: parseNumberOrDefault(params[5]) },
+			].forEach(({ type, reductionValue, chance }) => {
+				if (reductionValue !== 0 || chance !== 0) {
+					inflictedReductions.push({ type, reductionValue, chance });
+				}
+			});
+
+			debuffTurnDuration = parseNumberOrDefault(params[6]);
+			turnDuration = parseNumberOrDefault(params[7]);
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(8), 8, injectionContext);
+		} else {
+			[
+				{ type: Ailment.AttackReduction, reductionValueKey: 'atk% buff (153)', chanceKey: 'atk buff chance%' },
+				{ type: Ailment.DefenseReduction, reductionValueKey: 'def% buff (154)', chanceKey: 'def buff chance%' },
+				{ type: Ailment.RecoveryReduction, reductionValueKey: 'rec% buff (155)', chanceKey: 'rec buff chance%' },
+			].forEach(({ type, reductionValueKey, chanceKey }) => {
+				const reductionValue = parseNumberOrDefault(effect[reductionValueKey] as number);
+				const chance = parseNumberOrDefault(effect[chanceKey] as number);
+				if (reductionValue !== 0 || chance !== 0) {
+					inflictedReductions.push({ type, reductionValue, chance });
+				}
+			});
+
+			debuffTurnDuration = parseNumberOrDefault(effect['debuff turns']);
+			turnDuration = parseNumberOrDefault(effect['buff turns'] as number);
+		}
+
+		const results: IBuff[] = inflictedReductions.map(({ type, reductionValue, chance }) => ({
+			id: `proc:130:inflict on hit-${type}`,
+			originalId,
+			sources,
+			effectDelay,
+			duration: turnDuration,
+			value: {
+				reductionValue,
+				chance,
+				debuffTurnDuration,
+			},
+			...targetData,
+		}));
+
+		if (results.length === 0 && (isTurnDurationBuff(context, turnDuration, injectionContext) || isTurnDurationBuff(context, debuffTurnDuration, injectionContext))) {
+			// manually create turn duration buff to account for debuff turn duration
+			results.push({
+				id: BuffId.TURN_DURATION_MODIFICATION,
+				originalId,
+				sources,
+				value: {
+					buffs: [Ailment.AttackReduction, Ailment.DefenseReduction, Ailment.RecoveryReduction].map((a) => `proc:130:inflict on hit-${a}`),
+					duration: turnDuration,
+					debuffTurnDuration: debuffTurnDuration,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

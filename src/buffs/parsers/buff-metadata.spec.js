@@ -2484,6 +2484,20 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:126:damage over time reduction'], [IconId.BUFF_ATKREDUC]);
 	});
 
+	describe('proc 130 buffs', () => {
+		describe('proc:130:inflict on hit-atk down', () => {
+			testDefaultIconResult(BuffId['proc:130:inflict on hit-atk down'], [IconId.BUFF_PROB_ATKREDUC]);
+		});
+
+		describe('proc:130:inflict on hit-def down', () => {
+			testDefaultIconResult(BuffId['proc:130:inflict on hit-def down'], [IconId.BUFF_PROB_DEFREDUC]);
+		});
+
+		describe('proc:130:inflict on hit-rec down', () => {
+			testDefaultIconResult(BuffId['proc:130:inflict on hit-rec down'], [IconId.BUFF_PROB_RECREDUC]);
+		});
+	});
+
 	describe('proc:127:lock on', () => {
 		testDefaultIconResult(BuffId['proc:127:lock on'], [IconId.BUFF_TARGETED]);
 	});
