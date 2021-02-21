@@ -1874,6 +1874,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_NORMALATTACKREDUCTION],
 	},
+	'passive:143:atk limit break': {
+		id: BuffId['passive:143:atk limit break'],
+		name: 'Passive Attack Parameter Limit Break',
+		stat: UnitStat.attackLimitBreak,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_PARAMBREAK_ATK],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

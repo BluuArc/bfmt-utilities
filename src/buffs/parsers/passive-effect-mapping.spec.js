@@ -11510,5 +11510,13 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
 			});
 		});
+
+		describe('passive 143', () => {
+			testPassiveWithSingleNumericalParameter({
+				expectedOriginalId: '143',
+				expectedBuffId: 'passive:143:atk limit break',
+				effectKey: 'increase atk cap',
+			});
+		});
 	});
 });

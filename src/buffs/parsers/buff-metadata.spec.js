@@ -1468,6 +1468,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:128:normal attack mitigation'], [IconId.BUFF_NORMALATTACKREDUCTION]);
 	});
 
+	describe('passive:143:atk limit break', () => {
+		testDefaultIconResult(BuffId['passive:143:atk limit break'], [IconId.BUFF_PARAMBREAK_ATK]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});

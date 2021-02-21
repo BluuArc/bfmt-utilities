@@ -319,6 +319,8 @@ export enum UnitStat {
 	coloBattlePointModification = 'coloBattlePointModification',
 
 	normalAttackMitigation = 'normalAttackMitigation',
+
+	attackLimitBreak = 'attackLimitBreak',
 }
 
 /**
@@ -446,6 +448,8 @@ export interface IUnitState {
 	coloBattlePointModification: IBuff[];
 
 	normalAttackMitigation: IBuff[];
+
+	attackLimitBreak: IBuff[];
 }
 
 /**
@@ -964,6 +968,8 @@ export enum IconId {
 
 	BUFF_NORMALATTACKREDUCTION = 'BUFF_NORMALATTACKREDUCTION',
 
+	BUFF_PARAMBREAK_ATK = 'BUFF_PARAMBREAK_ATK',
+
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
 	SG_BUFF_WATER = 'SG_BUFF_WATER',
@@ -1319,6 +1325,7 @@ export enum BuffId {
 
 	'passive:127:damage over time reduction' = 'passive:127:damage over time reduction',
 	'passive:128:normal attack mitigation' = 'passive:128:normal attack mitigation',
+	'passive:143:atk limit break' = 'passive:143:atk limit break',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',
