@@ -4068,4 +4068,42 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 
 		return results;
 	});
+
+	map.set('128', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '128';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		let normalAttackMitigation = 0, chance = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const [rawChance, rawNormalAttackMitigation, ...extraParams] = splitEffectParams(typedEffect);
+			chance = parseNumberOrDefault(rawChance);
+			normalAttackMitigation = parseNumberOrDefault(rawNormalAttackMitigation);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 2, injectionContext);
+		}
+
+		const results: IBuff[] = [];
+		if (chance !== 0) {
+			results.push({
+				id: 'passive:128:normal attack mitigation',
+				originalId,
+				sources,
+				value: { 'mitigation%': normalAttackMitigation, chance },
+				conditions: { ...conditionInfo },
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }

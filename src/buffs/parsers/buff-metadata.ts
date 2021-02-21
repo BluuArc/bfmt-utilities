@@ -1867,6 +1867,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Passive,
 		icons: () => [IconId.BUFF_ATKREDUC],
 	},
+	'passive:128:normal attack mitigation': {
+		id: BuffId['passive:128:normal attack mitigation'],
+		name: 'Passive Damage Reduction from Normal Attacks',
+		stat: UnitStat.normalAttackMitigation,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_NORMALATTACKREDUCTION],
+	},
 	UNKNOWN_PROC_EFFECT_ID: {
 		id: BuffId.UNKNOWN_PROC_EFFECT_ID,
 		name: 'Unknown Proc Effect',

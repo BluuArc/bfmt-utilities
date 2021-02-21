@@ -11395,5 +11395,120 @@ describe('getPassiveEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['456', '0', '789']), 0] });
 			});
 		});
+
+		describe('passive 128', () => {
+			const expectedBuffId = 'passive:128:normal attack mitigation';
+			const expectedOriginalId = '128';
+			const MODIFIER_BUFF_KEY = 'mitigation%';
+			beforeEach(() => {
+				mappingFunction = getPassiveEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2';
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						chance: 1,
+						[MODIFIER_BUFF_KEY]: 2,
+					},
+				})];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5';
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							chance: 1,
+							[MODIFIER_BUFF_KEY]: 2,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						value: {
+							param_2: '3',
+							param_3: '4',
+							param_4: '5',
+						},
+					}),
+				];
+
+				const effect = { params };
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing or zero', () => {
+				it('defaults spark damage to 0 when spark damage is missing and chance is non-zero', () => {
+					const params = '123';
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							chance: 123,
+							[MODIFIER_BUFF_KEY]: 0,
+						},
+					})];
+
+					const effect = { params };
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a no params buff when chance is 0', () => {
+					const effect = { params: '0,123' };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext() });
+				});
+
+				it('defaults values for effect params to 0 if they are non-number or missing', () => {
+					const effect = { params: 'non-number' };
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			it('uses processExtraSkillConditions, getPassiveTargetData, createSourcesfromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = {
+					params: '3,4,789',
+				};
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						value: {
+							chance: 3,
+							[MODIFIER_BUFF_KEY]: 4,
+						},
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PASSIVE_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						conditions: arbitraryConditionValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['789']), 2] });
+			});
+		});
 	});
 });

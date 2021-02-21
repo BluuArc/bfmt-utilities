@@ -317,6 +317,8 @@ export enum UnitStat {
 
 	arenaBattlePointModification = 'arenaBattlePointModification',
 	coloBattlePointModification = 'coloBattlePointModification',
+
+	normalAttackMitigation = 'normalAttackMitigation',
 }
 
 /**
@@ -442,6 +444,8 @@ export interface IUnitState {
 
 	arenaBattlePointModification: IBuff[];
 	coloBattlePointModification: IBuff[];
+
+	normalAttackMitigation: IBuff[];
 }
 
 /**
@@ -958,6 +962,8 @@ export enum IconId {
 
 	BUFF_TARGETED = 'BUFF_TARGETED',
 
+	BUFF_NORMALATTACKREDUCTION = 'BUFF_NORMALATTACKREDUCTION',
+
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
 	SG_BUFF_WATER = 'SG_BUFF_WATER',
@@ -1312,6 +1318,7 @@ export enum BuffId {
 	'passive:114:when attacked conditional' = 'passive:114:when attacked conditional',
 
 	'passive:127:damage over time reduction' = 'passive:127:damage over time reduction',
+	'passive:128:normal attack mitigation' = 'passive:128:normal attack mitigation',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

@@ -1464,6 +1464,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:127:damage over time reduction'], [IconId.BUFF_ATKREDUC]);
 	});
 
+	describe('passive:128:normal attack mitigation', () => {
+		testDefaultIconResult(BuffId['passive:128:normal attack mitigation'], [IconId.BUFF_NORMALATTACKREDUCTION]);
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
