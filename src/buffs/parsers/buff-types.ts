@@ -1604,6 +1604,8 @@ export enum BuffId {
 	'proc:130:inflict on hit-def down' = 'proc:130:inflict on hit-def down',
 	'proc:130:inflict on hit-rec down' = 'proc:130:inflict on hit-rec down',
 
+	'proc:131:spark damage mitigation' = 'proc:131:spark damage mitigation',
+
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',
 

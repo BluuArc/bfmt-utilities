@@ -4865,4 +4865,14 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('131', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithSingleNumericalParameterAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			buffId: 'proc:131:spark damage mitigation',
+			originalId: '131',
+		});
+	});
 }

@@ -13579,5 +13579,12 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 8] });
 			});
 		});
+
+		describe('proc 131', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '131',
+				expectedBuffId: 'proc:131:spark damage mitigation',
+			});
+		});
 	});
 });

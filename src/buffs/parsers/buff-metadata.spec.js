@@ -2492,6 +2492,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:126:damage over time reduction'], [IconId.BUFF_ATKREDUC]);
 	});
 
+	describe('proc:127:lock on', () => {
+		testDefaultIconResult(BuffId['proc:127:lock on'], [IconId.BUFF_TARGETED]);
+	});
+
 	describe('proc 130 buffs', () => {
 		describe('proc:130:inflict on hit-atk down', () => {
 			testDefaultIconResult(BuffId['proc:130:inflict on hit-atk down'], [IconId.BUFF_PROB_ATKREDUC]);
@@ -2506,8 +2510,8 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
-	describe('proc:127:lock on', () => {
-		testDefaultIconResult(BuffId['proc:127:lock on'], [IconId.BUFF_TARGETED]);
+	describe('proc:131:spark damage mitigation', () => {
+		testDefaultIconResult(BuffId['proc:131:spark damage mitigation'], [IconId.BUFF_SPARKDMGDOWN]);
 	});
 
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
