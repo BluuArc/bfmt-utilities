@@ -273,6 +273,7 @@ export enum UnitStat {
 	lightElementalDamage = 'lightElementalDamage',
 	darkElementalDamage = 'darkElementalDamage',
 	elementalWeaknessDamageMitigation = 'elementalWeaknessDamageMitigation',
+	elementalDamageVulnerability = 'elementalDamageVulnerability',
 
 	turnDurationModification = 'turnDurationModification',
 
@@ -284,6 +285,7 @@ export enum UnitStat {
 
 	criticalDamage = 'criticalDamage',
 	criticalDamageMitigation = 'criticalDamageMitigation',
+	criticalDamageVulnerability = 'criticalDamageVulnerability',
 
 	sparkDamage = 'sparkDamage',
 	sparkDamageMitigation = 'sparkDamageMitigation',
@@ -403,6 +405,7 @@ export interface IUnitState {
 	lightElementalDamage: IBuff[];
 	darkElementalDamage: IBuff[];
 	elementalWeaknessDamageMitigation: IBuff[];
+	elementalDamageVulnerability: IBuff[];
 
 	turnDurationModification: IBuff[];
 
@@ -413,6 +416,7 @@ export interface IUnitState {
 
 	criticalDamage: IBuff[];
 	criticalDamageMitigation: IBuff[];
+	criticalDamageVulnerability: IBuff[];
 
 	sparkDamage: IBuff[];
 	sparkDamageMitigation: IBuff[];
@@ -969,6 +973,9 @@ export enum IconId {
 	BUFF_NORMALATTACKREDUCTION = 'BUFF_NORMALATTACKREDUCTION',
 
 	BUFF_PARAMBREAK_ATK = 'BUFF_PARAMBREAK_ATK',
+
+	BUFF_CRITDMG_VUL = 'BUFF_CRITDMG_VUL',
+	BUFF_ELEDMG_VUL = 'BUFF_ELEDMG_VUL',
 
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
@@ -1605,6 +1612,9 @@ export enum BuffId {
 	'proc:130:inflict on hit-rec down' = 'proc:130:inflict on hit-rec down',
 
 	'proc:131:spark damage mitigation' = 'proc:131:spark damage mitigation',
+
+	'proc:132:chance inflict vulnerability-critical' = 'proc:132:chance inflict vulnerability-critical',
+	'proc:132:chance inflict vulnerability-elemental' = 'proc:132:chance inflict vulnerability-elemental',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

@@ -4875,4 +4875,86 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			originalId: '131',
 		});
 	});
+
+	map.set('132', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '132';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		enum VulnerabilityType {
+			Critical = 'critical',
+			Elemental = 'elemental',
+		}
+		interface IVulnerabilityInfo {
+			type: VulnerabilityType;
+			value: number;
+			chance: number;
+		}
+		const inflictedReductions: IVulnerabilityInfo[] = [];
+		let debuffTurnDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const params = splitEffectParams(effect);
+			[
+				{ type: VulnerabilityType.Critical, value: parseNumberOrDefault(params[0]), chance: parseNumberOrDefault(params[2]) },
+				{ type: VulnerabilityType.Elemental, value: parseNumberOrDefault(params[1]), chance: parseNumberOrDefault(params[3]) },
+			].forEach(({ type, value, chance }) => {
+				if (value !== 0 || chance !== 0) {
+					inflictedReductions.push({ type, value, chance });
+				}
+			});
+
+			debuffTurnDuration = parseNumberOrDefault(params[4]);
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(5), 5, injectionContext);
+		} else {
+			[
+				{ type: VulnerabilityType.Critical, valueKey: 'crit vuln dmg% (157)', chanceKey: 'crit vuln chance%' },
+				{ type: VulnerabilityType.Elemental, valueKey: 'elemental vuln dmg% (158)', chanceKey: 'elemental vuln chance%' },
+			].forEach(({ type, valueKey, chanceKey }) => {
+				const value = parseNumberOrDefault(effect[valueKey] as number);
+				const chance = parseNumberOrDefault(effect[chanceKey] as number);
+				if (value !== 0 || chance !== 0) {
+					inflictedReductions.push({ type, value, chance });
+				}
+			});
+
+			debuffTurnDuration = parseNumberOrDefault(effect['vuln turns']);
+		}
+
+		const results: IBuff[] = inflictedReductions.map(({ type, value, chance }) => ({
+			id: `proc:132:chance inflict vulnerability-${type}`,
+			originalId,
+			sources,
+			effectDelay,
+			duration: debuffTurnDuration,
+			value: {
+				'increased dmg%': value,
+				chance,
+			},
+			...targetData,
+		}));
+
+		if (results.length === 0 && isTurnDurationBuff(context, debuffTurnDuration, injectionContext)) {
+			// manually create turn duration buff to account for debuff turn duration
+			results.push({
+				id: BuffId.TURN_DURATION_MODIFICATION,
+				originalId,
+				sources,
+				value: {
+					buffs: [VulnerabilityType.Critical, VulnerabilityType.Elemental].map((v) => `proc:132:chance inflict vulnerability-${v}`),
+					duration: debuffTurnDuration,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

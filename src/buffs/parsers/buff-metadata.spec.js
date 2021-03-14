@@ -2514,6 +2514,16 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:131:spark damage mitigation'], [IconId.BUFF_SPARKDMGDOWN]);
 	});
 
+	describe('proc 132 buffs', () => {
+		describe('proc:132:chance inflict vulnerability-critical', () => {
+			testDefaultIconResult(BuffId['proc:132:chance inflict vulnerability-critical'], [IconId.BUFF_CRITDMG_VUL]);
+		});
+
+		describe('proc:132:chance inflict vulnerability-elemental', () => {
+			testDefaultIconResult(BuffId['proc:132:chance inflict vulnerability-elemental'], [IconId.BUFF_ELEDMG_VUL]);
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

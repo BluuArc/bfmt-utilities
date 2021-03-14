@@ -13510,7 +13510,7 @@ describe('getProcEffectToBuffMapping method', () => {
 						expect(result).toEqual(expectedResult);
 					});
 
-					it(`returns an entry for ${type} when its reduction chance is the only non-zero value of the individual reduction properties`, () => {
+					it(`returns an entry for ${type} when its reduction chance is the only non-zero value of the individual reduction properties and the params property does not exist`, () => {
 						const effect = createArbitraryBaseEffect({
 							[EFFECT_KEY_CHANCE_MAPPING[type]]: 456,
 							[DEFAULT_TURN_DURATION_KEY]: arbitraryTurnDuration,
@@ -13584,6 +13584,236 @@ describe('getProcEffectToBuffMapping method', () => {
 			testProcWithSingleNumericalParameterAndTurnDuration({
 				expectedOriginalId: '131',
 				expectedBuffId: 'proc:131:spark damage mitigation',
+			});
+		});
+
+		describe('proc 132', () => {
+			const expectedOriginalId = '132';
+			const VULNERABILITY_ORDER = ['critical', 'elemental'];
+			const EFFECT_KEY_VALUE_MAPPING = {
+				critical: 'crit vuln dmg% (157)',
+				elemental: 'elemental vuln dmg% (158)',
+			};
+			const EFFECT_KEY_CHANCE_MAPPING = {
+				critical: 'crit vuln chance%',
+				elemental: 'elemental vuln chance%',
+			};
+			const TURN_DURATION_KEY = 'vuln turns';
+			const VALUE_KEY = 'increased dmg%';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds(VULNERABILITY_ORDER.map((v) => `proc:132:chance inflict vulnerability-${v}`));
+
+			it('uses the params property when it exists', () => {
+				const params = `1,2,3,4,${arbitraryTurnDuration}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:132:chance inflict vulnerability-critical',
+						duration: arbitraryTurnDuration,
+						value: {
+							[VALUE_KEY]: 1,
+							chance: 3,
+						},
+					}),
+					baseBuffFactory({
+						id: 'proc:132:chance inflict vulnerability-elemental',
+						duration: arbitraryTurnDuration,
+						value: {
+							[VALUE_KEY]: 2,
+							chance: 4,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = `1,2,3,4,${arbitraryTurnDuration},6,7,8`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:132:chance inflict vulnerability-critical',
+						duration: arbitraryTurnDuration,
+						value: {
+							[VALUE_KEY]: 1,
+							chance: 3,
+						},
+					}),
+					baseBuffFactory({
+						id: 'proc:132:chance inflict vulnerability-elemental',
+						duration: arbitraryTurnDuration,
+						value: {
+							[VALUE_KEY]: 2,
+							chance: 4,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_5: '6',
+							param_6: '7',
+							param_7: '8',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('falls back to effect properties when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[EFFECT_KEY_VALUE_MAPPING.critical]: 1,
+					[EFFECT_KEY_CHANCE_MAPPING.critical]: 2,
+					[EFFECT_KEY_VALUE_MAPPING.elemental]: 3,
+					[EFFECT_KEY_CHANCE_MAPPING.elemental]: 4,
+					[TURN_DURATION_KEY]: arbitraryTurnDuration,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:132:chance inflict vulnerability-critical',
+						duration: arbitraryTurnDuration,
+						value: {
+							[VALUE_KEY]: 1,
+							chance: 2,
+						},
+					}),
+					baseBuffFactory({
+						id: 'proc:132:chance inflict vulnerability-elemental',
+						duration: arbitraryTurnDuration,
+						value: {
+							[VALUE_KEY]: 3,
+							chance: 4,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are 0 or missing', () => {
+				VULNERABILITY_ORDER.forEach((type) => {
+					it(`returns an entry for ${type} when its reduction value is the only non-zero value of the individual reduction properties`, () => {
+						const params = [
+							type === 'critical' ? '123' : '0',
+							type === 'elemental' ? '123' : '0',
+							'0,0', // chance values of 0
+							arbitraryTurnDuration,
+						].join(',');
+						const effect = createArbitraryBaseEffect({ params });
+						const expectedResult = [baseBuffFactory({
+							id: `proc:132:chance inflict vulnerability-${type}`,
+							duration: arbitraryTurnDuration,
+							value: {
+								[VALUE_KEY]: 123,
+								chance: 0,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns an entry for ${type} when its reduction chance is the only non-zero value of the individual reduction properties`, () => {
+						const params = [
+							'0,0', // reduction values of 0
+							type === 'critical' ? '123' : '0',
+							type === 'elemental' ? '123' : '0',
+							arbitraryTurnDuration,
+						].join(',');
+						const effect = createArbitraryBaseEffect({ params });
+						const expectedResult = [baseBuffFactory({
+							id: `proc:132:chance inflict vulnerability-${type}`,
+							duration: arbitraryTurnDuration,
+							value: {
+								[VALUE_KEY]: 0,
+								chance: 123,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns an entry for ${type} when its reduction value is the only non-zero value of the individual reduction properties and the params property does not exist`, () => {
+						const effect = createArbitraryBaseEffect({
+							[EFFECT_KEY_VALUE_MAPPING[type]]: 456,
+							[TURN_DURATION_KEY]: arbitraryTurnDuration,
+						});
+						const expectedResult = [baseBuffFactory({
+							id: `proc:132:chance inflict vulnerability-${type}`,
+							duration: arbitraryTurnDuration,
+							value: {
+								[VALUE_KEY]: 456,
+								chance: 0,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns an entry for ${type} when its reduction chance is the only non-zero value of the individual reduction properties and the params property does not exist`, () => {
+						const effect = createArbitraryBaseEffect({
+							[EFFECT_KEY_CHANCE_MAPPING[type]]: 456,
+							[TURN_DURATION_KEY]: arbitraryTurnDuration,
+						});
+						const expectedResult = [baseBuffFactory({
+							id: `proc:132:chance inflict vulnerability-${type}`,
+							duration: arbitraryTurnDuration,
+							value: {
+								[VALUE_KEY]: 0,
+								chance: 456,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				describe('for buff duration', () => {
+					testTurnDurationScenarios({
+						createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,${duration}`,
+						buffIdsInTurnDurationBuff: VULNERABILITY_ORDER.map((v) => `proc:132:chance inflict vulnerability-${v}`),
+					});
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: `1,0,0,0,${arbitraryTurnDuration},123`,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: 'proc:132:chance inflict vulnerability-critical',
+						sources: arbitrarySourceValue,
+						duration: arbitraryTurnDuration,
+						value: { [VALUE_KEY]: 1, chance: 0 },
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 5] });
 			});
 		});
 	});

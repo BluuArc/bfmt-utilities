@@ -3465,6 +3465,20 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_SPARKDMGDOWN],
 	},
+	'proc:132:chance inflict vulnerability-critical': {
+		id: BuffId['proc:132:chance inflict vulnerability-critical'],
+		name: 'Critical Damage Vulnerability Infliction (Chance)',
+		stat: UnitStat.criticalDamageVulnerability,
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_CRITDMG_VUL],
+	},
+	'proc:132:chance inflict vulnerability-elemental': {
+		id: BuffId['proc:132:chance inflict vulnerability-elemental'],
+		name: 'Elemental Damage Vulnerability Infliction (Chance)',
+		stat: UnitStat.elementalDamageVulnerability,
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_ELEDMG_VUL],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',
