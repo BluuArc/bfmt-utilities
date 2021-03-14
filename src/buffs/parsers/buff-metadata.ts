@@ -3479,6 +3479,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_ELEDMG_VUL],
 	},
+	'proc:901:raid burst heal': {
+		id: BuffId['proc:901:raid burst heal'],
+		name: 'Burst Heal (Raid)',
+		stat: UnitStat.hpRecovery,
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_RAIDHPREC],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

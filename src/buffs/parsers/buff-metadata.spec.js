@@ -2524,6 +2524,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc:901:raid burst heal', () => {
+		testDefaultIconResult(BuffId['proc:901:raid burst heal'], [IconId.BUFF_RAIDHPREC]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

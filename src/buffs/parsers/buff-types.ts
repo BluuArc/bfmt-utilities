@@ -977,6 +977,8 @@ export enum IconId {
 	BUFF_CRITDMG_VUL = 'BUFF_CRITDMG_VUL',
 	BUFF_ELEDMG_VUL = 'BUFF_ELEDMG_VUL',
 
+	BUFF_RAIDHPREC = 'BUFF_RAIDHPREC',
+
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
 	SG_BUFF_WATER = 'SG_BUFF_WATER',
@@ -1615,6 +1617,8 @@ export enum BuffId {
 
 	'proc:132:chance inflict vulnerability-critical' = 'proc:132:chance inflict vulnerability-critical',
 	'proc:132:chance inflict vulnerability-elemental' = 'proc:132:chance inflict vulnerability-elemental',
+
+	'proc:901:raid burst heal' = 'proc:901:raid burst heal',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

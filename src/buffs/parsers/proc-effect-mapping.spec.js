@@ -13816,5 +13816,123 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 5] });
 			});
 		});
+
+		describe('proc 901', () => {
+			const expectedBuffId = 'proc:901:raid burst heal';
+			const expectedOriginalId = '901';
+
+			const VALUE_LOW_KEY = 'baseRecLow%';
+			const VALUE_HIGH_KEY = 'baseRecHigh%';
+
+			beforeEach(() => {
+				mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+				baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+			});
+
+			testFunctionExistence(expectedOriginalId);
+			testValidBuffIds([expectedBuffId]);
+
+			it('uses the params property when it exists', () => {
+				const params = '1,2';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						[VALUE_LOW_KEY]: 1,
+						[VALUE_HIGH_KEY]: 2,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a buff entry for extra parameters', () => {
+				const params = '1,2,3,4,5';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						value: {
+							[VALUE_LOW_KEY]: 1,
+							[VALUE_HIGH_KEY]: 2,
+						},
+					}),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						value: {
+							param_2: '3',
+							param_3: '4',
+							param_4: '5',
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			describe('when values are missing', () => {
+				const PARAMS_ORDER = [VALUE_LOW_KEY, VALUE_HIGH_KEY];
+				PARAMS_ORDER.forEach((param) => {
+					it(`defaults to 0 for missing ${param} value`, () => {
+						const params = [
+							param !== VALUE_LOW_KEY ? '123' : '0',
+							param !== VALUE_HIGH_KEY ? '123' : '0',
+						].join(',');
+						const effect = createArbitraryBaseEffect({ params });
+						const expectedResult = [baseBuffFactory({
+							id: expectedBuffId,
+							value: {
+								[VALUE_LOW_KEY]: param !== VALUE_LOW_KEY ? 123 : 0,
+								[VALUE_HIGH_KEY]: param !== VALUE_HIGH_KEY ? 123 : 0,
+							},
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+				it('returns a no params buff when no parameters are given', () => {
+					const effect = createArbitraryBaseEffect();
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+
+				it('defaults values for effect params to 0 if they are non-number or missing', () => {
+					const effect = createArbitraryBaseEffect({ params: 'non-number' });
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext() });
+				});
+			});
+
+			it('uses getProcTargetData, createSourcesFromContext, and createUnknownParamsValue for buffs', () => {
+				const effect = createArbitraryBaseEffect({
+					params: '0,1,123',
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffId,
+						sources: arbitrarySourceValue,
+						value: {
+							[VALUE_LOW_KEY]: 0,
+							[VALUE_HIGH_KEY]: 1,
+						},
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+					baseBuffFactory({
+						id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+						sources: arbitrarySourceValue,
+						value: arbitraryUnknownValue,
+						...arbitraryTargetData,
+					}, BUFF_TARGET_PROPS),
+				];
+
+				const context = createArbitraryContext();
+				const injectionContext = createDefaultInjectionContext();
+				const result = mappingFunction(effect, context, injectionContext);
+				expect(result).toEqual(expectedResult);
+				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 2] });
+			});
+		});
 	});
 });

@@ -4957,4 +4957,45 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('901', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '901';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let healLow = 0, healHigh = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const params = splitEffectParams(effect);
+			healLow = parseNumberOrDefault(params[0]);
+			healHigh = parseNumberOrDefault(params[1]);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(2), 2, injectionContext);
+		}
+
+		const results: IBuff[] = [];
+		if (healHigh !== 0 || healLow !== 0) {
+			results.push({
+				id: 'proc:901:raid burst heal',
+				originalId,
+				sources,
+				effectDelay,
+				value: {
+					// healing value is based on the REC value at the squad/unit selection screen
+					'baseRecLow%': healLow,
+					'baseRecHigh%': healHigh,
+				},
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }
