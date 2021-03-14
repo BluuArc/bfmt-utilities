@@ -4998,4 +4998,75 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('902', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '902';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const params = {
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			rec: '0' as AlphaNumeric,
+			crit: '0' as AlphaNumeric,
+			turnDuration: '0' as AlphaNumeric,
+		};
+		type CoreStatProperty = 'atk' | 'def' | 'rec' | 'crit';
+		const coreStatProperties: CoreStatProperty[] = ['atk', 'def', 'rec', 'crit'];
+		const coreStatPropertyMapping = {
+			atk: 'atk% buff (100)',
+			def: 'def% buff (101)',
+			rec: 'rec% buff (102)',
+			crit: 'crit% buff (103)',
+		};
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			[params.atk, params.def, params.rec, params.crit, params.turnDuration, ...extraParams] = splitEffectParams(effect);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 5, injectionContext);
+		} else {
+			coreStatProperties.forEach((statType) => {
+				const effectKey = coreStatPropertyMapping[statType];
+				if (effectKey in effect) {
+					params[statType] = effect[effectKey] as number;
+				}
+			});
+
+			params.turnDuration = effect['buff timer (seconds)'] as number;
+		}
+
+		// ensure numerical properties are actually numbers
+		(coreStatProperties as string[]).concat(['turnDuration']).forEach((prop) => {
+			params[prop as CoreStatProperty | 'turnDuration'] = parseNumberOrDefault(params[prop as CoreStatProperty | 'turnDuration']);
+		});
+
+		const hasAnyStats = coreStatProperties.some((statKey) => params[statKey] !== 0);
+		const results: IBuff[] = [];
+		if (hasAnyStats) {
+			coreStatProperties.forEach((statKey) => {
+				const value = params[statKey];
+				if (value !== 0) {
+					results.push({
+						id: `proc:902:raid stat boost-${statKey}`,
+						originalId,
+						sources,
+						effectDelay,
+						duration: params.turnDuration as number,
+						value,
+						...targetData,
+					});
+				}
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

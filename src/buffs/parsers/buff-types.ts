@@ -979,6 +979,11 @@ export enum IconId {
 
 	BUFF_RAIDHPREC = 'BUFF_RAIDHPREC',
 
+	BUFF_RAIDATKUP = 'BUFF_RAIDATKUP',
+	BUFF_RAIDDEFUP = 'BUFF_RAIDDEFUP',
+	BUFF_RAIDRECUP = 'BUFF_RAIDRECUP',
+	BUFF_RAIDCRTUP = 'BUFF_RAIDCRTUP',
+
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
 	SG_BUFF_WATER = 'SG_BUFF_WATER',
@@ -1619,6 +1624,11 @@ export enum BuffId {
 	'proc:132:chance inflict vulnerability-elemental' = 'proc:132:chance inflict vulnerability-elemental',
 
 	'proc:901:raid burst heal' = 'proc:901:raid burst heal',
+
+	'proc:902:raid stat boost-atk' = 'proc:902:raid stat boost-atk',
+	'proc:902:raid stat boost-def' = 'proc:902:raid stat boost-def',
+	'proc:902:raid stat boost-rec' = 'proc:902:raid stat boost-rec',
+	'proc:902:raid stat boost-crit' = 'proc:902:raid stat boost-crit',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

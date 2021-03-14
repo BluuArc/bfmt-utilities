@@ -2528,6 +2528,24 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:901:raid burst heal'], [IconId.BUFF_RAIDHPREC]);
 	});
 
+	describe('proc 902 buffs', () => {
+		describe('proc:902:raid stat boost-atk', () => {
+			testDefaultIconResult(BuffId['proc:902:raid stat boost-atk'], [IconId.BUFF_RAIDATKUP]);
+		});
+
+		describe('proc:902:raid stat boost-def', () => {
+			testDefaultIconResult(BuffId['proc:902:raid stat boost-def'], [IconId.BUFF_RAIDDEFUP]);
+		});
+
+		describe('proc:902:raid stat boost-rec', () => {
+			testDefaultIconResult(BuffId['proc:902:raid stat boost-rec'], [IconId.BUFF_RAIDRECUP]);
+		});
+
+		describe('proc:902:raid stat boost-crit', () => {
+			testDefaultIconResult(BuffId['proc:902:raid stat boost-crit'], [IconId.BUFF_RAIDCRTUP]);
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});
