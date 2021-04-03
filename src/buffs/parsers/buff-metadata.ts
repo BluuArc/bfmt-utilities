@@ -3528,6 +3528,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Burst,
 		icons: () => [IconId.BUFF_RAID_TELEPORT],
 	},
+	'proc:906:flee battle': {
+		id: BuffId['proc:906:flee battle'],
+		name: 'Flee Battle (Raid)',
+		stat: UnitStat.battleModification,
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_RAID_FLEE],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

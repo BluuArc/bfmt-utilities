@@ -2554,6 +2554,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:905:teleport to camp'], [IconId.BUFF_RAID_TELEPORT]);
 	});
 
+	describe('proc:906:flee battle', () => {
+		testDefaultIconResult(BuffId['proc:906:flee battle'], [IconId.BUFF_RAID_FLEE]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});
