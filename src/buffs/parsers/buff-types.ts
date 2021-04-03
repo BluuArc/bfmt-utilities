@@ -989,6 +989,7 @@ export enum IconId {
 	BUFF_RAIDCRTUP = 'BUFF_RAIDCRTUP',
 
 	BUFF_RAID_BOSS_REVEAL = 'BUFF_RAID_BOSS_REVEAL',
+	BUFF_RAID_TELEPORT = 'BUFF_RAID_TELEPORT',
 
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
@@ -1637,6 +1638,7 @@ export enum BuffId {
 	'proc:902:raid stat boost-crit' = 'proc:902:raid stat boost-crit',
 
 	'proc:903:boss location reveal' = 'proc:903:boss location reveal',
+	'proc:905:teleport to camp' = 'proc:905:teleport to camp',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

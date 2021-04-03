@@ -3521,6 +3521,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_RAID_BOSS_REVEAL],
 	},
+	'proc:905:teleport to camp': {
+		id: BuffId['proc:905:teleport to camp'],
+		name: 'Teleport Player to Camp (Raid)',
+		stat: UnitStat.mapModification,
+		stackType: BuffStackType.Burst,
+		icons: () => [IconId.BUFF_RAID_TELEPORT],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

@@ -2550,6 +2550,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:903:boss location reveal'], [IconId.BUFF_RAID_BOSS_REVEAL]);
 	});
 
+	describe('proc:905:teleport to camp', () => {
+		testDefaultIconResult(BuffId['proc:905:teleport to camp'], [IconId.BUFF_RAID_TELEPORT]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

@@ -5105,4 +5105,34 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('905', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '905';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const extraParams = splitEffectParams(effect);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 0, injectionContext);
+		}
+
+		const results: IBuff[] = [{
+			id: 'proc:905:teleport to camp',
+			originalId,
+			sources,
+			effectDelay,
+			value: true,
+			...targetData,
+		}];
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }
