@@ -2546,6 +2546,10 @@ describe('BUFF_METADATA entries', () => {
 		});
 	});
 
+	describe('proc:903:boss location reveal', () => {
+		testDefaultIconResult(BuffId['proc:903:boss location reveal'], [IconId.BUFF_RAID_BOSS_REVEAL]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

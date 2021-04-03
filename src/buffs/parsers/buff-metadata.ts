@@ -3514,6 +3514,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_RAIDCRTUP],
 	},
+	'proc:903:boss location reveal': {
+		id: BuffId['proc:903:boss location reveal'],
+		name: 'Active Boss Location Reveal (Raid)',
+		stat: UnitStat.mapModification,
+		stackType: BuffStackType.Active,
+		icons: () => [IconId.BUFF_RAID_BOSS_REVEAL],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

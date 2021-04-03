@@ -5052,11 +5052,47 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 						originalId,
 						sources,
 						effectDelay,
-						duration: params.turnDuration as number,
+						duration: params.turnDuration as number, // seconds
 						value,
 						...targetData,
 					});
 				}
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
+
+	map.set('903', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '903';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+		let secondsDuration = 0;
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [unknownValue, rawTurnDuration, ...extraParams] = splitEffectParams(effect);
+			secondsDuration = parseNumberOrDefault(rawTurnDuration);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams([unknownValue, '0', ...extraParams], 0, injectionContext);
+		}
+
+		const results: IBuff[] = [];
+		if (secondsDuration !== 0) {
+			results.push({
+				id: 'proc:903:boss location reveal',
+				originalId,
+				sources,
+				effectDelay,
+				duration: secondsDuration,
+				value: true,
+				...targetData,
 			});
 		}
 
