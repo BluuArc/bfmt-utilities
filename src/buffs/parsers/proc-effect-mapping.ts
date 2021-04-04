@@ -5165,4 +5165,14 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('907', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		return parseProcWithSingleNumericalParameterAndTurnDuration({
+			effect,
+			context,
+			injectionContext,
+			buffId: 'proc:907:raid mitigation',
+			originalId: '907',
+		});
+	});
 }

@@ -2558,6 +2558,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:906:flee battle'], [IconId.BUFF_RAID_FLEE]);
 	});
 
+	describe('proc:907:raid mitigation', () => {
+		testDefaultIconResult(BuffId['proc:907:raid mitigation'], [IconId.BUFF_RAID_DAMAGECUT]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

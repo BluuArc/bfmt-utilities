@@ -14361,5 +14361,12 @@ describe('getProcEffectToBuffMapping method', () => {
 				expectDefaultInjectionContext({ injectionContext, effect, context, unknownParamsArgs: [jasmine.arrayWithExactContents(['123']), 0] });
 			});
 		});
+
+		describe('proc 907', () => {
+			testProcWithSingleNumericalParameterAndTurnDuration({
+				expectedOriginalId: '907',
+				expectedBuffId: 'proc:907:raid mitigation',
+			});
+		});
 	});
 });
