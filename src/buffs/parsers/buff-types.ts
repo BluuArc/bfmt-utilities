@@ -994,6 +994,7 @@ export enum IconId {
 	BUFF_RAID_TELEPORT = 'BUFF_RAID_TELEPORT',
 	BUFF_RAID_FLEE = 'BUFF_RAID_FLEE',
 	BUFF_RAID_DAMAGECUT = 'BUFF_RAID_DAMAGECUT',
+	BUFF_RAID_ITEMDROP = 'BUFF_RAID_ITEMDROP',
 
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',
@@ -1645,6 +1646,7 @@ export enum BuffId {
 	'proc:905:teleport to camp' = 'proc:905:teleport to camp',
 	'proc:906:flee battle' = 'proc:906:flee battle',
 	'proc:907:raid mitigation' = 'proc:907:raid mitigation',
+	'proc:908:raid drop rate multiplier' = 'proc:908:raid drop rate multiplier',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

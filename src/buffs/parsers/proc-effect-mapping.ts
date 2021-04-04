@@ -5175,4 +5175,38 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 			originalId: '907',
 		});
 	});
+
+	map.set('908', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '908';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		let dropRatePercentIncrease = 0;
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			const [rawValue, ...extraParams] = splitEffectParams(effect);
+			dropRatePercentIncrease = parseNumberOrDefault(rawValue);
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 1, injectionContext);
+		}
+
+		const results: IBuff[] = [];
+		if (dropRatePercentIncrease !== 0) {
+			results.push({
+				id: 'proc:908:raid drop rate multiplier',
+				originalId,
+				sources,
+				effectDelay,
+				value: (dropRatePercentIncrease + 100) / 100,
+				...targetData,
+			});
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }

@@ -3542,6 +3542,13 @@ export const BUFF_METADATA: Readonly<{ [id: string]: IBuffMetadata }> = Object.f
 		stackType: BuffStackType.Active,
 		icons: () => [IconId.BUFF_RAID_DAMAGECUT],
 	},
+	'proc:908:raid drop rate multiplier': {
+		id: BuffId['proc:908:raid drop rate multiplier'],
+		name: 'Item Drop Rate Boost (Raid)',
+		stat: UnitStat.itemDropRate,
+		stackType: BuffStackType.Passive,
+		icons: () => [IconId.BUFF_RAID_ITEMDROP],
+	},
 	UNKNOWN_CONDITIONAL_EFFECT_ID: {
 		id: BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID,
 		name: 'Unknown Conditional Effect',

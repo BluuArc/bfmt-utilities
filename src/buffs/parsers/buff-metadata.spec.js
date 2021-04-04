@@ -2562,6 +2562,10 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:907:raid mitigation'], [IconId.BUFF_RAID_DAMAGECUT]);
 	});
 
+	describe('proc:908:raid drop rate multiplier', () => {
+		testDefaultIconResult(BuffId['proc:908:raid drop rate multiplier'], [IconId.BUFF_RAID_ITEMDROP]);
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});
