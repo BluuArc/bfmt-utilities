@@ -28,7 +28,7 @@
 
 *Inherited from [IPassiveEffect](_datamine_types_.ipassiveeffect.md).[params](_datamine_types_.ipassiveeffect.md#optional-params)*
 
-*Defined in [datamine-types.ts:95](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L95)*
+*Defined in [datamine-types.ts:108](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L108)*
 
 **`author`** BluuArc
 
@@ -40,7 +40,7 @@ ___
 
 *Inherited from [IPassiveEffect](_datamine_types_.ipassiveeffect.md).[passive id](_datamine_types_.ipassiveeffect.md#passive-id)*
 
-*Defined in [datamine-types.ts:90](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L90)*
+*Defined in [datamine-types.ts:103](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L103)*
 
 ___
 
@@ -48,4 +48,4 @@ ___
 
 • **sp_type**: *[SpPassiveType](../enums/_datamine_types_.sppassivetype.md)*
 
-*Defined in [datamine-types.ts:127](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L127)*
+*Defined in [datamine-types.ts:139](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L139)*

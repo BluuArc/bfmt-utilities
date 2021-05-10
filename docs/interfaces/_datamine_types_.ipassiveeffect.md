@@ -27,7 +27,7 @@
 
 • **params**? : *undefined | string*
 
-*Defined in [datamine-types.ts:95](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L95)*
+*Defined in [datamine-types.ts:108](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L108)*
 
 **`author`** BluuArc
 
@@ -37,4 +37,4 @@ ___
 
 • **passive id**: *string*
 
-*Defined in [datamine-types.ts:90](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L90)*
+*Defined in [datamine-types.ts:103](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L103)*

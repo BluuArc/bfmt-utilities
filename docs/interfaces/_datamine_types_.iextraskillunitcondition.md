@@ -18,4 +18,4 @@
 
 • **unit required**: *object[]*
 
-*Defined in [datamine-types.ts:233](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L233)*
+*Defined in [datamine-types.ts:245](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L245)*

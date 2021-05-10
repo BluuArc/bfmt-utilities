@@ -22,7 +22,7 @@
 
 • **sp_type**: *[SpPassiveType](../enums/_datamine_types_.sppassivetype.md)*
 
-*Defined in [datamine-types.ts:131](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L131)*
+*Defined in [datamine-types.ts:143](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L143)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 *Inherited from [IUnknownPassiveEffect](_datamine_types_.iunknownpassiveeffect.md).[unknown passive id](_datamine_types_.iunknownpassiveeffect.md#unknown-passive-id)*
 
-*Defined in [datamine-types.ts:112](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L112)*
+*Defined in [datamine-types.ts:124](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L124)*
 
 ___
 
@@ -42,4 +42,4 @@ ___
 
 *Inherited from [IUnknownPassiveEffect](_datamine_types_.iunknownpassiveeffect.md).[unknown passive params](_datamine_types_.iunknownpassiveeffect.md#unknown-passive-params)*
 
-*Defined in [datamine-types.ts:113](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L113)*
+*Defined in [datamine-types.ts:125](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L125)*
