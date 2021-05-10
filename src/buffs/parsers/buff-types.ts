@@ -1007,6 +1007,8 @@ export enum IconId {
 
 	SG_BUFF_STEALTH = 'SG_BUFF_STEALTH',
 
+	SG_BUFF_DAMAGECUTDOWN = 'SG_BUFF_DAMAGECUTDOWN',
+
 	ATK_ST = 'ATK_ST',
 	ATK_AOE = 'ATK_AOE',
 	ATK_RT = 'ATK_RT',
@@ -1352,6 +1354,12 @@ export enum BuffId {
 	'passive:127:damage over time reduction' = 'passive:127:damage over time reduction',
 	'passive:128:normal attack mitigation' = 'passive:128:normal attack mitigation',
 	'passive:143:atk limit break' = 'passive:143:atk limit break',
+
+	'passive:10008:mitigation-bb' = 'passive:10008:mitigation-bb',
+	'passive:10008:mitigation-sbb' = 'passive:10008:mitigation-sbb',
+	'passive:10008:mitigation-ubb' = 'passive:10008:mitigation-ubb',
+	'passive:10008:mitigation-normals' = 'passive:10008:mitigation-normals',
+	'passive:10008:mitigation-dot' = 'passive:10008:mitigation-dot',
 
 	UNKNOWN_PROC_EFFECT_ID = 'UNKNOWN_PROC_EFFECT_ID',
 	UNKNOWN_PROC_BUFF_PARAMS = 'UNKNOWN_PROC_BUFF_PARAMS',

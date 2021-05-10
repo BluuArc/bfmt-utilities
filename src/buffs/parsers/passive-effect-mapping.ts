@@ -4117,4 +4117,64 @@ function setMapping (map: Map<string, PassiveEffectToBuffFunction>, convertPassi
 			originalId: '143',
 		});
 	});
+
+	map.set('10008', (effect: PassiveEffect | ExtraSkillPassiveEffect | SpEnhancementEffect, context: IEffectToBuffConversionContext, injectionContext?: IPassiveBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '10008';
+		const { conditionInfo, targetData, sources } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const typedEffect = (effect as IPassiveEffect);
+		// types taken from proc 10004 (damage immunity)
+		enum MitigationType {
+			BraveBurst = 'bb',
+			SuperBraveBurst = 'sbb',
+			UltimateBraveBurst = 'ubb',
+			NormalAttacks = 'normals',
+			DamageOverTime = 'dot',
+		}
+		interface IMitigationInfo {
+			mitigationType: MitigationType;
+			value: number;
+			chance: number;
+		}
+		const mitigations: IMitigationInfo[] = [];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (typedEffect.params) {
+			const params = splitEffectParams(typedEffect);
+			// order taken from proc 10004 (damage immunity)
+			[
+				MitigationType.BraveBurst,
+				MitigationType.SuperBraveBurst,
+				MitigationType.UltimateBraveBurst,
+				MitigationType.NormalAttacks,
+				MitigationType.DamageOverTime,
+			].forEach((mitigationType, index) => {
+				const value = parseNumberOrDefault(params[index * 2]);
+				const chance = parseNumberOrDefault(params[(index * 2) + 1]);
+				if (value !== 0 || chance !== 0) {
+					mitigations.push({ mitigationType, value, chance });
+				}
+			});
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(params.slice(10), 10, injectionContext);
+		}
+
+		const results: IBuff[] = mitigations.map(({ mitigationType, value, chance }) => ({
+			id: `passive:10008:mitigation-${mitigationType}`,
+			originalId,
+			sources,
+			value: { value, chance },
+			conditions: { ...conditionInfo },
+			...targetData,
+		}));
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			conditionInfo,
+		});
+
+		return results;
+	});
 }
