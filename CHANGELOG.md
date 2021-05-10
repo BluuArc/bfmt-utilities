@@ -11,9 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* The API itself doesn't change, but it breaks any implementations using `buff-metadata` directly.
 
 ### ➕ Additions
-* buffs: add `parsers` property, which contains functions and types to facilitate converting from proc and passive effects into `IBuff` objects. Specifically, the following are available for use:
+* buffs: add `parsers` property, which contains functions and types to facilitate converting from proc, passive, and conditional effects into `IBuff` objects. Specifically, the following are available for use:
 	* `convertProcEffectToBuffs` method
 	* `convertPassiveEffectToBuffs` method
+	* `convertConditionalEffectToBuffs` method
 	* `BuffSource` enum
 	* `BuffStackType` enum
 	* `IBuff` interface
