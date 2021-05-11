@@ -1,6 +1,6 @@
 const testConstants = require('../_test-helpers/constants');
 const getMetadataForPassive = require('./getMetadataForPassive').default;
-const { PASSIVE_METADATA } = require('./buff-metadata');
+const { PASSIVE_METADATA } = require('./effect-metadata');
 
 describe('getMetadataForPassive method', () => {
 	describe('for invalid metadata inputs', () => {
@@ -60,7 +60,7 @@ describe('getMetadataForPassive method', () => {
 				} else {
 					expect(result)
 						.withContext('result is not undefined')
-						.toBe(undefined);
+						.toBeUndefined();
 				}
 			});
 		});

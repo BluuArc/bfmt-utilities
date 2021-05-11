@@ -6,5 +6,6 @@
 
 ### Enumerations
 
+* [KNOWN_CONDITIONAL_ID](../enums/_buffs_constants_.known_conditional_id.md)
 * [KNOWN_PASSIVE_ID](../enums/_buffs_constants_.known_passive_id.md)
 * [KNOWN_PROC_ID](../enums/_buffs_constants_.known_proc_id.md)

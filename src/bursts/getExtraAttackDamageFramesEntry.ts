@@ -2,7 +2,7 @@ import { IBurstDamageFramesEntry } from '../datamine-types';
 import getEffectId from '../buffs/getEffectId';
 import { KNOWN_PROC_ID } from '../buffs/constants';
 import isAttackingProcId from '../buffs/isAttackingProcId';
-import { IProcMetadataEntry } from '../buffs/buff-metadata';
+import { IProcMetadataEntry } from '../buffs/effect-metadata';
 
 /**
  * @description Get the extra attack damage frames entry based on the damage frames of a burst. Also apply the given effect delay to the resulting damage frames entry.

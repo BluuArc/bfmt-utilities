@@ -57,14 +57,14 @@ describe('getSpEntryWithId method', () => {
 	});
 
 	it('returns undefined when entries is empty', () => {
-		expect(getSpEntryWithId('1', [])).toBe(undefined);
+		expect(getSpEntryWithId('1', [])).toBeUndefined();
 	});
 
 	it('returns undefined when there are no entries with a matching ID', () => {
 		const id = '1';
 		const entries = [{ id: '2' }, { id: '3' }];
 		const result = getSpEntryWithId(id, entries);
-		expect(result).toBe(undefined);
+		expect(result).toBeUndefined();
 	});
 
 	describe('cases when entries should be found', () => {

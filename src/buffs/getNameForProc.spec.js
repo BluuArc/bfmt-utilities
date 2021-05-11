@@ -1,6 +1,6 @@
 const testConstants = require('../_test-helpers/constants');
 const getNameForProc = require('./getNameForProc').default;
-const { PROC_METADATA } = require('./buff-metadata');
+const { PROC_METADATA } = require('./effect-metadata');
 
 describe('getNameForProc method', () => {
 	const expectNonEmptyString = (result, expected) => {

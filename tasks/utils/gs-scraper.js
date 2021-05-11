@@ -24,7 +24,7 @@ function getGoogleSpreadsheetContents (url, logger = createLogger('GS-Scraper'))
 								const rows = [];
 								const sheetTable = document.getElementById(sheet.id);
 								const [headerRow, ...tableRows] = Array.from(sheetTable.querySelectorAll('tbody tr'));
-	
+
 								const columnMapping = Array.from(headerRow.querySelectorAll('td'))
 									.map((elem, i) => elem.innerText.trim() || `col-${i}`);
 								const createRowDataObject = (row) => {
@@ -34,11 +34,11 @@ function getGoogleSpreadsheetContents (url, logger = createLogger('GS-Scraper'))
 										return acc;
 									}, {});
 								};
-	
+
 								tableRows.forEach(row => {
 									rows.push(createRowDataObject(row));
 								});
-	
+
 								sheetMapping[`${sheet.name}|${sheet.id}`] = rows;
 							});
 							fulfill(sheetMapping);

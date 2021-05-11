@@ -118,12 +118,12 @@ describe('combineEffectsAndDamageFrames method', () => {
 		it('returns the expected composite values when using unknown proc id', () => {
 			const effectsList = generateProcEffectsList(10, (propName, index, defaultValue) => {
 				switch (propName) {
-				case 'unknown proc id':
-					return `id-${index}`;
-				case 'proc id':
-					return undefined;
-				default:
-					return defaultValue;
+					case 'unknown proc id':
+						return `id-${index}`;
+					case 'proc id':
+						return undefined;
+					default:
+						return defaultValue;
 				}
 			});
 			const damageFramesList = generateDamageFramesList(10);
@@ -134,12 +134,12 @@ describe('combineEffectsAndDamageFrames method', () => {
 		it('returns the expected composite values when using a mix of unknown proc id and proc id', () => {
 			const effectsList = generateProcEffectsList(10, (propName, index, defaultValue) => {
 				switch (propName) {
-				case 'unknown proc id':
-					return (index % 2 === 0) ? `id-${index}` : undefined;
-				case 'proc id':
-					return (index % 2 === 1) ? `id-${index}` : undefined;
-				default:
-					return defaultValue;
+					case 'unknown proc id':
+						return (index % 2 === 0) ? `id-${index}` : undefined;
+					case 'proc id':
+						return (index % 2 === 1) ? `id-${index}` : undefined;
+					default:
+						return defaultValue;
 				}
 			});
 			const damageFramesList = generateDamageFramesList(10);
@@ -150,10 +150,10 @@ describe('combineEffectsAndDamageFrames method', () => {
 		it('returns the expected composite values when using effects with a target area of random attack', () => {
 			const effectsList = generateProcEffectsList(10, (propName, index, defaultValue) => {
 				switch (propName) {
-				case 'random attack':
-					return true;
-				default:
-					return defaultValue;
+					case 'random attack':
+						return true;
+					default:
+						return defaultValue;
 				}
 			});
 			const damageFramesList = generateDamageFramesList(10);
@@ -164,10 +164,10 @@ describe('combineEffectsAndDamageFrames method', () => {
 		it('returns the expected composite values when using effects with a mix of target areas including random attack', () => {
 			const effectsList = generateProcEffectsList(10, (propName, index, defaultValue) => {
 				switch (propName) {
-				case 'random attack':
-					return index % 2 === 0;
-				default:
-					return defaultValue;
+					case 'random attack':
+						return index % 2 === 0;
+					default:
+						return defaultValue;
 				}
 			});
 			const damageFramesList = generateDamageFramesList(10);

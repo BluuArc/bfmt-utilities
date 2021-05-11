@@ -21,6 +21,7 @@
 * [isAttackingProcId](_buffs_index_.md#isattackingprocid)
 * [isPassiveEffect](_buffs_index_.md#ispassiveeffect)
 * [isProcEffect](_buffs_index_.md#isproceffect)
+* [parsers](_buffs_index_.md#parsers)
 
 ## References
 
@@ -111,3 +112,9 @@ ___
 ###  isProcEffect
 
 • **isProcEffect**:
+
+___
+
+###  parsers
+
+• **parsers**:

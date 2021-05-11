@@ -1,6 +1,6 @@
 const testConstants = require('../_test-helpers/constants');
 const getMetadataForProc = require('./getMetadataForProc').default;
-const { PROC_METADATA } = require('./buff-metadata');
+const { PROC_METADATA } = require('./effect-metadata');
 
 describe('getMetadataForProc method', () => {
 	describe('for invalid metadata inputs', () => {
@@ -60,7 +60,7 @@ describe('getMetadataForProc method', () => {
 				} else {
 					expect(result)
 						.withContext('result is not undefined')
-						.toBe(undefined);
+						.toBeUndefined();
 				}
 			});
 		});

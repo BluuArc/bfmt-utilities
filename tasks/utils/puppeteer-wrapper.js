@@ -5,7 +5,7 @@ function createInstance () {
 		browser: null,
 		page: null,
 	};
-	
+
 	function getBrowserInstance ({ headless = true } = {}) {
 		return Promise.resolve()
 			.then(() => instances.browser || puppeteer.launch({ headless: !!headless }))
@@ -14,7 +14,7 @@ function createInstance () {
 				return browser;
 			});
 	}
-	
+
 	function getPageInstanceToUrl ({ url, headless, timeout = 60 * 10000 } = {}) {
 		return getBrowserInstance({ headless })
 			.then(browser => instances.page || browser.newPage())
@@ -24,7 +24,7 @@ function createInstance () {
 			})
 			.then(() => instances.page);
 	}
-	
+
 	function closeBrowserInstance () {
 		return Promise.resolve()
 			.then(() => instances.browser && instances.browser.close())

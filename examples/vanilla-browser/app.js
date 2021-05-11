@@ -1,5 +1,15 @@
 (function(inputWindow) {
-	const BASE_DATAMINE_URL = 'https://raw.githubusercontent.com/cheahjs/bravefrontier_data/master';
+	const BASE_DATAMINE_URL = 'https://joshuacastor.me/bfmt-data/gl';
+
+	function fetchJson (url) {
+		return inputWindow.fetch(url)
+			.then(r => r.ok ? r.json() : (void 0));
+	}
+
+	/**
+	 * @type {import('../../src/index')}
+	 */
+	const bfmtUtilities = inputWindow.bfmtUtilities;
 
 	/**
 	 * @typedef {{ [key: string]: import('../../src/datamine-types').IUnit}} UnitData
@@ -43,14 +53,13 @@
 		}
 		setOptionsOnSelectElement(unitSelectorElement, options);
 		unitSelectorElement.disabled = false;
-		unitSelectorElement.addEventListener('change', event => onSelectedElementChange(event, unitData));
+		unitSelectorElement.addEventListener('change', (event) => onSelectedElementChange(event, unitData));
 	}
 
 	/**
 	 * @param {Event} event
-	 * @param {UnitData} unitData
 	 */
-	function onSelectedElementChange (event, unitData) {
+	async function onSelectedElementChange (event, unitData) {
 		const unitDetailsArea = inputWindow.document.querySelector('.unit-details');
 		if (!unitDetailsArea) {
 			return;
@@ -66,27 +75,76 @@
 			sp: unitDetailsArea.querySelector('.enhancement-details'),
 		};
 		const selectedId = event && event.target && event.target.value;
-		const unit = !!selectedId && unitData[selectedId];
+		/**
+		 * @type {import('../../src/datamine-types').IUnit}
+		 */
+		const unit = !!selectedId && unitData[selectedId] && await fetchJson(`${BASE_DATAMINE_URL}/unit/${selectedId}.json`);
 		if (unit) {
 			console.info('selected unit', unit);
 			detailSections.name.innerText = unit.name;
-			setEffectsListForSection(detailSections.ls, unit['leader skill'] && unit['leader skill'].name, bfmtUtilities.leaderSkills.getEffectsForLeaderSkill(unit['leader skill']));
+			setEffectsListForSection(
+				detailSections.ls,
+				unit['leader skill'] && unit['leader skill'].name,
+				bfmtUtilities.leaderSkills.getEffectsForLeaderSkill(unit['leader skill']),
+				{
+					source: bfmtUtilities.buffs.parsers.BuffSource.LeaderSkill,
+					sourceId: unit['leader skill'].id,
+				},
+			);
 			if (unit['extra skill']) {
-				setEffectsListForSection(detailSections.es, unit['extra skill'].name, bfmtUtilities.extraSkills.getEffectsForExtraSkill(unit['extra skill']));
+				setEffectsListForSection(
+					detailSections.es,
+					unit['extra skill'].name,
+					bfmtUtilities.extraSkills.getEffectsForExtraSkill(unit['extra skill']),
+					{
+						source: bfmtUtilities.buffs.parsers.BuffSource.ExtraSkill,
+						sourceId: unit['extra skill'].id,
+					},
+				);
 				detailSections.es.removeAttribute('hidden');
 			} else {
 				detailSections.es.setAttribute('hidden', '');
 			}
 
-			setEffectsListForSection(detailSections.bb, unit.bb && unit.bb.name, bfmtUtilities.bursts.getEffectsForBurst(unit.bb));
+			setEffectsListForSection(
+				detailSections.bb,
+				unit.bb && unit.bb.name,
+				bfmtUtilities.bursts.getEffectsForBurst(unit.bb),
+				{
+					source: bfmtUtilities.buffs.parsers.BuffSource.BraveBurst,
+					sourceId: unit.bb.id,
+					damageFrames: unit.bb["damage frames"],
+					sourceElement: unit.element,
+				},
+			);
 			if (unit.sbb) {
-				setEffectsListForSection(detailSections.sbb, unit.sbb.name, bfmtUtilities.bursts.getEffectsForBurst(unit.sbb));
+				setEffectsListForSection(
+					detailSections.sbb,
+					unit.sbb.name,
+					bfmtUtilities.bursts.getEffectsForBurst(unit.sbb),
+					{
+						source: bfmtUtilities.buffs.parsers.BuffSource.SuperBraveBurst,
+						sourceId: unit.sbb.id,
+						damageFrames: unit.sbb["damage frames"],
+						sourceElement: unit.element,
+					},
+				);
 				detailSections.sbb.removeAttribute('hidden');
 			} else {
 				detailSections.sbb.setAttribute('hidden', '');
 			}
 			if (unit.ubb) {
-				setEffectsListForSection(detailSections.ubb, unit.ubb.name, bfmtUtilities.bursts.getEffectsForBurst(unit.ubb));
+				setEffectsListForSection(
+					detailSections.ubb,
+					unit.ubb.name,
+					bfmtUtilities.bursts.getEffectsForBurst(unit.ubb),
+					{
+						source: bfmtUtilities.buffs.parsers.BuffSource.UltimateBraveBurst,
+						sourceId: unit.ubb.id,
+						damageFrames: unit.ubb["damage frames"],
+						sourceElement: unit.element,
+					},
+				);
 				detailSections.ubb.removeAttribute('hidden');
 			} else {
 				detailSections.ubb.setAttribute('hidden', '');
@@ -106,11 +164,36 @@
 	}
 
 	/**
+	 * @param {import('../../src/datamine-types').PassiveEffect | import('../../src/datamine-types').ProcEffect} effect
+	 * @param {import('../../src/buffs/parsers/buff-types').IEffectToBuffConversionContext} context
+	 */
+	function generateBuffListForEffect (effect, context) {
+		const buffList = document.createElement('ul');
+		let buffs;
+		if (bfmtUtilities.buffs.isPassiveEffect(effect)) {
+			buffs = bfmtUtilities.buffs.parsers.convertPassiveEffectToBuffs(effect, context);
+		} else {
+			buffs = bfmtUtilities.buffs.parsers.convertProcEffectToBuffs(effect, context);
+		}
+
+		buffs.forEach((buff) => {
+			const buffEntry = document.createElement('li');
+			const metadata = bfmtUtilities.buffs.parsers.getMetadataForBuff(buff.id);
+			const name = (metadata && metadata.name) || `Unknown buff ${buff.id}`;
+			buffEntry.innerText = `${name}: ${JSON.stringify(buff)}`;
+			buffList.appendChild(buffEntry);
+		});
+
+		return buffList;
+	}
+
+	/**
 	 * @param {HTMLElement} section
 	 * @param {string} name
 	 * @param {Array<import('../../src/datamine-types').PassiveEffect | import('../../src/datamine-types').ProcEffect>} effects
+	 * @param {import('../../src/buffs/parsers/buff-types').IEffectToBuffConversionContext} context
 	 */
-	function setEffectsListForSection (section, name, effects) {
+	function setEffectsListForSection (section, name, effects, context) {
 		const nameField = section.querySelector('.name');
 		if (nameField) {
 			nameField.innerText = name || 'None';
@@ -118,12 +201,24 @@
 
 		const effectList = section.querySelector('ul');
 		if (effectList) {
-			effectList.querySelectorAll('li').forEach(entry => entry.remove());
+			effectList.innerHTML = '';
 			let entries = [];
 			if (effects.length > 0) {
-				entries = effects.map(effect => {
+				const hasMultipleDamageFrames = Array.isArray(context.damageFrames);
+				entries = effects.map((effect, index) => {
+					let localContext;
+					if (hasMultipleDamageFrames) {
+						localContext = {
+							...context,
+							damageFrames: context.damageFrames[index],
+							sourceElement: context.sourceElement,
+						};
+					} else {
+						localContext = context;
+					}
 					const entry = inputWindow.document.createElement('li');
 					entry.innerText = `${bfmtUtilities.buffs.getEffectName(effect)}: ${JSON.stringify(effect)}`;
+					entry.appendChild(generateBuffListForEffect(effect, localContext));
 					return entry;
 				});
 			} else {
@@ -138,22 +233,32 @@
 	/**
 	 * @param {HTMLElement} section
 	 * @param {import('../../src/datamine-types').ISpEnhancementEntry[]} spEntries
+	 * @param {import('../../src/buffs/parsers/buff-types').IEffectToBuffConversionContext} context
 	 */
-	function setEffectsForSpSection (section, spEntries) {
+	function setEffectsForSpSection (section, spEntries, context) {
 		const skillList = section.querySelector('ol');
 		if (skillList) {
-			skillList.querySelectorAll('li').forEach(entry => entry.remove());
+			skillList.innerHTML = '';
 			let entries = [];
 			if (spEntries.length > 0) {
-				entries = spEntries.map(spEntry => {
+				entries = spEntries.map((spEntry, index) => {
 					const htmlEntry = inputWindow.document.createElement('li');
 
 					// get effects for current SP entry
 					const effectListWrapper = inputWindow.document.createElement('ul');
 					const effects = bfmtUtilities.spEnhancements.getEffectsForSpEnhancement(spEntry);
+					/**
+					 * @type {import('../../src/buffs/parsers/buff-types').IEffectToBuffConversionContext}
+					 */
+					const localContext = {
+						...context,
+						source: bfmtUtilities.buffs.parsers.BuffSource.SpEnhancement,
+						sourceId: bfmtUtilities.spEnhancements.spIndexToCode(index),
+					};
 					const effectHtmlEntries = effects.map(effect => {
 						const entry = inputWindow.document.createElement('li');
 						entry.innerText = `${bfmtUtilities.buffs.getEffectName(effect)}: ${JSON.stringify(effect)}`;
+						entry.appendChild(generateBuffListForEffect(effect, localContext));
 						return entry;
 					});
 					effectListWrapper.append.apply(effectListWrapper, effectHtmlEntries);
@@ -178,28 +283,8 @@
 		const unitSelectorElement = inputWindow.document.querySelector('select[name="unit-selector"]');
 		setOptionsOnSelectElement(unitSelectorElement, [{ label: 'Loading data...', value: '' }]);
 
-		const unitDataPromise = inputWindow.fetch(`${BASE_DATAMINE_URL}/info.json`)
-			.then(r => r.ok ? r.json() : ({}));
-		const enhancementDataPromise = inputWindow.Promise.resolve().then(() => {
-			/**
-			 * @type {HTMLInputElement}
-			 */
-			const spCheckbox = inputWindow.document.querySelector('input[name="load-sp-checkbox"]');
-			const loadSp = !!spCheckbox && !!spCheckbox.checked;
-			return loadSp ? inputWindow.fetch(`${BASE_DATAMINE_URL}/feskills.json`).then(r => r.ok ? r.json() : ({})) : {};
-		}).catch(() => ({}));
-
-		inputWindow.Promise.all([unitDataPromise, enhancementDataPromise])
-			.then(([unitData = {}, spData = {}]) => {
-				// add SP data to each unit
-				Object.keys(spData).forEach(spKey => {
-					if (unitData.hasOwnProperty(spKey)) {
-						unitData[spKey].feskills = spData[spKey].skills;
-					}
-				});
-
-				return initializeSelect(unitData);
-			});
+		fetchJson(`${BASE_DATAMINE_URL}/unit/bfmt_update-stats.json`)
+			.then((unitData = {}) => initializeSelect(unitData));
 	}
 
 	/**

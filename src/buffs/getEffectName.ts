@@ -3,7 +3,7 @@ import isPassiveEffect from './isPassiveEffect';
 import getNameForPassive from './getNameForPassive';
 import isProcEffect from './isProcEffect';
 import getNameForProc from './getNameForProc';
-import { IPassiveMetadataEntry, IProcMetadataEntry } from './buff-metadata';
+import { IPassiveMetadataEntry, IProcMetadataEntry } from './effect-metadata';
 
 /**
  * @description Get the name of a given object.

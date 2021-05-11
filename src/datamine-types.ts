@@ -11,6 +11,19 @@ export interface IBfmtMetadata {
 	removed?: boolean;
 }
 
+export enum Ailment {
+	Poison = 'poison',
+	Weak = 'weak',
+	Sick = 'sick',
+	Injury = 'injury',
+	Curse = 'curse',
+	Paralysis = 'paralysis',
+	AttackReduction = 'atk down',
+	DefenseReduction = 'def down',
+	RecoveryReduction = 'rec down',
+	Unknown = 'unknown',
+}
+
 export enum ArenaCondition {
 	hp_50pr_under = 'hp_50pr_under',
 	hp_50pr_over = 'hp_50pr_over',
@@ -97,7 +110,6 @@ export interface IPassiveEffect {
 
 export interface ITriggeredEffect {
 	'passive id': '66';
-	'passive target': TargetType;
 	'trigger on bb'?: boolean;
 	'trigger on sbb'?: boolean;
 	'trigger on ubb'?: boolean;
@@ -254,7 +266,12 @@ export interface IExtraSkillUnknownPassiveEffect extends IUnknownPassiveEffect {
 	'passive target': TargetType;
 }
 
-export type ExtraSkillPassiveEffect = IExtraSkillPassiveEffect | IExtraSkillUnknownPassiveEffect;
+export interface IExtraSkillTriggeredEffect extends ITriggeredEffect {
+	conditions: ExtraSkillCondition[];
+	'passive target': TargetType;
+}
+
+export type ExtraSkillPassiveEffect = IExtraSkillPassiveEffect | IExtraSkillUnknownPassiveEffect | IExtraSkillTriggeredEffect;
 
 export interface IExtraSkill {
 	/**

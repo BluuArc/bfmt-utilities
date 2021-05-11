@@ -18,4 +18,4 @@
 
 • **item required**: *string[]*
 
-*Defined in [datamine-types.ts:224](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L224)*
+*Defined in [datamine-types.ts:236](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L236)*

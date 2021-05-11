@@ -1,5 +1,5 @@
 import getMetadataForProc from './getMetadataForProc';
-import { IProcMetadataEntry } from './buff-metadata';
+import { IProcMetadataEntry } from './effect-metadata';
 
 /**
  * @description Get the associated name for a given proc ID.

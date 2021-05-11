@@ -18,6 +18,7 @@ describe('buffs index', () => {
 			'PASSIVE_METADATA',
 			'PROC_METADATA',
 			'constants',
+			'parsers',
 		]);
 	});
 });

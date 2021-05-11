@@ -9,7 +9,7 @@ module.exports = {
 	],
 	globals: {
 		Atomics: 'readonly',
-		SharedArrayBuffer: 'readonly'
+		SharedArrayBuffer: 'readonly',
 	},
 	parserOptions: {
 		ecmaVersion: 2018,
@@ -18,11 +18,12 @@ module.exports = {
 	rules: {
 		eqeqeq: [
 			'error',
-			'always'
+			'always',
 		],
 		indent: [
 			'error',
 			'tab',
+			{ SwitchCase: 1 },
 		],
 		'linebreak-style': [
 			'error',

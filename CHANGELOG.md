@@ -5,6 +5,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased] - YYYY-MM-DD
+### ⚠ Breaking Changes
+* datamine-types: `passive target` is no longer part of `ITriggeredEffect`, as that is only a property of extra skill passive effects.
+* buffs/effect-metadata: To prevent confusion, what was previously `buff-metadata` has been renamed to `effect-metadata`.
+	* The API itself doesn't change, but it breaks any implementations using `buff-metadata` directly.
+
+### ➕ Additions
+* buffs: add `parsers` property, which contains functions and types to facilitate converting from proc, passive, and conditional effects into `IBuff` objects. Specifically, the following are available for use:
+	* `convertProcEffectToBuffs` method
+	* `convertPassiveEffectToBuffs` method
+	* `convertConditionalEffectToBuffs` method
+	* `BuffSource` enum
+	* `BuffStackType` enum
+	* `IBuff` interface
+	* `IUnitState` interface
+	* `IEffectToBuffConversionContext` interface
+	* `BUFF_METADATA` object
+	* `IBuffMetadata` interface
+	* `getMetadataForBuff` method
+* datamine-types: Add `IExtraSkillTriggeredEffect`.
+
 ### Δ Changes
 * buffs: The following methods now have an optional metadata parameters for their respective metadata sources.
 	* `getMetadataForPassive`
@@ -14,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 	* `isAttackingProcId`
 	* `getEffectName` (allows passing in both passive and proc metadata)
 * bursts: Add optional metadata parameter to `getExtraAttackDamageFramesEntry`.
+* examples/vanilla-browser: Update example to read parse buffs in each effect and use `bfmt-data`.
 
 ## [0.7.0] - 2020-06-26
 ### ⚠ Breaking Changes

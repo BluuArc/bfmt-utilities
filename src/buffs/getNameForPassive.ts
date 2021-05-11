@@ -1,5 +1,5 @@
 import getMetadataForPassive from './getMetadataForPassive';
-import { IPassiveMetadataEntry } from './buff-metadata';
+import { IPassiveMetadataEntry } from './effect-metadata';
 
 /**
  * @description Get the associated name for a given passive ID.

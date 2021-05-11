@@ -26,7 +26,7 @@ const generateDamageFramesList = createObjectListFactoryFromSchema({
 });
 
 /**
- * @type {function(numEntries: number, valueGetter?: (propName: string, index: number, defaultValue: any) => any,  objectExtender?: (obj: object, index: number) => object): { [id: string]: import('../buffs/buff-metadata').IPassiveMetadataEntry }}
+ * @type {function(numEntries: number, valueGetter?: (propName: string, index: number, defaultValue: any) => any,  objectExtender?: (obj: object, index: number) => object): { [id: string]: import('../buffs/effect-metadata').IPassiveMetadataEntry }}
  */
 const generatePassiveMetadataObject = (...args) => createObjectListFactoryFromSchema({
 	ID: (index) => `${index}`,
@@ -36,8 +36,44 @@ const generatePassiveMetadataObject = (...args) => createObjectListFactoryFromSc
 	return entry;
 }, {});
 
+const generateNonArrayTestCases = (nonObjectValue = 'some value') => [
+	{
+		desc: 'is null',
+		value: null,
+	},
+	{
+		desc: 'is undefined',
+		value: (void 0),
+	},
+	{
+		desc: 'is not an object',
+		value: nonObjectValue,
+	},
+	{
+		desc: 'is an object but not an array',
+		value: { some: 'value' },
+	},
+];
+
+const generateNonObjectTestCases = (nonObjectValue = 123) => [
+	{
+		desc: 'is undefined',
+		value: (void 0),
+	},
+	{
+		desc: 'is null',
+		value: null,
+	},
+	{
+		desc: 'is not an object',
+		value: nonObjectValue,
+	},
+];
+
 module.exports = {
 	generateDamageFramesList,
 	generateProcEffectsList,
 	generatePassiveMetadataObject,
+	generateNonArrayTestCases,
+	generateNonObjectTestCases,
 };
