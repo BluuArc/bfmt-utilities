@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [SpPassiveType](_datamine_types_.sppassivetype.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [SpPassiveType](_datamine_types_.sppassivetype.md)
 
 # Enumeration: SpPassiveType
 

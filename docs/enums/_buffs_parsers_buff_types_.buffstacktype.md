@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/parsers/buff-types"](../modules/_buffs_parsers_buff_types_.md) › [BuffStackType](_buffs_parsers_buff_types_.buffstacktype.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["buffs/parsers/buff-types"](../modules/_buffs_parsers_buff_types_.md) › [BuffStackType](_buffs_parsers_buff_types_.buffstacktype.md)
 
 # Enumeration: BuffStackType
 

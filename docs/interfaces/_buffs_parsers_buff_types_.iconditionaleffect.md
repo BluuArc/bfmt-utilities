@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/parsers/buff-types"](../modules/_buffs_parsers_buff_types_.md) › [IConditionalEffect](_buffs_parsers_buff_types_.iconditionaleffect.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["buffs/parsers/buff-types"](../modules/_buffs_parsers_buff_types_.md) › [IConditionalEffect](_buffs_parsers_buff_types_.iconditionaleffect.md)
 
 # Interface: IConditionalEffect
 

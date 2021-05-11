@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/parsers/convertPassiveEffectToBuffs"](_buffs_parsers_convertpassiveeffecttobuffs_.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["buffs/parsers/convertPassiveEffectToBuffs"](_buffs_parsers_convertpassiveeffecttobuffs_.md)
 
 # Module: "buffs/parsers/convertPassiveEffectToBuffs"
 

@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/effect-metadata"](../modules/_buffs_effect_metadata_.md) › [IPassiveMetadataEntry](_buffs_effect_metadata_.ipassivemetadataentry.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["buffs/effect-metadata"](../modules/_buffs_effect_metadata_.md) › [IPassiveMetadataEntry](_buffs_effect_metadata_.ipassivemetadataentry.md)
 
 # Interface: IPassiveMetadataEntry
 

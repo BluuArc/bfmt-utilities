@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/parsers/proc-effect-mapping"](_buffs_parsers_proc_effect_mapping_.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["buffs/parsers/proc-effect-mapping"](_buffs_parsers_proc_effect_mapping_.md)
 
 # Module: "buffs/parsers/proc-effect-mapping"
 

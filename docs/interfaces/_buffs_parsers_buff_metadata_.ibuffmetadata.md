@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/parsers/buff-metadata"](../modules/_buffs_parsers_buff_metadata_.md) › [IBuffMetadata](_buffs_parsers_buff_metadata_.ibuffmetadata.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["buffs/parsers/buff-metadata"](../modules/_buffs_parsers_buff_metadata_.md) › [IBuffMetadata](_buffs_parsers_buff_metadata_.ibuffmetadata.md)
 
 # Interface: IBuffMetadata
 

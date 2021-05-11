@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["buffs/parsers/convertProcEffectToBuffs"](_buffs_parsers_convertproceffecttobuffs_.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["buffs/parsers/convertProcEffectToBuffs"](_buffs_parsers_convertproceffecttobuffs_.md)
 
 # Module: "buffs/parsers/convertProcEffectToBuffs"
 

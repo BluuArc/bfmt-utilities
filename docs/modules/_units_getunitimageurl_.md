@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["units/getUnitImageUrl"](_units_getunitimageurl_.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["units/getUnitImageUrl"](_units_getunitimageurl_.md)
 
 # Module: "units/getUnitImageUrl"
 

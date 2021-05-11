@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["bursts/getEffectsForBurst"](_bursts_geteffectsforburst_.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["bursts/getEffectsForBurst"](_bursts_geteffectsforburst_.md)
 
 # Module: "bursts/getEffectsForBurst"
 
