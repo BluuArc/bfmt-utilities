@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IBaseProcEffect](_datamine_types_.ibaseproceffect.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IBaseProcEffect](_datamine_types_.ibaseproceffect.md)
 
 # Interface: IBaseProcEffect
 
@@ -25,7 +25,7 @@
 
 • **effect delay time(ms)/frame**: *string*
 
-*Defined in [datamine-types.ts:70](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L70)*
+*Defined in [datamine-types.ts:83](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L83)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **params**? : *undefined | string*
 
-*Defined in [datamine-types.ts:73](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L73)*
+*Defined in [datamine-types.ts:86](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L86)*
 
 ___
 
@@ -41,7 +41,7 @@ ___
 
 • **target area**: *[TargetArea](../enums/_datamine_types_.targetarea.md)*
 
-*Defined in [datamine-types.ts:71](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L71)*
+*Defined in [datamine-types.ts:84](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L84)*
 
 ___
 
@@ -49,4 +49,4 @@ ___
 
 • **target type**: *[TargetType](../enums/_datamine_types_.targettype.md)*
 
-*Defined in [datamine-types.ts:72](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L72)*
+*Defined in [datamine-types.ts:85](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L85)*

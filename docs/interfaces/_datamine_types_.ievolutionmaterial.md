@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IEvolutionMaterial](_datamine_types_.ievolutionmaterial.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IEvolutionMaterial](_datamine_types_.ievolutionmaterial.md)
 
 # Interface: IEvolutionMaterial
 
@@ -20,7 +20,7 @@
 
 • **id**: *string*
 
-*Defined in [datamine-types.ts:417](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L417)*
+*Defined in [datamine-types.ts:434](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L434)*
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:418](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L418)*
+*Defined in [datamine-types.ts:435](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L435)*
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **type**: *"unit" | "item"*
 
-*Defined in [datamine-types.ts:419](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L419)*
+*Defined in [datamine-types.ts:436](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L436)*

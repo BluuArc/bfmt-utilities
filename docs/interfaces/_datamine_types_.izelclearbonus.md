@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IZelClearBonus](_datamine_types_.izelclearbonus.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IZelClearBonus](_datamine_types_.izelclearbonus.md)
 
 # Interface: IZelClearBonus
 
@@ -18,4 +18,4 @@
 
 • **zel**: *string*
 
-*Defined in [datamine-types.ts:792](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L792)*
+*Defined in [datamine-types.ts:809](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L809)*

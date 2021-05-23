@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [ArenaCondition](_datamine_types_.arenacondition.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [ArenaCondition](_datamine_types_.arenacondition.md)
 
 # Enumeration: ArenaCondition
 
@@ -21,7 +21,7 @@
 
 • **atk_max**: = "atk_max"
 
-*Defined in [datamine-types.ts:21](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L21)*
+*Defined in [datamine-types.ts:34](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L34)*
 
 ___
 
@@ -29,7 +29,7 @@ ___
 
 • **hp_25pr_under**: = "hp_25pr_under"
 
-*Defined in [datamine-types.ts:18](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L18)*
+*Defined in [datamine-types.ts:31](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L31)*
 
 ___
 
@@ -37,7 +37,7 @@ ___
 
 • **hp_50pr_over**: = "hp_50pr_over"
 
-*Defined in [datamine-types.ts:16](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L16)*
+*Defined in [datamine-types.ts:29](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L29)*
 
 ___
 
@@ -45,7 +45,7 @@ ___
 
 • **hp_50pr_under**: = "hp_50pr_under"
 
-*Defined in [datamine-types.ts:15](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L15)*
+*Defined in [datamine-types.ts:28](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L28)*
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 • **hp_75pr_under**: = "hp_75pr_under"
 
-*Defined in [datamine-types.ts:17](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L17)*
+*Defined in [datamine-types.ts:30](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L30)*
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 • **hp_max**: = "hp_max"
 
-*Defined in [datamine-types.ts:20](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L20)*
+*Defined in [datamine-types.ts:33](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L33)*
 
 ___
 
@@ -69,7 +69,7 @@ ___
 
 • **hp_min**: = "hp_min"
 
-*Defined in [datamine-types.ts:19](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L19)*
+*Defined in [datamine-types.ts:32](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L32)*
 
 ___
 
@@ -77,4 +77,4 @@ ___
 
 • **random**: = "random"
 
-*Defined in [datamine-types.ts:22](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L22)*
+*Defined in [datamine-types.ts:35](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L35)*

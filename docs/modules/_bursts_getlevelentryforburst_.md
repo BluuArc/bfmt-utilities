@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["bursts/getLevelEntryForBurst"](_bursts_getlevelentryforburst_.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["bursts/getLevelEntryForBurst"](_bursts_getlevelentryforburst_.md)
 
 # Module: "bursts/getLevelEntryForBurst"
 

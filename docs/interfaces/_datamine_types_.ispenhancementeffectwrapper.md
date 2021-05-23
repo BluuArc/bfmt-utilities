@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [ISpEnhancementEffectWrapper](_datamine_types_.ispenhancementeffectwrapper.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [ISpEnhancementEffectWrapper](_datamine_types_.ispenhancementeffectwrapper.md)
 
 # Interface: ISpEnhancementEffectWrapper
 
@@ -22,7 +22,7 @@
 
 • **add to bb**? : *[ProcEffect](../modules/_datamine_types_.md#proceffect)*
 
-*Defined in [datamine-types.ts:328](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L328)*
+*Defined in [datamine-types.ts:345](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L345)*
 
 **`description`** used when enhancing an existing BB
 
@@ -32,7 +32,7 @@ ___
 
 • **add to passive**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
 
-*Defined in [datamine-types.ts:323](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L323)*
+*Defined in [datamine-types.ts:340](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L340)*
 
 **`description`** used when enhancing an existing effect on LS
 
@@ -42,7 +42,7 @@ ___
 
 • **add to sbb**? : *[ProcEffect](../modules/_datamine_types_.md#proceffect)*
 
-*Defined in [datamine-types.ts:333](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L333)*
+*Defined in [datamine-types.ts:350](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L350)*
 
 **`description`** used when enhancing an existing SBB
 
@@ -52,7 +52,7 @@ ___
 
 • **add to ubb**? : *[ProcEffect](../modules/_datamine_types_.md#proceffect)*
 
-*Defined in [datamine-types.ts:338](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L338)*
+*Defined in [datamine-types.ts:355](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L355)*
 
 **`description`** used when enhancing an existing UBB
 
@@ -62,6 +62,6 @@ ___
 
 • **passive**? : *[PassiveEffect](../modules/_datamine_types_.md#passiveeffect)*
 
-*Defined in [datamine-types.ts:318](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L318)*
+*Defined in [datamine-types.ts:335](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L335)*
 
 **`description`** used to add an entirely new effect

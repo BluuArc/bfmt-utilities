@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IExtraSkillItemCondition](_datamine_types_.iextraskillitemcondition.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IExtraSkillItemCondition](_datamine_types_.iextraskillitemcondition.md)
 
 # Interface: IExtraSkillItemCondition
 
@@ -18,4 +18,4 @@
 
 • **item required**: *string[]*
 
-*Defined in [datamine-types.ts:224](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L224)*
+*Defined in [datamine-types.ts:236](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L236)*

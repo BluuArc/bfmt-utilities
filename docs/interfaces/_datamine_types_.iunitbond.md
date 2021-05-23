@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IUnitBond](_datamine_types_.iunitbond.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IUnitBond](_datamine_types_.iunitbond.md)
 
 # Interface: IUnitBond
 
@@ -21,7 +21,7 @@
 
 • **dbb**: *[IBraveBurst](_datamine_types_.ibraveburst.md)*
 
-*Defined in [datamine-types.ts:430](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L430)*
+*Defined in [datamine-types.ts:447](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L447)*
 
 ___
 
@@ -29,6 +29,6 @@ ___
 
 • **partner**: *number*
 
-*Defined in [datamine-types.ts:429](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L429)*
+*Defined in [datamine-types.ts:446](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L446)*
 
 **`description`** Unit ID of bond partner.

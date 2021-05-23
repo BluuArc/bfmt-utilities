@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IUnknownClearBonus](_datamine_types_.iunknownclearbonus.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IUnknownClearBonus](_datamine_types_.iunknownclearbonus.md)
 
 # Interface: IUnknownClearBonus
 
@@ -18,7 +18,7 @@
 
 • **unknown**: *object*
 
-*Defined in [datamine-types.ts:800](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L800)*
+*Defined in [datamine-types.ts:817](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L817)*
 
 #### Type declaration:
 

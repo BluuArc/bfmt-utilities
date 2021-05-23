@@ -4,16 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] - YYYY-MM-DD
+## [0.8.0] - 2021-05-10
 ### ⚠ Breaking Changes
 * datamine-types: `passive target` is no longer part of `ITriggeredEffect`, as that is only a property of extra skill passive effects.
 * buffs/effect-metadata: To prevent confusion, what was previously `buff-metadata` has been renamed to `effect-metadata`.
 	* The API itself doesn't change, but it breaks any implementations using `buff-metadata` directly.
 
 ### ➕ Additions
-* buffs: add `parsers` property, which contains functions and types to facilitate converting from proc and passive effects into `IBuff` objects. Specifically, the following are available for use:
+* buffs: add `parsers` property, which contains functions and types to facilitate converting from proc, passive, and conditional effects into `IBuff` objects. Specifically, the following are available for use:
 	* `convertProcEffectToBuffs` method
 	* `convertPassiveEffectToBuffs` method
+	* `convertConditionalEffectToBuffs` method
 	* `BuffSource` enum
 	* `BuffStackType` enum
 	* `IBuff` interface

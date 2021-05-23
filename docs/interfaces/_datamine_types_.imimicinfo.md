@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IMimicInfo](_datamine_types_.imimicinfo.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IMimicInfo](_datamine_types_.imimicinfo.md)
 
 # Interface: IMimicInfo
 
@@ -22,7 +22,7 @@
 
 • **group_1_chance**: *string*
 
-*Defined in [datamine-types.ts:754](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L754)*
+*Defined in [datamine-types.ts:771](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L771)*
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 • **group_1_monster_group**: *string*
 
-*Defined in [datamine-types.ts:759](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L759)*
+*Defined in [datamine-types.ts:776](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L776)*
 
 **`description`** Known mappings can be found at [MimicMonsterGroupMapping](../modules/_datamine_types_.md#const-mimicmonstergroupmapping).
 
@@ -40,7 +40,7 @@ ___
 
 • **group_2_chance**: *string*
 
-*Defined in [datamine-types.ts:760](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L760)*
+*Defined in [datamine-types.ts:777](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L777)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **group_2_monster_group**: *string*
 
-*Defined in [datamine-types.ts:765](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L765)*
+*Defined in [datamine-types.ts:782](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L782)*
 
 **`description`** Known mappings can be found at [MimicMonsterGroupMapping](../modules/_datamine_types_.md#const-mimicmonstergroupmapping).
 
@@ -58,4 +58,4 @@ ___
 
 • **spawn_chance_range_maybe**: *string*
 
-*Defined in [datamine-types.ts:766](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L766)*
+*Defined in [datamine-types.ts:783](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L783)*

@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IExtraSkillUnknownCondition](_datamine_types_.iextraskillunknowncondition.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IExtraSkillUnknownCondition](_datamine_types_.iextraskillunknowncondition.md)
 
 # Interface: IExtraSkillUnknownCondition
 
@@ -19,7 +19,7 @@
 
 • **condition_id**? : *undefined | string*
 
-*Defined in [datamine-types.ts:238](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L238)*
+*Defined in [datamine-types.ts:250](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L250)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **type_id**? : *undefined | string*
 
-*Defined in [datamine-types.ts:237](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L237)*
+*Defined in [datamine-types.ts:249](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L249)*

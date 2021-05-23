@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IBurstLevelEntry](_datamine_types_.iburstlevelentry.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IBurstLevelEntry](_datamine_types_.iburstlevelentry.md)
 
 # Interface: IBurstLevelEntry
 
@@ -19,7 +19,7 @@
 
 • **bc cost**: *number*
 
-*Defined in [datamine-types.ts:148](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L148)*
+*Defined in [datamine-types.ts:160](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L160)*
 
 ___
 
@@ -27,4 +27,4 @@ ___
 
 • **effects**: *[ProcEffect](../modules/_datamine_types_.md#proceffect)[]*
 
-*Defined in [datamine-types.ts:149](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L149)*
+*Defined in [datamine-types.ts:161](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L161)*

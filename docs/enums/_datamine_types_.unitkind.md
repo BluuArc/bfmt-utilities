@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitKind](_datamine_types_.unitkind.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitKind](_datamine_types_.unitkind.md)
 
 # Enumeration: UnitKind
 
@@ -17,7 +17,7 @@
 
 • **Enhancing**: = "enhancing"
 
-*Defined in [datamine-types.ts:412](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L412)*
+*Defined in [datamine-types.ts:429](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L429)*
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 • **Evolution**: = "evo"
 
-*Defined in [datamine-types.ts:411](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L411)*
+*Defined in [datamine-types.ts:428](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L428)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **Normal**: = "normal"
 
-*Defined in [datamine-types.ts:410](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L410)*
+*Defined in [datamine-types.ts:427](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L427)*
 
 ___
 
@@ -41,4 +41,4 @@ ___
 
 • **Sale**: = "sale"
 
-*Defined in [datamine-types.ts:413](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L413)*
+*Defined in [datamine-types.ts:430](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L430)*

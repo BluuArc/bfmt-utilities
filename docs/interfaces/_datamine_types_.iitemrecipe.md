@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IItemRecipe](_datamine_types_.iitemrecipe.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IItemRecipe](_datamine_types_.iitemrecipe.md)
 
 # Interface: IItemRecipe
 
@@ -20,7 +20,7 @@
 
 • **appearanceRequirements**? : *string[]*
 
-*Defined in [datamine-types.ts:657](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L657)*
+*Defined in [datamine-types.ts:674](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L674)*
 
 **`description`** Array of item IDs that the player must have for this recipe to appear.
 
@@ -32,7 +32,7 @@ ___
 
 • **karma**: *string*
 
-*Defined in [datamine-types.ts:651](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L651)*
+*Defined in [datamine-types.ts:668](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L668)*
 
 ___
 
@@ -40,4 +40,4 @@ ___
 
 • **materials**: *[IItemRecipeMaterial](_datamine_types_.iitemrecipematerial.md)[]*
 
-*Defined in [datamine-types.ts:652](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L652)*
+*Defined in [datamine-types.ts:669](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L669)*

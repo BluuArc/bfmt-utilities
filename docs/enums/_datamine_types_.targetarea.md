@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [TargetArea](_datamine_types_.targetarea.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [TargetArea](_datamine_types_.targetarea.md)
 
 # Enumeration: TargetArea
 
@@ -16,7 +16,7 @@
 
 • **Aoe**: = "aoe"
 
-*Defined in [datamine-types.ts:52](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L52)*
+*Defined in [datamine-types.ts:65](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L65)*
 
 ___
 
@@ -24,7 +24,7 @@ ___
 
 • **Random**: = "random"
 
-*Defined in [datamine-types.ts:54](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L54)*
+*Defined in [datamine-types.ts:67](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L67)*
 
 ___
 
@@ -32,4 +32,4 @@ ___
 
 • **Single**: = "single"
 
-*Defined in [datamine-types.ts:53](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L53)*
+*Defined in [datamine-types.ts:66](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L66)*

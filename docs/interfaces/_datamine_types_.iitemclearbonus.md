@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IItemClearBonus](_datamine_types_.iitemclearbonus.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IItemClearBonus](_datamine_types_.iitemclearbonus.md)
 
 # Interface: IItemClearBonus
 
@@ -18,7 +18,7 @@
 
 • **item**: *object*
 
-*Defined in [datamine-types.ts:785](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L785)*
+*Defined in [datamine-types.ts:802](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L802)*
 
 #### Type declaration:
 

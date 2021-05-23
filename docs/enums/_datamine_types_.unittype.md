@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitType](_datamine_types_.unittype.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [UnitType](_datamine_types_.unittype.md)
 
 # Enumeration: UnitType
 
@@ -19,7 +19,7 @@
 
 • **Anima**: = "anima"
 
-*Defined in [datamine-types.ts:435](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L435)*
+*Defined in [datamine-types.ts:452](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L452)*
 
 ___
 
@@ -27,7 +27,7 @@ ___
 
 • **Breaker**: = "breaker"
 
-*Defined in [datamine-types.ts:436](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L436)*
+*Defined in [datamine-types.ts:453](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L453)*
 
 ___
 
@@ -35,7 +35,7 @@ ___
 
 • **Guardian**: = "guardian"
 
-*Defined in [datamine-types.ts:437](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L437)*
+*Defined in [datamine-types.ts:454](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L454)*
 
 ___
 
@@ -43,7 +43,7 @@ ___
 
 • **Lord**: = "lord"
 
-*Defined in [datamine-types.ts:434](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L434)*
+*Defined in [datamine-types.ts:451](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L451)*
 
 ___
 
@@ -51,7 +51,7 @@ ___
 
 • **Oracle**: = "oracle"
 
-*Defined in [datamine-types.ts:438](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L438)*
+*Defined in [datamine-types.ts:455](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L455)*
 
 ___
 
@@ -59,4 +59,4 @@ ___
 
 • **Rex**: = "rex"
 
-*Defined in [datamine-types.ts:439](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L439)*
+*Defined in [datamine-types.ts:456](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L456)*

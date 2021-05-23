@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IItemRecipeMaterial](_datamine_types_.iitemrecipematerial.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [IItemRecipeMaterial](_datamine_types_.iitemrecipematerial.md)
 
 # Interface: IItemRecipeMaterial
 
@@ -20,7 +20,7 @@
 
 • **count**: *number*
 
-*Defined in [datamine-types.ts:645](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L645)*
+*Defined in [datamine-types.ts:662](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L662)*
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 • **id**: *number*
 
-*Defined in [datamine-types.ts:646](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L646)*
+*Defined in [datamine-types.ts:663](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L663)*
 
 ___
 
@@ -36,4 +36,4 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:647](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L647)*
+*Defined in [datamine-types.ts:664](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L664)*

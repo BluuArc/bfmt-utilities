@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [ISpEnhancementSkill](_datamine_types_.ispenhancementskill.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [ISpEnhancementSkill](_datamine_types_.ispenhancementskill.md)
 
 # Interface: ISpEnhancementSkill
 
@@ -24,7 +24,7 @@
 
 • **bp**: *number*
 
-*Defined in [datamine-types.ts:342](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L342)*
+*Defined in [datamine-types.ts:359](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L359)*
 
 ___
 
@@ -32,7 +32,7 @@ ___
 
 • **desc**: *string*
 
-*Defined in [datamine-types.ts:343](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L343)*
+*Defined in [datamine-types.ts:360](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L360)*
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 • **effects**: *[ISpEnhancementEffectWrapper](_datamine_types_.ispenhancementeffectwrapper.md)[]*
 
-*Defined in [datamine-types.ts:344](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L344)*
+*Defined in [datamine-types.ts:361](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L361)*
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 • **id**: *string*
 
-*Defined in [datamine-types.ts:345](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L345)*
+*Defined in [datamine-types.ts:362](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L362)*
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 • **level**: *number*
 
-*Defined in [datamine-types.ts:346](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L346)*
+*Defined in [datamine-types.ts:363](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L363)*
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 • **name**: *string*
 
-*Defined in [datamine-types.ts:347](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L347)*
+*Defined in [datamine-types.ts:364](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L364)*
 
 ___
 
@@ -72,4 +72,4 @@ ___
 
 • **series**: *string*
 
-*Defined in [datamine-types.ts:348](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L348)*
+*Defined in [datamine-types.ts:365](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L365)*

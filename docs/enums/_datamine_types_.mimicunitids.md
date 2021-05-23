@@ -1,4 +1,4 @@
-[@bluuarc/bfmt-utilities - v0.7.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [MimicUnitIds](_datamine_types_.mimicunitids.md)
+[@bluuarc/bfmt-utilities - v0.8.0](../README.md) › [Globals](../globals.md) › ["datamine-types"](../modules/_datamine_types_.md) › [MimicUnitIds](_datamine_types_.mimicunitids.md)
 
 # Enumeration: MimicUnitIds
 
@@ -17,7 +17,7 @@
 
 • **BatMimic**: = "60143"
 
-*Defined in [datamine-types.ts:737](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L737)*
+*Defined in [datamine-types.ts:754](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L754)*
 
 ___
 
@@ -25,7 +25,7 @@ ___
 
 • **DragonMimic**: = "60144"
 
-*Defined in [datamine-types.ts:738](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L738)*
+*Defined in [datamine-types.ts:755](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L755)*
 
 ___
 
@@ -33,7 +33,7 @@ ___
 
 • **MetalMimic**: = "60224"
 
-*Defined in [datamine-types.ts:739](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L739)*
+*Defined in [datamine-types.ts:756](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L756)*
 
 ___
 
@@ -41,4 +41,4 @@ ___
 
 • **Mimic**: = "60142"
 
-*Defined in [datamine-types.ts:736](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L736)*
+*Defined in [datamine-types.ts:753](https://github.com/BluuArc/bfmt-utilities/blob/master/src/datamine-types.ts#L753)*
