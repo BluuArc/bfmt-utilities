@@ -326,6 +326,8 @@ export enum UnitStat {
 
 	mapModification = 'mapModification',
 	battleModification = 'battleModification',
+
+	skillMitigation = 'skillMitigation',
 }
 
 /**
@@ -460,6 +462,8 @@ export interface IUnitState {
 
 	mapModification: IBuff[];
 	battleModification: IBuff[];
+
+	skillMitigation: IBuff[];
 }
 
 /**
@@ -995,6 +999,10 @@ export enum IconId {
 	BUFF_RAID_FLEE = 'BUFF_RAID_FLEE',
 	BUFF_RAID_DAMAGECUT = 'BUFF_RAID_DAMAGECUT',
 	BUFF_RAID_ITEMDROP = 'BUFF_RAID_ITEMDROP',
+
+	BUFF_BBDMGDOWN = 'BUFF_BBDMGDOWN',
+	BUFF_SBBDMGDOWN = 'BUFF_SBBDMGDOWN',
+	BUFF_UBBDMGDOWN = 'BUFF_UBBDMGDOWN',
 
 	SG_BUFF_ALL = 'SG_BUFF_ALL', // shield
 	SG_BUFF_FIRE = 'SG_BUFF_FIRE',

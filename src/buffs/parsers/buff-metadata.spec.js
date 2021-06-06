@@ -1472,6 +1472,28 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['passive:143:atk limit break'], [IconId.BUFF_PARAMBREAK_ATK]);
 	});
 
+	describe('passive 10008 buffs', () => {
+		describe('passive:10008:mitigation-bb', () => {
+			testDefaultIconResult(BuffId['passive:10008:mitigation-bb'], [IconId.BUFF_BBDMGDOWN]);
+		});
+
+		describe('passive:10008:mitigation-sbb', () => {
+			testDefaultIconResult(BuffId['passive:10008:mitigation-sbb'], [IconId.BUFF_SBBDMGDOWN]);
+		});
+
+		describe('passive:10008:mitigation-ubb', () => {
+			testDefaultIconResult(BuffId['passive:10008:mitigation-ubb'], [IconId.BUFF_UBBDMGDOWN]);
+		});
+
+		describe('passive:10008:mitigation-normals', () => {
+			testDefaultIconResult(BuffId['passive:10008:mitigation-normals'], [IconId.BUFF_NORMALATTACKREDUCTION]);
+		});
+
+		describe('passive:10008:mitigation-dot', () => {
+			testDefaultIconResult(BuffId['passive:10008:mitigation-dot'], [IconId.BUFF_ATKREDUC]);
+		});
+	});
+
 	describe('UNKNOWN_PROC_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_PROC_EFFECT_ID, [IconId.UNKNOWN]);
 	});
