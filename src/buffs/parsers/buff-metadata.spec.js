@@ -2588,6 +2588,24 @@ describe('BUFF_METADATA entries', () => {
 		testDefaultIconResult(BuffId['proc:908:raid drop rate multiplier'], [IconId.BUFF_RAID_ITEMDROP]);
 	});
 
+	describe('proc 10000 buffs', () => {
+		describe('proc:10000:taunt', () => {
+			testDefaultIconResult(BuffId['proc:10000:taunt'], [IconId.SG_BUFF_TAUNT]);
+		});
+
+		describe('proc:10000:taunt-atk', () => {
+			testDefaultIconResult(BuffId['proc:10000:taunt-atk'], [IconId.SG_BUFF_TAUNT ,IconId.BUFF_ATKUP]);
+		});
+
+		describe('proc:10000:taunt-def', () => {
+			testDefaultIconResult(BuffId['proc:10000:taunt-def'], [IconId.SG_BUFF_TAUNT ,IconId.BUFF_DEFUP]);
+		});
+
+		describe('proc:10000:taunt-crit', () => {
+			testDefaultIconResult(BuffId['proc:10000:taunt-crit'], [IconId.SG_BUFF_TAUNT ,IconId.BUFF_CRTRATEUP]);
+		});
+	});
+
 	describe('UNKNOWN_CONDITIONAL_EFFECT_ID', () => {
 		testDefaultIconResult(BuffId.UNKNOWN_CONDITIONAL_EFFECT_ID, [IconId.UNKNOWN]);
 	});

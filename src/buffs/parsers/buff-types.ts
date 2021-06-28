@@ -1013,6 +1013,7 @@ export enum IconId {
 	SG_BUFF_DARK = 'SG_BUFF_DARK',
 	SG_BUFF_UNKNOWN = 'SG_BUFF_UNKNOWN',
 
+	SG_BUFF_TAUNT = 'SG_BUFF_TAUNT',
 	SG_BUFF_STEALTH = 'SG_BUFF_STEALTH',
 
 	SG_BUFF_DAMAGECUTDOWN = 'SG_BUFF_DAMAGECUTDOWN',
@@ -1663,6 +1664,11 @@ export enum BuffId {
 	'proc:906:flee battle' = 'proc:906:flee battle',
 	'proc:907:raid mitigation' = 'proc:907:raid mitigation',
 	'proc:908:raid drop rate multiplier' = 'proc:908:raid drop rate multiplier',
+
+	'proc:10000:taunt' = 'proc:10000:taunt',
+	'proc:10000:taunt-atk' = 'proc:10000:taunt-atk',
+	'proc:10000:taunt-def' = 'proc:10000:taunt-def',
+	'proc:10000:taunt-crit' = 'proc:10000:taunt-crit',
 
 	UNKNOWN_CONDITIONAL_EFFECT_ID = 'UNKNOWN_CONDITIONAL_EFFECT_ID',
 	UNKNOWN_CONDITIONAL_BUFF_PARAMS = 'UNKNOWN_CONDITIONAL_BUFF_PARAMS',

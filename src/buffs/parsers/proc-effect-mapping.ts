@@ -5209,4 +5209,86 @@ function setMapping (map: Map<string, ProcEffectToBuffFunction>): void {
 
 		return results;
 	});
+
+	map.set('10000', (effect: ProcEffect, context: IEffectToBuffConversionContext, injectionContext?: IProcBuffProcessingInjectionContext): IBuff[] => {
+		const originalId = '10000';
+		const { targetData, sources, effectDelay } = retrieveCommonInfoForEffects(effect, context, injectionContext);
+
+		const params = {
+			atk: '0' as AlphaNumeric,
+			def: '0' as AlphaNumeric,
+			crit: '0' as AlphaNumeric,
+			turnDuration: '0' as AlphaNumeric,
+		};
+		type TauntStatProperty = 'atk' | 'def' | 'crit';
+		const tauntStatProperties: TauntStatProperty[] = ['atk', 'def', 'crit'];
+
+		let unknownParams: IGenericBuffValue | undefined;
+		if (effect.params) {
+			let extraParams: string[];
+			[params.atk, params.def, params.crit, params.turnDuration, ...extraParams] = splitEffectParams(effect);
+
+			unknownParams = createUnknownParamsEntryFromExtraParams(extraParams, 4, injectionContext);
+		} else {
+			tauntStatProperties.forEach((statType) => {
+				const effectKey = `${statType}% buff`;
+				if (effectKey in effect) {
+					params[statType] = effect[effectKey] as number;
+				}
+			});
+
+			params.turnDuration = effect['taunt turns (10000)'] as number;
+		}
+
+		// ensure numerical properties are actually numbers
+		(tauntStatProperties as string[]).concat(['turnDuration']).forEach((prop) => {
+			params[prop as TauntStatProperty | 'turnDuration'] = parseNumberOrDefault(params[prop as TauntStatProperty | 'turnDuration']);
+		});
+
+		const hasAnyStats = tauntStatProperties.some((statKey) => params[statKey] !== 0);
+		let results: IBuff[] = [{
+			id: 'proc:10000:taunt',
+			originalId,
+			sources,
+			effectDelay,
+			duration: params.turnDuration as number,
+			value: true,
+			...targetData,
+		}];
+		if (hasAnyStats) {
+			tauntStatProperties.forEach((statKey) => {
+				const value = params[statKey];
+				if (value !== 0) {
+					results.push({
+						id: `proc:10000:taunt-${statKey}`,
+						originalId,
+						sources,
+						effectDelay,
+						duration: params.turnDuration as number,
+						value,
+						...targetData,
+					});
+				}
+			});
+		} else if (isTurnDurationBuff(context, params.turnDuration as number, injectionContext)) {
+			results = [createTurnDurationEntry({
+				originalId,
+				sources,
+				buffs: ['proc:10000:taunt'].concat(tauntStatProperties.map((statKey) => `proc:10000:taunt-${statKey}`)),
+				duration: params.turnDuration as number,
+				targetData,
+			})];
+		} else if (params.turnDuration as number === 0) {
+			results = [];
+		}
+
+		handlePostParse(results, unknownParams, {
+			originalId,
+			sources,
+			targetData,
+			effectDelay,
+		});
+
+		return results;
+	});
 }
