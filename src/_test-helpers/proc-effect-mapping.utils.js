@@ -189,7 +189,7 @@ const testMissingDamageFramesScenarios = ({
 				expect(result).toEqual(expectedResult);
 			} else {
 				// buff gets hit value from elseewhere, so specifying only hits is identical to specifying nothing for damage frames
-				expectNoParamsBuffWithEffectAndContext({ effect: createArbitraryBaseEffect(), context });
+				expectNoParamsBuffWithEffectAndContext({ effect: createArbitraryBaseEffect(), context, mappingFunction, baseBuffFactory });
 			}
 		});
 	});
@@ -199,6 +199,7 @@ module.exports = {
 	createArbitraryBaseEffect,
 	createArbitraryContext,
 	createFactoryForBaseBuffFromArbitraryEffect,
+	expectNoParamsBuffWithEffectAndContext,
 	testFunctionExistence,
 	testMissingDamageFramesScenarios,
 	testValidBuffIds,

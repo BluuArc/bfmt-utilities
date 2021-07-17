@@ -1,7 +1,7 @@
 const { getProcEffectToBuffMapping } = require('./proc-effect-mapping');
 const { BuffId } = require('./buff-types');
 // const { UnitElement, Ailment, TargetArea, TargetType } = require('../../datamine-types');
-const { createFactoryForBaseBuffFromArbitraryEffect, testFunctionExistence, testValidBuffIds, createArbitraryBaseEffect, createArbitraryContext, testMissingDamageFramesScenarios } = require('../../_test-helpers/proc-effect-mapping.utils');
+const { createFactoryForBaseBuffFromArbitraryEffect, testFunctionExistence, testValidBuffIds, createArbitraryBaseEffect, createArbitraryContext, testMissingDamageFramesScenarios, expectNoParamsBuffWithEffectAndContext } = require('../../_test-helpers/proc-effect-mapping.utils');
 const { ARBITRARY_HIT_COUNT, ARBITRARY_DAMAGE_DISTRIBUTION, HIT_DMG_DISTRIBUTION_TOTAL_KEY } = require('../../_test-helpers/constants');
 
 describe('getProcEffectBuffMapping method for default mapping', () => {
@@ -141,6 +141,154 @@ describe('getProcEffectBuffMapping method for default mapping', () => {
 
 				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
+			});
+		});
+	});
+
+	describe('proc 2', () => {
+		const expectedBuffId = 'proc:2:burst heal';
+		const expectedOriginalId = '2';
+
+		const arbitraryRecX = 120;
+		const arbitraryRecY = 25;
+		const expectedRecAddedForArbitraryValues = 27.5;
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds([expectedBuffId]);
+
+		it('uses the params property when it exists', () => {
+			const params = `1,2,${arbitraryRecX},${arbitraryRecY}`;
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: {
+					healLow: 1,
+					healHigh: 2,
+					'healerRec%': expectedRecAddedForArbitraryValues,
+				},
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = `1,2,${arbitraryRecX},${arbitraryRecY},5,6,7`;
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						healLow: 1,
+						healHigh: 2,
+						'healerRec%': expectedRecAddedForArbitraryValues,
+					},
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_4: '5',
+						param_5: '6',
+						param_6: '7',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				'heal low': 3,
+				'heal high': 4,
+				'rec added% (from healer)': 5,
+			});
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: {
+					healLow: 3,
+					healHigh: 4,
+					'healerRec%': 5,
+				},
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('converts effect properties to numbers when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				'heal low': '6',
+				'heal high': '7',
+				'rec added% (from healer)': '8',
+			});
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: {
+					healLow: 6,
+					healHigh: 7,
+					'healerRec%': 8,
+				},
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		describe('when values are missing', () => {
+			const effectPropToResultPropMapping = {
+				'heal low': 'healLow',
+				'heal high': 'healHigh',
+				'rec added% (from healer)': 'healerRec%',
+			};
+			Object.keys(effectPropToResultPropMapping).forEach((effectProp) => {
+				it(`defaults to 0 for missing ${effectProp} value`, () => {
+					const valuesInEffect = Object.keys(effectPropToResultPropMapping)
+						.filter((prop) => prop !== effectProp)
+						.reduce((acc, prop) => {
+							acc[prop] = 123;
+							return acc;
+						}, {});
+					const effect = createArbitraryBaseEffect(valuesInEffect);
+					const expectedValues = Object.entries(effectPropToResultPropMapping)
+						.reduce((acc, [localEffectProp, resultProp]) => {
+							acc[resultProp] = localEffectProp === effectProp ? 0 : 123;
+							return acc;
+						}, {});
+					const expectedResult = [baseBuffFactory({
+						id: expectedBuffId,
+						value: expectedValues,
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				const effect = createArbitraryBaseEffect();
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const valuesInEffect = Object.keys(effectPropToResultPropMapping)
+					.reduce((acc, prop) => {
+						acc[prop] = 'not a number';
+						return acc;
+					}, {});
+				const effect = createArbitraryBaseEffect(valuesInEffect);
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+
+			it('defaults values for effect params to 0 if they are non-number or missing', () => {
+				const effect = createArbitraryBaseEffect({ params: 'non-number' });
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
 			});
 		});
 	});
