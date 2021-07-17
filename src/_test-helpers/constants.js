@@ -8,6 +8,7 @@ module.exports.ARBITRARY_EFFECT_DELAY = 'arbitrary effect delay';
 
 module.exports.ARBITRARY_HIT_COUNT = 123;
 module.exports.ARBITRARY_DAMAGE_DISTRIBUTION = 456;
+module.exports.ARBITRARY_TURN_DURATION = 789;
 
 module.exports.KNOWN_ARBITRARY_PASSIVE_ID = '1';
 module.exports.ARBITRARY_INVALID_PASSIVE_ID = '-1';
