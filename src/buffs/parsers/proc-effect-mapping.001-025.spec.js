@@ -782,4 +782,187 @@ describe('getProcEffectBuffMapping method for default mapping', () => {
 			});
 		});
 	});
+
+	describe('proc 6', () => {
+		const effectKeyMapping = {
+			bc: 'bc drop rate% buff (10)',
+			hc: 'hc drop rate% buff (9)',
+			item: 'item drop rate% buff (11)',
+			turnDuration: 'drop buff rate turns',
+		};
+		const DROP_PARAMS_ORDER = ['bc', 'hc', 'item'];
+		const expectedOriginalId = '6';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds(DROP_PARAMS_ORDER.map((p) => `proc:6:drop boost-${p}`));
+
+		it('uses the params property when it exists', () => {
+			const params = `1,2,3,${ARBITRARY_TURN_DURATION}`;
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: 'proc:6:drop boost-bc',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 1,
+				}),
+				baseBuffFactory({
+					id: 'proc:6:drop boost-hc',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 2,
+				}),
+				baseBuffFactory({
+					id: 'proc:6:drop boost-item',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 3,
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = `1,2,3,${ARBITRARY_TURN_DURATION},5,6,7`;
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: 'proc:6:drop boost-bc',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 1,
+				}),
+				baseBuffFactory({
+					id: 'proc:6:drop boost-hc',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 2,
+				}),
+				baseBuffFactory({
+					id: 'proc:6:drop boost-item',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 3,
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_4: '5',
+						param_5: '6',
+						param_6: '7',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[effectKeyMapping.bc]: 4,
+				[effectKeyMapping.hc]: 5,
+				[effectKeyMapping.item]: 6,
+				[effectKeyMapping.turnDuration]: ARBITRARY_TURN_DURATION,
+			});
+			const expectedResult = [
+				baseBuffFactory({
+					id: 'proc:6:drop boost-bc',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 4,
+				}),
+				baseBuffFactory({
+					id: 'proc:6:drop boost-hc',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 5,
+				}),
+				baseBuffFactory({
+					id: 'proc:6:drop boost-item',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 6,
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('converts effect properties to numbers when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[effectKeyMapping.bc]: '7',
+				[effectKeyMapping.hc]: '8',
+				[effectKeyMapping.item]: '9',
+				[effectKeyMapping.turnDuration]: `${ARBITRARY_TURN_DURATION}`,
+			});
+			const expectedResult = [
+				baseBuffFactory({
+					id: 'proc:6:drop boost-bc',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 7,
+				}),
+				baseBuffFactory({
+					id: 'proc:6:drop boost-hc',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 8,
+				}),
+				baseBuffFactory({
+					id: 'proc:6:drop boost-item',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 9,
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		describe('when values are missing', () => {
+			Object.entries(effectKeyMapping)
+				.filter(([resultKey]) => resultKey !== 'turnDuration')
+				.forEach(([resultKey, effectKey]) => {
+					it(`returns only value for ${resultKey} if it is non-zero and other rates are zero in the params property`, () => {
+						const params = [...DROP_PARAMS_ORDER.map((param) => param === resultKey ? '123' : '0'), ARBITRARY_TURN_DURATION].join(',');
+						const effect = createArbitraryBaseEffect({ params });
+						const expectedResult = [baseBuffFactory({
+							id: `proc:6:drop boost-${resultKey}`,
+							duration: ARBITRARY_TURN_DURATION,
+							value: 123,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+
+					it(`returns only value for ${resultKey} if it is non-zero and other rates are zero when params property does not exist`, () => {
+						const effect = createArbitraryBaseEffect({
+							[effectKey]: 123,
+							[effectKeyMapping.turnDuration]: ARBITRARY_TURN_DURATION,
+						});
+						const expectedResult = [baseBuffFactory({
+							id: `proc:6:drop boost-${resultKey}`,
+							duration: ARBITRARY_TURN_DURATION,
+							value: 123,
+						})];
+
+						const result = mappingFunction(effect, createArbitraryContext());
+						expect(result).toEqual(expectedResult);
+					});
+				});
+
+			it('returns a no params buff if the effect params are non-number or missing', () => {
+				const effect = createArbitraryBaseEffect({ params: 'non-number' });
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+		});
+
+		describe('when all rates are 0', () => {
+			testTurnDurationScenarios({
+				getMappingFunction: () => mappingFunction,
+				getBaseBuffFactory: () => baseBuffFactory,
+				createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,${duration}`,
+				buffIdsInTurnDurationBuff: DROP_PARAMS_ORDER.map((p) => `proc:6:drop boost-${p}`),
+			});
+		});
+	});
 });
