@@ -1055,4 +1055,149 @@ describe('getProcEffectBuffMapping method for default mapping', () => {
 			expect(result).toEqual(expectedResult);
 		});
 	});
+
+	describe('proc 8', () => {
+		const expectedFlatFillId = 'proc:8:max hp boost-flat';
+		const expectedPercentFillId = 'proc:8:max hp boost-percent';
+		const FLAT_FILL_KEY = 'max hp increase';
+		const PERCENT_FILL_KEY = 'max hp% increase';
+		const expectedOriginalId = '8';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds([expectedFlatFillId, expectedPercentFillId]);
+
+		it('uses the params property when it exists', () => {
+			const params = '1,2';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatFillId,
+					value: 1,
+				}),
+				baseBuffFactory({
+					id: expectedPercentFillId,
+					value: 2,
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = '1,2,3,4,5';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatFillId,
+					value: 1,
+				}),
+				baseBuffFactory({
+					id: expectedPercentFillId,
+					value: 2,
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_2: '3',
+						param_3: '4',
+						param_4: '5',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[FLAT_FILL_KEY]: 3,
+				[PERCENT_FILL_KEY]: 4,
+			});
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatFillId,
+					value: 3,
+				}),
+				baseBuffFactory({
+					id: expectedPercentFillId,
+					value: 4,
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('converts effect properties to numbers when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[FLAT_FILL_KEY]: '5',
+				[PERCENT_FILL_KEY]: '6',
+			});
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatFillId,
+					value: 5,
+				}),
+				baseBuffFactory({
+					id: expectedPercentFillId,
+					value: 6,
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		describe('when values are missing', () => {
+			it('defaults to 0 for missing flat fill value', () => {
+				const effect = createArbitraryBaseEffect({
+					[PERCENT_FILL_KEY]: 123,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedPercentFillId,
+						value: 123,
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('defaults to 0 for missing percent fill value', () => {
+				const effect = createArbitraryBaseEffect({
+					[FLAT_FILL_KEY]: 123,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatFillId,
+						value: 123,
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				const effect = createArbitraryBaseEffect();
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = createArbitraryBaseEffect({
+					[FLAT_FILL_KEY]: 'not a number',
+					[PERCENT_FILL_KEY]: 'not a number',
+				});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+		});
+	});
 });
