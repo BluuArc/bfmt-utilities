@@ -1628,4 +1628,165 @@ describe('getProcEffectBuffMapping method for default mapping', () => {
 			expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
 		});
 	});
+
+	describe('proc 11', () => {
+		const expectedOriginalId = '11';
+		const AILMENT_EFFECT_KEY_MAPPING = {
+			poison: 'poison%',
+			weak: 'weaken%',
+			sick: 'sick%',
+			injury: 'injury%',
+			curse: 'curse%',
+			paralysis: 'paralysis%',
+			'atk down': 'atk down',
+			'def down': 'def down',
+			'rec down': 'rec down',
+		};
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds(Object.values(AILMENT_MAPPING).concat(['unknown']).map((a) => `proc:11:chance inflict-${a}`));
+
+		it('uses the params property when it exists', () => {
+			const params = '1,2';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:11:chance inflict-poison',
+				value: 2,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters when number of params is odd', () => {
+			const params = '3,4,5,6,7';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: 'proc:11:chance inflict-sick',
+					value: 4,
+				}),
+				baseBuffFactory({
+					id: 'proc:11:chance inflict-curse',
+					value: 6,
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_4: '7',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('does not return a buff entry for extra parameters when number of params is odd and last parameter is 0', () => {
+			const params = '4,5,6,7,0';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: 'proc:11:chance inflict-injury',
+					value: 5,
+				}),
+				baseBuffFactory({
+					id: 'proc:11:chance inflict-paralysis',
+					value: 7,
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				'paralysis%': 123,
+			});
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:11:chance inflict-paralysis',
+				value: 123,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		Object.entries(AILMENT_MAPPING).forEach(([ailmentKey, ailmentName]) => {
+			it(`returns an entry for ${ailmentName} when it is present in the params property`, () => {
+				const params = `${ailmentKey},123`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: `proc:11:chance inflict-${ailmentName}`,
+					value: 123,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it(`returns an entry for ${ailmentName} when it is present in the effect and no params property does not exist`, () => {
+				const effect = createArbitraryBaseEffect({ [AILMENT_EFFECT_KEY_MAPPING[ailmentName]]: 456 });
+				const expectedResult = [baseBuffFactory({
+					id: `proc:11:chance inflict-${ailmentName}`,
+					value: 456,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+		});
+
+		it('parses multiple inflict entries in effect when params property does not exist', () => {
+			const valuesInEffect = Object.values(AILMENT_MAPPING).reduce((acc, ailment, index) => {
+				acc[AILMENT_EFFECT_KEY_MAPPING[ailment]] = index + 1;
+				return acc;
+			}, {});
+			const effect = createArbitraryBaseEffect(valuesInEffect);
+			const expectedResult = Object.values(AILMENT_MAPPING)
+				.map((ailment, index) => baseBuffFactory({
+					id: `proc:11:chance inflict-${ailment}`,
+					value: index + 1,
+				}));
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('parses params outside of the known ailments as unknown', () => {
+			const params = '123,456';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:11:chance inflict-unknown',
+				value: 456,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns values when no ailment is specified but chance is non-zero', () => {
+			const params = '0,123';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:11:chance inflict-unknown',
+				value: 123,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a no params buff if all params are 0', () => {
+			const params = new Array(8).fill('0').join(',');
+			const effect = createArbitraryBaseEffect({ params });
+			expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+		});
+	});
 });
