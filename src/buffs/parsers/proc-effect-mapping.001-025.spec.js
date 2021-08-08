@@ -965,4 +965,94 @@ describe('getProcEffectBuffMapping method for default mapping', () => {
 			});
 		});
 	});
+
+	describe('proc 7', () => {
+		const AI_EFFECT_KEY = 'angel idol recover hp%';
+		const expectedBuffId = 'proc:7:guaranteed ko resistance';
+		const expectedOriginalId = '7';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds([expectedBuffId]);
+
+		it('uses the params property when it exists', () => {
+			const effect = createArbitraryBaseEffect({ params: '1' });
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: 1,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const effect = createArbitraryBaseEffect({ params: '1,2,3,4' });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedBuffId,
+					value: 1,
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_1: '2',
+						param_2: '3',
+						param_3: '4',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({ [AI_EFFECT_KEY]: 1234 });
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: 1234,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('converts effect properties to numbers when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({ [AI_EFFECT_KEY]: '5678' });
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: 5678,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff value when params value is 0', () => {
+			const effect = createArbitraryBaseEffect({ params: '0' });
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: 0,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff value when params property and AI property on effect do not exist', () => {
+			const effect = createArbitraryBaseEffect();
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: 0,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+	});
 });
