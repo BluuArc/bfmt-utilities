@@ -28,3 +28,15 @@ module.exports.ELEMENT_MAPPING = Object.freeze({
 	5: UnitElement.Light,
 	6: UnitElement.Dark,
 });
+
+module.exports.AILMENT_MAPPING = Object.freeze({
+	1: 'poison',
+	2: 'weak',
+	3: 'sick',
+	4: 'injury',
+	5: 'curse',
+	6: 'paralysis',
+	7: 'atk down',
+	8: 'def down',
+	9: 'rec down',
+});
