@@ -2442,4 +2442,335 @@ describe('getProcEffectBuffMapping method for default mapping', () => {
 			generateConditions: () => ({ whenAttacked: true }),
 		});
 	});
+
+	describe('proc 22', () => {
+		const expectedOriginalId = '22';
+		testProcWithSingleNumericalParameterAndTurnDuration({
+			getMappingFunction: () => getProcEffectToBuffMapping().get(expectedOriginalId),
+			getBaseBuffFactory: () => createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId),
+			expectedOriginalId,
+			expectedBuffId: 'proc:22:defense ignore',
+			effectValueKey: 'defense% ignore',
+			effectTurnDurationKey: 'defense% ignore turns (39)',
+		});
+	});
+
+	describe('proc 23', () => {
+		const effectValueKey = 'spark dmg% buff (40)';
+		const effectTurnDurationKey = DEFAULT_TURN_DURATION_KEY;
+		const expectedBuffId = 'proc:23:spark damage';
+		const expectedOriginalId = '23';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds([expectedBuffId]);
+
+		it('uses the params property when it exists', () => {
+			const params = `1,0,0,0,0,0,${ARBITRARY_TURN_DURATION}`;
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				duration: ARBITRARY_TURN_DURATION,
+				value: 1,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = `1,2,3,4,5,6,${ARBITRARY_TURN_DURATION},8,9,10`;
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedBuffId,
+					duration: ARBITRARY_TURN_DURATION,
+					value: 1,
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_1: '2',
+						param_2: '3',
+						param_3: '4',
+						param_4: '5',
+						param_5: '6',
+						param_7: '8',
+						param_8: '9',
+						param_9: '10',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra intermediate parameters', () => {
+			const params = `1,2,3,4,5,6,${ARBITRARY_TURN_DURATION}`;
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedBuffId,
+					duration: ARBITRARY_TURN_DURATION,
+					value: 1,
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_1: '2',
+						param_2: '3',
+						param_3: '4',
+						param_4: '5',
+						param_5: '6',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[effectValueKey]: 2,
+				[effectTurnDurationKey]: ARBITRARY_TURN_DURATION,
+			});
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				duration: ARBITRARY_TURN_DURATION,
+				value: 2,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('converts effect properties to numbers when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[effectValueKey]: '3',
+				[effectTurnDurationKey]: ARBITRARY_TURN_DURATION,
+			});
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				duration: ARBITRARY_TURN_DURATION,
+				value: 3,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		describe('when non-turn duration value is 0', () => {
+			testTurnDurationScenarios({
+				getMappingFunction: () => mappingFunction,
+				getBaseBuffFactory: () => baseBuffFactory,
+				createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,${duration}`,
+				buffIdsInTurnDurationBuff: [expectedBuffId],
+			});
+		});
+	});
+
+	describe('proc 24', () => {
+		const STAT_PARAMS_ORDER = ['atk', 'def', 'rec'];
+		const CONVERTED_STAT_KEY = 'converted attribute';
+		const EFFECT_TURN_DURATION_KEY = '% converted turns';
+		const paramToResultStatMapping = {
+			1: 'atk',
+			2: 'def',
+			3: 'rec',
+			4: 'hp',
+		};
+		const effectStatToResultStatMapping = {
+			attack: 'atk',
+			defense: 'def',
+			recovery: 'rec',
+			hp: 'hp',
+		};
+		const expectedOriginalId = '24';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds(STAT_PARAMS_ORDER.map((stat) => `proc:24:converted-${stat}`));
+
+		it('uses the params property when it exists', () => {
+			const params = `1,2,3,4,${ARBITRARY_TURN_DURATION}`;
+			const splitParams = params.split(',');
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+				return baseBuffFactory({
+					id: `proc:24:converted-${stat}`,
+					duration: ARBITRARY_TURN_DURATION,
+					value: {
+						convertedStat: 'atk',
+						value: +splitParams[index + 1],
+					},
+				});
+			});
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = `2,2,3,4,${ARBITRARY_TURN_DURATION},6,7,8`;
+			const splitParams = params.split(',');
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+				return baseBuffFactory({
+					id: `proc:24:converted-${stat}`,
+					duration: ARBITRARY_TURN_DURATION,
+					value: {
+						convertedStat: 'def',
+						value: +splitParams[index + 1],
+					},
+				});
+			}).concat([baseBuffFactory({
+				id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+				value: {
+					param_5: '6',
+					param_6: '7',
+					param_7: '8',
+				},
+			})]);
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[CONVERTED_STAT_KEY]: 'recovery',
+				'atk% buff (46)': 4, // the numbers here are from actual data; separate unit tests handle more arbitrary cases
+				'def% buff (47)': 5,
+				'rec% buff (48)': 6,
+				[EFFECT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+			});
+			const expectedParamValues = [4, 5, 6];
+			const expectedResult = STAT_PARAMS_ORDER.map((stat, index) => {
+				return baseBuffFactory({
+					id: `proc:24:converted-${stat}`,
+					duration: ARBITRARY_TURN_DURATION,
+					value: {
+						value: expectedParamValues[index],
+						convertedStat: 'rec',
+					},
+				});
+			});
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		STAT_PARAMS_ORDER.forEach((statCase) => {
+			Object.entries(paramToResultStatMapping).forEach(([convertedStatKey, convertedStatValue]) => {
+				it(`returns only value for ${statCase} converted from ${convertedStatValue} if it is non-zero and other stats are zero and converted stat is ${convertedStatValue}`, () => {
+					const params = [convertedStatKey, ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0'), ARBITRARY_TURN_DURATION].join(',');
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: `proc:24:converted-${statCase}`,
+						duration: ARBITRARY_TURN_DURATION,
+						value: {
+							convertedStat: convertedStatValue,
+							value: 123,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			Object.entries(effectStatToResultStatMapping).forEach(([convertedStatKey, convertedStatValue]) => {
+				it(`returns only value for ${statCase} converted from ${convertedStatValue} if it is non-zero and other stats are zero and converted stat is ${convertedStatValue} and params property does not exist`, () => {
+					const effect = createArbitraryBaseEffect({
+						[CONVERTED_STAT_KEY]: convertedStatKey,
+						[`${statCase}% buff (${Math.floor(Math.random() * 100)})`]: 456,
+						[EFFECT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: `proc:24:converted-${statCase}`,
+						duration: ARBITRARY_TURN_DURATION,
+						value: {
+							convertedStat: convertedStatValue,
+							value: 456,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it(`converts converted stat values with no mapping to "unknown" and the only non-zero stat is ${statCase}`, () => {
+				const params = ['123', ...STAT_PARAMS_ORDER.map((stat) => stat === statCase ? '123' : '0'), ARBITRARY_TURN_DURATION].join(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: `proc:24:converted-${statCase}`,
+					duration: ARBITRARY_TURN_DURATION,
+					value: {
+						convertedStat: 'unknown',
+						value: 123,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it(`converts converted stat values with no mapping to "unknown" and the only non-zero stat is ${statCase} and params property does not exist`, () => {
+				const effect = createArbitraryBaseEffect({
+					[CONVERTED_STAT_KEY]: 'arbitrary stat',
+					[`${statCase}% buff (${Math.floor(Math.random() * 100)})`]: 456,
+					[EFFECT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+				});
+				const expectedResult = [baseBuffFactory({
+					id: `proc:24:converted-${statCase}`,
+					duration: ARBITRARY_TURN_DURATION,
+					value: {
+						convertedStat: 'unknown',
+						value: 456,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+		});
+
+		it('parses lack of converted stat property to "unknown" in effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				'def% buff': 1,
+				[EFFECT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+			});
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:24:converted-def',
+				duration: ARBITRARY_TURN_DURATION,
+				value: {
+					convertedStat: 'unknown',
+					value: 1,
+				},
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		describe('when all stats are 0', () => {
+			testTurnDurationScenarios({
+				getMappingFunction: () => mappingFunction,
+				getBaseBuffFactory: () => baseBuffFactory,
+				createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,${duration}`,
+				buffIdsInTurnDurationBuff: STAT_PARAMS_ORDER.map((stat) => `proc:24:converted-${stat}`),
+			});
+		});
+	});
 });
