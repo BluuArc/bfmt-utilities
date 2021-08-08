@@ -1,3 +1,4 @@
+const { UnitElement } = require('../../datamine-types');
 const { ARBITRARY_TURN_DURATION, ARBITRARY_HIT_COUNT, ARBITRARY_DAMAGE_DISTRIBUTION, HIT_DMG_DISTRIBUTION_TOTAL_KEY, ELEMENT_MAPPING } = require('../../_test-helpers/constants');
 const { createFactoryForBaseBuffFromArbitraryEffect, testFunctionExistence, testValidBuffIds, createArbitraryBaseEffect, createArbitraryContext, expectNoParamsBuffWithEffectAndContext, testTurnDurationScenarios, testMissingDamageFramesScenarios } = require('../../_test-helpers/proc-effect-mapping.utils');
 const { BuffId } = require('./buff-types');
@@ -787,6 +788,553 @@ describe('getProcEffectBuffMapping method for default mapping', () => {
 				getBaseBuffFactory: () => baseBuffFactory,
 				createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,${duration}`,
 				buffIdsInTurnDurationBuff: validElements.concat(['unknown']).map((e) => `proc:30:add element-${e}`),
+			});
+		});
+	});
+
+	describe('proc 31', () => {
+		const expectedFlatFillId = 'proc:31:bc fill-flat';
+		const expectedPercentFillId = 'proc:31:bc fill-percent';
+		const FLAT_FILL_KEY = 'increase bb gauge';
+		const expectedOriginalId = '31';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds([expectedFlatFillId, expectedPercentFillId]);
+
+		it('uses the params property when it exists', () => {
+			const params = '100,2';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatFillId,
+					value: 1,
+				}),
+				baseBuffFactory({
+					id: expectedPercentFillId,
+					value: 2,
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = '100,2,3,4,5';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatFillId,
+					value: 1,
+				}),
+				baseBuffFactory({
+					id: expectedPercentFillId,
+					value: 2,
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_2: '3',
+						param_3: '4',
+						param_4: '5',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[FLAT_FILL_KEY]: 3,
+			});
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatFillId,
+					value: 3,
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('converts effect properties to numbers when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[FLAT_FILL_KEY]: '4',
+			});
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatFillId,
+					value: 4,
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		describe('when values are missing', () => {
+			it('returns a no params buff when no parameters are given', () => {
+				const effect = createArbitraryBaseEffect();
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = createArbitraryBaseEffect({
+					[FLAT_FILL_KEY]: 'not a number',
+				});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+		});
+	});
+
+	describe('proc 32', () => {
+		const EFFECT_KEY = 'set attack element attribute';
+		const ELEMENT_MAPPING = {
+			1: UnitElement.Fire,
+			2: UnitElement.Water,
+			3: UnitElement.Earth,
+			4: UnitElement.Thunder,
+			5: UnitElement.Light,
+			6: UnitElement.Dark,
+		};
+		const expectedOriginalId = '32';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:32:element shift-${element}`));
+
+		it('uses the params property when it exists', () => {
+			const effect = createArbitraryBaseEffect({ params: '1' });
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:32:element shift-fire',
+				value: true,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const effect = createArbitraryBaseEffect({ params: '2,2,3,4' });
+			const expectedResult = [
+				baseBuffFactory({
+					id: 'proc:32:element shift-water',
+					value: true,
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_1: '2',
+						param_2: '3',
+						param_3: '4',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({ [EFFECT_KEY]: 'earth' });
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:32:element shift-earth',
+				value: true,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		Object.entries(ELEMENT_MAPPING).forEach(([elementKey, elementValue]) => {
+			it(`parses value for ${elementValue}`, () => {
+				const effect = createArbitraryBaseEffect({ params: `${elementKey}` });
+				const expectedResult = [baseBuffFactory({
+					id: `proc:32:element shift-${elementValue}`,
+					value: true,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it(`parses value for ${elementValue} when params property does not exist`, () => {
+				const effect = createArbitraryBaseEffect({
+					[EFFECT_KEY]: elementValue,
+				});
+				const expectedResult = [baseBuffFactory({
+					id: `proc:32:element shift-${elementValue}`,
+					value: true,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+		});
+
+		it('parses unknown elements to "unknown"', () => {
+			const effect = createArbitraryBaseEffect({ params: '1234' });
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:32:element shift-unknown',
+				value: true,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('parses unknown elements to "unknown" when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[EFFECT_KEY]: 'arbitrary unknown element',
+			});
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:32:element shift-unknown',
+				value: true,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('parses "all" buff in effect parameters to "unknown" when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[EFFECT_KEY]: 'all',
+			});
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:32:element shift-unknown',
+				value: true,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a no params buff if param is 0', () => {
+			const effect = createArbitraryBaseEffect({ params: '0' });
+			expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+		});
+
+		it('returns a no params buff when no parameters are given', () => {
+			expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+		});
+	});
+
+	describe('proc 33', () => {
+		const expectedBuffId = 'proc:33:buff wipe';
+		const expectedOriginalId = '33';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds([expectedBuffId]);
+
+		it('uses the params property when it exists', () => {
+			const effect = createArbitraryBaseEffect({ params: '123' });
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: 123,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const effect = createArbitraryBaseEffect({ params: '123,2,3,4' });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedBuffId,
+					value: 123,
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_1: '2',
+						param_2: '3',
+						param_3: '4',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to stat-specific properties when the params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({ 'clear buff chance%': 456 });
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: 456,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a no params buff when no parameters are given', () => {
+			const effect = createArbitraryBaseEffect();
+			expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+		});
+
+		it('returns a no params buff if parsed value from params is zero', () => {
+			const effect = createArbitraryBaseEffect({ params: '0' });
+			expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+		});
+
+		it('returns a no params buff if all effect properties are non-number values', () => {
+			const effect = createArbitraryBaseEffect({ 'clear buff chance%': 'not a number' });
+			expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+		});
+
+		it('returns a no params buff if the effect params are non-number or missing', () => {
+			const effect = createArbitraryBaseEffect({ params: 'non-number' });
+			expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+		});
+	});
+
+	describe('proc 34', () => {
+		const expectedFlatDrainId = 'proc:34:bc drain-flat';
+		const expectedPercentDrainId = 'proc:34:bc drain-percent';
+		const FLAT_DRAIN_LOW_KEY = 'base bb gauge reduction low';
+		const FLAT_DRAIN_HIGH_KEY = 'base bb gauge reduction high';
+		const PERCENT_DRAIN_LOW_KEY = 'bb gauge% reduction low';
+		const PERCENT_DRAIN_HIGH_KEY = 'bb gauge% reduction high';
+		const CHANCE_KEY = 'bb gauge reduction chance%';
+		const expectedOriginalId = '34';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds([expectedFlatDrainId, expectedPercentDrainId]);
+
+		it('uses the params property when it exists', () => {
+			const params = '100,200,3,4,5';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatDrainId,
+					value: {
+						drainLow: 1,
+						drainHigh: 2,
+						chance: 5,
+					},
+				}),
+				baseBuffFactory({
+					id: expectedPercentDrainId,
+					value: {
+						drainLow: 3,
+						drainHigh: 4,
+						chance: 5,
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = '100,200,3,4,5,6,7,8';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatDrainId,
+					value: {
+						drainLow: 1,
+						drainHigh: 2,
+						chance: 5,
+					},
+				}),
+				baseBuffFactory({
+					id: expectedPercentDrainId,
+					value: {
+						drainLow: 3,
+						drainHigh: 4,
+						chance: 5,
+					},
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_5: '6',
+						param_6: '7',
+						param_7: '8',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[FLAT_DRAIN_LOW_KEY]: 6,
+				[FLAT_DRAIN_HIGH_KEY]: 7,
+				[PERCENT_DRAIN_LOW_KEY]: 8,
+				[PERCENT_DRAIN_HIGH_KEY]: 9,
+				[CHANCE_KEY]: 10,
+			});
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatDrainId,
+					value: {
+						drainLow: 6,
+						drainHigh: 7,
+						chance: 10,
+					},
+				}),
+				baseBuffFactory({
+					id: expectedPercentDrainId,
+					value: {
+						drainLow: 8,
+						drainHigh: 9,
+						chance: 10,
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('converts effect properties to numbers when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[FLAT_DRAIN_LOW_KEY]: '11',
+				[FLAT_DRAIN_HIGH_KEY]: '12',
+				[PERCENT_DRAIN_LOW_KEY]: '13',
+				[PERCENT_DRAIN_HIGH_KEY]: '14',
+				[CHANCE_KEY]: '15',
+			});
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatDrainId,
+					value: {
+						drainLow: 11,
+						drainHigh: 12,
+						chance: 15,
+					},
+				}),
+				baseBuffFactory({
+					id: expectedPercentDrainId,
+					value: {
+						drainLow: 13,
+						drainHigh: 14,
+						chance: 15,
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		describe('when values are missing', () => {
+			const nonChanceKeys = [FLAT_DRAIN_LOW_KEY, FLAT_DRAIN_HIGH_KEY, PERCENT_DRAIN_LOW_KEY, PERCENT_DRAIN_HIGH_KEY];
+			nonChanceKeys.forEach((effectKey) => {
+				it(`defaults to 0 for missing effect parameter [${effectKey}] when params property does not exist`, () => {
+					const valuesInEffect = nonChanceKeys.reduce((acc, key) => {
+						if (key !== effectKey) {
+							acc[key] = 123;
+						}
+						return acc;
+					}, {});
+					valuesInEffect[CHANCE_KEY] = 456;
+					const effect = createArbitraryBaseEffect(valuesInEffect);
+					const expectedResult = [
+						baseBuffFactory({
+							id: expectedFlatDrainId,
+							value: {
+								drainLow: effectKey === FLAT_DRAIN_LOW_KEY ? 0 : 123,
+								drainHigh: effectKey === FLAT_DRAIN_HIGH_KEY ? 0 : 123,
+								chance: 456,
+							},
+						}),
+						baseBuffFactory({
+							id: expectedPercentDrainId,
+							value: {
+								drainLow: effectKey === PERCENT_DRAIN_LOW_KEY ? 0 : 123,
+								drainHigh: effectKey === PERCENT_DRAIN_HIGH_KEY ? 0 : 123,
+								chance: 456,
+							},
+						}),
+					];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('does not return a flat drain buff if both flat drain parameters are 0', () => {
+				const params = '0,0,1,2,3';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: expectedPercentDrainId,
+					value: {
+						drainLow: 1,
+						drainHigh: 2,
+						chance: 3,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('does not return a percent drain buff if both percent drain parameters are 0', () => {
+				const params = '100,200,0,0,3';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: expectedFlatDrainId,
+					value: {
+						drainLow: 1,
+						drainHigh: 2,
+						chance: 3,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				const effect = createArbitraryBaseEffect();
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+
+			it('returns a no params buff when drain values are zero and chance value is non-zero', () => {
+				const params = '0,0,0,0,123';
+				const effect = createArbitraryBaseEffect({ params });
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+
+			it('defaults all effect properties to 0 for non-number values', () => {
+				const effect = createArbitraryBaseEffect({
+					[FLAT_DRAIN_LOW_KEY]: 'not a number',
+					[FLAT_DRAIN_HIGH_KEY]: 'not a number',
+					[PERCENT_DRAIN_LOW_KEY]: 'not a number',
+					[PERCENT_DRAIN_HIGH_KEY]: 'not a number',
+					[CHANCE_KEY]: 'not a number',
+				});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
 			});
 		});
 	});
