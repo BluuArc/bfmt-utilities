@@ -29,6 +29,15 @@ module.exports.ELEMENT_MAPPING = Object.freeze({
 	6: UnitElement.Dark,
 });
 
+module.exports.NON_ZERO_ELEMENT_MAPPING = Object.freeze({
+	1: UnitElement.Fire,
+	2: UnitElement.Water,
+	3: UnitElement.Earth,
+	4: UnitElement.Thunder,
+	5: UnitElement.Light,
+	6: UnitElement.Dark,
+});
+
 module.exports.AILMENT_MAPPING = Object.freeze({
 	1: 'poison',
 	2: 'weak',
