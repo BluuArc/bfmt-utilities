@@ -1,8 +1,8 @@
 const { getProcEffectToBuffMapping } = require('./proc-effect-mapping');
 const { BuffId } = require('./buff-types');
-// const { UnitElement, Ailment, TargetArea, TargetType } = require('../../datamine-types');
-const { createFactoryForBaseBuffFromArbitraryEffect, testFunctionExistence, testValidBuffIds, createArbitraryBaseEffect, createArbitraryContext, testMissingDamageFramesScenarios, expectNoParamsBuffWithEffectAndContext, testTurnDurationScenarios } = require('../../_test-helpers/proc-effect-mapping.utils');
-const { ARBITRARY_HIT_COUNT, ARBITRARY_DAMAGE_DISTRIBUTION, HIT_DMG_DISTRIBUTION_TOTAL_KEY, ARBITRARY_TURN_DURATION, ELEMENT_MAPPING, AILMENT_MAPPING } = require('../../_test-helpers/constants');
+const { createFactoryForBaseBuffFromArbitraryEffect, testFunctionExistence, testValidBuffIds, createArbitraryBaseEffect, createArbitraryContext, testMissingDamageFramesScenarios, expectNoParamsBuffWithEffectAndContext, testTurnDurationScenarios, testProcWithSingleNumericalParameterAndTurnDuration, testProcWithNumericalValueRangeAndChanceAndTurnDuration } = require('../../_test-helpers/proc-effect-mapping.utils');
+const { ARBITRARY_HIT_COUNT, ARBITRARY_DAMAGE_DISTRIBUTION, HIT_DMG_DISTRIBUTION_TOTAL_KEY, ARBITRARY_TURN_DURATION, ELEMENT_MAPPING, AILMENT_MAPPING, EFFECT_DELAY_BUFF_PROP } = require('../../_test-helpers/constants');
+const { Ailment } = require('../../datamine-types');
 
 describe('getProcEffectBuffMapping method for default mapping', () => {
 	const DEFAULT_TURN_DURATION_KEY = 'buff turns';
@@ -2134,6 +2134,312 @@ describe('getProcEffectBuffMapping method for default mapping', () => {
 				const result = mappingFunction(effect, createArbitraryContext());
 				expect(result).toEqual(expectedResult);
 			});
+		});
+	});
+
+	describe('proc 16', () => {
+		const expectedOriginalId = '16';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:16:mitigate-${element}`));
+
+		it('uses the params property when it exists', () => {
+			const params = `0,1,${ARBITRARY_TURN_DURATION}`;
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:16:mitigate-all',
+				duration: ARBITRARY_TURN_DURATION,
+				value: 1,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = `1,2,${ARBITRARY_TURN_DURATION},4,5,6`;
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: 'proc:16:mitigate-fire',
+					duration: ARBITRARY_TURN_DURATION,
+					value: 2,
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_3: '4',
+						param_4: '5',
+						param_5: '6',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				'mitigate fire attacks (21)': 3, // number in key is from actual data; separate unit tests handle more arbitrary values
+				[DEFAULT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+			});
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:16:mitigate-fire',
+				duration: ARBITRARY_TURN_DURATION,
+				value: 3,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		Object.entries(ELEMENT_MAPPING).forEach(([elementKey, elementValue]) => {
+			it(`parses value for ${elementValue}`, () => {
+				const params = `${elementKey},123,${ARBITRARY_TURN_DURATION}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: `proc:16:mitigate-${elementValue}`,
+					duration: ARBITRARY_TURN_DURATION,
+					value: 123,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it(`parses value for ${elementValue} when params property does not exist`, () => {
+				const effect = createArbitraryBaseEffect({
+					[`mitigate ${elementValue} attacks (${Math.floor(Math.random() * 100)})`]: 456,
+					[DEFAULT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+				});
+				const expectedResult = [baseBuffFactory({
+					id: `proc:16:mitigate-${elementValue}`,
+					duration: ARBITRARY_TURN_DURATION,
+					value: 456,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+		});
+
+		it('parses unknown elements to "unknown"', () => {
+			const params = `1234,123,${ARBITRARY_TURN_DURATION}`;
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:16:mitigate-unknown',
+				duration: ARBITRARY_TURN_DURATION,
+				value: 123,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('parses unknown elements to "unknown" when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				'mitigate attacks': 456,
+				[DEFAULT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+			});
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:16:mitigate-unknown',
+				duration: ARBITRARY_TURN_DURATION,
+				value: 456,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		describe('when no mitigation value is given', () => {
+			testTurnDurationScenarios({
+				getMappingFunction: () => mappingFunction,
+				getBaseBuffFactory: () => baseBuffFactory,
+				createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,${duration}`,
+				buffIdsInTurnDurationBuff: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:16:mitigate-${stat}`),
+			});
+
+			it('returns a turn modification buff when turn duration is non-zero and params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					'attacks': 456,
+					[DEFAULT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+				});
+				const expectedResult = [baseBuffFactory({
+					id: BuffId.TURN_DURATION_MODIFICATION,
+					value: {
+						buffs: Object.values(ELEMENT_MAPPING).concat(['unknown']).map((stat) => `proc:16:mitigate-${stat}`),
+						duration: ARBITRARY_TURN_DURATION,
+					},
+				}, [EFFECT_DELAY_BUFF_PROP])];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+		});
+	});
+
+	describe('proc 17', () => {
+		const AILMENTS_ORDER = [Ailment.Poison, Ailment.Weak, Ailment.Sick, Ailment.Injury, Ailment.Curse, Ailment.Paralysis];
+		const EFFECT_TURN_DURATION_KEY = 'resist status ails turns';
+		const expectedOriginalId = '17';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds(AILMENTS_ORDER.map((ailment) => `proc:17:resist-${ailment}`));
+
+		it('uses the params property when it exists', () => {
+			const params = `1,2,3,4,5,6,${ARBITRARY_TURN_DURATION}`;
+			const splitParams = params.split(',');
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
+				return baseBuffFactory({
+					id: `proc:17:resist-${ailment}`,
+					duration: ARBITRARY_TURN_DURATION,
+					value: +splitParams[index],
+				});
+			});
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = `1,2,3,4,5,6,${ARBITRARY_TURN_DURATION},8,9,10`;
+			const splitParams = params.split(',');
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
+				return baseBuffFactory({
+					id: `proc:17:resist-${ailment}`,
+					duration: ARBITRARY_TURN_DURATION,
+					value: +splitParams[index],
+				});
+			}).concat([baseBuffFactory({
+				id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+				value: {
+					param_7: '8',
+					param_8: '9',
+					param_9: '10',
+				},
+			})]);
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				'resist poison% (30)': 7, // the numbers here are from actual data; separate unit tests handle more arbitrary cases
+				'resist weaken% (31)': 8,
+				'resist sick% (32)': 9,
+				'resist injury% (33)': 10,
+				'resist curse% (34)': 11,
+				'resist paralysis% (35)': 12,
+				[EFFECT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+			});
+			const expectedParamValues = [7, 8, 9, 10, 11, 12];
+			const expectedResult = AILMENTS_ORDER.map((ailment, index) => {
+				return baseBuffFactory({
+					id: `proc:17:resist-${ailment}`,
+					duration: ARBITRARY_TURN_DURATION,
+					value: expectedParamValues[index],
+				});
+			});
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		AILMENTS_ORDER.forEach((ailmentCase) => {
+			it(`returns only value for ${ailmentCase} if it is non-zero and other stats are zero`, () => {
+				const params = AILMENTS_ORDER.map((ailment) => ailment === ailmentCase ? '123' : '0').concat([ARBITRARY_TURN_DURATION]).join(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: `proc:17:resist-${ailmentCase}`,
+					duration: ARBITRARY_TURN_DURATION,
+					value: 123,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it(`returns only value for ${ailmentCase} if it is non-zero and other stats are zero and params property does not exist`, () => {
+				const ailmentKey = ailmentCase !== Ailment.Weak ? ailmentCase : 'weaken';
+				const effect = createArbitraryBaseEffect({
+					[`resist ${ailmentKey}% (${Math.floor(Math.random() * 100)})`]: 123,
+					[EFFECT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+				});
+				const expectedResult = [baseBuffFactory({
+					id: `proc:17:resist-${ailmentCase}`,
+					duration: ARBITRARY_TURN_DURATION,
+					value: 123,
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+		});
+
+		describe('when all resistances are 0', () => {
+			testTurnDurationScenarios({
+				getMappingFunction: () => mappingFunction,
+				getBaseBuffFactory: () => baseBuffFactory,
+				createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,0,0,0,${duration}`,
+				buffIdsInTurnDurationBuff: AILMENTS_ORDER.map((ailment) => `proc:17:resist-${ailment}`),
+			});
+		});
+	});
+
+	describe('proc 18', () => {
+		const expectedOriginalId = '18';
+		testProcWithSingleNumericalParameterAndTurnDuration({
+			getMappingFunction: () => getProcEffectToBuffMapping().get(expectedOriginalId),
+			getBaseBuffFactory: () => createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId),
+			expectedOriginalId,
+			expectedBuffId: 'proc:18:mitigation',
+			effectValueKey: 'dmg% reduction',
+			effectTurnDurationKey: 'dmg% reduction turns (36)',
+		});
+	});
+
+	describe('proc 19', () => {
+		const expectedOriginalId = '19';
+		testProcWithSingleNumericalParameterAndTurnDuration({
+			getMappingFunction: () => getProcEffectToBuffMapping().get(expectedOriginalId),
+			getBaseBuffFactory: () => createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId),
+			expectedOriginalId,
+			expectedBuffId: 'proc:19:gradual bc fill',
+			effectValueKey: 'increase bb gauge gradual',
+			effectTurnDurationKey: 'increase bb gauge gradual turns (37)',
+			getExpectedValueFromParam: (param) => +param / 100,
+		});
+	});
+
+	describe('proc 20', () => {
+		const expectedOriginalId = '20';
+		testProcWithNumericalValueRangeAndChanceAndTurnDuration({
+			getMappingFunction: () => getProcEffectToBuffMapping().get(expectedOriginalId),
+			getBaseBuffFactory: () => createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId),
+			expectedOriginalId,
+			expectedBuffId: 'proc:20:bc fill on hit',
+			effectKeyLow: 'bc fill when attacked low',
+			effectKeyHigh: 'bc fill when attacked high',
+			effectKeyChance: 'bc fill when attacked%',
+			effectTurnDurationKey: 'bc fill when attacked turns (38)',
+			buffKeyLow: 'fillLow',
+			buffKeyHigh: 'fillHigh',
+			getExpectedValueFromParam: (param) => +param / 100,
+			generateConditions: () => ({ whenAttacked: true }),
 		});
 	});
 });
