@@ -1,6 +1,6 @@
-const { Ailment } = require('../../datamine-types');
-const { ARBITRARY_TURN_DURATION, NON_ZERO_ELEMENT_MAPPING, EFFECT_DELAY_BUFF_PROP } = require('../../_test-helpers/constants');
-const { createFactoryForBaseBuffFromArbitraryEffect, testFunctionExistence, testValidBuffIds, createArbitraryBaseEffect, createArbitraryContext, testTurnDurationScenarios, testProcWithSingleNumericalParameterAndTurnDuration, expectNoParamsBuffWithEffectAndContext } = require('../../_test-helpers/proc-effect-mapping.utils');
+const { Ailment, TargetArea, TargetType } = require('../../datamine-types');
+const { ARBITRARY_TURN_DURATION, NON_ZERO_ELEMENT_MAPPING, EFFECT_DELAY_BUFF_PROP, ARBITRARY_HIT_COUNT, ARBITRARY_DAMAGE_DISTRIBUTION, HIT_DMG_DISTRIBUTION_TOTAL_KEY, ELEMENT_MAPPING } = require('../../_test-helpers/constants');
+const { createFactoryForBaseBuffFromArbitraryEffect, testFunctionExistence, testValidBuffIds, createArbitraryBaseEffect, createArbitraryContext, testTurnDurationScenarios, testProcWithSingleNumericalParameterAndTurnDuration, expectNoParamsBuffWithEffectAndContext, testMissingDamageFramesScenarios } = require('../../_test-helpers/proc-effect-mapping.utils');
 const { BuffId } = require('./buff-types');
 const { getProcEffectToBuffMapping } = require('./proc-effect-mapping');
 
@@ -1082,6 +1082,605 @@ describe('getProcEffectBuffMapping method for default mapping', () => {
 				createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,0,${duration}`,
 				buffIdsInTurnDurationBuff: BURST_TYPES.map((type) => `proc:59:attack reduction-${type}`),
 			});
+		});
+	});
+
+	describe('proc 61', () => {
+		const ADDED_ATK_BUFF_KEY = 'maxAddedAtk%';
+		const PARAMS_ORDER = ['baseAtk%', ADDED_ATK_BUFF_KEY, 'flatAtk', 'crit%', 'bc%', 'hc%', 'dmg%'];
+		const expectedBuffIdForAttack = 'proc:61:party bb gauge-scaled attack';
+		const expectedBuffIdForBcDrain = 'proc:61:party bc drain';
+		const expectedOriginalId = '61';
+
+		const createExpectedBcDrainBuff = () => baseBuffFactory({
+			id: expectedBuffIdForBcDrain,
+			value: true,
+			targetArea: TargetArea.Aoe,
+			targetType: TargetType.Party,
+		});
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds([expectedBuffIdForAttack, expectedBuffIdForBcDrain]);
+
+		it('uses the params property when it exists', () => {
+			const params = '1,2,3,4,5,6,7';
+			const splitParams = params.split(',');
+			const effect = createArbitraryBaseEffect({ params });
+			const context = createArbitraryContext({
+				damageFrames: {
+					hits: ARBITRARY_HIT_COUNT,
+					[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: ARBITRARY_DAMAGE_DISTRIBUTION,
+				},
+			});
+			const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+				acc[param] = +splitParams[index];
+				return acc;
+			}, {});
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedBuffIdForAttack,
+					value: {
+						...expectedValuesForParams,
+						hits: ARBITRARY_HIT_COUNT,
+						distribution: ARBITRARY_DAMAGE_DISTRIBUTION,
+					},
+				}),
+				createExpectedBcDrainBuff(),
+			];
+
+			const result = mappingFunction(effect, context);
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = '1,2,3,4,5,6,7,8,9,10';
+			const splitParams = params.split(',');
+			const effect = createArbitraryBaseEffect({ params });
+			const context = createArbitraryContext({
+				damageFrames: {
+					hits: ARBITRARY_HIT_COUNT,
+					[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: ARBITRARY_DAMAGE_DISTRIBUTION,
+				},
+			});
+			const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+				acc[param] = +splitParams[index];
+				return acc;
+			}, {});
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedBuffIdForAttack,
+					value: {
+						...expectedValuesForParams,
+						hits: ARBITRARY_HIT_COUNT,
+						distribution: ARBITRARY_DAMAGE_DISTRIBUTION,
+					},
+				}),
+				createExpectedBcDrainBuff(),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_7: '8',
+						param_8: '9',
+						param_9: '10',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, context);
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const mockValues = [7, 8, 9, 10, 11, 12, 13];
+			const valuesInEffect = PARAMS_ORDER.reduce((acc, stat, index) => {
+				let key;
+				if (stat === 'flatAtk') {
+					key = 'bb flat atk';
+				} else if (stat === 'baseAtk%') {
+					key = 'bb base atk%';
+				} else if (stat === ADDED_ATK_BUFF_KEY) {
+					key = 'bb max atk% based on ally bb gauge and clear bb gauges';
+				} else {
+					key = `bb ${stat}`;
+				}
+				acc[key] = mockValues[index];
+				return acc;
+			}, {});
+			const effect = createArbitraryBaseEffect(valuesInEffect);
+			const context = createArbitraryContext({
+				damageFrames: {
+					hits: ARBITRARY_HIT_COUNT,
+					[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: ARBITRARY_DAMAGE_DISTRIBUTION,
+				},
+			});
+			const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+				acc[param] = mockValues[index];
+				return acc;
+			}, {});
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedBuffIdForAttack,
+					value: {
+						...expectedValuesForParams,
+						hits: ARBITRARY_HIT_COUNT,
+						distribution: ARBITRARY_DAMAGE_DISTRIBUTION,
+					},
+				}),
+				createExpectedBcDrainBuff(),
+			];
+
+
+			const result = mappingFunction(effect, context);
+			expect(result).toEqual(expectedResult);
+		});
+
+		testMissingDamageFramesScenarios({
+			getMappingFunction: () => mappingFunction,
+			getBaseBuffFactory: () => baseBuffFactory,
+			expectedBuffId: expectedBuffIdForAttack,
+			getAdditionalBuffs: () => [createExpectedBcDrainBuff()],
+		});
+
+		PARAMS_ORDER.forEach((paramCase) => {
+			it(`returns associated values for ${paramCase} if it is non-zero and other stats are zero`, () => {
+				const params = PARAMS_ORDER.map((param) => param === paramCase ? '123' : '0').join(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForAttack,
+						value: {
+							[paramCase]: 123,
+							hits: 0,
+							distribution: 0,
+						},
+					}),
+					createExpectedBcDrainBuff(),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it(`returns associated values for ${paramCase} if it is non-zero and other stats are zero and params property does not exist`, () => {
+				const valuesInEffect = PARAMS_ORDER.reduce((acc, stat) => {
+					let key;
+					if (stat === 'flatAtk') {
+						key = 'bb flat atk';
+					} else if (stat === 'baseAtk%') {
+						key = 'bb base atk%';
+					} else if (stat === ADDED_ATK_BUFF_KEY) {
+						key = 'bb max atk% based on ally bb gauge and clear bb gauges';
+					} else {
+						key = `bb ${stat}`;
+					}
+					acc[key] = stat === paramCase ? 789 : 0;
+					return acc;
+				}, {});
+				const effect = createArbitraryBaseEffect(valuesInEffect);
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedBuffIdForAttack,
+						value: {
+							[paramCase]: 789,
+							hits: 0,
+							distribution: 0,
+						},
+					}),
+					createExpectedBcDrainBuff(),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+		});
+	});
+
+	describe('proc 62', () => {
+		const expectedOriginalId = '62';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds(Object.values(ELEMENT_MAPPING).concat(['unknown']).map((element) => `proc:62:barrier-${element}`));
+
+		it('uses the params property when it exists', () => {
+			const params = '0,1,2,3';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:62:barrier-all',
+				value: {
+					hp: 1,
+					defense: 2,
+					'damageAbsorption%': 3,
+				},
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = '1,2,3,4,5,6,7';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: 'proc:62:barrier-fire',
+					value: {
+						hp: 2,
+						defense: 3,
+						'damageAbsorption%': 4,
+					},
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_4: '5',
+						param_5: '6',
+						param_6: '7',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				'elemental barrier element': 'water',
+				'elemental barrier hp': 6,
+				'elemental barrier def': 7,
+				'elemental barrier absorb dmg%': 8,
+			});
+			const expectedResult = [baseBuffFactory({
+				id: 'proc:62:barrier-water',
+				value: {
+					hp: 6,
+					defense: 7,
+					'damageAbsorption%': 8,
+				},
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		describe('when parsing element parameter', () => {
+			Object.entries(ELEMENT_MAPPING).forEach(([elementKey, elementValue]) => {
+				it(`parses value for ${elementValue}`, () => {
+					const params = `${elementKey},1,2,3`;
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: `proc:62:barrier-${elementValue}`,
+						value: {
+							hp: 1,
+							defense: 2,
+							'damageAbsorption%': 3,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`parses value for ${elementValue} when params property does not exist`, () => {
+					const effect = createArbitraryBaseEffect({
+						'elemental barrier element': elementValue,
+						'elemental barrier hp': 4,
+						'elemental barrier def': 5,
+						'elemental barrier absorb dmg%': 6,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: `proc:62:barrier-${elementValue}`,
+						value: {
+							hp: 4,
+							defense: 5,
+							'damageAbsorption%': 6,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+			});
+
+			it('parses unknown elements to "unknown"', () => {
+				const params = '1234,1,2,3';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:62:barrier-unknown',
+					value: {
+						hp: 1,
+						defense: 2,
+						'damageAbsorption%': 3,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('parses unknown elements to "unknown" when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					'elemental barrier element': 'arbitrary element',
+					'elemental barrier hp': 4,
+					'elemental barrier def': 5,
+					'elemental barrier absorb dmg%': 6,
+				});
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:62:barrier-unknown',
+					value: {
+						hp: 4,
+						defense: 5,
+						'damageAbsorption%': 6,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('parses missing element property to "unknown" when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					'elemental barrier hp': 7,
+					'elemental barrier def': 8,
+					'elemental barrier absorb dmg%': 9,
+				});
+				const expectedResult = [baseBuffFactory({
+					id: 'proc:62:barrier-unknown',
+					value: {
+						hp: 7,
+						defense: 8,
+						'damageAbsorption%': 9,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+		});
+
+		describe('when non-elemental parameters are missing or 0', () => {
+			const NON_ELEMENTAL_EFFECT_KEY_TO_BUFF_KEY_MAPPING = {
+				'elemental barrier hp': 'hp',
+				'elemental barrier def': 'defense',
+				'elemental barrier absorb dmg%': 'damageAbsorption%',
+			};
+			Object.keys(NON_ELEMENTAL_EFFECT_KEY_TO_BUFF_KEY_MAPPING).forEach(([buffKey]) => {
+				it(`defaults to 0 for non-number ${buffKey} parameter`, () => {
+					const params = [
+						'0',
+						buffKey !== 'hp' ? '123' : 'not a number',
+						buffKey !== 'defense' ? '123' : 'not a number',
+						buffKey !== 'damageAbsorption%' ? '123' : 'not a number',
+					].join(',');
+					const effect = createArbitraryBaseEffect({ params });
+					const expectedResult = [baseBuffFactory({
+						id: 'proc:62:barrier-all',
+						value: {
+							hp: buffKey !== 'hp' ? 123 : 0,
+							defense: buffKey !== 'defense' ? 123 : 0,
+							'damageAbsorption%': buffKey !== 'damageAbsorption%' ? 123 : 0,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`defaults to 0 for non-number ${buffKey} parameter when params property does not exist`, () => {
+					const valuesInEffect = Object.entries(NON_ELEMENTAL_EFFECT_KEY_TO_BUFF_KEY_MAPPING).reduce((acc, [localEffectKey, localBuffKey]) => {
+						acc[localEffectKey] = localBuffKey !== buffKey ? 456 : 'not a number';
+						return acc;
+					}, {});
+					const effect = createArbitraryBaseEffect({
+						'elemental barrier element': 'all',
+						...valuesInEffect,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: 'proc:62:barrier-all',
+						value: {
+							hp: buffKey !== 'hp' ? 456 : 0,
+							defense: buffKey !== 'defense' ? 456 : 0,
+							'damageAbsorption%': buffKey !== 'damageAbsorption%' ? 456 : 0,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it(`defaults to 0 for missing ${buffKey} parameter when params property does not exist`, () => {
+					const valuesInEffect = Object.entries(NON_ELEMENTAL_EFFECT_KEY_TO_BUFF_KEY_MAPPING).reduce((acc, [localEffectKey, localBuffKey]) => {
+						if (localBuffKey !== buffKey) {
+							acc[localEffectKey] = 789;
+						}
+						return acc;
+					}, {});
+					const effect = createArbitraryBaseEffect({
+						'elemental barrier element': 'all',
+						...valuesInEffect,
+					});
+					const expectedResult = [baseBuffFactory({
+						id: 'proc:62:barrier-all',
+						value: {
+							hp: buffKey !== 'hp' ? 789 : 0,
+							defense: buffKey !== 'defense' ? 789 : 0,
+							'damageAbsorption%': buffKey !== 'damageAbsorption%' ? 789 : 0,
+						},
+					})];
+
+					const result = mappingFunction(effect, createArbitraryContext());
+					expect(result).toEqual(expectedResult);
+				});
+
+				it('returns a no params buff if all non-elemental parameters are 0', () => {
+					const effect = createArbitraryBaseEffect({ params: '1,0,0,0' });
+					expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+				});
+
+				it('returns a no params buff no parameters are given and params property does not exist', () => {
+					expectNoParamsBuffWithEffectAndContext({ effect: {}, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+				});
+			});
+		});
+	});
+
+	describe('proc 64', () => {
+		const PARAMS_ORDER = ['atk%', 'addedAtkPerUse%', 'maxIncreases', 'flatAtk', 'crit%', 'bc%', 'hc%', 'dmg%'];
+		const expectedBuffId = 'proc:64:consecutive usage attack';
+		const expectedOriginalId = '64';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds([expectedBuffId]);
+
+		it('uses the params property when it exists', () => {
+			const params = '1,2,3,4,5,6,7,8';
+			const splitParams = params.split(',');
+			const effect = createArbitraryBaseEffect({ params });
+			const context = createArbitraryContext({
+				damageFrames: {
+					hits: ARBITRARY_HIT_COUNT,
+					[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: ARBITRARY_DAMAGE_DISTRIBUTION,
+				},
+			});
+			const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+				acc[param] = +splitParams[index];
+				return acc;
+			}, {});
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: {
+					...expectedValuesForParams,
+					hits: ARBITRARY_HIT_COUNT,
+					distribution: ARBITRARY_DAMAGE_DISTRIBUTION,
+				},
+			})];
+
+			const result = mappingFunction(effect, context);
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = '1,2,3,4,5,6,7,8,9,10,11';
+			const splitParams = params.split(',');
+			const effect = createArbitraryBaseEffect({ params });
+			const context = createArbitraryContext({
+				damageFrames: {
+					hits: ARBITRARY_HIT_COUNT,
+					[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: ARBITRARY_DAMAGE_DISTRIBUTION,
+				},
+			});
+			const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+				acc[param] = +splitParams[index];
+				return acc;
+			}, {});
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						...expectedValuesForParams,
+						hits: ARBITRARY_HIT_COUNT,
+						distribution: ARBITRARY_DAMAGE_DISTRIBUTION,
+					},
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_8: '9',
+						param_9: '10',
+						param_10: '11',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, context);
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const mockValues = [7, 8, 9, 10, 11, 12, 13, 14];
+			const valuesInEffect = PARAMS_ORDER.reduce((acc, stat, index) => {
+				let key;
+				if (stat === 'flatAtk') {
+					key = 'bb flat atk';
+				} else if (stat === 'addedAtkPerUse%') {
+					key = 'bb atk% inc per use';
+				} else if (stat === 'maxIncreases') {
+					key = 'bb atk% max number of inc';
+				} else {
+					key = `bb ${stat}`;
+				}
+				acc[key] = mockValues[index];
+				return acc;
+			}, {});
+			const effect = createArbitraryBaseEffect(valuesInEffect);
+			const context = createArbitraryContext({
+				damageFrames: {
+					hits: ARBITRARY_HIT_COUNT,
+					[HIT_DMG_DISTRIBUTION_TOTAL_KEY]: ARBITRARY_DAMAGE_DISTRIBUTION,
+				},
+			});
+			const expectedValuesForParams = PARAMS_ORDER.reduce((acc, param, index) => {
+				acc[param] = +mockValues[index];
+				return acc;
+			}, {});
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: {
+					...expectedValuesForParams,
+					hits: ARBITRARY_HIT_COUNT,
+					distribution: ARBITRARY_DAMAGE_DISTRIBUTION,
+				},
+			})];
+
+			const result = mappingFunction(effect, context);
+			expect(result).toEqual(expectedResult);
+		});
+
+		testMissingDamageFramesScenarios({ expectedBuffId, getMappingFunction: () => mappingFunction, getBaseBuffFactory: () => baseBuffFactory });
+
+		PARAMS_ORDER.forEach((paramCase) => {
+			it(`returns only value for ${paramCase} if it is non-zero and other stats are zero`, () => {
+				const params = PARAMS_ORDER.map((param) => param === paramCase ? '789' : '0').join(',');
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						[paramCase]: 789,
+						hits: 0,
+						distribution: 0,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+		});
+	});
+
+	describe('proc 65', () => {
+		const expectedOriginalId = '65';
+		testProcWithSingleNumericalParameterAndTurnDuration({
+			getMappingFunction: () => getProcEffectToBuffMapping().get(expectedOriginalId),
+			getBaseBuffFactory: () => createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId),
+			expectedOriginalId,
+			expectedBuffId: 'proc:65:ailment attack boost',
+			effectValueKey: 'atk% buff when enemy has ailment',
+			effectTurnDurationKey: 'atk% buff turns (110)',
 		});
 	});
 });
