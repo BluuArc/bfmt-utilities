@@ -1789,4 +1789,71 @@ describe('getProcEffectBuffMapping method for default mapping', () => {
 			expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
 		});
 	});
+
+	describe('proc 12', () => {
+		const expectedBuffId = 'proc:12:guaranteed revive';
+		const expectedOriginalId = '12';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds([expectedBuffId]);
+
+		it('uses the params property when it exists', () => {
+			const effect = createArbitraryBaseEffect({ params: '123' });
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: 123,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const effect = createArbitraryBaseEffect({ params: '123,2,3,4' });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedBuffId,
+					value: 123,
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_1: '2',
+						param_2: '3',
+						param_3: '4',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to stat-specific properties when the params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({ 'revive to hp%': 456 });
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: 456,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a value if parsed value from params is zero', () => {
+			const effect = createArbitraryBaseEffect({ params: '0' });
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: 0,
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+	});
 });
