@@ -1,6 +1,6 @@
 const { Ailment, TargetArea, TargetType } = require('../../datamine-types');
 const { ARBITRARY_TURN_DURATION, NON_ZERO_ELEMENT_MAPPING, EFFECT_DELAY_BUFF_PROP, ARBITRARY_HIT_COUNT, ARBITRARY_DAMAGE_DISTRIBUTION, HIT_DMG_DISTRIBUTION_TOTAL_KEY, ELEMENT_MAPPING } = require('../../_test-helpers/constants');
-const { createFactoryForBaseBuffFromArbitraryEffect, testFunctionExistence, testValidBuffIds, createArbitraryBaseEffect, createArbitraryContext, testTurnDurationScenarios, testProcWithSingleNumericalParameterAndTurnDuration, expectNoParamsBuffWithEffectAndContext, testMissingDamageFramesScenarios } = require('../../_test-helpers/proc-effect-mapping.utils');
+const { createFactoryForBaseBuffFromArbitraryEffect, testFunctionExistence, testValidBuffIds, createArbitraryBaseEffect, createArbitraryContext, testTurnDurationScenarios, testProcWithSingleNumericalParameterAndTurnDuration, expectNoParamsBuffWithEffectAndContext, testMissingDamageFramesScenarios, testProcWithNumericalValueRangeAndChanceAndTurnDuration } = require('../../_test-helpers/proc-effect-mapping.utils');
 const { BuffId } = require('./buff-types');
 const { getProcEffectToBuffMapping } = require('./proc-effect-mapping');
 
@@ -1681,6 +1681,462 @@ describe('getProcEffectBuffMapping method for default mapping', () => {
 			expectedBuffId: 'proc:65:ailment attack boost',
 			effectValueKey: 'atk% buff when enemy has ailment',
 			effectTurnDurationKey: 'atk% buff turns (110)',
+		});
+	});
+
+	describe('proc 66', () => {
+		const expectedBuffId = 'proc:66:chance revive';
+		const expectedOriginalId = '66';
+
+		const HP_BUFF_KEY = 'reviveToHp%';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds([expectedBuffId]);
+
+		it('uses the params property when it exists', () => {
+			const params = '1,2';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: {
+					[HP_BUFF_KEY]: 1,
+					chance: 2,
+				},
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = '1,2,3,4,5';
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						[HP_BUFF_KEY]: 1,
+						chance: 2,
+					},
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_2: '3',
+						param_3: '4',
+						param_4: '5',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				'revive unit hp%': 3,
+				'revive unit chance%': 4,
+			});
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: {
+					[HP_BUFF_KEY]: 3,
+					chance: 4,
+				},
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('converts effect properties to numbers when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				'revive unit hp%': '5',
+				'revive unit chance%': '6',
+			});
+			const expectedResult = [baseBuffFactory({
+				id: expectedBuffId,
+				value: {
+					[HP_BUFF_KEY]: 5,
+					chance: 6,
+				},
+			})];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		describe('when values are missing or 0', () => {
+			it('defaults to 0 for non-number hp parameter', () => {
+				const params = ',2';
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						[HP_BUFF_KEY]: 0,
+						chance: 2,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('defaults to 0 for non-number hp parameter when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					'revive unit hp%': 'not a number',
+					'revive unit chance%': 4,
+				});
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						[HP_BUFF_KEY]: 0,
+						chance: 4,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('defaults to 0 for missing hp parameter when params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					'revive unit chance%': 6,
+				});
+				const expectedResult = [baseBuffFactory({
+					id: expectedBuffId,
+					value: {
+						[HP_BUFF_KEY]: 0,
+						chance: 6,
+					},
+				})];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				const effect = createArbitraryBaseEffect();
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+
+			it('returns a no params buff when chance is 0', () => {
+				const params = '123,0';
+				const effect = createArbitraryBaseEffect({ params });
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+
+			it('returns a no params buff when chance is 0 and params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					'revive unit hp%': 456,
+					'revive unit chance%': 0,
+				});
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+		});
+	});
+
+	describe('proc 67', () => {
+		const expectedOriginalId = '67';
+		testProcWithNumericalValueRangeAndChanceAndTurnDuration({
+			getMappingFunction: () => getProcEffectToBuffMapping().get(expectedOriginalId),
+			getBaseBuffFactory: () => createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId),
+			expectedOriginalId,
+			expectedBuffId: 'proc:67:bc fill on spark',
+			effectKeyLow: 'bc fill on spark low',
+			effectKeyHigh: 'bc fill on spark high',
+			effectKeyChance: 'bc fill on spark%',
+			effectTurnDurationKey: 'bc fill on spark buff turns (111)',
+			buffKeyLow: 'fillLow',
+			buffKeyHigh: 'fillHigh',
+			getExpectedValueFromParam: (param) => +param / 100,
+		});
+	});
+
+	describe('proc 68', () => {
+		const expectedOriginalId = '68';
+		testProcWithSingleNumericalParameterAndTurnDuration({
+			getMappingFunction: () => getProcEffectToBuffMapping().get(expectedOriginalId),
+			getBaseBuffFactory: () => createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId),
+			expectedOriginalId,
+			expectedBuffId: 'proc:68:guard mitigation',
+			effectValueKey: 'guard increase mitigation%',
+			effectTurnDurationKey: 'guard increase mitigation buff turns (113)',
+		});
+	});
+
+	describe('proc 69', () => {
+		const expectedFlatFillId = 'proc:69:bc fill on guard-flat';
+		const expectedPercentFillId = 'proc:69:bc fill on guard-percent';
+		const FLAT_FILL_KEY = 'bb bc fill on guard';
+		const PERCENT_FILL_KEY = 'bb bc fill% on guard';
+		const EFFECT_TURN_DURATION_KEY = 'bb bc fill on guard buff turns (114)';
+		const expectedOriginalId = '69';
+
+		beforeEach(() => {
+			mappingFunction = getProcEffectToBuffMapping().get(expectedOriginalId);
+			baseBuffFactory = createFactoryForBaseBuffFromArbitraryEffect(expectedOriginalId);
+		});
+
+		testFunctionExistence(expectedOriginalId);
+		testValidBuffIds([expectedFlatFillId, expectedPercentFillId]);
+
+		it('uses the params property when it exists', () => {
+			const params = `100,2,${ARBITRARY_TURN_DURATION}`;
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatFillId,
+					duration: ARBITRARY_TURN_DURATION,
+					value: 1,
+					conditions: {
+						onGuard: true,
+					},
+				}),
+				baseBuffFactory({
+					id: expectedPercentFillId,
+					duration: ARBITRARY_TURN_DURATION,
+					value: 2,
+					conditions: {
+						onGuard: true,
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('returns a buff entry for extra parameters', () => {
+			const params = `100,2,${ARBITRARY_TURN_DURATION},4,5,6`;
+			const effect = createArbitraryBaseEffect({ params });
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatFillId,
+					value: 1,
+					duration: ARBITRARY_TURN_DURATION,
+					conditions: {
+						onGuard: true,
+					},
+				}),
+				baseBuffFactory({
+					id: expectedPercentFillId,
+					value: 2,
+					duration: ARBITRARY_TURN_DURATION,
+					conditions: {
+						onGuard: true,
+					},
+				}),
+				baseBuffFactory({
+					id: BuffId.UNKNOWN_PROC_BUFF_PARAMS,
+					value: {
+						param_3: '4',
+						param_4: '5',
+						param_5: '6',
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('falls back to effect properties when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[FLAT_FILL_KEY]: 4,
+				[PERCENT_FILL_KEY]: 5,
+				[EFFECT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+			});
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatFillId,
+					duration: ARBITRARY_TURN_DURATION,
+					value: 4,
+					conditions: {
+						onGuard: true,
+					},
+				}),
+				baseBuffFactory({
+					id: expectedPercentFillId,
+					duration: ARBITRARY_TURN_DURATION,
+					value: 5,
+					conditions: {
+						onGuard: true,
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		it('converts effect properties to numbers when params property does not exist', () => {
+			const effect = createArbitraryBaseEffect({
+				[FLAT_FILL_KEY]: '6',
+				[PERCENT_FILL_KEY]: '7',
+				[EFFECT_TURN_DURATION_KEY]: '8',
+			});
+			const expectedResult = [
+				baseBuffFactory({
+					id: expectedFlatFillId,
+					duration: 8,
+					value: 6,
+					conditions: {
+						onGuard: true,
+					},
+				}),
+				baseBuffFactory({
+					id: expectedPercentFillId,
+					duration: 8,
+					value: 7,
+					conditions: {
+						onGuard: true,
+					},
+				}),
+			];
+
+			const result = mappingFunction(effect, createArbitraryContext());
+			expect(result).toEqual(expectedResult);
+		});
+
+		describe('when values are missing', () => {
+			it('returns only buff for percent fill if flat fill value is 0', () => {
+				const params = `0,123,${ARBITRARY_TURN_DURATION}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedPercentFillId,
+						duration: ARBITRARY_TURN_DURATION,
+						value: 123,
+						conditions: {
+							onGuard: true,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns only buff for flat fill if percent fill value is 0', () => {
+				const params = `12300,0,${ARBITRARY_TURN_DURATION}`;
+				const effect = createArbitraryBaseEffect({ params });
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatFillId,
+						duration: ARBITRARY_TURN_DURATION,
+						value: 123,
+						conditions: {
+							onGuard: true,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns only buff for percent fill if flat fill value is 0 and params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[FLAT_FILL_KEY]: 0,
+					[PERCENT_FILL_KEY]: 123,
+					[EFFECT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedPercentFillId,
+						duration: ARBITRARY_TURN_DURATION,
+						value: 123,
+						conditions: {
+							onGuard: true,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns only buff for flat fill if percent fill value is 0 and params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[FLAT_FILL_KEY]: 123,
+					[PERCENT_FILL_KEY]: 0,
+					[EFFECT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatFillId,
+						duration: ARBITRARY_TURN_DURATION,
+						value: 123,
+						conditions: {
+							onGuard: true,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns only buff for percent fill if flat fill value is missing and params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[PERCENT_FILL_KEY]: 123,
+					[EFFECT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedPercentFillId,
+						duration: ARBITRARY_TURN_DURATION,
+						value: 123,
+						conditions: {
+							onGuard: true,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns only buff for flat fill if percent fill value is missing and params property does not exist', () => {
+				const effect = createArbitraryBaseEffect({
+					[FLAT_FILL_KEY]: 123,
+					[EFFECT_TURN_DURATION_KEY]: ARBITRARY_TURN_DURATION,
+				});
+				const expectedResult = [
+					baseBuffFactory({
+						id: expectedFlatFillId,
+						duration: ARBITRARY_TURN_DURATION,
+						value: 123,
+						conditions: {
+							onGuard: true,
+						},
+					}),
+				];
+
+				const result = mappingFunction(effect, createArbitraryContext());
+				expect(result).toEqual(expectedResult);
+			});
+
+			it('returns a no params buff when no parameters are given', () => {
+				const effect = createArbitraryBaseEffect();
+				expectNoParamsBuffWithEffectAndContext({ effect, context: createArbitraryContext(), mappingFunction, baseBuffFactory });
+			});
+		});
+
+		describe('when both flat fill and percent fill values are 0', () => {
+			testTurnDurationScenarios({
+				getMappingFunction: () => mappingFunction,
+				getBaseBuffFactory: () => baseBuffFactory,
+				createParamsWithZeroValueAndTurnDuration: (duration) => `0,0,${duration}`,
+				buffIdsInTurnDurationBuff: [expectedFlatFillId, expectedPercentFillId],
+			});
 		});
 	});
 });
